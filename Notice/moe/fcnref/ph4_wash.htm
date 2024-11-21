@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: ph4_Wash, ph4_WashMDB" />
+  <title>Pharmacophore Functions: ph4_Wash, ph4_WashMDB</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Pharmacophore Functions: ph4_Wash,
+    ph4_WashMDB
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    [washed_keys, del_smi] = <a class="fcnlink" href=
+"#ph4_Wash">ph4_Wash</a> [ atom_keys, options ]
+    <a class="fcnlink" href=
+"#ph4_WashMDB">ph4_WashMDB</a> [ mdb, 'mol_field', 'dest_field', options ]
+
+    options = [
+        one_component   : flag,
+        delete_atoms    : flag,
+        coord_scale     : flag,
+        set_fc          : flag,
+        acid_base       : flag,
+        add_h           : flag
+    ]
+</pre>
+
+<h1>Description</h1>
+
+<p>These functions are used to &quot;wash&quot; molecules. This procedure
+  converts a molecule from its neutral gas phase to its solvated state in
+  aqueous solution. The functions optionally delete all solvent molecules.</p>
+<a id="ph4_Wash"></a>
+<hr noshade="noshade" />
+
+<pre>
+[washed_keys, del_smi] = <span class=
+"fcndef">ph4_Wash</span> [ atom_keys, options ]
+</pre>
+
+<p>Returns the atom keys of the solute molecule(s) in their washed state. All
+  atoms which were deleted or which were marked for deletion (but were not
+  deleted due to the <tt>delete_atoms</tt> flag being 0) are returned as a
+  molecule input language string expression <tt>del_smi</tt>.</p>
+
+<p>If <tt>options</tt> (described below) is not set, the default value for
+  each of the options is 1.</p>
+<a id="ph4_WashMDB"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class=
+"fcndef">ph4_WashMDB</span> [ mdb, 'mol_field', 'dest_field', options ]
+</pre>
+
+<p>Washes all of the molecules in the molecular database. The database is
+  specified either by database key or by name token. The molecules are taken
+  from the specified molecule field, and the washed molecules are written to
+  the specified destination field, which can be the same as the source molecule
+  field.</p>
+
+<p>If <tt>options</tt> (described below) is not set, the default value for
+  each of the options is 1.</p>
+
+<p>Both functions support the following <tt>options</tt>:</p>
+  <dl>
+    <dd></dd>
+    <dt><tt>one_component:flag</tt></dt>
+    <dd>
+      If <tt>flag</tt> is non-zero, then <tt>ph4_Wash</tt> performs a series of
+      filtering operations on the data after which, if more than one connected
+      component remains, the component with the most heavy atoms will be
+      retained. For more information on the filters, see <a href=
+      "../../mdb/wash.htm">Washing Molecules</a>.
+
+<p><b>Note:</b> Atoms will only be deleted if the <tt>delete_atoms</tt>
+      flag is set.</p>
+    </dd>
+    <dt><tt>delete_atoms:flag</tt></dt>
+    <dd>If <tt>flag</tt> is non-zero, atoms will be deleted from the system.
+    All molecules recognized to be part of the solvent medium -- water
+    molecules, counter-ions, simple acids and bases, common solvents, common
+    salts -- are deleted. If the <tt>one_component</tt> flag is set, then all
+    but one of the remaining molecules are also deleted. If <tt>flag</tt> is 0,
+    all atoms are preserved.</dd>
+    <dt><tt>coord_scale:flag</tt></dt>
+    <dd>If <tt>flag</tt> is non-zero, the coordinates of all non-solvent atoms
+    whose coordinates do not appear to be correctly scaled will be adjusted.
+    This option is sometimes needed to correct for improper scaling by molecule
+    drawing packages that do not set the 3D coordinates correctly. If
+    <tt>flag</tt> is 0, coordinates are not adjusted.</dd>
+    <dt><tt>set_fc:flag</tt></dt>
+    <dd>If <tt>flag</tt> is non-zero, solute atom ionizations will be set to
+    their formal charges. If <tt>flag</tt> is 0, the original
+    ionizations are preserved.</dd>
+    <dt><tt>acid_base:flag</tt></dt>
+    <dd>If <tt>flag</tt> is non-zero, acids will be deprotonated and bases will
+    be protonated. This applies to solute atoms only. If <tt>flag</tt> is 0, no
+    protonation/deprotonation occurs.</dd>
+    <dt><tt>add_h:flag</tt></dt>
+    <dd>If <tt>flag</tt> is non-zero, the number of hydrogens on all solute
+    molecules will be adjusted to satisfy full valence requirements. If
+    <tt>flag</tt> is 0, no adjustment of hydrogens is made.</dd>
+  </dl>
+
+<h1>See Also</h1>
+
+<p><a href="introph4.htm">Fingerprint Functions</a></p>
+
+<p><a class="svl" href="ph4_tlst.htm">ph4_aBase</a></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

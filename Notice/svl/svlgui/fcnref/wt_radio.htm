@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href=
+  "../../../include/manstyle.css" />
+  <meta name="keywords" content="keywords: Radio" />
+  <meta name="keywords" content="functions: Widget:Radio" />
+  <meta name="keywords" content="functions: Radio (widget)" />
+  <title>Radio Box Widget</title>
+  <style>
+  td { vertical-align: text-top; }
+  </style>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../../index.htm"><img src="../../../images/ccglogo.png" /></a>
+    <a href="../../../index.htm"><div class="moeversion"></div></a>
+    Radio Box Widget
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Description</h1>
+
+<p>Radio box, a set of toggle buttons, of which exactly one is selected at
+  any given time.</p>
+
+<h2>Attributes</h2>
+
+<p><tt>Radio</tt> inherits all <a class="svl" href="wt_core.htm">core</a>
+  attributes and defines the following attributes:</p>
+  <table class="titlebar">
+    <tr>
+      <th>Attribute</th>
+      <th>Description</th>
+      <th>Values</th>
+      <th>Default</th>
+    </tr>
+    <tr>
+      <td width="15%"><tt>text</tt></td>
+      <td>String labels</td>
+      <td>Vector of tokens</td>
+      <td><tt>[]</tt></td>
+    </tr>
+    <tr>
+      <td><tt>columns</tt></td>
+      <td>Number of columns for layout</td>
+      <td>1 to 127</td>
+      <td><tt>127</tt></td>
+    </tr>
+    <tr>
+      <td><tt>type</tt></td>
+      <td>Return value data type</td>
+      <td><tt>&#39;char&#39;</tt>,
+      <tt>&#39;int&#39;</tt></td>
+      <td><tt>&#39;char&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>minWidth</tt></td>
+      <td>Minimum width (in characters) of each of the
+      buttons</td>
+      <td>0 to 127</td>
+      <td><tt>0</tt></td>
+    </tr>
+    <tr>
+      <td><tt>sensitive</tt></td>
+      <td>Enable/disable radio button(s).
+      If a vector of sensitivities is specified, each radio button
+      is enabled/disabled individually. The vector length must match
+      the number of buttons (<tt>text</tt>).
+      </td>
+      <td>0, 1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td><tt>foreground</tt></td>
+      <td>Button label text color.
+      If a vector of colors is specified, each radio button
+      is colored individually. The vector length must match
+      the number of buttons (<tt>text</tt>).
+      </td>
+      <td><a class="svl" href=
+      "wt_const.htm">WINDOW_COLORS</a></td>
+      <td><tt>&#39;foreground&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>background</tt></td>
+      <td>Button label background color.
+      If a vector of colors is specified, each radio button
+      is colored individually. The vector length must match
+      the number of buttons (<tt>text</tt>).
+      </td>
+      <td><a class="svl" href=
+      "wt_const.htm">WINDOW_COLORS</a></td>
+      <td><tt>&#39;background&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>font</tt></td>
+      <td>Button label text font.
+      If a vector of fonts is specified, each radio button
+      uses an individual font. The vector length must match
+      the number of buttons (<tt>text</tt>).</td>
+      <td><a class="svl" href=
+      "wt_const.htm">WINDOW_FONTS</a></td>
+      <td><tt>&#39;medium&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>alignment</tt></td>
+      <td>Horizontal alignment of text</td>
+      <td><tt>&#39;left&#39;, &#39;center&#39;, &#39;right&#39;</td>
+      <td><tt>&#39;center&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>graphics</tt></td>
+      <td>A graphics object key (see <tt>gr_create</tt>) or
+      graphics content (see <tt>gr_data</tt>)</td>
+      <td>Scalar key, or vector content</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td><tt>grPosition</tt></td>
+      <td>Layout of graphic object with respect to text, when
+      both are present</td>
+      <td><tt>
+      &#39;left&#39;, &#39;right&#39;, &#39;above&#39;,</br>
+      &#39;below&#39;, &#39;overlay&#39;</br>
+      &#39;flushLeft&#39;, &#39;flushRight&#39;, </br>
+      &#39;flushAbove&#39;, &#39;flushBelow&#39;
+      </tt></td>
+      <td><tt>&#39;left&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>grScale</tt></td>
+      <td>Scaling policy for the graphic object</td>
+      <td><tt>&#39;none&#39;, &#39;anisotropic&#39;,
+      &#39;isotropic&#39;, &#39;isotropic-shrink&#39;</tt></td>
+      <td><tt>&#39;none&#39;</tt></td>
+    </tr>
+  </table>
+
+<h2>Trigger</h2>
+
+<p>A change in the selected button within the radio box.</p>
+
+<h2>Data Value</h2>
+
+<p>The last button pushed. If character return data is specified, the value
+  is the name of the radio button (a token), otherwise it is the index
+  (starting from 1) of the selected item. If no button has ever been pushed, it
+  defaults to the first button specified in the window descriptor.</p>
+
+<h1>See Also</h1>
+
+<p><a href="wt_core.htm">Core Attributes</a><br />
+  <a href="../wt_intro.htm">SVL Window Toolkit</a><br />
+  <a href="introwt.htm">Window Toolkit Functions</a></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../../images/ccgicon.png" /> <a href="../../../index.htm"></a>
+    <a href="../../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

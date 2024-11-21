@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href=
+  "../../../include/manstyle.css" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: Plot,PlotC,PlotS, PlotH" />
+  <meta name="keywords" content="functions: PlotSet" />
+  <title>Plot Functions: Plot, PlotC, PlotS, PlotH, PlotSet</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../../index.htm"><img src="../../../images/ccglogo.png" /></a>
+    <a href="../../../index.htm"><div class="moeversion"></div></a>
+    Plot Functions: Plot, PlotC, PlotS, PlotH,
+    PlotSet
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    wkey = <a class="fcnlink" href=
+"#Plot">Plot</a>  [[x1,...,xn],[x1,...xn],...,[x1,...,xn]];
+    wkey = <a class="fcnlink" href=
+"#PlotS">PlotS</a> [[[x1,...xn],[y1...yn]],..., [[x1,...xn],[y1...yn]]];
+    wkey = <a class="fcnlink" href="#PlotC">PlotC</a> [matrix of data];
+    wkey = <a class="fcnlink" href=
+"#PlotH">PlotH</a> [[x1,...,xn],[x1,...xn],...,[x1,...,xn]];
+
+    <a class="fcnlink" href=
+"#PlotSet">PlotSet</a> [wkey, attributes_value_pairs];
+
+</pre>
+<a id="Plot"></a>
+<h1>Description</h1>
+
+<p>The <tt>Plot</tt> functions are essentially convenience routines that plot
+  data in a variety of manners such as in scatter and contour plots. Each
+  function opens a window containing a plot widget and returns the window
+  key.</p>
+
+<p><tt>PlotSet</tt> is used to set plot attributes. <!-- DESC --></p>
+  <table class="titlebar">
+    <tr>
+      <th>Function</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<tt>Plot</tt></td>
+      <td valign="baseline">
+        1D function plot. Plots the values for each series of data against
+        sample numbers that have no unit.
+
+<pre>
+svl&gt; t = 0.01 * igen 628
+svl&gt; wkey = Plot [ sin t ]
+
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="PlotS"></a>
+<tt>PlotS</tt></td>
+      <td valign="baseline">
+        2D scatter plot. Plots <tt>y</tt> against <tt>x</tt>, where <tt>x</tt>
+        represents the horizontal axis and <tt>y</tt>, the vertical. Both
+        <tt>x</tt> and <tt>y</tt> must be flat vectors.
+
+<pre>
+svl&gt; t = 0.01 * PI * igen 360
+svl&gt; PlotS [ [ t * (180/PI), sin t ] ] // plot in degrees
+
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="PlotC"></a>
+<tt>PlotC</tt></td>
+      <td valign="baseline">
+        3D contour plot. Plots iso-level contours of the <tt>z</tt> values.
+        <tt>z</tt> is a matrix of values of a function <i>f(x, y)</i> sampled
+        on a rectangular <i>m</i>&times;<i>n</i> grid, and is given row-wise as
+        a vector of length <i>m</i> (number of rows), each element of which is
+        of length <i>n</i> (number of columns). The distance between contours
+        cannot be modified. Only one series may be viewed at a time.
+
+<pre>
+svl&gt; t = 0.01 * igen 314
+svl&gt; wkey = PlotC [ [sin t]*cos t ]
+
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="PlotH"></a>
+<tt>PlotH</tt></td>
+      <td valign="baseline">
+        Histogram plot. Displays a bar plot for each series in the given data.
+
+<pre>
+svl&gt; wkey = PlotH [ igen 10];
+
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="PlotSet"></a>
+<tt>PlotSet</tt></td>
+      <td valign="baseline">
+        Sets the attribute information on the given plot window. Plot
+        attributes are summarized in <a href="wt_plot.htm">Plot widget</a>.
+
+<pre>
+wkey =  Plot [igen 10]
+PlotSet [wkey,
+    [plotTitle: &#39;This is a test&#39;, seriesColor: [&#39;green&#39;]]
+];
+
+</pre>
+      </td>
+    </tr>
+  </table><!-- ENDDESC -->
+
+<h1>See Also</h1>
+
+<p><a href="wt_plot.htm">Plot widget</a><br />
+  <a class="svl" href="wt_plotatt.htm">PlotAttributesPrompt</a></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../../images/ccgicon.png" /> <a href="../../../index.htm"></a>
+    <a href="../../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

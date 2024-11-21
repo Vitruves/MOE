@@ -1,0 +1,1685 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../images/ccgicon.png" />
+  <title>Combinatorial Library</title>
+  <meta name="keywords" content="panel: Combinatorial Library" />
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../index.htm"><img src="../images/ccglogo.png" /></a>
+    <a href="../index.htm"><div class="moeversion"></div></a>
+    Combinatorial Library
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+  <ul>
+    <li>
+      <a href="#Method">Representing Combinatorial Libraries</a>
+      <ul>
+        <li><a href="#Attach">Attachment Points</a></li>
+        <li><a href="#Reactions">Creating Reactions</a></li>
+      </ul>
+    </li>
+    <li><a href="#FocusReagents">Focusing Reagent Libraries</a></li>
+    <li><a href="#Diverse">Diverse Selection from Library</a></li>
+    <li><a href="#RunCombi">Running Combinatorial Library</a>
+      <ul>
+        <li><a href="#ReagentPanel">Filter Reagent Library Panel</a></li>
+        <li><a href="#EnumPanel">Enumerate Library Panel</a></li>
+        <li><a href="#FocusPanel">Focus Reagent Panel</a></li>
+        <li><a href="#DiversePanel">Diverse Selection Panel</a></li>
+        <li><a href="#ActionMenu">Action Menu</a></li>
+        <li><a href="#SettingsPanel">Settings Panel</a></li>
+      </ul>
+    </li>
+    <li><a class="example" href="#Examples">Examples</a>
+      <ul>
+        <li><a class="example" href="#SimpleCalc">Enumerate Combinatorial
+        Library</a></li>
+        <li><a class="example" href="#FocusFromMOE">Focus Reagents (from
+        MOE)</a></li>
+        <li><a class="example" href="#PH4Restraint">Pharmacophore
+        Restraint</a></li>
+        <li><a class="example" href="#ClipRGroup">Clip R-groups</a></li>
+        <li><a class="example" href="#PairAtoms">Reaction Atom Pairing</a></li>
+        <li><a class="example" href="#DiverseSubset">Generate Diverse
+        Subset</a></li>
+      </ul>
+    </li>
+    <li><a href="#See_Also">See Also</a></li>
+  </ul>
+<a id="Method"></a>
+<h1>Representing Combinatorial Libraries</h1>
+
+<p>A combinatorial (or virtual) library can be represented as:</p>
+  <ul>
+    <li>One or more scaffold molecules</li>
+    <li>A set of R-group libraries</li>
+    <li>Connection information specifying where the R-groups attach to each
+    scaffold</li>
+  </ul>
+
+<p>This representation is the traditional form, used in the <a href=
+  "frag_combi.htm">Combinatorial Builder</a> for example. A combinatorial
+  library can also be represented as a chemical reaction:</p>
+
+<img src="combitools/introrxn1.png" alt="Intro Reaction 1" class="center" />
+
+<p>The structures on the left define the two components (or reactants) of the
+  reaction and the structure on the right defines the product. At minimum,
+  individual components must uniquely specify the desired chemical
+  functionality that all reagents must contain. <font color="blue">Blue</font>
+  numbers relate component and product atoms preserved in the reaction.
+  Component atoms lacking pair-numbers help identify the reagents and are then
+  discarded. Right-side atoms lacking pair-numbers are added to the product(s).
+  <font color="brown">Brown</font> annotations are <i>query properties</i> used
+  when identifying reagents. In this example, atom <font color="blue">8</font>
+  can be a carbon or hydrogen. The combinatorial library can be enumerated from
+  the reagents satisfying each component.</p>
+
+<p>Transformations expressed as chemical reactions were introduced with
+  <a href="shaman.htm">MedChem Transformations</a> and its <a href=
+  "https://www.chemcomp.com/moe/help/2018/CCG_Tutorials/(Tutorial)_MOE_MedChem_Transformations_In-Cleft.svlx">
+  In-Cleft tutorial</a>, using simple reactions of the form <span class=
+  "nobr"><tt>A -&gt; A<sup>'</sup></tt></span>. <b>Combinatorial
+  Library</b> introduces three additional types:</p>
+  <ul>
+    <li><i>chemical reactions</i> of the form <span class="nobr"><tt>A + B +
+    ... -&gt; C</tt></span></li>
+    <li><i>clip reactions</i> that replace chemical functionality with an
+    attachment point</li>
+    <li><i>combinatorial reactions</i> involving a scaffold and a number of
+    R-group components.</li>
+  </ul>
+<a id="Attach"></a>
+<h2>Attachment points</h2>
+
+<p>Attachment points in MOE are terminal atoms named <tt>A<i>n</i></tt> that
+  indicate where connections can be made. In scaffolds, <i>n</i> usually ranges
+  from 1 to 9 while in R-groups <i>n</i> can be 0 or 1. This scaffold</p>
+
+<img src="combitools/combi_scaff.png" alt=
+  "Scaffold Attachment Points" class="center" />
+
+<p>can make up to four connections at the designated atoms. The attachment
+  point names for scaffolds should be unique. R-groups can have one or two
+  attachment points, based on whether they are <i>monodentate</i> or
+  <i>bidentate</i>. This R-group</p>
+
+<img src="combitools/combi_rgroup.png" alt=
+  "R-group Attachment Points" class="center" />
+
+<p>forms two attachments (it is bidentate), labeled <tt>A0</tt> and
+  <tt>A1</tt>. R-groups can have multiple attachment points with the same name;
+  all will be used in turn if they satisfy the individual components of the
+  reaction. Note that attachment points can also appear as <tt>R<i>n</i></tt>
+  as in <a href="view2d.htm">2D Molecules</a>. 2D sketchers depict attachment
+  points differently: they are terminal atoms named <tt>R<i>n</i></tt>, where
+  <i>n</i> is a positive integer. The R-group attachment point <tt>A0</tt> is
+  represented as an asterisk, shown as <tt><font color="brown">*</font></tt> in
+  the clip reaction <a href="#ClipReaction">below</a>. A bidentate R-group
+  would be sketched with atoms labeled <tt>*</tt> and <tt>R1</tt>.
+<a id="Reactions"></a>
+</p>
+
+<h2>Creating Reactions</h2>
+
+<p>Atoms in a reaction can be represented by their chemical symbol, a
+  wildcard, an attachment point name or a query property. The meaning of
+  individual symbols can change whether they appear on the component or the
+  product side of the reaction: the former defines a search query while the
+  latter specifies a molecular structure. The following table contains the
+  symbols and their meanings for the reaction's components:</p>
+  <table class="titlebar">
+    <tr>
+      <th>Symbol</th>
+      <th>Definition</th>
+    </tr>
+    <tr>
+      <td style="text-align: center"><b>A</b></td>
+      <td>Any non-hydrogen atom</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><b>Q</b></td>
+      <td>Any non-hydrogen, non-carbon atom</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><b>X</b></td>
+      <td>Any halogen atom</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><b>M</b></td>
+      <td>Any metal atom</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><b>R</b></td>
+      <td>Any atom</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><b>*</b></td>
+      <td>Attachment point 0 (A<sub>0</sub> or R<sub>0</sub>)</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><b>R<i>n</i></b></td>
+      <td>Chemical reaction: any atom
+      Combinatorial reaction: attachment point <i>n</i></td>
+    </tr>
+  </table>
+
+<p><tt>R<i>n</i></tt> symbols can be used in chemical reactions to provide
+  information to the <a href="#ActionMenu"><b>Pair Reaction</b></a> action
+  (i.e. <tt>R1</tt> in the components is associated with <tt>R1</tt> in the
+  product(s).) In addition, query properties can be specified for individual
+  atoms:</p>
+  <ul>
+    <li>the number of non-hydrogen substituents</li>
+    <li>the absence of hydrogen substituents</li>
+    <li>the number of connecting ring bonds</li>
+    <li>the list of allowed chemical symbols</li>
+    <li>the list of forbidden chemical symbols</li>
+    <li>its stereochemistry</li>
+  </ul>
+
+<p>The following table contains the symbols and their meanings for the
+  reaction's products:</p>
+  <table class="titlebar">
+    <tr>
+      <th>Symbol</th>
+      <th>Definition</th>
+    </tr>
+    <tr>
+      <td style="text-align: center"><b>A</b></td>
+      <td>Copy properties from atom-paired reagent atom</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><b>R</b></td>
+      <td>Copy properties from atom-paired reagent atom</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><b>*</b></td>
+      <td>Attachment point 0 (A<sub>0</sub> or R<sub>0</sub>)</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><b>R<i>n</i></b></td>
+      <td>Chemical reaction: copy properties from atom-paired reagent
+      atom
+      Clip or combinatorial reaction: attachment point <i>n</i></td>
+    </tr>
+  </table>
+
+<p>The following reaction shows how <tt>A</tt> can be used:</p>
+
+<img src="combitools/introrxn4.png" alt="Intro Reaction 4" class="center" />
+
+<p>Atom <font color="blue">6</font> can be matched by a carbon or nitrogen.
+  The <tt>A</tt>, the corresponding product atom, means &quot;whatever
+  component atom was found&quot;. This provides the flexibility needed to
+  handle component atoms with complex query properties. <tt>R</tt> (and
+  <tt>R<i>n</i></tt>) mean the same thing as <tt>A</tt> and can be used on the
+  product side to provide information for the <span class="nobr"><b>Pair
+  Reaction</b></span> action.</p>
+
+<p>Bonds in a reaction can be represented by their bond symbol or a wildcard.
+  The following table contains the wildcards and their meanings for the
+  reaction's components:</p>
+  <table class="titlebar">
+    <tr>
+      <th>Symbol</th>
+      <th>Definition</th>
+    </tr>
+    <tr>
+      <td style="text-align: center; vertical-align: middle"><img src=
+      "combitools/bicon1.png" alt="Any bond" /></td>
+      <td>Any bond</td>
+    </tr>
+    <tr>
+      <td style="text-align: center; vertical-align: middle"><img src=
+      "combitools/bicon2.png" alt="Single or double bond" /></td>
+      <td>Single or double bond</td>
+    </tr>
+    <tr>
+      <td style="text-align: center; vertical-align: middle"><img src=
+      "combitools/bicon3.png" alt="Single or aromatic bond" /></td>
+      <td>Single or aromatic bond</td>
+    </tr>
+    <tr>
+      <td style="text-align: center; vertical-align: middle"><img src=
+      "combitools/bicon4.png" alt="Double or aromatic bond" /></td>
+      <td>Double or aromatic bond</td>
+    </tr>
+  </table>
+
+<p>In addition, two properties can be specified for individual bonds:
+  <b>chain-</b> or <b>ring-only</b> and its stereochemistry. The following
+  reaction shows how the <tt>Any</tt> bond symbol can be used:</p>
+
+<img src="combitools/introrxn5.png" alt="Intro Reaction 4" class="center" />
+
+<p>The bond between atoms <font color="blue">3</font> and <font color=
+  "blue">4</font> on the component side means that any type of bond will
+  satisfy the reagent search for component two. Its use on the product side
+  means &quot;whatever bond type was found&quot;, preserving the specific
+  connection in the product. This reaction also demonstrates that reactions
+  need not be stoichiometric, as the product's oxygen atom is not present
+  in either of the reaction's components.
+<a id="ClipReaction"></a>
+</p>
+
+<p><b>Clip Reactions.</b> Clip reactions are transformations that replace
+  portions of the structure with attachment points:</p>
+
+<img src="combitools/introrxn2.png" alt="Intro Reaction 2" class="center" />
+
+<p>This reaction converts an acid halide into an R-group, removing the
+  halogen and replacing it with <tt><font color="brown">*</font></tt>
+  (attachment point 0). These are represented in the output file as a carbon
+  atom with the label <tt>A0</tt> and three implicit hydrogens (i.e. a methyl
+  group). Combinatorial reactions are those with a <tt><font color=
+  "brown">*</font></tt> on at least one component atom. An example will be
+  provided <a href="#ClipRGroup">below</a>.</p>
+
+<p><b>Combinatorial Enumeration.</b> Combinatorial reactions represent the
+  enumeration process:</p>
+
+<img src="combitools/introrxn3.png" alt="Intro Reaction 3" class="center" />
+
+<p>The scaffold is the first component and the R-group is the second. The
+  attachment points are represented by <tt><font color="brown">R1</font></tt>
+  and <tt><font color="brown">*</font></tt> and the product is formed by
+  replacing these atoms with the bond between atoms 14 and 15. The number of
+  reagents satisfying the individual component searches determines the maximum
+  size of the combinatorial library. Combinatorial reactions can be used with
+  multiple scaffolds, or the <a href="#ActionMenu">From MOE</a> action can
+  create a reaction from a scaffold in MOE.
+<a id="FocusReagents"></a>
+</p>
+
+<h1>Focusing Reagent Libraries</h1>
+
+<p><b>Focus Reagents</b> is used to estimate the activity of a virtual
+  library formed from a scaffold and a collection of R-groups. By assigning an
+  activity score to each R-group, a pure combinatorial design can be achieved
+  by using this score first to cluster the R-groups and then to select the best
+  candidates. The activity is estimated by statistical sampling of the chemical
+  space spanned by all possible R-group substitutions.</p>
+
+<h2>Theory and Formulation</h2>
+
+<p>Imagine counting the number of times that a given R-group or scaffold
+  group molecule <i>m</i> appears in a biologically active compound. This count
+  can be expressed as:</p>
+
+<img src="combitools/count.png" alt="Formula 1" class="center" />
+
+<p>where the sum extends over all compounds <i>k</i> in the combinatorial
+  library. The assessment of activity used is a Binary QSAR model, which
+  outputs the probability that a compound is active. This allows the activity
+  assessment to be replaced with a softer (probabilistic) one:</p>
+
+<img src="combitools/softcount.png" alt="Formula 2" class="center" />
+
+<p>To avoid enumerating the library, the summation can be replaced with a
+  Monte Carlo integration as follows. Assuming a uniform sampling of the
+  combinatorial library and sample <i>p</i> molecules gives:</p>
+
+<img src="combitools/estimate.png" alt="Formula 3" class="center" />
+
+<p>where <i>V</i> is the number of compounds in the combinatorial library and
+  <i>X<sub>i</sub></i> is the <i>i</i><sup>th</sup> of <i>p</i> sampled
+  molecules. To avoid explicit use of the number of compounds in the
+  combinatorial library, the count can be normalized by dividing by the total
+  number of active compounds in the combinatorial library:</p>
+
+<img src="combitools/probability.png" alt="Formula" class="center" />
+
+<p>This approximate value to <i>P</i>(<i>m</i>) is what is written as output
+  for each source database R-group or central group. The sampling process
+  proceeds as follows:</p>
+  <ol start="1">
+    <li>Randomly select R-groups for each component.</li>
+    <li>Construct the product, connecting the R-groups to the scaffold.</li>
+    <li>Discard the product if it fails the Descriptor Filter (if
+    specified).</li>
+    <li>Calculate the product activity using the activity model.</li>
+    <li>Add the activity to the tally for each R-group and the active product
+    count.</li>
+  </ol>
+
+<p>This is repeated until the desired percentage of the combinatorial library
+  has been sampled. <b>Focus Reagents</b> writes an output file for each
+  component containing the approximate <i>P(m)</i> values for each reagent.
+<a id="Diverse"></a>
+</p>
+
+<h1>Diverse Selection from Library</h1>
+
+<p><b>Diverse Selection</b> is used to select a diverse collection of
+  compounds from a virtual combinatorial library of compounds. The virtual
+  library is constructed by combining <i>scaffold</i> molecules with a set of
+  <i>R-groups</i>. The diverse subset is created by statistical sampling of the
+  &quot;chemical space&quot; spanned by all possible R-group/scaffold
+  substitutions.</p>
+
+<h2>Theory and Formulation</h2>
+
+<p><b>Diverse Selection</b> is able to select diverse subsets from
+  arbitrarily large virtual libraries for one simple reason: <i>the virtual
+  library is never enumerated</i>. In conventional techniques, one first
+  enumerates the library by forming all combinations of scaffolds and R-groups.
+  This is followed by descriptor calculation, Principal Components Analysis and
+  Diverse Subset Selection. This application uses sampling techniques for each
+  of the sub-calculations thereby eliminating the enumeration.</p>
+
+<p>The Basic Sampling Operation is used to select a random member from the
+  virtual library spanned by the central and R-group databases. The Basic
+  Sampling Operation proceeds as follows:</p>
+  <ol>
+    <li>Randomly select a scaffold molecule.</li>
+    <li>Randomly select R-group molecules, one per attachment point on the
+    scaffold molecule.</li>
+    <li>Construct the product.</li>
+    <li>Test against the Descriptor Filter. Discard the product and return to
+    step 1 if the product fails the filter. This is repeated a maximum of 1000
+    times.</li>
+    <li>Calculate the properties specified by <b>Use Descriptors</b> for the
+    product molecule..</li>
+  </ol>
+
+<p>At the highest level, <b>Diverse Selection</b> proceeds in three
+  phases:</p>
+  <ol>
+    <li><b>PCA:</b>. Principal components analysis. The Basic Sampling
+    Operation is repeatedly performed a fixed number of times. A mean and
+    covariance matrix is accumulated and diagonalized. A linear transform
+    <i>Q</i> and a vector <i>u</i> are calculated such that for a given
+    descriptor vector <i>x</i>, <span class=
+    "nobr"><i>Q</i>(<i>x</i>-<i>u</i>)</span> has a mean of 0 and a variance
+    equal to the identity matrix.
+    </li>
+    <li><b>VAR:</b>. Mean and Variance Estimation. A random subset of size
+    <i>k</i> is repeatedly obtained using the Basic Sampling Operation. The PCA
+    transforms are used to de-correlate and normalize the descriptors. The
+    diversity metric is evaluated on each sampled subset. In this way, the mean
+    and variance of the diversity of a subset of size <i>k</i> is estimated.
+    This allows the diversity of a subset to be measured in terms of its
+    Z-score, the number of standard deviations away from random.
+    </li>
+    <li><b>MC:</b>. Monte Carlo Simulated Annealing. A random subset of size
+    <i>k</i> is used as the starting point. A simulated annealing calculation
+    is then used to randomly exchange members of the subset for random
+    molecules obtained with the Basic Sampling Operation. A Metropolis
+    rejection criterion is used to optimize the diversity metric.</li>
+  </ol>
+
+<p>The diversity metric is an entropy-based metric that encourages coverage
+  of the entire virtual library spanned by the scaffold and R-group databases;
+  this metric does not merely look for extreme molecules but for good coverage.
+  <!-- ============================ RUNNING ================================ !--></p>
+<a id="RunCombi"></a>
+<h1>Running Combinatorial Library</h1>
+
+<p>To start the Combinatorial Library application, select <span class=
+  "menu">MOE | Compute | QuaSAR | Combinatorial Library</span> to start the
+  application:</p>
+
+<img src="combitools/mainpanel1.png" alt=
+  "Combinatorial Library Panel 1" class="center" />
+
+<p>The panel switches between two displays as appropriate: the list of
+  available reactions and the depiction of the selected reaction. Examples of
+  each, along with a description of each menu item will be provided below.</p>
+  <table class="noborder">
+    <tr>
+      <td><b>Rxn/List</b></td>
+      <td>When a reaction is selected, the display automatically
+      changes to its depiction. Pressing this button switches between the list
+      of reactions (shown above) and a depiction of a selected reaction as
+      desired: <img src="combitools/mainpanel2.png" alt=
+      "Combinatorial Library Panel 2" class="center"/></td>
+    </tr>
+    <tr>
+      <td><b>Search Text</b></td>
+      <td>This defines a reaction subset based on the word(s)
+      entered in the text field. It responds to each keystroke, searching each
+      word independently and updating the results. For example, entering
+      <span class="nobr"><tt>pyrrole cross-coupling</tt></span> results in a
+      two-item list: <img src="combitools/mainpanel3.png" alt=
+      "Combinatorial Library Panel 3" class="center" /> Abbreviations are permitted, so
+      entering <span class="nobr"><tt>py cr</tt></span> yields the same result.
+      Selecting the <font color="red">X</font> clears the search text and
+      resets the list. When a reaction is selected, this field displays the
+      reaction title (formed by concatenating the Product and Class).</td>
+    </tr>
+    <tr>
+      <td><b>Arrow Keys</b></td>
+      <td>When a reaction is selected, its position in the current
+      list is shown to the right of the <font color="red">X</font> in the form
+      <tt>(m/n)</tt> where <tt>m</tt> is the position and <tt>n</tt> is the
+      length of the list. Selecting the up or down arrow key results browses
+      the list, showing each reaction in turn.
+<a id="ActionMenu"></a>
+</td>
+    </tr>
+    <tr>
+      <td><b>Action</b></td>
+      <td>
+        This menu is used to perform a number of tasks:
+        <ul>
+          <li><b>From MOE</b> creates a combinatorial reaction from a scaffold
+          in the MOE window. The scaffold is the first component and an
+          additional component is created for each attachment point.</li>
+          <li><b>Load File</b> loads a reaction from an MDL reaction
+          (<tt>.rxn</tt>) or sketch (<tt>.skc</tt>) file or a reaction file
+          previously saved via the <b>Save Reaction</b> panel.</li>
+          <li><b>Sketch</b> allows a reaction to be edited or created by an
+          external 2D sketcher.</li>
+          <li><b>Pair Reaction</b> generates atom-pairing for the current
+          reaction. Atom pairs relate component (left-side) atoms to product
+          (right-side) atoms.</li>
+          <li><b>Save Reaction</b> prompts for additional information, such as
+          reaction product or class and saves the current reaction to an MDL RD
+          file (<tt>.rdf</tt>) file and adds it to the reaction list. It is
+          described <a href="#ActionMenu">below</a>. Note that it is not
+          necessary to save a reaction before use.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td><b>Reaction List/Display</b></td>
+      <td>Reactions have four pieces of information associated
+      with them. Two are mandatory, the reaction Product and Class, and two are
+      optional, the reaction Description and Project information. All of the
+      information in the reaction can be searched via the Search Text
+      field.
+
+      The reaction depiction shows the component(s) used to construct the
+      product. The atom-pair information is shown in <font color=
+      "blue">blue</font>, atom query information is shown in <font color=
+      "brown">brown</font> and bond type information is shown as various bond
+      symbols. The specifics for each atom annotation is shown below its
+      component. A button is associated with each component, and the maximum
+      number of products in the combinatorial library is shown on the right. In
+      this example, there are 57 reagents in the file <tt>mini500.sdf</tt> that
+      match the first component. These buttons are described below.</td>
+    </tr>
+    <tr>
+      <td><b>Operation</b></td>
+      <td>Three types of tasks can be performed: <span class=
+      "nobr"><b>Enumerate Library</b></span> creates a sequential or random
+      enumeration of the combinatorial library defined by the reaction and
+      reagent libraries. <span class="nobr"><b>Focus Reagents</b></span> ranks
+      the reagents in each library by their contribution to the product's
+      activity as determined by an activity model. <span class=
+      "nobr"><b>Diverse Selection</b></span> selects a diverse subset of the
+      combinatorial library. The panels for <span class="nobr"><a href=
+      "#EnumPanel"><b>Enumerate Library</b></a></span>, <span class=
+      "nobr"><a href="#FocusPanel"><b>Focus Reagents</b></a></span> and
+      <span class="nobr"><a href="#DiversePanel"><b>Diverse
+      Selection</b></a></span> are described below.</td>
+    </tr>
+    <tr>
+      <td><b>Delete Unimportant</b></td>
+      <td>If on, any product component lacking reaction atom-pairing
+      information will be considered unimportant and deleted.  This could
+      be used as a filter when using reactions that can generate undesired
+      disconnected heavy atoms.
+    </tr>
+    <tr>
+      <td><b>Settings</b></td>
+      <td>The Combinatorial Library Settings panel can be used to
+      specify where to read reactions from, along with the default reagent
+      library and properties to be calculated for output structures. It is
+      described <a href="#SettingsPanel">below</a>.</td>
+    </tr>
+    <tr>
+      <td><b>Descriptors</b></td>
+      <td>
+        The list of descriptors calculated for each output structure (in
+        addition to any in the Descriptor Filter). For large lists, it reports
+        the number of descriptors. Selecting <font color="red"><b>X</b></font>
+        clears the list. Pressing <b>Select</b> brings up the <span class=
+        "nobr"><b>Select Descriptors</b></span> panel: <img src=
+        "combitools/adddescript1.png" alt="Additional Descriptors 1" class="center" />
+        <table class="noborder">
+          <tr>
+            <td><b>Descriptors Selected</b></td>
+            <td>Shows the number of descriptors selected for
+            calculation. Note that, depending on the Class and Filter contents,
+            not all available descriptors (even if selected) will be displayed
+            in the list (see below).</td>
+          </tr>
+          <tr>
+            <td><b>Class</b></td>
+            <td>The display of descriptors in the descriptor list
+            may be restricted to a particular descriptor class by pressing on
+            the corresponding Class button. <b>All</b> shows all descriptors.
+            <b>2D</b> shows only descriptors dependent on the atoms and
+            connectivity of the molecule. <b>Protein</b> calculates descriptors
+            for a 3D macromolecule in MOE, <b>i3D</b> uses 3D coordinate
+            information, but are invariant to rotation and translation.
+            <b>x3D</b> also use 3D coordinate information, but require an
+            absolute frame of reference (such as receptor docking).</td>
+          </tr>
+          <tr>
+            <td><b>Show Selected/
+            Show All</b></td>
+            <td>This button switches between the list of
+            descriptors (governed by <b>Class</b> and <b>Filter</b>) and the
+            currently-selected descriptors. It can be used to view or modify
+            the current selection and is particularly useful for large
+            selections.</td>
+          </tr>
+          <tr>
+            <td><b>Filter</b></td>
+            <td>The contents of the Filter text field restricts
+            the display of descriptors in the list. All descriptors of the
+            appropriate Class are shown if no filter is specified. If one is
+            specified, then in addition to the restrictions imposed by Class,
+            only those lines in the list with text containing each of the words
+            in the Filter text field will be displayed. Selecting the
+            <font color="red">X</font> clears the Filter text field. This field
+            behaves like <span class="nobr"><b>Search Text</b></span> described
+            previously.</td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td><b>Output</b></td>
+      <td>For <b>Enumerate Library</b>, the output file contains
+      the output structures, the reagents associated with each component and
+      any calculated properties. Output can be a SMILES <tt>(.smi)</tt>, SD
+      file <tt>(.sdf)</tt> or MOE database <tt>(.mdb)</tt>. The output file can
+      be specified by pressing <b>Browse</b> and selecting the appropriate
+      file.
+
+      For <b>Focus Reagents</b>, this field specifies the output prefix that
+      will be used to name the files associated with each component. If the
+      output is <tt>combitools.mdb</tt> and there are two components,
+      <tt>combitools_R1.mdb</tt> and <tt>combitools_R2.mdb</tt> will be
+      created.</td>
+    </tr>
+    <tr>
+      <td><b>Format</b></td>
+      <td>This menu specifies the output format. The filename
+      suffix is changed to reflect the current selection if appropriate.</td>
+    </tr>
+    <tr>
+      <td><b>Open Database Viewer</b></td>
+      <td>If the output format is <b>MOE Database</b>, the output
+      file will be opened in the <span class="nobr"><b>Database
+      Viewer</b></span>.</td>
+    </tr>
+    <tr>
+      <td><b>3D Coordinates</b></td>
+      <td>If on, 3D conformations will be generated for all reaction products
+      when <b>Operation</b> is set to
+      <span class="nobr"><b>Enumerate Library</b></span>.
+      Otherwise, 3D conformations will only be generated if required for 3D
+      filtering or property calculation.
+    </tr>
+    <tr>
+      <td><b>Field Separator</b></td>
+      <td>Specify the field separator when writing SMILES files.
+      Choose one of <b>Comma</b>, <b>Space</b>, <b>Tab</b> or
+      <b>Semicolon</b>.</td>
+    </tr>
+    <tr>
+      <td><b>Quoted Fields</b></td>
+      <td>If on, each field value in a SMILES file will be
+      enclosed in double quotes. This is necessary if the field contains a
+      field separator. In general, it is safest to always include quotes.</td>
+    </tr>
+    <tr>
+      <td><b>Field Titles</b></td>
+      <td>If on, the names of the individual fields in the output
+      SMILES file will be written as the first line of the file.</td>
+    </tr>
+  </table>
+<p>
+<a id="ReagentPanel"></a>
+When a reaction is depicted,
+  a button is associated with each component. Pressing the leftmost button
+  brings up the <span class="nobr"><b>Filter Reagent Library 1</b></span>
+  panel:
+</p>
+
+<img src="combitools/filterreagent1.png" alt="Filter Reagent 1" class="center" />
+  <table class="noborder">
+    <tr>
+      <td><b>Reagents</b></td>
+      <td>This specifies the reagents to be used for the specified
+      component. This can be changed by entering a filename or pressing
+      <b>Browse</b> and selecting the appropriate file.</td>
+    </tr>
+    <tr>
+      <td><b>Descriptor Filter</b></td>
+      <td>If specified, the Descriptor Filter defines the criteria
+      that reagents must satisfy to be used to create the combinatorial
+      library. Any 2D QuaSAR descriptor can be used, including SMARTS strings
+      to include/exclude functional groups. The <b>Save Reaction</b> panel
+      allows users to specify a default filter for each component when a
+      reaction is saved. Descriptor Filters can include files, specified as
+      <tt>@filename</tt> and can be saved as files by pressing <b>Save</b> and
+      entering a filename. Entries containing spaces or non-alphanumeric
+      characters must be enclosed in double quotes. For example, <span class=
+      "nobr"><tt>&quot;[#7;X4]&quot;&lt;1</tt></span> would forbid reagents
+      containing cationic sp<sup>3</sup> nitrogens.</td>
+    </tr>
+    <tr>
+      <td><b>Output</b></td>
+      <td>By default, temporary files are used to record the
+      reagents that contain the desired chemical functionality and pass the
+      Descriptor Filters for each component. If desired, they can be saved as a
+      SMILES or SD file or a MOE database by entering a filename or pressing
+      <b>Browse</b> and selecting the appropriate file. This could be used to
+      create reagent libraries tailored to particular reactions and components
+      that can be easily reused.</td>
+    </tr>
+    <tr>
+      <td><b>Format</b></td>
+      <td>This menu specifies the output format. The filename
+      suffix is changed to reflect the current selection if appropriate.</td>
+    </tr>
+    <tr>
+      <td><b>Field Separator</b></td>
+      <td>Specify the field separator when writing SMILES files.
+      Choose one of <b>Comma</b>, <b>Space</b>, <b>Tab</b> or
+      <b>Semicolon</b>.</td>
+    </tr>
+    <tr>
+      <td><b>Quoted Fields</b></td>
+      <td>If on, each field value in a SMILES file will be
+      enclosed in double quotes. This is necessary if the field contains a
+      field separator. In general, it is safest to always include quotes.</td>
+    </tr>
+    <tr>
+      <td><b>Field Titles</b></td>
+      <td>If on, the names of the individual fields in the output
+      SMILES file will be written as the first line of the file.</td>
+    </tr>
+  </table>
+
+<p>Press <b>OK</b> to perform filtering and create the new reagent files if
+  desired or <b>Cancel</b> to exit the panel. The information in the button is
+  updated to show the number of compounds that pass the filter(s) and the
+  output filename (if specified). The right-most button indicates the maximum
+  number of products in the combinatorial library. This button is inoperative.
+  Note that it is not necessary to wait until the reagent filtering is complete
+  to start the calculation.
+<a id="EnumPanel"></a>
+</p>
+
+<p>When <b>Operation</b> is set to <b>Enumerate Library</b>, the following
+  options are available:</p>
+
+<img src="combitools/enumoptions1.png" alt="Enumerate Options 1" class="center" />
+  <table class="noborder">
+    <tr>
+      <td><b>Product Limit</b></td>
+      <td>This is the maximum number of products to be written to
+      the output file. If zero, the entire combinatorial library will be
+      enumerated. If less than the maximum size of the library a random subset
+      will be created.</td>
+    </tr>
+    <tr>
+      <td><b>Descriptor Filter</b></td>
+      <td>If specified, the Descriptor Filter defines the criteria
+      that products must satisfy to be written to the output file. Any QuaSAR
+      descriptor can be used, including SMARTS strings to include/exclude
+      functional groups. The <b>Save Reaction</b> panel allows users to specify
+      a default filter for each component when a reaction is saved. Descriptor
+      Filters can include files, specified as <tt>@filename</tt> and can be
+      saved as files by pressing <b>Save</b> and entering a filename. Entries
+      containing spaces or non-alphanumeric characters must be enclosed in
+      double quotes. Molecules that do not satisfy the Descriptor Filter are
+      discarded.</td>
+    </tr>
+    <tr>
+      <td><b>Model File</b></td>
+      <td>Output molecules may optionally be filtered with a QSAR
+      <tt>.fit</tt> file, a Model Composer <tt>.mom</tt> file, a Fingerprint
+      Model <tt>.fpt</tt> file or a Pharmacophore query <tt>.ph4</tt> file.
+      Enter the name of an existing file or press <b>Browse</b> to select the
+      appropriate file. Molecules that fail to satisfy the given threshold
+      condition (specified in the following line) will be discarded.</td>
+    </tr>
+    <tr>
+      <td><b>Pharmacophore</b></td>
+      <td>If specified, the pharmacophore query to be used as a
+      filter. Enter the filename or press <b>Browse</b> to select the
+      appropriate file. Molecules that cannot satisfy the pharmacophore will be
+      discarded.</td>
+    </tr>
+  </table>
+
+<p>Normally, the output of <b>Enumerate Library</b> is a set of molecules
+  drawn as 2D depictions. If, however, a 3D QuaSAR Descriptor, Model file or a
+  Pharmacophore query is used, 3D conformers are generated and only those
+  satisfying all filters are retained. The search routine from <span class=
+  "nobr"><a href="confgui.htm">Conformation Import</a></span> is used to
+  generate conformers.
+<a id="FocusPanel"></a>
+</p>
+
+<p>When <b>Operation</b> is set to <b>Focus Reagents</b>, the following
+  options are available:</p>
+
+<img src="combitools/focusreagents1.png" alt=
+  "Focus Reagents Options 1" class="center" />
+  <table class="noborder">
+    <tr>
+      <td><b>Library Sampling</b></td>
+      <td>This specifies the percentage of the combinatorial
+      library that will be randomly enumerated to evaluate the contribution of
+      individual reagents to the overall activity.</td>
+    </tr>
+    <tr>
+      <td><b>Descriptor Filter</b></td>
+      <td>If specified, molecules that do not satisfy the
+      Descriptor Filter are discarded and replacements generated. Any QuaSAR
+      descriptor can be used, including SMARTS strings to include/exclude
+      functional groups. The <span class="nobr"><b>Save Reaction</b></span>
+      panel allows users to specify a default filter for each component when a
+      reaction is saved. Descriptor Filters can include files, specified as
+      <tt>@filename</tt> and can be saved as files by pressing <b>Save</b> and
+      entering a filename. Entries containing spaces or non-alphanumeric
+      characters must be enclosed in double quotes.</td>
+    </tr>
+    <tr>
+      <td><b>Model File</b></td>
+      <td>This is the activity model used to evaluate each
+      product; it <b>must</b> be specified for the calculation to proceed. It
+      can be a QSAR <tt>.fit</tt> file, a Model Composer <tt>.mom</tt> file, a
+      Fingerprint Model <tt>.fpt</tt> file or a Pharmacophore query
+      <tt>.ph4</tt> file. Enter the name of an existing file or press
+      <b>Browse</b> to select the appropriate file. The calculated activity
+      value is applied to each reagent (for each component). 3D conformers are
+      generated as needed, and the maximum value is used as the activity.</td>
+    </tr>
+    <tr>
+      <td><b>Reference</b></td>
+      <td>
+        This is an optional reference database used to calibrate the activity
+        model. It must contain compounds and associated activity data. The
+        specified model is evaluated for each compound and from the model
+        accuracy coefficients C<sub>0</sub> and C<sub>1</sub>, used to weight
+        subsequent model predictions, are calculated. These weighted
+        predictions and not the original model values are then used as follows:
+
+<p class="center"><i>p<sub>reagent</sub></i> = C<sub>0</sub> +
+        C<sub>1</sub> * <i>p<sub>model</sub></i></p>Enter the reference
+        database name or press <b>Browse</b> to select the appropriate file.
+      </td>
+    </tr>
+    <tr>
+      <td><b>Activity Field</b></td>
+      <td>The field of the reference database containing the
+      activity data. Compounds whose model values satisfy the specified
+      comparison are considered active and the rest are considered
+      inactive.</td>
+    </tr>
+  </table>
+<a id="DiversePanel"></a>
+<p>When <b>Operation</b> is set to <b>Diverse Selection</b>, the following
+  options are available:</p>
+
+<img src="combitools/diverseselection1.png" alt=
+  "Diverse Selection Options 1" class="center" />
+  <table class="noborder">
+    <tr>
+      <td><b>Subset Size</b></td>
+      <td>This specifies the desired size of the diverse subset
+      (number of molecules in the output database).</td>
+    </tr>
+    <tr>
+      <td><b>Use Descriptors</b></td>
+      <td>This specifies the list of 2D descriptors used to define
+      the chemical space of the combinatorial library. The molecules in the
+      output database represent a diverse selection from this space.</td>
+    </tr>
+    <tr>
+      <td><b>Descriptor Filter</b></td>
+      <td>If specified, all product molecules that do not satisfy
+      the Descriptor Filter are discarded and alternatives are generated. Any
+      2D QuaSAR descriptor can be used, including SMARTS strings to
+      include/exclude functional groups. The <span class="nobr"><b>Save
+      Reaction</b></span> panel allows users to specify a default filter for
+      each component when a reaction is saved. Descriptor Filters can include
+      files, specified as <tt>@filename</tt> and can be saved as files by
+      pressing <b>Save</b> and entering a filename. Entries containing spaces
+      or non-alphanumeric characters must be enclosed in double quotes.</td>
+    </tr>
+    <tr>
+      <td><b>PCA Samples</b></td>
+      <td>The number of iterations to use in the PCA sampling
+      step. Values above 30,000 tend to provide lesser returns for the
+      increased run time.</td>
+    </tr>
+    <tr>
+      <td><b>Subset Samples</b></td>
+      <td>The number of random subsets of size <b>Subset Size</b>
+      that will be sampled in order to estimate the mean and variance of the
+      diversity of the random subset.</td>
+    </tr>
+    <tr>
+      <td><b>Component Limit</b></td>
+      <td>The maximum number of components to use in the principal
+      component transform. If this is zero, no component limit is imposed. The
+      details of the Component Limit can be found in <a href=
+      "../quasar/cluster.htm">QuaSAR-Cluster</a>.</td>
+    </tr>
+    <tr>
+      <td><b>Temp. Steps</b></td>
+      <td>The number of simulation steps at each fixed temperature
+      is the product of the Temp. Steps value and the number of molecules in
+      the diverse subset.</td>
+    </tr>
+    <tr>
+      <td><b>Condition Limit</b></td>
+      <td>The condition number limit of the principal component
+      transform matrix. The details of the Condition Limit can be found in
+      <a href="../quasar/cluster.htm">QuaSAR-Cluster</a>.</td>
+    </tr>
+    <tr>
+      <td><b>Temp. Scale</b></td>
+      <td>The factor by which the Monte Carlo temperature will be
+      scaled from one outer iteration to the next. The simulation will stop
+      when the temperature falls below 1e-6 (it starts at 1.0).</td>
+    </tr>
+  </table>
+<p>The user can select a number of tasks from the <b>Action</b> menu:</p>
+  <table class="noborder">
+    <tr>
+      <td><b>From MOE</b></td>
+      <td>If a combinatorial scaffold is present in the MOE
+      window:
+	  <img src="combitools/combicore.jpg" alt="Combinatorial Core"
+	  class="top" />
+      the action creates a reaction with the scaffold as the first component
+      and additional components for each attachment point. In this example,
+      four are created:
+	  <img src="combitools/combireaction.png" alt= "Combinatorial Reaction"
+	  class="center" />
+	  Atom-pair numbering is used to associate the
+      scaffold atoms of the first component with the product atoms. The
+      attachment points are labeled <b>R1</b>, <b>R2</b>, <b>R3</b> and
+      <b>R4</b>. The additional components have an attachment point indicated
+      by <b>*</b> and any-atom wildcard, <b>R</b>. In the product, the wildcard
+      <b>A</b> is used to indicate that whatever atom was present in the
+      reactants should be maintained in the product. The button for the first
+      component contains <tt>in MOE</tt> to indicate it is the combinatorial
+      scaffold. Reagent libraries and/or Descriptor Filters can be associated
+      with the remaining components as described previously.</td>
+    </tr>
+    <tr>
+      <td><b>Load File</b></td>
+      <td>This prompts for the filename of a reaction, and loads
+      it into the main panel. It can read MDL reaction or sketch files, or any
+      reaction file saved via <span class="nobr"><b>Save Reaction</b></span>
+      panel.</td>
+    </tr>
+    <tr>
+      <td><b>Sketch</b></td>
+      <td>An external <a href="../moe/sketcher.htm">2D
+      sketcher</a> can be used to create or edit the current reaction.
+      Additional details about supported sketchers can be found <a href=
+      "../moe/extprog.htm#2DSketchers">here</a>.</td>
+    </tr>
+    <tr>
+      <td><p><b>Pair Reaction</b></p></td>
+      <td>
+      <p>Atom-pair numbering is required to associate reagent and product atoms;
+        reactions lacking numbering will be rejected. This Action can be used
+        to estimate and edit the atom pairing. It assumes that valid pairings
+        result from the &quot;fewest edits&quot; (or changes) of atom symbols
+        and bond types. If more than one equivalent pairing result, they can be
+        reviewed in the <span class="nobr"><b>Reaction Atom Pairing</b></span>
+        panel:</p>
+
+      <img src="combitools/atompairing1.png" alt="Atom-pairing" class="center"/>
+
+      <p>In this case, the two solutions interchange atom numbers 8 and 9 (which
+        are ambiguous). There are several options:</p>
+        <table class="noborder">
+          <tr>
+            <td><b>Accept</b></td>
+            <td>The current atom-pairing is accepted, replacing
+            the original reaction.</td>
+          </tr>
+          <tr>
+            <td><b>Next
+            Previous</b></td>
+            <td>Pressing these buttons browse the equivalent
+            solutions (if present).</td>
+          </tr>
+          <tr>
+            <td><b>Sketch</b></td>
+            <td>An external <a href="../moe/sketcher.htm">2D
+            sketcher</a> can be used to edit the currently proposed
+            atom-pairing. Any editing is assumed to generate a preferred (or
+            non-equivalent) solution, and the other alternatives are
+            discarded.</td>
+          </tr>
+          <tr>
+            <td><b>Reject</b></td>
+            <td>This rejects the proposed atom-pairings, leaving
+            the original reaction unchanged.</td>
+          </tr>
+        </table>
+        <p>An example is provided <a href="#PairAtoms">below</a>.</p>
+      </td>
+    </tr>
+    <tr>
+      <td><b>Save Reaction</b></td>
+      <td>
+        Reactions must be saved before they can appear in the reaction list,
+        with information provided in the <span class="nobr"><b>Save
+        Reaction</b></span> panel: <img src="combitools/savereaction1.png" alt=
+        "Save Reaction" class="center" />
+        <table class="noborder">
+          <tr>
+            <td><b>Output File</b></td>
+            <td>Enter the name of the output reaction file or
+            press <b>Browse</b> and select the appropriate file. The file
+            suffix <tt>(.rdf)</tt> can be omitted.</td>
+          </tr>
+          <tr>
+            <td><b>Reaction Product</b></td>
+            <td>The reaction product, such as <tt>pyrrole</tt> or
+            <tt>benzimidazole</tt>. This field is required.</td>
+          </tr>
+          <tr>
+            <td><b>Reaction Class</b></td>
+            <td>The reaction class, such as
+            <tt>cyclocondensation</tt> or <tt>clip</tt> in the case of
+            combinatorial chemistry clip reactions defining R-group libraries.
+            This field is also required.</td>
+          </tr>
+          <tr>
+            <td><b>Reaction Description</b></td>
+            <td>A description of the chemical reaction, which
+            might be its name or other comment. This field is optional.</td>
+          </tr>
+          <tr>
+            <td><b>Project Name</b></td>
+            <td>The project(s) that this reaction is associated
+            with. This field is optional.</td>
+          </tr>
+          <tr>
+            <td><b>Component <i>n</i> Filter</b></td>
+            <td>If specified, this is used as the default
+            component filter for the <i>n</i>th component of this reaction.
+            This can be any 2D QuaSAR Descriptor or SMARTS filter, such as
+            <span class="nobr"><tt>&quot;[#7;X4]&quot;&lt;1</tt></span> to
+            avoid reagents with cationic sp3 nitrogens.</td>
+          </tr>
+          <tr>
+            <td><b>Delete unimportant components</b></td>
+            <td>If on, any product component whose atoms lack
+            atom-pair numbering will be deleted. This can be used to delete
+            heavy atoms that were disconnected by the removal of atoms in the
+            reaction. Several of the clip reactions use this, such as
+            truncating <tt>-OR</tt> to <tt>-*</tt> as R can be of arbitrary
+            length.</td>
+          </tr>
+        </table>Note that it is not necessary to save a reaction before use.
+      </td>
+    </tr>
+  </table>
+
+<p>After filling in the appropriate entries, press <b>OK</b> to start the
+  calculation.  If MOE is running in
+  <a href="../install/smp_inst.htm">MPU mode</a>, the calculations are
+  automatically distributed to each node of the cluster.
+  Progress information is provided in the SVL Commands window. The
+  current operation can be terminated via <span class="menu">MOE |
+  Cancel</span>, by selecting <span class="nobr"><b>Enumerate Combinatorial
+  Library</b></span> or <span class="nobr"><b>Focus Reagent
+  Libraries</b></span> as appropriate.</p>
+
+<p>Upon completion, the output file for <span class="nobr"><b>Enumerate
+  Library</b></span> will contain the following fields (if possible):</p>
+<table class="titlebar">
+  <tr>
+    <th>Field</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><b>mol</b></td>
+    <td>A molecule field containing the structures generated
+    by Enumerate Library. The molecule name is constructed from the number
+    of components and the position of each reagent in the component's
+    library. For example, the product of a two-component reaction with the
+    name <span class="nobr"><tt>C1.1/C2.2</tt></span> used the first
+    reagent from component 1 and the second reagent from component 2.</td>
+  </tr>
+  <tr>
+    <td><b>mseq</b></td>
+    <td>The molecular sequence number, starting at 1 and
+    incrementing with every new molecule.</td>
+  </tr>
+  <tr>
+    <td><b>mol2D</b></td>
+    <td>The 2D Depiction if conformers were generated. In such
+    cases, the <b>mol</b> field contains the lowest-energy conformer.</td>
+  </tr>
+  <tr>
+    <td><b>mol:conf</b></td>
+    <td>The binary compressed conformation field if conformers
+    were generated. This contains all conformers that pass the Descriptor
+    filter, Model file or Pharmacophore query.  When writing SDF files,
+    only the lowest-energy 3D conformation that passes all filters will be
+    written.
+  </tr>
+  <tr>
+    <td><b>Component&nbsp;<i>n</i></b></td>
+    <td>A molecule field containing the reagent used as the
+    <i>n</i>th component in the reaction. For a SMILES or SD file, the name
+    of the reagent is used instead.</td>
+  </tr>
+</table>
+
+<p>If Descriptor or Model filtering is used or Additional Descriptors are
+  calculated, fields are created in the output file to receive the various
+  calculated properties. The output can be analyzed using any of the analysis
+  tools in MOE or an external program.</p>
+
+<p>Upon completion, the output files for <span class="nobr"><b>Focus
+  Reagents</b></span> will contain the following fields (if possible):</p>
+<table class="titlebar">
+  <tr>
+    <th>Field</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><b>mol</b></td>
+    <td>A molecule field containing the reagents associated
+    with the particular component of the reactions. These are unchanged
+    from the input file.</td>
+  </tr>
+  <tr>
+    <td><b>mseq</b></td>
+    <td>The molecular sequence number, starting at 1 and
+    incrementing with every reagent molecule.</td>
+  </tr>
+  <tr>
+    <td><b>$ACT</b></td>
+    <td>The estimate of the proportion of active compounds in
+    the combinatorial library that contain the specified reagent. The $ACT
+    field numbers will sum to 1 in any given output file, with higher
+    numbers indicating a higher proportion of actives.</td>
+  </tr>
+</table>
+
+<p>Upon completion, the output files for <span class="nobr"><b>Diverse
+  Selection</b></span> will contain the following fields (if possible):</p>
+<table class="titlebar">
+  <tr>
+    <th>Field</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><b>mol</b></td>
+    <td>A molecule field containing the structures generated
+    by Diverse Selection. The molecule name is constructed from the number
+    of components and the position of each reagent in the component's
+    library. For example, the product of a two-component reaction with the
+    name <span class="nobr"><tt>C1.1/C2.2</tt></span> used the first
+    reagent from component 1 and the second reagent from component 2.</td>
+  </tr>
+  <tr>
+    <td><b>mseq</b></td>
+    <td>The molecular sequence number, starting at 1 and
+    incrementing with every new molecule.</td>
+  </tr>
+  <tr>
+    <td><b>Component&nbsp;<i>n</i></b></td>
+    <td>A molecule field containing the reagent used as the
+    <i>n<sup>th</sup></i> component in the reaction. For a SMILES or SD
+    file, the name of the reagent is used instead.</td>
+  </tr>
+  <tr>
+    <td><b>Chemical Space</b></td>
+    <td>fields containing the value of each 2D property used
+    to define the chemical space.</td>
+  </tr>
+</table>
+
+<p>If Additional Descriptors are calculated, fields are created in the output
+  file to receive the various calculated properties. The output can be analyzed
+  using any of the analysis tools in MOE or an external program.
+  <!-- ============================ CONFIG PANEL =========================== !--></p>
+<a id="SettingsPanel"></a>
+<h1>Combinatorial Library Settings</h1>
+
+<p>Selecting the <b>Settings</b> icon in the Combinatorial Library
+  application brings up the settings panel:</p>
+
+<img src="combitools/configpanel1.png" alt="Config Panel 1" class="center" />
+<table class="noborder">
+  <tr>
+    <td><b>$MOE/lib/reactions</b></td>
+    <td>If on, the chemical reactions in the
+    <tt>$MOE/lib/reactions</tt> directory will be included in the reaction
+    list.</td>
+  </tr>
+  <tr>
+    <td><b>$MOE/lib/clipreactions</b></td>
+    <td>If on, the clip reactions in the
+    <tt>$MOE/lib/clipreactions</tt> directory will be included in the
+    reaction list. These have a reaction class of <tt>clip</tt>.</td>
+  </tr>
+  <tr>
+    <td><b>Add
+    Delete</b></td>
+    <td>Chemical reactions in the specified list of directories
+    will be included in the reaction list. Directories can be included by
+    pressing <b>Add</b> and selecting the appropriate directory. Pressing
+    <b>Delete</b> removes the selected directories from the list.</td>
+  </tr>
+  <tr>
+    <td><b>Current Working Directory</b></td>
+    <td>If on, <b>Combinatorial Library</b> will include the
+    chemical reactions from the current working directory when the
+    application is started.</td>
+  </tr>
+  <tr>
+    <td><b>Default Reagents</b></td>
+    <td>If specified, this library will be used as input for all
+    components in the selected reaction. Press <b>Browse</b> to select the
+    default library.</td>
+  </tr>
+  <tr>
+    <td><b>Default Descriptors</b></td>
+    <td>If specified, the list of descriptors to be calculated
+    for each output structure. Descriptor names are case-sensitive, and are
+    separated by spaces, commas or tabs. Press <b>Select</b> to select
+    descriptors.</td>
+  </tr>
+</table>
+
+<p>Changes to the Reaction Directories and Default Reagents take effect
+  immediately. Changes to the Default Descriptors take effect if none are
+  specified on the main panel. All changes are also recorded in the MOE
+  configuration file and take effect the next time Combinatorial Library is
+  used.
+  <!-- =============================== EXAMPLE ============================= -->
+</p>
+
+<a id="Examples"></a>
+<h1>Examples</h1>
+
+<p>In this section we will present a number of example calculations using the
+  Combinatorial Library application. The input files are available in
+  <span class="nobr"><tt>$MOE/sample/mol</tt></span>.</p>
+
+<div class="example">
+  <a id="SimpleCalc"></a>
+  <h2>Enumerate Combinatorial Library</h2>
+    <ol start="1">
+      <li><p>Clear the system:</p>
+
+        <p class="indent_novspace"><span class="menu">MOE | File |
+        Close</span></p>
+      </li>
+      <li><p>Start <b>Combinatorial Library</b>:</p>
+
+      <p class="indent_novspace"><span class="menu">MOE | Compute | QuaSAR |
+        Combinatorial Library</span></p>
+      </li>
+      <li>
+      <p><i>Select the reaction:</i></p>
+      <p>Enter <tt>Suzuki</tt> in the search text box.</p>
+      <p>Select the single reaction from the resulting list. After roughly ten
+      seconds, the buttons under the reaction show the number of reagents for
+      each component and the maximum number of products (over 400 thousand):</p>
+
+      <img src="combitools/simpleex1.png" alt="Enumeration 1" class="center"/>
+
+      </li>
+      <li><p><i>Reduce the number of products</i></p>
+      <p>Select the <tt>C1</tt> button,
+      enter <tt>Weight&lt;170</tt> as the Descriptor Filter and press
+      <b>OK</b>.</p>
+      <p>Select the <tt>C2</tt> button,
+      enter <tt>Weight&lt;170</tt> as the Descriptor Filter and press
+      <b>OK</b>.</p>
+     <p>Note that the maximum number of products is reduced to roughly 5000.</p>
+    </li>
+    </ol>
+    <p>Press <b>OK</b> to start the calculation. This will take about a
+    minute, and create <tt>combitools.mdb</tt>, which is the fully-enumerated
+    library. This example demonstrated how the reagent lists can be modified
+    with a Descriptor Filter. The filtered reagents can be saved for later use
+    by entering a filename in the <b>Output</b> field or pressing <b>Browse</b>
+    and selecting the appropriate file. A Descriptor Filter can also be applied
+    to the output molecules to reduce the number of products. A random subset
+    of the combinatorial library can be created by setting <span class=
+    "nobr"><b>Product Limit</b></span> to the desired number of output
+    structures.</p>
+</div>
+
+<div class="example">
+  <a id="FocusFromMOE"></a>
+  <h2>Focus Reagents (from MOE)</h2>
+  <ol start="1">
+    <li>
+      <p>Clear the system:</p>
+      <p class="indent_novspace"><span class="menu">MOE | File | Close</span></p>
+    </li>
+    <li>
+      <p><i>Create the model file</i></p>
+      <p>Open <tt>$MOE/sample/mol/gmp_inhibitors.mdb</tt>.
+      Save a local copy:</p>
+
+    <p class="indent_novspace"><span class="menu">DBV | File | Save
+      As</span></p>
+
+    <p>and enter <tt>gmp_inhibitors.mdb</tt> in the current
+      directory.</p>
+    <p>Calculate the 32 binned VSA Descriptors:</p>
+
+    <p class="indent_novspace"><span class="menu">DBV | Compute |
+      Descriptors | Calculate</span></p>
+
+    <p>Select the <tt>PEOE_VSA+0</tt>
+      through <tt>PEOE_VSA-6</tt>, <tt>SlogP_VSA</tt> and <tt>SMR_VSA</tt>
+      binned descriptors and press <b>OK</b>.</p>
+    <p>Create a binary QSAR model:</p>
+
+    <p class="indent_novspace"><span class="menu">DBV | Compute | Model |
+      QSAR</span></p>
+
+    <p>Change <b>Method</b> to <tt>Binary</tt>.</p>
+    <p>In <b>Model</b> select the 32 descriptors (all but the activity).</p>
+    <p>Press <b>Fit</b> to calculate the binary model.</p>
+    <p>Press <b>Save</b> and save the modeling as <tt>gmp_model.fit</tt>.</p>
+    <p>Press <b>Close</b> to close the <b>QuaSAR-Model</b> panel.</p>
+
+    </li>
+    <li><p>Load the combinatorial scaffold:</p>
+
+    <p class="indent_novspace"><span class="menu">MOE | File |
+      Open</span></p>
+      <p>In the Open panel, select <span class=
+      "nobr"><tt>$MOE/sample/mol/gmp_scaffold.mdb</tt></span> and press
+      <b>OK</b>. This opens a Database Viewer. Double-click on the structure
+      in the <tt>mol</tt> field to load it into MOE. This scaffold has four
+      attachment points, which can be seen by displaying the atom
+      names.</p>
+
+    </li>
+    <li>
+      <p>Start <b>Combinatorial Library</b>:</p>
+
+    <p class="indent_novspace"><span class="menu">MOE | Compute | QuaSAR |
+      Combinatorial Library</span></p>
+    </li>
+    <li>
+      <p>Create the combinatorial reaction:</p>
+
+    <p class="indent_novspace"><span class="menu">Action Menu | From
+      MOE</span></p>
+
+      <p>This creates a five component reaction and assigns
+      atom-pairing as appropriate. The first component is the scaffold from
+      MOE, and the other four are the R-group libraries.</p>
+
+    </li>
+    <li>
+      <p><i>Associate R-group libraries with each attachment point</i>:</p>
+
+      <p>Press the button for each component from second to fifth.</p>
+      <p>In <b>Reagents</b>, enter <span class=
+      "nobr"><tt>$MOE/sample/mol/gmp_r<i>n</i>.mdb</tt></span> or use the
+      <b>Browse</b> button to select this file.</p>
+
+      <p>Press <b>OK</b> to close the <b>Filter Reagent Library</b> panel.</p>
+
+    </li>
+    <li><p><i>Define the <b>Focus Reagents</b> calculation</i>:<p>
+    <p>Change <b>Operation</b> to <b>Focus Reagents</b>,
+    change <b>Library Sampling</b> to 50%, and
+    load the <b>Model File</b>, <tt>gmp_model.fit</tt>, created
+    previously.</p>
+    </li>
+    <li><p>Press <img src="combitools/focusex1_x.png" class="icon"/> to
+    clear the Descriptors filter list.</p></li>
+  </ol>
+
+  <p>At this point, the panel should look like <img src=
+  "combitools/focusex1.png" alt="Library Focusing 1" class="center"/> There are a maximum
+  of 6480 products in the combinatorial library. Press <b>OK</b> to start the
+  calculation. This will take about 20 seconds to calculate, and five files
+  are created: <tt>combitools_R<i>n</i>.mdb</tt>, where <i>n</i> is 1 (the
+  scaffold) through 5 (the fourth component). Examining
+  <tt>combitools_R2.mdb</tt> reveals the <tt>$ACT</tt> estimates for the
+  reagents for the first component: <img src="combitools/focusex2.png" alt=
+  "Library Focusing 2" class="center"/> The library can be focused by sorting the database
+  by the <tt>$ACT</tt> column (descending order) and saving the first half.
+  This new library would contain the reagents that best contributed to the
+  activity.</p>
+</div>
+
+<div class="example">
+  <a id="PH4Restraint"></a>
+  <h2>Pharmacophore Restraint</h2>
+  <ol start="1">
+    <li><p>Clear the system:</p>
+
+      <p class="indent_novspace"><span class="menu">MOE | File |
+      Close</span></p>
+    </li>
+    <li>
+      <p><i>Create an aldehyde reagent library</i>:</p>
+      <p>Create formaldehyde in MOE:</p>
+
+      <p class="indent_novspace"><span class="menu">RHS |
+      Builder</span></p>
+      <p>and press <tt>-C=O</tt>.
+      Press <b>Fragments</b> to attach substituents.
+      Press <b>Save MDB</b>, enter <tt>aldehyde.mdb</tt>, and press
+      <b>OK</b>.</p>
+      <p>Press <b>Close</b> to close the Builder.</p>
+
+    </li>
+    <li>
+      <p><i>Create the unique subset</i>:</p>
+
+      <p>Open <tt>aldehyde.mdb</tt> in the Database Viewer:</p>
+      <p>Select the unique entries:</p>
+
+    <p class="indent_novspace"><span class="menu">DBV | Compute |
+      Sort</span></p>
+
+      <p>Enable <tt>Select Unique Entries</tt>, and disable
+      <tt>Sort Entries</tt>.</p>
+
+      <p>Select <tt>mol</tt> as field 1.</p>
+      <p>Press <b>OK</b>. This selects roughly 45 entries.</p>
+      <p>Create the unique aldehydes:</p>
+
+    <p class="indent_novspace"><span class="menu">DBV | File | Save
+      As</span></p>
+
+    <p>Enable <tt>Selected Entries Only</tt> and enter
+	<tt>aldehyde_unique.mdb</tt>, then press <b>OK</b>.</p>
+
+      </li><li>
+      <p><i>Create the input ligand</i>:</p>
+      <p>Clear the system and load <tt>$MOE/sample/mol/1kv2.pdb</tt>.</p>
+
+      <p>Run Protonate3D:</p>
+
+    <p class="indent_novspace"><span class="menu">Compute | Prepare |
+      Protonate 3D</span></p>
+
+      <p>and press <b>OK</b> to take the defaults.</p>
+      <p>Save the result as <tt>1kv2_prot.moe</tt>.</p>
+      <p>Delete the non-ligand atoms:</p>
+
+    <p class="indent_novspace"><span class="menu">RHS | Select |
+      Ligand</span></p>
+
+    <p class="indent_novspace"><span class="menu">RHS | Select |
+      Invert</span></p>
+
+    <p class="indent_novspace"><span class="menu">RHS |
+      Delete</span></p>
+
+    <p>Delete the non-nitrogen atoms of the morpholine ring,
+      leaving NH<sub>3<sup>+</sup></sub>. If this is not created, you can protonate the
+      appropriate nitrogen in the Builder:
+    </p>
+    <img src="combitools/morpholine.jpg" alt="Truncated Ligand" class="center"/>
+
+      <p>Save the ligand:</p>
+
+    <p class="indent_novspace"><span class="menu">File |
+      Save</span></p>
+
+      <p>Select <tt>MDL SDfile</tt> as <b>Format</b>.</p>
+      <p>Enter <tt>1kv2_lig.sdf</tt> and press <b>OK</b>.</p>
+
+    </li>
+    <li><p>Start <b>Combinatorial Library</b>:</p>
+
+    <p class="indent_novspace"><span class="menu">MOE | Compute | QuaSAR |
+      Combinatorial Library</span></p>
+    </li>
+    <li>
+      <p>Select the first amine/reductive amination reaction:
+        <img src=
+    "combitools/aminereaction1.png" alt="Amine Reaction" class="center"/>
+    <p>Press the first
+    component button and enter <tt>aldehyde_unique.mdb</tt> and press
+    <b>OK</b>.</p>
+    <p>Press the second component button and enter <tt>1kv2_lig.sdf</tt> and
+    press <b>OK</b>.</p>
+  </li>
+    <li>
+      <p>Enter <tt>$MOE/sample/mol/ph4_1kv2.ph4</tt> as the
+    <b>Pharmacophore</b>.</p>
+</li>
+  </ol>
+
+  <p>The maximum size of the combinatorial library is roughly 80. Press
+  <b>OK</b> to start the calculation. This will take a minute or two,
+  creating <tt>combitools.mdb</tt>. The output structures can be browsed in
+  the Database Viewer to show that they superimpose on the input ligand. All
+  conformers that satisfy the pharmacophore query are recorded in the
+  <b>mol:conf</b> field.</p>
+</div>
+
+<div class="example">
+  <a id="ClipRGroup"></a>
+  <h2>Clip R-groups</h2>
+  <ol start="1">
+    <li>
+      <p>Clear the system:</p>
+    <p class="indent_novspace"><span class="menu">MOE | RHS |
+      Close</span></p>
+    </li>
+    <li>
+      <p>Start <b>Combinatorial Library</b>:</p>
+      <p class="indent_novspace"><span class="menu">MOE | Compute | QuaSAR |
+      Combinatorial Library</span></p>
+    </li>
+    <li>
+      <p>Choose a clip reaction
+    Enter <tt>aldehyde</tt> in the Search Text, and select the resulting
+    reaction (of class <tt>clip</tt>):</p>
+     <img src="combitools/aldehyderxn.png"
+    alt="Aldehyde Clip Reaction" class="center"/>
+    <p>This replaces the hydrogen atom with the
+    <tt>A0</tt> attachment point, represented by <font color=
+    "brown"><tt>*</tt></font>. Each aldehyde group in the input molecules
+    will be transformed.</p>
+    </li>
+    <li>
+      <p>Press the (first) component button and enter <tt>Weight&lt;125</tt>
+      as a Descriptor Filter and press <b>OK</b>. The calculation will use the
+      default reagent library, <span class=
+      "nobr"><tt>$MOE/lib/combi_reagents.mdb</tt></span>. This can be changed
+      to an alternate reagent library as desired.</p>
+    </li>
+  </ol>
+
+  <p>Press <b>OK</b> to start the calculation. This creates
+  <tt>combitools.mdb</tt> with roughly 40 entries. The output structures can
+  be browsed in the Database Viewer to confirm that they contain an
+  attachment point:</p>
+  <img src="combitools/attachpts.png" alt=
+  "Attachment Points" class="center"/>
+  <p>The output database can be used in any application
+  expecting clipped R-groups.</p>
+</div>
+
+<div class="example">
+  <a id="PairAtoms"></a>
+  <h2>Reaction Atom Pairing</h2>
+
+  <p>Reactions require atom pair-numbers to relate reagent and product atoms.
+    These can be added when the reaction is created in a 2D sketcher, or
+    <span class="nobr"><b>Pair Reaction</b></span> can be selected from the
+    <b>Action</b> menu to generate possible pairings. The Mitsunobu reaction
+    can be used as an example:</p>
+    <img src="combitools/sketchedRXN.png" alt="Initial Sketch" class="center" />
+    <p>Reactions are drawn in a 2D sketcher, which can be
+    called via <span class="nobr"><b>Action Menu | Sketch</b></span> or run
+    externally and saved in a reaction file. This example assumes the latter
+    case, and demonstrates how pair numbers can be assigned.</p>
+
+    <ol start="1">
+      <li>
+        <p>Clear the system:</p>
+        <p class="indent_novspace"><span class="menu">MOE | RHS |
+        Close</span></p>
+      </li>
+      <li>
+        <p>Start <b>Combinatorial Library</b>:</p>
+        <p class="indent_novspace"><span class="menu">MOE | Compute | QuaSAR |
+        Combinatorial Library</span></p>
+      </li>
+      <li>
+        <p>Load the reaction:</p>
+        <p class="indent_novspace"><span class="menu">Action Menu | Load
+        File</span></p>
+	<p>Select the reaction file and press <b>OK</b>. The
+        reaction should be displayed in the GUI.</p>
+      </li>
+      <li>
+        <p>Generate possible pairings:</p>
+        <p class="indent_novspace"><span class="menu">Action Menu | Pair
+        Reaction</span></p>
+
+        <p>This takes a few seconds, generating two
+        possibilities. These are shown in a new window:</p>
+        <img src="combitools/pairRXN1.png"
+        alt="First Alternative" class="center" />
+
+        <p>In this
+        alternative, product atom <font color="blue">3</font> is assumed to
+        come from the -OH of component 1. While there is a penalty for changing
+        the atom label from <font color="brown">a</font> to O, the connection
+        to atom <font color="blue">2</font> is preserved.</p>
+        <img src="combitools/pairRXN2.png"
+        alt="Second Alternative" class="center" />
+
+        <p>In the second
+        alternative, product atom <font color="blue">3</font> is assumed to
+        come from the -OH of component 2. There is a similar penalty for
+        changing the atom label, and the connection to atom <font color=
+        "blue">5</font> is preserved.</p>
+      </li>
+    </ol>
+
+  <p><b>Next</b> and <b>Previous</b> can be used to review the various
+    possibilities. Pressing <b>Accept</b> uses the current pairing, closes the
+    second window and updates the GUI. If modifications are required, a pairing
+    can be edited in a 2D sketcher by pressing <b>Sketch</b>. This is assumed
+    to create the &quot;correct&quot; pairing and the other alternatives are
+    deleted. Pressing <b>Reject</b> leaves the initial reaction unchanged.</p>
+</div>
+
+<div class="example">
+<a id="DiverseSubset"></a>
+<h2>Generate Diverse Subset(from MOE)</h2>
+    <ol start="1">
+      <li>
+        <p>Clear the system:</p>
+        <p class="indent_novspace"><span class="menu">MOE | File |
+        Close</span></p>
+      </li>
+      <li>
+        <p>Load the combinatorial scaffold:</p>
+        <p class="indent_novspace"><span class="menu">MOE | File |
+        Open</span></p>
+
+        <p>In the Open panel, select <span class=
+        "nobr"><tt>$MOE/sample/mol/gmp_scaffold.mdb</tt></span> and press
+        <b>OK</b>. This opens a Database Viewer. Double-click on the structure
+        in the <tt>mol</tt> field to load it into MOE. This scaffold has four
+        attachment points, which can be seen by displaying the atom
+        names.</p>
+      </li>
+      <li>
+        <p>Start <b>Combinatorial Library</b>:</p>
+        <p class="indent_novspace"><span class="menu">MOE | Compute | QuaSAR |
+        Combinatorial Library</span></p>
+      </li>
+      <li>
+        <p>Create the combinatorial reaction:</p>
+        <p class="indent_novspace"><span class="menu">Action Menu | From
+        MOE</span></p>
+
+        <p>This creates a five component reaction and assigns
+        atom-pairing as appropriate. The first component is the scaffold from
+        MOE, and the other four are the R-group libraries.</p>
+
+      </li>
+      <li>
+        <p><i>Associate R-group libraries with each attachment point</i>:</p>
+
+      <p>Press the button for each component from second to fifth.</p>
+      <p>In <b>Reagents</b>, enter <span class=
+      "nobr"><tt>$MOE/sample/mol/gmp_r<i>n</i>.mdb</tt></span> or use the
+      <b>Browse</b> button to select this file.</p>
+
+      <p>Press <b>OK</b> to close the <b>Filter Reagent Library</b> panel.</p>
+
+      </li>
+      <li>
+        <p><i>Define the <b>Diverse Selection</b> calculation</i>:</p>
+
+      <p>Change <b>Operation</b> to <b>Diverse Selection</b>.</p>
+      <p>Press <b>Select</b> and select Weight, SlogP and TPSA as <b>Use
+      Descriptors</b>.</p>
+      <p>Enter <tt>druglike</tt> as the <b>Descriptor Filter</b>.</p>
+    </li>
+  </ol>
+
+  <p>At this point, the panel should look like</p>
+  <img src="combitools/diverseex1.png"
+  alt="Diverse Subset 1" class="center"/>
+  <p>There are a maximum
+  of 6480 products in the combinatorial library. Press <b>OK</b> to start the
+  calculation. This will take a few minutes to generate a 50-member diverse
+  selection, which is written to <tt>combitools.mdb</tt>. Progress
+  information is provided in the SVL Commands window.</p>
+</div>
+
+
+<a id="See_Also"></a>
+<h1>See Also</h1>
+<p>
+  <a href="../mdb/dbpca.htm">Principal Components Analysis</a><br/>
+  <a href="../quasar/descr.htm">Calculate Descriptors</a><br />
+  <a href="../install/smp_inst.htm">MOE/cluster (MOE/smp)</a>
+</p>
+
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../images/ccgicon.png" /> <a href="../index.htm"></a> <a href=
+    "../legal.htm"></a> &copy;<span class="versionyear"></span> <a href="http://www.chemcomp.com"></a>. All
+    rights reserved.
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

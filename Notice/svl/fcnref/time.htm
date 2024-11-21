@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: clock, cpuclock, asctime, time" />
+  <meta name="keywords" content=
+  "functions: clock_to_timevec, clock_to_timeYMD, timevec_to_clock" />
+  <meta name="keywords" content="functions: timeYMD_to_clock" />
+  <title>Time Functions: clock, asctime, time</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Time Functions: clock, asctime, time
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+seconds = <a class="fcnlink" href="#clock">clock</a> []
+seconds = <a class="fcnlink" href="#cpuclock">cpuclock</a> []
+
+time_string = <a class="fcnlink" href="#asctime">asctime</a> []
+
+timevec = <a class="fcnlink" href="#time">time</a> []
+time_part = <a class="fcnlink" href="#time">time</a> i
+
+timevec = <a class="fcnlink" href=
+"#clock_to_timevec">clock_to_timevec</a> secs
+
+YMD_vec = <a class="fcnlink" href=
+"#clock_to_timeYMD">clock_to_timeYMD</a> secs
+
+secs = <a class="fcnlink" href=
+"#timevec_to_clock">timevec_to_clock</a> cat [&#39;format&#39;, timevec]
+secs = <a class="fcnlink" href=
+"#timeYMD_to_clock">timeYMD_to_clock</a> YMD_vec
+</pre>
+
+<p>where <tt>timevec</tt> and <tt>YMD_vec</tt> are defined as follows:</p>
+
+<pre class="code">
+timevec     [year,mon,day,yday,yweek,wday,hour,min,sec,isdst]
+</pre>
+
+<div class="indent">
+  <div class="indent">
+  <table class="noborder left">
+    <tr>
+      <td><tt>year</tt></td>
+      <td>current year [INT_MIN, INT_MAX]</td>
+    </tr>
+    <tr>
+      <td><tt>mon</tt></td>
+      <td><i>month</i>, months since January, [1, 12]</td>
+    </tr>
+    <tr>
+      <td><tt>mday</tt></td>
+      <td>day of the month, [1, 31]</td>
+    </tr>
+    <tr>
+      <td><tt>yday</tt></td>
+      <td><i>day of the year</i>, days since January 1, [1, 366]</td>
+    </tr>
+    <tr>
+      <td><tt>yweek</tt></td>
+      <td>
+      <i>week of the year</i>, weeks since January 1, [1, 53].
+      <br /><span class="tip">Note:</span> weeks are defined to start on Monday.
+      The first calendar week of the year is the one that includes the first
+      Thursday of the year in question. In the Gregorian calendar, this is
+      equivalent to the week which includes January 4.
+      </td>
+    </tr>
+    <tr>
+      <td><tt>wday</tt></td>
+      <td><i>day of the week</i>, days since Sunday, [0, 6]</td>
+    </tr>
+    <tr>
+      <td><tt>hour</tt></td>
+      <td>hour since midnight, [0, 23]</td>
+    </tr>
+    <tr>
+      <td><tt>min</tt></td>
+      <td>minutes after the hour, [0, 59]</td>
+    </tr>
+    <tr>
+      <td><tt>sec</tt></td>
+      <td>seconds after the minute, [0, 59]</td>
+    </tr>
+    <tr>
+      <td><tt>isdst</tt></td>
+      <td>flag for daylight savings time</td>
+    </tr>
+  </table>
+</div>
+</div>
+
+<pre class="code">
+YMD_vec     [year, mon, day, hour, min, sec ]
+</pre>
+
+<div class="indent">
+  <div class="indent">
+  <table class="noborder left">
+    <tr>
+      <td><tt>year</tt></td>
+      <td>current year [INT_MIN, INT_MAX]</td>
+    </tr>
+    <tr>
+      <td><tt>mon</tt></td>
+      <td><i>month</i>, months since January, [1, 12]</td>
+    </tr>
+    <tr>
+      <td><tt>mday</tt></td>
+      <td>day of the month, [1, 31]</td>
+    </tr>
+    <tr>
+      <td><tt>hour</tt></td>
+      <td>hour since midnight, [0, 23]</td>
+    </tr>
+    <tr>
+      <td><tt>min</tt></td>
+      <td>minutes after the hour, [0, 59]</td>
+    </tr>
+    <tr>
+      <td><tt>sec</tt></td>
+      <td>seconds after the minute, [0, 59]</td>
+    </tr>
+  </table>
+</div>
+</div>
+
+<a id="clock"></a>
+<h1>Description</h1>
+
+<pre>
+seconds = <span class="fcndef">clock</span> []
+</pre>
+
+<p>Returns the current time in seconds. The number of seconds is measured
+  since the &quot;epoch&quot;, January 1, 1970.</p>
+<a id="cpuclock"></a>
+<hr noshade="noshade" />
+
+<pre>
+seconds = <span class="fcndef">cpuclock</span> []
+</pre>
+
+<p>Returns the number of seconds spent by the CPU on behalf of the current
+  process. This is often a more repeatable measurement than <tt>clock[]</tt>,
+  especially on machines that run several intensive processes at the same time,
+  but it should not be used to measure OS-related activities, such as I/O. For
+  technical reasons, the clock tick of the CPU clock used by
+  <tt>cpuclock[]</tt> is usually coarser than the clock tick used by
+  <tt>clock[]</tt>.</p>
+<a id="asctime"></a>
+<hr noshade="noshade" />
+
+<pre>
+time_string = <span class="fcndef">asctime</span> []
+</pre>
+
+<p>Returns a 26-character English-language time/date stamp.</p>
+
+<pre class="code">
+svl&gt; asctime []
+&quot;Fri Nov 22 11:57:09 2002&quot;
+</pre>
+<a id="time"></a>
+<hr noshade="noshade" />
+
+<pre>
+timevec = <span class="fcndef">time</span> []
+time_el_i = <span class="fcndef">time</span> i
+</pre>
+
+<p>Returns the current calendar time as a vector of numeric values.</p>
+
+<p>If <tt>i</tt> is given then <tt>time</tt> returns the <tt>i</tt>&#39;th
+  element of the time vector. For example, <tt>time 1</tt> will return the
+  current year.</p>
+<a id="clock_to_timeYMD"></a>
+<a id="clock_to_timevec"></a>
+<hr noshade="noshade" />
+
+<pre>
+timevec = <span class="fcndef">clock_to_timevec</span> secs
+YMD_vec = <span class="fcndef">clock_to_timeYMD</span> secs
+</pre>
+
+<p>Convert the number of seconds to a time vector or a YMD vector.</p>
+
+<pre class="code">
+svl&gt; clock_to_timevec clock []
+[2002,11,22,326,47,5,12,14,4.15481,0]
+
+svl&gt; clock_to_timeYMD clock []
+[2002,11,22,12,14,56.3907]
+</pre>
+<a id="timevec_to_clock"></a>
+<hr noshade="noshade" />
+
+<pre>
+secs = <span class=
+"fcndef">timevec_to_clock</span> cat [&#39;format&#39;, timevec]
+</pre>
+
+<p>Convert a time vector to the number of seconds since 1970. <tt>format</tt>
+  defines which elements of the time vector to use in the conversion and must
+  be one of:</p>
+
+<div class="indent">
+  <table class="fcnparam">
+    <tr>
+      <td>YMD</td>
+      <td><i>Year Month Day</i>. Use all data except day of the year (yday),
+      week of the year (yweek) and day of the week (wday).</td>
+    </tr>
+    <tr>
+      <td>YD</td>
+      <td><i>Year Day</i>. Use all data except day of the month (mday), week
+      of the year (yweek), day of the week (wday).</td>
+    </tr>
+    <tr>
+      <td>YWD</td>
+      <td><i>Year Week Day</i>. Use all data except month (mon), day of the
+      month (mday), day of the year (yday).</td>
+    </tr>
+  </table>
+</div>
+<a id="timeYMD_to_clock"></a>
+<hr noshade="noshade" />
+
+<pre>
+secs = <span class="fcndef">timeYMD_to_clock</span> YMD_vec
+</pre>
+
+<p>Convert a YMD time vector to number of seconds since Jan 1, 1970.</p>
+
+<h1>See Also</h1>
+
+<p><a class="svl" href="flistetc.htm">fdate</a> <a class="svl" href=
+  "sleep.htm">sleep</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

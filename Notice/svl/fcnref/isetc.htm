@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content=
+  "functions: isalnum, isalpha, isupper, islower, isdigit" />
+  <meta name="keywords" content=
+  "functions: isxdigit, isspace, ispunct, isprint, isgraph, iscntrl" />
+  <title>Logical Character Identifiers: isalpha, ...</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Logical Character Identifiers: isalpha, ...
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    val = <a class="fcnlink" href="#isalnum">isalnum</a> character_vector
+    val = <a class="fcnlink" href="#isalpha">isalpha</a> character_vector
+    val = <a class="fcnlink" href="#iscntrl">iscntrl</a> character_vector
+    val = <a class="fcnlink" href="#isdigit">isdigit</a> character_vector
+    val = <a class="fcnlink" href="#isgraph">isgraph</a> character_vector
+    val = <a class="fcnlink" href="#islower">islower</a> character_vector
+    val = <a class="fcnlink" href="#isprint">isprint</a> character_vector
+    val = <a class="fcnlink" href="#ispunct">ispunct</a> character_vector
+    val = <a class="fcnlink" href="#isspace">isspace</a> character_vector
+    val = <a class="fcnlink" href="#isupper">isupper</a> character_vector
+    val = <a class="fcnlink" href="#isxdigit">isxdigit</a> character_vector
+
+    val = <a class="fcnlink" href="#isalnum">isalnum</a> token_vector
+    val = <a class="fcnlink" href="#isalpha">isalpha</a> token_vector
+    val = <a class="fcnlink" href="#iscntrl">iscntrl</a> token_vector
+    val = <a class="fcnlink" href="#isdigit">isdigit</a> token_vector
+    val = <a class="fcnlink" href="#isgraph">isgraph</a> token_vector
+    val = <a class="fcnlink" href="#islower">islower</a> token_vector
+    val = <a class="fcnlink" href="#isprint">isprint</a> token_vector
+    val = <a class="fcnlink" href="#ispunct">ispunct</a> token_vector
+    val = <a class="fcnlink" href="#isspace">isspace</a> token_vector
+    val = <a class="fcnlink" href="#isupper">isupper</a> token_vector
+    val = <a class="fcnlink" href="#isxdigit">isxdigit</a> token_vector
+</pre>
+
+<h1>Description</h1>
+
+<p>For each leaf character element of <tt>character_vector</tt>, the
+  following functions return 1 for true, 0 for false.</p>
+
+<p>For each leaf token element of <tt>token_vector</tt>, the following
+  functions return 1 if ALL characters in the token are true, 0 if ANY of the
+  characters in the token are false. 1 or 0 is returned defined by each
+  function. <!-- DESC --></p>
+  <table class="titlebar">
+    <tr>
+      <th>Function</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="isalnum"></a>
+<tt>isalnum</tt></td>
+      <td valign="baseline">
+        True for any character for which <tt>isalpha</tt> or <tt>isdigit</tt>
+        is true.
+
+<pre>
+    svl&gt; <span class="fcndef">isalnum</span> &quot;a3B. _+}&quot;
+    [1,1,1,0,0,0,0,0]
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="isalpha"></a>
+<tt>isalpha</tt></td>
+      <td valign="baseline">
+        True for characters for which <tt>isupper</tt> or <tt>islower</tt> is
+        true, i.e. for which none of <tt>iscntrl</tt>, <tt>isdigit</tt>,
+        <tt>ispunct</tt>, or <tt>isspace</tt> is true.
+
+<pre>
+    svl&gt; isalpha &quot;a3B. _+}&quot;
+    [1,0,1,0,0,0,0,0]
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="iscntrl"></a>
+<tt>iscntrl</tt></td>
+      <td valign="baseline">
+        True for control characters.
+
+<pre>
+    svl&gt; iscntrl &quot;1x \n\t&quot;
+    [0,0,0,1,1]
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="isdigit"></a>
+<tt>isdigit</tt></td>
+      <td valign="baseline">
+        True for any decimal-digit character (<tt>0-9</tt>).
+
+<pre>
+    svl&gt; isdigit &quot;a3B. _+}&quot;
+    [0,1,0,0,0,0,0,0]
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="isgraph"></a>
+<tt>isgraph</tt></td>
+      <td valign="baseline">
+        True for any printable character, not including spaces.
+
+<pre>
+    svl&gt; isgraph &quot;a3B. _+}&quot;
+    [1,1,1,1,0,1,1,1]
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="islower"></a>
+<tt>islower</tt></td>
+      <td valign="baseline">
+        True for lower-case letters, i.e. letters for which none of
+        <tt>isupper</tt>, <tt>iscntrl</tt>, <tt>isdigit</tt>, <tt>ispunct</tt>,
+        or <tt>isspace</tt> is true.
+
+<pre>
+    svl&gt; islower &quot;a3B. _+}&quot;
+    [1,0,0,0,0,0,0,0]
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="isprint"></a>
+<tt>isprint</tt></td>
+      <td valign="baseline">True for any printable character, including
+      spaces.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="ispunct"></a>
+<tt>ispunct</tt></td>
+      <td valign="baseline">
+        True for characters for which none of <tt>isalnum</tt>,
+        <tt>isspace</tt>, or <tt>iscntrl</tt> is true.
+
+<pre>
+    svl&gt; ispunct &quot;a3B. _+}&quot;
+    [0,0,0,1,0,1,1,1]
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="isspace"></a>
+<tt>isspace</tt></td>
+      <td valign="baseline">
+        True for any white space, including newlines, vertical space, and for
+        characters for which neither <tt>isalnum</tt> nor <tt>ispunct</tt> is
+        true.
+
+<pre>
+    svl&gt; isspace &quot;a3B. _+}&quot;
+    [0,0,0,0,1,0,0,0]
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="isupper"></a>
+<tt>isupper</tt></td>
+      <td valign="baseline">
+        True for upper-case letters, i.e. letters for which none of
+        <tt>islower</tt>, <tt>iscntrl</tt>, <tt>isdigit</tt>, <tt>ispunct</tt>,
+        or <tt>isspace</tt> is true.
+
+<pre>
+    svl&gt; isupper &quot;a3B. _+}&quot;
+    [0,0,1,0,0,0,0,0]
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="isxdigit"></a>
+<tt>isxdigit</tt></td>
+      <td valign="baseline">
+        True for any hexadecimal-digit character (<tt>0-9</tt>, <tt>A-F</tt>,
+        <tt>a-f</tt>).
+
+<pre>
+    svl&gt; isxdigit &quot;a3B. _+}&quot;
+    [1,1,1,0,0,0,0,0]
+</pre>
+      </td>
+    </tr>
+  </table><!-- ENDDESC -->
+
+<h1>See Also</h1>
+
+<p><a class="svl" href="types.htm">atof</a> <a class="svl" href=
+  "types.htm">atoi</a> <a class="svl" href="toetc.htm">tolower</a> <a class=
+  "svl" href="toetc.htm">toupper</a> </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

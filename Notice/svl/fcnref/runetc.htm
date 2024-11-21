@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: eval, run, script" />
+  <title>Module Compilation and Execution: eval, run, script</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Module Compilation and Execution: eval, run,
+    script
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    result = <a class="fcnlink" href="#eval">eval</a> &#39;expression&#39;
+    result = <a class="fcnlink" href=
+"#eval">eval</a> [ &quot;source_string&quot; ]
+    result = <a class="fcnlink" href=
+"#eval">eval</a> [ &quot;source_string&quot;, argument ]
+
+    result = <a class="fcnlink" href=
+"#run">run</a> [ &#39;filename&#39;, argument ]
+    result = <a class="fcnlink" href="#run">run</a> &#39;filename&#39;
+    result = <a class="fcnlink" href=
+"#run">run</a> [ &quot;source_string&quot;, argument ]
+    result = <a class="fcnlink" href=
+"#run">run</a> [&#39;filename&#39;, argument, &#39;function&#39;]
+
+    result = <a class="fcnlink" href=
+"#script">script</a> [ &#39;filename&#39;, expression_argument ]
+    result = <a class="fcnlink" href="#script">script</a> &#39;filename&#39;
+    result = <a class="fcnlink" href=
+"#script">script</a> [ &quot;source_string&quot;, argument ]
+</pre>
+<a id="eval"></a>
+<h1>Description</h1>
+
+<pre>
+result = <span class="fcndef">eval</span> &#39;expression&#39;
+result = <span class="fcndef">eval</span> [&quot;source_string&quot;]
+result = <span class=
+"fcndef">eval</span> [ &quot;source_string&quot;, argument ]
+</pre>
+
+<p>Compiles <tt>&#39;expression&#39;</tt> and evaluates it as though it had
+  been typed at the command line. The value of the last evaluated expression is
+  returned. <tt>expression</tt> can contain more than one SVL expression
+  separated by semi-colons.</p>
+
+<p>If the expression to be evaluated is given as a string (doubly-quoted), it
+  must be enclosed in brackets.</p>
+
+<pre>
+    svl&gt; eval &#39;igen 10&#39;
+    [1,2,3,4,5,6,7,8,9,10]
+
+    svl&gt; eval &#39;x=9; igen 10&#39;
+    [1,2,3,4,5,6,7,8,9,10]
+    svl&gt; x
+    9
+
+    svl&gt; eval [&#39;igen argument []&#39;, 6]
+    [1,2,3,4,5,6]
+</pre>
+<a id="run"></a>
+<hr noshade="noshade" />
+
+<pre>
+result = <span class="fcndef">run</span> [&#39;filename&#39;, argument]
+result = <span class="fcndef">run</span> &#39;filename&#39;
+result = <span class=
+"fcndef">run</span> [ &quot;source_string&quot;, argument ]
+result = <span class=
+"fcndef">run</span> [&#39;filename&#39;, argument, &#39;function&#39;]
+</pre>
+
+<p>Compiles SVL source code from the file <tt>&#39;filename&#39;</tt>. All
+  functions are scoped as <tt>local</tt>, even those explicitly declared as
+  <tt>global</tt>. This means that no functions compiled from the file are
+  accessible to functions outside the file.</p>
+
+<p>The entry-point function of a new module is determined by the
+  module-environment variable <tt>main</tt>, which is specified by a <tt>#set
+  main</tt> compile directive at the top of the file. If this variable is not
+  set, the entry point defaults to a function of the name <tt>main</tt>, which
+  must then be present in the file.</p>
+
+<p>If the third argument, <tt>&#39;function&#39;</tt>, is present, the entry
+  point of the module will be set to the given function. The function must be
+  declared as a global function.</p>
+
+<p>After successful compilation, <tt>run</tt> invokes the entry-point
+  function with <tt>argument</tt> as the function&#39;s parameter.</p>
+
+<pre>
+        // myfunc.svl
+
+    function main arg
+        print igen arg;
+    endfunction
+
+    svl&gt; run [ &#39;myfunc.svl&#39;, 10 ]
+    [1,2,3,4,5,6,7,8,9,10]
+</pre>
+<a id="script"></a>
+<hr noshade="noshade" />
+
+<pre>
+result = <span class=
+"fcndef">script</span> [&#39;filename&#39;, expression_argument]
+result = <span class="fcndef">script</span> &#39;filename&#39;
+result = <span class=
+"fcndef">script</span> [ &quot;source_string&quot;, argument ]
+</pre>
+
+<p>Compiles and executes the script found in the file
+  <tt>&#39;filename&#39;</tt>. The SVL source code is evaluated as if it had
+  been typed, on a single line, at the command line, except that expressions
+  may span more than 1 line and must be terminated by a semi-colon.
+  <tt>expression_argument</tt> can be accessed by the code within the script
+  using the function <tt>argument</tt>.</p>
+
+<pre>
+        // myscript.svl
+
+    n = argument [];
+    igen n;
+
+    svl&gt; script [ &#39;myscript.svl&#39;, 10 ]
+    [1,2,3,4,5,6,7,8,9,10]
+</pre>
+
+<h1>See Also</h1>
+
+<p><a class="svl" href="symbol.htm">#set</a> <a class="svl" href=
+  "argument.htm">argument</a> <a class="svl" href="calletc.htm">call</a>
+  <a class="svl" href="loadetc.htm">load</a><br />
+  <a class="svl" href="logfile.htm">logfile</a> <a class="svl" href=
+  "symbol.htm">modenv</a><br />
+  <a class="svl" href="tskcall.htm">task_eval</a> <a class="svl" href=
+  "tskcall.htm">task_run</a> <a class="svl" href=
+  "tskcall.htm">task_script</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

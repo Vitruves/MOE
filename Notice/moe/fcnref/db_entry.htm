@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: db_Entries" />
+  <meta name="keywords" content="functions: db_nEntries" />
+  <meta name="keywords" content="functions: db_NextEntry" />
+  <meta name="keywords" content="functions: db_PrevEntry" />
+  <meta name="keywords" content="functions: db_EntryKey" />
+  <title>MOE Database Functions: db_Entries...</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    MOE Database Functions: db_Entries...
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    entry_keys = <a class="fcnlink" href="#db_Entries">db_Entries</a> mdb
+    nentries = <a class="fcnlink" href="#db_nEntries">db_nEntries</a> mdb
+
+    key = <a class="fcnlink" href=
+"#db_NextEntry">db_NextEntry</a> [ mdb, entry_key ]
+    key = <a class="fcnlink" href=
+"#db_PrevEntry">db_PrevEntry</a> [ mdb, entry_key ]
+
+    key = <a class="fcnlink" href=
+"#db_EntryKey">db_EntryKey</a> [ mdb, entry_key ]
+</pre>
+
+<p><b>Note:</b> <tt>mdb</tt> is either a database key, as obtained from
+  <a class="svl" href="db_opcl.htm">db_Open</a>, or a database filename. The
+  molecular database and entry keys are generated internally and cannot be
+  altered by the user.</p>
+<a id="db_Entries"></a>
+<h1>Description</h1>
+
+<pre>
+entry_keys = <span class="fcndef">db_Entries</span> mdb
+</pre>
+
+<p>Returns a vector of all entry keys for a given molecular database
+  identified by key or filename.</p>
+
+<p>The following example loops through all entries in the database
+  <tt>pdb_srch.mdb</tt>:</p>
+
+<pre>
+    local entry_key;
+    mdb_key = db_Open ['pdb_srch.mdb','read'];
+    local entries = db_Entries mdb_key;
+
+    for entry_key in entries loop       // loop through each entry
+        ...Perform some action on each entry...
+    endloop
+
+    db_Close mdb_key;
+</pre>
+<a id="db_nEntries"></a>
+<hr noshade="noshade" />
+
+<pre>
+nentries = <span class="fcndef">db_nEntries</span> mdb
+</pre>
+
+<p>Returns the number of entries in the molecular database identified by key
+  or filename.</p>
+<a id="db_NextEntry"></a>
+<hr noshade="noshade" />
+
+<pre>
+key = <span class="fcndef">db_NextEntry</span> [ mdb, entry_key ]
+</pre>
+
+<p>Returns the key of the entry immediately following that specified by
+  <tt>entry_key</tt>. If <tt>entry_key</tt> is 0, <tt>db_NextEntry</tt> returns
+  the key of the first entry in the database. If there are no entries after
+  <tt>entry_key</tt> in the database, 0 is returned. The database is specified
+  either by key or by filename.</p>
+
+<p>The following example shows how to loop through all entries in a database
+  in order to perform some operation on each entry:</p>
+
+<pre>
+    local ent = 0;
+    while ent = db_NextEntry ['my.mdb',ent] loop
+        ...Operate on ent...
+    endloop
+</pre>
+<a id="db_PrevEntry"></a>
+<hr noshade="noshade" />
+
+<pre>
+key = <span class="fcndef">db_PrevEntry</span> [ mdb, entry_key ]
+</pre>
+
+<p>Returns the key of the entry immediately preceding that specified by
+  <tt>entry_key</tt>. If <tt>entry_key</tt> is 0, <tt>db_PrevEntry</tt> returns
+  the key of the last entry in the database. If there are no entries before
+  <tt>entry_key</tt> in the database, 0 is returned. The database is specified
+  either by key or by filename.</p>
+<a id="db_EntryKey"></a>
+<hr noshade="noshade" />
+
+<pre>
+key = <span class="fcndef">db_EntryKey</span> [ mdb, entry_key ]
+</pre>
+
+<p>Returns <tt>entry_key</tt>, if it represents a valid entry in the database
+  <tt>mdb</tt>, or 0 otherwise. The database is specified either by key or by
+  filename. If <tt>mdb</tt> does not represent a valid database, the function
+  generates an error, except for <tt>mdb</tt>&nbsp;=&nbsp;0, when the function
+  returns 0. The function can be used on arbitrarily nested vectors.</p>
+
+<h1>See Also</h1>
+
+<p><a href="introdb.htm">Database Functions</a> </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

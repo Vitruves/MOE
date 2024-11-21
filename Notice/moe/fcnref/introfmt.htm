@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="intro: Molecular Format Functions" />
+  <meta name="keywords" content="intro: CTAB Functions" />
+  <meta name="keywords" content="intro: SMILES Functions" />
+  <title>Introduction to Molecular Format (CTAB, SMILES, ...)
+  Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Introduction to Molecular Format (CTAB, SMILES, ...) Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>CTAB Connection Table Functions</h1>
+
+<p>The Connection Table (CTAB) data structure is used in MOE to encode
+  chemical structures. Its primary purpose is to capture small molecule
+  chemistry since there are no chain or residue annotations. The CTAB data
+  structure is a useful as an intermediary when converting between different
+  chemical data formats.</p>
+
+<p><a class="svl" href="ctabfcn.htm">ctab_Extract</a><br />
+  <a class="svl" href="ctabfcn.htm">ctab_ExtractFromSMI</a><br />
+  <br />
+  <a class="svl" href="extract.htm">mol_ExtractFromCTAB</a><br />
+  <a class="svl" href="sm_build.htm">sm_ExtractFromCTAB</a><br />
+  <a class="svl" href="sm_build.htm">sm_BuildParse</a><br />
+  <br />
+  <a class="svl" href="ctabfcn.htm">ctab_aMask</a><br />
+  <br />
+  <a class="svl" href="protomer.htm">ctab_EnumerateProtomers</a>
+  </p>
+
+<h1>SMILES Functions</h1>
+
+<p>MOE uses an implementation of SMILES (Simplified Molecular Input Line Entry
+  System) for molecule building, and a subset of the SMARTS language for
+  substructure matching. SMARTS is essentially an extension of SMILES. The
+  basic syntax is described in the entry for <tt>sm_Build</tt>, with additional
+  matching expressions described in the entry for <tt>sm_Match</tt>. The string
+  extractor <tt>sm_Extract</tt> provides a simple means for generating the
+  SMILES strings describing molecules. Two syntax verifiers, one for building,
+  the other for matching, are available for checking string validity. For
+  matching, MOE supports the use of dictionaries of molecules specified as
+  match strings.</p>
+
+<p><a class="svl" href="sm_build.htm">sm_BuildMOL</a><br />
+  <a class="svl" href="sm_build.htm">sm_Build</a><br />
+  <br />
+  <a class="svl" href="sm_build.htm">sm_BuildParse</a><br />
+  <a class="svl" href="sm_build.htm">sm_BuildSyntax</a><br />
+  <a class="svl" href="sm_build.htm">sm_BuildSyntaxError</a><br />
+  <br />
+  <a class="svl" href="sm_build.htm">sm_Extract</a><br />
+  <a class="svl" href="sm_build.htm">sm_ExtractUnique</a><br />
+  <a class="svl" href="sm_build.htm">sm_ExtractFromCTAB</a><br />
+  <br />
+  <a class="svl" href="smartsfcn.htm">sm_Indexof</a><br />
+  <a class="svl" href="smartsfcn.htm">sm_Match</a><br />
+  <a class="svl" href="smartsfcn.htm">sm_MatchAtoms</a><br />
+  <a class="svl" href="smartsfcn.htm">sm_MatchAll</a><br />
+  <br />
+  <a class="svl" href="smartsfcn.htm">sm_MatchSyntax</a><br />
+  <a class="svl" href="smartsfcn.htm">sm_MatchSyntaxError</a><br />
+  <a class="svl" href="smartsfcn.htm">sm_MatchAtomCount</a><br />
+  <a class="svl" href="smartsfcn.htm">SMARTS</a><br />
+  <a class="svl" href="smartsfcn.htm">SMARTS_TABLE</a><br />
+  <a class="svl" href="sm_string.htm">sm_StringRoot</a><br />
+  </p>
+
+
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

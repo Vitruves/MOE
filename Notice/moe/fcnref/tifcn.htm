@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html>
+
+
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <title>Thermodynamic Integration Functions</title>
+  <meta name="keywords" content="functions: AMBER_TI_Initialize" />
+  <meta name="keywords" content="functions: AMBER_TI_Analyze" />
+  <meta name="keywords"
+	content="keywords: thermodynamic integration, AMBER TI" />
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Thermodynamic Integration Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    ti_opt = [
+	T           : num,
+	P           : num,
+	edge        : [vec,vec]
+	nlambda     : int,
+	pcharge     : token,
+	ps_emin     : num_ps,
+	ps_equil    : num_ps,
+	ps_equil_w  : num_ps,
+	ps_sample   : num_ps,
+	ps_sample_p : num_ps,
+	mm_gtest    : num,
+	core        : num,
+	opt_solvate : solvate_opt,
+	opt_md      : md_opt,
+	opt_hpc     : hpc_opt,
+	verbose     : flag
+    ];
+
+    <a class="fcnlink" href="#AMBER_TI_Initialize"
+>AMBER_TI_Initialize</a> [ dir, rec, liglist, ti_opt ]
+    <a class="fcnlink" href="#AMBER_TI_Analyze"
+>AMBER_TI_Analyze</a>    [ dir, opt ]
+</pre>
+
+<h1>Description</h1>
+
+<p>
+The purpose of the
+<span class="fcndef">AMBER_TI_Initialize</span> and
+<span class="fcndef">AMBER_TI_Analyze</span> functions is to calculate
+the relative free energies of binding of <i>n</i> molecules to a receptor
+given a connected graph of <i>m</i> transformations
+{...,(<i>I<sub>i</sub></i>,<i>J<sub>i</sub></i>),...} between pairs of
+molecules.  The calculations are conducted with the AMBER Molecular
+Dynamics software using the technique of Thermodynamic Integration.
+<span class="fcndef">AMBER_TI_Initialize</span> generates scripts for
+AMBER and once the AMBER simulations are complete,
+<span class="fcndef">AMBER_TI_Analyze</span> analyzes the results and
+computes the binding energies.
+</p>
+
+<a id="theory"></a>
+<p>
+The basic idea of Thermodynamic Integration is to interpolate between
+the energy
+functions of two molecules with a coupling parameter
+&lambda;&nbsp;&isin;&nbsp;[0,1].  If <i>E</i><sub>0</sub> is the energy
+function for one molecule and <i>E</i><sub>1</sub> is the energy function
+for the other molecule then we construct <i>E</i>(&lambda;) such that
+<i>E</i>(0) = <i>E</i><sub>0</sub> and
+<i>E</i>(1) = <i>E</i><sub>1</sub>.
+A linear interpolation <i>E</i>(&lambda;) = 
+(1&nbsp;&ndash;&lambda;) <i>E</i><sub>0</sub> + &lambda; <i>E</i><sub>1</sub>
+satisfies the requirements; in practice, non-linear interpolations are
+used.  With the interpolated energy function we have that
+</p>
+
+<p class="center">
+<img src="tifcn/tieqn.png" alt="TI Equations">
+</p>
+
+<p>
+Thus, we can write the free energy of a mathematical (or alchemical)
+transformation between two molecules as a one-dimensional integral over
+the expected derivative of the energy function with respect to &lambda;.
+This integral can be estimated by numerical integration of Molecular
+Dynamics simulations:
+</p>
+
+<ol>
+<li>
+Select <i>K</i> values {&lambda;<sub>1</sub>,...,&lambda;<sub><i>K</i></sub>}.
+</li>
+<li>
+Perform <i>K</i> simulations to estimate
+<i>v<sub>k</sub></i> =
+  &lt; &part;<i>E</i>(&lambda;)/&part;&lambda;
+  &gt;<sub>&lambda;<sub><i>k</i></sub></sub>.
+</li>
+<li>
+Estimate <i>v</i> by numerical integration on
+{...,(<i>v</i><sub>k</sub>,&lambda;<sub><i>k</i></sub>),...}.
+</li>
+</ol>
+
+<p>
+<img class="floatright" src="tifcn/winsim.png" alt="Simulations Diagram">
+
+Each transformation between molecules <i>I</i>&nbsp;&rarr;&nbsp;<i>J</i>
+requires <i>K</i>+1 molecular dynamics simulations
+consisting of an equilibration simulation of length <tt>ps_equil</tt> ps
+followed by <i>K</i> &lambda;-window simulations.
+The equilibration simulation is conducted with &lambda;&nbsp;=&nbsp;0.5.
+Each &lambda;-window simulation is conducted with energy function
+<i>E</i>(&lambda;<sub><i>k</i></sub>) for <i>k</i> = 1, ..., <i>K</i>
+and calculates <i>v</i>(&lambda;<sub><i>k</i></sub>) =
+&lt; &part;<i>E</i>/&part;&lambda; &gt;.
+</p>
+
+<p>
+Each &lambda;-window is a simulation with energy function
+<i>E</i>(&lambda;) whose length is determined by several options;
+<tt>ps_equil_w</tt> is the (relatively short) time (ps) of the
+equilibration phase, <tt>ps_sample</tt> is the total time (ps) of
+the simulation and <tt>ps_sample_p</tt> is the period (ps) at which
+coordinate samples are written to the trajectory file.  At each
+sample period, &part;<i>E</i>/&part;&lambda; is also calculated and
+averaged to produce <i>v</i>(&lambda;).
+The &lambda;-window simulations start from the initial equilibration
+simulation and can run in parallel.
+
+<br clear="both">
+</p>
+
+<p>
+The relative free energy difference for the transformation between
+molecules <i>I</i>&nbsp;&rarr;&nbsp;<i>J</i> is calculated as
+<i>v</i> = <i>w</i><sub>1</sub> <i>v</i>(&lambda;<sub>1</sub>) + &hellip;
++ <i>w<sub>K</sub></i> <i>v</i>(&lambda;<sub><i>K</i></sub>)
+where {<i>w<sub>i</sub></i>, &lambda;<sub>i</sub>} are determined
+from Fej&eacute;r-Clenshaw-Curtis quadrature
+</p>
+
+<p class="center">
+<img src="tifcn/fejer.png" alt="Fejer Quadrature">
+</p>
+
+<p>This numerical integration scheme exhibits spectral (exponentially
+increasing) accuracy. A lower limit of <i>K</i>&nbsp;&ge;&nbsp;11 is required,
+however, to ensure a near-zero expected error.
+</p>
+
+<p>
+The free energy difference of binding between molecules
+<i>I</i>&nbsp;&rarr;&nbsp;<i>J</i> is
+calculated as
+&Delta;&Delta;<i>G<sub>IJ</sub></i>
+    = <i>v<sub>b</sub></i> - <i>v<sub>u</sub></i>
+where <i>v<sub>b</sub></i> is the free energy of transforming molecules
+<i>I</i>&nbsp;&rarr;&nbsp;<i>J</i> in the bound state (with the receptor
+present) and <i>v<sub>u</sub></i> that in the unbound state.  The bound and
+unbound state values are calculated with separate simulations that can
+be run in parallel.
+</p>
+
+<p>Finally, the relative free energy of binding
+&Delta;&Delta;<i>G<sub>i</sub></i>
+for each molecule is computed from the transformation free energies
+{&Delta;&Delta;<i>G<sub>IJ</sub></i>} by a least squares fitting.
+For <i>n</i> molecules and <i>m</i> edges in the transformation graph
+connecting the molecules, let <i>B</i> denote the
+<i>m</i>&nbsp;&times;&nbsp;<i>n</i> edge-node incidence matrix of the graph
+</p>
+
+<p class="center">
+<img src="tifcn/bmat.png" alt="Edge-node Matrix">
+</p>
+
+<p>
+where {...,(<i>I<sub>i</sub></i>,<i>J<sub>i</sub></i>),...} are the <i>m</i>
+edges of the graph.  Let <i>B</i>&nbsp;=&nbsp;<i>UDW<sup>T</sup></i> be
+a singular value decomposition of <i>B</i>.  We can then write (in vector
+form)
+</p>
+
+<p class="center">
+&Delta;&Delta;<i>G<sub>I</sub></i> =
+    <i>W</i> <i>D<sup>*</sup></i> <i>U<sup>T</sup></i>
+    &Delta;&Delta;<i>G<sub>IJ</sub></i>
+</p>
+
+<p>
+where <i>D<sup>*</sup></i> is the pseudo-inverse of the diagonal matrix
+<i>D</i> (inverted non-zero values).  The resulting 
+&Delta;&Delta;<i>G<sub>I</sub></i> are a least-squares solution that
+guarantee a thermodynamic graph.
+Note that different graphs will have different effects on the expected
+errors of the entire calculation.  As a rule of thumb, trees should be
+avoided except for a star topology (<i>n</i>&ndash;1 nodes connected
+to a single root node).  Under reasonably mild assumptions, choosing
+a graph that minimizes trace&nbsp;<i>D</i><sup>*2</sup> will minimize the
+expected mean square error of the &Delta;&Delta;<i>G<sub>I</sub></i>.
+Assuming trace&nbsp;<i>D</i><sup>*2</sup> minimizing graphs with <i>m</i>
+edges, we have the following approximation to the expected mean square error:
+</p>
+
+<p class="center">
+<img src="tifcn/emse.png" alt="Expected MSE">
+</p>
+
+<p>
+where <i>K</i> &ge; 11, <i>q</i><sub>0</sub> = 2 &times; <tt>ps_equil</tt>,
+<i>q</i> = 2 &times; <tt>ps_equil_w</tt>
+and <i>w</i> is the total simulations time (ps) allocated to all simulations.
+This approximation can be used to estimate optimal values of
+<i>K</i> and <i>m</i> given the equilibration costs.
+
+For fixed <i>w</i> and negligible <i>q</i><sub>0</sub> and <i>q</i>
+increasing <i>K</i> or <i>m</i> (at the expense of simulation samples) will
+generally lead to a reduced E[MSE] with increased <i>m</i> preferred
+over increased <i>K</i> when
+3<i>m</i> &le; 11<i>K</i> / (<i>K</i> - 11).
+</p>
+
+<!-- -------------------------------- INTIALIZE -------------------------- -->
+
+<br /><a id="AMBER_TI_Initialize"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">AMBER_TI_Initialize</span> [dir, rec, lig, ti_opt]
+</pre>
+
+<p>The <span class="fcndef">AMBER_TI_Initialize</span> function is used
+to generate simulation files for AMBER's Thermodynamic Integration
+functions to calculate the relative free energy of binding of
+a collection of ligands.  The arguments are as follows:</p>
+
+<div class="indent">
+  <dl>
+    <dt><tt>dir</tt> : <i>path</i></dt>
+    <dd>The name (a token)
+    of the directory that will be created to hold all of the
+    generated scripts.  If the directory already exists, it will be
+    deleted prior to script generation.</dd>
+  </dl>
+  <dl>
+    <dt><tt>rec</tt> : <i>keys</i></dt>
+    <dd>The object keys of the receptor for which binding energies are
+    desired.  The keys may also include structural solvent or other
+    molecules to be included in each simulation.</dd>
+  </dl>
+  <dl>
+    <dt><tt>lig</tt> : <tt>[</tt><i>keys</i><tt>,</tt>...<tt>,</tt>
+	<i>keys</i><tt>]</tt></dt>
+    <dd>The <tt>lig</tt> argument specifies each individual molecule
+    for which relative binding energies to <tt>rec</tt> are desired.
+    Each <tt>lig(i)</tt> should contain keys not in other <tt>lig(j)</tt>
+    or <tt>rec</tt>.  The total number of molecules is
+    <i>n</i> = <tt>length lig</tt> and must be at least 2.</dd>
+  </dl>
+  <dl>
+    <dt><tt>ti_opt</tt> : <i>tagged vector</i></dt>
+    <dd>Options that affect the generation of scripts (see below). </dd>
+  </dl>
+</div>
+
+<p>It is recommended that all of the receptor and ligand atoms have
+reasonable geometries, and that each ligand (in isolation) not have clashes
+with the receptor atoms.  For best results, the ligands should have
+as much atomic overlap with each other as possible.
+An initial mean-field minimization will be
+performed on all of the specified atoms to maximize ligand overlap and
+optimize the mean interaction with the receptor. Then, the following
+files and subdirectories will be created (here,
+<tt>root/</tt> is being used as the holding directory):</p>
+
+  <center>
+    <table class="titlebar">
+      <tr>
+        <th>Generated&nbsp;Files</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td><tt>root/plan.moe</tt>
+        </td>
+        <td>The receptor and all ligands after mean field minimization.</td>
+      </tr>
+      <tr>
+        <td><tt>root/plan.mdb</tt>
+        </td>
+        <td>A database containing an entry for each ligand and each simulation;
+	<tt>plan.mdb</tt> is used and modified by the
+	<span class="fcndef">AMBER_TI_Analyze</span> function once all the
+	simulations are complete.
+	See below for more details.</td>
+      </tr>
+      <tr>
+        <td><tt>root/run.sh</tt>
+        </td>
+        <td>
+        The POSIX shell script for running/restarting calculations on
+	Unix/Linux systems; run the script with <tt>sh root/run.sh</tt>.
+	The script will exit when the full simulation protocol is complete.
+	Once the simulations are complete, MOE will be used to run
+	<span class="fcndef">AMBER_TI_Analyze</span> to compute
+	the final relative free energies of binding (see below).
+        </td>
+      </tr>
+      <tr>
+        <td><tt>root/mI_mJ/</tt>
+        </td>
+        <td>
+          A directory containing simulation directories and files for
+	  the relative binding energy calculation from molecule <tt>I</tt>
+	  to molecule <tt>J</tt>.
+      </tr>
+      <tr>
+        <td><tt>root/mI_mJ/b*/<br />root/mI_mJ/u*/</tt>
+        </td>
+        <td>
+	  Two sets of simulation directories: one set for the bound state
+	  (<tt>b*</tt>) including the receptor, and one set for the unbound
+	  state (<tt>u*</tt>).  The <tt>*</tt> are each 3 decimal digits
+	  000,...,0<i>K</i>, where <i>K</i> (<i>K</i>&ge;11) is the
+	  number of simulation windows used in the numerical integration
+	  (<a href="#nlambda"><tt>ti_opt.nlambda</tt></a>).
+	  Each simulation directory contains files generated with
+	   <a class="svl" href="mdfcn.htm">AMBER_Initialize</a>.
+	  </td>
+      </tr>
+    </table>
+  </center>
+
+<p>The <tt>ti_opt</tt> argument controls various aspects of the simulation
+files generated by <span class="fcndef">AMBER_TI_Initialize</span>:</p>
+
+<div class="indent">
+  <dl>
+    <dt><tt>T</tt> : <i>num</i></dt>
+    <dd>The temperature (K) at which each simulation will be conducted;
+    the default is 300.</dd>
+    <dt><tt>P</tt> : <i>num</i></dt>
+    <dd>The pressure (kPa) at which each simulation will be conducted;
+    the default is 101.  If <tt>P</tt> is negative, then the NVT ensemble
+    will be used for sampling.</dd>
+    <dt><tt>edge</tt> : <tt>[I,J]</tt>
+    <dd>A laminated vector of simulation edges (transformations) to
+    generate.  For each specified edge <tt>k</tt>, a simulation will be
+    generated to transform molecule
+    <tt>I(k)</tt> to molecule <tt>J(k)</tt>, and a corresponding directory
+    (<tt>root/mI_mJ</tt>) to hold the simulation files will be created.
+    If <tt>edge</tt> is <tt>[]</tt>
+    (the default) then a fan topology is generated with 2<i>n</i>&ndash;3
+    edges: (1,2), (1,3), ..., (1,<i>n</i>),
+	   (2,3), (3,4), ... (<i>n</i>&ndash;2,<i>n</i>&ndash;1).
+    </dd>
+    <dt><a id="nlambda"></a><tt>nlambda</tt> : <i>int</i></dt>
+    <dd>The number of simulation windows <i>K</i> used for the numerical
+    integration; the default is 11.
+    Higher values require more simulations but lead to more
+    accurate numerical integration; values above 15 provide rapidly
+    diminishing returns.
+    The files for the <i>K</i> simulation
+    windows will be stored in two sets (<tt>u</tt> for unbound state, and
+    <tt>b</tt> for bound state) of
+    <i>K</i> directories {<tt>mI_mJ/[ub]001/</tt>,...,<tt>mI_mJ/[ub]0K/</tt>}
+    (<i>K</i>&ge;11).
+    </dd>
+    <dt><tt>pcharge</tt> : <i>token</i></dt>
+    <dd>The partial charge model used for ligand molecules; the default
+    is <tt>'AM1-BCC'</tt>.  Legal values are those of the
+    <a class="svl" href="chrgfcn.htm">PartialCharge</a> function.</dd>
+    <dt><tt>ps_emin</tt> : <i>num</i></dt>
+    <dd>The number of picoseconds of energy minimization to use prior
+    to master system equilibration (in each <tt>mI_mJ/[bu]000</tt>
+    simulation); the default is 10.
+    If positive, the following protocol is used:
+<pre><p class="blockquote">mm1  { ps=25% T=0 r=0.5 }
+mm2  { ps=25% T=0 r=1.0 }
+mm3  { ps=50% T=0 }
+</p></pre>
+    where the <tt>ps=<i>x</i>%</tt> means <i>x</i>% of
+    the specified <i>num</i>.</dd>
+    <dt><tt>ps_equil</tt> : <i>num</i></dt>
+    <dd>The number of picoseconds of master equilibration
+    (in each <tt>mI_mJ/[bu]000</tt> simulation); the
+    default is 5000.  The following protocol is used:
+<pre><p class="blockquote">heat { ps=10% T=(50,t) }   // t = ti_opt.T
+nvt  { ps=10% T=t }
+npt  { ps=80% T=t P=p }    // p = ti_opt.P
+</p></pre>
+    where the <tt>ps=<i>x</i>%</tt> means <i>x</i>% of
+    the specified <i>num</i>.</dd>
+    <dt><tt>ps_equil_w</tt> : <i>num</i></dt>
+    <dd>The number of picoseconds of equilibration in each &lambda;-window
+    (<tt>mI_mJ/[bu]0nn</tt> simulation with <tt>nn</tt> > 0); the
+    default is 100.  The following protocol is used:
+<pre><p class="blockquote">heat { ps=25% T=(150,t) }  // t = ti_opt.T
+nvt  { ps=25% T=t }
+npt  { ps=50% T=t P=p }    // p = ti_opt.P
+</p></pre>
+    where the <tt>ps=<i>x</i>%</tt> means <i>x</i>% of
+    the specified <i>num</i>.</dd>
+    <dt><tt>ps_sample</tt> : <i>num</i></dt>
+    <dd>The number of picoseconds of sampling to perform in each
+    &lambda;-window (<tt>mI_mJ/[bu]0nn</tt> simulation with <tt>nn</tt> > 0);
+    the default is 5000.
+    <dt><tt>ps_sample_p</tt> : <i>num</i></dt>
+    <dd>The number of picoseconds of between each coordinate sample written
+    to the trajectory file.  Statistics data may be written to the text output
+    file more frequently.  The default is 10.
+    <dt><tt>mm_gtest</tt> : <i>num</i></dt>
+    <dd>The gradient test (RMS) used to terminate energy minimizations during
+    the generation of simulations; the default is 10.</dd>
+    <dt><tt>core</tt> : <i>num</i></dt>
+    <dd>The radial distance used to detect common core atoms; the default
+    is 0.1&nbsp;&Aring.  MOE uses a minimal common core methodology
+    (3 or 4 atoms); consequently, only a few atoms between each pair of
+    ligands need be within the specified distance.</dd>
+    <dt><tt>opt_md</tt> : <i>tagged vector</i></dt>
+    <dd>Additional options to pass to
+    <a class="svl" href="mdfcn.htm">AMBER_Initialize</a>; the
+    default is <tt>[]</tt>.</dd>
+    <dt><tt>opt_solvate</tt> : <i>tagged vector</i></dt>
+    <dd>Additional options to pass to
+    <a class="svl" href="solvfcn.htm"><tt>Solvate</tt></a>; the
+    default is <tt>[]</tt>.  The <tt>Solvate</tt> function is used
+    to add water and counter-ions to each simulation system.</dd>
+    <dt><tt>opt_hpc</tt> : <i>tagged vector</i></dt>
+    <dd>Options to be used in generating <tt>run.sh</tt> related
+    to high performance computing and workload management systems.
+    The default is <tt>[]</tt>.</dd>
+    <dt><tt>verbose</tt> : <i>flag</i></dt>
+    <dd>If non-zero, information will be written to the SVL Commands
+    window as the scripts are generated.  The default is 1.</dd>
+  </dl>
+</div>
+
+<p>The <tt>root/plan.mdb</tt> database contains information about the ligands
+involved in the simulation as well as the specification of each
+<tt>I</tt> to <tt>J</tt> simulation.  The first <i>n</i> entries are
+the ligands 1,...,<i>n</i> (the <i>molecule entries</i>) and the
+subsequent entries refer to the simulations (the <i>simulation entries</i>).
+</p>
+
+  <center>
+    <table class="titlebar">
+      <tr>
+        <th>Field</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td><tt>sim</tt></td>
+        <td>The name of the <tt>mI_mJ</tt> simulation directory (for
+	simulation entries); the field is empty for molecule entries.
+      </tr>
+      <tr>
+        <td><tt>I<br>J</tt></td>
+        <td>For molecule entries, <tt>I</tt> is the index of the molecule
+	and J is empty.
+	For simulation entries, <tt>I</tt> and <tt>J</tt> contain the
+	molecule indices in the <tt>I</tt> to <tt>J</tt> simulation
+        contained in the directory <tt>mI_mJ</tt>.</td>
+      </tr>
+      <tr>
+        <td><tt>mol_I<br>mol_J</tt></td>
+        <td>For molecule entries, <tt>mol_I</tt> contains the 2D depicted ligand
+	molecule and mol_J is empty.
+	For simulation entries, <tt>mol_I</tt> and <tt>mol_J</tt> contain the
+	2D depicted ligand molecules indexed in <tt>I</tt> and <tt>J</tt>.
+        </td>
+      </tr>
+      <tr>
+        <td><tt>dQ</tt></td>
+        <td>For molecule entries, <tt>dQ</tt> contains the total charge
+	of the molecule.
+	For simulation entries, <tt>dQ</tt> contains the total charge
+	of molecule <tt>J</tt> minus the total charge of molecule <tt>I</tt>.
+	</td>
+      </tr>
+      <tr>
+        <td><tt>dM</tt></td>
+        <td>For molecule entries, <tt>dM</tt> contains protonation state
+	strain energy (kcal/mol) needed to produce 1&nbsp;mol of the
+	state in <tt>mol_I</tt>.
+	For simulation entries, <tt>dM</tt> contains the protonation state
+	strain energy of molecule <tt>J</tt> minus the protonation state
+	strain energy of molecule <tt>I</tt>.
+	</td>
+      </tr>
+    </table>
+  </center>
+
+<p>To run the simulation, use</p>
+
+<p class="blockquote"><tt>linux&gt; sh root/run.sh
+</tt></p>
+
+<p>If the simulation is terminated prior to completion, then issue the
+command again to restart the simulation from where it left off.
+The <tt>root/run.sh</tt> script contains options for execution on both
+local systems and remote workload managers such as SGE, SLURM and LSF.
+Use <tt>root/run.sh -help</tt> for more information on these options.
+</p>
+
+<p><span class="tip">Warning!</span> The script requires a properly
+configured AMBER environment; in standard MOE:</p>
+
+<ol>
+<li>The <tt>AMBERHOME</tt> environment variable is assumed set.</li>
+<li><tt>$AMBERHOME/bin/pmemd.cuda</tt> is the AMBER MD engine.</li>
+<li><tt>CUDA_VISIBLE_DEVICES</tt> is assumed to be set.</li>
+</ol>
+
+<p>This standard AMBER configuration is specified in
+<tt>$MOE/lib/sh/hpc_amber.sh</tt> which is embedded automatically in
+the generated <tt>root/run.sh</tt>.  <tt>hpc_amber.sh</tt>
+can be customized for
+local configurations by saving a modified version, for example in
+<tt>$MOE/custom/lib/sh</tt> or <tt>$HOME/moefiles/lib/sh</tt>.
+The MOE configuration in <tt>$MOE/lib/sh/hpc_moe.sh</tt>,
+which sets the <tt>MOE</tt> environment variable, can be similarly
+configured.
+Note that if the required environment variables are already set
+when <tt>root/run.sh</tt> is executed, the values of those variables
+will be honored.
+</p>
+
+<!-- ------------------------------- ANALYZE ----------------------------- -->
+
+<br /><a id="AMBER_TI_Analyze"></a>
+<hr noshade="noshade" />
+<pre>
+<span class="fcndef">AMBER_TI_Analyze</span> [dir, opt]
+</pre>
+
+<p>
+The <span class="fcndef">AMBER_TI_Analyze</span> function is used to
+extract the simulation data from the files in the directory <tt>dir</tt>
+(here the directory <tt>'root'</tt> is used to illustrate)
+and to calculate the relative binding energies
+of the molecules in <tt>root/plan.mdb</tt>:</p>
+
+<p class="blockquote"><tt>svl&gt; AMBER_TI_Analyze ['root', opt]
+</tt></p>
+
+<p>
+Normally, <span class="fcndef">AMBER_TI_Analyze</span> will be run
+automatically by the <tt>root/run.sh</tt> script; however, it may be
+necessary to invoke the function directly (e.g. if it failed
+to run at the end of the script or if a change to the sampling time
+range is desired).
+<span class="fcndef">AMBER_TI_Analyze</span> will create, use, and/or
+populate the following fields in <tt>root/plan.mdb</tt>:</p>
+
+  <center>
+    <table class="titlebar">
+      <tr>
+        <th>Field</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td><tt>ddG</tt></td>
+        <td>The computed relative binding energy.
+	For molecule entries, <tt>ddG</tt> contains the (relative) binding
+	energy (kcal/mol) of each molecule calculated with a least-squares
+	estimate from the <tt>raw_ddG</tt> values.
+	For simulation entries, <tt>ddG</tt> contains the
+	binding energy of molecule <tt>J</tt>
+	minus the binding energy of molecule <tt>I</tt>.</td>
+      </tr>
+      <tr>
+        <td><tt>dG(exp)</tt></td>
+        <td>The experimental relative binding energy.  This field is
+	ignored for simulation entries.  For molecule entries,
+	<tt>dG(exp)</tt> should be set to a known experimental binding
+	energy (kcal/mol) or left empty.  The mean of the calculated binding
+	energies (in <tt>ddG</tt>) will be shifted to equal the mean of
+	<tt>dG(exp)</tt>.
+	</td>
+      </tr>
+      <tr>
+        <td><tt>ddG_err</tt></td>
+        <td>A computed error estimate of the values in <tt>ddG</tt>.
+	For molecule entries, this is a jackknife (leave-one-out) average
+	estimate of the error.  For simulation entries, this is the
+	difference between the values in <tt>ddG</tt> and <tt>raw_ddG</tt>.
+	</td>
+      </tr>
+      <tr>
+        <td><tt>rank</tt></td>
+        <td>The integer rank of the computed binding energies (1 is best
+	binder).  The rank is computed by repeatedly adding a random
+	Gaussian error with standard deviation <tt>ddG_err</tt> to the
+	computed <tt>ddG</tt> and sorting; the final rank is the average
+	rank.</td>
+      </tr>
+      <tr>
+        <td><tt>raw_ddG</tt></td>
+        <td>The relative binding energy (kcal/mol) from the individual
+	simulations.  For molecule entries, <tt>raw_ddG</tt> is empty.
+	For simulation entries, <tt>raw_ddG</tt> contains the
+	relative binding energy calculated directly from the simulation
+	sampling and numerical integration.</td>
+      </tr>
+      <tr>
+        <td><tt>raw_ddG_err</tt></td>
+        <td>An error estimate of the values in <tt>raw_ddG</tt>.
+	For molecule entries, <tt>raw_ddG_err</tt> is empty.
+	For simulation entries, <tt>raw_ddG_err</tt> contains the error
+	due to the averaging of sampled simulation quantities, but does
+	not contain modeling error estimates (e.g. forcefield error,
+	truncated simulation error, etc.)
+	</td>
+      </tr>
+      <tr>
+        <td><tt>raw_data</tt></td>
+        <td>For molecule entries, <tt>raw_data</tt> is empty.
+	For simulation entries, <tt>raw_data</tt> contains data extracted
+	from the various simulation files.</td>
+      </tr>
+      <tr>
+	<td><tt>skip</tt></td>
+	<td>If set to 1 then the molecule or simulation entry will be
+	ignored for the purposes of calculating binding energies.</td>
+      </tr>
+
+    </table>
+  </center>
+
+<p>The <span class="fcndef">AMBER_TI_Analyze</span> function accepts a
+number of options that affect its behavior:</p>
+
+<div class="indent">
+  <dl>
+    <dt><tt>t_min</tt> : <i>num</i></dt>
+    <dd>The lower time limit (ps) used to calculate the binding energies; the
+    default is 0.  Simulation frames before <i>num</i> are ignored.</dd>
+  </dl>
+  <dl>
+    <dt><tt>t_max</tt> : <i>num</i></dt>
+    <dd>The upper time limit (ps) used to calculate the binding energies; the
+    default is <tt>REAL_MAX</tt>.  Simulation frames after <i>num</i> are
+    ignored.</dd>
+  </dl>
+  <dl>
+    <dt><tt>update</tt> : <i>flag</i></dt>
+    <dd>The <tt>update</tt> flag controls whether <tt>raw_data</tt> is read
+    from the various simulation output files.
+
+    If <i>flag</i> is 0, no files will be read.
+    If <i>flag</i> is 1 (the default), simulation files will be read only if
+    the corresponding <tt>raw_data</tt> field is empty.
+    If <i>flag</i> is 2, the simulation files will be read and the
+    contents of <tt>raw_data</tt> will be replaced.</dd>
+  </dl>
+</div>
+
+<p>
+<p>The operations performed by <span class="fcndef">AMBER_TI_Analyze</span>
+on <tt>root/plan.mdb</tt> are:</p>
+
+<ol>
+<li>If <tt>update</tt> is non-zero then for each simulation entry with
+an empty <tt>raw_data</tt> field, extract the simulation data from
+the <tt>root/mI_mJ</tt> files.  If <tt>update</tt> is 2 then always read
+the files to extract the data and replace the contents of <tt>raw_data</tt>.
+</li>
+<li>For each simulation entry, scan the <tt>raw_data</tt> field and
+calculate the mean and standard deviation of the <i>dE/d&lambda;</i>
+samples of each simulation &lambda;-window.
+</li>
+<li>For each simulation entry, numerically integrate the calculated means
+and store the result in <tt>raw_ddG</tt>; estimate the standard error
+of the numerical integration and store the result in <tt>raw_ddG_err</tt>.
+</li>
+<li>Using the data in <tt>raw_ddG</tt> and <tt>raw_ddG_err</tt>, calculate
+the relative free energy of each molecule entry with <tt>skip</tt> not
+equal to 1 and store the result in <tt>ddG</tt>.  Estimate the standard
+error of the calculated <tt>ddG</tt> and store the result in <tt>ddG_err</tt>.
+The simulation entry edges <tt>I</tt> and <tt>J</tt> are used only if the
+simulation entry <tt>skip</tt> is not equal to 1.
+</li>
+<li>If there are non-empty values in the molecule entry <tt>dG(exp)</tt>
+fields then shift the calculated <tt>ddG</tt> values so that their mean
+is equal to the mean of the non-empty <tt>dG(exp)</tt> values.
+</li>
+<li>Using the data in <tt>ddG</tt> and <tt>ddG_err</tt> for molecule
+entries, calculate the simulations entries' <tt>ddG</tt> and <tt>ddG_err</tt>
+(for simulation entries with <tt>skip</tt> not equal to 1).
+For simulation entry edge (<tt>I</tt>,<tt>J</tt>),
+<tt>ddG = ddG(J) - ddG(I)</tt> and
+<tt>ddG_err = ddG(J) - ddG(I) - raw_ddG</tt>.
+</li>
+</ol>
+
+<p><b>Note!</b> If <tt>update</tt> is 0 or 1 and the simulation entry
+<tt>raw_data</tt> fields are non-empty, the calculations can be
+performed using only <tt>root/plan.mdb</tt>; i.e. no other
+files in the <tt>root/mI_mJ</tt> directories are needed.
+</p>
+
+
+<h1>See Also</h1>
+
+<p>
+  <a class="svl" href="../../svl/fcnref/hpcfcn.htm">hpc_Script</a><br />
+  <a class="svl" href="mdfcn.htm">AMBER_Initialize</a><br />
+  <a class="svl" href="chrgfcn.htm">PartialCharge</a><br />
+  <a class="svl" href="solvfcn.htm">Solvate</a><br />
+  <br />
+  <a href="../../apps/ti.htm">Free Energy Calculations with
+	Thermodynamic Integration</a><br />
+  <a href="../../apps/md.htm">Molecular Dynamics</a><br />
+</p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

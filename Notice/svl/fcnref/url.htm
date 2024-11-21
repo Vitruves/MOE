@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content=
+  "functions: url_open, url_read, url_write, url_stat" />
+  <meta name="keywords" content=
+  "functions: url_keylist, url_key, url_close, url_encode" />
+  <meta name="keywords" content=
+  "keywords: http, ftp, internet, file, transfer, download, url, connect" />
+  <title>Internet URL Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Internet URL Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<h2 class="obsolete">Obsolete</h2>
+
+<pre>
+    key = <a class="fcnlink" href="#url_open">url_open</a> &#39;url&#39;
+    key = <a class="fcnlink" href="#url_open">url_open</a> key
+    key = <a class="fcnlink" href="#url_open">url_open</a> options
+
+        where options is a subset of [
+            key : key,
+            url : &#39;URL&#39;,
+            username : &#39;name&#39;,
+            password : &#39;crypt_password&#39;,
+            properties : properties_tagged_vector
+        ]
+
+    data = <a class="fcnlink" href="#url_read">url_read</a> &#39;url&#39;
+    data = <a class="fcnlink" href="#url_read">url_read</a> key
+    data = <a class="fcnlink" href=
+"#url_read">url_read</a> [&#39;url&#39;, n_bytes]
+    data = <a class="fcnlink" href="#url_read">url_read</a> [key, n_bytes]
+
+    <a class="fcnlink" href=
+"#url_write">url_write</a> [&#39;url&#39;, &quot;data&quot;]
+    <a class="fcnlink" href="#url_write">url_write</a> [key, &quot;data&quot;]
+
+    token = <a class="fcnlink" href=
+"#url_encode">url_encode</a> &#39;token&#39;
+
+    status = <a class="fcnlink" href="#url_stat">url_stat</a> &#39;url&#39;
+    status = <a class="fcnlink" href="#url_stat">url_stat</a> key
+
+    keys = <a class="fcnlink" href="#url_keylist">url_keylist</a> []
+
+    mask = <a class="fcnlink" href="#url_key">url_key</a> keys
+
+    <a class="fcnlink" href="#url_close">url_close</a> keys
+</pre>
+
+<h1>Description</h1>
+
+<h4 class="obsolete">Obsolete Syntax</h4>
+
+<p><span class="warning">Note:</span> The <tt>url_*</tt> functions are
+deprecated.  The <a href="curl.htm" class="svl">curl_*</a> functions
+should be used instead.
+</p>
+
+<p>The <tt>url_</tt> functions provide a mechanism to transfer
+  <em>resources</em> over a network. There are a variety of internet protocols
+  that allow information to be transferred from computer to computer. The two
+  most common protocols are the Hyper Text Transfer Protocol (HTTP), and the
+  File Transfer Protocol (FTP). Information is requested from a client
+  computer, by way of a Uniform Resource Locator, to a web server that will
+  generate and return a response.</p>
+
+<p>Files and data are referred to through the use of a Uniform Resource
+  Locator (<tt>URL</tt>). Web servers receive requests in the form of a
+  <tt>URL</tt> and generate appropriate responses which are returned to the
+  client. The response to the client may be an HTML page, a file or some other
+  computed data depending on the <tt>URL</tt> given. Any such response is
+  called a <tt>resource</tt>.</p>
+
+<p><tt>URL</tt> specification is:</p>
+
+<pre>
+    &lt;scheme&gt;://&lt;authority&gt;&lt;path&gt;?&lt;query&gt;
+
+    scheme    = ( ftp | http ) &quot;:&quot;
+    authority = &quot;//&quot; [&lt;userinfo&gt;@] &lt;host&gt; [:port]
+    userinfo  = &lt;username&gt;:&lt;password&gt;
+    host      = IPv4address
+    path      = &quot;/&quot;  path *( &lt;path&gt; )
+    query     = &lt;var&gt;=&lt;value&gt; *( &quot;&&quot;&lt;query&gt; )
+</pre>
+
+<p>In general,</p>
+
+<pre>
+    [http://]&lt;www.server.name&gt;/d1/d2/.../page[?&lt;var&gt;=&lt;val&gt;]
+</pre>
+  <dl>
+    <dt>scheme</dt>
+    <dd>The leading <tt>&lt;scheme&gt;://</tt> protocol specification is
+    optional, but is added to the <tt>URL</tt> automatically if not provided.
+    Currently supported values are: <tt>scheme = {ftp, http
+    (default)}</tt>.</dd>
+    <dt>authority</dt>
+    <dd>The <tt>authority</tt> segment contains the host address to which the
+    connection is made (i.e. www.chemcomp.com). Optionally, a <tt>username</tt>
+    and <tt>password</tt> combination followed by the @-sign can be given, or a
+    port number to connect to a server not running on a standard <i>default
+    port</i>.</dd>
+    <dt>path</dt>
+    <dd>The <tt>path</tt> segment indicates a path to a resource that the
+    server understands. This may be the path to a file on the server, or the
+    path to a program that will generate a response.</dd>
+    <dt>query</dt>
+    <dd><tt>Variable</tt> and <tt>value</tt> pairs in the optional
+    <tt>&lt;query&gt;</tt> portion following a &quot;?&quot;, specify arguments
+    to be passed through to the server for additional processing. A webserver
+    that supports the Common Gateway Interface (CGI) may accept arguments in
+    this manner to dynamically generate a response to the query. This technique
+    is commonly used for online search engines, forms, <i>etc</i>.</dd>
+  </dl>
+
+<p>An example of a query submitted to the Protein Data Bank regarding the
+  compound with <tt>code=1HZ2</tt> would be:</p>
+
+<pre>
+    http://www.rcsb.org/pdb/cgi/export.cgi/1HZ2.pdb?format=PDB&amp;pdbId=1HZ2
+</pre>
+
+<h3>Connecting through a Proxy Server</h3>
+
+<p>Some networks are protected from the internet through the use of an
+  <i>internet proxy server</i>. If the Java Virtual Machine is supplied with
+  the information regarding the proxy server when it is started then the
+  <tt>url_</tt> functions can access internet resources from behind a proxy
+  server. If the version of Java installed on the machine has a control panel,
+  then the proxy details should be provided by pressing the <b>Network
+  Settings...</b> button on the <b>General</b> tab of the Java Control Panel.
+  On Windows the control panel is normally found in the Windows Control Panel,
+  while on UNIX, it can usually be found by simply entering
+  <tt>ControlPanel</tt> at a shell prompt. If the version of Java being used
+  does not include a control panel, configuration options for the JVM are
+  supplied by setting the <tt>moe-rc</tt> variable
+  <tt>&#39;jvm.commandOptions&#39;</tt> to the appropriate value. The values
+  affecting internet proxy settings for the JVM are listed below; the value of
+  <tt>&lt;proto&gt;</tt> can be one of <tt>{http, ftp}</tt> for all
+  options:</p>
+  <dl>
+    <dt><tt>proxySet</tt></dt>
+    <dd>When set to <tt>true</tt> the JVM will attempt to use a proxy server
+    for internet connections. The default is <tt>false</tt>.</dd>
+    <dt><tt>&lt;proto&gt;.proxyHost</tt></dt>
+    <dd>The name of the proxy host to use for establishing &LT;proto&GT;
+    connections to the internet. This host will proxy all connections to URLs
+    using the <tt>&lt;proto&gt;://</tt> protocol. The default is
+    <tt>&lt;none&gt;</tt>.</dd>
+    <dt><tt>&lt;proto&gt;.proxyPort</tt></dt>
+    <dd>The default is <tt>80</tt> if <tt>&lt;proto&gt;.proxyHost</tt> is
+    specified.</dd>
+    <dt><tt>&lt;proto&gt;.proxyUser</tt></dt>
+    <dd>If a username is required to access the proxy server.</dd>
+    <dt><tt>&lt;proto&gt;.proxyPassword</tt></dt>
+    <dd>If a password is required to access the proxy server.</dd>
+    <dt><tt>&lt;proto&gt;.nonProxyHosts</tt></dt>
+    <dd>The default is <tt>&lt;none&gt;</tt>.</dd>
+  </dl>
+
+<p>The string for the JVM command line must be prepared with the -D prefix
+  for each desired option. For example, the following SVL command would prepare
+  the JVM for FTP transfers through a proxy server, specified in angle
+  brackets:</p>
+
+<pre>
+svl&gt; SetRC [
+        &#39;jvm.commandOptions&#39;,
+        &#39;-DproxySet=true -Dftp.proxyHost=&lt;proxy&gt; -Dftp.proxyPort=&lt;port&gt;&#39;
+    ]
+</pre>
+
+<p>This change will take effect when the JVM is next restarted, but will be
+  written to the <tt>moe-rc</tt> file only when the current MOE session ends.
+  Exiting MOE will ensure that the changes are recorded for all subsequent MOE
+  sessions.</p>
+<a id="url_open"></a>
+<hr noshade="noshade" />
+  <!-- OPEN -->
+
+<pre>
+key = <span class="fcndef">url_open</span> &#39;url&#39;
+key = <span class="fcndef">url_open</span> key
+key = <span class="fcndef">url_open</span> options
+
+    where options is a subset of [
+        key : key,
+        url : &#39;URL&#39;,
+        username : &#39;name&#39;,
+        password : &#39;crypt_password&#39;,
+        properties : properties_tagged_vector
+    ]
+</pre>
+
+<p>Open a connection to a resource referenced by a <tt>URL</tt>.</p>
+
+<p><tt>url_open</tt> returns a <tt>key</tt> that is used to refer to this
+  <tt>URL</tt> in all subsequent operations. A given <tt>key</tt> may be opened
+  by different processes, and may be opened more than once before being closed.
+  Note that each call to <tt>url_open</tt> must be matched by a corresponding
+  call to <tt>url_close</tt>. Attempting to open a <tt>key</tt> of value zero,
+  i.e. <tt>url_open 0</tt>, will have no effect. It is an error to open an
+  invalid key.</p>
+
+<p>If <tt>options</tt> are specified, one of <tt>key</tt> or
+  <tt>&#39;URL&#39;</tt> must be supplied. The <tt>&#39;URL&#39;</tt> argument
+  overrides the <tt>key</tt> argument. For authenticated login, both
+  <tt>username</tt> and <tt>password</tt> must be supplied to establish the
+  connection to the server; the supplied password is expected to be encoded
+  using <a href="svlmpu.htm" class="svl">mpu_password</a>. Otherwise, anonymous
+  authentication is attempted. The need for authenticated login is typically
+  reserved for FTP connections.</p>
+
+<p>The <tt>properties</tt> attribute is used only for HTTP connections, for
+  sending HTTP headers such as <i>Content-type</i> before sending data over the
+  connection. This could be useful when doing a POST request, for example.
+  <tt>properties</tt> should be a tagged vector where the tags are the headers
+  to be sent (e.g. <tt>&#39;Content-type&#39;</tt>) and the values are the
+  values for the corresponding tags (e.g.
+  <tt>&quot;application/x-www-form-urlencoded&quot;</tt>). For example:</p>
+
+<pre>
+    [
+        ...
+        properties: [Content-type: &quot;application/x-www-form-urlencoded&quot;],
+        ...
+    ]
+</pre>
+<a id="url_read"></a>
+<hr noshade="noshade" />
+  <!-- READ -->
+
+<pre>
+data = <span class="fcndef">url_read</span> &#39;url&#39;
+data = <span class="fcndef">url_read</span> key
+data = <span class="fcndef">url_read</span> [&#39;url&#39;, n_bytes]
+data = <span class="fcndef">url_read</span> [key, n_bytes]
+</pre>
+
+<p>Read data from the resource. The resource is specified by either a
+  <tt>URL</tt> or by an open <tt>key</tt>. In the case that the <tt>URL</tt> is
+  given explicitly, the connection is opened and closed automatically before
+  the acquired data is returned.</p>
+
+<p>Either form optionally takes an integer argument, <tt>n_bytes</tt>, that
+  specifies the maximum number of bytes to be read. The call to
+  <tt>url_read</tt> has no effect if <tt>n_bytes</tt> is not positive. A
+  subsequent call to <tt>url_read [key, n_bytes]</tt> will begin reading at the
+  next byte.</p>
+<a id="url_write"></a>
+<hr noshade="noshade" />
+  <!-- WRITE -->
+
+<pre>
+<span class="fcndef">url_write</span> [&#39;url&#39;, &quot;data&quot;]
+<span class="fcndef">url_write</span> [key, &quot;data&quot;]
+</pre>
+
+<p>The behavior of this function depends on whether the connection is made
+  using HTTP or FTP.</p>
+
+<p>For FTP connections, the resource can be specified using either an
+  <tt>URL</tt> or an open <tt>key</tt>. The given <tt>data</tt> will be written
+  to a file on the FTP site (uploaded), provided permissions allow. In the case
+  that the <tt>URL</tt> is given explicitly, the connection is opened and
+  closed automatically; if the file does not already exist it will be created,
+  otherwise it will be overwritten. If <tt>key</tt> is given, the file will be
+  overwritten/created only on the first call to <tt>url_write</tt>.</p>
+
+<p>For HTTP connections, <tt>url_write</tt> permits data to be sent to the
+  web server as a POST request. In this case, a <tt>key</tt> to an already open
+  connection <b>must</b> be provided. Calls to <tt>url_write</tt> must
+  immediately follow the call to <tt>url_open</tt>, i.e. no other
+  <tt>url_*</tt> commands should occur between the <tt>url_open</tt> and
+  subsequent calls to <tt>url_write</tt>. Once the POST data has all been sent,
+  the first call to <tt>url_read</tt> will actually transmit the request and
+  fetch the response. Sending headers to specify, for example, the
+  <i>Content-type</i> of the request can only be done at the time that the
+  connection is opened, by setting the <a href=
+  "#url_open"><tt>url_open</tt></a> <tt>properties</tt> option
+  appropriately.</p>
+<a id="url_encode"></a>
+<hr noshade="noshade" />
+  <!-- ENCODE -->
+
+<pre>
+token = <span class="fcndef">url_encode</span> &#39;token&#39;
+</pre>
+
+<p>Encodes the given <tt>token</tt> as per RFC 3986 for transmission. It
+  would normally be used, for example, to encode variables passed as arguments
+  in an url, and should not be called on the full url. The result is the
+  encoded value of the token. This function works on arbitrarily nested
+  vectors.</p>
+<a id="url_stat"></a>
+<hr noshade="noshade" />
+  <!-- STAT -->
+
+<pre>
+status = <span class="fcndef">url_stat</span> &#39;url&#39;
+status = <span class="fcndef">url_stat</span> key
+</pre>
+
+<p>Return the status of a resource referred to by the given <tt>URL</tt> or
+  <tt>key</tt>. The server is queried with respect to attributes related to the
+  resource, returned as colon-separated pairs. All time values are reported in
+  seconds since the &quot;epoch&quot;, January 1, 1970. The results are those
+  provided by the server and are not guaranteed. The attributes are:</p>
+  <dl>
+    <dt>url:&#39;URL&#39;</dt>
+    <dd>The <tt>URL</tt> after interpretation by the server. For instance, the
+    <tt>&#39;URL&#39;</tt> will begin with <tt>&lt;scheme&gt;://</tt>.</dd>
+    <dt>type:&#39;url_connection_type&#39;</dt>
+    <dd>The content type of the resource. A common type for HTML web pages is
+    <tt>&#39;text/html&#39;</tt>.</dd>
+    <dt>length:bytes</dt>
+    <dd>The length in bytes of the resource that will be transferred.</dd>
+    <dt>date:seconds</dt>
+    <dd>The <i>sending date</i> of the resource, or 0 if not known.</dd>
+    <dt>modified:seconds</dt>
+    <dd>Last time of modification.</dd>
+    <dt><tt>expiration:seconds</tt></dt>
+    <dd>Expiration date.</dd>
+  </dl>
+<a id="url_keylist"></a>
+<hr noshade="noshade" />
+  <!-- KEYLIST -->
+
+<pre>
+keys = <span class="fcndef">url_keylist</span> []
+</pre>
+
+<p>Returns a vector of <tt>keys</tt> of all currently open <tt>url_</tt>
+  keys.</p>
+<a id="url_key"></a>
+<hr noshade="noshade" />
+  <!-- KEYS -->
+
+<pre>
+mask = <span class="fcndef">url_key</span> keys
+</pre>
+
+<p>For each <tt>key</tt> in <tt>keys</tt>, return the <tt>key</tt> if it
+  corresponds to a valid <tt>url_</tt> key. Return 0 otherwise.</p>
+<a id="url_close"></a>
+<hr noshade="noshade" />
+  <!-- CLOSE -->
+
+<pre>
+url_close keys
+</pre>
+
+<p>Close and free resources associated with a <tt>URL</tt>. Each <tt>key</tt>
+  listed in <tt>keys</tt> is closed if it is currently open. Invalid keys are
+  ignored.</p>
+
+<h1>See Also</h1>
+
+<p><a href="curl.htm">cURL Functions</a></p>
+
+<p><a href="time.htm">Time Functions</a></p>
+
+<p><a class="svl" href="svlmpu.htm">mpu_password</a></p>
+
+<p>The syntax of URL is defined by <a href=
+  "http://www.ietf.org/rfc/rfc2396.txt">RFC 2396: Uniform Resource Identifiers
+  (URI): Generic Syntax</a>,<br />
+  amended by <a href="http://www.ietf.org/rfc/rfc2732.txt">RFC 2732: Format for
+  Literal IPv6 Addresses in URLs</a>.</p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

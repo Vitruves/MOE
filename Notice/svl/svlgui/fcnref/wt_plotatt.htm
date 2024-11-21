@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href=
+  "../../../include/manstyle.css" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: PlotAttributesPrompt" />
+  <meta name="keywords" content="functions: PlotExport" />
+  <meta name="keywords" content="functions: PlotPickInfo" />
+  <meta name="keywords" content="functions: PlotCopyToClipboard" />
+  <title>Plot Functions: PlotAttributesPrompt, PlotExport, ...</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../../index.htm"><img src="../../../images/ccglogo.png" /></a>
+    <a href="../../../index.htm"><div class="moeversion"></div></a>
+    Plot Functions: PlotAttributesPrompt,
+    PlotExport, ...
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    <a class="fcnlink" href=
+"#PlotAttributesPrompt">PlotAttributesPrompt</a> [ window_key, plot_widget_name ];
+    grkey = <a class="fcnlink" href="#PlotExport"
+>PlotExport</a>   [ window_key, plot_widget_name ]
+    grkey = <a class="fcnlink" href="#PlotExport"
+>PlotExport</a>   [ window_key, plot_widget_name, [width, height] ]
+    <a class="fcnlink" href="#PlotCopyToClipboard"
+>PlotCopyToClipboard</a>  [ window_key, plot_widget_name, opt ]
+
+    [dx,dy,r,rmin,rmax,w,h] = <a class="fcnlink" href=
+"#PlotPickInfo">PlotPickInfo</a> [ window_key, plot_widget_name, [x, y] ]
+</pre>
+
+<a id="PlotAttributesPrompt"></a>
+<h1>Description</h1>
+
+<pre>
+<span class="fcndef">PlotAttributesPrompt</span
+> [ window_key, plot_widget_name ]
+</pre>
+
+<p>Displays a panel showing the current attributes of the plot widget,
+  which is located in the window referenced by <tt>window_key</tt>
+  and the widget <tt>name</tt> attribute <tt>plot_widget_name</tt>.
+  All attributes may be modified. Modifications to attributes are
+  immediately reflected in the plot widget.</p>
+
+<a id="PlotExport"></a>
+<hr noshade="noshade" />
+
+<pre>
+grkey = <span class="fcndef">PlotExport</span
+> [ window_key, plot_widget_name ]
+grkey = <span class="fcndef">PlotExport</span
+> [ window_key, plot_widget_name, [width, height] ]
+</pre>
+
+<p>Creates a graphics object from the specified plot <tt>plot_widget_name</tt>
+  and returns its key, which can be used e.g. as parameter to the function
+  <a href="../../fcnref/grfcn.htm">gr_export</a> to save the graphics object
+  in an image file or print it. Optionally the size of the output graphics
+  object can be specified.</p>
+
+<a id="PlotCopyToClipboard"></a>
+<hr noshade="noshade" />
+
+<pre>
+grkey = <span class="fcndef">PlotCopyToClipboard</span
+>  [ window_key, plot_widget_name, opt ]
+</pre>
+
+<p>Copies the plot data values of the specifed plot <tt>plot_widget_name</tt>
+  onto the clipboard. Data values are separated by tabs, one data point
+  per line. In the tagged vector <tt>opt</tt> one can specify additional
+  options:
+  <table class="noborder">
+    <tr>
+    <td><b><tt>copy_data</tt></b></td>
+    <td>If <tt>1</tt></b> (default: <tt>1</tt>),
+    copy the data values onto the text clipboard.</td>
+    </tr>
+    <tr>
+    <td><b><tt>copy_image</tt></b></td>
+    <td>If <tt>1</tt> (default: <tt>0</tt>),
+    copy an image of the plot (created by <tt>PlotExport</tt>) onto the
+    <tt>image/png</tt> clipboard. On Windows and Linux,
+    <tt>copy_data</tt> and <tt>copy_image</tt> can be enabled at the same
+    time; on macOS only one of them.</td>
+    </tr>
+    <tr>
+    <td><b><tt>series_idx</tt></b></td>
+    <td>Specify list of data series indices
+    to copy data values for (default: <tt>[]</tt>, i.e. copy all).</td>
+    </tr>
+  </table>
+</p>
+
+<h4>Plot Functions Example:</h4>
+
+<p>The following example code demonstrate how to use
+  <tt>PlotAttributesPrompt</tt>, <tt>PlotExport</tt>,
+  and <tt>PlotCopyToClipboard</tt>:</p>
+
+<pre>
+function gr_export, PlotCopyToClipboard;
+
+function PlotExample []
+    local wkey = WindowCreate [
+        title: &#39;Example&#39;,
+        name: &#39;shell&#39;,
+        windowName: &#39;Plot&#39;,
+        text: [
+          &#39;Attributes1...&#39;, &#39;Attributes2...&#39;,
+          &#39;Export1...&#39;, &#39;Export2...&#39;,
+          &#39;Clipboard1&#39;, &#39;Clipboard2&#39;,
+          &#39;Close&#39;
+        ],
+        onTrigger: [
+          &#39;return&#39;, &#39;return&#39;,
+          &#39;return&#39;, &#39;return&#39;,
+          &#39;return&#39;, &#39;return&#39;,
+          &#39;exit&#39;
+        ],
+
+        Plot: [
+          name: &#39;plot1&#39;,
+          background: &#39;black&#39;,
+          foreground: &#39;white&#39;,
+          series: [igen 10],
+          resizeV: 1,
+          resizeH: 1
+        ],
+
+        Plot: [
+          name: &#39;plot2&#39;,
+          background: &#39;canvasBackground&#39;,
+          foreground: &#39;canvasForeground&#39;,
+          plotType: &#39;histogram&#39;,
+          series: igen 10,
+          resizeV: 1,
+          resizeH: 1
+        ]
+    ];
+
+    WindowShow wkey;
+    loop
+        local [values, trigger] = WindowWait wkey;
+
+        if trigger == &#39;shell&#39; then
+            if values.shell == &#39;Attributes1...&#39; then
+                if second task_fork [master: &#39;parent&#39;] === &#39;child&#39; then
+                   <span class=
+"fcndef">PlotAttributesPrompt</span> [wkey, &#39;plot1&#39;];
+                   exit [];
+                endif
+            endif
+
+            if values.shell == &#39;Attributes2...&#39; then
+                if second task_fork [master: &#39;parent&#39;] === &#39;child&#39; then
+                   <span class=
+"fcndef">PlotAttributesPrompt</span> [wkey, &#39;plot2&#39;];
+                   exit [];
+                endif
+            endif
+
+            if values.shell == &#39;Export1...&#39; then
+                if second task_fork [master: &#39;parent&#39;] === &#39;child&#39; then
+                   gr_export <span class=
+"fcndef">PlotExport</span> [wkey, &#39;plot1&#39;];
+                   exit [];
+                endif
+            endif
+
+            if values.shell == &#39;Export2...&#39; then
+                if second task_fork [master: &#39;parent&#39;] === &#39;child&#39; then
+                   gr_export <span class=
+"fcndef">PlotExport</span> [wkey, &#39;plot2&#39;];
+                   exit [];
+                endif
+            endif
+
+            if values.shell == &#39;Clipboard1&#39; then
+                <span class=
+"fcndef">PlotCopyToClipboard</span> [wkey, 'plot1'];
+            endif
+
+            if values.shell == &#39;Clipboard2&#39; then
+                <span class=
+"fcndef">PlotCopyToClipboard</span> [wkey, 'plot2'];
+            endif
+        endif
+    endloop
+
+endfunction
+</pre>
+
+<a id="PlotPickInfo"></a>
+<hr noshade="noshade" />
+
+<pre>
+[dx,dy,r,rmin,rmax,w,h] = <span class="fcndef">PlotPickInfo</span
+> [ window_key, plot_widget_name, [x, y] ]
+</pre>
+
+<p>Returns information about the specified plot position <tt>x,y</tt> in the
+  plot <tt>plot_widget_name</tt> of the window <tt>window_key</tt>.
+  The information is useful when trying to decide if a mouse pick on
+  the plot should select a plot data point or not:
+  <table class="noborder">
+    <tr>
+    <td><tt><b>dx,&nbsp;dy</b></td></td>
+    <td>X/Y (axis) values per pixel at the specified
+    point in the plot. For logarithmic scales this varies depending on
+    the exact location in the plot.</td>
+    </tr>
+    <tr>
+    <td><tt><b>r</b></td></td>
+    <td>Default radius of plot makers in pixels.</td>
+    </tr>
+    <tr>
+    <td><tt><b>rmin,&nbsp;rmax</b></td></td>
+    <td>Minimum and maximum radius of variable
+    sized plot makers (W-axis) in pixels.</td>
+    </tr>
+    <tr>
+    <td><tt><b>w,&nbsp;h</b></td></td>
+    <td>Width and height of plot widget in pixels.</td>
+    </tr>
+  </table>
+
+<p>The following code demonstrate how one can use <tt>PlotPickInfo</tt>
+  to pick data points in a plot. The function <tt>pick_plot</tt>
+  has a parameters the window key, plot widget name and
+  vectors with the <tt>x,y,r</tt> data of the plot points; <tt>r</tt> is the
+  size data (w-axis) of the points. Additionally the location
+  <tt>mx,my</tt> of the mouse click is required. The function
+  returns the index of the data point which was hit by the mouse,
+  or <tt>0</tt> if no point was selected:</p>
+
+<pre>
+local function pick_plot [wkey, plot, data_x, data_y, data_r, mx, my]
+    local [dx, dy, r, rmin, rmax, w, h] = <span class=
+"fcndef">PlotPickInfo</span> [wkey, plot, [x, y]];
+
+    local dist =			// sqr of the distance to all points
+	sqr ((data_x - mx) / dx) +	// dx, dy is pixel size in plot units
+	sqr ((data_y - my) / dy)
+    ;
+    local idx = x_min dist;
+
+    if not idx then return 0; endif
+
+	// If plot points have variable radii take them into account.
+
+    local p_r = r;			// radius of plot markers (pixels) 
+    if notnull data_r then
+	local [p_rmin, p_rmax] = first WindowGetAttr [wkey, plot, &#39;WAxisRange&#39;];
+	p_r = (data_r(idx) - p_rmin) * invz (p_rmax - p_rmin);
+	p_r = min [1, max [0, p_r]];
+	p_r = rmin + p_r * (rmax-rmin);	// rmax, rmin: radius range (w-axis)
+    endif
+
+	// Check if nearest plot point is sufficiently close to the mouse.
+
+    if sqrt dist(idx) > max [p_r, r] then return 0; endif
+
+    return idx;
+endfunction
+</pre>
+
+
+<h1>See Also</h1>
+
+<p><a href="wt_plot.htm">Plot widget</a><br />
+  <a href="../../fcnref/grfcn.htm">Graphics Object Functions</a><br />
+  <a href="introwt.htm">Window Toolkit Functions</a><br /></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../../images/ccgicon.png" /> <a href="../../../index.htm"></a>
+    <a href="../../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: get, peek, mget" />
+  <meta name="keywords" content="SVL:symbol: [] (), | ||" />
+  <title>Data Access Functions: get, peek, ...</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Data Access Functions: get, peek, ...
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    result = <a class="fcnlink" href="#get">get</a> [ v, index_list ]
+    result = v [ index_list ]
+
+    result = <a class="fcnlink" href="#mget">mget</a> [ v, mask ]
+    result = v | mask
+
+    result = v_list || mask_list
+
+    result = <a class="fcnlink" href="#peek">peek</a> [ v, index_list ]
+    result = v(index_list)
+</pre>
+<a id="get"></a>
+<h1>Description</h1>
+
+<pre>
+result = <span class="fcndef">get</span> [ v, index_list ]
+result = v [ index_list ]
+</pre>
+
+<p>Extracts top-level vector elements. <tt>index_list</tt> is a flat numeric
+  vector specifying the positions of the elements to get; i.e. each index of
+  the index list corresponds to an element at the top level of vector
+  <tt>v</tt>. The extracted elements remain at the same level of nesting as in
+  the source vector.</p>
+
+<p>The shorthand notation for <tt>get</tt> is square brackets <tt>[]</tt>. Do
+  not confuse this with vector notation.</p>
+
+<pre>
+     svl&gt; v = [2,3,4,5,6]
+     svl&gt; get [v, 2]
+     3
+     svl&gt; v[2]
+     3
+     svl&gt; get [ [2,3,4,5,6], [4,2] ]
+     [5,3]
+     svl&gt; v[ [4,2] ]
+     [5,3]
+</pre>
+<a id="mget"></a>
+<hr noshade="noshade" />
+
+<pre>
+result = <span class="fcndef">mget</span> [ v, mask ]
+result = v | mask
+</pre>
+
+<p>Uses a mask instead of an index list to specify which elements to get.
+  <tt>mget</tt> extracts elements of <tt>v</tt> whose positions correspond to
+  the non-zero values in <tt>mask</tt>. <tt>mask</tt> and <tt>v</tt> should be
+  of the same length. <tt>|</tt> is shorthand for <tt>mget</tt>.</p>
+
+<pre>
+    svl&gt; a = [1,2,3,4,5]
+    svl&gt; a | [0,1,0,1,1]
+    [2,4,5]
+    svl&gt; &quot;bookkeeper&quot; | m_uniq &quot;bookkeeper&quot;
+    &quot;bokepr&quot;
+</pre>
+  <hr noshade="noshade" />
+
+<pre>
+result = v_list || mask_list
+</pre>
+
+<p>The next example demonstrates the <tt>apt mget</tt> function. <tt>||</tt>
+  is shorthand for <tt>apt mget</tt>.</p>
+
+<pre>
+    svl&gt; v = [1,2,3,4,5]
+    svl&gt; w = [10,20,30,40,50]
+    svl&gt; apt mget [ [v,w], [odd v] ]
+    [ [1,3,5], [10,30,50] ]
+</pre>
+<a id="peek"></a>
+<hr noshade="noshade" />
+
+<pre>
+result = <span class="fcndef">peek</span> [ v, index_list ]
+result = v(index_list)
+</pre>
+
+<p>Extracts a single element from a vector, from any level of nesting. The
+  shorthand for <tt>peek</tt> is parentheses ( ). A flat vector of indices
+  selects which element to peek. If <tt>index_list</tt> contains more than one
+  element, each successive number gives a deeper level of nesting; i.e. the
+  first index refers to a top-level element, the second index to an object
+  within that top-level element, and so forth.</p>
+
+<p><tt>peek</tt> returns a single element without additional brackets, and
+  decreases the level of nesting of the extracted element.</p>
+
+<pre>
+    svl&gt; v = [1,2,3,4,5]
+    svl&gt; peek [v, 2]
+    2
+    svl&gt; peek [&quot;goldfish&quot;, 5]
+    &quot;f&quot;
+    svl&gt; a = [1, [2,3], 4, 5]
+    svl&gt; a(2)
+    [2,3]
+    svl&gt; a( [2,1] )
+    2
+    svl&gt; a = [0, [1, 2, [3,4]]]
+    svl&gt; a( [2,3,1] )
+    3
+</pre>
+
+<p><b>Note:</b> <tt>peek</tt> extracts a single element from a vector. To
+  extract several elements of a vector, use <tt>get</tt>.</p>
+
+<h1>See Also</h1>
+
+<p><a href="introstruct.htm">Structural Functions</a></p>
+
+<p><a class="svl" href="putpoke.htm">put []=</a><br />
+  <a class="svl" href="putpoke.htm">poke ()=</a><br />
+  <a class="svl" href="putpoke.htm">mput |=</a><br />
+  <a class="svl" href="putpoke.htm">apt mput ||=</a><br />
+  <a class="svl" href="tagpeek.htm">tagpeek</a><br />
+  <a class="svl" href="app.htm">apt</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

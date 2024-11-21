@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="functions: GetRC" />
+  <meta name="keywords" content="functions: GetRCBoolean" />
+  <meta name="keywords" content="functions: GetRCNumber" />
+  <meta name="keywords" content="functions: SetRC" />
+  <meta name="keywords" content="functions: SetRCBoolean" />
+  <meta name="keywords" content="functions: SetRCNumber" />
+  <meta name="keywords" content="functions: SetRCTemp" />
+  <meta name="keywords" content="functions: SetRCTempBoolean" />
+  <meta name="keywords" content="functions: SetRCTempNumber" />
+  <meta name="keywords" content="functions: DelRC" />
+  <meta name="keywords" content="functions: FindRC" />
+  <meta name="keywords" content="functions: FindNewRC" />
+  <meta name="keywords" content="functions: SaveWindowPositions" />
+  <meta name="keywords" content="functions: RestoreWindowPositions" />
+  <title>Configuration File Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Configuration File Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+token = <a class="fcnlink" href="#GetRC">GetRC</a>        [ 'name', 'default'    ]
+flag  = <a class="fcnlink" href="#GetRCBoolean">GetRCBoolean</a> [ 'name', default_flag ]
+num   = <a class="fcnlink" href="#GetRCNumber">GetRCNumber</a>  [ 'name', default_num  ]
+
+<a class="fcnlink" href="#SetRC">SetRC</a>        [ 'name', value ]
+<a class="fcnlink" href="#SetRCBoolean">SetRCBoolean</a> [ 'name', bool  ]
+<a class="fcnlink" href="#SetRCNumber">SetRCNumber</a>  [ 'name', num   ]
+
+<a class="fcnlink" href="#SetRCTemp">SetRCTemp</a>        [ 'name', value ]
+<a class="fcnlink" href="#SetRCTempBoolean">SetRCTempBoolean</a> [ 'name', bool  ]
+<a class="fcnlink" href="#SetRCTempNumber">SetRCTempNumber</a>  [ 'name', num   ]
+
+<a class="fcnlink" href="#DelRC">DelRC</a>        'name'
+
+<a class="fcnlink" href="#FindRC">FindRC</a>        'pattern'
+<a class="fcnlink" href="#FindRC">FindNewRC</a>     'pattern'
+
+<a class="fcnlink" href="#SaveWindowPositions">SaveWindowPositions</a>    []
+<a class="fcnlink" href="#RestoreWindowPositions">RestoreWindowPositions</a> []
+</pre>
+
+<table class="noborder left">
+  <tr>
+    <td><i>rc-file</i></td>
+    <td>: <b>{</b> <i>line</i> <b>}*</b></td>
+  </tr>
+  <tr>
+    <td><i>line</i></td>
+    <td>: <i>name</i> <b><tt>=</tt></b> <i>value</i></td>
+  </tr>
+  <tr>
+    <td><i>comment</i></td>
+    <td>: <tt>#</tt> comment to end of line</td>
+  </tr>
+</table>
+
+<h1>Description</h1>
+
+<p>The RC file, or resource configuration file, is a collection of named
+  values. These named values serve as permanent settings for MOE. The master RC
+  file is <tt>$MOE/moe-rc</tt>, and is loaded on startup. The user file is
+  loaded after the master file, so that its values override those of the
+  master. The user file is <tt>$HOME/moefiles/moe-rc</tt>, where <tt>$HOME</tt>
+  is the user's home directory.</p>
+
+<p><b>Note:</b> The user configuration file is rewritten each time a MOE
+  session ends normally. Any changes made during the session are saved at this
+  time. This means that if you wish to edit your configuration file, you must
+  do so <b>after</b> closing MOE to avoid losing any changes. Note that
+  comments in a user configuration file are not saved.</p>
+<a id="GetRCNumber"></a>
+<a id="GetRCBoolean"></a>
+<a id="GetRC"></a>
+<hr noshade="noshade" />
+
+<pre>token = <span class=  "fcndef">GetRC</span>        [ 'name', 'default'    ]
+flag  = <span class="fcndef">GetRCBoolean</span> [ 'name', default_flag ]
+num   = <span class="fcndef">GetRCNumber</span>  [ 'name', default_num  ]
+</pre>
+
+<p><tt>GetRC</tt> returns the value associated with <tt>'name'</tt>.
+  If the name does not exist then the <tt>'default'</tt> is returned.
+  <tt>GetRCBoolean</tt> returns 1 (for true) or 0 (for false) depending on the
+  value of <tt>'name'</tt>. If the name does not exist then the
+  <tt>default_flag</tt> is returned. <tt>GetRCNumber</tt> returns a numeric
+  interpretation of the value associated with <tt>'name'</tt>. If the
+  name does not exist then the <tt>default_num</tt> is returned.</p>
+
+<pre class="code">
+svl&gt; GetRCNumber ['vsetup.atom_radius_scale', 50]
+25
+svl&gt; GetRCNumber ['xxx',5]   // returns the default
+5
+</pre>
+<a id="SetRCNumber"></a>
+<a id="SetRCBoolean"></a>
+<a id="SetRC"></a>
+<a id="SetRCTempNumber"></a>
+<a id="SetRCTempBoolean"></a>
+<a id="SetRCTemp"></a>
+<hr noshade="noshade" />
+
+<pre><span class="fcndef">SetRC</span>        [ 'name', 'value' ]
+<span class="fcndef">SetRCBoolean</span> [ 'name', bool    ]
+<span class="fcndef">SetRCNumber</span>  [ 'name', num     ]
+</pre>
+
+<p><tt>SetRC</tt> sets the value associated with the RC variable
+  <tt>'name'</tt> to the given <tt>'value'</tt> token.
+  <tt>SetRCBoolean</tt> sets the value associated with the RC variable
+  <tt>'name'</tt> to 1 if the <tt>bool</tt> argument evaluates to true,
+  and 0 otherwise. <tt>SetRCNumber</tt> sets the value associated with the RC
+  variable <tt>'name'</tt> to the number given by <tt>num</tt>. These
+  values will be written to the user's <tt>moe-rc</tt> file when the MOE
+  session ends, and will be in effect on the next launch of MOE.</p>
+
+<pre><span class="fcndef">SetRCTemp</span>        [ 'name', 'value' ]
+<span class="fcndef">SetRCTempBoolean</span> [ 'name', bool    ]
+<span class="fcndef">SetRCTempNumber</span>  [ 'name', num     ]
+</pre>
+
+<p>These functions are identical to their non-<tt>Temp</tt> counterparts
+  except that their RC values remain in effect for only the current instance of
+  MOE: the values will <i>not</i> be written to the user's <tt>moe-rc</tt>
+  file when MOE quits. On the next launch of MOE, the RC variables will have
+  reverted to their original values.</p>
+<a id="DelRC"></a>
+<hr noshade="noshade" />
+
+<pre><span class="fcndef">DelRC</span> 'name'
+</pre>
+
+<p><tt>DelRC</tt> deletes the RC entry of the given name. When the MOE
+  session ends, the specified RC variable will be removed from the user's
+  <tt>moe-rc</tt> file, so that the variable will be undefined on the
+  subsequent launch of MOE.</p>
+<a id="FindRC"></a>
+<hr noshade="noshade" />
+
+<pre>tagvec = <span class="fcndef">FindRC</span>    'pattern'
+tagvec = <span class="fcndef">FindNewRC</span> 'pattern'
+</pre>
+
+<p>Function <tt>FindRC</tt> returns all RC variables whose name matches a
+  given search pattern. Function <tt>FindNewRC</tt> returns only those
+  variables that have been defined or redefined by the user's custom moe-rc
+  file or by SVL <i>after</i> the default RC values have been loaded from
+  <span class="nobr"><tt>$MOE/moe-rc</tt></span>.</p>
+
+<pre class="code">
+svl&gt; FindRC 'vis.con*'
+[ 'vis.contacts.clash':'off', 'vis.contacts.hbond':'on' ]
+</pre>
+<a id="RestoreWindowPositions"></a>
+<a id="SaveWindowPositions"></a>
+<hr noshade="noshade" />
+
+<pre><span class="fcndef">SaveWindowPositions</span>    []
+<span class="fcndef">RestoreWindowPositions</span> []
+</pre>
+
+<p><tt>SaveWindowPositions</tt> saves the positions and sizes of all named
+  windows to the <tt>moe-rc</tt> file. Named windows include the <tt>moe</tt>
+  application system windows and named SVL windows (named using the
+  <tt>windowName</tt> attribute). <tt>RestoreWindowPositions</tt> restores the
+  positions and sizes of all named windows from their values in the
+  <tt>moe-rc</tt> file.</p>
+  <hr noshade="noshade" />
+
+<p>The configuration file is an ASCII file, in which each line is a record
+  containing a single configuration setting. Blank lines are ignored. Comments
+  begin with the <tt>#</tt> character and extend to the end of the line. If a
+  comment is not the first item on a line, then there must be white space
+  preceding the <tt>#</tt> character.</p>
+
+<p>Each configuration line has the syntax:</p>
+
+<pre class="code oneline">name = value</pre>
+
+<p>where <tt>name</tt> is any sequence of printable characters excluding
+  white space and the <tt>=</tt> character. It may contain the <tt>#</tt>
+  character, but not as the first character in the name. The syntax of the
+  setting depends on the variable: some variables require numeric entries while
+  other variables require string settings. The following is a sample of an RC
+  file.</p>
+
+<pre class="code">
+#
+# moe-rc
+#
+
+displayXErrors=no                   # display X/Xt warning messages
+bubbleHelpMode=key                  # press CTRL to get bubble help
+
+pdb=$MOE/lib/pdb.mdb                # protein database
+recentDirectories=$MOE;$MOE/lib     # default file selection history
+
+cli.history=200                     # output lines to maintain
+cli.commandHistory=100              # length of history
+
+F1=MeterRestraintManager[]          # F1 function key setting
+F2=Close [force:1]                  # F2 function key setting
+
+mouse.button3.c=if $ then aSetLabelRes[$, not aLabelRes $]; endif
+
+dbview.button1_dbl.s=dbv_EditCell 1 # DB viewer mouse programming
+
+SE.color.hbond=lightShadow          # color of hydrogen bond arcs
+forcefield=$MOE/lib/koll89.ff       # default forcefield
+</pre>
+
+<p>The contents of the RC file depend on MOE and those SVL programs that use
+  the RC file to save settings. Some of the more important names are:</p>
+
+<dl>
+      <!--
+<dt>
+<tt>autosave=number</tt><br />
+<tt>preserve=directory</tt>
+<dd>
+The <tt>autosave</tt> number defines the autosave delay period in
+minutes. A value of <tt>0</tt> will disable the autosave feature. If the
+current molecular system has been changed and the data was not saved
+during the delay period, MOE will save the data into a file of the form
+<tt>moe-save.xxxxxx</tt>.
+
+<p>
+
+<p>
+The <tt>preserve</tt> variable controls the location of the save file
+for both the periodic autosave and the unexpected halt autosave. Note that
+if <tt>preserve</tt> is blank, the periodic autosave will simply write to
+the current directory.  The data is written as a MOE molecule file.
+To recover the data, load the molecule into MOE using
+<b><span class="nobr">MOE | File | Open</span></b>.
+-->
+  <dt><tt>bubbleHelpMode=mode</tt></dt>
+  <dd><p>The bubble help environment variable controls the display of bubble
+  help text in MOE windows. The mode value <tt>on</tt> enables display,
+  <tt>off</tt> disables display, and <tt>key</tt> enables display only when
+  the <tt>Ctrl</tt> key is held down for more than a second.</p></dd>
+
+  <dt><tt>forcefield=file</tt></dt>
+  <dt><tt>potential.cutoffOn=number</tt></dt>
+  <dt><tt>potential.cutoffOff=number</tt></dt>
+  <dd><p>The <tt>forcefield</tt> variable sets the forcefield file to use when
+  MOE starts up. The <tt>potential.cutoffOn</tt> and
+  <tt>potential.cutoffOff</tt> set the default nonbonded cutoff start and
+  end distances.</p></dd>
+
+  <dt><tt>cli.history=number</tt></dt>
+  <dt><tt>cli.commandHistory=number</tt></dt>
+  <dd><p><tt>cli.history</tt> controls the number of text lines to keep in the
+  scrolling output area of the SVL Commands window, and
+  <tt>cli.commandHistory</tt> controls the number of previous commands to
+  keep in the command line history buffer (retrieved with the arrow
+  keys).</p></dd>
+
+  <dt><tt>dbview.button1_dbl=command</tt></dt>
+  <dt><tt>dbview.button1_dbl.s=command</tt></dt>
+  <dt><tt>dbview.button1_dbl.c=command</tt></dt>
+  <dt><tt>dbview.button1_dbl.a=command</tt></dt>
+  <dd><p>These variables control the behavior of the left mouse button
+  double-click in the Database Viewer. The <tt>s, c</tt> and <tt>a</tt>
+  denoted Shift, Ctrl and Alt modified double clicks.</p></dd>
+
+  <dt><tt>F1=command</tt></dt>
+  <dt><tt>F10=command</tt></dt>
+  <dd><p>MOE does not make use of the F1-F10 function keys found on most
+  keyboards. These function keys may be programmed in the configuration
+  file with by setting the <tt>F</tt><i>k</i> variable (<i>k</i> in [1,10])
+  to an SVL command.</p></dd>
+
+  <dt><tt>mouse.button3.s=command</tt></dt>
+  <dt><tt>mouse.button3.c=command</tt></dt>
+  <dd>
+    <p>These variables control the behavior of the third mouse button in the
+    main MOE window. Each variable has the form
+    <tt>mouse.button3.</tt><i>modifier</i> where <i>modifier</i> can be one
+    of <tt>s, c, a, sc, sa, ca, sca</tt>. Each such modifier denotes a
+    combination of Shift, Ctrl and Alt keys. Each such combination may have
+    its own SVL command.</p>
+    <p>The <tt>$</tt> symbol has special significance in the SVL commands
+    associated with the right mouse button: <tt>$</tt> refers to an atom
+    clicked on in the MOE Window using the right mouse button. In the
+    following example, clicking the right mouse button will cause atoms to
+    be labeled by residue name and number. <tt>$</tt> is substituted by the
+    key of the selected atom; if no atom is picked, <tt>0</tt> is
+    substituted.</p>
+
+<pre class="code">
+if $ then aSetLabelRes[$,1]; endif
+</pre>
+  </dd>
+
+  <dt><tt>editor.color.svl.*=color</tt></dt>
+  <dd>
+  <p>The syntax in SVL files (<tt>*.svl</tt>) is automatically colored in
+  the SVL Text Editor. The following examples of SVL syntax colors are
+  taken from the master configuration file. To change the SVL syntax
+  colors, the new values must be added to the user configuration file.</p>
+<pre class="code">
+editor.color.svl.assign=red
+editor.color.svl.badstring=orange
+editor.color.svl.brace=
+editor.color.svl.bracket=blue
+editor.color.svl.colon=red
+editor.color.svl.comma=red
+editor.color.svl.comment=brown
+editor.color.svl.default=black
+editor.color.svl.directive=purple
+editor.color.svl.function=blue
+editor.color.svl.keyword=blue
+editor.color.svl.name=
+editor.color.svl.number=
+editor.color.svl.parenthesis=
+editor.color.svl.semicolon=red
+editor.color.svl.space=purple
+editor.color.svl.string=black
+editor.color.svl.symbol=
+editor.color.svl.token=black
+</pre>
+  </dd>
+  <dt><tt>suspendTimeout=num_seconds</tt></dt>
+  <dd><p>Specifies the number of seconds (&gt; 0) of idle time (inactivity)
+  after which MOE will suspend, i.e. the MOE license currently in use will
+  be returned to the license server. When this happens, a resume
+  confirmation prompt will appear, allowing for reconnection to the license
+  server (provided there are licenses available). A value of zero (default)
+  disables the timeout feature.</p></dd>
+</dl>
+
+<h4 class="obsolete">Obsolete</h4>
+<p>The <tt>autosave</tt> and <tt>preserve</tt> RC settings are no longer
+valid.</p>
+
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

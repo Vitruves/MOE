@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <title>Protonation State Enumeration</title>
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: ctab_EnumerateProtomers" />
+  <meta name="keywords" content="functions: ctab_ProtomerUnique" />
+  <meta name="keywords" content="functions: ctab_ProtomerList" />
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Protonation State Enumeration
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+[ctlist, pC] = <a class="fcnlink" href=
+"#ctab_ProtomerList">ctab_ProtomerList</a> [ctab, opt]
+</pre>
+
+<h2 class="obsolete">Obsolete</h2>
+
+<pre class="code">
+[ctabs, graph] = <a class="fcnlink" href=
+"#ctab_EnumerateProtomers">ctab_EnumerateProtomers</a> [ctab, opt]
+idxlists = <a class="fcnlink" href=
+"#ctab_ProtomerUnique">ctab_ProtomerUnique</a> [ctablist, opt]
+</pre>
+
+<h1>Description</h1>
+
+<p>Tautomer and protonation state (or <i>protomer</i>) enumeration of small
+  molecules is accomplished by an aqueous pK<sub>a</sub> model that uses
+  connection table information alone (atomic coordinates are not used).</p>
+<a id="ctab_ProtomerList"></a>
+<hr noshade="noshade" />
+
+<pre>
+[ctlist, pC] = <span class="fcndef">ctab_ProtomerList</span> [ctab, opt]
+</pre>
+
+<p>The <tt>ctab_ProtomerList</tt> function enumerates protonation states of a
+  given input molecule <tt>ctab</tt>, in <a href="ctabfcn.htm">CTAB</a> format.
+  Explicit hydrogen atoms are treated as inviolate honorary heavy atoms during
+  the enumeration; therefore, in order for the enumeration to have any effect,
+  the input representation must have some or all explicit hydrogen atoms
+  subsumed into the <tt>CTAB_A_HCOUNT</tt> field. One way to obtain a suitable
+  input is:</p>
+
+<pre class="code">
+svl&gt; ctab = ctab_Extract [akeys, [heavy:1]]
+</pre>
+
+<p>The <tt>opt</tt> parameter is a tagged vector that controls the
+  enumeration:</p>
+<div class="indent">
+  <dl>
+    <dd></dd>
+    <dt><tt>barrier</tt> : <i>num</i></dt>
+    <dd>Protomer states with a relative log<sub>10</sub> concentration less
+    than <tt>-barrier</tt> are deemed insignificant and are discarded. This
+    (internal) cutoff applies throughout the calculation and is important for
+    tautomeric transformations and represents a thermodynamic barrier limit;
+    lower values will lead to loss of certain tautomeric states. Generally,
+    this option should not be changed from the default; the <tt>cutoff</tt>
+    parameter should be used to limit results. The default is 6.0.</dd>
+    <dd></dd>
+    <dt><tt>cutoff</tt> : <i>num</i></dt>
+    <dd>Protomer states with a relative log<sub>10</sub> concentration (to
+    the most common species) less than <tt>-cutoff</tt> are discarded. This
+    cutoff applies only to the structures returned and does not affect the
+    enumeration itself. This parameter is the preferred method of limiting
+    the results while preserving accuracy. If the given value is negative
+    then the number of states is the entropic count of states: the integer
+    closest to 10<sup>H</sup> where <nobr>H = sum {
+    pC<sub>i</sub>&nbsp;10<sup>-pC<sub>i</sub></sup> }</nobr>. The default is
+    -1.</dd>
+    <dd></dd>
+    <dt><tt>pH</tt> : <i>number</i></dt>
+    <dd>The pH of the aqueous environment. The default is 7.0.</dd>
+    <dd></dd>
+    <dt><tt>original</tt> : <i>flag</i></dt>
+    <dd>If nonzero, the original structure will be retained when protomers
+    are calculated. Otherwise, the original and all enumerated structures
+    compete equally.</dd>
+    <dd></dd>
+    <dt><tt>limit</tt> : <i>number</i></dt>
+    <dd>At most the specified number of protonation states will be returned.
+    Setting this number too low will adversely affect the accuracy of the
+    returned concentrations. The default is 256.</dd>
+    <dd></dd>
+    <dt><tt>protect</tt> : <i>mask</i></dt>
+    <dd>A mask that applies to the atoms of the input molecule. Non-zero
+    elements indicate that the protonation state of the corresponding atoms
+    will not be modified. The default is 0. Unit extension applies.</dd>
+    <dd></dd>
+    <dt><tt>protectR</tt> : <i>flag</i></dt>
+    <dd>If nonzero, atoms with non-negative <tt>CTAB_A_RGROUP</tt> values
+    will be protected in addition to the protected atoms specified by
+    <tt>protect</tt>. This means that fragments with R-group annotations can
+    be specified without change to the protonation state of the R# atoms. The
+    default is 1.</dd>
+    <dd></dd>
+    <dt><tt>unique</tt> : <i>flag</i></dt>
+    <dd>If nonzero, then only topologically unique protonation states are
+    returned; for example, only one of <tt>C(=O)[OH]</tt> and
+    <tt>C([OH])=O</tt> will be returned (with twice the concentration as when
+    <tt>unique</tt> is zero). If the given flag is zero, then each atom is
+    considered topologically distinct; this mode is useful when the input
+    molecule has well defined 3D coordinates. The default is 1.</dd>
+    <dd></dd>
+    <dt><tt>updateStereo</tt> : <i>flag</i></dt>
+    <dd>If nonzero, then stereo annotations in the results will be removed on
+    atoms that are involved in keto-enol type tautomers. Double bond stereo
+    will be removed on bonds that are not double bonds in all protomer
+    states; atom stereo (and wedges) will be removed on atoms with a multiple
+    bond in some protomer state. The default is 1.</dd>
+    <dd></dd>
+    <dt><tt>pos3D</tt> : <tt>[x,y,z]</tt></dt>
+    <dd>If non-null then <tt>pos3D</tt> contains the 3D coordinates of all
+    the atoms in the <tt>ctab</tt>. Supplying 3D coordinates will affect the
+    results since torsion strain energies will be taken into account. When 3D
+    information is supplied, the <tt>unique</tt> option should be 0. The
+    default is <tt>[]</tt>.</dd>
+    <dd></dd>
+    <dt><tt>env3D</tt> : <i>mol</i></dt>
+    <dd>If non-null then <tt>env3D</tt> must be a MOL structure containing
+    the 3D environment about the molecule. Hydrogen bond interactions with
+    the environment will affect the resulting concentrations. When 3D
+    information is supplied, the <tt>unique</tt> option should be 0. The
+    default is <tt>[]</tt>.</dd>
+    <dd></dd>
+    <dt><tt>verbose</tt> : <i>flag</i></dt>
+    <dd>If true, information will be written to the SVL Commands window
+    during the calculation. The default is 0.</dd>
+  </dl>
+</div>
+
+<p>The returned <tt>ctlist</tt> is a vector of <a href="ctabfcn.htm">CTAB</a>
+  structures. The original structure is first; otherwise, the structures are in
+  no particular order. The vector <tt>pC</tt> contains the negative
+  log<sub>10</sub> concentrations of each <tt>ctlist</tt>; if the
+  <tt>ctlist</tt> was not truncated (<i>e.g.</i> with <tt>limit</tt>) then the
+  concentrations will sum to 1. <b>Note!</b> each member of <tt>ctlist</tt>
+  (including the original state) will differ from the input <tt>ctab</tt>:</p>
+  <ol>
+    <li><tt>CTAB_A_HCOUNT</tt> and <tt>CTAB_A_CHARGE</tt> from state
+    enumeration;</li>
+    <li><tt>CTAB_B_BTYPE</tt> and <tt>CTAB_A_CHARGE</tt> from resonance
+    recalculation;</li>
+    <li><tt>CTAB_A_STEREO</tt> and <tt>CTAB_B_STEREO</tt> if
+    <tt>updateStereo</tt> is enabled.</li>
+  </ol>
+
+<p>with other fields, atom and bond permutation remaining identical to the
+  input <tt>ctab</tt>. <!--
+The returned <tt>[I,J]</tt> vectors (each with the same length) define
+the protonation state transition graph in edge list form.  Each state
+transition <tt>k</tt> encodes the reaction
+<nobr><tt>ctlist(I(k))</tt> &rightarrow; <tt>ctlist(J(k))</tt></nobr>
+with state <tt>I(k)</tt> having one more hydrogen than state <tt>J(k)</tt>.
+The graph is not necessarily connected (due to possible deletion of states in
+the returned structures).
+--></p><!-- =================== -->
+<a id="ctab_EnumerateProtomers"></a>
+<hr noshade="noshade" />
+
+<pre>
+[ctabs, graph] = <span class=
+"fcndef">ctab_EnumerateProtomers</span> [ctab, opt]
+</pre>
+
+<p>Given a molecule <tt>ctab</tt> in <a href="ctabfcn.htm">CTAB</a> format,
+  the <tt>ctab_EnumerateProtomers</tt> enumerates a list of molecular species
+  which are related to the input by a sequence of transformations, which
+  consist of some combination of tautomeric shifts, resonance interchanges,
+  protonation and/or deprotonation reactions. The manner in which the
+  enumeration is performed is stepwise, and the applicable range of
+  transformations can be controlled to an extent by optional parameters. The
+  enumeration is exhaustive, starting with the input structure, and terminating
+  when no new results can be found, or the maximum limit is achieved.</p>
+
+<p>Explicit hydrogen atoms are treated as inviolate honorary heavy atoms
+  during the enumeration process, therefore in order for the enumeration to
+  have any effect, the input representation must have some or all explicit
+  hydrogen atoms subsumed into the <tt>CTAB_A_HCOUNT</tt> field. The implicit
+  hydrogen fields must all be defined, i.e. non-negative, otherwise the
+  enumeration function will fail. It is also inappropriate to provide aromatic
+  bond types (<tt>CTAB_BT_ARO</tt>), which will not be properly handled.</p>
+
+<p>One way to obtain such a suitable input is:</p>
+
+<pre class="code">
+svl&gt; ctab = ctab_Extract [akeys, [heavy:1, aro:0]]
+</pre>
+
+<p>The <tt>opt</tt> parameter is a tagged vector which allows various options
+  to be controlled. Tautomer enumeration is always enabled.</p>
+  <div class="indent">
+    <dl>
+      <dd></dd>
+      <dt><tt>charge</tt> : <i>flag</i></dt>
+      <dd>If non-zero then some limited forms of resonance-style charge
+      migration is included in the enumeration steps, for example N(+)=C-N
+      becomes interchangeable with N-C=N(+). While resonance-equivalent forms
+      are filtered from the final output on the grounds of degeneracy, their
+      presence during the enumeration process can give rise to derived
+      tautomers or protomers, due to the possibility of different acidity and
+      neighboring functional groups. The default is 0.</dd>
+      <dd></dd>
+      <dt><tt>titrate</tt> : <i>flag</i></dt>
+      <dd>If non-zero then a number of transformations which involve adding or
+      subtracting a proton to bases and acids respectively are allowed, which
+      leads to the generation of protomers which have different overall charge
+      and molecular formula, but the same heavy atom skeleton. While the
+      eligible acids and bases are restricted to functional groups which have
+      borderline pKa values, each of the protonation/deprotonation transforms
+      is considered fully reversible, which leads to a combinatorial explosion
+      of results when applied to molecules with a large number of protonic
+      functional groups (e.g. many carboxylic acid or aliphatic amine
+      functional groups). The default is 0.</dd>
+      <dd></dd>
+      <dt><tt>unique</tt> : <i>flag</i></dt>
+      <dd>If on, then each proposed result of a transformation is converted to
+      a canonically unique molecular representation, compared with those of the
+      molecules already in the set, and discarded if already present. In this
+      way, topologically degenerate results such as C(=O)OH and C(OH)=O will
+      not be returned as two separate entries. If off, then the canonical
+      reordering is not performed, and so the two attachment points for
+      hydrogen on a carboxylic acid would be considered distinct results. The
+      latter mode is particularly appropriate when the input molecule already
+      has well defined 3D geometry, e.g. for ligands bound in an active site.
+      The default is 1.</dd>
+      <dd></dd>
+      <dt><tt>limit</tt> : <i>number</i></dt>
+      <dd>Because the enumeration process is stepwise, and the number of
+      possible results is nominally exponential with respect to certain
+      functional groups, the enumeration will be terminated when it reaches a
+      predefined limit. The default is 100.</dd>
+      <dd></dd>
+      <dt><tt>pH</tt> : <i>number</i></dt>
+      <dd>The pH of the aqueous environment. The default is 7.0.</dd>
+      <dd></dd>
+      <dt><tt>original</tt> : <i>flag</i></dt>
+      <dd>If nonzero, the original structure will be retained when protomers
+      are calculated. Otherwise, the original and all enumerated structures
+      compete equally.</dd>
+    </dl>
+  </div>
+
+<p>The first entry in the returned vector, <tt>ctabs</tt>, is an array of one
+  or more molecular species, expressed in the CTAB format. The order of these
+  results is arbitrary, except that the input molecule is always present, and
+  always first. It is guaranteed that for each returned molecule, the atom
+  number and atom ordering is identical. The hydrogen count, charge and bond
+  order fields will be different for each result.</p>
+
+<p>The second return parameter, <tt>graph</tt>, describes the manner in which
+  the returned results are related by transformations, in neighbor-list format.
+  The presence of an edge between two nodes implies that there is a protomer
+  transformation between the two species.</p>
+<a id="ctab_ProtomerUnique"></a>
+<hr noshade="noshade" />
+
+<pre>
+idxlists = <span class="fcndef">ctab_ProtomerUnique</span> [ctablist, opt]
+</pre>
+
+<p>Given a list of molecular structures, determines which of them are
+  tautomers or protomers of each other, and for each set of related structures,
+  returns their indices.</p>
+
+<p>The requirements for the input structures and options are the same as for
+  <tt>ctab_EnumerateProtomers</tt> as described above, and the input may be
+  composed of tautomers only or both tautomers and protomers.</p>
+
+<p>Consider the molecules represented by the following SMILES strings:</p>
+
+<pre class="code">
+CC(=O)CCC
+CC(O)=CCC
+CC(O)CC=C
+</pre>
+
+<p>The first two molecules are keto-enol tautomers of each other, while the
+  third molecule has the same molecular formula and heavy-atom skeleton, but it
+  is not a tautomer of either of the first two. The indices returned by the
+  function would be: <tt><span class="nobr">[[1, 2], 3]</span></tt>.</p>
+
+<p>The function does not determine which tautomer or protomer should be used
+  as the canonical reference, and the ordering within a group of indices has no
+  special meaning. For efficiency purposes, this function should not be called
+  with molecular species which have a different heavy-atom topology, since they
+  cannot be protomers. When all input structures are the same, no protomer
+  enumeration is necessary. Otherwise, protomer enumeration will have to be
+  conducted for at least one of the input structures. The worst case scenario
+  is that protomers will be enumerated for all input structures, which happens
+  when none of the structures are protomers of each other.</p>
+
+<h1>See Also</h1>
+
+<p><a href="ctabfcn.htm">CTAB Functions</a><br />
+  <a class="svl" href="washmol.htm">WashMoleculeCTAB</a><br />
+  <a class="svl" href="washmol.htm">WashMoleculeMOE</a>
+  </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

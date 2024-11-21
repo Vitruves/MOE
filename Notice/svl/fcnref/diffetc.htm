@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: diff,m_diff,x_diff,sdiff" />
+  <title>Set Difference Functions: diff, m_diff, ...</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Set Difference Functions: diff, m_diff, ...
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+values_only_in_v = <a class="fcnlink" href="#diff">diff</a> [v,w]
+
+diff_mask = <a class="fcnlink" href="#m_diff">m_diff</a> [v,w]
+diff_indices = <a class="fcnlink" href="#x_diff">x_diff</a> [v,w]
+
+values_not_in_both = <a class="fcnlink" href="#sdiff">sdiff</a> [v,w]
+</pre>
+
+<a id="diff"></a>
+<h1>Description</h1>
+
+<pre>
+values_only_in_v = <span class="fcndef">diff</span> [v,w]
+</pre>
+
+<p>Returns all elements of <tt>v</tt> that do not occur in <tt>w</tt>,
+  preserving ordering and duplicates in <tt>v</tt>.</p>
+
+<pre class="code">
+svl&gt; diff [ &quot;afg&quot;, &quot;cfigg&quot; ]
+&quot;a&quot;
+svl&gt; diff [ &quot;cfigg&quot;, &quot;afg&quot; ]
+&quot;ci&quot;
+</pre>
+<a id="m_diff"></a>
+<hr noshade="noshade" />
+
+<pre>
+diff_mask = <span class="fcndef">m_diff</span> [v,w]
+</pre>
+
+<p>Returns a mask such that: <tt>diff [v,w] === v|<em>msk</em></tt></p>
+
+<pre class="code">
+svl&gt; m_diff [ &quot;cfigg&quot;, &quot;afg&quot; ]
+[1,0,1,0,0]
+</pre>
+<a id="x_diff"></a>
+<hr noshade="noshade" />
+
+<pre>
+diff_indices = <span class="fcndef">x_diff</span> [v,w]
+</pre>
+
+<p>Returns an index list such that: <tt>diff [v,w] === v[<em>idx</em>]</tt></p>
+
+<pre class="code">
+svl&gt; x_diff [ &quot;cfigg&quot;, &quot;afg&quot; ]
+[1,3]
+</pre>
+<a id="sdiff"></a>
+<hr noshade="noshade" />
+
+<pre>
+values_not_in_both = <span class="fcndef">sdiff</span> [v,w]
+</pre>
+
+<p>Gives the symmetrical set difference. <tt>sdiff[v,w]</tt> returns
+  <tt>cat[v,w]</tt> with all elements occurring in both <tt>v</tt> and
+  <tt>w</tt> removed. The function preserves duplicates and the original
+  ordering of its arguments.</p>
+
+<pre class="code">
+svl&gt; sdiff [ &quot;afg&quot;, &quot;cfigg&quot; ]
+&quot;aci&quot;
+svl&gt; sdiff [ &quot;cfigg&quot;, &quot;afg&quot; ]
+&quot;cia&quot;
+</pre>
+
+<h1>See Also</h1>
+
+<p><a href="introstruct.htm">Structural Functions</a></p>
+
+<p><a class="svl" href="uniqetc.htm">freq</a> <a class="svl" href=
+  "joinetc.htm">join</a> <a class="svl" href="uniqetc.htm">uniq</a></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

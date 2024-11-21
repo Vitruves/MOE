@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="functions: aColorBy, aSetColorBy" />
+  <meta name="keywords" content="functions: aRGB, aSetRGB, aColor" />
+  <meta name="keywords" content="functions: aDisplayRadius" />
+  <meta name="keywords" content="functions: aSelected, aSetSelected" />
+  <meta name="keywords" content="functions: aNucleusLook, aSetNucleusLook" />
+  <meta name="keywords" content="functions: aBondLook, aSetBondLook" />
+  <meta name="keywords" content="functions: aHidden, aSetHidden" />
+  <meta name="keywords" content="functions: aScalar, aSetScalar" />
+  <meta name="keywords" content="functions: aLabel, aSetLabel" />
+  <meta name="keywords" content="functions: aLabelHidden, aSetLabelHidden" />
+  <meta name="keywords" content="unsupported: _aLabelTok, _aSetLabelTok" />
+  <meta name="keywords" content="obsolete: aLabelName, aSetLabelName" />
+  <meta name="keywords" content="obsolete: aLabelRes, aSetLabelRes" />
+  <meta name="keywords" content="obsolete: aLabelElement, aSetLabelElement" />
+  <meta name="keywords" content="obsolete: aLabelChain, aSetLabelChain" />
+  <meta name="keywords" content="obsolete: aLabelMMType, aSetLabelMMType" />
+  <meta name="keywords" content="obsolete: aLabelCharge, aSetLabelCharge" />
+  <meta name="keywords" content="intro: Atom Display Functions" />
+  <title>Atom Display Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Atom Display Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    bond_tokens    = <a class="fcnlink" href=
+"#aBondLook">aBondLook</a>      atom_keys
+    colors         = <a class="fcnlink" href=
+"#aColor">aColor</a>         atom_keys
+    colorby_tokens = <a class="fcnlink" href=
+"#aColorBy">aColorBy</a>       atom_keys
+    radii          = <a class="fcnlink" href=
+"#aDisplayRadius">aDisplayRadius</a> atom_keys
+    flags          = <a class="fcnlink" href=
+"#aHidden">aHidden</a>        atom_keys
+    label_tokens   = <a class="fcnlink" href=
+"#aLabel">aLabel</a>         atom_keys
+    flags          = <a class="fcnlink" href=
+"#aLabelHidden">aLabelHidden</a>   atom_keys
+    nuc_tokens     = <a class="fcnlink" href=
+"#aNucleusLook">aNucleusLook</a>   atom_keys
+    colors         = <a class="fcnlink" href=
+"#aRGB">aRGB</a>           atom_keys
+    numbers        = <a class="fcnlink" href=
+"#aScalar">aScalar</a>        atom_keys
+    flags          = <a class="fcnlink" href=
+"#aSelected">aSelected</a>      atom_keys
+
+    <a class="fcnlink" href=
+"#aSetBondLook">aSetBondLook</a>     [atom_keys, bond_tokens]
+    <a class="fcnlink" href=
+"#aSetColorBy">aSetColorBy</a>      [atom_keys, colorby_tokens]
+    <a class="fcnlink" href=
+"#aSetHidden">aSetHidden</a>       [atom_keys, flags]
+    <a class="fcnlink" href=
+"#aSetLabel">aSetLabel</a>        [atom_keys, label_tokens]
+    <a class="fcnlink" href=
+"#aSetLabelHidden">aSetLabelHidden</a>  [atom_keys, flags]
+    <a class="fcnlink" href=
+"#aSetNucleusLook">aSetNucleusLook</a>  [atom_keys, nuc_tokens]
+    <a class="fcnlink" href="#aSetRGB">aSetRGB</a>          [atom_keys, colors]
+    <a class="fcnlink" href=
+"#aSetScalar">aSetScalar</a>       [atom_keys, numbers]
+    <a class="fcnlink" href=
+"#aSetSelected">aSetSelected</a>     [atom_keys, flags]
+</pre>
+
+<h3 class="obsolete">Obsolete</h3>
+
+<pre>
+    flags = <a class="fcnlink" href=
+"#aLabelChain">aLabelChain</a>   atom_keys
+    flags = <a class="fcnlink" href=
+"#aLabelCharge">aLabelCharge</a>  atom_keys
+    flags = <a class="fcnlink" href=
+"#aLabelElement">aLabelElement</a> atom_keys
+    flags = <a class="fcnlink" href=
+"#aLabelMMType">aLabelMMType</a>  atom_keys
+    flags = <a class="fcnlink" href=
+"#aLabelName">aLabelName</a>    atom_keys
+    flags = <a class="fcnlink" href=
+"#aLabelRes">aLabelRes</a>     atom_keys
+    <a class="fcnlink" href=
+"#aSetLabelChain">aSetLabelChain</a>   [atom_keys, flags]
+    <a class="fcnlink" href=
+"#aSetLabelCharge">aSetLabelCharge</a>  [atom_keys, flags]
+    <a class="fcnlink" href=
+"#aSetLabelElement">aSetLabelElement</a> [atom_keys, flags]
+    <a class="fcnlink" href=
+"#aSetLabelMMType">aSetLabelMMType</a>  [atom_keys, flags]
+    <a class="fcnlink" href=
+"#aSetLabelName">aSetLabelName</a>    [atom_keys, flags]
+    <a class="fcnlink" href=
+"#aSetLabelRes">aSetLabelRes</a>     [atom_keys, flags]
+</pre>
+
+
+<h1>Description</h1>
+
+<p>In MOE, molecular data is organized as a hierarchy of <i>molecular
+  objects</i> or <i>objects</i>. MOE stores atom information in separate
+  internal data structures. Atoms are referenced with an object key, which is a
+  unique number identifying the atom object. The many atom functions provided
+  in MOE cover the following broad categories:</p>
+  <ul>
+    <li><a href="atom.htm">Fundamental Properties</a></li>
+    <li><a href="atom_p.htm">Potential Properties</a></li>
+    <li><a href="atom_d.htm">Display Properties</a> (this page)</li>
+    <li><a href="atom_g.htm">Geometry Properties</a></li>
+  </ul>
+
+<p>The following functions can be used to obtain information from atom
+  objects: <!-- DESC --></p>
+  <table class="titlebar">
+    <tr>
+      <th>Function</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="aBondLook"></a>
+<tt>aBondLook</tt><br /></td>
+      <td valign="baseline">For each atom in the argument, this function
+      returns a token describing how the atom's bonds are rendered. Legal
+      values are defined in the constant <tt>A_BOND_LOOKS</tt> and consist of
+      <tt>'none'</tt>, <tt>'line'</tt> and
+      <tt>'cylinder'</tt>. This function can be used on arbitrarily
+      nested vectors.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="aColor"></a>
+<tt>aColor</tt></td>
+      <td valign="baseline">Returns the display color for the atom. This is the
+      (computed) color that is actually used for the atom. The integer color
+      format is 0xRRGGBB encoding red, green and blue.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="aColorBy"></a>
+<tt>aColorBy</tt></td>
+      <td valign="baseline">
+        For each atom in the argument, this function returns a token describing
+        how the atom is colored. Legal values are
+        <ul>
+          <li><tt>'element'</tt> - color by atom's element</li>
+          <li><tt>'scalar'</tt> - color by atom's <tt>aScalar</tt>
+          value</li>
+          <li><tt>'rgb'</tt> - color by atom's <tt>aRGB</tt>
+          color</li>
+          <li><tt>'tempfactor'</tt> - color by the atom's
+          temperature factor</li>
+          <li><tt>'a:rgb'</tt> - color by atom's <tt>aRGB</tt>
+          color</li>
+          <li><tt>'r:rgb'</tt> - color by the owning residue's
+          <tt>rRGB</tt> color</li>
+          <li><tt>'c:rgb'</tt> - color by the owning chain's
+          <tt>cRGB</tt> color</li>
+          <li><tt>'r:aseg'</tt> - color by the owning residue's
+          secondary structure color</li>
+          <li><tt>'c:number'</tt> - color by the owning chain's
+          index color</li>
+          <li><tt>'chain'</tt> - color by the owning chain's
+          display color</li>
+          <li><tt>'residue'</tt> - color by the owning residue's
+          display color</li>
+          <li><tt>'ribbon'</tt> - color by the owning residue's
+          ribbon display color</li>
+        </ul>This function can be used on arbitrarily nested vectors.
+      </td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="aDisplayRadius"></a>
+<tt>aDisplayRadius</tt><br /></td>
+      <td valign="baseline">Returns the atom's radius (in angstroms) used
+      for rendering. Points have a radius of 0.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="aHidden"></a>
+<tt>aHidden</tt><br /></td>
+      <td valign="baseline">For each atom in the argument, this function
+      returns a value of 1 if the atom is hidden in the MOE Window, and zero
+      otherwise. This function can be used on arbitrarily nested vectors.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="aLabel"></a>
+<tt>aLabel</tt></td>
+      <td valign="baseline">For each atom in the argument, this function
+      returns the atom label token. This function can be used on
+      arbitrarily nested vectors.
+      <p>
+      Atom label text supports HTML tags for
+      <a href="../gui/label.htm#LabelFormats">text formatting</a>
+      and  <a href="../gui/label.htm#LabelPosition">positioning</a>.
+      Atom property values such as atom name, element, charge, etc.
+      can be added via <a href="../gui/label.htm#LabelShortcuts">shortcuts</a>.
+      </p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="aLabelHidden"></a>
+<tt>aLabelHidden</tt><br /></td>
+      <td valign="baseline">For each atom in the argument, this function
+      returns a value of 1 if the atom label is hidden in the MOE Window,
+      and zero otherwise. This function can be used on arbitrarily nested
+      vectors.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="aNucleusLook"></a>
+<tt>aNucleusLook</tt><br /></td>
+      <td valign="baseline">For each atom in the argument, this function
+      returns a token describing how the atom's nucleus is rendered. Legal
+      values are defined in the constant <tt>A_NUCLEUS_LOOKS</tt> and consist
+      of <tt>'none'</tt>, <tt>'point'</tt>,
+      <tt>'sphere'</tt> and <tt>'small-sphere'</tt>. This
+      function can be used on arbitrarily nested vectors.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="aRGB"></a>
+<tt>aRGB</tt></td>
+      <td valign="baseline">Returns the internal color of the atom. This is the
+      color used when the atom's ColorBy mode is <tt>rgb</tt> or
+      <tt>a:rgb</tt>. The internal color is an integer representing the RGB
+      color in the format 0xRRGGBB encoding red, green and blue.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="aScalar"></a>
+<tt>aScalar</tt></td>
+      <td valign="baseline">Returns the &quot;atom scalar&quot; number of each
+      atom in the argument. The scalar value, a floating point value between 0
+      and 1, is used to color atoms when the ColorBy mode is
+      <tt>'scalar'</tt>. This function can be used on arbitrarily
+      nested vectors.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="aSelected"></a>
+<tt>aSelected</tt></td>
+      <td valign="baseline">For each atom in the argument, this function
+      returns a value of 1 if the atom is selected in the MOE Window, and zero
+      otherwise. This function can be used on arbitrarily nested vectors.</td>
+    </tr>
+  </table><!-- ENDDESC -->
+
+<p>The following functions can be used to modify information in atom objects:
+  <!-- DESC --></p>
+  <table class="titlebar">
+    <tr>
+      <th>Function</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="aSetBondLook"></a>
+<tt>aSetBondLook</tt></td>
+      <td valign="baseline">Sets the 3D display mode of bonds for each atom in
+      the argument. Legal values are defined in the constant
+      <tt>A_BOND_LOOKS</tt> and consist of <tt>'none'</tt>,
+      <tt>'line'</tt> and <tt>'cylinder'</tt>. This function
+      can be used on arbitrarily nested vectors.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="aSetColorBy"></a>
+<tt>aSetColorBy</tt></td>
+      <td valign="baseline">
+        Sets the coloring mode (for 3D display) for each given atom. The scalar
+        value is used to color atoms when the ColorBy mode is
+        <tt>'scalar'</tt>. Legal values are
+        <ul>
+          <li><tt>'element'</tt> - color by atom's element</li>
+          <li><tt>'scalar'</tt> - color by atom's <tt>aScalar</tt>
+          value</li>
+          <li><tt>'rgb'</tt> - color by atom's <tt>aRGB</tt>
+          color</li>
+          <li><tt>'tempfactor'</tt> - color by the atom's
+          temperature factor</li>
+          <li><tt>'a:rgb'</tt> - color by atom's <tt>aRGB</tt>
+          color</li>
+          <li><tt>'r:rgb'</tt> - color by the owning residue's
+          <tt>rRGB</tt> color</li>
+          <li><tt>'c:rgb'</tt> - color by the owning chain's
+          <tt>cRGB</tt> color</li>
+          <li><tt>'r:aseg'</tt> - color by the owning residue's
+          secondary structure color</li>
+          <li><tt>'c:number'</tt> - color by the owning chain's
+          index color</li>
+          <li><tt>'chain'</tt> - color by the owning chain's
+          display color</li>
+          <li><tt>'residue'</tt> - color by the owning residue's
+          display color</li>
+          <li><tt>'ribbon'</tt> - color by the owning residue's
+          ribbon display color</li>
+        </ul>This function can be used on arbitrarily nested vectors.
+      </td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="aSetHidden"></a>
+<tt>aSetHidden</tt></td>
+      <td valign="baseline">Sets the hidden flag for each given atom. Atoms
+      with a true hidden flag will not be displayed in the MOE Window. This
+      function can be used on arbitrarily nested vectors.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="aSetLabel"></a>
+<tt>aSetLabel</tt></td>
+      <td valign="baseline">Sets the label for each given atom.
+      Atom labels are displayed in the MOE Window. This function can be used on
+      arbitrarily nested vectors.
+      <p>
+      Atom label text supports HTML tags for
+      <a href="../gui/label.htm#LabelFormats">text formatting</a>
+      and  <a href="../gui/label.htm#LabelPosition">positioning</a>.
+      Atom property values such as atom name, element, charge, etc.
+      can be added via <a href="../gui/label.htm#LabelShortcuts">shortcuts</a>.
+      </p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="aSetLabelHidden"></a>
+<tt>aSetLabelHidden</tt></td>
+      <td valign="baseline">Sets the hidden flag of the atom label for each
+      given atom.  Setting the hidden flag to true will cause the label of the
+      associated atom to no longer be shown in the MOE Window.
+      This provides the ability to hide the atom label without deleting it.
+      This function can be used on arbitrarily nested vectors.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="aSetNucleusLook"></a>
+<tt>aSetNucleusLook</tt></td>
+      <td valign="baseline">Sets the 3D display mode of the nucleus for each
+      given atom. Legal values are defined in the constant <a class="svl" href=
+      "moe_const.htm">A_NUCLEUS_LOOKS</a> and consist of
+      <tt>'none'</tt>, <tt>'point'</tt>,
+      <tt>'sphere'</tt> and <tt>'small-sphere'</tt>. This
+      function can be used on arbitrarily nested vectors.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="aSetRGB"></a>
+<tt>aSetRGB</tt></td>
+      <td valign="baseline">Sets the internal color of the atom. This is the
+      color used when the atom's ColorBy mode is <tt>rgb</tt> or
+      <tt>a:rgb</tt>. The internal color is an integer representing the RGB
+      color in the format 0xRRGGBB encoding red, green and blue.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="aSetScalar"></a>
+<tt>aSetScalar</tt></td>
+      <td valign="baseline">Sets the scalar (floating point) value for each
+      given atom. The <tt>numbers</tt> must be between [0,1]. Values outside
+      this range will be clamped. This function can be used on arbitrarily
+      nested vectors.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="aSetSelected"></a>
+<tt>aSetSelected</tt></td>
+      <td valign="baseline">Sets the selected flag for each given atom.
+      Selected atoms are marked in the MOE Window. This function can be used on
+      arbitrarily nested vectors.</td>
+    </tr>
+  </table><!-- ENDDESC -->
+
+<a id="aLabelElement"></a>
+<a id="aLabelName"></a>
+<a id="aLabelRes"></a>
+<a id="aLabelChain"></a>
+<a id="aLabelMMType"></a>
+<a id="aLabelCharge"></a>
+<hr noshade="noshade" />
+<h4 class="obsolete">Obsolete Syntax</h4>
+<pre>
+flags = <a class="obsfcndef">aLabelChain</a>   atom_keys
+flags = <a class="obsfcndef">aLabelCharge</a>  atom_keys
+flags = <a class="obsfcndef">aLabelElement</a> atom_keys
+flags = <a class="obsfcndef">aLabelMMType</a>  atom_keys
+flags = <a class="obsfcndef">aLabelName</a>    atom_keys
+flags = <a class="obsfcndef">aLabelRes</a>     atom_keys
+</pre>
+
+<p>
+For each atom in the argument, this function returns a value of 1
+if the atom label component is enabled, and zero otherwise.
+This function can be used on arbitrarily nested vectors.
+</p>
+<p>
+Superseded by function
+<a class="fcnlink" href="#aLabel"><tt>aLabel</tt></a>.
+</p>
+
+<a id="aSetLabelElement"></a>
+<a id="aSetLabelName"></a>
+<a id="aSetLabelRes"></a>
+<a id="aSetLabelChain"></a>
+<a id="aSetLabelMMType"></a>
+<a id="aSetLabelCharge"></a>
+<hr noshade="noshade" />
+<pre>
+<a class="obsfcndef">aSetLabelChain</a>   [atom_keys, flags]
+<a class="obsfcndef">aSetLabelCharge</a>  [atom_keys, flags]
+<a class="obsfcndef">aSetLabelElement</a> [atom_keys, flags]
+<a class="obsfcndef">aSetLabelMMType</a>  [atom_keys, flags]
+<a class="obsfcndef">aSetLabelName</a>    [atom_keys, flags]
+<a class="obsfcndef">aSetLabelRes</a>     [atom_keys, flags]
+</pre>
+
+<p>
+Sets the label component flag for each given atom.
+Atom labels are displayed in the MOE Window. This function can be used on
+arbitrarily nested vectors.
+</p>
+<p>
+Superseded by function
+<a class="fcnlink" href="#aSetLabel"><tt>aSetLabel</tt></a>.
+</p>
+
+
+<h1>See Also</h1>
+
+<p><a href="atom.htm">Atom&nbsp;Functions</a><br />
+  <a href="atom_p.htm">Atom&nbsp;Potential&nbsp;Functions</a><br />
+  <a href="bond.htm">Bond&nbsp;Functions</a><br />
+  <a href="chain.htm">Chain&nbsp;Functions</a><br />
+  <a href="residue.htm">Residue&nbsp;Functions</a><br />
+  <a href="obj.htm">Object&nbsp;Functions</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

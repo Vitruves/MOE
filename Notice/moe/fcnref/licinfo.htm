@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords: license" />
+  <meta name="keywords" content="functions: LicenseInfo" />
+  <title>License Information Function: LicenseInfo</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    License Information Function: LicenseInfo
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    <a class="fcnlink" href="#LicenseInfo">LicenseInfo</a> []
+    data = <a class="fcnlink" href="#LicenseInfo">LicenseInfo</a> []
+</pre>
+<a id="LicenseInfo"></a>
+<h1>Description</h1>
+
+<p>Returns information about the license file. The license file limits the
+  usage of the licensed application, specifying the highest version of the
+  software that can be run within the duration of the license, and the maximum
+  number of copies that can be run simultaneously.</p>
+
+<p>The returned data is a tagged vector with the
+following information:</p>
+  <div class="indent">
+    <table class="noborder">
+      <tr>
+        <td valign="baseline"><tt>path</tt></td>
+        <td valign="baseline">Path to the license file in use.</td>
+      </tr>
+      <tr>
+        <td valign="baseline"><tt>feature</tt></td>
+        <td valign="baseline">Name of the licensed application.</td>
+      </tr>
+      <tr>
+        <td valign="baseline"><tt>version</tt></td>
+        <td valign="baseline">Highest numbered version allowed.</td>
+      </tr>
+      <tr>
+        <td valign="baseline"><tt>expires</tt></td>
+        <td valign="baseline">Expiry date, given as <i>dd-mmm-yyyy</i>. If year
+        is 0000, the feature never expires.</td>
+      </tr>
+      <tr>
+        <td valign="baseline"><tt>key</tt></td>
+        <td valign="baseline">Hexadecimal authentication key used to verify
+        that the license has not been modified.</td>
+      </tr>
+      <tr>
+        <td valign="baseline"><tt>short_key</tt></td>
+        <td valign="baseline">First 16 characters of full <tt>key</tt>.</td>
+      </tr>
+      <tr>
+        <td valign="baseline"><tt>server</tt></td>
+        <td valign="baseline">Hostname or IP address of the computer acting as
+        license server.</td>
+      </tr>
+      <tr>
+        <td valign="baseline"><tt>ntokens</tt></td>
+        <td valign="baseline">Total number of tokens hosted by the
+        license server.
+        A value of 0 means unlimited.</td>
+      </tr>
+      <tr>
+        <td valign="baseline"><tt>nused</tt></td>
+        <td valign="baseline">Total number of tokens currently in use.
+        A value of 0 means unlimited.</td>
+      </tr>
+      <tr>
+        <td valign="baseline"><tt>nfloatused</tt></td>
+        <td valign="baseline">Number of floating tokens currently in use.
+        Floating tokens are not limited to a specific machine or user and
+        can be used by multiple different users in turns.
+        A value of 0 means unlimited.</td>
+      </tr>
+      <tr>
+        <td valign="baseline"><tt>days</tt></td>
+        <td valign="baseline">Days until the license file expires.</td>
+      </tr>
+      <tr>
+        <td valign="baseline"><tt>notice</tt></td>
+        <td valign="baseline">Notice text from the license file.</td>
+      </tr>
+      <tr>
+        <td valign="baseline"><tt>user</tt></td>
+        <td valign="baseline">Current user and host information.</td>
+      </tr>
+      <tr>
+        <td valign="baseline"><tt>hostid</tt></td>
+        <td valign="baseline">Host identification information.</td>
+      </tr>
+      <tr>
+        <td valign="baseline"><tt>hostid_ether</tt></td>
+        <td valign="baseline">Network port host identification information.</td>
+      </tr>
+      <tr>
+        <td valign="baseline"><tt>display</tt></td>
+        <td valign="baseline">Host display information.</td>
+      </tr>
+      <tr>
+        <td valign="baseline"><tt>flexnet</tt></td>
+        <td valign="baseline">Flexnet MOE version information.</td>
+      </tr>
+      <tr>
+        <td valign="baseline"><tt>daemon</tt></td>
+        <td valign="baseline">Flexnet license server version information.</td>
+      </tr>
+      <tr>
+        <td valign="baseline"><tt>timeout</tt></td>
+        <td valign="baseline">License server timeout.</td>
+      </tr>
+  </table>
+  </div>
+
+<p>For example:</p>
+
+<pre>
+    svl&gt; x = <span class="fcndef">LicenseInfo</span> []
+    svl&gt; x
+    [ path: 'C:/moe/license.dat', feature: 'moe', version: '2020.03',
+      expires: '31-may-2020', server: 'lic.chemcomp.com', ntokens: 6, ... ]
+</pre>
+
+<p>When the return value of <tt>LicenseInfo</tt> is not assigned to a
+  variable, the function prints a report about the license.</p>
+
+<pre>
+    svl&gt; LicenseInfo []
+     Path    : C:/moe/license.dat
+     Feature : moe
+     Version : 2020.03
+     Expires : 31-mar-2020 (11 days left)
+     Key     : 1234 ABCD 1234 AB4D 1FEG 1234 ABCD 1234 AB4D ...
+     Server  : lic.chemcomp.com
+     Tokens  : 6 (3 used)
+     Notice  : 
+     User    : USER=moeuser HOSTNAME=computer1
+     HostID  : 12ab34cd56e1
+     Display : DISPLAY=
+     FlexNet : v11.14.1.2 build 208719 x64_lsb
+     Daemon  : 
+</pre>
+
+<h1>See Also</h1>
+
+<p><a class="svl" href="../../svl/fcnref/getenv.htm">getenv</a></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: Message" />
+  <title>Miscellaneous Functions: Message</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Miscellaneous Functions: Message
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    msg_key = <a class="fcnlink" href=
+"#Message">Message</a> [msg_key, 'message']
+</pre>
+<a id="Message"></a>
+<h1>Description</h1>
+
+<p>Handles the creation, modification and deletion of messages that are
+  displayed in the MOE Window. The behavior of the function is summarized as
+  follows:</p>
+  <center>
+    <table class="noborder">
+      <tr>
+        <td>&nbsp;</td>
+        <td><tt>'message' == ''</tt></td>
+        <td><tt>'message' &lt;&gt; ''</tt></td>
+      </tr>
+      <tr>
+        <td><tt>msg_key == 0</tt></td>
+        <td>Does nothing</td>
+        <td>Creates new message</td>
+      </tr>
+      <tr>
+        <td><tt>msg_key &lt;&gt; 0</tt></td>
+        <td>Clears message</td>
+        <td>Modifies message</td>
+      </tr>
+    </table>
+  </center>
+
+<p>Whenever <tt>Message</tt> is called with a non-empty
+  <tt>'message'</tt>, <tt>'message'</tt> is
+  displayed in the MOE Window. The message is removed as soon as the task that
+  created the message is completed. As a consequence, a call to
+  <tt>Message</tt> at the CLI on its own will result in the associated message
+  token being put up and removed in such rapid succession that the message will
+  not appear to have been displayed in the MOE window at all.</p>
+
+<p>Messages are meant to be used within a function that wants to display
+  progress messages while a long operation is being performed. The key of the
+  message is returned if the message survived the operation (the message was
+  not destroyed).</p>
+
+<p>The following function illustrates the use of the <tt>Message</tt>
+  function:</p>
+
+<pre>
+    global function message_example []
+        local msgkey = <span class=
+"fcndef">Message</span> [ 0, 'Performing a long operation' ];
+
+            // msgkey is destroyed when the task is finished.
+            // Sleep here for 5 seconds in order to see the
+            // message in the MOE Window.
+
+        sleep 5;
+    endfunction
+</pre>
+
+<h1>See Also</h1>
+
+<p><a class="svl" href="../../svl/svlgui/fcnref/beep.htm">Beep</a><br />
+  <a class="svl" href="../../svl/svlgui/fcnref/yesno.htm">NoYes</a><br />
+  <a class="svl" href="../../svl/svlgui/fcnref/yesno.htm">OKCancel</a><br />
+  <a class="svl" href="quit.htm">Quit</a><br />
+  <a class="svl" href="../../svl/svlgui/fcnref/yesno.htm">YesNo</a><br />
+  <a class="svl" href="../../svl/svlgui/fcnref/yesno.htm">YesNoCancel</a><br />
+  <a class="svl" href="../../svl/svlgui/fcnref/yesno.htm">Warning</a></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: cat, nest, split" />
+  <title>Reshaping Functions: cat, nest and split</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Reshaping Functions: cat, nest and split
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+val = <a class="fcnlink" href="#cat">cat</a> [ a, b ]
+val = <a class="fcnlink" href="#cat">cat</a> [ a1, a2, a3, ...]
+
+val = <a class="fcnlink" href="#nest">nest</a> v
+
+val = <a class="fcnlink" href="#split">split</a> [ w, n ]
+val = <a class="fcnlink" href="#split">split</a> [ w, [n1,n2,...] ]
+val = <a class="fcnlink" href="#split">split</a> [ w, n1, n2, ... ]
+val = <a class="fcnlink" href=
+"#split">split</a> [ w, [n11,n12,...], [n21,n22,...] ]
+</pre>
+<a id="cat"></a>
+<h1>Description</h1>
+
+<pre>
+val = <span class="fcndef">cat</span> [ a, b ]
+val = <span class="fcndef">cat</span> [ a1, a2, a3, ...]
+</pre>
+
+<p>Concatenates elements of vectors <tt>a1</tt>, <tt>a2</tt>, ... into a
+  single vector. The top-level elements of <tt>cat</tt> become top-level
+  elements of the result.</p>
+
+<pre class="code">
+svl&gt; cat [ 1, [2,3] ]
+[1,2,3]
+
+svl&gt; cat [ igen 3, &quot;abc&quot;, [10,15] ]
+[ 1, 2, 3, &quot;a&quot;, &quot;b&quot;, &quot;c&quot;, 10, 15 ]
+
+svl&gt; cat [ [[1,2]], [[3,4]] ]
+[ [1,2], [3,4] ]
+</pre>
+<a id="nest"></a>
+<hr noshade="noshade" />
+
+<pre>
+val = <span class="fcndef">nest</span> v
+</pre>
+
+<p>Increases the nesting level of <tt>v</tt>, effectively &quot;adding&quot;
+  a set of brackets around the entire vector <tt>v</tt>. Equivalent to
+  <tt>[v]</tt>.</p>
+
+<pre class="code">
+svl&gt; nest igen 5
+[ [1,2,3,4,5] ]
+
+svl&gt; app nest [ [2,3], 4 ]
+[ [ [2,3] ], 4 ]
+
+svl&gt; igen 3 == nest igen 3 // generate identity matrix
+[ [1,0,0],[0,1,0],[0,0,1] ]
+</pre>
+<a id="split"></a>
+<hr noshade="noshade" />
+
+<pre>
+val = <span class="fcndef">split</span> [ w, n ]
+val = <span class="fcndef">split</span> [ w, [n1,n2,...] ]
+val = <span class="fcndef">split</span> [ w, n1, n2, ... ]
+val = <span class="fcndef">split</span> [ w, [n11,n12,...], [n21,n22,...] ]
+</pre>
+
+<p>Splits <tt>w</tt> into smaller vectors of specified lengths. If the
+  lengths add up to less than the length of <tt>w</tt>, the vector of lengths
+  is appropriately resized (by repeating its elements, starting from the first
+  one.)</p>
+  <ul>
+    <li>
+      <tt>split [ w, n ]</tt>
+
+<p>Split <tt>w</tt> into vectors of <tt>n</tt> elements each.</p>
+    </li>
+  </ul>
+
+<pre class="code">
+svl&gt; w = [1,2,3,4,5,6,7,8,9,10,11]
+svl&gt; split [ w, 3 ]
+[ [1,2,3], [4,5,6], [7,8,9], [10,11] ]
+</pre>
+  <ul>
+    <li>
+      <tt>split [ w, [n1,n2,...] ]</tt>
+
+<p>Split <tt>w</tt> into vectors of <tt>n1</tt>, <tt>n2</tt>, ...
+      elements each.</p>
+    </li>
+  </ul>
+
+<pre class="code">
+svl&gt; split [ &quot;abcdefghijk&quot;, [2,3] ]
+[ &quot;ab&quot;, &quot;cde&quot;, &quot;fg&quot;, &quot;hij&quot;, &quot;k&quot;]
+</pre>
+
+<pre class="code">
+svl&gt; split [ igen 11, [3, 2] ]
+[ [1,2,3], [4,5], [6, 7,8],[9, 10], 11 ]
+</pre>
+  <ul>
+    <li>
+      <tt>split [ w, n1, n2, ... ]</tt>
+
+<p>First, split <tt>w</tt> into vectors of <tt>n1</tt> elements each.
+      Then, split this vector into vectors of <tt>n2</tt> elements each.
+      Continue splitting the vector until all arguments are exhausted.</p>
+
+<p>Equivalent to:</p>
+
+<p><tt>split [ ... split [split [w,n1], n2], ...]</tt></p>
+    </li>
+  </ul>
+
+<pre class="code">
+svl&gt; split [ &quot;abcdefghi&quot;, 2, 3]
+[[&quot;ab&quot;,&quot;cd&quot;,&quot;ef&quot;], [&quot;gh&quot;,&quot;i&quot;]]
+
+svl&gt; split [ igen 11, 3, 2 ]
+[[[1,2,3], [4,5,6]], [[7,8,9], [10,11]]]
+</pre>
+  <ul>
+    <li>
+      <tt>split [ w, [n11,n12,...], [n21,n22,...] ]</tt>
+
+<p>First, split <tt>w</tt> into vectors of <tt>n11</tt>, <tt>n12</tt>,
+      ... elements each. Then, split this vector into vectors of <tt>n21</tt>,
+      <tt>n22</tt>, ... elements each. Continue splitting the vector until all
+      arguments are exhausted.</p>
+
+<p>Equivalent to:</p>
+
+<pre class="code">
+split [ ... split [split [w, [n11,n12,...]], [n21,n22,...]], ...]
+</pre>
+
+    </li>
+  </ul>
+
+<pre class="code">
+svl&gt; split [ &quot;abcdefghijkl&quot;, [2,3], [2,1] ]
+[[&quot;ab&quot;,&quot;cde&quot;], [&quot;fg&quot;], [&quot;hij&quot;,&quot;kl&quot;]]
+</pre>
+
+<h1>See Also</h1>
+
+<p><a class="svl" href="append.htm">append</a> <a class="svl" href=
+  "append.htm">prepend</a><br />
+  <a class="svl" href="length.htm">length</a> <a class="svl" href=
+  "lhs.htm">lhs</a><br />
+  <a class="svl" href="repetc.htm">rep</a> <a class="svl" href=
+  "repetc.htm">resize</a><br />
+  <a class="svl" href="tokcat.htm">tok_cat</a><br />
+  <a class="svl" href="sam.htm">sam</a><br />
+  <a class="svl" href="proxetc.htm">prox_find</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

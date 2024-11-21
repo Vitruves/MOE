@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content=
+  "functions: rAtomCount, rName, rNumber, rPos, rPosSE, rSelected, rType" />
+  <meta name="keywords" content=
+  "functions: rActualSegment, rSegment, rSetSegment" />
+  <meta name="keywords" content=
+  "functions: rSetSelected, rSetName, rSetPos, rSetType" />
+  <meta name="keywords" content=
+  "functions: rUID, rUID2, rSetUID, rSetUID2, rINS, rINS2, rSetINS, rSetINS2" />
+  <meta name="keywords" content="rScalar,: rSetScalar" />
+  <meta name="keywords" content="functions: rScalar1, rScalar2, rScalar3" />
+  <meta name="keywords" content=
+  "functions: rRGB, rSetRGB, rColor, rColorBy, rSetColorBy" />
+  <meta name="keywords" content=
+  "functions: rRibbonWidth, rSetRibbonWidth, rRibbonHeight, rSetRibbonHeight" />
+  <meta name="keywords" content=
+  "functions: rRibbonRGB, rSetRibbonRGB, rRibbonColor" />
+  <meta name="keywords" content=
+  "functions: rRibbonColorBy, rSetRibbonColorBy" />
+  <meta name="keywords" content="functions: rRibbonMode, rSetRibbonMode" />
+  <meta name="keywords" content="functions: rRibbonEnable, rSetRibbonEnable" />
+  <meta name="keywords" content=
+  "functions: rLetter, rSheetNumber, rDomain, rVisibleSE" />
+  <meta name="keywords" content="intro: Residue Functions" />
+  <title>Residue Object Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Residue Object Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+seg_tokens      = <a class="fcnlink" href=
+"#rActualSegment">rActualSegment</a> residue_keys
+atom_counts     = <a class="fcnlink" href=
+"#rAtomCount">rAtomCount</a>     residue_keys
+colors          = <a class="fcnlink" href=
+"#rColor">rColor</a>         residue_keys
+colorby_tokens  = <a class="fcnlink" href=
+"#rColorBy">rColorBy</a>       residue_keys
+domain_numbers  = <a class="fcnlink" href=
+"#rDomain">rDomain</a>        residue_keys
+ins_chars       = <a class="fcnlink" href=
+"#rINS">rINS</a>           residue_keys
+ins_chars       = <a class="fcnlink" href=
+"#rINS2">rINS2</a>          residue_keys
+letter_chars    = <a class="fcnlink" href=
+"#rLetter">rLetter</a>        residue_keys
+name_tokens     = <a class="fcnlink" href=
+"#rName">rName</a>          residue_keys
+residue_indices = <a class="fcnlink" href=
+"#rNumber">rNumber</a>        residue_keys
+positions       = <a class="fcnlink" href=
+"#rPos">rPos</a>           residue_keys
+se_positions    = <a class="fcnlink" href=
+"#rPosSE">rPosSE</a>         residue_keys
+flags           = <a class="fcnlink" href=
+"#rVisibleSE">rVisibleSE</a>     residue_keys
+colors          = <a class="fcnlink" href=
+"#rRGB">rRGB</a>           residue_keys
+colors          = <a class="fcnlink" href=
+"#rRibbonColor">rRibbonColor</a>   residue_keys
+colorby_tokens  = <a class="fcnlink" href=
+"#rRibbonColorBy">rRibbonColorBy</a> residue_keys
+heights         = <a class="fcnlink" href=
+"#rRibbonHeight">rRibbonHeight</a>  residue_keys
+mode_tokens     = <a class="fcnlink" href=
+"#rRibbonMode">rRibbonMode</a>    residue_keys
+flags           = <a class="fcnlink" href=
+"#rRibbonEnable">rRibbonEnable</a>  residue_keys
+colors          = <a class="fcnlink" href=
+"#rRibbonRGB">rRibbonRGB</a>     residue_keys
+widths          = <a class="fcnlink" href=
+"#rRibbonWidth">rRibbonWidth</a>   residue_keys
+scalar_triplets = <a class="fcnlink" href=
+"#rScalar">rScalar</a>        residue_keys
+scalar_1        = <a class="fcnlink" href=
+"#rScalar1">rScalar1</a>       residue_keys
+scalar_2        = <a class="fcnlink" href=
+"#rScalar2">rScalar2</a>       residue_keys
+scalar_3        = <a class="fcnlink" href=
+"#rScalar3">rScalar3</a>       residue_keys
+seg_tokens      = <a class="fcnlink" href=
+"#rSegment">rSegment</a>       residue_keys
+flags           = <a class="fcnlink" href=
+"#rSelected">rSelected</a>      residue_keys
+sheet_numbers   = <a class="fcnlink" href=
+"#rSheetNumber">rSheetNumber</a>   residue_keys
+type_tokens     = <a class="fcnlink" href=
+"#rType">rType</a>          residue_keys
+uid_numbers     = <a class="fcnlink" href=
+"#rUID">rUID</a>           residue_keys
+uid_numbers     = <a class="fcnlink" href=
+"#rUID2">rUID2</a>          residue_keys
+
+<a class="fcnlink" href=
+"#rSetColorBy">rSetColorBy</a>       [residue_keys, 'colorby_tokens']
+<a class="fcnlink" href=
+"#rSetINS">rSetINS</a>           [residue_keys, ins_chars]
+<a class="fcnlink" href=
+"#rSetINS2">rSetINS2</a>          [residue_keys, ins_chars]
+<a class="fcnlink" href=
+"#rSetName">rSetName</a>          [residue_keys, name_tokens]
+<a class="fcnlink" href=
+"#rSetPos">rSetPos</a>           [residue_keys, se_positions]
+<a class="fcnlink" href=
+"#rSetRGB">rSetRGB</a>           [residue_keys, colors]
+<a class="fcnlink" href=
+"#rSetRibbonColorBy">rSetRibbonColorBy</a> [residue_keys, colorby_tokens]
+<a class="fcnlink" href=
+"#rSetRibbonHeight">rSetRibbonHeight</a>  [residue_keys, heights]
+<a class="fcnlink" href=
+"#rSetRibbonMode">rSetRibbonMode</a>    [residue_keys, mode_tokens]
+<a class="fcnlink" href=
+"#rSetRibbonEnable">rSetRibbonEnable</a>  [residue_keys, flags]
+<a class="fcnlink" href=
+"#rSetRibbonRGB">rSetRibbonRGB</a>     [residue_keys, colors]
+<a class="fcnlink" href=
+"#rSetRibbonWidth">rSetRibbonWidth</a>   [residue_keys, widths]
+<a class="fcnlink" href=
+"#rSetScalar">rSetScalar</a>        [residue_keys, scalar_num, values]
+<a class="fcnlink" href=
+"#rSetSegment">rSetSegment</a>       [residue_keys, seg_tokens]
+<a class="fcnlink" href=
+"#rSetSelected">rSetSelected</a>      [residue_keys, flags]
+<a class="fcnlink" href=
+"#rSetType">rSetType</a>          [residue_keys, type_tokens]
+<a class="fcnlink" href=
+"#rSetUID">rSetUID</a>           [residue_keys, uid_numbers]
+<a class="fcnlink" href=
+"#rSetUID2">rSetUID2</a>          [residue_keys, uid_numbers]
+</pre>
+<a id="rActualSegment"></a>
+<h1>Description</h1>
+
+<p>In MOE, molecular data is organized as a hierarchy of <i>molecular
+  objects</i> or <i>objects</i>. A residue object can own zero or more atoms.
+  Within MOE residue information is stored in separate internal data
+  structures. The following functions obtain or modify basic residue
+  properties. Residues are referenced with an object key (a unique number
+  identifying the residue object). <!-- DESC --></p>
+
+<p>The following functions can be used to obtain information from residue
+  objects:</p>
+  <table class="titlebar">
+    <tr>
+      <th>Function</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td>
+<tt>rActualSegment</tt></td>
+      <td>
+        Returns the secondary structure segment label token for each residue.
+        Legal label tokens are defined by the constant <a class="svl" href=
+        "moe_const.htm">R_SEGMENT_TYPES</a>. This function can be used on
+        arbitrarily nested vectors.
+
+<pre class="code">
+seg_tokens = rActualSegment residue_keys
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td>
+<a id="rAtomCount"></a>
+<tt>rAtomCount</tt></td>
+      <td>
+        Returns the number of atoms owned by each given residue. This function
+        can be used on arbitrarily nested vectors.
+
+<pre class="code">
+atom_counts = rAtomCount residue_keys
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td>
+<a id="rColor"></a>
+<tt>rColor</tt></td>
+      <td>Returns the display color for the residue. This is
+      the (computed) color that is actually used for the residue label in the
+      Sequence Editor. The integer color format is 0xRRGGBB encoding red, green
+      and blue.</td>
+    </tr>
+    <tr>
+      <td>
+<a id="rColorBy"></a>
+<tt>rColorBy</tt></td>
+      <td>
+        For each residue in the argument, this function returns a token
+        describing how the residue is colored. Legal values are
+        <ul>
+          <li><tt>'rgb'</tt> - color by residue's <tt>rRGB</tt>
+          color</li>
+          <li><tt>'tempfactor'</tt> - color by the residue's
+          atoms' average temperature factor</li>
+          <li><tt>'r:rgb'</tt> - color by residue's <tt>rRGB</tt>
+          color</li>
+          <li><tt>'c:rgb'</tt> - color by the owning chain's
+          <tt>cRGB</tt> color</li>
+          <li><tt>'r:aseg'</tt> - color by the residue's secondary
+          structure</li>
+          <li><tt>'c:number'</tt> - color by the owning chain's
+          index color</li>
+          <li><tt>'chain'</tt> - color by the owning chain's
+          display color</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>
+<a id="rDomain"></a>
+<tt>rDomain</tt></td>
+      <td>
+
+<p>Uses the algorithm described in [Feldman&nbsp;2012] to identify
+        structural domains within a protein by clustering alpha carbons.
+        Briefly, buried alpha carbon atoms are identified and then clustered
+        spatially using average-linkage clustering to produce a dendrogram. A
+        single cut is then made to the dendrogram, producing one or more
+        clusters of alpha carbons, each representing a protein domain. Finally,
+        non-buried residues are added back to their nearest clusters and some
+        smoothing is performed. Domains may consist of one or more contiguous
+        segments from one or more chains within the structure.</p>
+
+<p>The function returns a positive integer for each residue that is
+        part of a protein structural domain, and zero for all other residues.
+        Residues with the same integer are part of the same structural domain.
+        The returned values will be in the range [0..N] where N is the total
+        number of domains in the system. Domains will never span multiple chain
+        tags. If the function fails for any reason, the return values will all
+        be zero. This function can be used on arbitrarily nested vectors.</p>
+
+<pre class="code">
+domain_numbers = rDomain residue_keys
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td>
+<a id="rLetter"></a>
+<tt>rLetter</tt></td>
+      <td>
+        Returns the single letter code translation for the name of each given
+        residue. Standard IUPAC translations are applied for standard amino
+        acid residues. Residues which are not amino acids are translated to a
+        question mark (&quot;?&quot;). Modified and non-standard residues are
+        mapped to the letter code of the standard residue from which they are
+        derived.
+
+<pre class="code">
+letter_chars = rLetter residue_keys
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td>
+<a id="rINS"></a>
+<tt>rINS</tt></td>
+      <td>
+        Returns the PDB insertion character for each given residue. This
+        function can be used on arbitrarily nested vectors.
+
+<pre class="code">
+ins_chars = rINS residue_keys
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td>
+<a id="rINS2"></a>
+<tt>rINS2</tt></td>
+      <td>
+        Returns the PDB author insertion character for each given residue. This
+        function can be used on arbitrarily nested vectors.
+
+<pre class="code">
+ins_chars = rINS2 residue_keys
+</pre>See also <tt>rUID2</tt>. The author UID/INS values are set when reading
+in PDB or CIF files and are meant as storage for the original UID/INS
+assignments as intended by the author of the PDB file while the rUID/rINS
+residue values are changed.
+      </td>
+    </tr>
+    <tr>
+      <td>
+<a id="rName"></a>
+<tt>rName</tt></td>
+      <td>
+        Returns the 3 letter residue name token for each residue in the
+        argument. This function can be used on arbitrarily nested vectors.
+
+<pre class="code">
+name_tokens = rName residue_keys
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td>
+<a id="rNumber"></a>
+<tt>rNumber</tt></td>
+      <td>
+        Returns the index of each residue in its parent chain, and is
+        equivalent to <a class="svl" href="obj.htm">oIndex</a>. This function
+        can be used on arbitrarily nested vectors.
+
+<pre class="code">
+residue_indices = rNumber residue_keys
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td>
+<a id="rPos"></a>
+<tt>rPos</tt></td>
+      <td>
+        Returns the non-negative integers used to determine the layout column
+        numbers of residues in the Sequence Editor. This function can be used
+        on arbitrarily nested vectors.
+
+<pre class="code">
+res_pos = rPos residue_keys
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td>
+<a id="rPosSE"></a>
+<tt>rPosSE</tt></td>
+      <td>
+        Returns the layout column numbers of residues in the Sequence Editor.
+        The column numbers are calculated from assigned residue positions. This
+        function can be used on arbitrarily nested vectors.
+
+<pre class="code">
+se_positions = rPosSE residue_keys
+</pre>
+
+<p>For each residue <i>i</i> in a given chain, the gap distance
+        <i>g</i>(<i>i</i>) between it and the next residue in its chain is
+        calculated using the following formula:</p>
+        <p class="blockquote">
+          <i>g</i>(<i>i</i>) = MAX { rpos(<i>i</i>) - rpos(<i>i</i>-1), 1 }
+        </p>The value <i>g</i>(<i>i</i>) becomes the gap between
+        residue <i>i</i> and residue <i>i</i>-1. The value of rpos(1) (<i>i</i>
+        starts at 1) is 1. A gap value of 1 results in no gap.
+      </td>
+    </tr>
+    <tr>
+      <td>
+<a id="rVisibleSE"></a>
+<tt>rVisibleSE</tt></td>
+      <td>
+        Returns a flag for each residue: 1 if the residue is visible in the
+        Sequence Editor, 0 if it is hidden (a residue within a hidden column or
+        hidden chain).
+
+<pre class="code">
+flags = rVisibleSE residue_keys
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td>
+<a id="rRGB"></a>
+<tt>rRGB</tt></td>
+      <td>Returns the internal color of the residue. This is
+      the color used when the residue's ColorBy mode is <tt>rgb</tt> or
+      <tt>r:rgb</tt>. The internal color is an integer representing the RGB
+      color in the format 0xRRGGBB encoding red, green and blue.</td>
+    </tr>
+    <tr>
+      <td>
+<a id="rRibbonWidth"></a>
+<a id="rRibbonHeight"></a>
+<tt>rRibbonWidth</tt><br />
+      <tt>rRibbonHeight</tt></td>
+      <td>Returns the width (height) used for rendering the
+      backbone ribbon. A value of zero means that a standard width (height) is
+      used. Not all ribbon modes use the width (height).</td>
+    </tr>
+    <tr>
+      <td>
+<a id="rRibbonColor"></a>
+<tt>rRibbonColor</tt></td>
+      <td>Returns the display color for the ribbon for the
+      given residue. This is the (computed) color that is actually used for the
+      ribbon segment. The integer color format is 0xRRGGBB encoding red, green
+      and blue.</td>
+    </tr>
+    <tr>
+      <td>
+<a id="rRibbonColorBy"></a>
+<tt>rRibbonColorBy</tt></td>
+      <td>
+        For each residue in the argument, this function returns a token
+        describing how the residue's ribbon segment is colored. Legal
+        values are
+        <ul>
+          <li><tt>'rgb'</tt> - color by ribbons'
+          <tt>rRibbonRGB</tt> color</li>
+          <li><tt>'tempfactor'</tt> - color by residue's atoms'
+          average temperature factor</li>
+          <li><tt>'r:rgb'</tt> - color by residue's <tt>rRGB</tt>
+          color</li>
+          <li><tt>'c:rgb'</tt> - color by the owning chain's
+          <tt>cRGB</tt> color</li>
+          <li><tt>'r:aseg'</tt> - color by the residue's secondary
+          structure</li>
+          <li><tt>'c:number'</tt> - color by the owning chain's
+          index color</li>
+          <li><tt>'chain'</tt> - color by the owning chain's
+          display color</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>
+<a id="rRibbonEnable"></a>
+<tt>rRibbonEnable</tt></td>
+      <td>Returns a flag for each residue: 0 if the ribbon
+      rendering is disabled for the residue, 1 if enabled.</td>
+    </tr>
+    <tr>
+      <td>
+<a id="rRibbonMode"></a>
+<tt>rRibbonMode</tt></td>
+      <td>
+        Returns a token describing how the residue's backbone is to be
+        rendered. Legal values are:
+        <ul>
+          <li><tt>'none'</tt> - no backbone is rendered</li>
+          <li><tt>'line'</tt> - backbone is rendered as a smooth
+          line</li>
+          <li><tt>'trace'</tt> - backbone is rendered as a straight
+          line</li>
+          <li><tt>'flat'</tt> - backbone is rendered as a flat
+          ribbon</li>
+          <li><tt>'tube'</tt> - backbone is rendered as a ellipsoidal
+          tube</li>
+          <li><tt>'slab'</tt> - backbone is rendered as a solid
+          ribbon</li>
+          <li><tt>'auto'</tt> - backbone is rendered according to
+          secondary structure</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>
+<a id="rRibbonRGB"></a>
+<tt>rRibbonRGB</tt></td>
+      <td>Returns the internal color of the ribbon. This is
+      the color used when the ribbon's ColorBy mode is <tt>rgb</tt> or
+      <tt>r:rgb</tt>. The internal color is an integer representing the RGB
+      color in the format 0xRRGGBB encoding red, green and blue.</td>
+    </tr>
+    <tr>
+      <td>
+<a id="rScalar"></a>
+<tt>rScalar</tt></td>
+      <td>
+        Returns a vector of three numbers for each residue in the argument.
+        These three numbers are the values used in the Sequence Editor residue
+        plots. This function applies to flat vectors only.
+
+<pre class="code">
+scalar_triplets = rScalar residue_keys
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td>
+<a id="rScalar1"></a>
+<a id="rScalar2"></a>
+<a id="rScalar3"></a>
+<tt>rScalar1</tt><br />
+      <tt>rScalar2</tt><br />
+      <tt>rScalar3</tt></td>
+      <td>Returns the corresponding residue scalar number for
+      each residue in the argument. The numbers are the values used in the
+      Sequence Editor residue plots. These functions apply to flat vectors
+      only.</td>
+    </tr>
+    <tr>
+      <td>
+<a id="rSegment"></a>
+<tt>rSegment</tt></td>
+      <td>
+        Returns the predicted secondary structure segment label token for each
+        residue. This label token is used to secondary structure predictors
+        (unlike the actual segment which is defined by atomic coordinates).
+        Legal label tokens are defined by the constant <a class="svl" href=
+        "moe_const.htm">R_SEGMENT_TYPES</a>. This function can be used on
+        arbitrarily nested vectors.
+
+<pre class="code">
+seg_tokens = rSegment residue_keys
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td>
+<a id="rSelected"></a>
+<tt>rSelected</tt></td>
+      <td>
+        Returns the selection state for each residue in the argument: 1 if the
+        residue is selected in the Sequence Editor and 0 otherwise. This
+        function can be used on arbitrarily nested vectors.
+
+<pre class="code">
+flags = rSelected residue_keys
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td>
+<a id="rSheetNumber"></a>
+<tt>rSheetNumber</tt></td>
+      <td>
+        Returns a positive integer for each residue that is part of a
+        &beta;-sheet, and zero for non-sheet residues. Residues with the same
+        integer are part of the same sheet (as determined by hydrogen bonding).
+        The returned values will be in the range [0..N] where N is the total
+        number of sheets in the system. This function can be used on
+        arbitrarily nested vectors.
+
+<pre class="code">
+sheet_numbers = rSheetNumber residue_keys
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td>
+<a id="rType"></a>
+<tt>rType</tt></td>
+      <td>
+        Returns the residue type token for each residue in the argument. Legal
+        type tokens are defined in the constant <a class="svl" href=
+        "moe_const.htm">R_TYPES</a>. This function can be used on arbitrarily
+        nested vectors.
+
+<pre class="code">
+type_tokens = rType residue_keys
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td>
+<a id="rUID"></a>
+<tt>rUID</tt></td>
+      <td>
+        Returns the UID number (an integer typically equal to the ID field in
+        PDB files) for each residue in the argument. This function can be used
+        on arbitrarily nested vectors.
+
+<pre class="code">
+uid_numbers = rUID residue_keys
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td>
+<a id="rUID2"></a>
+<tt>rUID2</tt></td>
+      <td>
+        Returns the author UID number (an integer equal to the ID field in PDB
+        files) for each residue in the argument. This function can be used on
+        arbitrarily nested vectors.
+
+<pre class="code">
+uid_numbers = rUID2 residue_keys
+</pre>See also <tt>rINS2</tt>. The author UID/INS values are set when reading
+in PDB or CIF files and are meant as storage for the original UID/INS
+assignments as intended by the author of the PDB file while the rUID/rINS
+residue values are changed.
+      </td>
+    </tr>
+  </table><!-- ENDDESC -->
+
+<p>The following functions can be used to modify information in residue
+  objects: <!-- DESC --></p>
+  <table class="titlebar">
+    <tr>
+      <th>Function</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td>
+<a id="rSetColorBy"></a>
+<tt>rSetColorBy</tt></td>
+      <td>
+        For each residue in the argument, this function sets the mode
+        describing how the residue is colored. Legal values are
+        <ul>
+          <li><tt>'rgb'</tt> - color by residue's <tt>rRGB</tt>
+          color</li>
+          <li><tt>'r:rgb'</tt> - color by residue's <tt>rRGB</tt>
+          color</li>
+          <li><tt>'c:rgb'</tt> - color by the owning chain's
+          <tt>cRGB</tt> color</li>
+          <li><tt>'r:aseg'</tt> - color by the residue's secondary
+          structure</li>
+          <li><tt>'c:number'</tt> - color by the owning chain's
+          index color</li>
+          <li><tt>'chain'</tt> - color by the owning chain's
+          display color</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>
+<a id="rSetINS"></a>
+<tt>rSetINS</tt></td>
+      <td>
+        Sets the PDB insertion character for each residue in the
+        <tt>residue_keys</tt> argument. This function can be used on
+        arbitrarily nested vectors.
+
+<pre class="code">
+rSetINS [residue_keys, ins_chars]
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td>
+<a id="rSetINS2"></a>
+<tt>rSetINS2</tt></td>
+      <td>
+        Sets the PDB author insertion character for each residue in the
+        <tt>residue_keys</tt> argument. This function can be used on
+        arbitrarily nested vectors.
+
+<pre class="code">
+rSetINS2 [residue_keys, ins_chars]
+</pre>See also <tt>rSetUID2</tt>. The author UID/INS values are set when
+reading in PDB or CIF files and are meant as storage for the original UID/INS
+assignments as intended by the author of the PDB file while the rUID/rINS
+residue values are changed.
+      </td>
+    </tr>
+    <tr>
+      <td>
+<a id="rSetName"></a>
+<tt>rSetName</tt></td>
+      <td>
+        Sets the residue name for each residue in the <tt>residue_keys</tt>
+        argument. Residue names are automatically converted to upper-case with
+        no blanks and truncated to a maximum of three characters. This function
+        can be used on arbitrarily nested vectors.
+
+<pre class="code">
+rSetName [residue_keys, name_tokens]
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td>
+<a id="rSetPos"></a>
+<tt>rSetPos</tt></td>
+      <td>
+        Assigns the values used to determine the layout column numbers of
+        residues in the Sequence Editor. Negative numbers are replaced with
+        zero.
+
+<pre class="code">
+rSetPos [residue_keys, residue_positions]
+</pre>
+
+<p>For each residue <i>i</i> in a given chain, the gap distance
+        <i>g</i>(<i>i</i>) between it and the next residue in its chain is
+        calculated using the following formula:</p>
+        <p class="blockquote">
+          <i>g</i>(<i>i</i>) = MAX { rpos(<i>i</i>) - rpos(<i>i</i>-1), 1 }
+        </p>The value <i>g</i>(<i>i</i>) becomes the gap between
+        residue <i>i</i> and residue <i>i</i>-1. The value of rpos(1) (<i>i</i>
+        starts at 1) is 1. A gap value of 1 results in no gap. <a class="svl"
+        href="#rPosSE">rPosSE</a> returns the actual layout column numbers for
+        its residue arguments.
+      </td>
+    </tr>
+    <tr>
+      <td>
+<a id="rSetScalar"></a>
+<tt>rSetScalar</tt></td>
+      <td>
+        Sets a scalar value for each given residue. Residue scalars can be
+        displayed in the Sequence Editor residue plots. This function applies
+        to flat vectors only.
+
+<pre class="code">
+rSetScalar [residue_keys, scalar_num, values]
+</pre>
+
+<p>where <tt>scalar_num</tt> can be <tt>1</tt>, <tt>2</tt> or
+        <tt>3</tt>.</p>
+
+<p>Unit extension applies as illustrated below:</p>
+
+<pre class="code">
+rSetScalar [
+    first Residues[], // residue key
+    [1,2,3],          // sets all three scalars
+    [1,-1,2]          // value for each scalar
+]
+</pre>
+
+<p>The next example sets the first scalar (<tt>scalar_num</tt> is 1) of
+        all residues to <tt>value</tt> 100:</p>
+
+<pre class="code">
+rSetScalar [
+    Residues[],   // residue keys
+    1,            // sets one scalar
+    100           // value for all scalars
+]
+</pre>
+
+<p>(See <a class="svl" href="drawse.htm">DrawSEScalar</a> and <a class=
+        "svl" href="sescalar.htm">SEScalarPlotName</a>.)</p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+<a id="rSetRibbonColorBy"></a>
+<tt>rSetRibbonColorBy</tt></td>
+      <td>
+        For each residue in the argument, this function sets the mode by which
+        the residue's ribbon segment is colored. Legal values are
+        <ul>
+          <li><tt>'rgb'</tt> - color by ribbons'
+          <tt>rRibbonRGB</tt> color</li>
+          <li><tt>'r:rgb'</tt> - color by residue's <tt>rRGB</tt>
+          color</li>
+          <li><tt>'c:rgb'</tt> - color by the owning chain's
+          <tt>cRGB</tt> color</li>
+          <li><tt>'r:aseg'</tt> - color by the residue's secondary
+          structure</li>
+          <li><tt>'c:number'</tt> - color by the owning chain's
+          index color</li>
+          <li><tt>'chain'</tt> - color by the owning chain's
+          display color</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>
+<a id="rSetRibbonEnable"></a>
+<tt>rSetRibbonEnable</tt></td>
+      <td>For each residue, sets the flag for enabling or
+      disabling ribbon rendering. If <tt>flag</tt> is 0, rendering is disabled.
+      Otherwise, if <tt>flag</tt> is 1, the ribbon will be rendered in the
+      current ribbon mode (<tt>rRibbonMode</tt>).</td>
+    </tr>
+    <tr>
+      <td>
+<a id="rSetRibbonMode"></a>
+<tt>rSetRibbonMode</tt></td>
+      <td>
+        Sets the backbone ribbon rendering mode for each residue. Legal values
+        are:
+        <ul>
+          <li><tt>'none'</tt> - no backbone is rendered</li>
+          <li><tt>'line'</tt> - backbone is rendered as a smooth
+          line</li>
+          <li><tt>'trace'</tt> - backbone is rendered as a straight
+          line</li>
+          <li><tt>'flat'</tt> - backbone is rendered as a flat
+          ribbon</li>
+          <li><tt>'tube'</tt> - backbone is rendered as a ellipsoidal
+          tube</li>
+          <li><tt>'slab'</tt> - backbone is rendered as a solid
+          ribbon</li>
+          <li><tt>'auto'</tt> - backbone is rendered according to
+          secondary structure</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>
+<a id="rSetRGB"></a>
+<tt>rSetRGB</tt></td>
+      <td>Sets the internal color of the residue. This is the
+      color used when the residue's ColorBy mode is <tt>rgb</tt> or
+      <tt>r:rgb</tt>. The internal color is an integer representing the RGB
+      color in the format 0xRRGGBB encoding red, green and blue.</td>
+    </tr>
+    <tr>
+      <td>
+<a id="rSetRibbonWidth"></a>
+<a id="rSetRibbonHeight"></a>
+<tt>rSetRibbonWidth</tt><br />
+      <tt>rSetRibbonHeight</tt></td>
+      <td>Sets the width (height) used for rendering the
+      backbone ribbon. A value of zero means that a standard width (height) is
+      used. Not all ribbon modes use the width (height).</td>
+    </tr>
+    <tr>
+      <td>
+<a id="rSetRibbonRGB"></a>
+<tt>rSetRibbonRGB</tt></td>
+      <td>Sets the internal color of the ribbon. This is the
+      color used when the ribbon's ColorBy mode is <tt>rgb</tt> or
+      <tt>r:rgb</tt>. The internal color is an integer representing the RGB
+      color in the format 0xRRGGBB encoding red, green and blue.</td>
+    </tr>
+    <tr>
+      <td>
+<a id="rSetSegment"></a>
+<tt>rSetSegment</tt></td>
+      <td>
+        Sets the segment label for each given residue. Legal segment labels are
+        defined in the constant <a class="svl" href=
+        "moe_const.htm">R_SEGMENT_TYPES</a>. Segment labels are used in
+        secondary structure prediction. This function can be used on
+        arbitrarily nested vectors.
+
+<pre class="code">
+rSetSegment [residue_keys, seg_tokens]
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td>
+<a id="rSetSelected"></a>
+<tt>rSetSelected</tt></td>
+      <td>
+        Assigns the selection flag for each given residue. The selection flag
+        controls the selection status of residues in the Sequence Editor. This
+        function can be used on arbitrarily nested vectors.
+
+<pre class="code">
+rSetSelected [residue_keys, flags]
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td>
+<a id="rSetType"></a>
+<tt>rSetType</tt></td>
+      <td>
+        Sets the residue type token for each given residue. Legal type tokens
+        are defined in the constant <a class="svl" href=
+        "moe_const.htm">R_TYPES</a>. This function can be used on arbitrarily
+        nested vectors.
+
+<pre class="code">
+rSetType [residue_keys, type_tokens]
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td>
+<a id="rSetUID"></a>
+<tt>rSetUID</tt></td>
+      <td>
+        Sets the integer User ID number for each given residue. These numbers
+        are typically the residue identification numbers found in PDB files.
+        This function can be used on arbitrarily nested vectors.
+
+<pre class="code">
+rSetUID [residue_keys, uid_numbers]
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td>
+<a id="rSetUID2"></a>
+<tt>rSetUID2</tt></td>
+      <td>
+        Sets the integer author User ID number for each given residue. These
+        numbers are the residue identification numbers found in PDB files. This
+        function can be used on arbitrarily nested vectors.
+
+<pre class="code">
+rSetUID2 [residue_keys, uid_numbers]
+</pre>See also <tt>rSetINS2</tt>. The author UID/INS values are set when
+reading in PDB or CIF files and are meant as storage for the original UID/INS
+assignments as intended by the author of the PDB file while the rUID/rINS
+residue values are changed.
+      </td>
+    </tr>
+  </table><!-- ENDDESC -->
+
+<h1>References</h1>
+  <table class="ref">
+    <tr>
+      <td valign="top">[Feldman&nbsp;2012]</td>
+      <td valign="top">Feldman, H.J.; Identifying Structural Domains of
+      Proteins using Clustering; <i>BMC Bioinformatics 13:286</i>
+      (<b>2012</b>).</td>
+    </tr>
+  </table>
+
+<h1>See Also</h1>
+
+<p><a class="svl" href="ratrch.htm">rAtoms</a><br />
+  <a class="svl" href="ratrch.htm">rChains</a><br />
+  <a class="svl" href="rconstraint.htm">rConstraints</a><br />
+  <a class="svl" href=
+  "../../proteins/fcnref/pro_lett.htm">Seq_LetterToName</a></p>
+
+<p><a href="atom.htm">Atom&nbsp;Functions</a><br />
+  <a href="chain.htm">Chain&nbsp;Functions</a><br />
+  <a href="obj.htm">Object&nbsp;Functions</a></p>
+
+<p><a href="../molsystems/molrep.htm">Representation of Molecular Systems in
+  MOE</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

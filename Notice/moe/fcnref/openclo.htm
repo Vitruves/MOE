@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: Open, Close" />
+  <title>Open/Close Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Open/Close Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    <a class="fcnlink" href="#Open">Open</a> 'filename'
+    <a class="fcnlink" href="#Open">Open</a> []
+
+    <a class="fcnlink" href="#Close">Close</a> options
+    <a class="fcnlink" href="#Close">Close</a> []
+</pre>
+<a id="Open"></a>
+<h1>Description</h1>
+
+<pre>
+<span class="fcndef">Open</span> 'filename'
+<span class="fcndef">Open</span> []
+</pre>
+
+<p>Reads the file <tt>'filename'</tt>, which can include a directory
+  path. The format of the file is automatically detected. If called with a null
+  argument, <tt>Open[]</tt> displays the Open Panel and returns. See the
+  <a href="../gui/fileopen.htm">Open Panel documentation</a> for a list of
+  recognized formats.</p>
+
+<pre>
+    SVL&gt; Open 'crambin.pdb' // PDB format
+    SVL&gt; Open 'aspirin.moe' // MOE format
+</pre>
+<a id="Close"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">Close</span> options
+<span class="fcndef">Close</span> []
+</pre>
+
+<p>Removes all graphical and molecular objects from the system, i.e. clears
+  the workspace. If the current molecular data has not been saved, and the
+  function call was issued with a null argument, a confirmation prompt appears.
+  <tt>options</tt> is a tagged vector that can contain any number of the
+  following name-value pairs:</p>
+  <dl>
+    <dt><tt>force:flag</tt></dt>
+    <dd>A non-zero value of <tt>flag</tt> will force a close without
+    confirmation; a zero value (default) will cause prompting to occur.</dd>
+    <dt><tt>viewreset:flag</tt></dt>
+    <dd>A non-zero value of <tt>flag</tt> (default) will cause the view to
+    reset; a zero value will keep the current view.</dd>
+    <dt><tt>delgobj:flag</tt></dt>
+    <dd>A non-zero value of <tt>flag</tt> (default) will cause all graphic
+    objects to be deleted; a zero value will not.</dd>
+  </dl>
+
+<h1>See Also</h1>
+
+<p><a href="../gui/fileopen.htm">Opening Files in MOE</a><br />
+  <a href="molrw.htm">Read/Write Molecular Data Functions</a><br />
+  <a href="../../svl/fcnref/fopenetc.htm">File Functions</a></p>
+
+<p><a class="svl" href="save.htm">DataFilename</a><br />
+  <a class="svl" href="save.htm">DataModified</a><br />
+  <a class="svl" href="save.htm">Save</a><br />
+  <a class="svl" href="save.htm">SaveAs</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

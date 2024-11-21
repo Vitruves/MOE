@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: PEOE" />
+  <title>Potential Energy Functions: PEOE</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Potential Energy Functions: PEOE
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<h3 class="obsolete">Obsolete</h3>
+
+<pre>
+    partial_charges = <a class="fcnlink" href=
+"#PEOE">PEOE</a> [ damp, damp_scale ]
+    partial_charges = <a class="fcnlink" href="#PEOE">PEOE</a> []
+</pre>
+<a id="PEOE"></a>
+<h1>Description</h1>
+
+<h4 class="obsolete">Obsolete Syntax</h4>
+
+<p><tt>PEOE</tt> is an implementation of the <a href="../pot.htm">Gasteiger
+  and Marsili Partial Equalization of Orbital Electronegativities method</a> of
+  calculating partial charges.</p>
+  <dl>
+    <dt><tt>damp</tt></dt>
+    <dd>Damping factor (specified as a real) used to guarantee
+    convergence.</dd>
+    <dt><tt>damp_scale</tt></dt>
+    <dd>Scaling factor (specified as a real) used to scale the damping factor
+    with each successive iteration of the algorithm.</dd>
+  </dl>
+
+<p><tt>PEOE</tt> can be called with either or both arguments null, in which
+  case default values as found in file <tt>peoe.svl</tt> are used (0.5,
+  0.5).</p>
+
+<p>The function calculates and returns the partial charge for every atom in
+  the system but does not however actually set the atom charges. To do so,
+  use:</p>
+
+<pre>
+    aSetCharge [ Atoms [], <span class="fcndef">PEOE</span> [] ]
+</pre>
+
+<h1>See Also</h1>
+
+<p><a href="atom.htm">Atom Functions</a> </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

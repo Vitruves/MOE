@@ -1,0 +1,1562 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content=
+  "functions: curl_open, curl_read, curl_write, curl_stat, curl_keylist" />
+  <meta name="keywords" content=
+  "functions: curl_key, curl_close, curl_setopt, curl_setproxy" />
+  <meta name="keywords" content=
+  "keywords: http, ftp, internet, file, transfer, download, url, connect" />
+  <title>Internet cURL Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Internet cURL Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    key = <a class="fcnlink" href="#curl_open">curl_open</a> &#39;url&#39;
+    key = <a class="fcnlink" href="#curl_open">curl_open</a> key
+    key = <a class="fcnlink" href="#curl_open">curl_open</a> options
+</pre>
+
+<p class="blockquote">
+        where options is a tagged vector as described below.
+</p>
+
+<pre class="code">
+    <a class="fcnlink" href="#curl_setopt">curl_setopt</a> [key, options]
+</pre>
+
+<p class="blockquote">
+        where options is a tagged vector as described below.
+</p>
+
+<pre class="code">
+    <a class="fcnlink" href="#curl_setproxy">curl_setproxy</a> [
+        host: &#39;hostname&#39;,
+        port: port_number,
+        username: &#39;name&#39;,
+        password: &#39;password&#39;
+    ]
+<!--
+    <a class="fcnlink" href="#curl_setproxy">curl_setproxy</a> [reset: 1]
+    proxy = <a class="fcnlink" href="#curl_setproxy">curl_setproxy</a> []
+-->
+    data = <a class="fcnlink" href="#curl_read">curl_read</a> &#39;url&#39;
+    data = <a class="fcnlink" href="#curl_read">curl_read</a> key
+    data = <a class="fcnlink" href=
+"#curl_read">curl_read</a> [&#39;url&#39;, n_bytes]
+    data = <a class="fcnlink" href="#curl_read">curl_read</a> [key, n_bytes]
+
+    <a class="fcnlink" href=
+"#curl_write">curl_write</a> [&#39;url&#39;, &quot;data&quot;]
+    <a class="fcnlink" href=
+"#curl_write">curl_write</a> [key, &quot;data&quot;]
+
+    [dl_cur, dl_tot, ul_cur, ul_tot] = <a class="fcnlink" href=
+"#curl_stat">curl_stat</a> keys
+
+    keys = <a class="fcnlink" href="#curl_keylist">curl_keylist</a> []
+
+    keys = <a class="fcnlink" href="#curl_key">curl_key</a> keys
+
+    <a class="fcnlink" href="#curl_close">curl_close</a> keys
+</pre>
+
+<h1>Description</h1>
+
+<p>The <tt>curl_</tt> functions provide a mechanism to transfer
+  <em>resources</em> over a network using the cURL library. There are a variety
+  of internet protocols that allow information to be transferred from computer
+  to computer. The two most common protocols are the Hyper Text Transfer
+  Protocol (HTTP), and the File Transfer Protocol (FTP). Information is
+  requested from a client computer, by way of a Uniform Resource Locator, to a
+  web server that will generate and return a response.</p>
+
+<p>Files and data are referred to through the use of a Uniform Resource
+  Locator (<tt>URL</tt>). Web servers receive requests in the form of a
+  <tt>URL</tt> and generate appropriate responses which are returned to the
+  client. The response to the client may be an HTML page, a file or some other
+  computed data depending on the <tt>URL</tt> given. Any such response is
+  called a <tt>resource</tt>.</p>
+
+<p><tt>URL</tt> specification is:</p>
+
+<pre class="code">
+&lt;scheme&gt;://&lt;authority&gt;&lt;path&gt;?&lt;query&gt;
+
+scheme    = ( ftp | http | https | scp | sftp | telnet | file | ldap | ldaps ) &quot;:&quot;
+authority = &quot;//&quot; [&lt;userinfo&gt;@] &lt;host&gt; [:port]
+userinfo  = &lt;username&gt;:&lt;password&gt;
+host      = IPv4address
+path      = &quot;/&quot;  path *( &lt;path&gt; )
+query     = &lt;var&gt;=&lt;value&gt; *( &quot;&&quot;&lt;query&gt; )
+</pre>
+
+<p>In general,</p>
+
+<pre>
+    [http://]&lt;www.server.name&gt;/d1/d2/.../page[?&lt;var&gt;=&lt;val&gt;]
+</pre>
+  <dl>
+    <dt>scheme</dt>
+    <dd>The leading <tt>&lt;scheme&gt;://</tt> protocol specification is
+    optional, but is added to the <tt>URL</tt> automatically if not provided.
+    Currently supported values are those of the cURL library, the most
+    important of which are: <tt>scheme = {ftp, http (default), https, scp,
+    sftp, telnet, file, ldap, ldaps}</tt>.</dd>
+    <dt>authority</dt>
+    <dd>The <tt>authority</tt> segment contains the host address to which the
+    connection is made (i.e. www.chemcomp.com). Optionally, a <tt>username</tt>
+    and <tt>password</tt> combination followed by the @-sign can be given, or a
+    port number to connect to a server not running on a standard <i>default
+    port</i>.</dd>
+    <dt>path</dt>
+    <dd>The <tt>path</tt> segment indicates a path to a resource that the
+    server understands. This may be the path to a file on the server, or the
+    path to a program that will generate a response.</dd>
+    <dt>query</dt>
+    <dd><tt>Variable</tt> and <tt>value</tt> pairs in the optional
+    <tt>&lt;query&gt;</tt> portion following a &quot;?&quot;, specify arguments
+    to be passed through to the server for additional processing. A webserver
+    that supports the Common Gateway Interface (CGI) may accept arguments in
+    this manner to dynamically generate a response to the query. This technique
+    is commonly used for online search engines, forms, <i>etc</i>.</dd>
+  </dl>
+
+<p>An example of a query submitted to the Protein Data Bank regarding the
+  compound with <tt>code=1HZ2</tt> would be:</p>
+
+<pre>
+    http://www.rcsb.org/pdb/cgi/export.cgi/1HZ2.pdb?format=PDB&amp;pdbId=1HZ2
+</pre>
+
+<h3>Connecting through a Proxy Server</h3>
+
+<p>Some networks are protected from the internet through the use of an
+  <i>internet proxy server</i>. If SVL is supplied with the information
+  regarding the proxy server, either when it is started or when opening a new
+  connection, then the <tt>curl_</tt> functions can access internet resources
+  from behind a proxy server. On Windows and macOS, by default the proxy settings
+  are inherited from the system, but these can be changed using the
+  <tt>curl_setproxy</tt> command (see below). On UNIX, it can be set in the
+  operating system using the <b>http_proxy</b>, <b>ftp_proxy</b>,
+  <b>https_proxy</b> and <b>all_proxy</b> environment variables. The proxy can
+  also be configured on the <span class="menu">MOE | <img src=
+  "../../appendix/settings/settings.png" alt="Settings" style=
+  "vertical-align:text-top" /> | <a href=
+  "../../appendix/settings.htm#Proxy">Proxy settings</a></span> menu.</p>
+<a id="curl_open"></a>
+<hr noshade="noshade" />
+  <!-- OPEN -->
+
+<pre>
+key = <span class="fcndef">curl_open</span> &#39;url&#39;
+key = <span class="fcndef">curl_open</span> key
+key = <span class="fcndef">curl_open</span> options
+</pre>
+
+<p>Open a connection to a resource referenced by a <tt>URL</tt>.</p>
+
+<p><tt>curl_open</tt> returns a <tt>key</tt> that is used to refer to this
+  <tt>URL</tt> in all subsequent operations. A given <tt>key</tt> may be opened
+  by different processes, and may be opened more than once before being closed.
+  Note that each call to <tt>curl_open</tt> must be matched by a corresponding
+  call to <tt>curl_close</tt>. Attempting to open a <tt>key</tt> of value zero,
+  i.e. <tt>curl_open 0</tt>, will have no effect. It is an error to open an
+  invalid key.</p>
+
+<p>If <tt>options</tt> are specified, <tt>&#39;url&#39;</tt> must be
+  supplied. For authenticated login, both <tt>username</tt> and
+  <tt>password</tt> must be supplied to establish the connection to the server;
+  the supplied password is expected to be encoded using <a href="svlmpu.htm"
+  class="svl">mpu_password</a>. Otherwise, anonymous authentication is
+  attempted. The need for authenticated login is typically reserved for FTP
+  connections.</p>
+
+<p>For sending HTTP headers such as <i>Content-type</i> (e.g.
+  <tt>&quot;application/x-www-form-urlencoded&quot;</tt>) before sending data
+  over the connection use the <tt>httpheader</tt> option, and to send data for
+  a POST request use the <tt>postfields</tt> option, unless the data is very
+  large in which case it should be written to the server in chunks using
+  <tt>curl_write</tt>. For example:</p>
+
+<pre class="code">
+url_key = curl_open [
+    url: &#39;http://www.somewhere.com/&#39;,
+    postfields: &#39;action=print&amp;version=1&#39;,
+    httpheader: &#39;Content-type: application/x-www-form-urlencoded&#39;
+];
+</pre>
+
+<p>To send a JSON request as an HTTP POST call, the following can be used:</p>
+
+<pre class="code">
+url_key = curl_open [
+    url: &#39;http://www.somewhere.com/&#39;,
+    postfields: &#39;some_json_request&#39;,
+    httpheader: &#39;Content-type: application/json&#39;
+];
+</pre>
+
+<p>The complete list of options and their usage is a subset of those support
+  by cURL as follows (see the curl documentation for further details):</p>
+
+<h2>Basic connection options</h2>
+  <table class="titlebar">
+  <tr>
+      <th>Option tag</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Meaning</th>
+    </tr><!-- URL to contact -->
+    <tr>
+      <td>url</td>
+      <td>token</td>
+      <td>NULL</td>
+      <td>The URL to connect to. See above for more detail on URL formats. If a
+      scheme is not specified, http is assumed, unless the URL begins with
+      &#39;ftp.&#39; or &#39;ldap.&#39; in which case FTP or LDAP,
+      respectively, are used.</td>
+    </tr>
+    <tr>
+      <td>port</td>
+      <td>number</td>
+      <td>0</td>
+      <td>Sets the port to connect to on the remote server, overriding any
+      specified in the url. Valid range is 1-65535.</td>
+    </tr>
+    <tr>
+      <td>username</td>
+      <td>token</td>
+      <td>NULL</td>
+      <td>Username to use when accessing password-protected urls.
+      <i>password</i> must be provided as well. For some authentication methods
+      on Windows, such as NTLM and Kerberos v5, it may be necessary to include
+      the user&#39;s domain as well, e.g. DOMAIN\username.</td>
+    </tr>
+    <tr>
+      <td>password</td>
+      <td>token (MPU-encoded)</td>
+      <td>NULL</td>
+      <td>Used when accessing password-protected urls.</td>
+    </tr>
+    <tr>
+      <td>unix_socket_path</td>
+      <td>token</td>
+      <td>NULL</td>
+      <td>The path of a Unix domain socket to use as a connection endpoint
+      instead of establishing a TCP connection to a host. The maximum path
+      length is 107 characters on most systems.</td>
+    </tr>
+    <tr>
+      <td>http_version</td>
+      <td>one of &#39;none&#39;, &#39;1.0&#39;, &#39;1.1&#39;,
+      &#39;2.0&#39;</td>
+      <td>&#39;none&#39;</td>
+      <td>Use to enforce a particular version of HTTP protocol. This is only a
+      request and it is not guaranteed the requested version will actually get
+      used.</td>
+    </tr>
+    <tr>
+      <td>httpauth</td>
+      <td>one or more of &#39;basic&#39;, &#39;digest&#39;, &#39;digest
+      ie&#39;, &#39;negotiate&#39;, &#39;ntlm&#39;, &#39;ntlm wb&#39;,
+      &#39;any&#39;, &#39;anysafe&#39;, &#39;only&#39;</td>
+      <td>&#39;any&#39;</td>
+      <td>
+        A list of authentication methods to try when speaking to a remote
+        server. If multiple are given the server will be checked to see which
+        ones it supports, and the best one will be selected. Use
+        <i>username</i> and <i>password</i> options to set the username and
+        password information used with authentication. A brief description of
+        the methods follows:
+        <ul>
+          <li><b>basic</b>: supported almost everywhere, but sends passwords
+          over the network in plain text where it is easily captured</li>
+          <li><b>digest</b>: more secure than <b>basic</b> using checksums, as
+          per RFC 2617</li>
+          <li><b>digest ie</b>: same as <b>digest</b> but with a quirk from IE
+          version 6 and earlier</li>
+          <li><b>negotiate</b>: SPNEGO authentication as defined in RFC 4559, a
+          more secure method</li>
+          <li><b>ntlm</b>: Microsoft NTLM authentication, cannot be
+          eavesdropped</li>
+          <li><b>ntlm wb</b>: as <b>ntlm</b> but delegating to winbind helper
+          (an external executable)</li>
+          <li><b>any</b>: enables all the above options</li>
+          <li><b>anysafe</b>: enables all the above options <i>except</i>
+          <b>basic</b></li>
+          <li><b>only</b>: must appear with exactly one other token (besides
+          <b>any</b> or <b>anysafe</b>) and means only that single algorithm is
+          acceptable</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>range</td>
+      <td>token</td>
+      <td>NULL</td>
+      <td>A token in the format &#39;A-B&#39; where at least one of A or B must
+      be specified and these are byte indices into the requested resource. The
+      first byte is &#39;0&#39;. Only the specified bytes will be retrieved.
+      HTTP also supports multiple comma-separated intervals, e.g.
+      &#39;A-B,C-D&#39;.</td>
+    </tr>
+    <tr>
+      <td>connect_only</td>
+      <td>number</td>
+      <td>0</td>
+      <td>If non-zero, all the required proxy authentication and connection
+      setup will take place, but no data is transferred. This is useful for
+      testing a connection.</td>
+    </tr>
+    <tr>
+      <td>postfields</td>
+      <td>token</td>
+      <td>NULL</td>
+      <td>Using this option with an HTTP request makes it a POST request,
+      sending the data as given. The user must url-encode it if necessary. This
+      option automatically sets <i>Content-Type:</i> to
+      <tt>application/x-www-form-urlencoded</tt>. If there is a large amount of
+      POST data, it is suggested to use <b>curl_write</b> and the
+      <i>infilesize</i> option instead, which will result in an HTTP PUT
+      instead.</td>
+    </tr>
+    <tr>
+      <td>infilesize</td>
+      <td>number</td>
+      <td>-1</td>
+      <td>When set, specifies the expected file size in bytes of the data to be
+      uploaded. A value of -1 means unspecified. Use this also when using
+      <tt>curl_write</tt> to write PUT data, to indicate the total number of
+      bytes that will be written.</td>
+    </tr>
+    <tr>
+      <td>failonerror</td>
+      <td>number</td>
+      <td>1</td>
+      <td>Affects handling of errors returned by the remote server.  When
+      non-zero, generally a window will popup with the HTTP error code
+      returned by the server, such as 403.  If zero, instead the body of
+      the error page generated by the server, if any, will be returned.
+      This often will contain more details as to why the request failed
+      or was refused.  Typically one should first make a call with this
+      setting set to 1, and if an error is detected, make the call again
+      with this set to 0 for more details on the error condition.</td>
+    </tr>
+  </table><!-- (S)FTP, SCP options -->
+
+<h2>FTP, SFTP, SCP-only options</h2>
+  <table class="titlebar">
+  <tr>
+      <th>Option tag</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Meaning</th>
+    </tr>
+    <tr>
+      <td>accepttimeout</td>
+      <td>number</td>
+      <td>60</td>
+      <td>Time, in seconds, to wait for a server to connect back to SVL when an
+      active FTP connection is used.</td>
+    </tr>
+    <tr>
+      <td>append</td>
+      <td>number</td>
+      <td>0</td>
+      <td>When non-zero and uploading a file to an FTP site, the file will be
+      appended to instead of overwritten.</td>
+    </tr>
+    <tr>
+      <td>dirlistonly</td>
+      <td>number</td>
+      <td>0</td>
+      <td>For FTP and SFTP, if this is non-zero, then only names of files in a
+      directory are returned rather than a full directory listing.</td>
+    </tr>
+    <tr>
+      <td>ftp_create_missing_dirs</td>
+      <td>one of &#39;none&#39;, &#39;create&#39;, &#39;retry&#39;</td>
+      <td>&#39;none&#39;</td>
+      <td>If set to &#39;create&#39;, any FTP requests which try to change to a
+      non-existent directory will attempt to create that directory on the
+      remote server. If &#39;retry&#39;, it will try to change to the directory
+      again if creating the directory fails. This is useful when doing many
+      parallel connections to the same server and path. If &#39;none&#39;,
+      changing to a non-existent directory will produce an error.</td>
+    </tr>
+    <tr>
+      <td>ftp_response_timeout</td>
+      <td>number</td>
+      <td>None</td>
+      <td>Timeout, in seconds, waiting for the FTP server to respond to a
+      command. This takes precedence over <i>timeout</i> when waiting for a
+      response.</td>
+    </tr>
+    <tr>
+      <td>ftp_skip_pasv_ip</td>
+      <td>number</td>
+      <td>0</td>
+      <td>If non-zero, for passive FTP connections, ignore the IP suggested in
+      the FTP server&#39;s 227 response to the PASV command and re-use the same
+      IP already used.</td>
+    </tr>
+    <tr>
+      <td>ftp_use_eprt</td>
+      <td>number</td>
+      <td>Unknown</td>
+      <td>If non-zero, EPRT will be used instead of (or before trying) PORT for
+      active FTP downloads.</td>
+    </tr>
+    <tr>
+      <td>ftp_use_epsv</td>
+      <td>number</td>
+      <td>1</td>
+      <td>If non-zero, EPSV will be attempted before trying PASV for passive
+      FTP downloads.</td>
+    </tr>
+    <tr>
+      <td>ftp_use_pret</td>
+      <td>number</td>
+      <td>0</td>
+      <td>If non-zero, the PRET command will be sent before PASV or EPSV. This
+      is required on some servers.</td>
+    </tr>
+    <tr>
+      <td>ftpport</td>
+      <td>token</td>
+      <td>NULL</td>
+      <td>Indicates an active FTP transfer and should specify the IP address
+      and port(s) to use with the PORT command.</td>
+    </tr>
+    <tr>
+      <td>ftpsslauth</td>
+      <td>one of &#39;default&#39;, &#39;ssl&#39;, &#39;tls&#39;</td>
+      <td>&#39;default&#39;</td>
+      <td>Affects FTP over SSL, if <i>use_ssl</i> is set. A value of
+      &#39;ssl&#39; means try SSL first, then TLS. &#39;tls&#39; means try TLS
+      first and SSL if that fails. By default, curl will decide.</td>
+    </tr>
+    <tr>
+      <td>krblevel</td>
+      <td>one of &#39;clear&#39;, &#39;safe&#39;, &#39;confidential&#39;,
+      &#39;private&#39;</td>
+      <td>NULL</td>
+      <td>Sets the Kerberos security level for FTP and turns on Kerberos.</td>
+    </tr>
+    <tr>
+      <td>quote</td>
+      <td>[&#39;cmd1&#39;, &#39;cmd2&#39;, ...]</td>
+      <td>NULL</td>
+      <td>A list of FTP or SFTP commands to pass to the server before the
+      transfer request begins.</td>
+    </tr>
+    <tr>
+      <td>prequote</td>
+      <td>[&#39;cmd1&#39;, &#39;cmd2&#39;, ...]</td>
+      <td>NULL</td>
+      <td>A list of FTP or SFTP commands to pass to the server before the
+      transfer request begins but after the transfer type is set.</td>
+    </tr>
+    <tr>
+      <td>postquote</td>
+      <td>[&#39;cmd1&#39;, &#39;cmd2&#39;, ...]</td>
+      <td>NULL</td>
+      <td>A list of FTP or SFTP commands to pass to the server after the
+      transfer request is complete.</td>
+    </tr>
+    <tr>
+      <td>transfertext</td>
+      <td>number</td>
+      <td>0</td>
+      <td>If non-zero, FTP transfers will use ASCII mode instead of the default
+      binary mode.</td>
+    </tr>
+    <tr>
+      <td>proxy_transfer_mode</td>
+      <td>number</td>
+      <td>0</td>
+      <td>If non-zero and doing FTP via an HTTP proxy, this allows setting the
+      transfer mode to ASCII or binary based on the setting of the
+      <i>transfertext</i> option.</td>
+    </tr>
+    <tr>
+      <td>resume_from</td>
+      <td>number</td>
+      <td>0</td>
+      <td>The offset in bytes that the transfer should start from. When
+      uploading a file by FTP, this is the position in the local file to resume
+      the upload from, and data will be appended to the remote file. If -1, the
+      transfer will resume from the end of the destination file (after a
+      previously interrupted upload).</td>
+    </tr>
+    <tr>
+      <td>new_directory_perms</td>
+      <td>number</td>
+      <td>0755</td>
+      <td>Permissions to assign newly created directories on the server. This
+      is only supported by sftp://, scp:// and file:// urls.</td>
+    </tr>
+    <tr>
+      <td>new_file_perms</td>
+      <td>number</td>
+      <td>0644</td>
+      <td>Permissions to assign newly created files on the server. This is only
+      supported by sftp://, scp:// and file:// urls.</td>
+    </tr>
+    <tr>
+      <td>use_ssl</td>
+      <td>one of &#39;none&#39;, &#39;try&#39;, &#39;control&#39;,
+      &#39;all&#39;</td>
+      <td>&#39;none&#39;</td>
+      <td>
+        Select the desired level of SSL for the FTP transfer when starting in
+        plain text and &#39;upgrading&#39; to SSL with the STARTTLS command:
+        <ul>
+          <li><b>none</b>: Do not use SSL</li>
+          <li><b>try</b>: Try to use SSL, proceed normally otherwise</li>
+          <li><b>control</b>: Require SSL for the control connection or
+          fail</li>
+          <li><b>all</b>: Require SSL for all communication or fail</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>wildcardmatch</td>
+      <td>number</td>
+      <td>Unknown</td>
+      <td>Used for FTP downloads, when non-zero multiple files may be
+      transferred according to a file name pattern. The pattern can be included
+      in the <i>url</i> option. e.g. ftp://example.com/path/*.txt, to download
+      all files with txt extension. Other allowed operators are ? (match
+      exactly one character) and [a-zA-Z] or [[:alpha:]] to match one
+      alphabetic character, etc.</td>
+    </tr>
+    <tr>
+      <td>ssh_auth_types</td>
+      <td>one or more of &#39;publickey&#39;, &#39;password&#39;,
+      &#39;host&#39;, &#39;keyboard&#39;, &#39;agent&#39;, &#39;any&#39;</td>
+      <td>NULL</td>
+      <td>Sets desired authentication types for SFTP or SCP. &#39;any&#39; is a
+      shortcut to allow all types. If &#39;agent&#39; is used it will attempt
+      to connect to ssh-agent or pageant and let the agent attempt
+      authentication. &#39;host&#39; is currently not used.</td>
+    </tr>
+    <tr>
+      <td>ssh_host_public_key_md5</td>
+      <td>token</td>
+      <td>NULL</td>
+      <td>The 128-bit MD5 checksum of the remote host&#39;s public key. The
+      SFTP or SCP connection will be rejected if it does not match.</td>
+    </tr>
+    <tr>
+      <td>ssh_knownhosts</td>
+      <td>token</td>
+      <td>NULL</td>
+      <td>Filename of the known_host file to use for an SFTP or SCP operation.
+      The file must be in OpenSSH format, and only connections with hosts that
+      are known and present in the file will be accepted.</td>
+    </tr>
+    <tr>
+      <td>ssh_private_keyfile</td>
+      <td>token</td>
+      <td>$HOME/.ssh/id_dsa or ./id_dsa if HOME is not set</td>
+      <td>Filename of the SSH private key. You may need to set <i>keypasswd</i>
+      if the file is password-protected.</td>
+    </tr>
+    <tr>
+      <td>ssh_public_keyfile</td>
+      <td>token</td>
+      <td>$HOME/.ssh/id_dsa.pub or ./id_dsa.pub if HOME is not set</td>
+      <td>Filename of the SSH public kep.</td>
+    </tr>
+  </table><!-- SSL/TLS options -->
+
+<h2>SSL/TLS options</h2>
+  <table class="titlebar">
+  <tr>
+      <th>Option tag</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Meaning</th>
+    </tr>
+    <tr>
+      <td>ssl_verifyhost</td>
+      <td>number</td>
+      <td>2</td>
+      <td>Determines if the server certificate is for the server it is known
+      as. When set to 2, the certificate must indicate that the server is the
+      one you meant to connect, or the connection fails. The name in the
+      certificate must match the URL. A setting of 1 is invalid. when set to
+      zero, no name checking is performed.</td>
+    </tr>
+    <tr>
+      <td>ssl_verifypeer</td>
+      <td>number</td>
+      <td>0</td>
+      <td>If non-zero, the authenticity of the peer&#39;s certificate is
+      verified. This trust is based on a chain of digital signatures rooted in
+      certification authority (CA) certificates, either supplied in the
+      <i>cainfo</i> or <i>capath</i> options, or from a default pool of
+      recognized CAs. The connection will fail if the certificate cannot be
+      validated. Normally <i>verifyhost</i> should also be enabled along with
+      this option. <b>IMPORTANT</b>: Note that self-signed certificates will
+      fail verification, and thus this option is disabled by default. For truly
+      secure communications, you must enable this option (and use a real
+      certificate).</td>
+    </tr>
+    <tr>
+      <td>ssl_verifystatus</td>
+      <td>number</td>
+      <td>0</td>
+      <td>If non-zero, the server certificate status is verified using the
+      Certificate Status Request TLS extension (OCSP stapling). This checks for
+      revocation of certificates, and should be enabled for truly secure
+      communications, however it does add extra network overhead to perform the
+      check.</td>
+    </tr>
+    <tr>
+      <td>cainfo</td>
+      <td>token</td>
+      <td>libcurl default</td>
+      <td>Filename of a file holding one or more certificates to verify the
+      peer with. If <i>ssl_verifypeer</i> is zero, this option is ignored.</td>
+    </tr>
+    <tr>
+      <td>capath</td>
+      <td>token</td>
+      <td>NULL</td>
+      <td>Path to directory containing certificates to verify the peer with. If
+      <i>ssl_verifypeer</i> is zero, this option is ignored.</td>
+    </tr>
+    <tr>
+      <td>ssl_cipher_list</td>
+      <td>token</td>
+      <td>NULL</td>
+      <td>Colon (:) separated list of ciphers to use for TLS. Valid examples
+      include &#39;RC4-SHA&#39;, &#39;SHA1+DES&#39;, &#39;TLSv1&#39; or
+      &#39;DEFAULT&#39;.</td>
+    </tr>
+    <tr>
+      <td>ssl_enable_alpn</td>
+      <td>number</td>
+      <td>1</td>
+      <td>If non-zero, enables ALPN in the SSL handshake, which can be used to
+      negotiate http2.</td>
+    </tr>
+    <tr>
+      <td>ssl_enable_npn</td>
+      <td>number</td>
+      <td>1</td>
+      <td>If non-zero, enables NPN in the SSL handshake, which can be used to
+      negotiate http2.</td>
+    </tr>
+    <tr>
+      <td>ssl_falsestart</td>
+      <td>number</td>
+      <td>0</td>
+      <td>If non-zero, it will use false start during the TLS handshake. This
+      is mostly done for efficiency, sending data before verifying the
+      server&#39;s Finished message.</td>
+    </tr>
+    <tr>
+      <td>ssl_sessionid_cache</td>
+      <td>number</td>
+      <td>1</td>
+      <td>If non-zero, SSL session-ID&#39;s are cached. This may need to be
+      disabled to work with some broken SSL implementations.</td>
+    </tr>
+    <tr>
+      <td>sslcert</td>
+      <td>token</td>
+      <td>NULL</td>
+      <td>Filename of the client certificate. The default format is P12 for
+      Secure Transport engine (see <i>sslengine</i>) or PEM format for others.
+      This may also be the nickname of the certificate as named in the security
+      database. A private key will likely be needed as well, given with the
+      <i>sslkey</i> option.</td>
+    </tr>
+    <tr>
+      <td>sslcerttype</td>
+      <td>one of &#39;PEM&#39;, &#39;DER&#39;, &#39;P12&#39;</td>
+      <td>&#39;PEM&#39;</td>
+      <td>Format of the certificate. &#39;P12&#39; (PKCS#12-encoding) is only
+      supported for OpenSSL and Secure Transport.</td>
+    </tr>
+    <tr>
+      <td>sslengine</td>
+      <td>token</td>
+      <td>NULL</td>
+      <td>The crypto engine to use for the private key.</td>
+    </tr>
+    <tr>
+      <td>sslengine_default</td>
+      <td>number</td>
+      <td>NULL</td>
+      <td>If non-zero, sets the actual crypto engine as the default for
+      (asymmetric) crypto operations.</td>
+    </tr>
+    <tr>
+      <td>sslkey</td>
+      <td>token</td>
+      <td>NULL</td>
+      <td>Filename of the private key. The default format is &#39;PEM&#39; but
+      may be specified in <i>sslkeytype</i>.</td>
+    </tr>
+    <tr>
+      <td>sslkeytype</td>
+      <td>one of &#39;PEM&#39;, &#39;DER&#39;, &#39;ENG&#39;</td>
+      <td>&#39;PEM&#39;</td>
+      <td>The format of the private key. &#39;ENG&#39; enables the private key
+      to be loaded from a crypto engine, in which case <i>sslkey</i> is an
+      identifier passed to the engine; the engine is set with <i>sslengine</i>.
+      Note &#39;DER&#39; is currently broken due to a bug in OpenSSL.</td>
+    </tr>
+    <tr>
+      <td>keypasswd</td>
+      <td>token (MPU-encoded)</td>
+      <td>NULL</td>
+      <td>Sets the password required to use the <i>sslkey</i> or
+      <i>ssh_private_keyfile</i> private key.</td>
+    </tr>
+    <tr>
+      <td>sslversion</td>
+      <td>one of &#39;default&#39;, &#39;tlsv1&#39;, &#39;sslv2&#39;,
+      &#39;sslv3&#39;, &#39;tlsv1.0&#39;, &#39;tlsv1.1&#39;,
+      &#39;tlsv1.2&#39;</td>
+      <td>&#39;default&#39;</td>
+      <td>
+        Specify which version of SSL/TLS to attempt to use:
+        <ul>
+          <li><b>default</b>: attempt to figure out the remote SSL protocol
+          version</li>
+          <li><b>tlsv1</b>: TLS version 1.x</li>
+          <li><b>sslv2</b>: SSL version 2</li>
+          <li><b>sslv3</b>: SSL version 3</li>
+          <li><b>tlsv1.0</b>: TLS version 1.0</li>
+          <li><b>tlsv1.1</b>: TLS version 1.1</li>
+          <li><b>tlsv1.2</b>: TLS version 1.2</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>egdsocket</td>
+      <td>token</td>
+      <td>NULL</td>
+      <td>Path to the Entropy Gathering Daemon socket, used to seed the SSL
+      random engine.</td>
+    </tr>
+    <tr>
+      <td>random_file</td>
+      <td>token</td>
+      <td>NULL</td>
+      <td>A filename that will be read from to seed the random engine for SSL
+      and more.</td>
+    </tr>
+    <tr>
+      <td>tlsauth_type</td>
+      <td>token</td>
+      <td>NULL</td>
+      <td>The method of the TLS authentication. Currently only &#39;SRP&#39;
+      (Secure Remote Password, see RFC 5054) is supported. The
+      <i>tlsauth_username</i> and <i>tlsauth_password</i> options must also be
+      set.</td>
+    </tr>
+    <tr>
+      <td>tlsauth_username</td>
+      <td>token</td>
+      <td>NULL</td>
+      <td>Username for TLS authentication method specified in
+      <i>tlsauth_type</i>. The <i>tlsauth_password</i> must be set as
+      well.</td>
+    </tr>
+    <tr>
+      <td>tlsauth_password</td>
+      <td>token (MPU-encoded)</td>
+      <td>NULL</td>
+      <td>Password to use for the TLS authentication method specified in the
+      <i>tlsauth_type</i> option. <i>tlsauth_username</i> should also be
+      set.</td>
+    </tr>
+    <tr>
+      <td>issuercert</td>
+      <td>token</td>
+      <td>NULL</td>
+      <td>Filename of a file containing a CA certificate in PEM format, and
+      verifies it is the issuer of the peer certificate. If
+      <i>ssl_verifypeer</i> is zero this option is ignored.</td>
+    </tr>
+    <tr>
+      <td>pinnedpublickey</td>
+      <td>token</td>
+      <td>NULL</td>
+      <td>Filename of the pinned public key, in PEM or DER format. The public
+      key from any remote TLS or SSL connection must match that provided or the
+      connection will be immediately aborted. This option may also specify a
+      series of semicolon (;) delimited, base64 encoded sha256 hashes, each
+      preceded by &quot;sha256//&quot;.</td>
+    </tr>
+    <tr>
+      <td>crlfile</td>
+      <td>token</td>
+      <td>NULL</td>
+      <td>Filename of Certificate Revocation List (in PEM format). If
+      <i>ssl_verifypeer</i> is zero this option is ignored.</td>
+    </tr>
+  </table><!-- cookies and headers -->
+
+<h2>Headers and cookies</h2>
+  <table class="titlebar">
+  <tr>
+      <th>Option tag</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Meaning</th>
+    </tr>
+    <tr>
+      <td>httpheader</td>
+      <td>[&#39;header1&#39;, &#39;header2&#39;, ...]</td>
+      <td>NULL</td>
+      <td>Used to pass arbitrary HTTP headers in a request, one token per
+      header line to send. <i>cookie</i>, <i>useragent</i> and <i>referer</i>
+      are shortcuts that also affect the HTTP headers and may be used instead
+      of this setting.</td>
+    </tr>
+    <tr>
+      <td>referer</td>
+      <td>token</td>
+      <td>NULL</td>
+      <td>A shortcut to set the <i>Referer:</i> header in an HTTP request.</td>
+    </tr>
+    <tr>
+      <td>useragent</td>
+      <td>token</td>
+      <td>NULL</td>
+      <td>A shortcut to set the <i>User-Agent:</i> HTTP header.</td>
+    </tr>
+    <tr>
+      <td>accept_encoding</td>
+      <td>token</td>
+      <td>NULL</td>
+      <td>Sets the contents of the <i>Accept-Encoding</i> header of an HTTP
+      request.</td>
+    </tr>
+    <tr>
+      <td>transfer_encoding</td>
+      <td>number</td>
+      <td>0</td>
+      <td>If non-zero, adds a request for compressed Transfer Encoding to
+      outgoing HTTP requests. The response is then automatically uncompressed
+      upon receipt.</td>
+    </tr>
+    <tr>
+      <td>cookie</td>
+      <td>token</td>
+      <td>NULL</td>
+      <td>The contents of the cookie header in the outgoing request. For
+      example, &quot;name1=content1; name2=content2;&quot;.</td>
+    </tr>
+    <tr>
+      <td>cookiefile</td>
+      <td>token</td>
+      <td>NULL</td>
+      <td>Filename of cookie data file in Mozilla format or HTTP-header style
+      format.</td>
+    </tr>
+    <tr>
+      <td>cookiejar</td>
+      <td>token</td>
+      <td>NULL</td>
+      <td>Filename to write all cookies to.</td>
+    </tr>
+    <tr>
+      <td>cookielist</td>
+      <td>token</td>
+      <td>NULL</td>
+      <td>
+        Add a single cookie, in Mozilla format or Set-Cookie: format, to the
+        internal cookie store. The following tokens have special meanings:
+        <ul>
+          <li><b>ALL</b>: erase all cookies in memory</li>
+          <li><b>SESS</b>: erase all session cookies in memory</li>
+          <li><b>FLUSH</b>: write all known cookies to the file specified by
+          <i>cookiejar</i></li>
+          <li><b>RELOAD</b>: load all cookies from the file give by
+          <i>cookiefile</i></li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>cookiesession</td>
+      <td>number</td>
+      <td>0</td>
+      <td>If non-zero, starts a new cookie session, ignoring any previous
+      &quot;session cookies&quot;.</td>
+    </tr>
+  </table><!-- Proxy options -->
+
+<h2>Proxy servers</h2>
+<table class="titlebar">
+  <tr>
+    <th>Option tag</th>
+    <th>Type</th>
+      <th>Default</th>
+      <th>Meaning</th>
+    </tr>
+    <tr>
+      <td>proxy</td>
+      <td>token</td>
+      <td>NULL</td>
+      <td>Specify the host IP and port of the proxy server to use for the
+      current request only. This is useful to temporarily override the proxy
+      set in <b>curl_setproxy</b>. The format is:
+      <tt>[scheme://][user:password@]hostip[:port]</tt>. Setting this to empty
+      token will disable using a proxy for the current request.</td>
+    </tr>
+    <tr>
+      <td>proxyport</td>
+      <td>number</td>
+      <td>0</td>
+      <td>Set the port, from 1-65535, on which to access the proxy server. This
+      overrides any other proxy settings from elsewhere.</td>
+    </tr>
+    <tr>
+      <td>noproxy</td>
+      <td>token</td>
+      <td>NULL</td>
+      <td>A comma-separated list of host names that should bypass the proxy, if
+      specified. This is only necessary if you wish to override the normal
+      proxy settings for a particular request. See also
+      <b>curl_setproxy</b>.</td>
+    </tr>
+    <tr>
+      <td>proxyusername</td>
+      <td>token</td>
+      <td>NULL</td>
+      <td>Sets the username to use for proxy authentication.</td>
+    </tr>
+    <tr>
+      <td>proxypassword</td>
+      <td>token (MPU-encoded)</td>
+      <td>NULL</td>
+      <td>Sets the password to use for authentication on the proxy server.</td>
+    </tr>
+    <tr>
+      <td>proxyauth</td>
+      <td>one or more of &#39;basic&#39;, &#39;digest&#39;, &#39;digest
+      ie&#39;, &#39;negotiate&#39;, &#39;ntlm&#39;, &#39;ntlm wb&#39;,
+      &#39;any&#39;, &#39;anysafe&#39;, &#39;only&#39;</td>
+      <td>&#39;any&#39;</td>
+      <td>Selects which authentication method(s) to use for proxy
+      authentication. Username and password, if any, are provided in the
+      <i>proxyusername</i> and <i>proxypassword</i> options. See
+      <i>httpauth</i> for more details on the authentication methods.</td>
+    </tr>
+    <tr>
+      <td>proxytype</td>
+      <td>one of &#39;http&#39;, &#39;http1.0&#39;, &#39;socks4&#39;,
+      &#39;socks5&#39;, &#39;socks4a&#39;, &#39;socks5hostname&#39;</td>
+      <td>&#39;http&#39;</td>
+      <td>
+        Sets the type of proxy server, if not already specified in the
+        <i>proxy</i> string.
+        <ul>
+          <li><b>http</b>: a standard HTTP proxy server</li>
+          <li><b>http1.0</b>: differs from <b>http</b> only when CONNECT is
+          used</li>
+          <li><b>socks4</b>: SOCKS version 4</li>
+          <li><b>socks5</b>: SOCKS version 5</li>
+          <li><b>socks4a</b>: SOCKS version 4a</li>
+          <li><b>socks5hostname</b>: SOCKS version 5, asking the proxy to do
+          the resolving</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>proxyheader</td>
+      <td>[&#39;header1&#39;, &#39;header2&#39;, ...]</td>
+      <td>NULL</td>
+      <td>A list of HTTP headers as with <i>httpheader</i>, the difference
+      being that these headers are only used in requests sent to a proxy.</td>
+    </tr>
+    <tr>
+      <td>proxy_service_name</td>
+      <td>token</td>
+      <td>HTTP</td>
+      <td>Set the SPNEGO service name of the proxy.</td>
+    </tr>
+    <tr>
+      <td>socks5_gssapi_nec</td>
+      <td>number</td>
+      <td>Unknown</td>
+      <td>If non-zero, as part of gssapi negotiation, allows unprotected
+      exchange of the protection mode negotiation, violating RFC 1961.</td>
+    </tr>
+    <tr>
+      <td>socks5_gssapi_service</td>
+      <td>token</td>
+      <td>&#39;rcmd/server-fqdn&#39;</td>
+      <td>Socks proxy gssapi service name.</td>
+    </tr>
+    <tr>
+      <td>httpproxytunnel</td>
+      <td>number</td>
+      <td>0</td>
+      <td>If non-zero, tunnel all operations through the HTTP proxy. Note that
+      this is different from simply using an HTTP proxy server.</td>
+    </tr>
+  </table><!-- Redirect options -->
+
+<h2>Redirect handling</h2>
+<table class="titlebar">
+  <tr>
+    <th>Option tag</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Meaning</th>
+    </tr>
+    <tr>
+      <td>followlocation</td>
+      <td>number</td>
+      <td>1</td>
+      <td>If non-zero, any <b>Location:</b> header as part of a 3xx HTTP
+      response will be followed. A new request will automatically be made, and
+      the process continued until no more <b>Location:</b> headers are found or
+      <i>maxredirs</i> is exceeded.</td>
+    </tr>
+    <tr>
+      <td>maxredirs</td>
+      <td>number</td>
+      <td>-1</td>
+      <td>Used in conjunction with <i>followlocation</i>; the maximum number of
+      redirects to follow before raising an error. 0 will cause any redirect to
+      be refused, while -1 mean unlimited.</td>
+    </tr>
+    <tr>
+      <td>unrestricted_auth</td>
+      <td>number</td>
+      <td>1</td>
+      <td>If non-zero, credentials (username and password) will be sent when
+      following locations, even if the hostname changes. This option is ignored
+      if <i>followlocation</i> is zero.</td>
+    </tr>
+    <tr>
+      <td>autoreferer</td>
+      <td>number</td>
+      <td>0</td>
+      <td>when non-zero, the <i>Referer</i> header field will be set in HTTP
+      requests where a <i>Location</i> redirect has been followed.</td>
+    </tr>
+    <tr>
+      <td>postredir</td>
+      <td>one or more of &#39;301&#39;, &#39;302&#39;, &#39;303&#39;,
+      &#39;all&#39;</td>
+      <td>&#39;301&#39;</td>
+    <td>Affects behavior after POST requests that get a 301, 302 or 303
+      response. If &#39;301&#39; is set, POST requests will not be converted to
+      GET when following a 301 redirection, contrary to RFC 7231. If
+      &#39;302&#39; or &#39;303&#39; are set, the request method is maintained
+      after a 302 or 303, respectively. &#39;all&#39; is a shortcut to set all
+      three items. This option is ignored if <i>followlocation</i> is
+      zero.</td>
+    </tr>
+  </table><!-- Timeout options -->
+
+<h2>Timeout options</h2>
+  <table class="titlebar">
+  <tr>
+      <th>Option tag</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Meaning</th>
+    </tr>
+    <tr>
+      <td>timeout</td>
+      <td>number</td>
+      <td>0</td>
+      <td>The maximum time, in seconds, to allow a transfer operation to take,
+      after which it is aborted. Zero means there is no timeout (it will wait
+      forever). It is often better to implement your own timeout logic than to
+      rely on this setting, which is rather heavy-handed.</td>
+    </tr>
+    <tr>
+      <td>connecttimeout</td>
+      <td>number</td>
+      <td>15</td>
+      <td>Timeout, in seconds, for connection to the server. This only affects
+      connecting to the server and has no effect once the connection is made. A
+      value of zero results in the default setting being used.</td>
+    </tr>
+    <tr>
+      <td>expect_100_timeout</td>
+      <td>number</td>
+      <td>1</td>
+      <td>Timeout, in seconds, to wait for a server response with HTTP status
+      100 (Continue) or similar after sending a request with an <b>Expect:
+      100-continue</b> header. If the timeout is exceeded the request body is
+      sent anyway.</td>
+    </tr>
+    <tr>
+      <td>dns_cache_timeout</td>
+      <td>number</td>
+      <td>60</td>
+      <td>Timeout, in seconds, to keep name resolutions in memory without
+      looking them up again with each request. Setting to zero disables caching
+      of DNS lookups while -1 keep cached results indefinitely.</td>
+    </tr>
+  </table><!-- Miscellaneous options -->
+
+<h2>Miscellaneous/obscure options</h2>
+  <table class="titlebar">
+  <tr>
+      <th>Option tag</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Meaning</th>
+    </tr>
+    <tr>
+      <td>crlf</td>
+      <td>number</td>
+      <td>0</td>
+      <td>If non-zero, Unix newlines are converted to CRLF newlines on
+      transfers.</td>
+    </tr>
+    <tr>
+      <td>dns_interface</td>
+      <td>token</td>
+      <td>NULL</td>
+      <td>The name of the network interface that the DNS resolver should bind
+      to.</td>
+    </tr>
+    <tr>
+      <td>dns_local_ip4</td>
+      <td>token</td>
+      <td>NULL</td>
+      <td>The local IPv4 address that the DNS resolver should bind to.</td>
+    </tr>
+    <tr>
+      <td>dns_local_ip6</td>
+      <td>token</td>
+      <td>NULL</td>
+      <td>The local IPv6 address that the DNS resolver should bind to.</td>
+    </tr>
+    <tr>
+      <td>dns_servers</td>
+      <td>token</td>
+      <td>NULL</td>
+      <td>List of DNS servers to use instead of the system default, in the
+      format: <tt>hostip[:port][,hostip[:port]]</tt>...</td>
+    </tr>
+    <tr>
+      <td>resolve</td>
+      <td>[&#39;host1:port1:ip1&#39;, &#39;host2:port2:ip2&#39;, ...]</td>
+      <td>NULL</td>
+      <td>For each token, the given host plus port combination will be set in
+      the DNS cache to resolve to the given IP, without actually accessing the
+      DNS server(s). To remove a previously set host use the token
+      &#39;-host:port&#39; with a minus (-) at the front.</td>
+    </tr>
+    <tr>
+      <td>filetime</td>
+      <td>number</td>
+      <td>0</td>
+      <td>If non-zero, get the modification time of the remote document.</td>
+    </tr>
+    <tr>
+      <td>ignore_content_length</td>
+      <td>number</td>
+      <td>0</td>
+      <td>If non-zero, ignore the Content-Length HTTP header. This is mostly
+      useful if downloading files larger than 2 gigabytes from a server that
+      does not have large file support (and thus reports Content-Length
+      incorrectly for large files).</td>
+    </tr>
+    <tr>
+      <td>interface</td>
+      <td>token</td>
+      <td>NULL</td>
+      <td>The interface name to use for outgoing traffic. It can be an
+      interface name, IP address or host name.</td>
+    </tr>
+    <tr>
+      <td>localport</td>
+      <td>number</td>
+      <td>0</td>
+      <td>Set local port number of the socket used for the connection; valid
+      values are from 1 to 65535.</td>
+    </tr>
+    <tr>
+      <td>localportrange</td>
+      <td>number</td>
+      <td>1</td>
+      <td>Combines with <i>localport</i> option; if that port is not available,
+      one will be added and the new port tried. This setting gives the number
+      of times to continue adding one to the port and trying again, effectively
+      giving the size of the port range to try.</td>
+    </tr>
+    <tr>
+      <td>low_speed_limit</td>
+      <td>number</td>
+      <td>0</td>
+      <td>If transfer speed falls below this rate, in bytes per second, for
+      longer than the time in seconds specified in <i>low_speed_time</i>, the
+      transfer will be aborted.</td>
+    </tr>
+    <tr>
+      <td>low_speed_time</td>
+      <td>number</td>
+      <td>0</td>
+      <td>See <i>low_speed_limit</i>; value is in seconds.</td>
+    </tr>
+    <tr>
+      <td>max_recv_speed</td>
+      <td>number</td>
+      <td>0</td>
+      <td>Speed in bytes per second, above which downloads will be paused (to
+      keep the average speed below this value). A value of zero means do not
+      throttle.</td>
+    </tr>
+    <tr>
+      <td>max_send_speed</td>
+      <td>number</td>
+      <td>0</td>
+      <td>Speed in bytes per second, above which uploads will be paused (to
+      keep the average speed below this value). A value of zero means do not
+      throttle.</td>
+    </tr>
+    <tr>
+      <td>nobody</td>
+      <td>number</td>
+      <td>0</td>
+      <td>If non-zero, do not download the body part of the response. For HTTP
+      or HTTPS this means doing a HEAD request.</td>
+    </tr>
+    <tr>
+      <td>path_as_is</td>
+      <td>number</td>
+      <td>0</td>
+      <td>If non-zero, paths containing &quot;/../&quot; or &quot;/./&quot;
+      will not be &#39;normalized&#39; as required by RFC 3986.</td>
+    </tr>
+    <tr>
+      <td>service_name</td>
+      <td>token</td>
+      <td>HTTP</td>
+      <td>SPNEGO service name.</td>
+    </tr>
+    <tr>
+      <td>tcp_keepalive</td>
+      <td>number</td>
+      <td>0</td>
+      <td>If non-zero, TCP keepalive probes will be sent. The delay and
+      frequency are set by <i>tcp_keepidle</i> and <i>tcp_keepintvl</i>.</td>
+    </tr>
+    <tr>
+      <td>tcp_keepidle</td>
+      <td>number</td>
+      <td>Unknown</td>
+      <td>The delay, in seconds, that the operating system will wait while the
+      connection is idle before sending keepalive probes. Not all operating
+      systems support this option.</td>
+    </tr>
+    <tr>
+      <td>tcp_keepintvl</td>
+      <td>number</td>
+      <td>Unknown</td>
+      <td>The interval, in seconds, that the operating system will wait between
+      sending keepalive probes. Not all operating systems support this
+      option.</td>
+    </tr>
+    <tr>
+      <td>tcp_nodelay</td>
+      <td>number</td>
+      <td>0</td>
+      <td>If non-zero then TCP&#39;s Nagle algorithm is disabled. This results
+      in more, smaller packets being sent on the network which is less
+      efficient and can contribute to network congestion; nevertheless
+      sometimes it may be necessary.</td>
+    </tr>
+    <tr>
+      <td>telnetoptions</td>
+      <td>[&#39;option1=value1&#39;, &#39;option2=value2&#39;, ...]</td>
+      <td>NULL</td>
+      <td>A list of variables to pass to telnet negotiations. Possible options
+      include &#39;TTYPE&#39;, &#39;XDISPLOC&#39; and &#39;NEW_ENV&#39;.</td>
+    </tr>
+    <tr>
+      <td>tftp_blksize</td>
+      <td>number</td>
+      <td>512</td>
+      <td>Specify the blocksize for TFTP transfers. Allowed range is given in
+      RFC 2348 as 8-65464 bytes. The default size will be used if the server
+      does not acknowledge the given blocksize.</td>
+    </tr>
+  </table>
+  <!--<tr><td>address_scope</td><td>number</td><td>0</td><td>scope_id when
+    connecting to IPv6 link-local or site-local addresses.</td></tr>
+-->
+  <!--<tr><td>buffersize</td><td>number</td><td>largest possible size</td><td>
+    Size (in bytes) for the receive buffer in curl.</td></tr>
+-->
+  <!--<tr><td>customrequest</td><td>token</td><td>NULL</td><td>xxx</td></tr>-->
+  <!--<tr><td>failonerror</td><td>number</td><td>NULL</td><td>xxx</td></tr>-->
+  <!--<tr><td>ftp_account</td><td>token</td><td>NULL</td><td>xxx</td></tr>-->
+  <!--<tr><td>http_content_decoding</td><td>number</td><td>1</td><td>xxx</td></tr>-->
+  <!--<tr><td>http_transfer_decoding</td><td>number</td><td>1</td><td>xxx</td></tr>-->
+  <!--<tr><td>httpget</td><td>number</td><td>0</td><td>xxx</td></tr>-->
+  <!--<tr><td>maxconnects</td><td>number</td><td>5</td><td>xxx</td></tr>-->
+  <!--<tr><td>maxfilesize</td><td>number</td><td>None</td><td>xxx</td></tr>-->
+  <!--<tr><td>pipewait</td><td>number</td><td>0</td><td>xxx</td></tr>-->
+  <!--<tr><td>post</td><td>number</td><td>0</td><td>xxx</td></tr>-->
+  <!--<tr><td>put</td><td>number</td><td>NULL</td><td>xxx</td></tr>-->
+  <!--<tr><td>upload</td><td>number</td><td>NULL</td><td>xxx</td></tr>-->
+<a id="curl_setopt"></a>
+<hr noshade="noshade" />
+  <!-- SETOPT -->
+
+<pre>
+<span class="fcndef">curl_setopt</span> [key, options]
+</pre>
+
+<p>Allows setting of options on an existing, previously opened curl key. This
+  takes the same set of options as <a class="fcnlink" href=
+  "#curl_open">curl_open</a> but permits setting after the key has already been
+  opened. Note calling this function after a <tt>curl_read</tt> or
+  <tt>curl_write</tt> will generally have no effect, all options must be set
+  before any data transfer takes place. In most cases, setting an option that
+  has already been given a value from a pervious call will replace that
+  previous setting with the new one.</p>
+<a id="curl_setproxy"></a>
+<hr noshade="noshade" />
+  <!-- SETPROXY -->
+
+<pre>
+<span class="fcndef">curl_setproxy</span> [
+    host: &#39;hostname&#39;,
+    port: port_number,
+    username: &#39;name&#39;,
+    password: &#39;password&#39;
+]
+<!--
+<span class="fcndef">curl_setproxy</span> [reset: 1]
+proxy = <span class="fcndef">curl_setproxy</span> []
+--></pre>
+
+<p>Controls usage of a proxy server for accessing resources on the network.
+  Note that normally proxy server settings should be configured through the
+  <span class="menu">MOE | <img src="../../appendix/settings/settings.png" alt=
+  "Settings" style="vertical-align:middle" /> | <a href=
+  "../../appendix/settings.htm#Proxy">Proxy settings</a></span> menu which will
+  be the initial proxy setting for the <tt>curl_</tt> functions. This function
+  may be used to change the proxy for the current session only. Note that
+  changes do NOT affect keys which have already been opened, only keys opened
+  after the change will be affected.</p>
+
+<p>The <i>host</i> and <i>port</i> arguments are required and should indicate
+  the hostname and port of the proxy server, respectively. <i>username</i> and
+  <i>password</i> are only required for proxies that require authentication,
+  and are not permanently stored. If they are omitted and authentication is
+  required, a dialog will pop up requesting the username and password if in
+  graphical MOE, or an error will be raised in MOE/batch or MOE/web.</p><!--
+
+<p>
+Calling the function with the special <tt>reset: 1</tt> argument will cause
+the proxy settings to be re-read from the <span class="menu">MOE |
+<img src="../../appendix/settings/settings.png" alt="Settings"
+style="vertical-align:middle" /> |
+<a href="../../appendix/settings.htm#Proxy">Proxy settings</a></span> panel,
+as if Apply had been pressed.
+</p>
+
+<p>
+If it is called with no arguments, the function returns the current
+proxy settings as a tagged vector:
+<ul>
+<li><i>http_host</i>: proxy for HTTP requests</li>
+<li><i>http_port</i>: proxy port for HTTP requests</li>
+<li><i>https_host</i>: proxy for HTTPS requests</li>
+<li><i>https_port</i>: proxy port for HTTPS requests</li>
+<li><i>ftp_host</i>: proxy for FTP requests</li>
+<li><i>ftp_port</i>: proxy port for FTP requests</li>
+<li><i>socks_host</i>: SOCKS proxy server</li>
+<li><i>socks_port</i>: port for SOCKS proxy server</li>
+<li><i>username</i>: username for proxy server</li>
+<li><i>password</i>: password for proxy server</li>
+<li><i>noproxyhosts</i>: comma-separated list of hosts for which proxy should
+    not be used; &lt;local&gt; is a special token meaning that the proxy should
+    be bypassed for all &quot;local&quot; addresses, that is, all hostnames
+    not containing a period (.)</li>
+</ul>
+However, note that if an autoconfiguration script is being used, the proxy
+may in fact be different for every request and these values cannot be
+considered reliable.
+</p>
+-->
+<a id="curl_read"></a>
+<hr noshade="noshade" />
+  <!-- READ -->
+
+<pre>
+data = <span class="fcndef">curl_read</span> &#39;url&#39;
+data = <span class="fcndef">curl_read</span> key
+data = <span class="fcndef">curl_read</span> [&#39;url&#39;, n_bytes]
+data = <span class="fcndef">curl_read</span> [key, n_bytes]
+</pre>
+
+<p>Read data from the resource. The resource is specified by either a
+  <tt>URL</tt> or by an open <tt>key</tt>. In the case that the <tt>URL</tt> is
+  given explicitly, the connection is opened and closed automatically before
+  the acquired data is returned.</p>
+
+<p>Either form optionally takes an integer argument, <tt>n_bytes</tt>, that
+  specifies the maximum number of bytes to be read. The call to
+  <tt>curl_read</tt> returns the full document if <tt>n_bytes</tt> is negative.
+  A subsequent call to <tt>curl_read [key, n_bytes]</tt> will begin reading at
+  the next byte.</p>
+<p>If an attempt is made to read from a resource where authorization is
+  required, a dialog box will popup where the username and password can be
+  entered.  Once entered correctly, the call will proceed as normal, and the
+  username and password will be saved for the remainder of the MOE session,
+  automatically being passed with all requests to the same host.</p>
+<a id="curl_write"></a>
+<hr noshade="noshade" />
+  <!-- WRITE -->
+
+<pre>
+<span class="fcndef">curl_write</span> [&#39;url&#39;, &quot;data&quot;]
+<span class="fcndef">curl_write</span> [key, &quot;data&quot;]
+</pre>
+
+<p>The behavior of this function depends on whether the connection is made
+  using HTTP or FTP.</p>
+
+<p>For FTP connections, the resource can be specified using either an
+  <tt>URL</tt> or an open <tt>key</tt>. The given <tt>data</tt> will be written
+  to a file on the FTP site (uploaded), provided permissions allow. In the case
+  that the <tt>URL</tt> is given explicitly, the connection is opened and
+  closed automatically; if the file does not already exist it will be created,
+  otherwise it will be overwritten. If <tt>key</tt> is given, the file will be
+  overwritten/created only on the first call to <tt>curl_write</tt>.</p>
+
+<p>For HTTP connections, <tt>curl_write</tt> permits data to be sent to the
+  web server as a PUT request. In this case, a <tt>key</tt> to an already open
+  connection <b>must</b> be provided. Calls to <tt>curl_write</tt> must
+  immediately follow the call to <tt>curl_open</tt>, i.e. no other
+  <tt>curl_*</tt> commands should occur between the <tt>curl_open</tt> and
+  subsequent calls to <tt>curl_write</tt>. It is also necessary that the
+  <i>infilesize</i> option to <tt>curl_open</tt> has been given, to provide the
+  exact size of the PUT data in bytes. Once the PUT data has all been sent, the
+  first call to <tt>curl_read</tt> will actually transmit the request and fetch
+  the response. Sending headers to specify, for example, the
+  <i>Content-type</i> of the request can only be done at the time that the
+  connection is opened, by setting the <a href=
+  "#curl_open"><tt>curl_open</tt></a> options appropriately. Note that for
+  small-sized of PUT data, it is preferable and simpler to use the
+  <i>postfields</i> option to <tt>curl_open</tt> rather than
+  <tt>curl_write</tt>. This works as long as the data can be sent all in a
+  single block.</p>
+<a id="curl_stat"></a>
+<hr noshade="noshade" />
+  <!-- STAT -->
+
+<pre>
+[dl_cur, dl_tot, ul_cur, ul_tot] = <span class="fcndef">curl_stat</span> keys
+</pre>
+
+<p>Returns the upload and download status of one or more connections referred
+  to by the given <tt>keys</tt>. It is given as a laminated vector of 4 items,
+  each the same length as the input argument. <tt>dl_cur</tt> is the number of
+  bytes currently received on the current transfer, and <tt>dl_tot</tt> is the
+  total number of bytes exepected to be downloaded. Similarly, <tt>ul_cur</tt>
+  is the current number of bytes uploaded and <tt>ul_tot</tt> the expected size
+  of the upload. Note that both unknown and inapplicable quantities will be
+  zero. They may also initially all be zero until the transfer actually
+  begins.</p>
+<a id="curl_keylist"></a>
+<hr noshade="noshade" />
+  <!-- KEYLIST -->
+
+<pre>
+keys = <span class="fcndef">curl_keylist</span> []
+</pre>
+
+<p>Returns a vector of <tt>keys</tt> of all currently open <tt>curl_</tt>
+  keys.</p>
+<a id="curl_key"></a>
+<hr noshade="noshade" />
+  <!-- KEYS -->
+
+<pre>
+keys = <span class="fcndef">curl_key</span> keys
+</pre>
+
+<p>For each <tt>key</tt> in <tt>keys</tt>, return the <tt>key</tt> if it
+  corresponds to a valid <tt>curl_</tt> key. Return 0 otherwise.</p>
+<a id="curl_close"></a>
+<hr noshade="noshade" />
+  <!-- CLOSE -->
+
+<pre>
+<span class="fcndef">curl_close</span> keys
+</pre>
+
+<p>Close and free resources associated with a <tt>URL</tt>. Each <tt>key</tt>
+  listed in <tt>keys</tt> is closed if it is currently open. Invalid keys are
+  ignored.</p>
+
+<h1>See Also</h1>
+
+<p><a href="time.htm">Time Functions</a></p>
+
+<p><a class="svl" href="svlmpu.htm">mpu_password</a></p>
+
+<p>The syntax of URL is defined by:<br />
+  <a href="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986: Uniform Resource
+  Identifier (URI): Generic Syntax</a>.<br />
+  <a href="http://www.ietf.org/rfc/rfc7231.txt">RFC 7231: Hypertext Transfer
+  Protocol (HTTP/1.1): Semantics and Content</a>.<br />
+  <a href="http://www.ietf.org/rfc/rfc2617.txt">RFC 2617: HTTP Authentication:
+  Basic and Digest Access Authentication</a>.<br />
+  <a href="http://www.ietf.org/rfc/rfc4559.txt">RFC 4559: SPNEGO-based Kerberos
+  and NTLM HTTP Authentication in Microsoft Windows</a>.<br />
+  <a href="http://www.ietf.org/rfc/rfc5054.txt">RFC 5054: Using the Secure
+  Remote Password (SRP) Protocol for TLS Authentication</a>.<br />
+  <a href="http://www.ietf.org/rfc/rfc1961.txt">RFC 1961: GSS-API
+  Authentication Method for SOCKS Version 5</a>.<br />
+  <a href="http://www.ietf.org/rfc/rfc2348.txt">RFC 2348: TFTP Blocksize
+  Option</a>.</p>
+
+<p><a href="http://curl.haxx.se/" target="_blank">cURL Home Page</a></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

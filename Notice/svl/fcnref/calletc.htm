@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: call" />
+  <meta name="keywords" content="SVL:syntax: #&lt;function&gt;" />
+  <title>Invoke Function by Name: call</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Invoke Function by Name: call
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+result = <a class="fcnlink" href=
+"#call">call</a> [ 'fcn_name', fcn_args ]
+result = <a class="fcnlink" href=
+"#call">call</a> [ 'fcn_name', fcn_args, 'filename' ]
+result = <a class="fcnlink" href="#call">call</a> [ #fcn_name, fcn_args ]
+
+proc_flag = <a class="fcnlink" href="#call">call</a> []
+</pre>
+
+<h1>Description</h1>
+
+<p>Function <tt>call</tt>, given a non-empty argument, calls the function
+  that is specified as its first argument, <tt>fcn_name</tt>. The called
+  function is given the second argument, <tt>fcn_arg</tt>, as its argument.
+  Function <tt>call</tt> returns the result of the called function. That is,
+  the result of the function <tt>call</tt> with the above arguments is the same
+  as the result of function</p>
+
+<pre class="code">
+fcn_name fcn_args
+</pre>
+
+<p>The difference between the different syntactic forms lies in the scope of
+  the definition of the called function <tt>func_name</tt>.</p>
+
+<hr noshade="noshade" />
+
+<pre>
+result = <span class=
+"fcndef">call</span> ['fcn_name', [arg1, arg2, ...]]
+</pre>
+
+<p>The argument <tt>'fcn_name'</tt> must be the name of either a
+  built-in function or global function defined in a loaded file. That is, the
+  function of name <tt>'fcn_name'</tt> must be callable from the
+  command line. For example:</p>
+
+<pre class="code">
+svl&gt; v = 'igen'
+svl&gt; call [v, 10]
+[1,2,3,4,5,6,7,8,9,10]
+</pre>
+<hr noshade="noshade" />
+
+<pre>
+result = <span class=
+"fcndef">call</span> ['fcn_name', [arg1, arg2, ...], 'filename']
+</pre>
+
+<p>Similarly to the above case, the argument <tt>'fcn_name'</tt> may
+  be the name of a built-in function or global function defined in a loaded
+  file. Additionally, it may also be the name of a global function defined in
+  file <tt>'filename'</tt>, which does not need to be loaded. If not
+  loaded at the call time, the file will be temporarily loaded for the duration
+  of the call. (More correctly put, the file will be run with the function
+  <tt>'fcn_name'</tt> used as the entry point.)</p>
+<hr noshade="noshade" />
+
+<pre>
+result = <span class="fcndef">call</span> [#fcn_name, [arg1, arg2, ...]]
+</pre>
+
+<p>The argument <tt>#fcn_name</tt> must be the address of a local function
+  that is defined in the same file as the <tt>&quot;call [...]&quot;</tt>
+  expression. The function must be defined at the top-level, i.e. it must
+  <i>not</i> be nested. The address of function is a number that is obtained by
+  the syntactic expression <tt>#fcn_name</tt>, i.e. the symbol
+  &quot;<tt>#</tt>&quot; followed by the unquoted name of the function.</p>
+
+<p>Note: The user should not assume anything about the format of the function
+  address. Unloading (or reloading) of a module will invalidate pointers to all
+  of its local functions. The address of a local function cannot be
+  successfully used on a different MPU hosts; local functions on different MPU
+  hosts do not share the same address, even if they share their definition.</p>
+<hr noshade="noshade" />
+
+<a id="call"></a>
+<pre>
+proc_flag = <span class="fcndef">call</span> []
+</pre>
+
+<p>When <tt>call</tt> is invoked with a null argument <tt>[]</tt>, it returns
+  1 if the function which called it was invoked as a procedure, and 0
+  otherwise.</p>
+
+<p>The distinction is as follows: a routine is invoked as a <i>procedure</i>
+  when its return value is not stored or used in an expression. That happens
+  when the function call forms a statement all by itself (and is not part of
+  any assignment or expression). For example, the routine <tt>my_fcn</tt> below
+  is invoked as a procedure.</p>
+
+<pre class="code">
+my_fcn args;
+</pre>
+
+<p>If the function <tt>my_fcn</tt> above executes
+  &quot;<tt>p=call[];</tt>&quot;, then the value of <tt>p</tt> would be set to
+  1.</p>
+
+<p>A routine is invoked as a <i>function</i> when its return value is stored
+  or used in an expression. A routine whose call is surrounded by parentheses is
+  also considered to be invoked as a function:</p>
+
+<pre class="code">
+v = my_fcn args
+... 5 + my_fcn args + ...
+print [5, my_fcn args, ...]
+(my_fcn args);
+</pre>
+
+<p>If the function <tt>my_fcn</tt> above executes
+  &quot;<tt>p=call[];</tt>&quot;, then the value of <tt>p</tt> would be set to
+  0.</p>
+
+<p>Such a distinction is useful when creating functions that should behave
+  differently when their return value is not needed by their calling routine.
+  For example, when the result of a function is not needed for further
+  calculation and is likely to be only visually examined by the user, the
+  function may pretty-print its result on the output console:</p>
+
+<pre class="code">
+global function IdentityMatrix n
+    local M = igen n == [igen n];   // generate matrix
+
+    if call [] then                 // if procedural call
+        apt write['{12n:.5g}\n',M]; // print nicely
+        M = [];                     // null return value
+    endif
+
+    return M;
+endfunction
+</pre>
+
+<h1>See Also</h1>
+
+<p><a class="svl" href="argument.htm">argument</a> <a class="svl" href=
+  "runetc.htm">eval</a> <a class="svl" href="loadetc.htm">load</a> <a class=
+  "svl" href="runetc.htm">run</a> <a class="svl" href="runetc.htm">script</a>
+  <a class="svl" href="tskcall.htm">task_call</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

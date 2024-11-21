@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content=
+  "functions: rep, resize, resizec, stretch, s_add, s_min, s_max" />
+  <title>Replication and Resizing Functions: rep, resize, ...</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Replication and Resizing Functions: rep,
+    resize, ...
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    w = <a class="fcnlink" href="#rep">rep</a> [ v, n ]
+    w = <a class="fcnlink" href="#rep">rep</a> [ v, n1, n2, ... ]
+
+    new_v = <a class="fcnlink" href="#resize">resize</a> [ v, new_length ]
+    new_counts = <a class="fcnlink" href=
+"#resizec">resizec</a> [ counts, new_sum ]
+
+    val = <a class="fcnlink" href="#stretch">stretch</a> [ v, [n1, n2, ...] ]
+    val = <a class="fcnlink" href="#s_add">s_add</a> [ v, [n1, n2, ...] ]
+    val = <a class="fcnlink" href="#s_min">s_min</a> [ v, [n1, n2, ...] ]
+    val = <a class="fcnlink" href="#s_max">s_max</a> [ v, [n1, n2, ...] ]
+</pre>
+<a id="rep"></a>
+<h1>Description</h1>
+
+<pre>
+w = <span class="fcndef">rep</span> [ v, n ]
+w = <span class="fcndef">rep</span> [ v, n1, n2, ... ]
+</pre>
+
+<p>Replicates vector <tt>v</tt> exactly <tt>n</tt> times. If the argument to
+  <tt>rep</tt> has more than 2 elements, then <tt>v</tt> is replicated
+  <tt>n1</tt> times, the result is replicated <tt>n2</tt> times, and so forth.
+  <tt>n</tt> and <tt>n1</tt>, <tt>n2</tt>, ... must be non-negative scalar
+  numbers. Zero values produce null vectors. Non-integral values are converted
+  to integers before replicating.</p>
+
+<pre>
+    svl&gt; rep [ 0, 5 ]
+    [0,0,0,0,0]
+
+    svl&gt; rep [ 0, 2, 2 ]
+    [ [0,0], [0,0] ]
+
+    svl&gt; rep [ [1,2], 2, 3 ]
+    [ [[1,2],[1,2]], [[1,2],[1,2]], [[1,2],[1,2]] ]
+</pre>
+<a id="resize"></a>
+<hr noshade="noshade" />
+
+<pre>
+new_v = <span class="fcndef">resize</span> [ v, new_length ]
+</pre>
+
+<p>Cuts or elongates (by cycling) <tt>v</tt> to length <tt>new_length</tt>.
+  Argument <tt>new_length</tt> must be a non-negative scalar number;
+  non-integral values are converted to integers before resizing.</p>
+
+<pre>
+    svl&gt; resize [ &quot;abcd&quot;, 3 ]
+    &quot;abc&quot;
+
+    svl&gt; resize [ &quot;abcd&quot;, 7 ]
+    &quot;abcdabc&quot;
+</pre>
+<a id="resizec"></a>
+<hr noshade="noshade" />
+
+<pre>
+new_counts = <span class="fcndef">resizec</span> [ counts, new_sum ]
+</pre>
+
+<p>Cuts or elongates (by cycling) the vector of non-negative integers,
+  <tt>counts</tt>, so that the sum of the result is <tt>new_sum</tt>. Argument
+  <tt>new_sum</tt> must be a non-negative scalar number. Non-integral values in
+  both arguments are converted to integers before resizing.</p>
+
+<pre>
+    svl&gt; resizec [ [5,15,25], 44 ]
+    [5,15,24]
+
+    svl&gt; resizec [ [5,15,25], 91 ]
+    [5,15,25,5,15,25,1]
+</pre>
+
+<p>The following identities hold:</p>
+
+<pre>
+    app length split [v, counts] === resizec [counts, length v]
+    split [v, counts] === split [v, resizec [counts, length v]]
+    csmear [v, counts] === csmear [v, resizec [counts, length v]]
+</pre>
+<a id="stretch"></a>
+<hr noshade="noshade" />
+
+<pre>
+val = <span class="fcndef">stretch</span> [ v, [n1,n2,...] ]
+</pre>
+
+<p>Resizes <tt>v</tt> by replicating each of its elements. Each number in the
+  second argument indicates how many copies of the corresponding element of the
+  first argument, <tt>v</tt>, are generated. The number of copies may be zero.
+  Both arguments will be unit-extended to the same length. The functions does
+  not increase the nesting of <tt>v</tt>.</p>
+
+<pre>
+    svl&gt; stretch [&quot;abc&quot;, [3,4,5]]
+    &quot;aaabbbbccccc&quot;
+
+    svl&gt; stretch [&quot;abc&quot;, 3]
+    &quot;aaabbbccc&quot;
+</pre>
+<a id="s_add"></a>
+<hr noshade="noshade" />
+
+<pre>
+val = <span class="fcndef">s_add</span> [ v, [n1, n2, ...] ]
+</pre>
+
+<p>Splits vector <tt>v</tt> into segments of <tt>n1</tt>, <tt>n2</tt>, ...
+  elements each and returns the sum of each segment.</p>
+
+<pre>
+    svl&gt; s_add [[1,2,3,4,5], [3,2]]
+    [6,9]
+
+    svl&gt; s_add [[1,2,3,4,5], 2]
+    [3,7,5]
+
+    svl&gt; s_add [[1,2,3,4,5,6], [2,0,0,1]]
+    [3,0,0,3,9,0,0,6]
+</pre>
+<a id="s_min"></a>
+<hr noshade="noshade" />
+
+<pre>
+val = <span class="fcndef">s_min</span> [ v, [n1, n2, ...] ]
+</pre>
+
+<p>Splits vector <tt>v</tt> into segments of <tt>n1</tt>, <tt>n2</tt>, ...
+  elements each and returns the minimum of each segment. The minimum of an
+  empty segment is Inf.</p>
+
+<pre>
+    svl&gt; s_min [[1,2,3,4,5], [3,2]]
+    [1,4]
+
+    svl&gt; s_min [[1,2,3,4,5], 2]
+    [1,3,5]
+
+    svl&gt; s_min [[1,2,3,4,5,6], [2,0,0,1]]
+    [1,Inf,Inf,3,4,Inf,Inf,6]
+</pre>
+<a id="s_max"></a>
+<hr noshade="noshade" />
+
+<pre>
+val = <span class="fcndef">s_max</span> [ v, [n1, n2, ...] ]
+</pre>
+
+<p>Splits vector <tt>v</tt> into segments of <tt>n1</tt>, <tt>n2</tt>, ...
+  elements each and returns the maximum of each segment. The maximum of an
+  empty segment is -Inf.</p>
+
+<pre>
+    svl&gt; s_max [[1,2,3,4,5], [3,2]]
+    [3,5]
+
+    svl&gt; s_max [[1,2,3,4,5], 2]
+    [2,4,5]
+
+    svl&gt; s_max [[1,2,3,4,5,6], [2,0,0,1]]
+    [2,-Inf,-Inf,3,5,-Inf,-Inf,6]
+</pre>
+
+<h1>See Also</h1>
+
+<p><a class="svl" href="catetc.htm">cat</a> <a class="svl" href=
+  "length.htm">length</a> <a class="svl" href="lhs.htm">lhs</a> <a class="svl"
+  href="catetc.htm">split</a> <a class="svl" href="smearetc.htm">smear</a>
+  </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

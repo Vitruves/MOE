@@ -1,0 +1,4634 @@
+<!DOCTYPE html>
+<html>
+
+
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../images/ccgicon.png" />
+  <meta name="keywords" content="panel: Dock" />
+  <meta name="keywords" content="keywords:" />
+  <title>Docking</title>
+  <meta name="keywords" content=
+  "main_keywords: pose, placement, scoring, rescoring" />
+  <meta name="keywords" content=
+  "main_keywords: GOLD, Flex, Surflex, template forcing" />
+  <meta name="keywords" content=
+  "keywords: pharmacophore, constraint, conformation" />
+  <meta name="keywords" content="keywords: unified annotation scheme" />
+  <meta name="keywords" content=
+  "keywords: forcefield, refinement, protein-ligand interaction" />
+  <meta name="keywords" content="keywords: active, alpha site finder" />
+  <meta name="keywords" content=
+  "keywords: Generalized Born solvation, reaction field" />
+  <meta name="keywords" content=
+  "keywords: proxy, triangle, dummy, rotate bond" />
+  <meta name="keywords" content=
+  "keywords: receptor, pocket, binding, isolate" />
+  <meta name="keywords" content=
+  "keywords: potential setup, tether, restraint, temperature factor, batch" />
+  <meta name="keywords" content=
+  "keywords: moebatch, protonate, hydrogen, smp" />
+  <meta name="keywords" content=
+  "keywords: browse, field environment, configure, clash, db_SetfieldEnv" />
+  <meta name="keywords" content=
+  "keywords: ASE, Affinity, London dG, HB, wall" />
+  <meta name="keywords" content=
+  "keywords: duplicate, solvent, covalent docking, protein-protein" />
+  <meta name="keywords" content="keywords: induced fit, virtual screening" />
+  <meta name="keywords" content=
+  "keywords: electron density, alpha sphere, template similarity" />
+  <meta name="keywords" content=
+  "keywords: fft, convolution, gaussian, convolve, protocol" />
+  <meta name="keywords" content=
+  "keywords: coarse-grained, CG, GB/VI, vdW, van der Waals" />
+</head>
+<body>
+  <div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../index.htm"><img src="../images/ccglogo.png" /></a>
+    <a href="../index.htm"><div class="moeversion"></div></a>
+    Docking
+  </div><!-- END MOE_HEADER -->
+  <!-- <div id="useMathJax"></div> -->
+  <div class="content">
+
+  <div class="toc-wrap" id="toc-list">
+  <ul class="tight">
+  <li><a href="#Introduction">Introduction</a></li>
+  <li><a href="#Methodology_Overview">Methodology Overview</a>
+  <ul class="tight">
+  <li><a href="#Placement_Methodology">Placement Methodology</a></li>
+  <li><a href="#Pharmacophore_Constraint">Pharmacophore Constraint</a></li>
+  <li><a href="#Computational_Background">Computational Background</a>
+  <ul class="tight">
+  <li><a href="#ASE_Scoring">ASE Scoring</a></li>
+  <li><a href="#Affinity_dG_Scoring">Affinity dG Scoring</a></li>
+  <li><a href="#Alpha_HB_Scoring">Alpha HB Scoring</a></li>
+  <li><a href="#London_dG_Scoring">London dG Scoring</a></li>
+  <li><a href="#GBVI_WSA_dG_Scoring">GBVI/WSA dG Scoring</a></li>
+  <li><a href="#Electron_Density_Scoring">Electron Density Scoring</a></li>
+  </ul>
+  </li>
+  <li><a href="#Duplication_Removal">Duplicate Removal</a></li>
+  <li><a href="#Protein_Method">Protein-Protein Docking</a></li>
+  </ul>
+  </li>
+  <li><a href="#Running_Dock">Running Dock</a>
+  <ul class="tight">
+  <li><a href="#Preparing_the_Receptor">Preparing the Receptor</a></li>
+  <li><a href="#Identifying_the_Binding_Site">Identifying the Binding
+  Site</a></li>
+  <li><a href="#Preparing_the_Ligand">Ligand Specification</a></li>
+  <li><a href="#Using_the_Dock_Panel" >Using the Dock Panel</a>
+  <ul class="tight">
+  <li><a href="#System_and_Constraints">Specifying the System and
+  Constraints</a></li>
+  <li><a href="#Selecting_the_Placement_Method">Selecting the Placement
+  Method</a>
+  <div class="tocSubitems">
+  <a href="#General">General</a> |
+  <a href="#Template">Template</a> |
+  <a href="#Electron_Density">Electron Density</a> |
+  <a href="#Covalent_Docking">Covalent Docking</a> |
+  <a href="#Protein-Protein">Protein-Protein</a> |
+  <a href="#External">External (Third-party Software Integration)</a>
+  </div>
+  </li>
+  <li><a href="#Final_Scoring_and_Output">Final Scoring and Output</a></li>
+  </ul>
+  </li>
+  <li><a href="#Browsing_the_Output_Database">Browsing the Output
+  Database</a></li>
+  </ul>
+  </li>
+  <li><a href="#Parallel_Docking_with_MOE/smp">Parallel Docking with
+  MOE/smp</a></li>
+  <li><a href="#Parallel_Docking_with_HPC">Parallel Docking on High Performance
+  Clusters</a>
+  <ul><li>
+  <a href="#Protein-Protein_HPC">Distributed Protein-Protein Docking</a>
+  </li></ul></li>
+  <li><a href="#Examples">Examples</a>
+  <ul class="tight">
+  <li><a class="example" href=
+    "#Example_Data_Preparation">1G5S Data Preparation</a></li>
+  <li><a class="example" href=
+    "#Example_Docking_Simulation">1G5S Docking Simulation</a></li>
+  <li><a class="example" href=
+    "#Example_Docking_Library">Docking a Library of Ligands</a></li>
+  <li><a class="example" href=
+    "#Example_Library_Template">Docking a Library with Template Forcing</a></li>
+  <li><a class="example" href=
+    "#Example_Covalent_Docking">Performing a Covalent Docking
+    Simulation</a></li>
+  <li><a class="example" href=
+    "#Example_ElectronDensity">Scoring Using Electron Density</a></li>
+  <li><a class="example" href=
+    "#Example_PostDocking">Post-Docking Refinement</a></li>
+  <li><a class="example" href=
+    "#Example_ProteinProtein">Fab fragment of IgG Antibody docking to birch
+    allergen Bet v 1</a></li>
+  </ul>
+  </li>
+  <li><a href="#References">References</a></li>
+  </ul>
+</div>
+
+<a id="Introduction">
+<h1>Introduction</h1>
+</a>
+
+<p>Docking is a computer simulation technique used to predict the preferred
+orientation of two interacting chemical species. Usually, this is the
+interaction of a small- to medium-sized molecule with a protein (molecular
+docking), but in recent years the concept has been expanded to
+protein-protein, protein-antibody, and protein-receptor interactions as well
+(macromolecular docking). Docking remains a critically important tool in the
+structure-based drug design process. In its most general sense, the docking
+process involves positioning various conformations (and potentially
+tautomeric forms) of one molecule with respect to another and determining the
+optimal interaction geometry and its associated energy.</p>
+
+<p>MOE's Dock application searches for favorable <i>binding modes</i>
+between small- to medium-sized ligands and a not-too-flexible macromolecular
+target, which is usually a protein. For each ligand, a number of placements
+called <i>poses</i> are generated and scored. If desired, the poses can be
+covalently bound to a receptor side-chain atom. The score can be calculated
+as either a free energy of binding including, among other contributions,
+solvation and entropy terms, or enthalpy terms based on polar interaction
+interaction energies (including metal ligation) or as qualitative
+shaped-based numerical value. Poses can be optionally constrained to fit a
+pharmacophore query, and final filtering by pharmacophore query is also
+possible. The atoms of the active site can be permitted to move: sidechains
+can be tethered, but backbone atoms are always fixed. The final highest
+scoring poses, along with their scores and conformation energies, are written
+to a database where they are ready for further analysis.</p>
+
+<p>The Dock application was designed for flexibility and customizability. The
+algorithm that is executed is arranged as a series of self-contained stages,
+each of which may be bypassed if desired. As a result, the application can
+also be used to rescore or refine poses resulting from earlier Dock runs, or
+even from other docking applications. At most stages, there is a choice from
+among multiple methods. The GOLD, Surflex, and Flex* docking programs, if
+available, have been seamlessly integrated into the Dock framework as initial
+placement methods.</p>
+
+
+<a id="Methodology_Overview">
+<h1>Methodology Overview</h1>
+</a>
+
+<p>The Dock workflow begins with a <a href="#Preparing_the_Receptor">prepared
+receptor</a> and <a href="#Preparing_the_Ligand">ligand</a> loaded in MOE.
+The general algorithm is divided into stages, as illustrated in the diagram
+below. For each stage, multiple methods are available:</p>
+
+<p><b>Note:</b> The search for binding modes is usually constrained to a
+specific, small region of the receptor &ndash; the active site, here simply
+referred to as the <i>site</i>. As one would expect, the predictive power of
+Dock correlates with the degrees of freedom of the system. Docking results
+are expected to be reliable when the ligands are molecules with limited
+flexibility and the site is not significantly larger than the ligand. Ligands
+having up to 10 rotatable bonds can be handled reasonably.</p>
+
+<p class="center"><img src="docking/Workflow.png" alt=
+"Stages in the Docking Algorithm" /><br />
+<i>Stages in the Dock Algorithm</i></p>
+
+<ol>
+  <li> <a id="Conformational_Analysis"></a><i>Conformational Analysis</i>. If
+  ligand conformations are not supplied via a conformation database,
+  conformations can be generated by <span class="nobr"><a
+  href="confgui.htm">Conformation Import</a></span> via a fragment-based
+  approach or from a single 3D conformer by applying a collection of preferred
+  torsion angles to the rotatable bonds. In the latter case, bond lengths and
+  bond angles will not be altered and rings will not be flexed, hence it is
+  important that the starting conformation have a reasonable geometry.</li>
+
+<!--
+  Dock can be used to generate conformations from a single 3D conformation by
+  applying a collection of preferred torsion angles to the rotatable bonds. A
+  systematic search is conducted covering all combinations of angles on a grid
+  if this will result in under 5000 conformers. Otherwise, a stochastic
+  sampling of conformations is conducted.  Bond lengths and bond angles will
+  not be altered from the starting conformation, hence it is important that the
+  starting conformation has a reasonable geometry. Also, as of now, rings will
+  not be flexed. A thorough treatment of the different ring conformations
+  requires that they be pre-generated before being fed into Dock.
+-->
+
+  <li><i>Pharmacophore Pre-filtering and Pre-placement</i>. The
+  user may provide a pharmacophore for filtering the conformations prior
+  to placement.  Conformations that pass the filtering step are
+  superposed onto the pharmacophore query to have a more favorable starting
+  position coming into the placement step.
+  If a pharmacophore is supplied,
+  Pharmacophore is the recommended placement method of choice.
+  Note that Volume pharmacophore constraints are applied only at the
+  final filtering stage.</li>
+
+  <li><i>Placement</i>. A collection of poses is generated from the pool of
+  ligand conformations using one of the placement methods. The bonds between
+  the site and covalent ligands (if desired) are constructed at this point.
+  Each of the generated poses is assigned a score.</li>
+
+  <li><i>Initial Scoring</i>. Poses generated by the placement methodology
+  can be rescored using one of the available methods. Typically, scoring
+  functions emphasize favorable hydrophobic, ionic and hydrogen bond
+  contacts. For the Dock framework to work properly, all new scoring methods
+  must assign low scores to good poses.</li>
+
+  <li><i>Refinement</i>. Poses resulting from the placement stage can be
+  refined using either the explicit molecular mechanics forcefield method or
+  the grid-based energetics method.</li>
+
+  <li><i>Pharmacophore Constraints</i>. The user may provide a pharmacophore
+  to constrain the final poses. If a pharmacophore constraint is provided,
+  Pharmacophore is the placement method of choice.
+  Note that Volume pharmacophore constraints are applied only at the
+  final filtering stage.</li>
+
+  <li><i>Final Scoring</i>. The final poses can be rescored using one of
+  several scoring schemes.</li>
+</ol>
+
+<p>The top scoring poses are output, subject to optional duplicate removal.</p>
+
+<p>It is possible to perform rescoring or further refinement of existing
+docking results by using the output database from an earlier Dock Run as the
+source for the input ligands, and setting the placement step to None. Note that
+any such refinement would use the receptor as defined in the Dock panel rather
+than one stored in the database.</p>
+
+<a id="Placement_Methodology">
+<h2>Placement Methodology</h2>
+</a>
+
+<p>The Placement phase of Dock generates poses from ligand conformations. The
+available methods are:</p>
+
+<table class="titlebar">
+  <tr>
+    <th>Method</th>
+    <th>Description</th>
+  </tr>
+
+  <tr>
+    <td>General</td>
+    <td>Poses are generated using one of the following placement
+    methods:
+    <a href="#AlphaPMI">Alpha PMI</a>,
+    <a href="#AlphaTriangle">Alpha Triangle</a>,
+    <a href="#PH4">Pharmacophore</a>,
+    <a href="#ProxyTriangle">Proxy Triangle</a>, or
+    <a href="#TriangleMatcher">Triangle Matcher</a>.
+    </td>
+  </tr>
+<!--
+  <tr>
+    <td>Alpha&nbsp;Triangle</td>
+    <td>Poses are generated by superposition of ligand atom triplets and
+    triplets of receptor site points. The receptor site points are <i>alpha
+    sphere</i> centers which represent locations of tight packing. At each
+    iteration, a random conformation is selected. A random triplet of ligand
+    atoms and a random triplet of alpha sphere centers are used to determine
+    the pose.  </td>
+  </tr>
+
+  <tr>
+    <td>Alpha&nbsp;PMI</td>
+    <td>Poses are generated by aligning ligand conformations' principal moments
+    of inertia to a randomly generated subset of alpha spheres in the receptor
+    site. This method is most suited to tight pockets and is quite fast. Using
+    this method results in the search space being greatly truncated.  </td>
+  </tr>
+-->
+
+  <tr>
+    <td>Covalent&nbsp;Docking</td>
+    <td>Poses are generated by the reaction/transformation methodology of
+    <span class="nobr"><a href="combitools.htm">Combinatorial
+    Library</a></span>. One or more residues in the pocket are considered
+    Component 1 and the input ligand(s) are considered Component 2. Any
+    reaction that creates a single bond between the two components can be
+    used. Failing to match the pocket residue(s) is considered an error,
+    while ligands that do not match are ignored.</td>
+  </tr>
+  <tr>
+    <td>Electron&nbsp;Density</td>
+    <td>Poses are generated by maximizing the alignment of ligand
+    conformations to the peaks of the input electron density grid,
+    as described <a href="#Electron_Density_Scoring">below</a>.</td>
+  </tr>
+  <tr>
+    <td>GOLD</td>
+    <td> GOLD is a third party docking program, which is integrated into MOE as
+    if it were a type of placement. A separate license from CCDC is required to
+    run GOLD. Configuration and operation of GOLD is described <a
+    href="#GOLD">later</a>. GOLD uses a genetic algorithm for pose generation.
+    </td>
+  </tr>
+  <tr>
+    <td>Surflex-Dock</td>
+    <td> Surflex-Dock is a third party docking program, which is integrated
+    into MOE as if it were a type of placement. A separate license from Ajay
+    Jain is required to run Surflex-Dock. Configuration and operation of
+    Surflex-Dock is described <a href="#SurflexDock">later</a>. </td>
+  </tr>
+  <tr>
+    <td>Flex*</td>
+    <td> Flex* is a third party docking program, which is integrated into MOE
+    as if it were a type of placement. A separate license from BioSolveIT is
+    required to run Flex*. Configuration and operation of Flex* is described <a
+    href="#FlexStar">later</a>. Flex* uses an incremental fragment growth
+    strategy.  </td>
+  </tr>
+
+<!--
+  <tr>
+    <td>Pharmacophore</td>
+    <td> This method is the preferred method when a pharmacophore is present,
+    but will not work if there is no pharmacophore.  The ligand is placed using
+    the features in the pharmacophore.  Volume constraints are applied as a
+    final filter but are ignored during the placement stage.  If there are more
+    than two pharmacophore features and they do not lie on or close to a
+    straight line, the pharmacophore search engine is used to orient the
+    ligand.  If the pharmacophore features lie on or very close to a line, the
+    ligand is anchored by the pharmacophore features and rotated such that a
+    third atom matches an alpha site point.  If all pharmacophore features lie
+    at a point or very close to one point, the ligand is first anchored at that
+    point. Then, two more atoms on the ligand are matched to two alpha site
+    points to orient the ligand.  Since the ligand pose changes upon
+    refinement, if there is a refinement stage, the pharmacophore constraints
+    are loosened for placement. Furthermore, if a pharmacophore search returns
+    too few hits, the pharmacophore constraints are further loosened so that
+    more hits are obtained. </td>
+  </tr>
+-->
+<!--
+  <tr>
+    <td>Proxy&nbsp;Triangle</td>
+    <td>This method was developed for tackling medium to large sized ligands
+    which have a very large number of conformers. For small ligands, the
+    Triangle Matcher method is called. For medium and large ligands, conformers
+    are pre-superposed prior to being placed into the binding site, thus saving
+    computational time. For large ligands, the score for internal ranking uses
+    atom representatives rather than all of the ligand atoms. More time is
+    allowed for larger ligands. </td>
+  </tr>
+-->
+  <tr>
+    <td>Template&nbsp;Forcing</td>
+    <td>This uses the methodology developed for <span class=
+    "nobr"><b><a href="dbv_molsup.htm">Molecular Superpose</a></b></span> to
+    place ligands in the active site based on one or more reference
+    structures (templates). The substructure used to align template and input
+    molecules can be specified as selected atoms, a SMARTS pattern or as a
+    sketched query. The scoring function incorporates terms for
+    reference/ligand similarity and RMSD overlap as well as a protein-ligand
+    clash term. This method is well suited for binding sites for which some
+    structural or fragment interactions are known.</td>
+  </tr>
+  <tr>
+    <td>Template&nbsp;Similarity</td>
+    <td>This uses the methodology developed for <span class=
+    "nobr"><b><a href="dbv_molsup.htm">Molecular Superpose</a></b></span> to
+    place ligands in the active site based on one or more reference
+    structures (templates). This aligns template and input molecules via an
+    undirected heavy-atom and projected feature triplet matching scheme. The
+    scoring function incorporates terms for reference/ligand similarity as
+    well as a protein-ligand clash term. This method is well suited for
+    binding sites whose locations are known but information about specific
+    pocket/ligand interactions is lacking.</td>
+  </tr>
+<!--
+  <tr>
+    <td>Triangle&nbsp;Matcher (<b>default</b>)</td>
+    <td>Poses are generated by aligning ligand triplets of atoms on triplets of
+    alpha spheres in a more systematic way than in the Alpha Triangle method.
+    </td>
+  </tr>
+-->
+<!--
+  <tr>
+    <td>None</td>
+    <td> No placement is carried out.  The ligands are passed through with
+    unchanged coordinates. Choose this method when you wish to use Dock's
+    refinement and scoring tools to post-process already-docked poses, either
+    from an earlier Dock run or from other sources.  </td>
+  </tr>
+-->
+  <tr>
+    <td>Protein-Protein</td>
+    <td>Poses are generated using the Coarse-grained bead model as described
+    <a href="#Protein_Method">below</a>.  This includes a FFT enumeration
+    followed by a rigid-body refinement and optional sidechain repacking.</td>
+  </tr>
+</table>
+
+<p><b>Note!</b> While the placement stage produces identical results under
+identical set up conditions, it is normal for the output to vary from run to
+run if there is a refinement stage or if <span class="nobr"><b>Conformation
+Import</b></span> is used. This variation is due to the non-deterministic
+nature of the energy minimization process.</p>
+
+<a id="Pharmacophore_Constraint">
+<h2>Pharmacophore Constraint</h2>
+</a>
+
+<p>To facilitate the use of known interactions to guide the docking process,
+a <a href="ph4_guide.htm">pharmacophore query</a> (either from a MOE
+pharmacophore file or from a <a href="ph4_query.htm">Pharmacophore Query
+Editor</a>) may be specified. All final poses (after the refinement stage, if
+there is one) that do not satisfy the pharmacophore (in absolute mode) will
+be eliminated.</p>
+
+<p>If a pharmacophore is specified, the pharmacophore placement method is the
+method of choice. If another placement method (available under the
+<b>General</b> docking protocol) is used, the final poses will still be
+filtered using the pharmacophore, but the process is likely to be less
+efficient.</p>
+
+<p>If the pharmacophore was defined using the <a href="ph4_annot.htm">Unified
+Annotation Scheme</a>, restraints will be applied during refinement to keep
+the poses reasonably close to the pharmacophore model. It is possible,
+especially for pharmacophore models defined using other annotation schemes,
+for poses to move away from the pharmacophore during refinement.</p>
+
+<ul class="help">
+  <li class="help" style="padding-left: 25px;">For an example of docking using
+  pharmacophore constraints, please see the Docking Tutorial, which can
+  be accessed via <span class="menu">MOE | Help | Tutorials</span>.
+  </li>
+</ul>
+
+<a id="Computational_Background">
+<h2>Computational Background</h2>
+</a>
+
+<p>The following sections describe the theoretical background for the docking
+methods implemented in MOE. It should be noted that for all scoring functions,
+lower scores indicate more favorable poses.</p>
+
+<a id="ASE_Scoring">
+<h3>ASE Scoring</h3>
+</a>
+
+<p>This score is proportional to the sum of the Gaussians
+<i>R<sub>1</sub>R<sub>2</sub>e<sup>-d<sup>2</sup>/2</sup></i> over all ligand
+atom&ndash;receptor atom pairs and ligand atom&ndash;alpha sphere pairs.
+<i>R<sub>1</sub></i> and <i>R<sub>2</sub></i> are the radii of the atoms in
+&Aring;, or are <span class="nobr">-1.85 &Aring;</span> for alpha spheres.
+<i>d</i> is the distance between the pair in &Aring;. The proportionality
+constant has a default value of <span class="nobr">0.035 kcal/mol</span>.</p>
+
+<a id="Affinity_dG_Scoring">
+<h3>Affinity dG Scoring</h3>
+</a>
+
+<p>This function estimates the enthalpic contribution to the free energy of
+  binding using a linear function: <!-- <span class="LaTeX">\[
+\begin{equation}
+\Delta G =
+      C_{\textrm{hb}}   f_{\textrm{hb}}
+    + C_{\textrm{ion}}  f_{\textrm{ion}}
+    + C_{\textrm{mlig}} f_{\textrm{mlig}}
+    + C_{\textrm{hh}}   f_{\textrm{hh}}
+    + C_{\textrm{hp}}   f_{\textrm{hp}}
+    + C_{\textrm{aa}}   f_{\textrm{aa}}
+\end{equation}
+\]</span> --></p>
+
+<p class="center"><img src="docking/math_docking_eq0.png" /></p>
+
+<p>where the <i>f</i> terms fractionally count atomic contacts of specific
+  types and the <i>C</i>'s are coefficients that weight the term
+  contributions to the affinity estimate. The individual terms are:</p>
+
+<table class="titlebar">
+  <tr>
+    <th>Subscript</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>hb</td>
+    <td>Interactions between hydrogen bond donor-acceptor pairs. An optimistic
+    view is taken; for example, two hydroxyl groups are assumed to interact in
+    the most favorable way.</td>
+  </tr>
+  <tr>
+    <td>ion</td>
+    <td>Ionic interactions. A Coulomb-like term is used to evaluate the
+    interactions between charged groups. This can contribute to or detract from
+    binding affinity.</td>
+  </tr>
+  <tr>
+    <td>mlig</td>
+    <td>Metal ligation. Interactions between Nitrogens/Sulfurs and transition
+    metals are assumed to be metal ligation interactions.</td>
+  </tr>
+  <tr>
+    <td>hh</td>
+    <td>Hydrophobic interactions, for example, between alkane carbons. These
+    interactions are generally favorable.</td>
+  </tr>
+  <tr>
+    <td>hp</td>
+    <td>Interactions between hydrophobic and polar atoms. These interactions
+    are generally unfavorable.</td>
+  </tr>
+  <tr>
+    <td>aa</td>
+    <td>An interaction between any two atoms. This interaction is weak and
+    generally favorable.</td>
+  </tr>
+</table>
+
+<a id="Alpha_HB_Scoring">
+<h3>Alpha HB Scoring</h3>
+</a>
+
+<p>This score is a linear combination of two terms. The first term measures the
+geometric fit of the ligand to the binding site. The second term measures
+hydrogen bonding effects. Both terms are summed over all ligand atoms.</p>
+
+<p>The first term has an attractive component and a repulsive component. The
+attractive component is summed over atoms in the ligand. Each ligand atom that
+is within 3 &Aring; of an alpha sphere center contributes
+<i>Ae<sup>-d<sup>2</sup>/2</sup></i> to this term, where <i>d</i> is the
+distance from the ligand atom to the nearest alpha sphere center, and <i>A</i>
+assumes the value of -0.6845. The repulsive component is summed over all pairs
+of atomic overlap between the ligand and the receptor. For each pair of
+overlap, the contribution is between 0 and 1 depending on the severity of the
+overlap.</p>
+
+<p>The second term measures hydrogen bond effects. For non-<i>sp3</i> donors
+and acceptors, hydrogen bonding sites are projected from the atom. If the site
+is occupied by a favorable atom, there is a score of <tt>-</tt>2 (negative
+means favorable). Otherwise, if it is occupied by some other ligand atom, there
+is a score of +1. For <i>sp3</i> donors and acceptors, all favorable atoms
+within <span class="nobr">3.5 &Aring;</span> contribute a score of <tt>-</tt>1
+while all other atoms contribute +1. Metals in the receptor are treated as
+acceptors but with a three-fold effect.</p>
+
+<a id="London_dG_Scoring">
+<h3>London dG Scoring</h3>
+</a>
+
+<p>The London dG scoring function estimates the free energy of binding of the
+  ligand from a given pose. The functional form is a sum of terms:
+<!-- <span class="LaTeX">\[
+\begin{equation}
+\Delta G
+    = c + E_{\mathrm{flex}}
+        + \sum_{h-bonds} c_{HB} f_{HB}
+        + \sum_{m-lig} c_{M} f_{M}
+        + \sum_{atoms~i} \Delta D_{i}
+\end{equation}
+\]</span> --></p>
+
+<p class="center"><img src="docking/math_docking_eq1.png" /></p>
+
+<p>where <i>c</i> represents the average gain/loss of rotational and
+  translational entropy; <i>E<sub>flex</sub></i> is the energy due to the loss
+  of flexibility of the ligand (calculated from ligand topology only);
+  <i>f</i><sub>HB</sub> measures geometric imperfections of hydrogen bonds and
+  takes a value in [0,1]; <i>c</i><sub>HB</sub> is the energy of an ideal
+  hydrogen bond; <i>f</i><sub>M</sub> measures geometric imperfections of metal
+  ligations and takes a value in [0,1]; <i>c</i><sub>M</sub> is the energy of
+  an ideal metal ligation; and <i>D<sub>i</sub></i> is the desolvation energy
+  of atom <i>i</i>. The difference in desolvation energies is calculated
+  according to the formula
+<!-- <span class="LaTeX">\[
+\begin{equation}
+\Delta D_{i} = c_{i} R_{i}^{3} \left\{
+          \iiint\limits_{u \notin A \cup B} \left| u \right|^{-6} du
+        - \iiint\limits_{u \notin B}        \left| u \right|^{-6} du
+    \right\}
+\end{equation}
+\]</span> --></p>
+
+<p class="center"><img src="docking/math_docking_eq2.png" /></p>
+
+<p>where <i>A</i> and <i>B</i> are the protein and/or ligand volumes with
+atom <i>i</i> belonging to volume <i>B</i>; <i>R<sub>i</sub></i> is the
+solvation radius of atom <i>i</i> (taken as the OPLS-AA van der Waals sigma
+parameter plus <span class="nobr">0.5 &Aring;</span>); and
+<i>c<sub>i</sub></i> is the desolvation coefficient of atom <i>i</i>. The
+coefficients {<i>c</i>, <i>c<sub>HB</sub></i>, <i>c<sub>i</sub></i>} were
+fitted from approximately 400 X-ray crystal structures of protein-ligand
+complexes with available experimental pK<sub>i</sub> data. Atoms are
+categorized into about a dozen atom types for the assignment of the
+<i>c<sub>i</sub></i> coefficients. The triple integrals are approximated
+using Generalized Born integral formulas.</p>
+
+<a id="GBVI_WSA_dG_Scoring">
+<h3>GBVI/WSA dG Scoring</h3>
+</a>
+
+<p>The GBVI/WSA <i>&Delta;G</i> [Corbeil] is a forcefield-based scoring function which
+estimates the free energy of binding of the ligand from a given pose. It has
+been trained using the MMFF94x and AMBER99 forcefield on the 99
+protein-ligand complexes of the SIE training set [Naim]. The functional form
+is a sum of terms: <!-- <span class="LaTeX">\[
+\begin{equation}
+\Delta G \approx c + \alpha \left[
+        \frac{2}{3} \left( \Delta E_{coul} + \Delta E_{sol} \right)
+        + \Delta E_{vdw} + \beta \Delta S A_{weighted}
+    \right]
+\end{equation}
+\]</span> --></p>
+
+<p class="center"><img src="docking/math_docking_eq3.png" /></p>
+
+<p>where:</p>
+
+<table class="noborder">
+  <tr>
+    <td><i>c</i></td>
+    <td>represents the average gain/loss of rotational and translational
+    entropy.</td>
+  </tr>
+  <tr>
+    <td><i>&alpha;</i>, <i>&beta;</i></td>
+    <td>are constants which were determined during training (along with
+    <i>c</i> and are forcefield-dependent. If not using an AMBER forcefield,
+    the parameters will be set by default to the MMFF trained parameters.</td>
+  </tr>
+  <tr>
+    <td><i>E</i><sub>Coul</sub></td>
+    <td>is the coulombic electrostatic term which is calculated using currently
+    loaded charges, using a constant dielectric of <span class=
+    "nobr"><i>&epsilon;<sub>i</sub></i>=1</span>.</td>
+  </tr>
+  <tr>
+    <td><i>E</i><sub>sol</sub></td>
+    <td> is the solvation electrostatic term which is calculated using the
+    GB/VI solvation model. For more information on the GB/VI solvation model,
+    please see <a href="../moe/pot.htm">Potential Energy Selection and
+    Configuration</a>.  </td>
+  </tr>
+  <tr>
+    <td><i>E</i><sub>vdW</sub></td>
+    <td>is the van der Waals contribution to binding.</td>
+  </tr>
+  <tr>
+    <td><i>SA</i><sub>weighted</sub></td>
+    <td>is the surface area, weighted by exposure. This weighting scheme
+    penalizes exposed surface area.</td>
+  </tr>
+</table>
+
+<p class="center"><img src="docking/wsa.jpg" /></p>
+
+<br clear="all" />
+
+<a id="Electron_Density_Scoring">
+<h3>Electron Density Scoring</h3>
+</a>
+
+<p>The Dock electron density placement method is based on alpha spheres.
+First, peaks are detected in the input electron density grid and these
+positions are used to create additional alpha spheres to complement those
+generated during the placement phase. Peaks are identified as locations where
+&nabla;<i>x</i>=0. These are typically not coincident with grid points, and
+must be calculated. All grid points where the density is greater than
+1.5<i>&sigma;</i> and &nabla;<sup>2</sup><i>x&lt;</i>0 are located, and to
+those where the density is greater than that of all six neighbors, the
+truncated Newton method is applied to find the nearest maximum. After duplicate
+removal, the resulting maxima constitute the set of identified peaks, which
+ideally correspond to the locations of atoms within the density.</p>
+
+<p>For the refinement phase of docking, to calculate how well a particular
+conformation matches the given electron density data, the simulated density of
+the input molecular conformation is convolved with the electron density grid.
+This gives a density correlation score which is higher when the atom positions
+fit well into the density, and is small when they do not. Density is simulated
+using a two-Gaussian approximation based on the method described in [Agarwal
+1978]. For atom types not covered by that reference, the three-Gaussian model
+of [Eyck 1977] is used. Note that isotropic B factors are necessary to
+accurately reproduce the density using this method, so an average B factor of
+25 is used for all atoms. In this way, the electron density contribution at a
+given position <i>r</i> from an atom is given by:
+
+  <!-- <span class="LaTeX">\[
+\begin{equation*}
+\rho(r) = \sum_i Z_i \left| 4 \pi D_i \right| ^\frac{1}{2}
+exp(-4 \pi^2 r^T D_i r)
+\end{equation*}
+\]</span> --></p>
+
+<p class="center"><img src="docking/math_docking_eq16.png" /></p>
+
+<p>where the sum is over the <i>i</i> Gaussians and || is the determinant
+operation.</p>
+
+<p>In order to compare an experimental density, <i>F</i>, with a simulated one,
+<i>G</i>, they must first be scaled correctly. In general, we wish to minimize
+the squared error between (<i>aG</i>+<i>b</i>) and <i>F</i>:
+
+  <!-- <span class="LaTeX">\[
+\begin{equation*}
+\underset{a,b}{\operatorname{argmin}} \int\left[ a G(x) + b - F(x) \right]^2 dx
+\end{equation*}
+\]</span> --></p>
+
+<p class="center"><img src="docking/math_docking_eq17.png" /></p>
+
+<p>Differentiating by <i>b</i> and solving, we obtain the optimal translation as
+<!-- <span class="LaTeX">\[
+\begin{equation*}
+b = \bar{F} - a\,\bar{G}
+\end{equation*}
+\]</span> --></p>
+
+<p class="center"><img src="docking/math_docking_eq18.png" /></p>
+  <!-- <span class="LaTeX">\[
+\begin{equation*}
+\bar{F} = V^{-1} \int F(x)\,dx \hspace{4ex}
+\bar{G} = V^{-1} \int G(x)\,dx \hspace{4ex}
+V = \int dx
+\end{equation*}
+\]</span> -->
+
+<p class="center"><img src="docking/math_docking_eq19.png" /></p>
+
+<p>Without loss of generality, we may assume that <i>F</i> and <i>G</i> have
+zero mean
+<!-- <span class="LaTeX">\[
+\begin{equation*}
+F \leftarrow F - \bar{F} \hspace{4ex} G \leftarrow G - \bar{G}
+\end{equation*}
+\]</span> --></p>
+
+<p class="center"><img src="docking/math_docking_eq20.png" /></p>
+
+<p>Replacing the optimal <i>b</i> we can write the optimal scaling <i>a</i> as
+<!-- <span class="LaTeX">\[
+\begin{equation*}
+\underset{a}{\operatorname{argmin}} \int\left[ a\,G(x) - F(x) \right] ^2 dx
+\end{equation*}
+\]</span> --></p>
+
+<p class="center"><img src="docking/math_docking_eq21.png" /></p>
+
+<p>Differentiating by <i>a</i> and solving we obtain the optimal scaling as
+<!-- <span class="LaTeX">\[
+\begin{equation*}
+a = \int F(x)\,G(x)\,dx \Big / \int G(x)\,G(x)\,dx
+\end{equation*}
+\]</span> --></p>
+
+<p class="center"><img src="docking/math_docking_eq22.png" /></p>
+
+<p>Inserting the optimal <i>a</i> into the function to minimize, expanding and
+simplifying we have squared error under optimal scaling and centering as
+
+<!-- <span class="LaTeX">\[
+\begin{equation*}
+| F |^2 - |G|^{-2} \left[ \int F(x) \, G(x)\,dx \right] ^2 \\ |
+F|^2 = \int F (x)\,F(x)\,dx \hspace{4ex} |G|^2 = \int G(x)\,Gx)\,dx
+\end{equation*}
+\]</span> --></p>
+
+<p class="center"><img src="docking/math_docking_eq23a.png" /></p>
+<p class="center"><img src="docking/math_docking_eq23b.png" /></p>
+
+<p>Minimizing the squared error under a positive <i>a</i> constraint is
+  equivalent to minimizing the anti-correlation
+<!-- <span class="LaTeX">\[
+\begin{equation*}
+f(G) = |F| - |G|^{-1} \int F(x)\,G(x)\,dx
+\end{equation*}
+\]</span> --></p>
+
+<p class="center"><img src="docking/math_docking_eq24.png" /></p>
+
+<p>which has the value 0 when <i>G</i>=<i>F</i> and 2|<i>F</i>| when
+  <i>G</i>=<i>-F</i>. When <i>G</i> is a sum of Gaussian densities centered on
+  <i>n</i> coordinates <i><b>r</b></i>={<i>r<sub>i</sub></i>} we have that
+<!-- <span class="LaTeX">\[
+\begin{equation*}
+G(x ; \mathbf{r} ) = \sum_{i=1}^{n} g_i \left( x - r_i \right) - \bar{G}
+\hspace{3ex}
+g_i(t) = \sum_k a_{ik} \beta_{ik}^{3/2} \pi^{-3/2} e^{-\beta_{ik}|t|^2}
+\hspace{3ex}
+\bar{G} = V^{-1} \sum_{i=1}^n \sum_k a_{ik}
+\end{equation*}
+\]</span> --></p>
+
+<p class="center"><img src="docking/math_docking_eq25a.png" /></p>
+<p class="center"><img src="docking/math_docking_eq25b.png" /></p>
+
+<p>and the correlation function becomes a function of the coordinates
+<i><b>r</b></i>:
+<!-- <span class="LaTeX">\[
+\begin{equation*}
+f( \mathbf{r} ) = |F| - |G|^{-1} \sum_{i=1}^{n} \int F(x)\,g_i \left( x - r_i
+\right)\,dx
+\end{equation*}
+\]</span> --></p>
+
+<p class="center"><img src="docking/math_docking_eq26.png" /></p>
+
+<p>In practice, many of the {<i>g<sub>i</sub></i>} will be the same since they
+represent elements {C, N, O, S, ...}. Consequently, we represent these
+integrals on a separate grid <i>S</i> per atom (i.e., per element)
+<!-- <span class="LaTeX">\[
+\begin{equation*}
+S_i (r) = \int F(x)\, g_i (x-r)\,dx
+\end{equation*}
+\]</span> --></p>
+
+<p class="center"><img src="docking/math_docking_eq27.png" /></p>
+
+<p>Note that these grids can be computed efficiently by convolution using FFT.
+The correlation then becomes
+<!-- <span class="LaTeX">\[
+\begin{equation*}
+f \left( \mathbf{r} \right) = |F| - |G|^{-1} \sum_{i=1}^n S_i(r_i)
+\end{equation*}
+\]</span> --></p>
+
+<p class="center"><img src="docking/math_docking_eq28.png" /></p>
+
+<p>Now, <!-- <span class="LaTeX">\[
+\begin{equation*}
+|G|^2 = \sum_{i,j = 1}^{n} g_{ij} - V \bar{G}^2
+\hspace{4ex}
+g_{ij} = \int g_i (x - r_i)\,g_j(x-r_j)\,dx
+\end{equation*}
+\]</span> --></p>
+
+<p class="center"><img src="docking/math_docking_eq29.png" /></p>
+
+<p>and <!-- <span class="LaTeX">\[
+\begin{equation*}
+g_{ij} = \sum_k \sum_l a_{ik}\,a_{jl}\,\beta_{ijkl}^{3/2}\,\pi^{-3/2}
+         \exp \left\{-\beta_{ijkl} \left| r_i - r_j \right|^2\right\}
+\hspace{4ex}
+\beta_{ijkl} = \frac{\beta_{ik}\,\beta_{jl}}{\beta_{ik} + \beta_{jl}}
+\end{equation*}
+\]</span> --></p>
+
+<p class="center"><img src="docking/math_docking_eq30.png" /></p>
+
+<p>Most of the contribution to |<i>G</i>|<sup>2</sup> will come from the
+{<i>g<sub>ii</sub></i>} and <i>g<sub>ij</sub></i> when <i>i</i> and <i>j</i>
+are bonded. (Angles at standard geometries could be included as well.)
+Consequently, we can use standard bond lengths (and angles) and neglect the
+remaining overlaps and assume that |<i>G</i>| is constant. We arrive at
+<!-- <span class="LaTeX">\[
+\begin{equation*}
+f(\mathbf{r}) = |F| - |G|^{-1} \sum_{i=1}^{n} S_i(r_i)
+\end{equation*}
+\]</span> --></p>
+
+<p class="center"><img src="docking/math_docking_eq31.png" /></p>
+<!-- <span class="LaTeX">\[
+\begin{equation*}
+\frac{d}{dr_m} f(\mathbf{r}) = - |G|^{-1} S'_m(r_m)
+\end{equation*}
+\]</span> -->
+
+<p class="center"><img src="docking/math_docking_eq32.png" /></p>
+
+<p>where we have assumed that <span style=
+"text-decoration:overline"><i>F</i></span>=0. This is equivalent to minimizing
+<!-- <span class="LaTeX">\[
+\begin{equation*}
+f(\mathbf{r}) = -|F|^{-1} \sum_{i=1}^{n} S_i(r_i)
+\end{equation*}
+\]</span> --></p>
+
+<p class="center"><img src="docking/math_docking_eq33.png" /></p>
+
+<!-- <span class="LaTeX">\[
+\begin{equation*}
+\frac{d}{d r_m} f(\mathbf{r}) = -|F|^{-1}\,S'_m(r_m)
+\end{equation*}
+\]</span> -->
+
+<p class="center"><img src="docking/math_docking_eq34.png" /></p>
+
+<p>where we can fold the |<i>F</i>|<sup>-1</sup> into the
+{<i>S<sub>i</sub></i>}; i.e. assume that <i>F</i> is normalized. This latter
+form has the advantage that <i>f</i> is near -|<i>G</i>| for an ideal fit and
+positive when not and achieves a maximum of near |<i>G</i>|.</p>
+
+<p>The electron density correlation, describing the match between <i>F</i> and
+<i>G</i>, is integrated directly into the forcefield as an additional term:
+<!-- <span class="LaTeX">\[
+\begin{equation*}
+E_{\mathrm{density}} = -(\alpha / F) \sum_{\mathrm{el}} \sum_i S_i (r_i)
+\end{equation*}
+\]</span> --></p>
+
+<p class="center"><img src="docking/math_docking_eq35.png" /></p>
+
+<p>where the outer sum is over distinct atomic elements in the ligand, and the
+inner sum is over all atoms of that element, each at position
+<i>r<sub>i</sub></i>. <i>&alpha;</i> is a scale factor set to 1. The scale
+factor <i>F</i> accounts for the fact that we are only fitting ligand atoms and
+not the whole unit cell, and is computed as: <!-- <span class="LaTeX">\[
+\begin{equation}
+F=n_{\mathrm{protons}} \frac{F_{\mathrm{mag}}}{n_{\mathrm{copies}}n_{\mathrm
+{protons}_{\mathrm{asu}}}}
+\end{equation}
+\]</span> --></p>
+
+<p class="center"><img src="docking/math_docking_eq36.png" /></p>
+
+<p>where <i>n</i><sub>copies</sub> is the number of symmetry copies in the unit
+cell and <i>n</i><sub>protons<sub>asu</sub></sub> is the total count of protons
+in the asymmetric unit; thus the total electron density should integrate
+(approximately) to <i>n</i><sub>copies</sub>*<i>n</i><sub>protons</sub>.
+<i>F</i><sub>mag</sub> is the actual RMS integral of the density over the unit
+cell, and <i>n</i><sub>protons</sub> is the number of protons in the ligand
+being fit.  The forcefield gradient is computed accordingly as well.</p>
+
+<p>Using the same definition of <i>S<sub>i</sub></i> from above, the electron
+density score is defined as simply the sum of the <i>S<sub>i</sub></i> over
+each distinct atomic element:
+<!-- <span class="LaTeX">\[
+\begin{equation*} \operatorname{score} =
+-\sum_{\mathrm{el}} \sum_i S_i(r_i) \end{equation*}
+\]</span> --></p>
+
+<p class="center"><img src="docking/math_docking_eq37.png" /></p>
+
+<p>where the outer sum is over distinct atomic elements in the ligand, and the
+inner sum over all atoms of that element, each at position
+<i>r<sub>i</sub></i>.</p>
+
+<!--
+<p class="center">When selected, Electron Density Scoring docking poses are
+scored against an electron density map. The score is the negative sum of the
+density where the docking pose and electron density map overlap.  </p>
+
+<p class="center"> <img src="docking/edscoring_panel.png" /> </p>
+
+<table class="noborder">
+  <tr>
+    <td><b><nobr>Structure Factors</nobr></b></td>
+    <td> field to identify the MTZ or CIF file that contains the electron
+    density grid.  </td>
+  </tr>
+
+  <tr>
+    <td><b>Structure</b></td>
+    <td> If one of the fields must be simulated, the original PDB file is
+    required to be defined. When the <b>Structure Factors</b> file is
+    identified and a Structure is required, it will automatically try to locate
+    the appropriate PDB file, either located in the current directory or in
+    $DOWNLOADS.  </td>
+  </tr>
+
+  <tr>
+    <td><b>Map</b></td>
+    <td>
+      Specifies the type of the electron density map.  Values <b>Fo</b>,
+      <b>2Fo-Fc</b>, <b>3Fo-2Fc</b> and special values <b>2FOFCWT</b> and
+      <b>FWT</b> correspond to density maps and are displayed in one color, which
+      defaults to blue.  Values <b>Fo-Fc</b> and special values <b>FOFCWT</b> and
+      <b>DELFWT</b> correspond to difference maps and are displayed in two
+      colors, which default to green for positive and pink for negative.
+
+      <p> If <b>Map</b> is <b>Fo</b> or a formula involving <b>Fo</b> and
+      <b>Fc</b>, then the MTZ data columns specified by <b>Fo</b> and <b>Fc</b>
+      are used.  </p>
+
+      <p> If <b>Map</b> is the name of a special column, such as <b>2FOFCWT</b>,
+      then the <b>Fo</b> and <b>Fc</b> parameters are not used and the <b>Phi</b>
+      parameter is set to represent the appropriate corresponding phase, such as
+      <b>PH2FOFCWT</b>.  </p>
+    </td>
+  </tr>
+
+  <tr>
+    <td><b>Phi</b></td>
+    <td>
+      The name of the MTZ data column containing the structure factor phase
+      information.  Selecting <b>Simulated</b> (the initial default) uses
+      calculated phase data.  If <b>Fo</b> or <b>Fc</b> are <b>Simulated</b>,
+      then <b>Phi</b> will be also <b>Simulated</b>.
+
+      <p> If <b>Map</b> specifies a special column, such as <b>2FOFCWT</b>,
+      then <b>Phi</b> is set to represent the corresponding phase, such as
+      <b>PH2FOFCWT</b>.  </p>
+    </td>
+  </tr>
+
+  <tr>
+    <td><b>Fo</b></td>
+    <td>
+      The name of the MTZ data column containing the structure factor
+      information.  Selecting <b>Simulated</b> (the initial default) displays a
+      surface based on atomic position and number.
+
+      <p> If <b>Map</b> does not specify <b>Fo</b> or a difference formula that
+      uses <b>Fo</b>, then the <b>Fo</b> option is unavailable.  </p>
+    </td>
+  </tr>
+
+  <tr>
+    <td><b>Fc</b></td>
+    <td>
+      The name of the MTZ data column containing the structure factor
+      information for a difference map.  Selecting <b>Simulated</b> uses
+      calculated information for the map.
+
+      <p> If <b>Map</b> does not specify a difference formula that uses
+      <b>Fc</b>, then the <b>Fc</b> option is unavailable.  </p>
+    </td>
+  </tr>
+
+</table>
+
+<br clear="all">
+ -->
+
+<a id="Duplication_Removal">
+<h2>Duplicate Removal</h2>
+</a>
+
+<p>Duplicate removal is not performed using a conventional RMSD cutoff
+approach. Instead, the hydrogen bonding pattern and hydrophobic interaction
+pattern between the ligand and the receptor are considered. A pair of
+ligand-receptor atoms of the appropriate types are considered to have a
+hydrogen bond interaction if they are less than 3.5&Aring; apart. A hydrophobic
+atom on the ligand is considered to have a hydrophobic interaction with a
+receptor residue if that atom is under 4.5&Aring; away from a hydrophobic atom
+of that residue. Poses are considered as duplicates if the same set of
+ligand-receptor atom pairs are involved in hydrogen bond interactions and the
+same set of ligand atom receptor residue pairs are involved in hydrophobic
+interactions.</p>
+
+<a id="Protein_Method">
+<h2>Protein-Protein Docking</h2>
+</a>
+
+<p>In protein-protein docking one protein structure, referred to as the
+<i>ligand</i>, is docked against another, referred to as the <i>receptor</i>.
+Commonly, the smaller structure is chosen to be the ligand, but there is no
+requirement that it be so.  The calculation will be carried out by aligning
+each protein in a standard orientation and using as the fixed grid whichever
+is larger.  Note that even though the proteins are aligned at the start of
+the calculation the initial coordinates can still generate some randomness
+due to rounding error in discretizing the grids.  The initial choice of
+receptor and ligand will determine the reference frame of the output poses
+as well as which protein defines the point of view of the PLIF calculation,
+if applicable.  For example, to carry out epitope analysis the antigen
+would be considered the receptor, regardless of size.</p>
+
+<p>The protein-protein docker uses a multi-stage method for generating poses
+and then ranking them. Starting from a coarse-grained (CG) model to reduce the
+computational search space, exhaustive sampling is carried out to generate a
+set of initial poses.  The Hopf fibration is used to generate a set of
+uniformly-distributed rotations [Yershova] and a Fast Fourier Transform (FFT)
+is used to sample all translations for a given rotation.  This is followed by a
+minimization process that is built around a staged convergence protocol.</p>
+
+<p>Protein-protein docking proceeds according to the following steps:</p>
+
+<ol style="list-style-type: decimal">
+  <li>Create a residue-based CG rigid-body representation of the structures
+  to be docked.</li>
+  <li>Create a grid-based representation of receptor fields.</li>
+  <li>Generate a set of rotations [Yershova&nbsp;2010] for the ligand with a
+  default target RMSD of <span class="nobr">3.5 &Aring;</span>.
+  Keep only those rotations which correspond to smaller angles than any
+  of the octahedral symmetry operations.</li>
+  <li>Loop over rotations:
+    <ol style="list-style-type: lower-latin;">
+      <li>Generate a complementary grid of coefficients for ligand.</li>
+      <li>Calculate the FFT of the rotated ligand grid as well as all
+      of its symmetry operations by permuting the indices.</li>
+      <li>Calculate the grid-based protein interaction energy for all
+      translations using FFT convolutions.</li>
+      <li>Record the top two translations for each rotation and top two
+      rotations for each translation.</li>
+    </ol>
+  </li>
+  <li>Fast minimize unique poses as CG rigid-bodies using a
+  (1+<i>r</i>)<sup>-2</sup> form for electrostatics.</li>
+  <li>Further minimize the <i>N<sub>top</sub></i> (default 10<sup>3</sup>)
+  poses accounting for solvation free-energy using GBVI.</li>
+  <li>Rank according to the interaction energy.</li>
+</ol>
+
+<h4>Coarse-Grained (CG) Representation</h4>
+
+<p>The proteins are first rendered into a coarse-grained (CG) residue-based
+representation in which each residue is composed of one to three
+&quot;united-atom&quot; beads following the scheme proposed by Basdevant <i>et
+al.</i> [Basdevant]</p>
+
+<p class="center"><img src="docking/figure1_ppdock_docu.jpg" alt= "Examples of
+coarse-grained residues and protein." /></p>
+
+<p class="caption">a) Coarse-grained Glycine, Lysine, and Arginine; b)
+Coarse-grained <i>&alpha;</i>&ndash;amylase</p>
+
+<p>The CG representation includes the following energy components: van der
+Waals, electrostatic, and solvation <i>via</i> the Generalized Born Volume
+Integral (GB/VI) formalism [Labute].</p>
+
+<p><b>CG van der Waals Interactions</b></p>
+
+<p>The united-atom beads making up the residues interact via a van der Waals
+(vdW) potential that has been calibrated to reproduce all-atom (AA) derived
+energies using just a few parameters, namely sizes <i>&sigma;<sub>i</sub></i>
+and <i>&lambda;<sub>i</sub></i> along with energy scale
+<i>&epsilon;<sub>i</sub></i>, defined for each residue <i>i</i> [Basdevant].
+The Lorentz-Berthelot rule is used for mixing the coefficients of interacting
+beads <i>i</i> and <i>j</i> separated by a distance <i>r<sub>i</sub></i> such
+that <span class=
+"nobr"><i>&sigma;<sub>ij</sub></i>=(<i>&sigma;<sub>i</sub></i> +
+<i>&sigma;<sub>j</sub></i>)/2</span>, <span class=
+"nobr"><i>&lambda;<sub>ij</sub></i>=(<i>&lambda;<sub>i</sub></i> +
+<i>&lambda;<sub>j</sub></i>)/2</span>, and
+<i>&epsilon;<sub>ij</sub>=(&epsilon;<sub>i</sub>&epsilon;<sub>j</sub>)<sup>1/2</sup></i>.
+This gives:
+
+<!-- <span class="LaTeX">\[
+\begin{equation}
+U_{\mathrm{vdW}}(r_{ij}) = \epsilon_{ij} \left[ \left(
+\frac{\lambda_{ij}}{r_{ij}} \right)^6 -\exp \left( -\left( \frac{r_{ij}}
+{\sigma_{ij}} \right)^2 \right) \right]
+\end{equation}
+\]</span> --></p>
+
+<p class="center"><img src="docking/math_docking_eq4.png" /></p>
+  <!-- &#771; is the tilde diacritical mark -->
+
+<p>The van der Waals potential defined this way exhibits a minimum
+<i>E</i><sub>min,<i>ij</i></sub> at a distance
+<i>r</i><sub>min,<i>ij</i></sub>. An approximation
+<i>U&#771;<sub>vdW</sub>(r<sub>ij</sub>)</i> to the above vdW potential can be
+calculated using an 8,6 Lennard-Jones formulation:
+
+<!-- <span class="LaTeX">\[
+\begin{equation}
+\tilde U_{\mathrm{vdW}}(r_{ij}) = E_{\mathrm{min},ij} \left[ 3\left(
+\frac{r_{\mathrm{min},ij}}{r_{ij}} \right)^8 - 4\left(
+\frac{r_{\mathrm{min},ij}}{r_{ij}} \right)^6 \right]
+\end{equation}
+\]</span> --></p>
+
+<p class="center"><img src="docking/math_docking_eq5.png" /></p>
+
+<p>This faster to compute formulation of the vdW energy is the one used in the
+Protein-Protein Docker.</p>
+
+<p><b>CG Electrostatic Interactions</b></p>
+
+<p>For a given CG protein, beads charges are determined by minimizing the
+difference between the electrostatic field produced by these point charges and
+the one calculated for the AA protein in vacuum using AMBER 10 parameters as
+suggested by Basdevant <i>et al</i>. [Basdevant] For two point charges
+<i>Q<sub>i</sub></i> and <i>Q<sub>j</sub></i> separated by a distance
+<i>r<sub>ij</sub></i>, we have used the following general form of the Coulomb
+energy:
+
+<!-- <span class="LaTeX">\[
+\begin{equation}
+U_{\mathrm{ele}}(r_{ij}) = \frac{Q_iQ_j}{(b+r_{ij})^n}
+\end{equation}
+\]</span> --></p>
+
+<p class="center"><img src="docking/math_docking_eq6.png" /></p>
+
+<p>where <i>b</i> plays the role of a buffer and <i>n</i> is a tunable
+exponent. When the output of the FFT docking phase is first minimized,
+<i>b</i>=1 and <i>n</i>=2. This leads to an electrostatic potential more
+permissive of slight overlaps (clashes). When the final minimization occurs,
+bare electrostatic interactions defined by <i>b</i>=0 and <i>n</i>=1 are paired
+with solvation free-energies described below.</p>
+
+<p><b>CG Solvation Free-Energies</b></p>
+
+<p>Solvation effects are implicitly accounted for using the Generalized Born
+Volume Integral (GBVI) approach as detailed in [Labute]. Whereas the van der
+Waals and electrostatic interactions are computed for pairs of beads belonging
+to the two proteins to be docked, the GBVI derived interactions include both
+self and cross contributions to properly account for disturbances in the
+electrostatic field and in the solvent shells surrounding the proteins as they
+approach one another.</p>
+
+<h4>CG Grid Representations</h4>
+
+<p>Once the proteins involved in the docking procedure have been
+coarse-grained, they are cast onto three dimensional grids to allow for quick
+exploration of the configuration space using FFTs. The FFT approach effectively
+allows for calculating the translational energy landscape in a single pass for
+each mutual orientation to be sampled. The grids have cells of isotropic side
+lengths <i>&Delta;s</i>.</p>
+
+<p><b>Receptor</b></p>
+
+<p>The fields surrounding a set of CG beads <i>j</i> that constitute the
+<b>receptor</b> are calculated on a grid with a default grid spacing of <span
+class="nobr">3.5 &Aring;</span>. For each grid point <i>k</i>:
+
+  <!-- <span class="LaTeX">\[
+\begin{equation}
+\varphi_{\mathrm{rep},k} = \sum_j3A_jr_{k,j}^{-8}:~A_j =
+\sqrt{E_{\mathrm{min},j}}r_{\mathrm{min},j}^4,
+\end{equation}
+\]</span> --></p>
+
+<p class="center"><img src="docking/math_docking_eq7.png" /></p>
+  <!-- <span class="LaTeX">\[
+\begin{equation}
+\varphi_{\mathrm{att},k} = -\sum_j4B_jr_{k,j}^{-6}:~B_j =
+\sqrt{E_{\mathrm{min},j}}r_{\mathrm{min},j}^3,
+\end{equation}
+\]</span> -->
+
+<p class="center"><img src="docking/math_docking_eq8.png" /></p>
+  <!-- <span class="LaTeX">\[
+\begin{equation}
+\varphi_{\mathrm{ele},k} = \varphi_{\mathrm{PBE},k}(\vec Q_j),
+\end{equation}
+\]</span> -->
+
+<p class="center"><img src="docking/math_docking_eq9.png" /></p>
+
+<p>where <i>&phi;<sub>rep,k</sub></i> and <i>&phi;<sub>att,k</sub></i> are the
+repulsive and attractive van der Waals &quot;fields&quot;, while
+<i>&phi;<sub>ele,k</sub></i> is the electrostatic field as given by the
+solution to the linearized Poisson-Boltzmann equations (PBE) for a set of
+charges <i>Q<sub>j</sub></i>. The values <i>A<sub>j</sub></i> and
+<i>B<sub>j</sub></i> are essentially combining <i>E</i><sub>min,<i>ij</i></sub>
+and <i>r</i><sub>min,<i>ij</i></sub> for the self-interactions of beads
+<i>j</i>.</p>
+
+<p><b>Ligand</b></p>
+
+<p>The CG beads comprising the <b>ligand</b> are cast onto a complementary grid
+of coefficients such that, for each point <i>k</i>, a weighted Gaussian
+integrated bead density resulting from neighboring beads <i>i</i> can be
+calculated:
+<!-- <span class="LaTeX">\[
+\begin{equation}
+\rho_{\mathrm{rep},k} = \sum_iA_if_G(\vec r_k, \vec r_i):~A_i =
+\sqrt{E_{\mathrm{min},i}}r_{\mathrm{min},i}^4,
+\end{equation}
+\]</span> --></p>
+
+<p class="center"><img src="docking/math_docking_eq10.png" /></p>
+  <!-- <span class="LaTeX">\[
+\begin{equation}
+\rho_{\mathrm{att},k} = \sum_iB_if_G(\vec r_k, \vec r_i):~A_i =
+\sqrt{E_{\mathrm{min},i}}r_{\mathrm{min},i}^3,
+\end{equation}
+\]</span> -->
+
+<p class="center"><img src="docking/math_docking_eq11.png" /></p>
+  <!-- <span class="LaTeX">\[
+\begin{equation}
+\rho_{\mathrm{ele},k} = \sum_iQ_if_G(\vec r_k, \vec r_i),
+\end{equation}
+\]</span> -->
+
+<p class="center"><img src="docking/math_docking_eq12.png" /></p>
+
+<p>where the function
+<i>f<sub>G</sub>(r<sub>k</sub>,r<sub>i</sub>,&sigma;<sub>i</sub>)</i> defines
+the Gaussian integral value of bead <i>i</i> of extent
+<i>&sigma;<sub>i</sub></i> at grid point <i>k</i>:
+
+<!-- <span class="LaTeX">\[
+\begin{equation}
+f_G(\vec r_k, \vec r_i) = \int_{\vec r_k - \Delta s/2}^
+{\vec r_k + \Delta s/2} \left(2\pi\sigma^2\right)^{-3/2}
+\exp\left(\frac{\left|\vec r - \vec r_i\right|^2}{2\sigma^2}\right)d^3r,
+\end{equation}
+\]</span> --></p>
+
+<p class="center"><img src="docking/math_docking_eq13.png" /></p>
+
+<p><b>Grid Energies <i>via</i> Convolutions</b></p>
+
+<p>Given a grid of field values <i>&phi;</i> surrounding a receptor and
+complementary coefficients <i>&rho;(</i>R,<i><b>T</b>)</i> representing an
+interacting ligand rotated by R and translated by <i><b>T</b></i> away from an
+initial configuration, we can calculate the energy of interaction to be:
+
+<!-- <span class="LaTeX">\[
+\begin{equation}
+U = \sum_k\rho_k\phi_k,
+\end{equation}
+\]</span> --></p>
+
+<p class="center"><img src="docking/math_docking_eq14.png" /></p>
+
+<p>the result of a sum running over all <i>k</i> grid points. The above is a
+<i>convolution</i> of <i>&rho;</i> and <i>&phi;</i>, which can be calculated
+efficiently using FFTs:
+
+<!-- <span class="LaTeX">\[
+\begin{equation}
+U(\{\vec T\}) = \mathrm{FFT}^{-1}(\mathrm{FFT}(\rho(\mathrm{R},0)) \times
+\mathrm{FFT}(\phi)),
+\end{equation}
+\]</span> --></p>
+
+<p class="center"><img src="docking/math_docking_eq15.png" /></p>
+
+<p>where the FFT of the coefficient values <i>&rho;</i> is taken with respect
+to the reference position, say at <i><b>T</b></i>=0. The above equation yields
+the value of U simultaneously for <i>all</i> translations {<i><b>T</b></i>}
+allowed by the size of the grids, and not just for the desired translation
+<i><b>T</b></i>. Hence, it provides a quick way to explore the energy landscape
+in translational space.</p>
+
+<h4>Site Restraints and Hydrophobic Patch Potential</h4>
+
+<p>In addition to the standard grids and potential functions described above,
+optional terms can be added corresponding to site restraints and to a non-local
+hydrophobic solvation energy derived from <a href=
+"../proteins/propatch.htm">protein patch analysis</a>. These terms take the
+form:</p>
+
+<!-- <span class="LaTeX">\[
+E_{\mathrm{site}} = 1-\delta\left(\sum_{i\in \mathrm{site}}~\sum_{j\notin \mathrm{mol}_i}
+f(r_{ij})\right),
+\]</span> -->
+
+<p class="center"><img src="docking/math_docking_eqSite.png" /></p>
+<!-- <span class="LaTeX">\[
+E_{\mathrm{patch}} = \sum_{i\in \mathrm{mol}_1}A_i\prod_{jin \mathrm{mol}_2}
+\left(1-f(r_{ij})\right),
+\]</span> -->
+
+<p class="center"><img src="docking/math_docking_eqPatchA.png" /></p>
+
+<p>where <!-- <span class="LaTeX">\[
+f(r_{ij}) = \int_{\vec r_j-r_{cut}}^{\vec r_j+r_{cut}}f_G(\vec r_i, \vec r)d^3r
+\]</span> --></p>
+
+<p class="center"><img src="docking/math_docking_eqPatchB.png" /></p>
+
+<p>and <em>r<sub>cut</sub></em> = 5.0 &Aring;.</p>
+
+<p>In the case of site restraints this corresponds to a large penalty unless at
+least one site bead interacts with the other protein, and in the case of the
+patch potential it is proportional to the total area (<em>A<sub>i</sub></em>)
+of solvent-exposed hydrophobic beads.</p>
+
+
+<a id="Running_Dock">
+<h1>Running Dock</h1>
+</a>
+
+<p>A docking study typically proceeds according to the following workflow:</p>
+
+<ol>
+  <li> <b>Prepare the Receptor and the Ligand.</b> For good results, the raw
+  crystallographic structure must be properly <a href=
+  "#Preparing_the_Receptor">prepared</a>, e.g. usually hydrogens must be added,
+  structural problems, if any, addressed, partial charges calculated, and some
+  geometry optimization performed. The ligand is obtained either from a file or
+  a database or by creating it using the <a
+  href="../moe/molsystems/build.htm">Molecule Builder</a>.  </li>
+
+  <li><b>Set up the Dock Protocol.</b> In the Dock panel, the receptor, binding
+  site, and ligand must be specified. An optional pharmacophore filter may also
+  be specified. Specialized dock protocols exist for particular scenarios, such
+  as covalent or protein-protein docking, but by default, the Dock panel opens
+  onto the <b>General</b> docking page. This page offers the flexibility of
+  defining a variety of protocols by allowing the placement method, scoring
+  function(s) and refinement options to be set individually. For example, in
+  addition to a conventional rigid receptor docking protocol, flexible receptor
+  docking can be achieved by specifying <b>Induced Fit</b> as the
+  <b>Refinement</b> method. Similarly, a virtual screening run can be set up by
+  disabling refinement completely (choose <b>None</b>), whereas pose rescoring
+  can be accomplished by setting <b>Placement</b> to <b>None</b>.</li>
+
+  <li> <b>Run the Docking Simulation.</b> The Dock calculations can be run as
+  a foreground process, in which case their progress can be monitored in the <a
+  href="../moe/gui/svlcommands.htm">SVL Commands</a> window; the output is
+  written to a <a href="../mdb/db.htm">MOE database</a> and can be examined
+  while the simulation is on-going.  The calculation can be stopped from the
+  Dock GUI by pressing <b>Stop</b>. (Note that the <a
+  href="../moe/gui/mainwin.htm#Cancel">Cancel</a> menu can always be used to
+  cancel tasks.)  Calculations can also be run as batch jobs.
+  </li>
+
+  <li> <b>Analyze the Results.</b> The output scores, ligand strain energies,
+  and docked poses can be analyzed using a <a href=
+  "../mdb/dbbrowse.htm">Database Browser</a>.  </li>
+</ol>
+
+<p>The Dock application has been arranged in a series of stages, as described
+in the <a href="#Methodology_Overview">Methodology</a> section above. Each of
+these stages may be bypassed, if desired. As a result, the application can also
+be used, as described above, to rescore or refine poses resulting from earlier
+Dock runs or even from other docking applications. <b>Warning!</b> When the
+docking application is used to rescore or refine poses from earlier Dock runs,
+the receptor conformation resulting from the previous run will <i>not</i> be
+taken into account; Dock always uses the receptor, as defined through the Dock
+GUI, in the current molecular system.</p>
+
+<a id="Preparing_the_Receptor">
+<h2>Preparing the Receptor</h2>
+</a>
+
+<p>Dock requires a receptor structure, usually a protein, loaded in MOE. The
+structure data is typically crystallographic data read from a <a href=
+"../proteins/pdb_mdb.htm#OpeningPDBFiles">PDB file</a>, obtained from the MOE
+<a href="../proteins/pdb_mdb.htm#MOEPDB">protein database</a> or directly from
+the <a href="../moe/gui/fileopen.htm#PSILODownload">PDB or PSILO</a>.  The data
+might also be loaded from a <a href="../mdb/db.htm">MOE database</a> or pasted
+from the <a href="../moe/gui/mainwin.htm#Copy">clipboard</a>.</p>
+
+<p>Structural data often contains errors. Additional preparatory steps are
+commonly required, such as capping, completing residues with missing atoms, and
+selecting appropriate alternate locations. In MOE, structural issues can be
+automatically corrected using the Structure Preparation application (<span
+class="menu">MOE | Compute | Prepare | Structure Preparation</span>).  Once the
+panel is raised, press <b>Correct</b>. This will result in an attempt to
+correct all issues detected the application. For more information on manual
+preparation, please see the chapter on using the <a href=
+"../apps/structprep.htm">Structure Preparation</a> application.</p>
+
+<p>Although not required by the default docking methods, it may be desirable to
+optimize the hydrogen bond network (<span class="menu">MOE | Compute | Prepare
+| <a href="protonate3d.htm">Protonate&nbsp;3D</a></span>) and calculate charges
+(<span class="menu">MOE | Compute | Prepare | <a href=
+"../moe/pot.htm#Charges">Partial&nbsp;Charges</a></span>) as optimal hydrogen
+positions and charges are necessary if any molecular mechanics refinement is to
+be performed on the docked poses. If this is desired, the molecular mechanics
+<a href="../moe/pot.htm">forcefield and solvation model</a> should be
+selected.</p>
+
+<p>It may also be desirable to perform tethered energy minimization prior to
+commencement of docking to relieve bad crystallographic contacts or other bad
+geometries. Note that in this case, the <a href="../apps/emin.htm">Energy
+Minimize</a> application itself can be used to adjust hydrogens and lone pairs
+and to calculate partial charges. Tethering, which prevents receptor atoms from
+deviating too far from their initial coordinates, can be done through the
+Energy Minimize panel. Alternatively, the <span class="menu">MOE | RHS | <a
+href="../apps/ligx.htm#Prepare">QuickPrep</a></span> panel can be used to add
+tether restraints to receptor, ligand, and/or solvent atoms (<b>Receptor</b>,
+<b>Ligand</b>, <b>Solvent</b>) and then perform energy minimization on the
+system (enable <b>Refine</b>).</p>
+
+<p>An additional step that may be taken is to delete extraneous co-factors or
+unbound water molecules. Water molecules which play structural roles within the
+protein (such as bridging waters) and important cofactors should be retained
+for the docking simulation.</p>
+
+<p><b>Note:</b> Exceptionally, for protein-protein docking, it is necessary to
+remove all small molecules (ligands, solvent, excipients &mdash; all
+non-protein entities).</p>
+
+<p>Finally, the <a href="progeom.htm">Protein Geometry</a> application can be
+used to assess the stereochemical quality of the protein.</p>
+
+<ul class="help">
+  <li class="help" style="padding-left: 25px;">For more information on
+  receptor preparation, please see the chapter on <a href=
+  "../apps/structprep.htm">Structure Preparation</a>.
+  </li>
+</ul>
+
+<a id="Identifying_the_Binding_Site">
+<h2>Identifying the Binding Site</h2>
+</a>
+
+<p>In conventional small molecule docking, the binding pocket of the receptor
+must be specified (this is optional for protein-protein and covalent docking,
+in which case specifying the binding site is used to focus the search space).
+This can be done in a number of ways, typically one of:</p>
+
+<ol>
+  <li>Specifying the atoms of a co-crystallized ligand and any other small
+  molecules that are present in the pocket (the latter will be ignored during
+  docking).</li>
+  <li>Specifying the residues of a pocket.</li>
+  <li>Selecting the site points (alpha sphere &quot;dummy&quot; atoms) created
+  by MOE's <a href="sitefind.htm">Site Finder</a> application.  </li>
+</ol>
+
+<p>(<b>Hint:</b> <a href="../moe/gui/select.htm#NamedSets">Named sets</a> may
+be used to facilitate the marking of atoms / residues / site point
+dummies.)</p>
+
+<p>The Dock application can also automatically detect the site from proximity
+to the ligand atoms or from the pocket atoms, as detected by <span class=
+"menu">MOE | Select | <a href=
+"../moe/gui/mainwin.htm#Pocket">Pocket</a></span>.</p>
+
+<p>For all placement methods except protein-protein, covalent, and external
+dockers, alpha spheres within 5&nbsp;&Aring; of any atoms / residues / site
+points selected to define the docking site will be generated for use in the
+placement method.</p>
+
+<p>It is recommended that the docking site be a subset (rather than all) of the
+receptor. Otherwise, Dock will also try to dock the ligand to areas
+&quot;outside&quot; of the receptor.</p>
+
+<a id="Preparing_the_Ligand">
+<h2>Ligand Specification</h2>
+</a>
+
+<p>Dock requires the specification of a ligand to dock. This can be a single
+molecule in MOE or it can be a collection of ligands in one or more <a href=
+"../mdb/db.htm">MOE databases</a>. If a conformational search
+has already been carried out (e.g. with <a href="confgui.htm">High Throughput
+Conformational Analysis</a>), the database will contain a set of conformations
+for each ligand.</p>
+
+<ul class="help">
+  <li class="help" style="padding-left: 25px;">For more information on
+  preparing 3D structures, please see <a href="../moe/prep3ddb.htm">Preparing
+  a 3D Structure Database</a>.
+  </li>
+</ul>
+
+<p><b>Note:</b> If the docked poses are to be refined, the MOE Window will show
+an image of the ligand (and also the receptor pocket, if it is flexible) being
+refined. However, the display is provided for visual purposes only. The actual
+refinement is carried out in a separate calculation that is independent of the
+display. It is permissible to continue working in the MOE Window as any
+operations performed will not affect the refinement calculation. If a change in
+molecular topology is detected, the refinement display will simply terminate,
+leaving the refinement process to continue undisturbed in the background.</p>
+
+<a id="Using_the_Dock_Panel" >
+<h2>Using the Dock Panel</h2>
+</a>
+
+<p>Issue <span class="menu"><b>MOE | Compute | Dock</b></span> to launch the
+Dock application:</p>
+
+<p class="center"><img src="docking/dockpanel_new.png" alt="Dock Panel" />
+<i>MOE Dock Panel</i></p>
+
+<p>The Dock panel is divided into four main sections. The system (receptor,
+active site, and ligand) along with any constraints is specified at the top.
+Options for the final scoring and output are specified in the bottom section of
+the panel. These two sections are common to all placement methods and remain
+static regardless of which placement method is selected. The left-hand side of
+the panel contains six buttons that allow for the selection of various
+placement methods available in MOE. When one of the placement methods is
+selected, the middle portion of the Dock panel will change to present the
+options relevant to the selected placement method.</p>
+
+<a id="System_and_Constraints">
+<h3>Specifying the System and Constraints</h3>
+</a>
+
+<table class="noborder">
+  <tr>
+    <td><b>Receptor</b></td>
+    <td>
+    Specifies which atoms are treated as the receptor. If the receptor field is
+    left empty, the receptor will be detected from the active molecule in the
+    MOE Window. The options outlined in the following table will be available.
+    The receptor can also be specified using chain tag names as well as <a
+    href= "../moe/gui/select.htm#NamedSets">named sets</a>, all of which will
+    appear as options in the dropdown menu.
+
+    <p>The Edit button next to the atom selection dropdown menu allows the
+    use of custom atom <a
+    href="../moe/gui/sel_ui.htm#SelectionExamples">Selection Expressions</a>.
+    Use the <b>?</b> button to the right of the menu to identify the atoms that
+    will be interpreted as the receptor &ndash; they will briefly
+    &quot;flash&quot; in the MOE Window.</p>
+
+    <p> For <b>MDB Files</b>, the field (defined by Receptor field) of type
+    <tt>molecule</tt> or <tt>moe</tt> in the database will be treated as the
+    receptor. It is also possible to pick which atoms will be used as the
+    receptor using an Atom Selection. Each ligand will be docked to each
+    receptor independently. The docking site is defined with an Atom Selection
+    as applied to the receptor molecule.</p>
+
+    <table class="titlebar">
+      <tr>
+        <th>Menu&nbsp;Option</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td><b>Receptor&nbsp;Atoms</b></td>
+        <td>The active receptor atoms in the system,
+	as automatically detected by MOE.
+	These correspond to the active atoms that would be selected by
+	<span class="menu">MOE | Select | Receptor</span>.</td>
+      </tr>
+      <tr>
+        <td><b>Receptor+Solvent</b></td>
+        <td>The active receptor and solvent atoms in the system,
+	as automatically detected
+	by MOE.  These correspond to the active atoms that would be
+	selected by <span class="menu">MOE | Select |
+        Receptor</span> together with <span class=
+        "menu">MOE | Select | Solvent</span>.</td>
+      </tr>
+      <tr>
+        <td><b>All&nbsp;Atoms</b></td>
+        <td>All active atoms in the system.</td>
+      </tr>
+      <tr>
+        <td><b>Selected&nbsp;Atoms</b></td>
+        <td>Selected atoms only.</td>
+      </tr>
+      <tr>
+        <td><b>Unselected&nbsp;Atoms</b></td>
+        <td>Unselected active atoms only.</td>
+      </tr>
+      <tr>
+        <td><b>Selected&nbsp;Residues</b></td>
+        <td>All selected residues.</td>
+      </tr>
+      <tr>
+        <td><b>Selected&nbsp;Chains</b></td>
+        <td>All selected chains.</td>
+      </tr>
+    </table>
+
+    <p><img src="docking/rec_options_popup.png" alt="Receptor Options"
+    class="floatright" /> A database file can be entered in the text field or
+    selected using the <img src="docking/folder_icon.png" alt="File Folder"
+    class="icon" /> icon to open the file dialog. The database must contain
+    at least one field of type <tt>'molecule'</tt> or <tt>'moe'</tt> containing
+    the 3D structure of the receptor. If there is more than one valid field,
+    the receptor field can be specified using the <b>Receptor field</b> through
+    the <img src="docking/gear_icon.png" alt= "Configure Gear" class="icon" />
+    icon. By default, the first field of type <tt>'molecule'</tt> is assumed to
+    be the receptor field.</p>
+
+    </td>
+  </tr>
+  <tr>
+    <td><b>Site</b></td>
+    <td>
+    Specifies which atoms are to be used to determine the docking site, as
+    outlined in the following table. The specified atoms may belong to either
+    the receptor or the ligand or may be dummy atoms created by the <a
+    href="sitefind.htm">Site Finder</a> application. The site can also be
+    specified using chain tag names as well as <a href=
+    "../moe/gui/select.htm#NamedSets">named sets</a>, all of which will appear
+    as options in the menu. In all cases, the site atoms are used solely to
+    determine a spatial locale for pose generation.
+
+    <p>The Edit button next to the site atom selection dropdown menu allows the
+    use of custom atom <a
+    href="../moe/gui/sel_ui.htm#SelectionExamples">Selection Expressions</a>.
+    Use the <b>?</b> button to the right of the menu to identify the atoms that
+    will be interpreted as the site &ndash; they will briefly &quot;flash&quot;
+    in the MOE Window.</p>
+
+    <table class="titlebar">
+      <tr>
+        <th><b>Site&nbsp;Specified By</b></th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td><b>Dummy&nbsp;Atoms</b></td>
+        <td>All dummy atoms in the system. Dummy atoms are atoms of element
+        LP having no bonds.</td>
+      </tr>
+      <tr>
+        <td><b>Ligand&nbsp;Atoms</b></td>
+        <td>The active ligand atoms in the system, as
+	automatically detected by MOE.  These correspond to the atoms
+	that would be selected by <span class="menu">MOE | Select |
+        Ligand</span>.</td>
+      </tr>
+      <tr>
+        <td><b>Pocket&nbsp;Atoms</b></td>
+        <td>The active pocket atoms in the system, as
+	automatically detected by MOE.  These correspond to the atoms
+	that would be selected by <span class="menu">MOE | Select |
+        Pocket</span>.</td>
+      </tr>
+      <tr>
+        <td><b>Receptor&nbsp;Atoms</b></td>
+        <td>The active receptor atoms in the system, as
+	automatically detected by MOE.  These correspond to the atoms
+	that would be selected by <span class="menu">MOE | Select |
+        Receptor</span>.</td>
+      </tr>
+      <tr>
+        <td><b>All&nbsp;Atoms</b></td>
+        <td>All active atoms.</td>
+      </tr>
+      <tr>
+        <td><b>Selected&nbsp;Atoms</b></td>
+        <td>Selected atoms only.</td>
+      </tr>
+      <tr>
+        <td><b>Selected&nbsp;Residues</b></td>
+        <td>All selected residues.</td>
+      </tr>
+      <tr>
+        <td><b>Selected&nbsp;Chains</b></td>
+        <td>All selected chains.</td>
+      </tr>
+      <tr>
+        <td><b>None</b></td>
+        <td>The site will be defined solely by the wall constraint,
+	if the use of the wall constraint is enabled.</td>
+      </tr>
+    </table>
+
+    <p>Enable the <b>Use Wall Constraint</b> checkbox to further restrict the
+    site to the interior of the Potential Wall, which can be configured in the
+    <a href="../moe/pot.htm#Wall">Potential Setup panel</a>.</p>
+    </td>
+  </tr>
+  <tr>
+    <td><b>PH4</b></td>
+    <td> A pharmacophore may be specified from a MOE pharmacophore file, or
+    from a <a href="ph4_query.htm">Pharmacophore Query Editor</a> window.
+    The pharmacophore will be used to pre-filter ligand conformations and
+    to pre-place those passing the filter by aligning them to the
+    pharmacophore query.  After pose generation and refinement, final
+    poses that do not satisfy the pharmacophore (in absolute mode) will be
+    eliminated. If a pharmacophore is specified, the Pharmacophore method is
+    the method of choice for the placement stage, since it makes direct use of
+    the pharmacophore information. For pharmacophores defined using the Unified
+    Annotation Scheme, restraints will also be set up during the refinement
+    stage to prevent the pose from moving away from the pharmacophore. Note
+    that volume constraints are always applied, and only at the final filtering
+    stage.  </td>
+  </tr>
+  <tr>
+    <td><b>Density</b></td>
+    <td>A structure factor file (of type .mtz or .cif) or electron density
+    map (of type .ccp4 or .mrc) may be
+    specified in the text field using either the dropdown menu, which selects
+    from the current working directory, or through the file dialog by
+    pressing the <img src="docking/folder_icon.png" alt="File Folder" style=
+    "vertical-align: middle" /> icon. Once a file has been loaded, it
+    will be displayed in the MOE Window. The surface menu is available
+    through the <img src="docking/gear_icon.png" alt="Gear" style=
+    "vertical-align: middle" /> icon to control the display
+    characteristics.</td>
+  </tr>
+  <tr>
+    <td><b>Ligand</b></td>
+    <td>
+    Specifies which atoms are treated as the ligand. If the ligand field is
+    left empty, the ligand will be detected from the active molecules in the
+    MOE system. The options outlined in the following table will be available.
+    The ligand can also be specified using chain tag names as well as <a
+    href= "../moe/gui/select.htm#NamedSets">named sets</a>, all of which will
+    appear as options in the dropdown menu. 
+
+    <p>The Edit button next to the atom selection dropdown menu allows the
+    use of custom atom <a
+    href="../moe/gui/sel_ui.htm#SelectionExamples">Selection Expressions</a>.
+    Use the <b>?</b> button to the right of the menu to identify the atoms that
+    will be interpreted as the ligand &ndash; they will briefly
+    &quot;flash&quot; in the MOE Window.</p>
+
+    <p> For <b>Database Files</b>, the field (defined by Ligand field) of type
+    <tt>molecule</tt> or <tt>moe</tt> in the database will be treated as the
+    ligand. It is also possible to pick which atoms will be used as the
+    ligand using an Atom Selection. Each ligand will be docked to each
+    receptor independently. </p>
+
+    <p>Supported database formats are <b>MDB File</b>, <b>SD File</b> and
+    <b>Omega File</b>. </p>
+
+    <table class="titlebar">
+      <tr>
+        <th>Menu Option</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td><b>Ligand Atoms</b></td>
+        <td>The active ligand atoms in the system, as automatically detected
+	by MOE.  These correspond to the atoms that would be selected by
+	<span class="menu"><b>MOE | Select |
+        Ligand</b></span>. If there are multiple ligands in the system,
+        these will be docked separately in successive dock runs.</td>
+      </tr>
+      <tr>
+        <td><b>All Atoms</b></td>
+        <td>All currently active atoms are used as the ligand.</td>
+      </tr>
+      <tr>
+        <td><b>Selected Atoms</b></td>
+        <td>The current atom selection specifies the ligand.</td>
+      </tr>
+      <tr>
+        <td><b>Unselected Atoms</b></td>
+        <td>The current non-selected atoms specify the ligand.</td>
+      </tr>
+      <tr>
+        <td><b>Selected Residues</b></td>
+        <td>The current residue selection specifies the ligand. The
+        Sequence Editor can be used to view and select residues.</td>
+      </tr>
+      <tr>
+        <td><b>Selected Chains</b></td>
+        <td>The current chain selection specifies the ligand. The Sequence
+        Editor can be used to view and select chains.</td>
+      </tr>
+      <tr>
+        <td><span class="nobr"><img src="docking/sketch_icon.png" alt=
+        "Sketch" class="icon" /> <b>Sketch</b></span></td>
+        <td>Open a sketcher to sketch one or more ligands into MOE. The
+        ligands in MOE, both the ones newly created as well as any others
+        already present, will constitute the set of ligands to be
+        docked.</td>
+      </tr>
+    </table>
+
+    <p>The ligand options popup, raised by pressing the <img src=
+    "docking/gear_icon.png" alt="Settings Gear" style= "vertical-align: middle"
+    /> icon, provides options as described in the following table:</p>
+
+    <table class="titlebar">
+      <tr>
+        <th>Ligand Source</th>
+        <th>Description</th>
+        <th>Popup</th>
+      </tr>
+      <tr>
+        <td style="vertical-align:top;"><b>MOE</b></td>
+        <td style="vertical-align:top;">
+          <b>Descriptor Filter</b> is an optional filter applied to ligand
+          conformations. The <a href=
+          "../quasar/fcnref/descrfcn.htm#DescriptorExprSyntax">descriptor
+          filter</a> expression specifies a set of calculated MOE <a href=
+          "../quasar/descr.htm">descriptors</a> and value/range criteria
+          that they must satisfy. <b>Conformations</b> specifies the
+          conformation generation method. The default method is <b>Rotate
+          Bonds</b>.
+        </td>
+        <td style="vertical-align:top;"><img src=
+        "docking/lig_moe_options_popup.png" alt=
+        "Ligand MOE options popup" /></td>
+      </tr>
+      <tr>
+        <td style="vertical-align:top;"><b>MDB</b></td>
+        <td style="vertical-align:top;">In addition to <b>Descriptor Filter</b>
+        and <b>Conformations</b>, the following options are available:
+        <b>Ligand Field</b> specifies the database field from which the ligand
+        will be taken. By default, the first field of type <tt>molecule</tt> is
+        assumed to be the ligand field.  <b>Ligand Energy Field</b> specifies
+        the optional database field containing the conformational energies of
+        the input structures (<b>E</b> by default).  If the database is open in
+        a Database Viewer, then the <b>Selected Entries Only</b> option will be
+        available.  The <img src= "docking/open_dbv_icon.png" alt="Open Database
+        Viewer Folder" class="icon" /> icon can be used to open the database in
+        a Database Viewer.  If the second checkbox is enabled, other data fields
+        in the input database will be copied to the output database.  Note that
+        the data is copied and not re-calculated.  A duplicate copy of the
+        input data fields will be made for each pose.  If no fields are
+        selected, all non-molecule fields will be copied.  When docking an MDB
+        containing conformations (mseq column), by default only unique mseq
+        entries are docked.  Enabling the final checkbox causes all entries to
+        be docked as unique molecules.  This is useful for re-docking or
+        re-scoring previous results.</td>
+
+        <td style="vertical-align:top;"><img src=
+        "docking/lig_mdb_options_popup.png" alt=
+        "Ligand MDB options popup" /></td>
+      </tr>
+      <tr>
+        <td style="vertical-align:top;"><b>SDF</b></td>
+
+        <td style="vertical-align:top;">In addition to <b>Descriptor Filter</b>
+        and <b>Conformations</b>, the following options are available: Ligands
+        may be prepared prior to docking by selecting an option from the
+        <b>Protonation</b> menu.  <b>pH</b> specifies the pH of the aqueous
+        environment.  <b>Keep Original</b> specifies whether the starting
+        molecule is to be retained when protomers are calculated.  If not, then
+        only the highest frequency protomers will be chosen, thus the original
+        structure is not guaranteed to be present.  <b>Limit</b> specifies how
+        many structures to retain when protomers are calculated.</td>
+
+        <td style="vertical-align:top;"><img src=
+        "docking/lig_sdf_options_popup.png" alt=
+        "Ligand SDF options popup" /></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+</table>
+
+<a id="Selecting_the_Placement_Method">
+<h3>Selecting the Placement Method</h3>
+</a>
+
+<a id="General">
+<h4>General</h4>
+</a>
+
+<p>Selecting the <b>General</b> button will present the following in the
+placement method section of the Dock panel:</p>
+
+<p class="center"><img src="docking/placement_general.png" alt= "General
+Placement" /></p>
+
+<p>The various options can be set according to the following tables.</p>
+
+<table class="noborder">
+  <tr>
+    <td><b>Method</b></td>
+    <td>
+
+      <table class="titlebar">
+        <tr>
+          <th>Menu&nbsp;Option</th>
+          <th>Description</th>
+        </tr>
+        <tr>
+          <td><a id="AlphaPMI"></a><b>Alpha PMI</b></td>
+          <td> Poses are generated by aligning ligand conformations' principal
+          moments of inertia to a randomly generated subset of alpha spheres in
+          the receptor site. This method is most suited to tight pockets and is
+          quite fast. Using this method results in the search space being
+          greatly truncated. The options for this method are:
+
+          <table class="noborder left">
+            <tr>
+              <td><b>Samples per Conformation</b></td>
+              <td>Maximum number of times to place each sample</td>
+            </tr>
+            <tr>
+              <td><b>Maximum Poses</b></td>
+              <td>Maximum number of poses returned from each sampling
+              iteration</td>
+            </tr>
+          </table>
+
+          </td>
+        </tr>
+        <tr>
+          <td><a id="AlphaTriangle"></a><b>Alpha Triangle</b></td>
+          <td> Poses are generated by superposition of ligand atom triplets and
+          triplets of receptor site points. The receptor site points are alpha
+          sphere centers which represent locations of tight packing.  At each
+          iteration, a random conformation is selected. A random triplet of
+          ligand atoms and a random triplet of alpha sphere centers are used to
+          determine the pose. The options for this method are:
+
+          <table class="noborder left">
+            <tr>
+              <td><b>Minimum Iterations</b></td>
+              <td>Minimum number of iterations to use for placement</td>
+            </tr>
+            <tr>
+              <td><b>Maximum Iterations</b></td>
+              <td>Maximum number of iterations to use for placement</td>
+            </tr>
+            <tr>
+              <td><b>Timeout (seconds)</b></td>
+              <td>Maximum number of seconds allowed for each placement</td>
+            </tr>
+          </table>
+
+          </td>
+        </tr>
+        <tr>
+          <td><a id="PH4"></a><b>Pharmacophore</b></td>
+          <td> This method is the preferred method when a pharmacophore is
+          present, but will not work if there is no pharmacophore. The ligand
+          is placed using the features in the pharmacophore. Volume constraints
+          are applied as a final filter but are ignored during the placement
+          stage. If there are more than two pharmacophore features and they do
+          not lie on or close to a straight line, the pharmacophore search
+          engine is used to orient the ligand. If the pharmacophore features
+          lie on or very close to a line, the ligand is anchored by the
+          pharmacophore features and rotated such that a third atom matches an
+          alpha site point. If all pharmacophore features lie at a point or
+          very close to one point, the ligand is first anchored at that point.
+          Then, two more atoms on the ligand are matched to two alpha site
+          points to orient the ligand. Since the ligand pose changes upon
+          refinement, if there is a refinement stage, the pharmacophore
+          constraints are loosened for placement.  Furthermore, if a
+          pharmacophore search returns too few hits, the pharmacophore
+          constraints are further loosened so that more hits are obtained. The
+          options for this method are:
+
+          <table class="noborder left">
+            <tr>
+              <td><b>Timeout (seconds)</b></td>
+              <td>Maximum number of seconds allowed for each ligand
+              placement</td>
+            </tr>
+            <tr>
+              <td><b>No. of Return Poses</b></td>
+              <td>Maximum number of poses returned for each ligand</td>
+            </tr>
+          </table>
+
+          </td>
+        </tr>
+        <tr>
+          <td><a id="ProxyTriangle"></a><b>Proxy Triangle</b></td>
+          <td> This method was developed for tackling medium to large sized
+          ligands which have a very large number of conformers. For small
+          ligands, the Triangle Matcher method is called. For medium and large
+          ligands, conformers are pre-superposed prior to being placed into the
+          binding site, thus saving computational time. For large ligands, the
+          score for internal ranking uses atom representatives rather than all
+          of the ligand atoms. More time is allowed for larger ligands. The
+          options for this method are:
+
+          <table class="noborder left">
+            <tr>
+              <td><b>Speed Factor</b></td>
+              <td>This slider may be used to adjust the relative amount of
+              time allowed for the placement of each ligand.</td>
+            </tr>
+            <tr>
+              <td><b>No. of Return Poses</b></td>
+              <td>Maximum number of poses returned by each ligand
+              placement</td>
+            </tr>
+          </table>
+
+          </td>
+        </tr>
+        <tr>
+          <td><a id="TriangleMatcher"></a><b>Triangle Matcher</b></td>
+          <td> Poses are generated by aligning ligand triplets of atoms on
+          triplets of alpha spheres in a more systematic way than in the Alpha
+          Triangle method. The options for this method are:
+
+          <table class="noborder left">
+            <tr>
+              <td><b>Timeout (seconds)</b></td>
+              <td>Amount of time allowed for each ligand placement</td>
+            </tr>
+            <tr>
+              <td><b>Number of Returned Poses</b></td>
+              <td>Maximum number of poses returned by each ligand
+              placement</td>
+            </tr>
+          </table>
+
+          </td>
+        </tr>
+        <tr>
+          <td><b>None</b></td>
+          <td>No placement is carried out. The ligands are passed through
+          with unchanged coordinates. Choose this method when you wish to use
+          Dock's refinement and scoring tools to post-process
+          already-docked poses, either from an earlier Dock run or from other
+          sources.</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td><b>Score</b></td>
+    <td>
+      <table class="titlebar">
+        <tr>
+          <th>Menu&nbsp;Option</th>
+          <th>Description</th>
+        </tr>
+        <tr>
+          <td><b>ASE</b></td>
+          <td> Use the <a href="#ASE_Scoring">ASE</a> scoring function to score
+          the generated poses. The following options may be adjusted:
+
+          <table class="noborder left">
+            <tr>
+              <td><b>Weight</b></td>
+              <td>The multiplicative factor used when applying the ASE
+              parameters.</td>
+            </tr>
+          </table>
+
+          </td>
+        </tr>
+        <tr>
+          <td><b>Affinity dG</b></td>
+          <td> Use the enthalpy-based <a href="#Affinity_dG_Scoring">Affinity
+          dG</a> scoring function to score generated poses. The following
+          options may be adjusted:
+
+          <table class="noborder left">
+            <tr>
+              <td><b>Hydrogen Bond</b></td>
+              <td>The ideal hydrogen bond affinity in energy units</td>
+            </tr>
+            <tr>
+              <td><b>Ionic Contact</b></td>
+              <td>The ionic Coulomb coefficient</td>
+            </tr>
+            <tr>
+              <td><b>Metal Ligation</b></td>
+              <td>The metal ligation affinity</td>
+            </tr>
+            <tr>
+              <td><b>Hydrophobic Contact</b></td>
+              <td>The hydrophobic-hydrophobic contact energy</td>
+            </tr>
+            <tr>
+              <td><b>Hydrophobic-Polar</b></td>
+              <td>The hydrophobic-polar contact energy</td>
+            </tr>
+            <tr>
+              <td><b>Atom-Atom</b></td>
+              <td>The general atom-atom contact energy</td>
+            </tr>
+          </table>
+
+          </td>
+        </tr>
+        <tr>
+          <td><b>Alpha HB</b></td>
+          <td> Use the two-term <a href="#Alpha_HB_Scoring">Alpha HB</a>
+          scoring function to score generated poses. The following options may
+          be adjusted:
+
+          <table class="noborder left">
+            <tr>
+              <td><b>Alpha Weight</b></td>
+              <td>Weighting factor for the alpha score</td>
+            </tr>
+            <tr>
+              <td><b>Hydrogen Bond Weight</b></td>
+              <td>Weighting factor for the hydrogen bond projected feature
+              score</td>
+            </tr>
+          </table>
+
+          </td>
+        </tr>
+        <tr>
+          <td><b>Electron Density</b></td>
+          <td>Use the supplied electron density for scoring.</td>
+        </tr>
+        <tr>
+          <td><b>GBVI/WSA dG</b></td>
+          <td> Use the <a href="#GBVI_WSA_dG_Scoring">GBVI/WSA dG</a> scoring
+          function as described above.  </td>
+        </tr>
+        <tr>
+          <td><b>London dG</b></td>
+          <td> Use the <a href="#London_dG_Scoring">London dG</a> scoring
+          function as described above.  </td>
+        </tr>
+        <tr>
+          <td><b>None</b></td>
+          <td>Do not score the initial poses. This is useful primarily for
+          re-scoring the results from a previous docking calculation.</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+
+<a id="Template">
+<h4>Template</h4>
+</a>
+
+<p>Selecting the <b>Template</b> button will present the following in the
+placement method section of the Dock panel:</p>
+
+<p class="center"><img src="docking/placement_template.png" alt= "Template
+Placement" /></p>
+
+<p>The template will use the current MOE system if the <b>Template</b> field is
+left empty and an MDB File otherwise. In both cases, it is possible to specify
+the template atoms using the atom selection dropdown menu. The Edit button next
+to this menu allows the use of custom atom <a
+href="../moe/gui/sel_ui.htm#SelectionExamples">Selection Expressions</a>.  Use
+the <b>?</b> button to the right of the menu to identify the atoms that will be
+interpreted as the template &ndash; they will briefly &quot;flash&quot; in the
+MOE Window.</p>
+
+<p>The <b>Similarity</b> and <b>Substructure</b> buttons select the type of
+template-based search to be performed. The <b>Similarity</b> button selects the
+methodology developed for <span class="nobr"><b><a href=
+"dbv_molsup.htm">Molecular Superpose</a></b></span> to place ligands in the
+active site based on one or more reference structures (templates). This aligns
+template and input molecules via an undirected heavy-atom and projected feature
+triplet matching scheme. The scoring function incorporates terms for
+reference/ligand similarity as well as a protein-ligand clash term.  This
+method is well suited for binding sites whose locations are known but
+information about specific pocket/ligand interactions is lacking.</p>
+
+<p>The <b>Substructure</b> button selects the methodology developed for <span
+class="nobr"><b><a href="dbv_molsup.htm">Molecular Superpose</a></b></span> to
+place ligands in the active site based on one or more reference structures
+(templates). The substructure used to align template and input molecules can be
+specified as selected atoms, a SMARTS pattern or as a sketched query. The
+scoring function incorporates terms for reference/ligand similarity and RMSD
+overlap as well as a protein-ligand clash term. This method is well suited for
+binding sites for which some structural or fragment interactions are known.</p>
+
+<p>The various menu options are described in the following table. Note: The
+<b>Query</b> option is only available with the <b>Substructure</b> method.</p>
+
+<table class="noborder">
+  <tr>
+    <td><b>Template</b></td>
+    <td>
+
+    <table class="titlebar">
+      <tr>
+        <th>Menu&nbsp;Option</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td><b>MOE</b></td>
+        <td>
+
+        <table class="noborder left">
+          <tr>
+            <td><b>Ligand Atoms</b></td>
+            <td>The atoms selected by <span class="menu">MOE | Select |
+            Ligand</span>.</td>
+          </tr>
+          <tr>
+            <td><b>Selected Atoms</b></td>
+            <td>Selected atoms only.</td>
+          </tr>
+        </table>
+
+        </td>
+      </tr>
+      <tr>
+        <td><b>MDB File</b></td>
+        <td>A MOE database file may be specified in the text field or
+        through the file dialog by pressing the <img src=
+        "docking/folder_icon.png" alt="File Folder" style=
+        "vertical-align: middle" /> icon.</td>
+      </tr>
+    </table>
+
+    </td>
+  </tr>
+  <tr>
+    <td><b>Query</b></td>
+    <td>
+
+    <table class="titlebar">
+      <tr>
+        <th>Menu&nbsp;Option</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td><b>Selected Atoms</b></td>
+        <td>The currently selected set of atoms in the MOE Window.
+	Uncheck the <b>Ignore Hydrogens</b> option to explicitly include
+	selected hydrogen atoms in the query.</td>
+      </tr>
+      <tr>
+        <td><b>SMARTS</b></td>
+        <td>Any valid SMARTS string may be entered in the text field.
+        Pressing the <b>From Selected</b> button will select the matching
+        substructure(s) from the currently selected molecule in the MOE
+        Window.</td>
+      </tr>
+      <tr>
+        <td><b>Sketch</b></td>
+        <td>Press to launch the 2D sketching program. A substructure may
+        be drawn and then imported into the Dock panel, where it will be
+        displayed.</td>
+      </tr>
+      <tr>
+        <td><b>Heavy Atoms</b></td>
+        <td>The entire template is used as the substructure to be matched,
+        i.e. the heavy atoms must be matched exactly. This mode is useful when
+        specifying a database of templates.</td>
+      </tr>
+    </table>
+
+    </td>
+  </tr>
+</table>
+
+<a id="Electron_Density">
+<h4>Electron Density</h4>
+</a>
+
+<p>Selecting the <b>Electron Density</b> button will present the following in
+the placement method section of the Dock panel:</p>
+
+<p class="center"><img src="docking/placement_electrondensity.png" alt=
+"Electron Density" /></p>
+
+<p>The display options are the same as those found in the <a href=
+"surfmap.htm#ElectronDensitySurface">Surfaces and Maps</a> panel.</p>
+
+<a id="Covalent_Docking">
+<h4>Covalent Docking</h4>
+</a>
+
+<p>Selecting the <b>Covalent</b> button will present the following in the
+placement method section of the Dock panel:</p>
+
+<p class="center"><img src="docking/placement_covalent.png" alt= "Covalent
+Docking" /></p>
+
+<p>The various options are as follows:</p>
+
+<table class="noborder">
+  <tr>
+    <td><b>Reactive&nbsp;Site</b></td>
+    <td>The atoms of the protein that define Component 1 for the specified
+    reaction. Any matches that do NOT contain one of the specified atoms will
+    be ignored. 
+    <p>The Edit button next to the atom selection dropdown menu allows the
+    use of custom atom <a
+    href="../moe/gui/sel_ui.htm#SelectionExamples">Selection Expressions</a>.
+    Use the <b>?</b> button to the right of the menu to identify the atoms that
+    will be interpreted as the reactive site &ndash; they will briefly
+    &quot;flash&quot; in the MOE Window.</p>
+</td>
+  </tr>
+  <tr>
+    <td><b>Reaction</b></td>
+    <td>When no reaction is selected, this indicates the current directory
+    containing the reaction files. Once a reaction is selected, it indicates
+    the name of the specific reaction file that will be used. Reactions are
+    classified by
+    the <b>Class</b> of the reaction and the resulting <b>Product</b>.
+    Reaction files or directories can be specified by entering their name in
+    the text field, using the shortcut or pressing the <img src=
+    "docking/folder_icon.png" alt="File Folder" style= "vertical-align: middle"
+    /> icon and selecting the appropriate file. The reaction can be visualized
+    by pressing the <img src= "docking/sketch_icon.png" alt="Reaction Image"
+    style= "vertical-align: middle" /> icon.</td>
+  </tr>
+</table>
+
+<p> As Covalent Docking creates a connection between the protein and ligand, it
+uses a more complex placement process:
+
+  <ol>
+    <li>Identify the pocket residues - these will be treated as component
+    #1 of the reaction.  The ligand will be treated as component #2.</li>
+
+    <li>Perform the reaction, yielding one or more products.  Note that
+    multiple connection sites are possible, based on the
+    <span class="nobr"><b>Reactive Site</b></span> setting.</li>
+
+    <li>For each product, create an <i>alignment stub</i> using all of the
+    heavy atoms in the pocket that are numbered in both the reactants and
+    the products.  Hydrogens are included if necessary as the
+    stub must have at least three atoms.  This stub is used to align the ligand
+    when constructing the complex, and is discarded when the protein-ligand
+    connection is made.</li>
+
+    <li>Mark the atoms proximate to the protein-ligand connection.  These
+    must be ignored when scoring the complex so that they are not seen as
+    repulsive interactions.</li>
+
+    <li>Use Conformation Import to create the unique lower-energy ring and
+    chiral classes for the stub-ligand.  Each of these will be used as starting
+    points for rotamer generating using <b>Rotate Bonds</b>.</li>
+
+    <li>Place each rotamer in the pocket by aligning on the stub and then
+    performing
+    small rotations and translations about the center of mass to
+    determine the lowest-scoring placement (using Dock's
+    <a href="#Alpha_HB_Scoring">Alpha Score</a>).</li>
+  </ol>
+
+<br />
+
+<p>
+<b>Note:</b> The placement process described above is performed for every input
+structure.  Reactions are provided as 2D sketches which must yield 3D
+structures suitable for placement.  Thus, for Covalent Docking, it is
+recommended to use a non-conformer database as input. </p>
+
+<a id="Protein-Protein">
+<h4>Protein-Protein</h4>
+</a>
+
+<p>Selecting the <b>Protein-Protein</b> button will present the following in
+the placement method section of the Dock panel:</p>
+
+<p class="center"><img src="docking/placement_protein.png" alt=
+  "Protein Placement" /></p>
+
+<p>In addition, if the proteins in the MOE system have been
+<a href="../moe/gui/mainwin.htm#ProteinAnnotation">annotated</a>
+and contain <b>Antibody</b> and <b>Antigen</b> sets, the Receptor and
+Ligand fields will be automatically assigned.  Since the
+<a href="plif.htm">PLIF</a> calculation
+and <a href="epitope.htm">Epitope Analysis</a>
+are carried out with respect to the Receptor, the Antibody in this case
+will be designated as the Ligand, and the Antigen as the Receptor.
+The <b>Ligand Site</b> is also set to <b><tt>CDR_H3</tt></b> by default.</p>
+
+<p>The various options can be set according to the following tables.</p>
+
+<table class="noborder">
+  <tr>
+    <td><a id="LigandSite"><b>Ligand Site</b></a></td>
+    <td> Specifies which ligand atoms are required to participate in binding,
+    as outlined in the following table. The ligand binding site can also be
+    specified using chain tag names as well as <a href=
+    "../moe/gui/select.htm#NamedSets">named sets</a>, all of which will appear
+    as options in the menu.
+
+    <p>The Edit button next to the atom selection dropdown menu allows the
+    use of custom atom <a
+    href="../moe/gui/sel_ui.htm#SelectionExamples">Selection Expressions</a>.
+    Use the <b>?</b> button to the right of the menu to identify the atoms that
+    will be interpreted as the ligand site &ndash; they will briefly
+    &quot;flash&quot; in the MOE Window.</p>
+
+    <table class="titlebar">
+      <tr>
+        <th>Menu Option</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td><b>Dummy&nbsp;Atoms</b></td>
+        <td>All dummy atoms in the system. Dummy atoms are atoms of element
+        LP having no bonds.</td>
+      </tr>
+      <tr>
+        <td><b>Ligand&nbsp;Atoms</b></td>
+        <td>The active ligand atoms in the system, as
+	automatically detected by MOE.  These correspond to the atoms
+	that would be selected by <span class="menu">MOE | Select |
+        Ligand</span>.</td>
+      </tr>
+      <tr>
+        <td><b>Pocket&nbsp;Atoms</b></td>
+        <td>The active pocket atoms in the system, as
+	automatically detected by MOE.  These correspond to the atoms
+	that would be selected by <span class="menu">MOE | Select |
+        Pocket</span>.</td>
+      </tr>
+      <tr>
+        <td><b>Receptor&nbsp;Atoms</b></td>
+        <td>The active receptor atoms in the system, as
+	automatically detected by MOE.  These correspond to the atoms
+	that would be selected by <span class="menu">MOE | Select |
+        Receptor</span>.</td>
+      </tr>
+      <tr>
+        <td><b>All&nbsp;Atoms</b></td>
+        <td>All active atoms.</td>
+      </tr>
+      <tr>
+        <td><b>Selected&nbsp;Atoms</b></td>
+        <td>Selected atoms only.</td>
+      </tr>
+      <tr>
+        <td><b>Selected&nbsp;Residues</b></td>
+        <td>All selected residues.</td>
+      </tr>
+      <tr>
+        <td><b>Selected&nbsp;Chains</b></td>
+        <td>All selected chains.</td>
+      </tr>
+      <tr>
+        <td><b>None</b></td>
+        <td>The site will be defined solely by the wall constraint,
+	if the use of the wall constraint is enabled.</td>
+      </tr>
+    </table>
+
+    </td>
+  </tr>
+</table>
+
+<p>The final section allows additional protein-specific terms to be added to
+  the protein-protein placement scoring function.</p>
+
+<table class="titlebar">
+  <tr>
+    <th>Type</th>
+    <th>Option</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><b>Patch Analysis</b></td>
+    <td><b>Use Hydrophobic Patch Potential</b></td>
+    <td>If enabled, automatically determine hydrophobic patches and include a
+    hydrophobic surface term in the scoring function.  This is on by default.
+    </td>
+  </tr>
+  <tr>
+    <td><b>Antibody</b></td>
+    <td><b>Auto-detect CDR Site Restraints</b></td>
+    <td>If enabled,
+    <a href="../proteins/fcnref/abclassify.htm">antibody annotation</a>
+    will be automatically carried out, and
+    <b><tt>CDR_H3</tt></b>, if found, will be used as the
+    <a href="#LigandSite">Ligand Site</a> restraint.
+
+    <p>This option is on by default, except
+    in the case where the MOE system already contains an annotated antibody;
+    in this case, <b>Ligand Site</b> will automatically be set to
+    <b>CDR_H3</b> in the panel.</p>
+    </td>
+  </tr>
+  <tr>
+    <td><b>Placement</b></td>
+    <td><b>Protein-protein</b></td>
+    <td>Select to use the default <a href="#Protein_Method">Protein-protein</a>
+    placement method.</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td><b>None</b></td>
+    <td>Select to skip the Protein-protein placement step
+    and perform re-scoring only. Note that this is independent of the
+    Refinement option which must also be set to None to score in-place.</td>
+  </tr>
+</table>
+The Coarse-grained refinement step has been implemented to run on graphics
+cards (GPUs) which support cuda.  By default the GPU will be used if it is
+available, but for running batch jobs on a queueing system using the 
+<a href="../moe/hpc.htm#BatchPanel">Batch</a> panel the <b>gpu</b> resource
+must be specified.
+
+<a id="External">
+<h4>External (Third-party Software Integration)</h4>
+</a>
+
+<p>Selecting the <b>External</b> button will present the following in the
+placement method section of the Dock panel:</p>
+
+<p class="center"><img src="docking/placement_external.png" alt=
+  "External Placement" /></p>
+
+<p>The various options are described below.</p>
+
+<table class="noborder">
+  <tr>
+    <td> <a id="GOLD"><b>GOLD</b></a> </td>
+    <td> GOLD (Genetic Optimization for Ligand Docking) is a docking program
+    that is available from <a href="http://www.ccdc.cam.ac.uk">CCDC</a>. If
+    GOLD is installed on a computer that is running MOE, it can be used from
+    within the MOE docking interface by selecting GOLD as the <b>Placement</b>
+    method.
+
+    <p>To configure the GOLD executable press the <img src=
+    "docking/gear_icon.png" alt="Configure Gear" style= "vertical-align:
+    middle" /> button. Once the location of the GOLD executable has been
+    specified, the <span class= "nobr"><b>Test</b></span> button can be used to
+    verify that the installation runs correctly.</p>
+
+    <p class="center"><img src="docking/goldcfg2.png" alt= "GOLD Configuration"
+    /></p>
+
+    <table class="titlebar">
+      <tr>
+        <th><b>Menu Option</b></th>
+        <th><b>Description</b></th>
+      </tr>
+      <tr>
+        <td><b>Executable</b></td>
+        <td>
+          <p>This specifies the full path for the GOLD executable.</p>
+          <p>On Windows, this is typically
+          <tt>$GOLD/gold/gold/d_win32/bin/gold_win32.exe</tt>, where
+          <tt>$GOLD</tt> is the installation path for the GOLD suite of
+          programs. On Linux, this is typically
+          <tt>$GOLD/bin/gold_auto</tt>.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><b>Parallel Executable</b></td>
+        <td>
+          <p>This specifies the full path for the Parallel GOLD executable.</p>
+          <p>GOLD may be run in parallel. For more information, please refer to
+          the GOLD documentation.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><b>Working Dir</b></td>
+        <td>When GOLD is run from within MOE, a number of files are generated.
+        The directory for these files may be specified explicitly, or the
+        default value of <tt>$TMP</tt> can be used to indicate the MOE
+        temporary file directory.</td>
+      </tr>
+      <tr>
+        <td><b>Save</b></td>
+        <td>The executable location and working directory locations can be
+        saved into the MOE RC file, so that they do not need to be re-entered
+        for each use of GOLD.</td>
+      </tr>
+      <tr>
+        <td><b>Test</b></td>
+        <td>This tests the specified GOLD executable, checking whether it is
+        properly licensed and can execute successfully. This takes a few
+        seconds, and any errors are reported to the <nobr><b>SVL
+        Commands</b></nobr> window.</td>
+      </tr>
+    </table>
+
+    <p>GOLD-specific docking options can be seen in the main panel as shown
+    below.</p>
+
+    <p class="center"><img src="docking/gold2.png" alt="GOLD GUI" /></p>
+
+    <p>A detailed explanation of the capabilities of GOLD can be found on the
+    <a href=
+    "http://www.ccdc.cam.ac.uk/SupportandResources/Support/Documentation/pages/DownloadDocumentation.aspx?p=1">
+    CCDC website</a>. Each of the options found in the configuration panel
+    corresponds to a specific parameter in the GOLD configuration file.</p>
+
+    <table class="titlebar">
+      <tr>
+        <th><b>Menu Option</b></th>
+        <th><b>Description</b></th>
+      </tr>
+      <tr>
+        <td><b>Prefix</b></td>
+        <td>Files created within the working directory, in order to
+        interoperate with GOLD, have a prespecified set of filenames. They
+        can optionally be prefixed with an arbitrary string, which may be
+        useful if the files are being retained, in order to distinguish one
+        docking run from another.</td>
+      </tr>
+      <tr>
+        <td><b>Keep Files</b></td>
+        <td>If on, the temporary files used during the docking run will be
+        retained.</td>
+      </tr>
+      <tr>
+        <td><b>Show Log</b></td>
+        <td>If on, the log file generated by GOLD will be shown
+        automatically at the end of the docking run.</td>
+      </tr>
+      <tr>
+        <td><b>Efficiency</b></td>
+        <td>This controls the speed and predictive accuracy of the DOCK
+        calculation. Four pre-sets are provided: <nobr><b>Very Flexible</b>
+        (200%)</nobr>, <nobr><b>Default</b> (100%)</nobr>, <nobr><b>Virtual
+        Screening</b> (30%)</nobr> and <nobr><b>Library Screening</b>
+        (10%)</nobr>. The efficiency can also be specified in the text
+        field, ranging from 1 to 500 percent.</td>
+      </tr>
+      <tr>
+        <td><b>GA Parameters...</b></td>
+        <td> This button brings up a sub-panel, allowing the user to change
+        various GA parameters for GOLD. Having the settings set to <b>auto</b>
+        instructs GOLD to determine the optimum value(s) based on the specified
+        <b>Efficiency</b> level:
+
+        <p class="center"><img src="docking/gold22.png" alt= "GA Params"/></p>
+
+        <table class="border">
+          <tr>
+            <td valign="top"><b>Population Size</b></td>
+            <td valign="top">Specifies the population size for each
+            island in the GA calculation.</td>
+          </tr>
+          <tr>
+            <td valign="top"><b>Selection Pressure</b></td>
+            <td valign="top">Sets the selection pressure for the GA
+            calculation. This is the ratio between the probability that
+            the most-fit member of the population will be selected and
+            the probability that an average member will be selected.</td>
+          </tr>
+          <tr>
+            <td valign="top"><b>Islands</b></td>
+            <td valign="top">Sets the number of islands in the GA
+            calculation.</td>
+          </tr>
+          <tr>
+            <td valign="top"><b>Maximum Operations</b></td>
+            <td valign="top">Sets the maximum number of genetic
+            operations for the GA calculation.</td>
+          </tr>
+          <tr>
+            <td valign="top"><b>Niche Size</b></td>
+            <td valign="top">Sets the maximum size of any niche for the
+            GA calculation.</td>
+          </tr>
+          <tr>
+            <td valign="top"><b>Crossover Weight</b></td>
+            <td valign="top">Sets the crossover weight for the GA
+            calculation. Operations are selected randomly, biased by the
+            weights for crossover, mutation and migration.</td>
+          </tr>
+          <tr>
+            <td valign="top"><b>Mutation Weight</b></td>
+            <td valign="top">Sets the mutation weight for the GA
+            calculation.</td>
+          </tr>
+          <tr>
+            <td valign="top"><b>Migration Weight</b></td>
+            <td valign="top">Sets the migration rate for the GA
+            calculation.</td>
+          </tr>
+        </table>
+
+        </td>
+      </tr>
+      <tr>
+        <td><b><nobr>Early Termination</nobr></b></td>
+        <td>If on, GOLD docking calculations will terminate as soon as the
+        specified <b>Number</b> of <i>equivalent results</i> are obtained.
+        Results are considered equivalent if the <b>RMS</b> deviation of
+        the solutions are within the specified range.</td>
+      </tr>
+      <tr>
+        <td><b><nobr>Scoring</nobr></b></td>
+        <td> This specifies the fitness function used in the GA calculation.
+        These are described in the <a href=
+        "http://www.ccdc.cam.ac.uk/SupportandResources/Support/Documentation/pages/DownloadDocumentation.aspx?p=1">
+        GOLD documentation</a>.  </td>
+      </tr>
+      <tr>
+        <td><b><nobr>Diverse Poses<br />During Placement</nobr></b></td>
+        <td>If on, GOLD enforces diversity during the ligand mapping stage
+        by comparing existing solutions with the proposed ligand
+        construction and placement. Insufficiently diverse ligands are
+        discarded.</td>
+      </tr>
+      <tr>
+        <td><b><nobr>Allow Rotatable<br /> Waters</nobr></b></td>
+        <td>If on, then waters included in the receptor definition will be
+        allowed to rotate their hydrogen atoms to better accommodate bound
+        ligands. If off, the water is held fixed.</td>
+      </tr>
+      <tr>
+        <td><b><nobr>Internal Ligand<br /> H-bonds</nobr></b></td>
+        <td>If on, intramolecular hydrogen bonds in the ligand are
+        permitted.</td>
+      </tr>
+      <tr>
+        <td><b><nobr>COOH</nobr></b></td>
+        <td>This controls the behavior of protonated carboxylic acids
+        during docking: <b>flip</b> allows 180 degree rotation,
+        <b>rotate</b> allows free rotation, and <b>fix</b> prevents
+        rotation.</td>
+      </tr>
+      <tr>
+        <td><b><nobr>Flip Ring Corners</nobr></b></td>
+        <td>If on, a limited conformation search of ligand cyclic systems
+        will be performed, allowing corner atoms to flip above/below the
+        ring plane.</td>
+      </tr>
+      <tr>
+        <td><b><nobr>Flip Amide Bonds</nobr></b></td>
+        <td>If on, ligand amides, thioamides, ureas and thioureas can adopt
+        <i>cis</i> conformations and switch between <i>cis</i> and
+        <i>trans</i> conformations during docking.</td>
+      </tr>
+      <tr>
+        <td><b><nobr>Flip Planar<br />
+        Nitrogen</nobr></b></td>
+        <td>If on, ligand planar trigonal nitrogens (bound to sp2 carbons)
+        can flip between cis and trans conformations during docking.</td>
+      </tr>
+      <tr>
+        <td><b><nobr>Flip Pyramidal<br />
+        Nitrogen</nobr></b></td>
+        <td>If on, ligand pyramidal (sp3) nitrogens can invert during
+        docking.</td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td> <a id="SurflexDock"><b>Surflex-Dock</b></a> </td>
+    <td> Surflex-Dock is a docking program authored by Ajay Jain, and is
+    accessed by selecting <b>Surflex-Dock</b> as the placement method.
+
+    <p>To use and/or configure Surflex-Dock within MOE, set the
+    <b>Placement</b> method in the MOE docking panel to <b>External</b>, and
+    the External docking method to <b>Surflex-Dock</b>, then click the <img
+    src="docking/gear_icon.png" alt="Configure Gear" style= "vertical-align:
+    middle" /> button. The following panel will be shown:</p>
+
+    <p class="center"><img src="docking/surflexcfg2.png" alt= "Surflex-Dock
+    Configuration" /></p>
+
+    <table class="titlebar">
+      <tr>
+        <th><b>Menu Option</b></th>
+        <th><b>Description</b></th>
+      </tr>
+      <tr>
+        <td><b>Executable</b></td>
+        <td>The location of the Surflex-Dock executable file must be
+        specified. If this file cannot be found, or cannot be executed for
+        some reason, none of the functionality will be available.</td>
+      </tr>
+      <tr>
+        <td><b>Working Dir</b></td>
+        <td>A number of files must be written in order to execute
+        Surflex-Dock and obtain the output. The directory to which these
+        files are written should be specified, otherwise the current
+        working directory will be used.</td>
+      </tr>
+      <tr>
+        <td><b>Save</b></td>
+        <td>When the <b>OK</b> button is pressed, the configuration
+        settings will be applied only to the current docking run, i.e. the
+        next time the panel is opened, the settings will have been reset.
+        Use <b>Save&nbsp;Options</b> to write the current settings to the
+        MOE RC file, so that they will be used as the default settings for
+        the next session.</td>
+      </tr>
+      <tr>
+        <td><b><nobr>Test</nobr></b></td>
+        <td>Runs the Surflex-Dock executable and verifies installation by
+        completing a quick docking run.</td>
+      </tr>
+    </table>
+
+    <p>The current interface to Surflex-Dock has been intentionally simplified
+    for ease of use. The following options are available:</p>
+
+    <table class="titlebar">
+      <tr>
+        <th><b>Menu&nbsp;Option</b></th>
+        <th><b>Description</b></th>
+      </tr>
+      <tr>
+        <td><b>Protocol</b></td>
+        <td>
+          Docking protocol.
+          <table class="noborder left">
+            <tr>
+              <td><b>pscreen</b></td>
+              <td>Fast but thorough virtual screening mode</td>
+            </tr>
+            <tr>
+              <td><b>pgeom</b></td>
+              <td>Optimal pose prediction, for pose accuracy</td>
+            </tr>
+            <tr>
+              <td><b>pgeomx</b></td>
+              <td>Exhaustive pose accuracy</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td><b>Processors</b></td>
+        <td>Number of processors to use, for multiprocessor run.</td>
+      </tr>
+      <tr>
+        <td><b>Command-Line</b></td>
+        <td>Text field in which to enter additional Surflex options.</td>
+      </tr>
+    </table>
+
+    </td>
+  </tr>
+  <tr>
+    <td> <a id="FlexStar"><b>Flex*</b></a> </td>
+    <td> The interface to the Flex* docking program is implemented as a plugin
+    placement method in the MOE docking framework. Unlike the built-in
+    placement methods, the generation of bound poses is obtained by executing
+    an external program.
+
+    <p>Flex* is not part of the MOE package. In order to use it, a license must
+    be obtained from <a href= "http://www.biosolveit.de">BioSolveIT</a>. Flex*
+    must be installed and configured, and then information about the location
+    of the appropriate files must be provided to the MOE docking framework (see
+    below). From that point onward, Flex* becomes operationally equivalent to
+    one of the built-in MOE placement methods.</p>
+
+    <p>To use and/or configure Flex* within MOE, set the <b>Placement</b>
+    method in the MOE docking panel to <b>External</b>, and the External
+    docking method to <b>Flex*</b>, then click the <img src=
+    "docking/gear_icon.png" alt="Configure Gear" style= "vertical-align:
+    middle" /> button. The following panel will be shown:</p>
+
+    <p class="center"><img src="docking/flexcfg2.png" alt= "Flex*
+    Configuration" /></p>
+
+    <table class="titlebar">
+      <tr>
+        <th><b>Menu Option</b></th>
+        <th><b>Description</b></th>
+      </tr>
+      <tr>
+        <td><b>Executable</b></td>
+        <td>The location of the Flex* executable file must be specified. If
+        this file cannot be found, or cannot be executed for some reason,
+        none of the functionality will be available.</td>
+      </tr>
+      <tr>
+        <td><b>Config File</b></td>
+        <td>
+          The location of the Flex* configuration file must be specified.
+          This configuration file must contain sufficient information to be
+          able to run Flex* in the chosen working directory. Extensive
+          documentation concerning how to set up this file is available
+          from <a href="http://www.biosolveit.de">BioSolveIT</a>.
+        </td>
+      </tr>
+      <tr>
+        <td><b>Working Dir</b></td>
+        <td>A number of files must be written in order to execute Flex* and
+        obtain the output. The directory to which these files are written
+        should be specified, otherwise the current working directory will
+        be used.</td>
+      </tr>
+      <tr>
+        <td><b>Save</b></td>
+        <td>When the <b>OK</b> button is pressed, the configuration
+        settings will be applied only to the current docking run, i.e. the
+        next time the panel is opened, the settings will have been reset.
+        Use <b>Save&nbsp;Options</b> to write the current settings to the
+        MOE RC file, so that they will be used as the default settings for
+        the next session.</td>
+      </tr>
+      <tr>
+        <td><b><nobr>Test</nobr></b></td>
+        <td>Runs the Flex* executable and requests that the version number
+        be emitted. If successful, the version number is displayed.
+        Otherwise, an error is reported.</td>
+      </tr>
+    </table>
+
+    <p>The panel allows the configuration of settings that are general to the
+    execution of Flex* within MOE, as well as settings that may vary between
+    different runs in order to optimize the results. Once the location of the
+    Flex* executable has been specified, the <span class=
+    "nobr"><b>Test</b></span> button can be used to verify that the
+    installation is running correctly.</p>
+
+    <p class="center"><img src="docking/flex.png" /></p>
+
+    <table class="titlebar">
+      <tr>
+        <th><b>Menu Option</b></th>
+        <th><b>Description</b></th>
+      </tr>
+      <tr>
+        <td><b>Prefix</b></td>
+        <td>The files which are written by MOE as input to Flex* and the
+        files which are written by Flex* to be read back by MOE are
+        prepended with a user-specified prefix. This can be used to
+        conveniently distinguish these files from any other content in the
+        directory.</td>
+      </tr>
+      <tr>
+        <td><b>Serial</b></td>
+        <td>If on, the filenames used to shuttle information to/from Flex*
+        will be further decorated by a serial number, which increments as
+        the docking run progresses. This is useful for debugging purposes,
+        and, in some cases, when the files are being retained for later
+        analysis. Note that it is not a unique serial identifier, and
+        restarting a run may cause files to be overwritten.</td>
+      </tr>
+      <tr>
+        <td><b>Keep Files</b></td>
+        <td>If off, the temporary files will be deleted for each docking
+        instance as soon as the information has been extracted and recorded
+        in the output database. Checking this option causes the files to be
+        retained. If doing a run with multiple batches, but with the
+        <b>Serial</b> option left off, only the files for the last run will
+        survive.</td>
+      </tr>
+      <tr>
+        <td><b>Pharmacophore</b></td>
+        <td>
+
+        <p>Flex* has its own special pharmacophore format, which can be used to
+        guide the docking process. An editor for such pharmacophores is
+        available as a part of the Flex* package. Files generated for this
+        purpose typically have the extension <tt>.phm</tt>. An existing Flex*
+        pharmacophore may be selected using this option, and if so, it will be
+        passed to Flex* during the docking process.</p>
+
+        <p>Note that if this feature is used in conjunction with a MOE
+        pharmacophore which is specified in the main docking panel, then the
+        Flex* pharmacophore is used during the placement, and the MOE
+        pharmacophore is applied afterwards, in order to filter out any results
+        which do not meet its criteria.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><b>Translate MOE Pharmacophore</b></td>
+        <td>
+
+        <p>If a MOE pharmacophore has been specified, then checking this option
+        has the effect of causing it to be partially translated into a Flex*
+        pharmacophore query. When this option is checked, the ability to
+        provide a separate Flex* pharmacophore file is disabled.</p>
+
+        <p>The translation between MOE pharmacophores and Flex* pharmacophores
+        is incomplete, as the formats are non-equivalent.  The partially
+        translated pharmacophore is used to restrict the poses that Flex* is
+        able to generate and, upon return, the original MOE pharmacophore is
+        used to rigorously screen the results.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><b>Torsions</b></td>
+        <td>Rotatable bonds may be freely rotated in order to vary the
+        conformations, or they may be fixed in their original state.</td>
+      </tr>
+      <tr>
+        <td><b>Formal Charges</b></td>
+        <td>Formal charges of all-atom structures may be calculated by MOE,
+        or they may be reinterpreted as necessary by Flex*.</td>
+      </tr>
+      <tr>
+        <td><b>Ring Generator</b></td>
+        <td>Flex* does not have an internal generator of ring
+        conformations, so it will use only the ring conformations provided,
+        unless one of two accompanying programs is selected. The manner in
+        which these programs are run is handled internally by Flex*
+        configuration scripts.</td>
+      </tr>
+      <tr>
+        <td><b>3D Generator</b></td>
+        <td>Normally, the input geometry provided to Flex* is assumed to be
+        reasonable, i.e. it is an example of a good conformation with
+        sensible bond lengths. Alternatively, it can be instructed to
+        rebuild the starting geometry with an external program. The manner
+        in which such an external program is run is handled internally by
+        Flex* configuration scripts.</td>
+      </tr>
+      <tr>
+        <td><b>Filters</b></td>
+        <td>Additional filters for internally generated conformations may
+        be specified.</td>
+      </tr>
+      <tr>
+        <td><b>Stereo</b></td>
+        <td>By default, stereochemical inversions are not performed during
+        the generation of possible bound poses. At the discretion of the
+        user, saturated nitrogen or carbon centers or alkene stereobonds
+        may be flipped in order to find better binding conformations.</td>
+      </tr>
+      <tr>
+        <td><b>Max. Overlap</b><br />
+        <b>Volume</b></td>
+        <td>The maximum overlap criterion for detecting proximity clashes
+        may optionally be overridden from the configured default by
+        selecting the <tt>Custom</tt> option and modifying the overlap
+        volume.</td>
+      </tr>
+      <tr>
+        <td><b>Access Scaling</b></td>
+        <td>If on, the pose scores returned are adapted according to depth
+        within the active site.</td>
+      </tr>
+      <tr>
+        <td><b>Ligand Clash</b></td>
+        <td>The criteria for rejecting proposed conformations based on
+        intramolecular clashes may be overridden from the defaults by
+        selecting <tt>Heavy</tt> or <tt>All</tt>. If the latter is
+        selected, then hydrogen atoms are also considered. The ligand clash
+        factor can be modified to suit.</td>
+      </tr>
+      <tr>
+        <td><b>Verbosity</b></td>
+        <td>The output file produced by Flex* is not parsed by the MOE
+        plugin, but it may optionally be retained for examination by the
+        user. By default, the degree of additional information written is
+        kept terse, but the level of verbosity can be increased in various
+        increments.</td>
+      </tr>
+      <tr>
+        <td><b>Show Log File</b></td>
+        <td>If on, the MOE text editor is used to display the Flex* output
+        from each docking run. This is intended only for diagnostic
+        purposes.</td>
+      </tr>
+    </table>
+
+    </td>
+  </tr>
+</table>
+
+<a id="Final_Scoring_and_Output">
+<h3>Final Scoring and Output</h3>
+</a>
+
+<table class="noborder">
+  <tr>
+    <td><b>Refinement</b></td>
+    <td> The structures generated by the placement method can be further
+    refined by selecting <b>Induced Fit</b> or <b>Rigid Receptor</b> from the
+    option menu, or, in the case of Protein-Protein docking, <b>Rigid Body</b>.
+
+    <p><b>Induced Fit</b> is appropriate when flexible protein sidechains are
+    to be included in the refinement stage. <b>Rigid Body</b> will repack
+    sidechains using a rotamer library prior to carrying out a rigid-body
+    minimization.</p>
+
+    <p>Energy minimization of the system is carried out using a conventional
+    molecular mechanics setup. The current prevailing <a href=
+    "../moe/pot.htm">molecular mechanics forcefield</a> will be used.  <b>The
+    charges of all atoms will be reassigned</b> under the current
+    forcefield.</p>
+
+    <p>Default settings can be changed using the Configure panel, which is
+    opened by pressing the <img src="docking/gear_icon.png" alt= "Configure
+    Gear" style="vertical-align: middle" /> button. <span class=
+    "warning">Note:</span> Not all options appear for each refinement
+    option.</p>
+
+    <p class="center"><img src="docking/inducedfit_config.png" alt=
+    "Configure Induced Fit Refinement" /></p>
+
+    <p>In order to speed up the calculation, residues (or atoms, depending on
+    the <b>Pocket</b> setting in the Configure panel) over a cutoff distance
+    (<b>Cutoff</b> in the Configure panel, default is 6 &Aring;) away from all
+    the pre-refined poses are ignored, both during the refinement and in the
+    final energy evaluation. However, if after the refinement any poses are
+    moved to within 80% of the cutoff distance of any ignored atoms, the
+    refinement stage will be repeated with an increased cutoff distance.</p>
+
+    <p>By default, backbone atoms are held fixed during refinement. When
+    <b>Rigid Receptor</b> is chosen, sidechains of the receptor are also held
+    fixed. In <b>Induced Fit</b> mode, sidechains can be tethered to their
+    original positions (<b>Tether</b>, <b>B-Factor</b>, or <b>As-is
+    (pocket)</b>), or are free to move (<b>Free</b>).</p>
+
+    <p>When tethering is used, the parameters <i>L</i> and <i>U</i>, as
+    described in the <a href="../moe/pot.htm#Restraints">manual page for
+    tethering</a>, are both set to 0. The weights of the tethers <i>w</i> are
+    either determined from the individual atom temperature factors (B-factors)
+    or set to user-defined values. In the case of the <b>Tether</b> option, a
+    single user-defined value is applied to all sidechain atoms. Tethering
+    using B-factors has the following interpretation: an atom's root mean
+    square deviation from its equilibrium position will be equal to the given
+    B-factor if the atom is floating freely in the potential well of the tether
+    at 300 K. In the case of <b>As-is (pocket)</b>, the user-defined inert,
+    fixed, tethered, and restrained atoms of the receptor pocket are
+    honored.</p>
+
+    <p>For protein-protein docking the repacking of all sidechains in the
+    interface region is turned on by default, but can be skipped by un-checking
+    the <b>Repack From Library</b> option.</p>
+
+    <p>By default, during the refinement, solvation effects are calculated
+    using the <a href="../moe/pot.htm#Equation">reaction field functional
+    form</a> for the electrostatic energy term and a dielectric constant of 4.
+    However, if you prefer to use the current <a href=
+    "../moe/fcnref/potfcn.htm">potential setup</a>, the default behavior can be
+    disabled by toggling off the <tt>Potential Setup</tt> checkbox in the
+    Configure panel.</p>
+
+    <p>By default, the final energy is evaluated using the <a href=
+    "../moe/pot.htm#Equation">Generalized Born solvation model (GB/VI)</a>.  If
+    this default setting is disabled, the final energy will simply be
+    calculated in the same way as during minimization instead of using the
+    Generalized Born solvation model. Note that in any case, the final energy
+    includes only the interaction energy between the receptor and the ligand.
+    The self-energies of both the receptor and the ligand are excluded.</p>
+
+    <p>For refinement options which treat the ligand as flexible by default the
+    ligand can also be held fixed by checking the <b>Rigid Ligand</b> option.
+    The <b>Planar Systems Are Rigid Bodies</b> option can be used to treat all
+    pi systems (connected components consisting of atoms connected with bonds
+    of high pi bond order) as rigid bodies.</p>
+
+    <p>In the presence of a pharmacophore defined using the <a href=
+    "ph4_annot.htm">Unified Annotation Scheme</a>, restraints will be set up
+    between the features on the ligand and the corresponding pharmacophore
+    query points. If the distance between the feature and the query point
+    exceeds a certain threshold (see below) by an amount <tt>x</tt>, there will
+    be a penalty in the potential of the form <tt>kx<sup>3</sup></tt>. The
+    threshold is the radius associated with the pharmacophore query point minus
+    the <tt>Radius Offset</tt> parameter on the Configure panel, or zero if
+    this results in a negative value. Both the force constant <tt>k</tt> and
+    the <tt>Radius Offset</tt> are adjustable on the Configure panel. Their
+    default values are 100.0 <nobr>kcal / (mol &Aring;<sup>3</sup>)</nobr> and
+    0.4 &Aring;, respectively.</p>
+
+    </td>
+  </tr>
+  <tr>
+    <td><b>Final Scoring</b></td>
+    <td>
+
+    <table class="titlebar">
+      <tr>
+        <th>Menu Option</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td><b>ASE</b></td>
+        <td> Use the <a href="#ASE_Scoring">ASE</a> scoring function to score
+        the generated poses. The following options may be adjusted:
+
+        <table class="noborder left">
+          <tr>
+            <td><b>Weight</b></td>
+            <td>The multiplicative factor used when applying the ASE
+            parameters.</td>
+          </tr>
+        </table>
+
+        </td>
+      </tr>
+      <tr>
+        <td><b>Affinity dG</b></td>
+        <td> Use the enthalpy-based <a href="#Affinity_dG_Scoring">Affinity
+        dG</a> scoring function to score generated poses. The following options
+        may be adjusted:
+
+        <table class="noborder left">
+          <tr>
+            <td><b>Hydrogen Bond</b></td>
+            <td>The ideal hydrogen bond affinity in energy units</td>
+          </tr>
+          <tr>
+            <td><b>Ionic Contact</b></td>
+            <td>The ionic Coulomb coefficient</td>
+          </tr>
+          <tr>
+            <td><b>Metal Ligation</b></td>
+            <td>The metal ligation affinity</td>
+          </tr>
+          <tr>
+            <td><b>Hydrophobic Contact</b></td>
+            <td>The hydrophobic-hydrophobic contact energy</td>
+          </tr>
+          <tr>
+            <td><b>Hydrophobic-Polar</b></td>
+            <td>The hydrophobic-polar contact energy</td>
+          </tr>
+          <tr>
+            <td><b>Atom-Atom</b></td>
+            <td>The general atom-atom contact energy</td>
+          </tr>
+        </table>
+
+        </td>
+      </tr>
+      <tr>
+        <td><b>Alpha HB</b></td>
+        <td> Use the two-term <a href="#Alpha_HB_Scoring">Alpha HB</a> scoring
+        function to score generated poses. The following options may be
+        adjusted:
+
+        <table class="noborder left">
+          <tr>
+            <td><b>Alpha Weight</b></td>
+            <td>Weighting factor for the alpha score</td>
+          </tr>
+          <tr>
+            <td><b>Hydrogen Bond Weight</b></td>
+            <td>Weighting factor for the hydrogen bond projected feature
+            score</td>
+          </tr>
+        </table>
+
+        </td>
+      </tr>
+      <tr>
+        <td><b>Electron Density</b></td>
+        <td>Use the supplied electron density for scoring.</td>
+      </tr>
+      <tr>
+        <td><b>GBVI/WSA dG</b></td>
+        <td>
+          Use the <a href="#GBVI_WSA_dG_Scoring">GBVI/WSA dG</a>
+          scoring function as described above.
+        </td>
+      </tr>
+      <tr>
+        <td><b>London dG</b></td>
+        <td>
+          Use the <a href="#London_dG_Scoring">London dG</a>
+          scoring function as described above.
+        </td>
+      </tr>
+      <tr>
+        <td><b>None</b></td>
+        <td>Do not score the initial poses. This is useful primarily for
+        re-scoring the results from a previous docking calculation.</td>
+      </tr>
+    </table>
+
+    </td>
+  </tr>
+  <tr>
+    <td><b>Output</b></td>
+    <td>
+
+    <p>The name of the Molecular Database file that will be created to hold the
+    top scoring poses and associated scores. Note that any existing database
+    with the same name will be overwritten.  By default, the appropriate <a
+    href="plif.htm#LigandPLIFs">protein-ligand</a> or <a
+    href="plif.htm#ProteinPLIFs">protein-protein</a> fingerprints will be
+    generated for each pose which can be viewed using the <a
+    href="plif.htm#Using">PLIF visualization</a> panel.  In the case of
+    Protein-Protein docking the epitope clustering will also be performed which
+    can be view in the <a href="epitope.htm">Epitope Analysis</a> panel.  The
+    <b>Generate Fingerprints</b> checkbox can be deselected in order to disable
+    the fingerprint calculation.  Fingerprints can still be generated later
+    using the <a href="plif.htm#Generate">PLIF Calculate</a> panel. </p>
+
+    <p>Dock writes the top scoring poses to a database containing some or all
+    of the following fields:</p>
+
+    <table class="titlebar">
+      <tr>
+        <th>field(s)</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td valign="top"><b><tt>mol</tt></b></td>
+        <td>An output pose.</td>
+      </tr>
+      <tr>
+        <td valign="top"><b><tt>receptor</tt></b></td>
+        <td>The receptor after the refinement stage. This field is present
+        if the receptor was allowed to move.</td>
+      </tr>
+      <tr>
+        <td valign="top"><b><tt>rseq</tt></b></td>
+        <td> The receptor sequence number. If multiple receptors from a
+        database are being docked, the <tt>rseq</tt> field for the output
+        results will be set to the entry number in the source.
+
+        <p>When examining the output database, it is safe to assume that if two
+        consecutive entries have different <tt>rseq</tt> numbers, they have
+        been docked to different proteins.</p>
+
+        </td>
+      </tr>
+      <tr>
+        <td><b><tt>mseq</tt></b></td>
+        <td> The molecule sequence number. If multiple ligands are being docked
+        from a database that does not itself contain an <tt>mseq</tt> field
+        (i.e. not a conformation database), the <tt>mseq</tt> field for the
+        output results will be set to the entry number in the source. If the
+        molecule source contains groups of conformations, the original
+        <tt>mseq</tt> number of the group will be omitted.
+
+        <p>When examining the output database, it is safe to assume that if two
+        consecutive entries have a different <tt>mseq</tt> number, they belong
+        to a different group of bound poses. The <tt>mseq</tt> field is not
+        guaranteed to be group-consecutive or unique.</p>
+
+        </td>
+      </tr>
+      <tr>
+        <td><b><tt>S</tt></b></td>
+        <td>The final score, which is the score of the last stage that was
+        not set to <b>None</b>.</td>
+      </tr>
+      <tr valign="top">
+        <td><b><tt>rmsd</tt></b></td>
+        <td>The root mean square deviation of the pose, in &Aring;, from
+        the original ligand. This field is present if the site definition
+        was identical to the ligand definition.</td>
+      </tr>
+      <tr>
+        <td><b><tt>rmsd_refine</tt></b></td>
+        <td>The root mean square deviation between the pose before
+        refinement and the pose after refinement.</td>
+      </tr>
+      <tr>
+        <td><b><tt>useAtoms</tt></b></td>
+        <td>(<b>Covalent Docking</b>) This can be used as a mask indicating
+        which atoms in the output pose correspond to the ligand portion of
+        the protein-ligand complex. It can also be used as atom indices to
+        map output vs. input ligand atoms.</td>
+      </tr>
+      <tr>
+        <td><b><tt>pDel</tt></b></td>
+        <td>(<b>Covalent Docking</b>) These are the atom indices of the
+        receptor atoms that are deleted by the reaction forming the output
+        protein-ligand complex.</td>
+      </tr>
+      <tr>
+        <td><b><tt>complex</tt></b></td>
+        <td>(<b>Covalent Docking</b>) This is the protein-ligand complex
+        corresponding to the pose contained in <b>mol</b>.</td>
+      </tr>
+      <tr valign="top">
+        <td><b><tt>E_conf</tt></b></td>
+        <td>The energy of the conformer. If there is a refinement stage,
+        this is the energy calculated at the end of the refinement. Note
+        that for Forcefield refinement, by default, this energy is
+        calculated with the solvation option set to Born.</td>
+      </tr>
+      <tr valign="top">
+        <td><b><tt>E_place</tt></b></td>
+        <td>
+          Score from the <a href="#Placement_Methodology">placement
+          stage</a>.
+        </td>
+      </tr>
+      <tr valign="top">
+        <td><b><tt>E_score1<br />
+        E_score2</tt></b></td>
+        <td>
+          Score from <a href="#Computational_Background">rescoring
+          stages</a> 1 and 2.
+        </td>
+      </tr>
+      <tr valign="top">
+        <td><b><tt>E_refine</tt></b></td>
+        <td>
+          Score from the <a href="#Final_Scoring_and_Output">refinement
+          stage</a>,
+          calculated to be the sum of the van der Waals electrostatics and
+          solvation energies, under the Generalized Born solvation model
+          (GB/VI).
+        </td>
+      </tr>
+      <tr valign="top">
+        <td><b><tt>E_orig</tt></b></td>
+        <td>
+	  Ligand conformational energy (if any) following initial
+          <a href="confgui.htm">Conformation Import</a>, but prior to
+          refinement.  If refinement is carried out, the conformational
+          energy is recalculated for the minimized structure and the
+          previous <tt>E_conf</tt> is copied to <tt>E_orig</tt>.
+        </td>
+      </tr>
+      <tr valign="top">
+        <td><b><tt>Rec_index</tt></b></td>
+        <td>Identifier of the rigid receptor if it is stored in the database
+        environment.</td>
+      </tr>
+      <tr valign="top">
+        <td><b><tt>FP:PLIF</tt></b></td>
+        <td>List of set PLIF bits.</td>
+      </tr>
+      <tr valign="top">
+        <td><b><tt>PLIF_ligidx</tt></b></td>
+        <td>List of interacting ligand atoms in PLIF.</td>
+      </tr>
+      <tr valign="top">
+        <td><b><tt>class</tt></b></td>
+        <td>Cluster index used in
+        <a href="epitope.htm">Epitope Analysis</a>.</td>
+      </tr>
+    </table>
+
+    </td>
+  </tr>
+  <tr>
+    <td><b>Poses</b></td>
+    <td>
+
+    <p>The number of poses that are passed to the Refinement stage is
+    controlled by the <b>Placement Poses</b> text field. This value specifies
+    the number of top ranking poses that will undergo refinement.  The number
+    of poses that are retained from the Refinement stage to be written to the
+    output is controlled by the <b>Refinement Poses</b> text field. Duplicate
+    removal is performed before the poses are written, and therefore there may
+    be fewer poses output than specified.</p>
+
+    <p>In the case of Protein-Protein docking, there is an additional
+    parameter, <b>Pre-Placement Poses</b>, which corresponds to the number of
+    poses returned from the initial FFT and simplified minimization stages.
+    <b>Placement Poses</b> then determines the number of poses output from the
+    Coarse-Grained model to be refined and <b>Refinement Poses</b> is the
+    number of all-atom poses that are then output following refinement.</p>
+
+    <p>Note that if there is no Refinement step, these values have no effect,
+    and a default number of Placement poses is generated and output (subject to
+    duplicate removal).</p>
+
+    </td>
+  </tr>
+</table>
+
+<a id="Browsing_the_Output_Database">
+<h2>Browsing the Output Database</h2>
+</a>
+
+<p>Output poses can be conveniently browsed using the <a href=
+"../mdb/dbbrowse.htm">Database Browser</a>.  For docking results,
+a custom browsing mode (<b>Subject:</b> <span class="nobr">
+<tt>mol+receptor</tt></span>) is available which shows both
+the ligand and the pocket simultaneously in the MOE Window and a 2D depiction
+of the ligand as well as the docking score in the browse window.
+In the case of rigid refinement (where the receptor is the same for
+all poses) the Subject will be <tt>mol+(receptor)</tt> by default in
+which the receptor is retrieved from the enviroment using <b>Rec_index</b>,
+however the <b>Pocket: Enable</b> option will be unchecked by default
+so that the receptor will not be shown.  See
+<a href="../mdb/dbbrowse.htm#Docking_Database">Docking/Ligand-Pocket Browser</a>
+for details.</p>
+
+<p class="center"><img src="docking/dbbrowse.png" /></p>
+
+<a id="Parallel_Docking_with_MOE/smp">
+<h1>Parallel Docking with MOE/smp</h1>
+</a>
+
+<p>If the current instance of MOE is running in MPU mode, the
+internally-implemented docking methods are automatically distributed to each
+node of the cluster.</p>
+
+<p>Because of the initialization time required to send a receptor across a
+distributed system and analyze its properties, the MPU overhead is amortized by
+dividing the input ligands into chunks of size <tt>N</tt>. For each unit
+operation, the protein and the accompanying conformations for <tt>N</tt>
+ligands are packaged and sent to the next available node, and the corresponding
+<tt>N</tt> sets of poses are returned and then written to the output database
+when the calculation is complete. The value of <tt>N</tt> is currently set to
+10.</p>
+
+<p>Since the docking of each ligand is independent, except for the
+initialization of the receptor, the speedup can be expected to be almost linear
+for most hardware configurations.</p>
+
+<p>Installing and running MOE in MPU mode is described in the <a href=
+"../install/smp_inst.htm">MOE/smp manual</a>. If MOE is being run on a
+multiprocessor workstation, this can be setup by adding a command line
+parameter, e.g.:</p>
+
+<pre>
+    cmd% moe -mpu 2
+</pre>
+
+<p>The above syntax will run MOE with two MPU nodes, both on the same
+workstation.</p>
+
+<p>Note that externally implemented docking methods, such as Flex*, rely on
+their own built-in parallel algorithms, and will not be executed from MOE on
+multiple nodes.</p>
+
+<a id="Parallel_Docking_with_HPC">
+<h1>Parallel Docking on High Performance Clusters</h1>
+</a>
+
+<p>For High Performance Clusters (HPC), the docking job splits the input into
+multiple independent docking runs. The number of <b>partitions</b> can be set in
+the <a href="../moe/hpc.htm#BatchPanel">Batch</a> job submit panel.
+For optimal efficiency, the input should be split into as many
+files as the number of simultaneous docking runs.</p>
+
+<p>It is possible to choose from the Batch panel
+whether or not the input files
+for the ligand and the receptor should be copied to the job directory. This
+should be avoided when the files are large and will be available from the HPC
+worker nodes.</p>
+
+<p class="center"><img src="docking/dock_batchpanel.png" alt= "Batch Panel" /></p>
+
+<p>A post-processing step is done after all the independent runs are finished
+to merge the results into a single database.</p>
+
+<a id="Protein-Protein_HPC">
+<h2>Distributed Protein-Protein Docking</h2>
+</a>
+
+<p>For protein-protein docking an additional <b>Verbose Log File</b> checkbox
+is available which turns on additional output for writing to the batch job's log
+file.  This can help to monitor job progress for systems which may take a long
+time, but care should be taken since the resulting files can be potentially
+quite large.</p>
+
+<p>In the case where "all-versus-all" docking is being performed between two
+protein databases (e.g. of different homologs/models/conformations), setting
+the number of partitions to the total number of pairs of proteins will allow
+running all docking jobs independently.  Some additional options are provided
+when running batch jobs to handle such situations.</p>
+
+<table class="noborder">
+  <tr>
+    <td><b>Limit</b></td>
+    <td>Save the top <b><i>N</i></b> overall best-scoring poses in the final
+    merged output database.  This can potentially speed up the post-processing
+    task considerably when the individual job ouput databases are very large.
+    </td>
+  </tr>
+  <tr>
+    <td><b>Write summary database</b></td>
+    <td>Create an additional output database file where each entry corresponds
+    to a single pair of input protein structures.  This database will contain
+    the fields described below.  The epitope calculation is described in
+    <a href="epitope.htm">Epitope Analysis</a>.
+    <table class="titlebar">
+      <tr>
+        <th>Field(s)</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td valign="top"><b><tt>rseq</tt></b></td>
+        <td>Index of the receptor protein in the first input database.</td>
+      </tr>
+      <tr>
+        <td valign="top"><b><tt>mseq</tt></b></td>
+        <td>Index of the ligand protein in the second input database.</td>
+      </tr>
+      <tr>
+        <td valign="top"><b><tt>file</tt></b></td>
+        <td>Name of the docking output database containing this pair
+        of proteins.</td>
+      </tr>
+      <tr>
+        <td valign="top"><b><tt>count</tt></b></td>
+        <td>Number of docked poses for this pair of proteins.</td>
+      </tr>
+      <tr>
+        <td valign="top"><b><tt>min S</tt></b></td>
+        <td>Minimum (best) value of the docking score for this pair
+        of proteins.</td>
+      </tr>
+      <tr>
+        <td valign="top"><b><tt>epitope N</tt></b></td>
+        <td>Number of poses in the top-scoring epitope.</td>
+      </tr>
+      <tr>
+        <td valign="top"><b><tt>epitope S</tt></b></td>
+        <td>Ensemble score of the top-scoring epitope.</td>
+      </tr>
+      <tr>
+        <td valign="top"><b><tt>epitope res</tt></b></td>
+        <td>List of residues contributing to the top-scoring epitope.</td>
+      </tr>
+    </table>
+    The individual docking runs can be visualized in more detail by opening
+    the Summary Database file in a Database Viewer and using the
+    <a href="../mdb/dbbrowse.htm">Database Browser</a> to access the
+    separate output databases and view the epitope analysis using
+    the DBV Browser Plugin version of the 
+    <a href="epitope.htm#Viewing">Epitope Browser</a>.
+    </td>
+  </tr>
+</table>
+
+<a id="Examples">
+<h1>Examples</h1>
+</a>
+
+<a id="Example_Data_Preparation">
+<h2>Example: 1G5S Data Preparation</h2>
+</a>
+
+
+<div class="example">
+  <p>Cyclin-dependent kinases (CDKs) are regulatory proteins that play a
+  central role in mediating cell growth. Consequently, they are potentially
+  promising as targets for anti-cancer agents. This example demonstrates how to
+  dock the adenine-derived inhibitor H717 with human cyclin-dependent kinase 2,
+  PDB code 1G5S.</p>
+
+  <ol>
+    <li>
+      <i>Load the structure into MOE.</i>
+
+      <p class="blockquote"><span class="menu">MOE | File | Open |
+      <tt>$MOE/sample/mol/1g5s.pdb.gz</tt></span></p>
+
+      In the Load PDB File panel that opens, press <b>OK</b>. The molecular
+      data comprises the crystallized protein-ligand complex. 
+    </li>
+
+    <li>
+      <i>Delete the water chain.</i><br /> Open the Sequence Editor using the
+      <b>SEQ</b> button at the top right of the MOE Window. Use the following
+      command after selecting Chain 3:
+
+      <p class="blockquote"><span class="menu">SE | Chain Popup |
+      Delete</span></p>
+    </li>
+
+    <li>
+      <i>Correct Structural Issues.</i><br />
+    
+      <p class="blockquote"><span class="menu">MOE | Compute | Prepare |
+      Structure Preparation</span></p>
+      
+      Press <b>Correct</b> in the panel to add hydrogens and correct structural
+      issues in the protein-ligand complex.
+    </li>
+
+    <li>
+      <i>Optimize hydrogen bond network</i><br />
+      
+      <p class="blockquote"><span class="menu">MOE | Compute | Prepare |
+      Protonate3D</span></p>
+      
+      Press <b>OK</b> in the panel to add protons to both the ligand and
+      receptor. The calculation will take a few moments.  </li>
+
+    <li>
+      <div class="floatright"><img src="docking/1g5s_site.jpg" alt= "Binding
+      site of 1G5S" /></div>
+      
+      <i>Setup the forcefield and assign partial charges.</i>
+    
+      <p class="blockquote"><span class="menu">MOE | Footer | Potential
+      Setup</span></p>
+      
+      If the currently loaded forcefield is not MMFF94x, select it from the
+      <b>Load</b> menu. The change is effected immediately. To assign charges
+      to both the protein and the ligand, click on <span class="menu">Potential
+      Setup | Fix Charges</span>. Close the Potential Setup panel. 
+    </li>
+
+    <li>
+      <i>Identify the binding site.</i>
+
+      <p class="blockquote"><span class="menu">MOE | Compute | Site
+      Finder</span></p>
+      
+      Press <b>Apply</b> in the Site Finder panel. A list of possible sites is
+      calculated and displayed in the panel. The first site in the list should
+      be selected, but if not then do so (left click on the list item).
+
+      <p class="blockquote"><span class="menu">Isolate: Atoms and
+      Backbone</span></p>
+
+      <p>This will isolate the atoms and backbone region in the vicinity of the
+      selected site. The graphical balls mark the site visually. Press
+      <b>Dummies</b> to create dummy atoms to mark the site for future
+      applications.</p>
+
+      <p>Close the Site Finder panel.</p>
+    </li>
+    <li>
+      <div class="floatright"><img src="docking/1g5s_sitesurf.jpg" alt=
+      "Surface of binding site of 1G5S" /></div><i>Select and show the
+      ligand.</i><br />
+
+      <p class="blockquote"><span class="menu">MOE | Popup | Select |
+      Ligand</span><br /> <span class="menu">MOE | Popup | Show |
+      Selected</span></p>
+    </li>
+    <li>
+      <i>Set the ligand rendering mode for better visualization.</i><br />
+      With the ligand still selected,
+
+      <p class="blockquote"><span class="menu">MOE | Popup | Atoms | <img
+      src="../moe/gui/mainwin/atom_render_stick.png" alt="Stick" style=
+      "vertical-align: middle" /></span></p>
+    </li>
+    <li>
+      <i>Draw a surface around the binding site for better visualization.</i>
+
+      <p class="blockquote"><span class="menu">MOE | Compute | Surfaces and
+      Maps | Molecular Surface</span></p>
+
+      <p>Press <b>Create</b> to generate the surface, and then <span class=
+      "menu">Color | ActiveLP</span> in the panel to color the surface
+      according to hydrophobicity. Then close the panel. In the MOE Window,
+      drag the middle mouse button to rotate the view so that the binding cleft
+      is visible.</p>
+
+      <p>If the ligand is still selected, pressing</p>
+
+      <p class="blockquote"><span class="menu">MOE | RHS | SiteView</span></p>
+
+      <p>will center the selected atoms in the MOE Window. Click on the
+      background (i.e. away from any atoms) to clear the atom selection.</p>
+    </li>
+    <li>
+      <i>Save the prepared data for future docking runs.</i>
+
+      <p class="blockquote"><span class="menu">MOE | File | Save |
+      <tt>1G5S_docking.moe</tt></span></p>
+      
+      The MOE file format saves graphics and viewing information in addition to
+      molecular data.
+    </li>
+  </ol>
+</div>
+
+<a id="Example_Docking_Simulation">
+<h2>Example: 1G5S Docking Simulation</h2>
+</a>
+
+<div class="example">
+
+  <p>This section assumes that the system prepared above
+  (<tt>1G5S_docking.moe</tt>) is currently loaded in MOE.</p>
+
+  <ol>
+    <li>
+      Open the Dock panel:
+
+      <p class="blockquote"><span class="menu">MOE | Compute | Dock</span></p>
+    </li>
+
+    <li><i>Verify the receptor specification.</i><br />
+    <b>Receptor</b> should be set to <b>Receptor Atoms</b>. Press the
+    <b>?</b> button to see the atoms briefly selected in the MOE Window.</li>
+
+    <li><i>Verify the site specification.</i><br />
+    Set <b>Site</b> to <b>Ligand Atoms</b>. Press the <b>?</b> button to see
+    the atoms briefly selected in the MOE Window.</li>
+
+    <li><i>Verify the ligand specification.</i><br />
+    <b>Ligand</b> should be set to <b>Ligand Atoms</b>. Press the <b>?</b>
+    button to see the atoms briefly selected in the MOE Window.</li>
+
+    <li><i>Isolate the docking site.</i><br />
+    Press <b>MOE | RHS | SiteView</b> and then <b>MOE | RHS | Hide | Dummy</b>
+    to show only the ligand and pocket residue atoms.</li>
+
+    <li><i>Turn on conformation generation.</i><br />
+    Open the Ligand configuration popup by pressing the
+    <img src="docking/gear_icon.png" alt= "Configure Gear"
+    style="vertical-align: middle" /> button and ensure that
+    <b>Rotate Bonds</b> is enabled; this will generate ligand
+    conformations by bond rotation prior to the ligand placement stage.</li>
+
+    <li><i>Set the docking parameters.</i><br />
+    Use the default docking parameters for Rigid Receptor docking, Ensure
+    that <b>Refinement Method</b> is set to <i>Rigid Receptor</i>.</li>
+
+    <li> <i>Start the docking simulation.</i><br /> Press <b>Run</b>. The
+    output database opens automatically into a Database Viewer; this database
+    will contain the docked poses and scores at the end of the dock operation.
+    Docking progress is reported to the <a
+    href="../moe/gui/svlcommands.htm">SVL Commands window</a>. The ligand
+    refinement stage can be observed in the MOE Window.  </li>
+
+  </ol>
+</div>
+
+<h5>Analyzing Results</h5>
+
+<div class="example">
+
+  <p class="center"><img src="docking/1g5s_browse.jpg" alt= "Browsed Docking
+  Results" /></p>
+
+  <p>The output database contains the docked poses sorted by the final score
+  <tt>S</tt>, in this case, the GBVI/WSA dG score. The top-scoring poses are
+  found at the beginning of the database. The <tt>rmsd</tt> field gives the
+  RMSD between the pose and the original ligand (this field is written when
+  Site in the Dock panel is set to Ligand Atoms).</p>
+
+  <p>Visualization of the docking calculation results constitutes an important
+  component of output analysis. To browse the results, use the Database Browser
+  of the output database:</p>
+
+  <p class="blockquote"><span class="menu">DBV | File | Browse</span></p>
+
+  <p>The first entry in the database is automatically loaded into MOE. To
+  render the browsed pose for better visualization:</p>
+
+  <ol>
+    <li>Open the Sequence Editor by pressing <b>SEQ</b> in the upper right
+    corner of the MOE Window.</li>
+
+    <li>
+      <i>Render the browsed ligand in ball-and-stick mode.</i><br />
+      <p class="blockquote"><span class="menu">SE | Chain 4 Popup | Atoms |
+      <img src="../moe/gui/mainwin/atom_render_ballstick.png" alt= "Ball and
+      Stick" style="vertical-align: middle" /></span></p>
+    </li>
+    <li>
+      <i>Color the carbon atoms green.</i><br />
+      <p class="blockquote"><span class="menu">SE | Chain 4 Popup | Atoms |
+      C</span><br /> <span class="menu">SE | Chain 4 Popup | Atoms |
+      <i>Green</i></span></p>
+      Close the Sequence Editor (<span class="menu">SE | File | Quit</span>).
+    </li>
+    <li>
+      <i>Hide Nonpolar Hydrogens.</i><br />
+      <p class="blockquote"><span class="menu">MOE | Popup | Hide | Nonpolar
+      Hydrogens</span></p>
+    </li>
+  </ol>
+
+  <p>In the Database Browser, press the arrow buttons to successively display
+  different poses from the database.</p>
+
+  <div class="floatright">
+    <img src="docking/1g5s_ligint_small.png" alt= "Ligand Interactions" />
+  </div>
+
+  <p>Poses can be compared with each other or with the original ligand in 2D
+  using the Ligand Interactions diagram. This has the advantage of simplifying
+  the view and making the interactions with the binding site easy to see.</p>
+
+  <ol start="5">
+    <!--magic number; ensure it continues previous list. -->
+    <li>
+      Open the Ligand Interactions application with:
+
+      <p class="blockquote"><span class="menu">MOE | Compute | Ligand
+      Interactions</span></p>
+
+      <p>The panel will automatically be loaded with a 2D diagram of the
+      original ligand and a schematic representation of the binding site
+      residues, with the important interactions between ligand and binding site
+      shown.</p>
+    </li>
+
+    <li><i>Choose the top-scoring pose from the output database.</i><br />
+    In the Database Browser, move the <b>Entry</b> slider all the way to the
+    left to load entry 1 into MOE.</li>
+
+    <li>
+      <i>Overlay both ligands.</i><br />
+      In the Ligand Interactions panel, choose <span class="menu">Ligand:
+      Overlay Complexes</span>. Press <b>Apply</b>.
+
+      <p>The original ligand is labeled &quot;1&quot; in the Legend and
+      colored red by default. The docked pose is labeled &quot;2&quot; and
+      colored green. Observe how the hydrogen bond interactions with LEU83,
+      ASP145, and ASN132 are preserved in this pose.</p>
+    </li>
+
+    <li><i>Browse other poses from the output database.</i><br />
+    In the Database Browser, select another entry. In the Ligand Interactions
+    panel, press <b>Apply</b>. The Ligand Interactions diagram will update to
+    reflect the new pose.</li>
+  </ol>
+
+  <p>From both the 3D (in the MOE Window) and 2D (Ligand Interactions)
+  renderings, it is seen that there are poses that are not reflecting the hinge
+  binding pattern which is known from co-crystallized kinase inhibitors.</p>
+
+  <p>For an example of how to use pharmacophore filters in docking, please
+  refer to the <a href=
+  "https://www.chemcomp.com/moe/help/2018/CCG_Tutorials/(Tutorial)_MOE_Docking.svlx">
+  Docking Tutorial</a></p>
+</div>
+
+<a id="Example_Docking_Library">
+<h2>Example: Docking a Library of Ligands</h2>
+</a>
+
+<div class="example">
+  <ol>
+    <li><i>Clear the molecular data.</i><br />
+    Ensure there are no running tasks (use the Cancel menu in the MOE Window)
+    and close all molecular data with <span class="menu">MOE | RHS |
+    Close</span>.</li>
+
+    <li>
+      <i>Open the protein file.</i>
+
+      <p class="blockquote"><span class="menu">MOE | File | Open |
+      <tt>$MOE/sample/mol/1RO6.moe.gz</tt></span></p>
+
+      <p>This file contains both a protein and a ligand. This ligand will be
+      used later on to define the binding site.</p>
+    </li>
+
+    <li>
+      <i>Prepare the protein.</i><br />
+
+      <ol type="a">
+        <li>
+          <i>Correct Structural Issues.</i><br />
+
+          <p class="blockquote"><span class="menu">MOE | Compute | Prepare |
+          Structure Preparation</span></p>Press <b>Correct</b> in the panel to
+          add hydrogens and correct structural issues in the protein-ligand
+          complex.
+        </li>
+        <li>
+          <i>Optimize hydrogen bond network</i><br />
+
+          <p class="blockquote"><span class="menu">MOE | Compute | Prepare |
+          Protonate 3D</span></p>
+          
+          Press <b>OK</b> in the panel to add protons to both the ligand and
+          the receptor. The calculation will take a few moments.
+        </li>
+        <li>
+          <i>Setup the forcefield and assign partial charges.</i><br />
+
+          <p class="blockquote"><span class="menu">MOE | Footer | Potential
+          Setup</span></p>
+          
+          If the currently loaded forcefield is not MMFF94x, select it from the
+          <b>Load</b> menu. The change is effected immediately. To assign
+          charges to both the protein and the ligand, click on <span
+          class="menu">Potential Setup | Fix Charges</span>.
+        </li>
+      </ol>
+    </li>
+    <li>
+      <i>Render the system</i><br />
+      Render the system with the following options:
+      <ul>
+        <li><span class="menu">MOE | RHS | Surface | Receptor</span></li>
+        <li><span class="menu">MOE | RHS | SiteView</span></li>
+        <li><span class="menu">MOE | RHS | Select | Ligand</span></li>
+        <li><span class="menu">MOE | Footer | Atoms | Color |
+        <i>Green</i></span></li>
+      </ul>
+    </li>
+    <li>
+      <i>Save the system.</i><br />
+      Save the file under the name <tt>1ro6_docking.moe</tt>.
+
+      <p class="blockquote"><span class="menu">MOE | File | Save |
+      <tt>1ro6_docking.moe</tt>.</span></p>
+    </li>
+    <li>
+      <i>Open the Dock panel.</i>
+      <p class="blockquote"><span class="menu">MOE | Compute | Dock</span></p>
+    </li>
+
+    <li> <i>Verify the receptor specification.</i><br /> <b>Receptor</b> should
+    be set to <b>Receptor Atoms</b>. Press the <b>?</b> button to see the atoms
+    briefly selected in the MOE Window.  </li>
+
+    <li><i>Verify the site specification.</i><br /> Set <b>Site</b> to
+    <b>Ligand Atoms</b>. Press the <b>?</b> button to see the atoms briefly
+    selected in the MOE Window.</li>
+
+    <li><i>Select an MDB library of ligands to dock</i><br /> Press
+    <b>Browse</b> and select <tt>$MOE/sample/mol/1RO6_ligands.mdb</tt>.</li>
+
+    <li><i>Turn on conformation generation.</i><br />
+    Open the Ligand configuration popup by pressing the
+    <img src="docking/gear_icon.png" alt= "Configure Gear"
+    style="vertical-align: middle" /> button and ensure that
+    <b>Rotate Bonds</b> is enabled; this will generate ligand
+    conformations by bond rotation prior to the ligand placement stage.</li>
+
+    <li>
+      <i>Set the docking parameters.</i>
+      <ul>
+        <li>Use the default (start-up) parameters of the docking application.
+        Ensure <b>Refinement</b> is set to <b>Rigid Receptor</b>
+        docking.</li>
+        <li>Set both <b>Poses</b> values to 10.</li>
+      </ul>
+    </li>
+
+    <li><i>Name the output MDB file.</i><br /> In the <b>Output</b> field,
+    enter <tt>dock1.mdb</tt> as the output name.</li>
+
+    <li> <i>Start the docking simulation.</i><br /> Press <b>Run</b>. The
+    output database opens automatically into a Database Viewer; this database
+    will contain the docked poses and scores at the end of the dock operation.
+    Docking progress is reported to the <a
+    href="../moe/gui/svlcommands.htm">SVL Commands window</a>. The ligand
+    refinement stage can be observed in the MOE Window.  </li>
+
+    <li>
+      <i>Analyze the Docking Results</i><br /> The Docking results can be
+      viewed by using a combination of the <a href="../mdb/db.htm">Database
+      Viewer</a> and the <a href= "../mdb/dbbrowse.htm">Database Browser</a>.
+      By default, a Database Viewer loaded with <tt>dock1.mdb</tt> will open
+      automatically, however, if it does not, open the database file with <span
+      class="menu">MOE | File | Open</span>. This will initiate a Database
+      Viewer loaded with the file.
+
+      <p>Open the Database Browser.</p>
+
+      <p class="blockquote"><span class="menu">DBV | File | Browse</span></p>
+
+      <p>Render the docked ligand for better visualization:</p>
+
+      <ul>
+        <li>Select the ligand atoms by positioning the mouse cursor over a
+        ligand atom and <tt>Ctrl</tt>-Left-Clicking.</li>
+
+        <li><span class="menu">MOE | Footer | Atoms | <img src=
+        "../moe/gui/mainwin/atom_render_stick.png" alt="Stick" style=
+        "vertical-align: middle" /></span></li> <li><span class="menu">MOE |
+        Render | Hide | Nonpolar Hydrogens</span></li>
+
+      </ul>
+    </li>
+  </ol>
+
+  <p class="center"><img src="docking/1ro6_mdbdock.jpg" alt="MDB Docking" /></p>
+</div>
+
+<a id="Example_Library_Template">
+<h2>Example: Docking a Library with Template Forcing</h2>
+</a>
+
+<div class="example">
+  <ol>
+    <li><i>Clear the molecular data.</i><br />
+    Ensure there are no running tasks (use the Cancel menu in the MOE Window)
+    and close all molecular data with <span class="menu">MOE | RHS |
+    Close</span>.</li>
+
+    <li>
+      <i>Open the previously-prepared protein file.</i>
+
+      <p class="blockquote"><span class="menu">RHS | Open |
+      <tt>1ro6_docking.moe</tt></span></p>
+
+      <p>This file contains both a protein and a ligand. This ligand will be
+      used later to define the binding site and serve as a reference
+      structure.</p>
+    </li>
+
+    <li><i>Open the Dock panel.</i><br /> <br /> <span class="menu">MOE |
+    Compute | Dock</span><br /> <br /> Press the <b>Template</b> button.</li>
+
+    <li><i>Verify the receptor specification.</i><br /> <b>Receptor</b> should
+    be set to <b>Receptor Atoms</b>. Press the <b>?</b> button to see the atoms
+    briefly selected in the MOE Window.</li>
+
+    <li><i>Verify the site specification.</i><br /> Set <b>Site</b> to
+    <b>Ligand Atoms</b>. Press the <b>?</b> button to see the atoms briefly
+    selected in the MOE Window.</li>
+
+    <li><i>Select an MDB library of ligands to dock</i><br /> Press <img src=
+    "docking/folder_icon.png" alt="File Folder" style= "vertical-align: middle"
+    /> and select <tt>$MOE/sample/mol/1RO6_ligands.mdb</tt>.</li>
+
+    <li>
+      <i>Set the docking parameters to use Template Similarity.</i>
+      <ul>
+        <li>Set <b>Template</b> to <b>Ligand Atoms</b>.</li>
+        <li>Select the <b>Similarity</b> button.</li>
+      </ul>
+      
+      Note that all of the ligand atoms are highlighted in the display.  You
+      can investigate the effect of selecting atoms by changing <b>Template</b>
+      to <span class="nobr"><b>Selected Atoms</b></span> and selecting a
+      portion of the ligand. Restore <b>Template</b> to <span
+      class="nobr"><b>Ligand Atoms</b></span> to continue.
+    </li>
+
+    <li><i>Name the output MDB file.</i><br /> In the <b>Output</b> field,
+    enter <tt>dock2.mdb</tt> as the output name.</li>
+
+    <li> <i>Start the docking simulation.</i><br /> Press <b>Run</b>. The
+    output database opens automatically into a Database Viewer; this database
+    will contain the docked poses and scores at the end of the dock operation.
+    Docking progress is reported to the <a
+    href="../moe/gui/svlcommands.htm">SVL Commands Window</a>. The results can
+    be analyzed as in the previous example. This example can also be rerun
+    using Template Forcing with the catechol fragment as the template structure
+    by pressing the <b>Substructure</b> button, setting <b>Query</b> to
+    <b>SMARTS</b> and entering <tt>Oc1ccccc1O</tt> as the SMARTS string.  </li>
+  </ol>
+</div>
+
+<a id="Example_Covalent_Docking">
+<h2>Example: Performing a Covalent Docking Simulation</h2>
+</a>
+
+<div class="example">
+  This example will demonstrate how Covalent Docking can be used to
+  reconstruct the protein-ligand bound complex for PDB code 4JG7.
+
+  <ol>
+    <li><i>Clear the molecular data.</i><br /> Ensure there are no running
+    tasks (use the Cancel menu in the MOE Window) and close all molecular data
+    with<br /> <br /> <span class="menu">MOE | RHS | Close</span>.<br /></li>
+
+    <li><i>Load the structure into MOE.</i><br /> <br /> <span class="menu">MOE
+    | File | Open | <tt>$MOE/sample/mol/4jg7.pdb.gz</tt></span><br /> <br /> In
+    the Load PDB File panel that opens, set <b>Symmetry</b> to <b>Biomolecule
+    Assembly</b> and press <b>OK</b>. The molecular data comprises the
+    protein-ligand bound complex.<br /></li>
+
+    <li><i>Prepare the protein-ligand complex.</i><br /> Set the current
+    forcefield to <b>Amber10:EHT</b>.<br /> Set <b>Solvation</b> to
+    <b>R-field</b>.<br /> Prepare the protein-ligand complex.<br /> <br />
+    <span class="menu">MOE | RHS | QuickPrep</span><br /> <br /> Press
+    <b>OK</b> to start QuickPrep. This calculation will take a few minutes.
+    When completed, save the prepared protein-ligand complex to a file.<br />
+    <br /> <span class="menu">MOE | File | Save</span><br /> <br /> and enter
+    <tt>prep_4jg7.moe</tt> and press <b>OK</b>. Center the display on the
+    active site.<br /> <br /> <span class="menu">MOE | RHS | SiteView</span><br
+    /></li>
+
+    <li><i>Prepare the ligand.</i><br /> Two bonds must be changed to recreate
+    a ligand that can react with the pocket residue. Start the
+    <b>Builder</b><br /> <br /> <span class="menu">MOE | RHS |
+    Builder</span><br /> <br /> Break the bond between the ligand and the
+    terminal sulfur atom.<br /> Change the bond between the formerly-bound
+    carbon and the alpha-cyano group from single to double.<br /> Save the
+    protein-ligand complex with the prepared ligand to a file.<br /> <br />
+    <span class="menu">MOE | File | Save</span><br /> <br /> and enter
+    <tt>initial_4jg7.moe</tt> and press <b>OK</b>.<br /></li>
+
+    <li>
+      <i>Start the docking simulation.</i><br /> <br /> <span class="menu">MOE
+      | Compute | Dock</span><br /> <br /> Open the Dock panel.  Change the
+      <b>Refinement</b> setting from 5 to 30 poses.  This increases the number
+      of bound structures that can be refined.<br /> <br /> Press the
+      <b>Covalent</b> button.<br /> Select the sulfur atom from the broken
+      bond, and set <span class= "nobr"><b>Reactive Site</b></span> to <span
+      class="nobr"><b>Selected Residues</b></span>.<br /> Select the <span
+      class="nobr"><b>Michael acceptor S</b></span> class for the <span
+      class="nobr"><b>1,4-addition beta-mercapto carbonyl</b></span> product.
+      At this point, the panel should look like this:
+
+      <p class="center"><img src="docking/covalent_4jg7_initial.png" alt=
+      "Covalent Docking Example" /></p>
+    </li>
+  </ol>
+
+  Press <b>Run</b> to start the calculation, which will take a few minutes and
+  produce <tt>dock.mdb</tt>. The output database opens automatically in a
+  Database Viewer, which will contain roughly 25 poses and their corresponding
+  scores. These poses have been refined using <span class="nobr"><b>Rigid
+  Receptor</b></span> and rescored using <span class="nobr"><b>GBVI/WSA
+  dG</b></span>. Docking progress is reported to the <a
+  href="../moe/gui/svlcommands.htm">SVL Commands Window</a>.  Browsing the
+  results will show several structures quite similar to the starting ligand.
+</div>
+
+<a id="Example_ElectronDensity">
+<h2>Example: Scoring Using Electron Density</h2>
+</a>
+
+<div class="example">
+  This example walks through docking of the ligand from 1XKK and performs a
+  pose rescoring with electron density.
+
+  <ol>
+    <li>
+      Follow <a href="#Example_Data_Preparation">Example 1</a> and <a
+      href="#Example_Docking_Simulation">Example 2</a>, replacing 1g5s.pdb.gz
+      with 1xkk.pdb.gz.
+
+      <p class="center"><img src="docking/1xkk_dock_results.png" alt= "1XKK
+      Docking" /></p>
+    </li>
+    <li>Rescore the poses against the electron density.
+      <ol type="a">
+        <li>
+          Open the Dock Panel.
+          <p class="blockquote"><span class="menu">MOE | Compute |
+          Dock</span></p>
+        </li>
+
+        <li>Click on the <img src="docking/folder_icon.png" alt="Browse Gear"
+        style="vertical-align: middle" /> button adjacent to <b>Density</b> and
+        locate <tt>$MOE/sample/mol/1xkk_sigmaa.mtz</tt>. Click <b>Yes</b> to
+        accept the new space group if prompted.</li>
+
+        <li>
+          Click on the <img src="docking/gear_icon.png" alt= "Configure Gear"
+          style="vertical-align: middle" /> button adjacent to <b>Density</b>.
+          <p class="center"><img src="docking/ed_panel.png" alt= "1XKK Docking"
+          /></p>
+        </li>
+
+        <li>Set <b>Map</b> to <tt>2FOFCWT</tt> on the Electron Density panel.
+	</li>
+        <li>Insert the name of the MDB output file from the 1XKK docking
+        experiment in <b>Ligand</b>.</li>
+
+        <li>Change <b>Placement Method</b> and <b>Refinement Method</b> to
+        <i>None</i>.</li>
+
+        <li>Change <b>Placement Score</b> to <i>Electron Density</i>.</li>
+        <li>Change <b>Output</b> to <i>dock_ed.mdb</i>.</li>
+        <li>Click <b>Run</b> on the Docking panel to rescore the previous
+        docking poses.</li>
+      </ol>
+      <br clear="all" />
+    </li>
+    <li>
+      Analyze the results
+
+      <p>The electron density score is located in the <i>S_A</i>. Note that the
+      lower the electron density score, the better the overlap between the
+      docking pose and the electron density. To visual compare the electron
+      density and docking poses an <a href=
+      "../apps/surfmap.htm#ElectronDensity">electron density surface</a> can be
+      used.</p>
+
+      <ol type="a">
+        <li>
+          Open the MDB File browser and render the ligand
+          <p class="blockquote"><span class="menu">DBV | File | Browse
+          ...</span></p>
+          <p>To render the ligand, select <b>Atoms</b> and change the atom
+          color to <i>light green</i> and the atom rendering to <i>ball and
+          stick</i>.</p>
+        </li>
+        <li>
+
+          <p>Open the <a href="../apps/surfmap.htm">Surface and Maps</a>
+          application.</p>
+
+          <p class="blockquote"><span class="menu">MOE | RHS | Surface |
+          Surface and Maps ...</span></p>
+
+          <img src="docking/1xkk_surfmap_ed.png" alt="Surface and Maps"
+          class="center"/>
+
+          <p>Then change <b>Surface</b> to<i>Electron Density</i>, or select</p>
+
+          <p class="blockquote"><span class="menu">MOE | Compute | Surface and
+          Maps | Electron Density</span></p>
+
+        </li>
+        <li>
+          Load <i>1xkk_sigmaa.mtz</i>
+
+          <p>Click the <b>Load...</b> button and select
+          <i>$MOE/sample/mol/1xkk_sigmaa.mtz</i>.</p>
+        </li>
+
+        <li>
+          Change the options to show the ligand electron density only.
+
+          <p>These options will show the volume of space occupied by the
+          ligand. NOTE: Some density from the receptor may be shown if it is in
+          close contact to the crystallographic ligand.</p>
+          <ul>
+            <li><b>Atoms</b> to <i>Ligand Atoms</i>.</li>
+            <li><b>Near</b> to <i>Ligand Atoms</i>.</li>
+            <li><b>Within</b> to <i>1.5</i>.</li>
+          </ul><br clear="all" />
+        </li>
+        <li>
+          <img src="docking/1xkk_dock_results_ed.png" alt="1XKK Docking"
+          class="floatright" /> Create the Electron Density surface
+
+          <p>Click on <b>Create</b> on the Surface and Maps panel.</p>
+        </li>
+        <li>
+          Compare the ligand poses to the Electron Density surface.
+
+          <p>It is now possible to cycle through the Docking browser and
+          compare how well the ligand poses compare to the electron density
+          surface. Notice that the posses with the lowest electron density
+          scores have the best overlap with the electron density.</p>
+        </li>
+      </ol>
+    </li>
+  </ol>
+</div>
+
+<a id="Example_PostDocking">
+<h2>Example: Post-Docking Refinement</h2>
+</a>
+
+<div class="example">
+
+  <p>This example will demonstrate the ability of the docking engine to re-score
+  and filter results from a previous docking simulation by use the engine's
+  ability to use <b>None</b> as a placement option.</p>
+
+  <p>This example assumes that the results of the previous example are currently
+  in MOE. If <tt>1ro6_docking.moe</tt> is not already open, close the current
+  system with <span class="menu">MOE | RHS | Close</span> and open the file with
+  <span class="menu">MOE | File | Open</span></p>
+
+  <ol>
+    <li>
+      <i>Render the system.</i><br />
+      Delete the current (quick) surfaces from the system with:
+
+      <p class="blockquote"><span class="menu">MOE | RHS | Surface |
+      Clear</span></p>
+    </li>
+    <li>
+      Open the Dock panel.
+
+      <p class="blockquote"><span class="menu">MOE | Compute | Dock</span></p>
+    </li>
+    <li><i>Verify the receptor specification.</i><br />
+    <b>Receptor</b> should be set to <b>Receptor Atoms</b>. Press the
+    <b>?</b> button to see the atoms briefly selected in the MOE Window.</li>
+    <li>
+      <i>Create a pharmacophore filter.</i><br />
+      We will now create a pharmacophore query for filtering the docking
+      results.
+
+      <p>Set <b>PH4</b> to <i>Create new Query</i> and click <b>Open
+      new Editor</b></p>
+
+      <p>Select the two projected acceptor pharmacophore annotations (acc2)
+      near the catechol oxygens of the ligand (see near green arrow in the
+      image below). Click on <span class="menu">Pharmacophore Query |
+      Feature</span>.</p>
+
+      <p class="center"><img src="docking/1ro6_ph4.png" alt= "Pharmacophore
+      Constraint" /></p>
+    </li>
+
+    <li> <i>Verify the pharmacophore specification</i><br />
+    <b>PH4</b> should be set to <b>Pharmacophore Editor</b>.</li>
+
+    <li><i>Verify the site specification.</i><br /> Set <b>Site</b> to
+    <b>Ligand Atoms</b>. Press the <b>?</b> button to see the atoms briefly
+    selected in the MOE Window.</li>
+
+    <li><i>Select the MDB library of a previous docking run</i><br /> Press
+    <b>Browse</b> to open a file browser, and select <tt>dock1.mdb</tt> or
+    <tt>dock2.mdb</tt> as desired.</li>
+
+    <li>
+      <i>Set the docking parameters.</i>
+      <ul>
+        <li>Complete Pose Rescoring by setting:</li>
+        <li><b>Placement Method</b> and <b>Refinement Method</b> to
+        <b>None</b>.</li>
+        <li>Use the <b>Affinity dG</b> for scoring
+        (<b>Rescoring&nbsp;2:&nbsp;Affinity&nbsp;dG</b>).</li>
+        <li style="list-style: none">
+          <a href="../moe/pot.htm">Forcefield</a> should be set to MMFF94x.
+        </li>
+      </ul>
+    </li>
+
+    <li><i>Name the output MDB file.</i><br /> In the <b>Output</b> field, type
+    <tt>dock3.mdb</tt> as the output name.</li>
+
+    <li><i>Start the docking simulation.</i><br /> Press <b>Run</b>. The output
+    database opens automatically into a Database Viewer; this database will
+    contain the refined and filtered poses. This new data will be saved in
+    <tt>dock3.mdb</tt> with a suffix to distinguish from the results from the
+    previous docking run.</li>
+
+    <li>
+      <i>Analyze the Docking Results</i><br />
+      The Docking results can be viewed by using a combination of the
+      <a href="../mdb/db.htm">Database Viewer</a> and the <a href=
+      "../mdb/dbbrowse.htm">Database Browser</a>.
+
+      <p><tt>dock3.mdb</tt> by default is opened at the completion of the
+      docking simulation; if not, open it with <span class="menu">MOE | File
+      | Open</span>.</p>
+
+      <p>Open the Database Browser:</p>
+
+      <p class="blockquote"><span class="menu">DBV | File |
+      Browse</span>.</p>
+
+      <p>Sort the results based on <i>S</i> using <span class="menu">DBV |
+      Compute | Sort</span> and select <b>S_A</b> in the pull down menu of
+      first sorting option (<b>1:</b>), then <b>OK</b>. Render the docked
+      ligand with the following options:</p>
+
+      <ul>
+        <li><span class="menu">MOE Window | <tt>Ctrl</tt>-Left-Click on a
+        ligand atom</span></li>
+        <li><span class="menu">MOE | Footer | Atoms | <img src=
+        "../moe/gui/mainwin/atom_render_stick.png" alt="Stick" style=
+        "vertical-align: middle" /></span></li>
+        <li><span class="menu">MOE | Render | Hide | Nonpolar
+        Hydrogens</span></li>
+        <li>Additionally close the <b>Pharmacophore Query Editor</b>.</li>
+      </ul>
+
+      <p class="center"><img src="docking/1ro6_filter.png" alt="MDB
+      Docking"/></p>
+    </li>
+  </ol>
+</div>
+
+<a id="Example_ProteinProtein">
+<h2>Example: Fab fragment of IgG Antibody docking to birch allergen Bet v 1</h2>
+</a>
+
+<div class="example">
+
+  <p>As shown in the previous section, our docker performs quite well on most
+  antibodies. We thus selected <i>1FSK</i>, a complex of the major birch
+  allergen Bet v 1 and a Fab fragment of a monoclonal murine IgG antibody, as a
+  protein-protein docking example.</p>
+
+  <p><b>Load and prepare the system</b></p>
+
+  <ol style="list-style-type: decimal">
+    <li>Open the MOE file:<br />
+    <span class="menu">MOE | File | Open |
+    $MOE/sample/mol/1fsk.moe.gz</span></li>
+    <li>Set force-field to Amber:EHT:<br />
+    <b>MOE | Footer | Amber:EHT</b><br /></li>
+    <li>Prepare the structure:<br />
+    <b>MOE | RHS | QuickPrep</b><br />
+    Use default options and click <b>OK</b>.</li>
+    <li>Annotate the chains using antibody detection:<br />
+    <span class="menu">SE | Annotate | Antibody | CCG</span> or<br />
+    <span class="menu">MOE | Protein | Annotate | Antibody | CCG</span>.</li>
+  </ol>
+
+  <p><b>Dock the complex</b></p>
+
+  <ol style="list-style-type: decimal">
+    <li>
+      Open the Dock panel, select the Protein-Protein mode, and set up run:<br
+      /> <span class="menu">MOE | Compute | Dock | Protein-Protein</span> or<br
+      /> <span class="menu">MOE | Protein | Protein-Protein Dock</span>
+    </li>
+
+    <li>
+      <p>Make sure the <b>Receptor</b> is set to <b>Antigen</b> and its <b>Site</b> to
+      <b>All Atoms</b>.</p>
+
+      <p>Make sure the <b>Ligand</b> is set to <b>Antibody</b> and that the <b>Ligand Site</b>
+      is set to <b>CDR_H3</b>.</p>
+
+      <p>Make sure <b>Use Hydrophobic Patch Potential</b> is selected to add the
+      automatic patch analysis.</p>
+
+      <p>For this example, <b>Refinement</b> can be set to <b>None</b>.
+      Since that will save a large number of poses the <b>Generate
+      Fingerprints</b> option can also be unchecked.</p>
+    </li>
+
+    <li>Run the docking procedure by clicking <b>Run</b> at the bottom of the
+    panel.</li>
+  </ol>
+
+  <p>Once the docking run is finished, the user is shown the result MDB
+  database with the top-ranked ligand (antibody) poses.</p>
+  <br clear="all" />
+</div>
+
+<a id="References">
+<h1>References</h1>
+</a>
+
+<table class="ref">
+  <tr>
+    <td valign="top">[Basdevant]</td>
+    <td>Basdevant, N., Borgis, D. &amp; Ha-Duong, T. A coarse-grained
+    protein-protein potential derived from an all-atom force field. <i>The
+    Journal of Physical Chemistry B</i> <b>111,</b> 9390&ndash;9399
+    (2007).</td>
+  </tr>
+  <tr>
+    <td valign="top">[Corbeil]</td>
+    <td>Corbeil, C.R., Williams, C.I. &amp; Labute, P. Variability in docking
+    success rates due to dataset preparation. <i>J Comput Aided Mol Des</i>
+    <b>26</b>, 775–786 (2012). https://doi.org/10.1007/s10822-012-9570-1</td>
+  </tr>
+  <tr>
+    <td valign="top">[Edelsbrunner]</td>
+    <td>H. Edelsbrunner. Weighted alpha shapes. Report UIUCDCS-R-92-1760, Dept.
+    Comput. Sci., Univ. Illinois, Urbana, Illinois, (1992).</td>
+  </tr>
+  <tr>
+    <td valign="top">[Gru]</td>
+    <td>Gru, A., Lai, P.-k., Blanco, M. A. &amp; Roberts, C. J.  Coarse-Grained
+    Modeling of Protein Second Osmotic Virial Coefficients : Sterics and
+    Short-Ranged Attractions. (2013).</td>
+  </tr>
+  <tr>
+    <td valign="top">[Labute]</td>
+    <td valign="top">Labute, P.; The Generalized Born / Volume Integral (GB/VI)
+    Implicit Solvent Model: Estimation of the Free Energy of Hydration Using
+    London Dispersion Instead of Atomic Surface Area; <i>J.  Comp. Chem.</i>
+    <b>19</b> (2008) 1693&ndash;1698.</td>
+  </tr>
+  <tr>
+    <td valign="top">[Marrink]</td>
+    <td>Marrink, S. J., Risselada, H. J., Yefimov, S., Tieleman, D. P. &amp; De
+    Vries, A. H. The mARTINI force field: Coarse grained model for biomolecular
+    simulations. <i>The Journal of Physical Chemistry B</i> <b>111,</b>
+    7812&ndash;7824 (2007).</td>
+  </tr>
+  <tr>
+    <td valign="top">[Naim]</td>
+    <td valign="top">Naim <i>et al.</i>; <i>J. Chem. Inf. Model.</i> <b>47</b>
+    (2007) 122&ndash;133.</td>
+  </tr>
+  <tr>
+    <td valign="top">[Singh]</td>
+    <td>Singh, J. &amp; Kofke, D. Mayer Sampling: Calculation of Cluster
+    Integrals using Free-Energy Perturbation Methods. <i>Physical Review
+    Letters</i> <b>92,</b> 220601 (2004).</td>
+  </tr>
+  <tr>
+    <td valign="top">[Yershova]</td>
+    <td>Yershova, A., Jain, S., LaValle, S. M., &amp; Mitchell, J. C.
+    Generating Uniform Incremental Grids on SO(3) Using the Hopf Fibration.
+    <i>Int J Rob Res.</i> <b>29(7)</b> 801&ndash;812 (2010).</td>
+  </tr>
+</table>
+
+<a id="See_Also">
+<h1>See Also</h1>
+</a>
+
+<p><a href=
+"https://www.chemcomp.com/moe/help/2018/CCG_Tutorials/(Tutorial)_MOE_Docking.svlx">
+Docking Tutorial</a></p>
+
+<p><a href="ph4_guide.htm">Introduction to Pharmacophores in MOE</a><br />
+  <a href="sitefind.htm">Site Finder</a><br />
+  <a href="combitools.htm">Combinatorial Library</a><br />
+  <a href="confgui.htm">High Throughput Conformational Analysis</a><br />
+  <a href="plif.htm">Protein Ligand Interaction Fingerprints</a><br />
+  <a href="../moe/pot.htm">Potential Energy Selection and Configuration</a><br/>
+  <a href="../mdb/db.htm">Molecular Database Viewer</a><br />
+  <a href="dbv_molsup.htm">Molecular Superpose</a><br />
+  <a href="../mdb/dbbrowse.htm">Database Browser</a><br />
+  <a href="../moe/hpc.htm">High-Performance Computing Framework</a><br />
+  <a href="../install/smp_inst.htm">MOE/cluster (MOE/smp)</a></p>
+
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../images/ccgicon.png" /> <a href="../index.htm"></a> <a href=
+    "../legal.htm"></a> &copy; <a href="http://www.chemcomp.com"></a>. All
+    rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+
+  </div>
+  </div>
+
+</body>
+</html>
+

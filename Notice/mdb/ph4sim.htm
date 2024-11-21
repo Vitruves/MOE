@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../images/ccgicon.png" />
+  <meta name="keywords" content="panel: MOE-Similarity" />
+  <meta name="keywords" content="panel: Fingerprint Similarity" />
+  <meta name="keywords" content="panel: Fingerprint Chooser (Similarity)" />
+  <title>Similarity Searching</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../index.htm"><img src="../images/ccglogo.png" /></a>
+    <a href="../index.htm"><div class="moeversion"></div></a>
+    Similarity Searching
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+  <ul>
+    <li>
+      <a href="#Introduction">Introduction</a>
+    </li>
+    <li>
+      <a href="#Running">Running MOE-Similarity</a>
+    </li>
+    <li>
+      <a href="#SVL">SVL Commands</a>
+    </li>
+  </ul>
+
+<h1>
+<a id="Introduction">Introduction</a></h1>
+
+<p>MOE-Similarity performs a search in a database for molecules that are
+  similar to a query molecule. To run a similarity search, the following items
+  are required:</p>
+  <ol>
+    <li><i>Fingerprinted Database</i>. A molecular database for which
+    fingerprints have already been calculated. In the Database Viewer, use
+    <b><span class="nobr">DBV | Compute | Fingerprint | <a href=
+    "ph4calc.htm">Calculate</a></span></b> to calculate fingerprints if the
+    search database does not contain them.</li>
+    <li><i>Query Molecule.</i> Search queries are defined by atoms (or a subset
+    of atoms) loaded in MOE. In the MOE Window, use <b><nobr>MOE | File |
+    <a href="../moe/gui/fileopen.htm">Open</a></nobr></b> to load a query
+    molecule.</li>
+  </ol>
+
+<h1><a id="Running">Running MOE-Similarity</a></h1>
+
+<p>When ready to perform the search, open the database and choose
+  <b><span class="nobr">DBV | Compute | Fingerprint | Search</span></b> in the
+  Database Viewer. The MOE-Similarity panel appears:</p>
+  <img src="ph4sim/panel.png" alt="MOE-Similarity Panel" class="center" />
+  <table class="noborder">
+    <tr>
+      <td valign="top"><b>Database</b></td>
+      <td>Path and filename of the current database in which the search will be
+      performed.</td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Entries</b></td>
+      <td>Determines which entries will be used when performing the similarity
+      search. You may perform the search on all database entries or restrict it
+      to entries that are selected, visible or hidden.</td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Fingerprint</b></td>
+      <td>Indicates the fingerprint system and similarity metric used for the
+      search. Press the Set Fingerprint button (described below) to change the
+      fingerprint or the metrics.<br />
+      <br />
+      <b>Note:</b> If you select a fingerprint system that has not been applied
+      to the database, you will not be able to search (fingerprints must be
+      calculated prior to searching).</td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Overlap</b></td>
+      <td>Determines the strictness of the search. All similarity metrics
+      return a number between 0 and 100%, where 100% means most similar. A
+      <i>hit</i> is any molecule whose similarity measure to the query molecule
+      is greater than, or equal to, the Overlap value.</td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Atoms</b></td>
+      <td>When turned on, only the selected atoms in MOE will be used to
+      represent the query molecule. Otherwise, all atoms will be used to form
+      the search query.</td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Visibility</b></td>
+      <td>
+        Controls the visibility of the similarity search results in the
+        database:
+        <ul>
+          <li>Show Hits: Displays the hits (similar molecules) and hides the
+          misses</li>
+          <li>Hide Hits: Displays the misses and hides the hits</li>
+          <li>Unchanged: Leaves the entry visibility state unchanged</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Selection</b></td>
+      <td>
+        Controls the selection state of the similarity search results in the
+        database:
+        <ul>
+          <li>Select Hits: Selects hits (provided they are visible) in the
+          database and deselects misses</li>
+          <li>Select Misses: Selects the misses and deselects the hits</li>
+          <li>Unchanged: Leaves the entry selection state unchanged</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Set&nbsp;Fingerprint</b></td>
+      <td>Displays the Fingerprint Chooser (Similarity) panel, which is used to
+      change the fingerprint and/or similarity metric used for the search.</td>
+    </tr>
+  </table>
+
+<p>Once all the components necessary for the search are present, press the
+  Search button to start the process. The button label changes to Busy during
+  the search.</p>
+
+<p>MOE-Similarity cannot perform a search under the following conditions:</p>
+  <ul>
+    <li>The Search button turns to <b>No Fingerprint</b> when the database does
+    not contain a fingerprint field matching the chosen search fingerprint
+    system. Use <span class="nobr">Compute | Fingerprint | <a href=
+    "ph4calc.htm">Calculate</a></span> to calculate the correct fingerprints in
+    the database.</li>
+    <li>The Search button turns to <b>No Query</b> if there are no atoms in the
+    system.</li>
+  </ul>
+
+<p>Depending on the size of the database, the search may require some time.
+  Note that it might take longer for certain fingerprint systems to calculate a
+  fingerprint for a given molecule, depending on the complexity of the
+  fingerprint. The search always proceeds by calculating a fingerprint for the
+  query atoms.</p>
+  <img src="ph4sim/choose_sim.png" alt="Fingerprint Chooser Panel" class="center" />
+
+<h1><a id="SVL">SVL Commands</a></h1>
+
+<p><a class="svl" href=
+  "../moe/fcnref/ph4_mdb.htm#ph4_FingerprintMDB">ph4_FingerprintMDB</a></p>
+
+<h1>See Also</h1>
+
+<p><a href="ph4intro.htm">Introduction to Molecular Fingerprints</a><br />
+  <a href="db.htm">Molecular Database Viewer</a><br /></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../images/ccgicon.png" /> <a href="../index.htm"></a>
+<a href=
+    "../legal.htm"></a> &copy;<span class="versionyear"></span> <a href="http://www.chemcomp.com"></a>. All
+    rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

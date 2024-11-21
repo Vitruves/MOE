@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content=
+  "functions: DrawSE2Struct, DrawSECompound, DrawSEHBonds" />
+  <meta name="keywords" content=
+  "functions: DrawSEResIdx, DrawSEResUID, DrawSEPred2Struct" />
+  <meta name="keywords" content=
+  "functions: DrawSESingleLetter, DrawSEScalar, DrawSEChainTag" />
+  <title>Sequence Editor Drawing Functions: DrawSE2Struct...</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Sequence Editor Drawing Functions:
+    DrawSE2Struct...
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    DrawSE<i>fcn</i> flag
+    old_flag = DrawSE<i>fcn</i> flag
+    flag = DrawSE<i>fcn</i> []
+
+    old_flag = <a class="fcnlink" href=
+"#DrawSEScalar">DrawSEScalar</a> [index, flag]
+    old_flag = <a class="fcnlink" href="#DrawSEScalar">DrawSEScalar</a> index
+</pre>
+<a id="DrawSE2Struct"></a>
+<h1>Description</h1>
+
+<p>Each of the following functions turns on or off a display attribute of the
+  Sequence Editor. Drawing is enabled if <tt>flag</tt> is a non-zero value, and
+  disabled if <tt>flag == 0</tt>. If passed a null argument, functions return
+  the current drawing state. <!-- DESC --></p>
+  <table class="titlebar">
+    <tr>
+      <th>Function</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td valign="top">
+<tt>DrawSE2Struct</tt></td>
+      <td valign="top">
+        Turns on or off the actual secondary structure labels drawn as
+        color-coded bars above the residues.
+
+<pre>
+DrawSE2Struct flag
+old_flag = DrawSE2Struct flag
+flag = DrawSE2Struct []
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+<a id="DrawSECompound"></a>
+<tt>DrawSECompound</tt></td>
+      <td valign="top">
+        Turns on or off the compound name.
+
+<pre>
+DrawSECompound flag
+old_flag = DrawSECompound flag
+flag = DrawSECompound []
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+<a id="DrawSEChainTag"></a>
+<tt>DrawSEChainTag</tt></td>
+      <td valign="top">
+        Turns on or off the chain tag.
+
+<pre>
+DrawSEChainTag flag
+old_flag = DrawSEChainTag flag
+flag = DrawSEChainTag []
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+<a id="DrawSEHBonds"></a>
+<tt>DrawSEHBonds</tt></td>
+      <td valign="top">
+        Turns on or off hydrogen bonds drawn as arcs above residues.
+
+<pre>
+DrawSEHBonds flag
+old_flag = DrawSEHBonds flag
+flag = DrawSEHBonds []
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+<a id="DrawSEPred2Struct"></a>
+<tt>DrawSEPred2Struct</tt></td>
+      <td valign="top">
+        Turns on or off the predicted secondary structure labels drawn as
+        color-coded bars below the residues.
+
+<pre>
+DrawSEPred2Struct flag
+old_flag = DrawSEPred2Struct flag
+flag = DrawSEPred2Struct []
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+<a id="DrawSEResIdx"></a>
+<tt>DrawSEResIdx</tt></td>
+      <td valign="top">
+        Turns on or off the residue index. This option is mutually exclusive of
+        <tt>DrawSEResUID</tt>.
+
+<pre>
+DrawSEResIdx flag
+old_flag = DrawSEResIdx flag
+flag = DrawSEResIdx []
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+<a id="DrawSEResUID"></a>
+<tt>DrawSEResUID</tt></td>
+      <td valign="top">
+        Turns on or off the residue UID number. This option is mutually
+        exclusive of <tt>DrawSEResIdx</tt>.
+
+<pre>
+DrawSEResUID flag
+old_flag = DrawSEResUID flag
+flag = DrawSEResUID []
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+<a id="DrawSEScalar"></a>
+<tt>DrawSEScalar</tt></td>
+      <td valign="top">
+        Turns on or off the residue scalar plots below residues. <tt>index</tt>
+        indicates which of the three residue scalars to plot (see <a class=
+        "svl" href="residue.htm">rSetScalar</a>).
+
+<pre>
+old_flag = DrawSEScalar [index, flag]
+old_flag = DrawSEScalar index
+</pre>
+
+<p>The following enables the display of the plot of residue scalar
+        2:</p>
+
+<pre>
+    svl&gt; DrawSEScalar [2,1];
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+<a id="DrawSESingleLetter"></a>
+<tt>DrawSESingleLetter</tt></td>
+      <td valign="top">
+        Turns on or off the single-letter display of residue codes. When off,
+        residue codes have three letters.
+
+<pre>
+DrawSESingleLetter flag
+old_flag = DrawSESingleLetter flag
+flag = DrawSESingleLetter []
+</pre>
+      </td>
+    </tr>
+  </table><!-- ENDDESC -->
+
+<h1>See Also</h1>
+
+<p><a href="draw.htm">3D Rendering Window Display Functions</a></p>
+
+<p><a class="svl" href="moe_const.htm">R_SEGMENT_TYPES</a><br />
+  <a class="svl" href="residue.htm">rActualSegment</a><br />
+  <a class="svl" href="residue.htm">rSegment</a><br />
+  <a class="svl" href="residue.htm">rSetSegment</a><br />
+  <a class="svl" href="sescalar.htm">SEDisplayPos</a><br />
+  <a class="svl" href="sescalar.htm">SEDisplaySize</a><br />
+  <a class="svl" href="sescalar.htm">SEScalarPlotName</a></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

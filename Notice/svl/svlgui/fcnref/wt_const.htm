@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href=
+  "../../../include/manstyle.css" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content=
+  "functions: WINDOW_OBJECTS, WINDOW_COLORS, WINDOW_DATA_TYPES, WINDOW_FONTS" />
+  <meta name="keywords" content=
+  "functions: WINDOW_FSB_MODES, WINDOW_ON_TRIGGER, WINDOW_SHADOWS" />
+  <meta name="keywords" content="functions: WINDOW_SPACING" />
+  <title>Window Constants</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../../index.htm"><img src="../../../images/ccglogo.png" /></a>
+    <a href="../../../index.htm"><div class="moeversion"></div></a>
+    Window Constants
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Description</h1>
+
+<p>The SVL Window Toolkit defines the following constants:</p>
+  <table class="noborder">
+    <tr>
+      <td><tt>WINDOW_OBJECTS</tt></td>
+      <td>Contains the complete list of widgets specified as tokens.</td>
+    </tr>
+    <tr>
+      <td><tt>WINDOW_COLORS</tt></td>
+      <td>
+        Tokens that specify the color names used by the <tt>foreground</tt> and
+        <tt>background</tt> attributes. Color names are as follows:
+
+<p><b>Widget Type Colors (adapt dynamically to MOE
+        Appearance):</b><br />
+        <tt>&#39;foreground&#39;</tt>, <tt>&#39;background&#39;</tt>,
+        <tt>&#39;textForeground&#39;</tt>, <tt>&#39;textBackground&#39;</tt>,
+        <tt>&#39;highlight&#39;</tt>, <tt>&#39;highlightForeground&#39;</tt>,
+        <tt>&#39;canvasForeground&#39;</tt>,
+        <tt>&#39;canvasBackground&#39;</tt></p>
+
+<p><b>Default Widget Color (adapts dynamically to MOE Appearance and
+        widget type):</b><br />
+        <tt>&#39;none&#39;</tt></p>
+
+<p><b>Base Foreground Colors For Colored Text (adapt dynamically to MOE
+        Appearance):</b><br />
+        <tt>&#39;baseRed&#39;</tt>, <tt>&#39;baseGreen&#39;</tt>,
+        <tt>&#39;baseBlue&#39;</tt>, <tt>&#39;baseYellow&#39;</tt>,
+        <tt>&#39;baseCyan&#39;</tt>, <tt>&#39;baseMagenta&#39;</tt>,
+        <tt>&#39;basePurple&#39;</tt>, <tt>&#39;baseOrange&#39;</tt>,
+        <tt>&#39;baseBrown&#39;</tt>, <tt>&#39;basePink&#39;</tt></p>
+
+<p><b>Primary Colors:</b><br />
+        <tt>&#39;black&#39;</tt>, <tt>&#39;white&#39;</tt>,
+        <tt>&#39;red&#39;</tt>, <tt>&#39;green&#39;</tt>,
+        <tt>&#39;blue&#39;</tt>, <tt>&#39;yellow&#39;</tt>,
+        <tt>&#39;cyan&#39;</tt>, <tt>&#39;magenta&#39;</tt>,
+        <tt>&#39;purple&#39;</tt>, <tt>&#39;orange&#39;</tt>,
+        <tt>&#39;brown&#39;</tt>, <tt>&#39;pink&#39;</tt>,
+        <tt>&#39;gray&#39;</tt>, <tt>&#39;lightGray&#39;</tt>,
+        <tt>&#39;darkGray&#39;</tt>, <tt>&#39;darkRed&#39;</tt>,
+        <tt>&#39;darkGreen&#39;</tt>, <tt>&#39;darkBlue&#39;</tt>,
+        <tt>&#39;darkYellow&#39;</tt>, <tt>&#39;darkCyan&#39;</tt>,
+        <tt>&#39;darkMagenta&#39;</tt>, <tt>&#39;darkPurple&#39;</tt>,
+        <tt>&#39;darkOrange&#39;</tt>, <tt>&#39;darkBrown&#39;</tt>,
+        <tt>&#39;darkPink&#39;</tt></p>
+      </td>
+    </tr>
+    <tr>
+      <td><tt>WINDOW_DATA_TYPES</tt></td>
+      <td>
+        Tokens specifying the available data type attribute:
+        <ul>
+          <li><tt>&#39;int&#39;</tt>: integers only</li>
+          <li><tt>&#39;char&#39;</tt>: token</li>
+          <li><tt>&#39;real&#39;</tt>: any numeric</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td><tt>WINDOW_FONTS</tt></td>
+      <td>
+        Tokens specifying the font names used by the <tt>font</tt> attributes.
+        Font names are as follows:
+
+<p><b>Proportional Fonts:</b> <tt>&#39;small&#39;</tt>,
+        <tt>&#39;smallBold&#39;</tt>, <tt>&#39;medium&#39;</tt>,
+        <tt>&#39;mediumBold&#39;</tt>, <tt>&#39;large&#39;</tt>,
+        <tt>&#39;largeBold&#39;</tt></p>
+
+<p><b>Fixed Fonts:</b> <tt>&#39;smallFixed&#39;</tt>,
+        <tt>&#39;smallFixedBold&#39;</tt>, <tt>&#39;mediumFixed&#39;</tt>,
+        <tt>&#39;mediumFixedBold&#39;</tt>, <tt>&#39;largeFixed&#39;</tt>,
+        <tt>&#39;largeFixedBold&#39;</tt></p>
+      </td>
+    </tr>
+    <tr>
+      <td><tt>WINDOW_FSB_MODES</tt></td>
+      <td>
+        Tokens specifying the FSB and FSBText validation modes:
+        <ul>
+          <li><tt>&#39;none&#39;</tt>: no validation</li>
+          <li><tt>&#39;open&#39;</tt>: ensure that filename exists</li>
+          <li><tt>&#39;saveAs&#39;</tt>: ensure that user wishes to overwrite
+          existing file</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td><tt>WINDOW_ON_TRIGGER</tt></td>
+      <td>
+        Tokens specifying the <tt>onTrigger</tt> attribute settings:
+        <ul>
+          <li><tt>&#39;return&#39;</tt>: perform no validation</li>
+          <li><tt>&#39;validate&#39;</tt>: validate all widgets when
+          triggered</li>
+          <li><tt>&#39;ignore&#39;</tt>: do not return from WindowWait when
+          triggered</li>
+          <li><tt>&#39;exit&#39;</tt>: kill task when triggered</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td><tt>WINDOW_SHADOWS</tt></td>
+      <td>
+        Tokens specifying the <tt>shadow</tt> attribute settings:
+        <ul>
+          <li><tt>&#39;none&#39;</tt>: no shadow</li>
+          <li><tt>&#39;noline&#39;</tt>: space allocated, but no line is
+          drawn</li>
+          <li><tt>&#39;in&#39;</tt>: inset look</li>
+          <li><tt>&#39;out&#39;</tt>: raised look</li>
+          <li><tt>&#39;etched-in&#39;</tt>: inset etched look</li>
+          <li><tt>&#39;etched-out&#39;</tt>: raised etched look</li>
+          <li><tt>&#39;outline&#39;</tt>: solid outline</li>
+          <li><tt>&#39;rounded-in&#39;</tt>: rounded inset look</li>
+          <li><tt>&#39;rounded-out&#39;</tt>: rounded raised look</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td><tt>WINDOW_SPACING</tt></td>
+      <td>Tokens specifying the <tt>spacing</tt> attribute:
+      <tt>&#39;none&#39;</tt>, <tt>&#39;small&#39;</tt>,
+      <tt>&#39;medium&#39;</tt>, <tt>&#39;large&#39;</tt></td>
+    </tr>
+  </table>
+
+<h1>See Also</h1>
+
+<p><a href="wt_core.htm">Core Attributes</a><br />
+  <a href="../wt_intro.htm">SVL Window Toolkit</a><br />
+  <a href="introwt.htm">Window Toolkit Functions</a></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../../images/ccgicon.png" /> <a href="../../../index.htm"></a>
+    <a href="../../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href=
+  "../../../include/manstyle.css" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: Widget:Core" />
+  <meta name="keywords" content="functions: Core (widget)" />
+  <title>Core</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../../index.htm"><img src="../../../images/ccglogo.png" /></a>
+    <a href="../../../index.htm"><div class="moeversion"></div></a>
+    Core
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Attributes</h1>
+
+<p>All widgets support the following attributes. In general, 0 means the
+  attribute is on, 1 off.</p>
+<table class="titlebar">
+  <tr>
+    <th>Attribute</th>
+    <th>Description</th>
+    <th>Values</th>
+    <th>Default</th>
+  </tr>
+  <tr>
+    <td><tt>background</tt></td>
+    <td>Background color</td>
+    <td><a href=
+    "wt_const.htm">WINDOW_COLORS</a></td>
+    <td>&#39;none&#39; (Widget dependent)</td>
+  </tr>
+  <tr>
+    <td><tt>bubbleHelp</tt></td>
+    <td>Text to display when cursor is motionless on
+    widget</td>
+    <td>Vector of tokens</td>
+    <td><tt>[]</tt></td>
+  </tr>
+  <tr>
+    <td><tt>bubbleHelpGraphics</tt></td>
+    <td>Add graphic object to the bubble help</td>
+    <td>Scalar key, or vector content: <a href=
+    "../../fcnref/grfcn.htm">Graphic object</a></td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td><tt>centerH</tt></td>
+    <td>Center widget horizontally within its cell</td>
+    <td>0, 1</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td><tt>centerV</tt></td>
+    <td>Center widget vertically within cell; vertical
+    (X-coordinate) alignment point ignored</td>
+    <td>0, 1</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td><tt>collapse</tt></td>
+    <td>Collapse widget visually. A collapsed widget is not
+    visible, and does not occupy any space in the layout.</td>
+    <td>0, 1</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td><tt>extendH</tt></td>
+    <td>Widget always stretched horizontally to fill width
+    of cell</td>
+    <td>0, 1</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td><tt>extendV</tt></td>
+    <td>Widget always stretched vertically to fill height
+    of cell</td>
+    <td>0, 1</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td><tt>flushLeft</tt></td>
+    <td>Widget placed at left edge of cell; vertical
+    (Y-coordinate) alignment point ignored</td>
+    <td>0, 1</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td><tt>flushTop</tt></td>
+    <td>Widget placed at top edge of cell; horizontal
+    (X-coordinate) alignment point ignored</td>
+    <td>0, 1</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td><tt>font</tt></td>
+    <td>Widget font</td>
+    <td><a href=
+    "wt_const.htm">WINDOW_FONTS</a></td>
+    <td><tt>&#39;medium&#39;</tt></td>
+  </tr>
+  <tr>
+    <td><tt>foreground</tt></td>
+    <td>Foreground color</td>
+    <td><a href=
+    "wt_const.htm">WINDOW_COLORS</a></td>
+    <td>&#39;none&#39; (Widget dependent)</td>
+  </tr>
+  <tr>
+    <td><tt>margin</tt></td>
+    <td>Margin (extra space) added around widget</td>
+    <td>0, 1</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td><tt>name</tt></td>
+    <td>Name to be used for referencing the widget; must be
+    unique within a window descriptor to allow widget to be unambiguously
+    referenced</td>
+    <td>token</td>
+    <td><tt>[]</tt></td>
+  </tr>
+  <tr>
+    <td><tt>onTrigger</tt></td>
+    <td>Change to widget&#39;s value triggers window</td>
+    <td><a href=
+    "wt_const.htm">WINDOW_ON_TRIGGER</a></td>
+    <td><tt>&#39;ignore&#39;</tt></td>
+  </tr>
+  <tr>
+    <td><tt>sensitive</tt></td>
+    <td>Widget and all its children are disabled</td>
+    <td>0, 1</td>
+    <td>1</td>
+  </tr>
+  <tr>
+    <td><tt>shadow</tt></td>
+    <td>Widget displayed with shadow</td>
+    <td><a href=
+    "wt_const.htm">WINDOW_SHADOWS</a></td>
+    <td><tt>&#39;none&#39;</tt></td>
+  </tr>
+  <tr>
+    <td><tt>title</tt></td>
+    <td>Widget title</td>
+    <td>token</td>
+    <td><tt>[]</tt></td>
+  </tr>
+  <tr>
+    <td><tt>titleFont</tt></td>
+    <td>Widget title font</td>
+    <td><a href=
+    "wt_const.htm">WINDOW_FONTS</a></td>
+    <td><tt>&#39;mediumBold&#39;</tt></td>
+  </tr>
+  <tr>
+    <td><tt>titleTop</tt></td>
+    <td>Title placed on top rather than at left</td>
+    <td>0, 1</td>
+    <td>0</td>
+  </tr>
+</table>
+
+<p><b>Notes:</b></p>
+  <ul>
+    <li><a href="../../../svl/manual/svlfund.htm#UnitExtension">Unit
+    extension</a> applies when setting the <tt>onTrigger</tt> attribute of
+    widgets that are composed of several components that can each trigger, e.g.
+    a set of pushbuttons.</li>
+    <li>The <tt>foreground</tt> and <tt>background</tt> colors may not be
+    applicable to some widgets. In such cases, they will be ignored.</li>
+  </ul>
+
+<h1>Widget Types</h1>
+<table class="functionList">
+  <tr>
+    <td><a href="wt_shell.htm">Shell</a></td>
+    <td><a href="wt_vbox.htm">Hbox</a></td>
+    <td><a href="wt_vbox.htm">Mbox</a></td>
+    <td><a href="wt_vbox.htm">Vbox</a></td>
+    <td><a href="wt_shell.htm">Prompter</a></td>
+  </tr>
+  <tr>
+    <td><a href="wt_button.htm">Button</a></td>
+    <td><a href="wt_cli.htm">Cli</a></td>
+    <td><a href="wt_check.htm">Checkbox</a></td>
+    <td><a href="wt_edit.htm">Edit</a></td>
+    <td><a href="wt_fsb.htm">FSB</a></td>
+  </tr>
+  <tr>
+    <td><a href="wt_fsb.htm">FSBText</a></td>
+    <td><a href="wt_label.htm">Label</a></td>
+    <td><a href="wt_list.htm">Listbox</a></td>
+    <td><a href="wt_option.htm">Option</a></td>
+    <td><a href="wt_pager.htm">Pager</a></td>
+  </tr>
+  <tr>
+    <td><a href="wt_plot.htm">Plot</a></td>
+    <td><a href="wt_radio.htm">Radio</a></td>
+    <td><a href="wt_scale.htm">Scale</a></td>
+    <td><a href="wt_sep.htm">Separator</a></td>
+    <td><a href="wt_slider.htm">Slider</a></td>
+  </tr>
+  <tr>
+    <td><a href="wt_spin.htm">Spin</a></td>
+    <td><a href="wt_text.htm">Text</a></td>
+    <td><a href="wt_wheel.htm">Wheel</a></td>
+  </tr>
+</table>
+
+<h1>See Also</h1>
+
+<p><a href="../wt_intro.htm">SVL Window Toolkit</a><br />
+  <a href="introwt.htm">Window Toolkit Functions</a></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../../images/ccgicon.png" /> <a href="../../../index.htm"></a>
+    <a href="../../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content=
+  "functions: cNumber, cResidueCount, cName, cTag, cHeader" />
+  <meta name="keywords" content="functions: cGroup, cSetGroup" />
+  <meta name="keywords" content="functions: cSelected, cSetSelected" />
+  <meta name="keywords" content=
+  "functions: cSetName, cSetNumber, cSetTag, cSetHeader" />
+  <meta name="keywords" content=
+  "functions: cRGB, cSetRGB, cColor, cColorBy, cSetColorBy" />
+  <meta name="keywords" content="functions: cSetHiddenSE, cVisibleSE" />
+  <meta name="keywords" content="functions: cSubunit, cSetSubunit, cTagId" />
+  <meta name="keywords" content="intro: Chain Functions" />
+  <title>Chain Object Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Chain Object Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    colors          = <a class="fcnlink" href=
+"#cColor">cColor</a>        chain_keys
+    colorby_tokens  = <a class="fcnlink" href=
+"#cColorBy">cColorBy</a>      chain_keys
+    group_tokens    = <a class="fcnlink" href=
+"#cGroup">cGroup</a>        chain_keys
+    header_tokens   = <a class="fcnlink" href=
+"#cHeader">cHeader</a>       chain_keys
+    name_tokens     = <a class="fcnlink" href=
+"#cName">cName</a>         chain_keys
+    chain_indices   = <a class="fcnlink" href=
+"#cNumber">cNumber</a>       chain_keys
+    residue_counts  = <a class="fcnlink" href=
+"#cResidueCount">cResidueCount</a> chain_keys
+    colors          = <a class="fcnlink" href=
+"#cRGB">cRGB</a>          chain_keys
+    flags           = <a class="fcnlink" href=
+"#cSelected">cSelected</a>     chain_keys
+    subunit_numbers = <a class="fcnlink" href=
+"#cSubunit">cSubunit</a>      chain_keys
+    tag_tokens      = <a class="fcnlink" href=
+"#cTag">cTag</a>          chain_keys
+    tag_id_numbers  = <a class="fcnlink" href=
+"#cTagId">cTagId</a>        chain_keys
+    flags           = <a class="fcnlink" href=
+"#cVisibleSE">cVisibleSE</a>    chain_keys
+
+    <a class="fcnlink" href=
+"#cSetColorBy">cSetColorBy</a>  [ chain_keys, colorby_tokens ]
+    <a class="fcnlink" href=
+"#cSetGroup">cSetGroup</a>    [ chain_keys, group_tokens ]
+    <a class="fcnlink" href=
+"#cSetHeader">cSetHeader</a>   [ chain_keys, header_tokens ]
+    <a class="fcnlink" href=
+"#cSetName">cSetName</a>     [ chain_keys, name_tokens ]
+    <a class="fcnlink" href=
+"#cSetNumber">cSetNumber</a>   [ chain_keys, chain_indices ]
+    <a class="fcnlink" href="#cSetRGB">cSetRGB</a>      [ chain_keys, colors ]
+    <a class="fcnlink" href=
+"#cSetSelected">cSetSelected</a> [ chain_keys, flags ]
+    <a class="fcnlink" href=
+"#cSetSubunit">cSetSubunit</a>  [ chain_keys, subunit_numbers ]
+    <a class="fcnlink" href=
+"#cSetTag">cSetTag</a>      [ chain_keys, tag_tokens ]
+    <a class="fcnlink" href=
+"#cSetHiddenSE">cSetHiddenSE</a> [ chain_keys, flags ]
+</pre>
+<h1>Description</h1>
+
+<p>In MOE, molecular data is organized as a hierarchy of <i>molecular
+  objects</i> or <i>objects</i>. A chain object can own zero or more residues.
+  MOE stores chain information in separate internal data structures. The
+  following functions obtain or modify basic chain properties. Chains are
+  referenced with an object key, which is a unique number identifying the chain
+  object.</p>
+
+<p><b>Important!</b> All functions described herein can be used on
+  arbitrarily nested vectors.</p>
+
+<p>The following functions can be used to obtain information from chain
+  objects: <!-- DESC --></p>
+  <table class="titlebar">
+    <tr>
+      <th>Function</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="cColor"></a>
+<tt>cColor</tt></td>
+      <td valign="baseline">Returns the display color for the chain. This is
+      the (computed) color that is actually used for the chain label in the
+      Sequence Editor. The integer color format is 0xRRGGBB encoding red, green
+      and blue.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="cColorBy"></a>
+<tt>cColorBy</tt></td>
+      <td valign="baseline">
+        For each chain in the argument, this function returns a token
+        describing how the chain is colored. Legal values are
+        <ul>
+          <li><tt>'rgb'</tt> - color by chain's <tt>cRGB</tt>
+          color</li>
+          <li><tt>'c:rgb'</tt> - color by the chain's <tt>cRGB</tt>
+          color</li>
+          <li><tt>'c:number'</tt> - color by the chain's index</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="cGroup"></a>
+<tt>cGroup</tt></td>
+      <td valign="baseline">Returns the chain group token for each chain in the
+      argument. The chain group is used as additional grouping layer in the
+      <a href="../gui/system.htm">System Manager</a>.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="cHeader"></a>
+<tt>cHeader</tt></td>
+      <td valign="baseline">Returns the chain header token for each chain in
+      the argument. The chain header is typically the HEADER line from a PDB
+      file.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="cName"></a>
+<tt>cName</tt></td>
+      <td valign="baseline">Returns the chain name token for each chain in the
+      argument.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="cNumber"></a>
+<tt>cNumber</tt></td>
+      <td valign="baseline">Returns the index in the list of chains of each
+      chain specified in the argument and is equivalent in functionality to
+      <tt>oIndex</tt>.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="cResidueCount"></a>
+<tt>cResidueCount</tt></td>
+      <td valign="baseline">Returns the number of residues in each chain and is
+      equivalent in functionality to <tt>oChildCount</tt>.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="cRGB"></a>
+<tt>cRGB</tt></td>
+      <td valign="baseline">Returns the internal color of the chain. This is
+      the color used when the chain's ColorBy mode is <tt>rgb</tt> or
+      <tt>c:rgb</tt>. The internal color is an integer representing the RGB
+      color in the format 0xRRGGBB encoding red, green and blue.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="cSelected"></a>
+<tt>cSelected</tt></td>
+      <td valign="baseline">For each chain in the argument, returns a value of
+      1 if the chain is selected in the Sequence Editor, and zero
+      otherwise.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="cSubunit"></a>
+<tt>cSubunit</tt></td>
+      <td valign="baseline">For each chain in the argument, returns the
+      <a href="../gui/se.htm">Sequence Editor</a> subunit pane number.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="cTag"></a>
+<tt>cTag</tt></td>
+      <td valign="baseline">Returns the chain tag token for each chain in the
+      argument. The chain tag is used to identify a group of chains.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="cTagId"></a>
+<tt>cTagId</tt></td>
+      <td valign="baseline">Returns the chain tag id number for each chain in
+      the argument. The chain tag id is related to the chain tag token and is
+      used to split chains into groups as in the <a href=
+      "../gui/system.htm">System Manager</a> and <a href=
+      "../gui/se.htm">Sequence Editor</a>.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="cVisibleSE"></a>
+<tt>cVisibleSE</tt></td>
+      <td valign="baseline">For each chain in the argument, returns a value of
+      1 if the chain is visible in the Sequence Editor, and zero if
+      hidden.</td>
+    </tr>
+  </table><!-- ENDDESC -->
+
+<p>The following functions can be used to modify information in chain
+  objects: <!-- DESC --></p>
+  <table class="titlebar">
+    <tr>
+      <th>Function</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="cSetColorBy"></a>
+<tt>cSetColorBy</tt></td>
+      <td valign="baseline">
+        For each chain in the argument, this function sets the mode by which
+        the chain is colored in the Sequence Editor. Legal values are
+        <ul>
+          <li><tt>'rgb'</tt> - color by chain's <tt>cRGB</tt>
+          color</li>
+          <li><tt>'tempfactor'</tt> - color by chain's atoms'
+          average temperature factor</li>
+          <li><tt>'c:rgb'</tt> - color by the chain's <tt>cRGB</tt>
+          color</li>
+          <li><tt>'c:number'</tt> - color by the chain's index</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="cSetGroup"></a>
+<tt>cSetGroup</tt></td>
+      <td valign="baseline">Sets the chain group token for each given chain.
+      The group token is used in the <a href="../gui/system.htm">System
+      Manager</a> as additional grouping layer.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="cSetHeader"></a>
+<tt>cSetHeader</tt></td>
+      <td valign="baseline">Sets the chain header token for each given chain.
+      Typically, this represents the PDB header (for proteins).</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="cSetName"></a>
+<tt>cSetName</tt></td>
+      <td valign="baseline">Sets the chain name token for each given chain. For
+      proteins in the PDB, this field usually contains the PDB code and chain
+      letter.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="cSetNumber"></a>
+<tt>cSetNumber</tt></td>
+      <td valign="baseline">Sets the order of chains in the system. Chain
+      numbers start from 1. This function can be used to re-order or re-number
+      chains.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="cSetRGB"></a>
+<tt>cSetRGB</tt></td>
+      <td valign="baseline">Sets the internal color of the chain. This is the
+      color used when the chain's ColorBy mode is <tt>rgb</tt> or
+      <tt>c:rgb</tt>. The internal color is an integer representing the RGB
+      color in the format 0xRRGGBB encoding red, green and blue.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="cSetSelected"></a>
+<tt>cSetSelected</tt></td>
+      <td valign="baseline">Assigns the selected flag for each given chain. The
+      selected flag controls the selection state of the chain in the Sequence
+      Editor.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="cSetSubunit"></a>
+<tt>cSetSubunit</tt></td>
+      <td valign="baseline">Assigns the <a href="../gui/se.htm">Sequence
+      Editor</a> subunit pane numbers of the specified chains for the split
+      multi-subunit display.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="cSetTag"></a>
+<tt>cSetTag</tt></td>
+      <td valign="baseline">Sets the chain tag token for each given chain. The
+      tag token is used to identify groups of related chains. For example, for
+      PDB files, the tag is set to the PDB code.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="cSetHiddenSE"></a>
+<tt>cSetHiddenSE</tt></td>
+      <td valign="baseline">Hides a given chain in the Sequence Editor. Hiding
+      the chain will also unselect it.</td>
+    </tr>
+  </table><!-- ENDDESC -->
+
+<p>For example, suppose insulin is the only molecule loaded. We can obtain
+  the chain keys and find out the indices of each chain loaded with:</p>
+
+<pre>    svl&gt; c = Chains[];
+    svl&gt; cNumber c
+    [1,2]
+</pre>
+
+<p>The following code sets the name field of chains to '91NS.A' and
+  '9INS.B' respectively and verifies the modification:</p>
+
+<pre>    svl&gt; cSetName [c, ['9INS.A','9INS.B']]
+    svl&gt; cName c
+    ['9INS.A','9INS.B']
+</pre>
+
+<p>We now set the tag field of both chains to '9INS':</p>
+
+<pre>    svl&gt; cSetTag [c, '9INS']
+    svl&gt; cTag c
+    ['9INS','9INS']
+</pre>
+
+<h1>See Also</h1>
+
+<p><a class="svl" href="catoms.htm">cAtoms</a> <a class="svl" href=
+  "catoms.htm">cResidues</a></p>
+
+<p><a href="atom.htm">Atom&nbsp;Functions</a><br />
+  <a href="residue.htm">Residue&nbsp;Functions</a><br />
+  <a href="obj.htm">Object&nbsp;Functions</a></p>
+
+<p><a href="../molsystems/molrep.htm">Representation of Molecular Systems in
+  MOE</a><br />
+  <a href="../gui/system.htm">System Manager</a><br />
+  <a href="../gui/se.htm">Sequence Editor</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="panel: Residue Selector" />
+  <meta name="keywords" content="panel: Atom Selector" />
+  <meta name="keywords" content="keywords: Selection Prompter, UI button" />
+  <title>Selection Panels</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Selection Panels
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+  <ul>
+    <li><a href="#NamedSets">Named Sets</a></li>
+    <li><a href="#Operation">The Selection Operation</a></li>
+    <li>
+      <a href="#DefinedSet">Defining the Selection Set</a>
+      <ul>
+        <li><a href="#AtomSet">The Defined Atom Set</a></li>
+        <li><a href="#ResidueSet">The Defined Residue Set</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#AtomSelector">The Atom Selector</a>
+      <ul>
+        <li><a href="#PredefinedAtomSets">Predefined Atom Sets</a></li>
+        <li><a href="#AtomSelectionButtons">Atom Selection Buttons</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#ResidueSelector">The Residue Selector</a>
+      <ul>
+        <li><a href="#Extend">Extending the Selection</a></li>
+        <li>
+          <a href="#ResidueSelectionButtons">Residue Selection Buttons</a>
+          <ul>
+            <li><a href="#ResidueName">Selecting by Residue Name</a></li>
+            <li><a href="#Pattern">Selecting by Pattern</a></li>
+            <li><a href="#Range">Selecting a Range (UID, Index, Pos)</a></li>
+            <li><a href="#Scalar">Selecting by Scalar</a></li>
+            <li><a href="#Data">Selecting by Atom Data</a></li>
+            <li><a href="#Class">Selecting by Amino Acid Functional
+            Class</a></li>
+            <li><a href="#Structure">Selecting by Structure</a></li>
+            <li><a href="#Ribbon">Selecting by Ribbon Mode</a></li>
+            <li><a href="#Type">Selecting by Residue Type</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#SVL">SVL Commands</a></li>
+  </ul>
+
+<h1>Introduction</h1>
+
+<p>The Atom Selector and Residue Selector panels offer an extensive array of
+  selection controls and the ability to combine selections using logical
+  operators. These panels may be called into play when the built-in menu
+  commands of the <a href="mainwin.htm#Selecting">MOE Window</a> and
+  <a href="se.htm#SelectingMolecularObjects">Sequence Editor</a> are
+  insufficient. For basic selection tasks, the MOE and SE menu commands provide
+  a variety of pre-defined atom and residue selection commands such as ligand
+  and pocket atom selection, atom selection by element, chirality, and protein
+  properties, or chain, residue, and child atom selection with given
+  properties. The Atom Selector panel additionally supports such selection
+  criteria as ring connectivity, atom name, accessibility, and pharmacophoric
+  type, among others, and the Residue Selector panel such criteria as amino
+  acid classes and pattern matching. Additional flexibility is gained through
+  the use of named sets, which are collections of molecular objects identified
+  by a unique name. Both panels support the use of such sets.</p>
+<a id="Named_Sets"></a>
+<a id="NamedSets"></a>
+<h1>Named Sets</h1>
+
+<p>In MOE, molecular data can be managed as named sets or <i>collections</i>.
+  A collection comprises any mixture of atom, residue, and chain keys, and has
+  a unique associated name. The selection panels allow named sets to be
+  manipulated using the <b>Named Set</b> field. In the <b>Atom Selector</b>
+  only atom keys will be added to a named set and in the <b>Residue
+  Selector</b> only residue keys will be added to a named set. The atom set
+  further allows for 10 predefined sets to be created.</p>
+
+<p>Named sets are displayed in three locations in the selection panels.</p>
+  <ol type="i">
+    <li>
+      <b>The option menu at the top</b>.
+
+<img src="select/aset.png" alt="Atom Selection" class="center" />
+
+<p>These menus define the set of objects to be included in the selection
+      operations. If any named sets are defined then they will appear in the
+      menu. When chosen, only the objects (and child objects) in the chosen set
+      will be used for the selection.</p>
+    </li>
+    <li>
+      <b>The shortcut menu in the Named Set text field</b>.
+
+<img src="select/namedset.png" alt="Named Set" class="center" />
+
+<p>The <b>Named Set</b> field is used to create new or overwrite existing
+      sets. The shortcut will show any currently named sets.</p>
+    </li>
+    <li>
+      <b>The Sets: menu in the selection button area</b>.
+
+<img src="select/sets.png" alt="Sets" class="center" />
+
+<p>The <b>Sets</b> menu located among the selection buttons of the panel
+      is used to operate on the objects in the set itself. The operation
+      performed will depend on the <i>defined set</i> and the <i>operation</i>
+      chosen.</p>
+    </li>
+  </ol>
+
+<p>Named sets are stored with the system and will be reinstated when the
+  molecule file is reopened. Empty sets are not allowed, thus, creating a named
+  set with no objects is equivalent to deleting the set from the system.</p>
+<a id="Defining_the_Selection_Set"></a>
+<a id="DefinedSet"></a>
+<h1>Defining the Selection Set</h1>
+
+<p>The Atom Selector and Residue Selector panels generally operate on a
+  restricted set of atoms or residues called the <i>defined object set</i>.
+  When a button is pressed, only the objects (or child objects) will be used.
+  If, say, a selection of all Carbon atoms is chosen, only those carbon atoms
+  located in the defined set will be operated upon.</p>
+
+<p>Defining this restricted set is done through the options at the top of the
+  panel using a combination of the option menu and the checkboxes. The
+  intersection of all chosen restrictions will define the set.</p>
+<a id="The_Defined_Atom_Set"></a>
+<a id="AtomSet"></a>
+<h3>The Defined Atom Set</h3>
+
+<p>The defined atom set is specified by the following controls:</p>
+
+<table class="noborder">
+  <tr>
+	<td><b>All Atoms</b></td>
+	<td>Include all atoms in the system.</td>
+  </tr>
+  <tr>
+	<td><b>Selected Residues</b></td>
+	<td>Restrict operations to atoms whose parent residue is selected.</td>
+  </tr>
+  <tr>
+	<td><b>Named Set</b></td>
+	<td>Restrict operations to atoms in the set or to child atoms of
+	residue and chain objects in the set.</td>
+  </tr>
+  <tr>
+	<td><b>Selected Chains</b></td>
+	<td>Restricts operations to atoms whose parent chain is selected.</td>
+  </tr>
+  <tr>
+	<td><b>Visible Atoms</b></td>
+	<td>Restricts operations to visible atoms.</td>
+  </tr>
+</table>
+
+<p>If all checkboxes are turned off and <b>All Atoms</b> is specified then
+  the defined atom set is all the atoms in the system.</p>
+<a id="The_Defined_Residue_Set"></a>
+<a id="ResidueSet"></a>
+<h3>The Defined Residue Set</h3>
+
+<p>The defined residue set is specified using the following controls:</p>
+<table class="noborder">
+  <tr>
+	<td><b>All Chains</b></td>
+	<td>Include all residues in all chains.</td>
+  </tr>
+  <tr>
+	<td><b>Selected Chains</b></td>
+	<td>Restricts operations to residues whose parent chain is
+	selected.</td>
+  </tr>
+  <tr>
+	<td><b>Named Set</b></td>
+	<td>Restricts operations to residues in the set and to child residues
+	of chain objects in the set.</td>
+  </tr>
+  <tr>
+	<td><b>Residues with<br />
+	Visible Atoms</b></td>
+	<td>Restricts operations to residues with at least one atom visible in
+	the MOE Window.</td>
+  </tr>
+  <tr>
+	<td><b>Nonempty Residues</b></td>
+	<td>Restricts operations to residues with at least one atom.</td>
+  </tr>
+</table>
+
+<p>If all checkboxes are turned off and <b>All Chains</b> is chosen, then the
+  defined residue set is all the residues in the system.</p>
+<a id="The_Selection_Operation"></a>
+<a id="Operation"></a>
+<h1>The Selection Operation</h1>
+
+<p>In both selection panels, the <b>Operation</b> radio buttons are used to
+  combine consecutive selections.</p>
+<table class="noborder">
+  <tr>
+	<td><b>or</b></td>
+	<td>Add the objects satisfying the new criteria to the current
+	selection set.</td>
+  </tr>
+  <tr>
+	<td><b>and</b></td>
+	<td>Select the intersection between the objects satisfying the new
+	criteria and the previous selection set. Deselect any objects not in
+	this set.</td>
+  </tr>
+  <tr>
+	<td><b>deselect</b></td>
+	<td>Deselect the objects satisfying the new criteria.</td>
+  </tr>
+  <tr>
+	<td><b>replace</b></td>
+	<td>Clear the current selection and replace it with the objects
+	satisfying the new criteria.</td>
+  </tr>
+</table>
+<a id="The_Atom_Selector"></a>
+<a id="AtomSelector"></a>
+<h1>The Atom Selector</h1>
+
+<p>The Atom Selector allows complex selection operations to be performed on
+  sets of atoms. From this panel you can perform logical operations on
+  selection sets, as well as select atoms based on specific properties,
+  substructure or proximity. The Atom Selector is opened from the MOE Window
+  <a href="sel_ui.htm">Selection Prompter</a>. Choose
+  <span class="menu">MOE | Select | Selector</span>
+  and in the Selection Prompter interface, press the <b>UI</b> button. The
+  following panel will open:</p>
+
+<img src="select/aselect.png" alt="Atom Selector" class="center" />
+
+<p>The buttons to the right of the <b>Atom</b> definition controls operate
+  upon the defined atom set, as follows:</p>
+
+<table class="noborder">
+  <tr>
+	<td><b>All</b></td>
+	<td>Select all atoms within the defined atom set.</td>
+  </tr>
+  <tr>
+	<td><b>Clear</b></td>
+	<td>Deselect all atom within the defined atom set.</td>
+  </tr>
+  <tr>
+	<td><b>Fixed</b></td>
+	<td>Select all fixed atoms within the defined atom set.</td>
+  </tr>
+  <tr>
+	<td><b>Hidden</b></td>
+	<td>Select all hidden atoms within the defined atom set.</td>
+  </tr>
+  <tr>
+	<td><b>Invert</b></td>
+	<td>Toggle the selection state of all atom within the defined atom
+	set.</td>
+  </tr>
+  <tr>
+	<td><b>Visible</b></td>
+	<td>Select all visible atoms within the defined atom set.</td>
+  </tr>
+</table>
+
+<p>The <b>Current Set</b> label displays the number of atoms currently
+  selected in the system.</p>
+
+<p>The buttons at the bottom of the panel, <b>View, Hide, Show</b>, operate
+  on the entire current selection set ignoring the defined atom set.
+  <b>View</b> centers all the selected atoms in the 3D rendering area.
+  <b>Hide</b> hides all the selected atoms and <b>Show</b> makes the selected
+  atoms visible.</p>
+<a id="Predefined_Atom_Sets"></a>
+<a id="PredefinedAtomSets"></a>
+<h2>Predefined Atom Sets</h2>
+
+<p>You can save and restore up to ten different <i>system</i> atom sets using
+  the <b>Save Set/Load Set</b> buttons. Loading an atom set will restore the
+  selection set and combine it with the previous selection set according to the
+  chosen logical operation. The saved selection set remains in memory as long
+  as it is not overwritten. A bold label indicates the set currently has a
+  value.</p>
+<a id="Atom_Selection_Buttons"></a>
+<a id="AtomSelectionButtons"></a>
+<h2>Atom Selection Buttons</h2>
+
+<p>The selection buttons are grouped together based on property. You can
+  select by <b>Element</b>, <b>Name</b>, <b>SMILES</b> or use a selection from
+  one of the pages located in the pager: <b>Accessibility</b>, <b>Chiral</b>,
+  <b>Connectivity</b>, <b>Geometry</b>, <b>General</b>, <b>Pharmacophore</b>,
+  and <b>Protein</b>.</p>
+
+<table class="noborder">
+<tr>
+  <td><b>Element</b></td>
+  <td>Select atoms based on their element. <b>Table</b> contains the
+  periodic table, as well as entries enabling you to select based on row,
+  column, heavy atom (<b>Q</b>), transition metal (<b>T</b>), or lone pair
+  (<b>LP</b>).</td>
+</tr>
+<tr>
+  <td><b>Name</b></td>
+  <td>To select atoms based on their atom name you can use one of the
+  buttons (<b>A0</b>..<b>A6</b>) or turn on the <b>Other</b> toggle which
+  will change the display to allow you to enter the name in the text field.
+  Press Apply for the selection to be performed.</td>
+</tr>
+<tr>
+  <td><b>SMILES</b></td>
+  <td>Enter a <a href="../molsystems/smiles.htm">molecule input language
+  string</a> representation. Enter the string and press <b>All</b> to
+  select all the atoms within matching substructures or <b>Root</b> to
+  select just the root atom of the substructures which matched.</td>
+</tr>
+<tr>
+  <td><b>Proximity</b></td>
+  <td>Select atoms within a given radius of any currently selected atom.
+  Enter the desired radius (in angstroms) in the <b>Radius</b> text field
+  and then press the <b>Proximity</b> button. Repeatedly pressing proximity
+  will cease to have an effect if the operation selected no new atoms. In
+  this case you may wish to increase the radius and try again.</td>
+</tr>
+<tr>
+  <td><b>Accessibility</b></td>
+  <td><img src="select/access.png" class="floatleft" alt="Accessibility" />
+  Selects atoms which are buried (inaccessible) or exposed (accessible) to
+  a probe sphere of the given radius. The probe must touch the accessible
+  atoms without intersecting any other atoms. See <a class="svl" href=
+  "../../svl/fcnref/alpha.htm">ialpha_complex3</a> for more information on
+  this function.</td>
+</tr>
+<tr>
+  <td><b>Chiral</b></td>
+  <td><img src="select/chiral.png" class="floatleft" alt="Chiral" />
+  <b>Centers</b>: select R and S chiral atoms (<a class="svl" href=
+  "../fcnref/atom_g.htm">aRSChirality</a>). <b>Constraints</b>: select
+  atoms which have chiral constraints (<a class="svl" href=
+  "../fcnref/atom_p.htm">aForceRS</a>) imposed on them.</td>
+</tr>
+<tr>
+  <td><b>Connectivity</b></td>
+  <td><img src="select/connect.png" class="floatleft" alt="Connectivity" />
+  Select atoms based on the size of ring they are located within or atoms
+  which are spiro centers (i.e. which constitute the articulation point
+  between two rings that are connected through a single atom). See
+  <a class="svl" href="../fcnref/atom.htm">aInRing</a>.</td>
+</tr>
+<tr>
+  <td><b>Geometry</b></td>
+  <td><img src="select/geom.png" class="floatleft" alt="Geometry" /> Select
+  atoms based on the selected hybridization. See <a class="svl" href=
+  "../fcnref/atom.htm">aGeometry</a>.</td>
+</tr>
+<tr>
+  <td><b>General</b></td>
+  <td><img src="select/gen.png" class="floatleft" alt="General" /> Select inert
+  atoms (atoms marked for omission from potential energy calculation, e.g.
+  using <span class="menu">MOE | Edit | Potential | Inert</span> or
+  <a class="svl" href="../fcnref/atom_p.htm">aSetInert</a>) or ?? MM Type
+  atoms (atoms with an unknown MM Type). Select polar or non-polar
+  hydrogens.</td>
+</tr>
+<tr>
+  <td><b>Pharmacophore</b></td>
+  <td><img src="select/pharma.png" class="floatleft" alt="Pharmacophore" />
+  Select atoms of the chosen pharmacophoric type.</td>
+</tr>
+<tr>
+  <td><b>Protein</b></td>
+  <td><img src="select/protein.png" class="floatleft" alt="Protein" /> Select
+  alpha carbon atoms (these have atom name &quot;CA&quot;), backbone atoms
+  (atoms with the backbone bit set), sidechain atoms (atoms not on the
+  backbone), or peptide bonds (atoms in a peptide bond).</td>
+</tr>
+<tr>
+  <td><b>Extend</b></td>
+  <td>
+	To extend the selection based on the current selection use the
+	<b>Extend</b> buttons. All of these selections select within the
+	defined atom set using the chosen logical operation.
+	<ul>
+	  <li><b>Bonded To</b>. Atoms bonded to any currently selected
+	  atom.</li>
+	  <li><b>Chain</b>. Atoms within the same chain as any currently
+	  selected atom.</li>
+	  <li><b>Domain</b>. Atoms within the same protein domain as any
+	  currently selected atom.</li>
+	  <li><b>Hydrogens</b>. Hydrogens attached to any currently selected
+	  atom.</li>
+	  <li><b>Light Atoms</b>. Hydrogen and lone pairs attached to any
+	  currently selected atom.</li>
+	  <li><b>Molecule</b>. Atoms within the same connected component as any
+	  currently selected atom.</li>
+	  <li><b>Residue</b>. Atoms within the same residue as any currently
+	  selected atom.</li>
+	  <li><b>Sidechain</b>. Sidechain atoms belonging to the same residue
+	  as any currently selected atom.</li>
+	  <li><b>Chain Tag</b>. Atoms belonging to a chain which has the same
+	  chain tag as any currently selected atom.</li>
+	  <li><b>Secondary Structure</b>. Atoms within the same secondary
+	  structure segment as any currently selected atom.</li>
+	  <li><b>Topologically Equivalent</b>. Atoms matching the graphical
+	  structure of any currently selected atom. See <a class="svl" href=
+	  "../fcnref/atom.htm">aPrioZQH</a> for more information on this
+	  operation.</li>
+	</ul>
+  </td>
+</tr>
+</table>
+<a id="The_Residue_Selector_Panel"></a>
+<a id="ResidueSelector"></a>
+<h1>The Residue Selector Panel</h1>
+
+<p>The Residue Selector allows the selection of residues based on specific
+  criteria. Selections can be made on residue name (e.g. Alanine), structure
+  (e.g. helix, 4-turn), chemical class (e.g. hydrophobic, acidic), search
+  strings, as well as other methods. The selection operations permit the
+  intersection or union of two selection sets or entire replacement of the
+  current selection set.</p>
+
+<p>The Residue Selector is opened from the Sequence Editor <a href=
+  "sel_ui.htm">Selection Prompter</a>. Choose
+  <span class="menu">SE | Select | Selector</span>
+  and in the Selection Prompter interface, press the <b>UI</b> button. The
+  following panel will open:</p>
+
+<img src="select/rselect.png" alt="Residue Selector" class="center" />
+
+<p>The buttons to the right of the residue definition controls operate upon
+  the defined residue set, as follows:</p>
+
+<table class="noborder">
+  <tr>
+	<td><b>All</b></td>
+	<td>Select all residues within the defined residue set.</td>
+  </tr>
+  <tr>
+	<td><b>Clear</b></td>
+	<td>Deselect all residues within the defined residue set.</td>
+  </tr>
+  <tr>
+	<td><b>Invert</b></td>
+	<td>Toggle the selection state of all residues within the defined
+	residue set.</td>
+  </tr>
+  <tr>
+	<td><b>Atoms</b></td>
+	<td>Select all visible atoms that are children of residues within the
+	defined residue set.</td>
+  </tr>
+</table>
+
+<p>The <b>Select Atoms</b> button at the bottom of the panel is independent
+  of the <i>defined residue set</i>. Pressing this button will select the atoms
+  of the currently selected residues.</p>
+<a id="Extending_the_Selection"></a>
+<a id="Extend"></a>
+<h2>Extending the Selection</h2>
+
+<p>Extending a selection means expanding the current set of selected residues
+  according to particular rules defined by the extend operations. The currently
+  selected residues are the basis for the extend operation, and any additional
+  residues can only be selected if they are within the defined residue set.
+  Each extend operation defines a rule that determines how additional residues
+  will be selected:</p>
+
+<table class="noborder">
+  <tr>
+	<td><b>Column</b></td>
+	<td>All residues that are in the defined residue set and are also in
+	the same column as at least one currently selected residue.</td>
+  </tr>
+  <tr>
+	<td><b>Subunit Column</b></td>
+	<td>All residues that are in the defined residue set and are also in
+	the same column and same subunit as at least one currently
+	selected residue.</td>
+  </tr>
+  <tr>
+	<td><b>Domain</b></td>
+	<td>Residues that are in the defined residue set and are also in the
+	same protein domain as a currently selected residue.</td>
+  </tr>
+  <tr>
+	<td><b>Secondary Structure</b></td>
+	<td>Residues that are in the defined residue set and are also in the
+	same secondary structure segment as a currently selected residue.</td>
+  </tr>
+  <tr>
+	<td><b>Radius</b></td>
+	<td>Residues that are in the defined residue set and that are located
+	within the specified radius (in angstroms) of a currently selected
+	residue. The text field contains a shortcut for common values, however,
+	any value may be entered. Press <b>Proximity</b> to perform the extend
+	operation.</td>
+  </tr>
+  <tr>
+	<td><b>Neighbor</b></td>
+	<td>Residues that are in the defined residue set and that are
+	neighboring a currently selected residue in terms of the residue
+	sequence. The text field permits specifying by how many neighbors on
+	each side to extend. If <b>Columns</b> is on, gaps are taken into
+	account, otherwise they are ignored.</td>
+  </tr>
+</table>
+<a id="Residue_Selection_Operation"></a>
+<a id="ResidueOperation"></a>
+<h2>Residue Selection Operation</h2>
+
+<p>In addition to setting the defined residue set, the operation may also be
+  changed when using any of the buttons in the <b>Select</b> section of the
+  panel.</p>
+<a id="Residue_Selection_Buttons"></a>
+<a id="ResidueSelectionButtons"></a>
+<h2>Residue Selection Buttons</h2>
+
+<p>The buttons available for selecting and deselecting residues are grouped
+  into several categories as outlined in the following sections.</p>
+<a id="Selecting_by_Residue_Name"></a>
+<a id="ResidueName"></a>
+<h3>Selecting by Residue Name</h3>
+
+<p>To select residues by name use the groups of buttons located in the
+  <b>Name</b> pager. If none of the buttons contain the desired residue name,
+  the <b>Other</b> text field can be used to enter an arbitrary name. The
+  <b>Name</b> pager contains the following pages of buttons:</p>
+  <table class="noborder">
+      <tr>
+        <td><b>Amino Acids</b></td>
+        <td>
+          Selecting by amino acid types can be done using either the single
+          letter or the three letter amino acid names. The <b>Single Letter
+          Residues</b> toggle controls which buttons will be shown. Included in
+          this list is <b>UNK</b> for <i>unknown</i> three letter codes. The
+          three letter codes correspond to the values returned by the svl
+          function <span class="svl">rName</span>.
+
+<p>The single letter codes correspond to the values returned by the
+          svl function <span class="svl">Seq_NameToLetter</span>.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><b>Nucleic Acid</b></td>
+        <td>Nucleic acid residues are selected based on name alone. For
+        example, if a non-nucleic acid residue has the name 'a', then
+        it will also be selected.</td>
+      </tr>
+      <tr>
+        <td><b>Cofactors</b></td>
+        <td>Residues with common cofactor names.</td>
+      </tr>
+      <tr>
+        <td><b>Metals</b></td>
+        <td>Residues with common metal names.</td>
+      </tr>
+      <tr>
+        <td><b>Other</b></td>
+        <td>
+          This field can be used to enter a single name which will be searched
+          for in the defined residue set. Often it is desirable to combine a
+          residue name with its UID value in order to more precisely specify a
+          residue. Several examples of how input will be interpreted are as
+          follows:
+          <table class="noborder">
+            <tr>
+              <th>Text</th>
+              <th>Name</th>
+              <th>UID</th>
+              <th>INS</th>
+            </tr>
+            <tr>
+              <td>ARG30A</td>
+              <td>ARG</td>
+              <td>30</td>
+              <td>A</td>
+            </tr>
+            <tr>
+              <td>ARG30a</td>
+              <td>ARG</td>
+              <td>30</td>
+              <td>a</td>
+            </tr>
+            <tr>
+              <td>Ar309</td>
+              <td>AR</td>
+              <td>309</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td>309</td>
+              <td>309</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td>*</td>
+              <td>*</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+          </table>
+
+<p>Note that in the last example, the star is the name itself, not a
+          pattern matching function. To select based on a pattern string, see
+          selecting by pattern below.</p>
+        </td>
+      </tr>
+    </table>
+<a id="Selecting_by_Pattern"></a>
+<a id="Pattern"></a>
+<h3>Selecting by Pattern</h3>
+
+<p>Residues can be selected based on an amino acid residue search pattern. To
+  do so, enter the search string, a sequence of characters designating the
+  sub-sequence to be found within the current system, in the text field and
+  press <b>Pattern</b>. Residues matching the pattern and within the defined
+  residue set are selected or deselected (depending on the Operation). For
+  example, the sequence <tt>gx</tt> will select all pairs of consecutive
+  residues in which the first residue is a glycine.</p>
+
+<p>The standard IUPAC one-letter codes for amino acids are used. The patterns
+  are case-insensitive.</p>
+
+<p>Wildcards and variations of a sequence can be specified using the
+  following characters:</p>
+  <center>
+    <table class="titlebar">
+      <tr>
+        <th>Wildcard</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td width="10%"><tt>x<br />
+        ?</tt></td>
+        <td>Wildcard matching exactly 1 character.</td>
+      </tr>
+      <tr>
+        <td><tt>[]</tt></td>
+        <td>Indicates a set of matchable characters. For example,
+        <tt>[ALT]</tt> can match Ala or Leu or Thr.</td>
+      </tr>
+      <tr>
+        <td><tt>{}<br />
+        [^ ]</tt></td>
+        <td>Set of characters which must not be matched. For example,
+        <tt>{AM}</tt> or <tt>[^AM]</tt> both mean any amino acid except Ala and
+        Met.</td>
+      </tr>
+      <tr>
+        <td><tt>-</tt></td>
+        <td>Allows each character to be separated from its neighbor by a dash
+        (<tt>-</tt>).</td>
+      </tr>
+      <tr>
+        <td>*</td>
+        <td>Wildcard matching 0 or more characters.</td>
+      </tr>
+      <tr>
+        <td>&lt;</td>
+        <td>Pattern must be in the N-terminal. The &lt; must be at the
+        beginning of the pattern.</td>
+      </tr>
+      <tr>
+        <td>&gt;</td>
+        <td>Pattern must be in the C-terminal. The &gt; must be at the end of
+        the pattern.</td>
+      </tr>
+    </table>
+  </center>
+
+<p>Examples of search strings:</p>
+  <center>
+    <table class="titlebar">
+      <tr>
+        <th>Pattern</th>
+        <th>Interpretation</th>
+      </tr>
+      <tr>
+        <td valign="top" width="25%"><tt>[AC]-x-V-x-{ED}</tt></td>
+        <td><tt>[ALA or CYS]-any-VAL-any-{any but Glu or Asp}</tt></td>
+      </tr>
+      <tr>
+        <td><tt>&lt;A*N&gt;</tt></td>
+        <td><tt>ALA in the N-terminal and ASN in the C-terminal</tt></td>
+      </tr>
+      <tr>
+        <td><tt>ASF</tt></td>
+        <td><tt>ALA-SER-PHE</tt> located anywhere in the chain sequence</td>
+      </tr>
+    </table>
+  </center>
+<a id="Selecting_a_Range"></a>
+<a id="Range"></a>
+<h3>Selecting a Range</h3>
+
+<p>Selecting a range of columns can be done quite easily directly in the
+  Sequence Editor by using the columns headers and the <tt>Shift</tt>-click
+  keystroke to extend a range. This, however, will select <i>all</i> the
+  residues within the specified columns. Using the <b>Range</b> field in the
+  Residue Selector, the residues can be restricted and the operation can be
+  varied.</p>
+
+<p>The range is used to specify multiple residues, not necessarily
+  consecutive. Multiple values are entered separated by blanks or commas.
+  Ranges are specified by separating two numbers with a hyphen (-). The range
+  is expanded to include all integer values in-between the two numbers.</p>
+
+<p>Three buttons are available to use on the specified range:</p>
+  <table class="noborder">
+      <tr>
+        <td><b>Pos</b></td>
+        <td>The residue position (column number) is determined by the SVL
+        function <span class="svl">rPos</span>.</td>
+      </tr>
+      <tr>
+        <td><b>Index</b></td>
+        <td>The residue index is determined by the SVL function <span class=
+        "svl">rNumber</span>. This is the index of the residue in its parent
+        chain.</td>
+      </tr>
+      <tr>
+        <td><b>UID</b></td>
+        <td>The residue UID is determined by the SVL function <span class=
+        "svl">rUID</span> (an integer typically equal to the ID field in PDB
+        files).</td>
+      </tr>
+    </table>
+
+<p>Examples:</p>
+  <center>
+    <table class="titlebar">
+      <tr>
+        <th>Text</th>
+        <th>Button Pressed</th>
+        <th>Result</th>
+      </tr>
+      <tr>
+        <td><tt>1, 5, 7-10</tt></td>
+        <td>Index</td>
+        <td>All residues with an index (<span class="svl">rNumber</span>) value
+        of one of: 1, 5, 7, 8, 9, or 10.</td>
+      </tr>
+      <tr>
+        <td><tt>1, 6, 7-10, 12</tt></td>
+        <td>Pos</td>
+        <td>All residues with a position (<span class="svl">rPos</span>) value
+        of one of: 1, 6, 7, 8, 9, 10, or 12.</td>
+      </tr>
+    </table>
+  </center>
+<a id="Selecting_by_Scalar"></a>
+<a id="Scalar"></a>
+<h3>Selecting by Scalar</h3>
+
+<p>Residues can be selected based on their scalar values. The sliders below
+  the buttons allow a range to be specified.</p>
+  <center>
+
+<img src="select/scalar.png" alt="Scalar" class="center" />
+  </center>
+
+<p>Set the desired range and then press one of the scalar buttons. Note that
+  the name on the buttons will change automatically when the scalar is
+  recalculated.</p>
+<a id="Selecting_by_Atom_Data"></a>
+<a id="Data"></a>
+<h3>Selecting by Atom Data</h3>
+
+<p>The <b>Atom Data</b> page has functions to select residues based on their
+  internal atom data. For example, selecting by atom data can be used to
+  discover residues that should be deleted prior to attempting a homology
+  model.</p>
+  <table class="noborder">
+      <tr>
+        <td>Missing Atoms</td>
+        <td>Nonempty amino acid residues with one or more standard atoms
+        missing.</td>
+      </tr>
+      <tr>
+        <td>Incomplete Backbone</td>
+        <td>Nonempty amino acid residues with one or more standard backbone
+        atoms missing.</td>
+      </tr>
+      <tr>
+        <td>Nonstandard Atom Names</td>
+        <td>Nonempty amino acid residues with one or more atoms with
+        nonstandard names.</td>
+      </tr>
+      <tr>
+        <td>No Atoms</td>
+        <td>Amino acid residues with no atoms.</td>
+      </tr>
+    </table>
+<a id="Class"></a>
+<a id="Selecting_by_Amino_Acid_Functional_Class"></a>
+<h3>Selecting by Amino Acid Functional Class</h3>
+
+<p>Residues can be selected based on their amino acid functional classes. The
+  following table gives the amino acids associated with each class:</p>
+  <table class="noborder">
+      <tr>
+        <td>Hydrophobic:</td>
+        <td>VAL, ILE, LEU, MET, TRP, PHE, TYR, ALA</td>
+      </tr>
+      <tr>
+        <td>Hydrophilic:</td>
+        <td>SER, THR, ASN, GLN, ASP, GLU, ARG, LYS, HIS</td>
+      </tr>
+      <tr>
+        <td>Acidic:</td>
+        <td>GLU, ASP</td>
+      </tr>
+      <tr>
+        <td>Basic:</td>
+        <td>ARG, LYS, HIS</td>
+      </tr>
+      <tr>
+        <td>Polar:</td>
+        <td>ASN, SER, THR, GLU</td>
+      </tr>
+      <tr>
+        <td>Hydroxyl:</td>
+        <td>SER, THR</td>
+      </tr>
+      <tr>
+        <td>Aliphatic:</td>
+        <td>ALA, VAL, LEU, GLY, ILE, MET</td>
+      </tr>
+      <tr>
+        <td>Aromatic:</td>
+        <td>PHE, TYR, HIS, TRP</td>
+      </tr>
+    </table>
+<a id="Selecting_by_Structure"></a>
+<a id="Structure"></a>
+<h3>Selecting by Structure</h3>
+
+<p>To select residues based on their underlying structure, use the
+  <b>Secondary Structure</b> or <b>DSSP Label</b> pages. The SVL function
+  <span class="svl">rActualSegment</span> is used to determine these
+  residues.</p>
+  <table class="noborder">
+      <tr>
+        <td>Helix:</td>
+        <td>3-10-helix, 3-10-helix-left, helix, helix-left, pi-helix,
+        pi-helix-left</td>
+      </tr>
+      <tr>
+        <td>Sheet:</td>
+        <td>strand, anti-strand</td>
+      </tr>
+      <tr>
+        <td>Turn:</td>
+        <td>3-turn, 4-turn, 5-turn</td>
+      </tr>
+      <tr>
+        <td>None:</td>
+        <td>residues whose <span class="svl">rActualSegment</span> token is
+        'none'.</td>
+      </tr>
+    </table>
+<a id="Selecting_by_Ribbon_Mode"></a>
+<a id="Ribbon"></a>
+<h3>Selecting by Ribbon Mode</h3>
+
+<p>The <b>Ribbon Style</b> page buttons identify residues whose ribbon mode
+  is set to the specified token as determined by the SVL function <span class=
+  "svl">rRibbonMode</span>. Whether or not the ribbon is currently drawn in the
+  MOE Window does not affect these buttons.</p>
+<a id="Selecting_by_Residue_Type"></a>
+<a id="Type"></a>
+<h3>Selecting by Residue Type</h3>
+
+<p>There are four buttons available on the <b>Residue Type</b> page allowing
+  the selection of specific kinds of residues. The residue types identified
+  are: <b>Amino Acid</b> (as determined by the SVL function <span class=
+  "svl">rType</span>), <b>Nucleic Acid</b> (as determined by the SVL function
+  <span class="svl">rType</span>), <b>Salts &amp; Solvent</b> (waters and some
+  simple ions, i.e. PO3, PO4, SO3, SO4), and <b>Ligand</b>. A ligand is defined
+  as a residue that is not a solvent, not an amino acid and not a nucleic acid
+  yet has more than one atom (i.e. none of the above types).</p>
+<a id="SVL_Commands"></a>
+<a id="SVL"></a>
+<h1>SVL Commands</h1>
+
+<p><a class="svl" href="../fcnref/collect.htm">oSetCollections</a><br />
+  <a class="svl" href="../fcnref/collect.htm">oCollections</a><br />
+  <a class="svl" href="../fcnref/collect.htm">oGetCollection</a><br />
+<a id="See_Also"></a>
+</p>
+
+<h1>See Also</h1>
+
+<p><a href="mainwin.htm#MOE_Window">MOE Window</a><br />
+  <a href="se.htm">Sequence Editor</a><br />
+  <a href="sel_ui.htm">Selection Prompter</a><br />
+  <a href="../fcnref/aselect.htm">Selection Language</a>
+  </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

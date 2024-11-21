@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../images/ccgicon.png" />
+  <title>Conformation Import</title>
+  <meta name="keywords" content="panel: Conformation Import" />
+  <meta name="keywords" content=
+  "main_keywords: conformational search, stochastic" />
+  <meta name="keywords" content=
+  "keywords: forcefield, fragment, refinement, molecular mechanics, MM" />
+  <meta name="keywords" content=
+  "keywords: minimization, iteration, gradient, test, analysis, limit" />
+  <meta name="keywords" content=
+  "keywords: chiral constraint, potential setup, strain" />
+  <meta name="keywords" content="keywords: smp, wash, filter, duplicate" />
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../index.htm"><img src="../images/ccglogo.png" /></a>
+    <a href="../index.htm"><div class="moeversion"></div></a>
+    Conformation Import
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+  <ul>
+    <li><a href="#Methodology">Methodology Overview</a></li>
+    <li><a href="#Running">Running Conformation Import</a></li>
+    <li><a href="#Output">Output</a></li>
+  </ul>
+
+<p>The purpose of Conformation Import is to rapidly calculate low-energy
+  conformations of molecules contained in MDL SD files, CSV files containing
+  SMILES, or MOE Molecular Databases.  When run on a
+  <a href= "../install/smp_inst.htm">MOE/cluster (MOE/smp)</a>
+  multi-processor, Conformation Import will automatically execute in parallel.
+  The main characteristics of Conformation Import are:
+</p>
+<ol>
+  <li><i>High Throughput</i>. The protocol is designed for generating
+  conformations for large collections of molecules.</li>
+  <li><i>Forcefield-Based</i>. A forcefield is used as the basis for
+  determining low energy conformations (as opposed to rule-based
+  methods).</li>
+  <li><i>Fragment Approach</i>. Molecules are divided into overlapping
+  fragments whose conformations are determined independently.</li>
+</ol>
+
+<p>In this document we present an overview of the underlying methodology as
+  well as instructions on how to run the application.</p>
+
+<!-- METHODOLOGY -->
+<a id="Methodology"></a>
+<h1>Methodology Overview</h1>
+
+<p>Conformation Import calculates low energy conformations of a collection of
+  molecules. The processing of these molecules (typically in SDF or MDB files)
+  proceeds in stages.  The main stages of the calculation are as follows:</p>
+
+  <img src="confgui/method.png" class="floatright"
+	alt="Conformation Import Method" />
+
+<p><b>Wash and Filter</b>. Acids and bases are (de)protonated and a single
+  molecular component is retained.  A Descriptor Filter can be used to
+  reject compounds with undesirable properties; typically, size and flexibility
+  are restricted (e.g. eliminate large or overly flexible compounds).  Any
+  <a href= "../quasar/descr.htm">2D QuaSAR descriptor</a> can be used.</p>
+
+<p><b>Fragment</b>.  Input molecules are divided into overlapping fragments.
+  The idea is to fragment the molecules so that each fragment's conformations
+  can be determined independently.</p>
+
+<p><b>Lookup or Search</b>.  Fragment conformations are saved during the
+  calculations for re-use in different molecules.  New fragments are subjected
+  to a full conformational search to generate the conformations and then are
+  saved.  Constraints (e.g. <i>trans</i> amides and esters) are imposed on
+  the conformations to prevent high-energy group conformations. A fragment
+  strain energy limit of 4.0 kcal/mol and a RMSD tolerance of 0.25 &Aring;
+  is enforced.</p>
+
+<p><b>Assemble</b>.  Rigid-body superpositions (on the intersections of the
+  fragments) are used to assemble fragment conformations into full molecular
+  conformations.  Van der Waals clashes are relieved with energy minimization.
+  Topological symmetries are used to eliminate duplicates.</p>
+
+<p>At the lowest level, a stochastic conformational search method is used
+  to generate fragment conformations.  Stochastic search is a simple, reliable,
+  and efficient method to search chain, ring, and stereochemistry
+  configurations.</p>
+
+<div class="indent">
+  <p><b>Step 1</b> [Initialize].  Initialize the conformation list <i>C</i>
+      to empty. Set the failure counter <i>f</i> to zero.
+
+  <p><b>Step 2</b> [Embed].  Obtain a set of 3D coordinates (ignoring chiral
+      constraints) using a distance geometry algorithm (see below).</p>
+
+  <p><b>Step 3</b> [Perturb]. Randomly rotate all bonds (including ring bonds)
+      and randomly invert all chiral centers and non-planar atoms with three
+      or more heavy neighbors.</p>
+
+  <p><b>Step 4</b> [Minimize].  Energy minimize the resulting set of
+      coordinates.</p>
+
+  <p><b>Step 5</b> [Reject].  If the conformation fails any one of several
+      quality checks or has previously been seen in the list <i>C</i>, it
+      is rejected.  If the conformation is rejected, then increase the failure
+      counter <i>f</i> by one.  If the failure limit <i>f</i> exceeds a
+      preset limit, then go to Step&nbsp;7; otherwise return to Step&nbsp;3.</p>
+
+  <p><b>Step 6</b> [Save].  Add the coordinates of the atoms and the potential
+      energy of the coordinates to the conformation list <i>C</i>. Set the
+      failure counter, <i>f</i>, to zero. Return to Step&nbsp;3.</p>
+
+  <p><b>Step 7</b> [Termination].  Save the conformation list <i>C</i> and
+      terminate the algorithm.</p>
+</div>
+
+<p>The termination criteria in Step&nbsp;5 can be interpreted as follows.
+  Upon termination there have been <i>f</i> consecutive attempts to generate
+  a new configuration and each has failed.  By way of analogy to coin tossing,
+  we can estimate the probability that there exists a configuration not yet
+  seen.  Using the coin tossing analogy, a biased coin has been tossed L times
+  and each time &quot;heads&quot; was observed. The Bayes estimate for the
+  probability of observing &quot;heads&quot; is (#heads+1)/(#tosses+2). If
+  L &quot;heads&quot; are observed in L tosses then the probability of
+  observing &quot;heads&quot; is (L+1)/(L+2); thus the probability of
+  observing &quot;tails&quot; (or, analogously, a new configuration) is
+  1/(L+2). At L = 18 this probability is 5%.</p>
+
+<p>Step&nbsp;3 of the algorithm computes an initial set of 3D coordinates of
+  a molecule when given a molecular graph.  Chiral constraints are ignored for
+  the embedding since chirality is part of the StochasticSearch algorithm. The
+  Embed3D algorithm is used to effect the embedding:</p>
+
+  <div class="indent">
+<p><b>Step 1</b>. Calculate two <i>n</i> by <i>n</i> matrices L and U, the
+    estimate of lower and upper the bounds of the inter-atomic distances; that
+    is, for atoms <i>i</i> and <i>j</i>, we estimate L<i><sub>ij</sub></i> and
+    U<i><sub>ij</sub></i> such that in any conformation, the distance
+    <i>d</i> between atoms <i>i</i> and <i>j</i> satisfies
+    L<i><sub>ij</sub></i> &lt; <i>d</i> &lt; U<i><sub>ij</sub></i>.</p>
+
+<p><b>Step 2</b>. Calculate a random inter-atomic distance matrix D such
+    that D<i><sub>ji</sub></i> = D<i><sub>ij</sub></i> = L<i><sub>ij</sub></i>
+    + X<i><sub>ij</sub></i> where <i>i</i>&lt;<i>j</i> and
+    X<i><sub>ij</sub></i> is a random number chosen uniformly in the interval
+    [L<i><sub>ij</sub></i>,U<i><sub>ij</sub></i>].</p>
+
+<p><b>Step 3</b>. Obtain an initial set of coordinates using the
+    least-squares linear embedding method. Briefly, assuming that D is the
+    distance matrix of a set of points, a dot product matrix A is derived
+    from D (A<i><sub>ij</sub></i> is the dot product of the coordinate vectors
+    of points <i>i</i> and <i>j</i>, assuming the points' centroid is at the
+    origin). A is then diagonalized and the first three eigenvectors scaled by
+    the square root of the associated eigenvalues are retained as the
+    coordinate estimates.</p>
+
+<p><b>Step 4</b>. Energy minimize the coordinates obtained in Step&nbsp;3.
+    If the resulting conformation passes quality checks described above, then
+    the algorithm terminates; otherwise go to Step&nbsp;2.</p>
+</div>
+
+<p>In practice, Embed3D is fast (especially for molecular fragments) and only
+  one or two iterations of the algorithm are required (even for bridge systems
+  and fused ring systems).</p>
+
+<p>To summarize, Conformation Import uses a method based upon stochastic
+  search of fragments followed by the assembly of fragment conformations to
+  produce molecular conformations unique up to rigid-body superposition and
+  molecular symmetry. For speed, a fragment database is used to store (for
+  re-use) the calculated fragment conformations.
+</p>
+
+<!-- MAIN PANEL -->
+<a id="Running"></a>
+<h1>Running Conformation Import</h1>
+
+<p>To run Conformation Import, perform the following:</p>
+<ol>
+  <li>Select and configure the forcefield using <span class="menu">MOE |
+  Footer | Potential Setup</span>. <a href="../moe/pot.htm">All-atom
+  forcefields</a> are recommended.</li>
+  <li>Open the panel using one of the following methods:
+    <ol type="i">
+      <li>Choose <span class="menu">MOE | Compute | Conformations |
+      Import</span> and then use the <b>Add</b> button on the Conformation
+      Import panel to specify one or more input files.</li>
+      <li>Use the <span class="menu">MOE | File | Open</span> command in the
+      MOE window and select either an MDL SD file (<tt>sdf</tt>) or a MOE
+      Molecular Database (<tt>mdb</tt>). Then choose <b>Import
+      Conformations</b> from the operations available in the <b>Action</b>
+      option list.</li>
+    </ol>
+  </li>
+</ol>
+
+<p>The following panel will appear:</p>
+<img src="confgui/conf_ui.png" alt="Conformation Import Panel" class="center" />
+
+<p>The panel controls have the following meanings.</p>
+<table class="noborder">
+  <tr>
+    <td><b>Output Database</b></td>
+    <td>The file name of the molecular database that will hold the output
+    conformations. This file is created anew for each run of Conformation
+    Import.</td>
+  </tr>
+  <tr>
+    <td><b>Split Output Database</b></td>
+    <td>
+      To prevent large output database files, the output can be automatically
+	split into several files.  The size of each output database will be
+	determined by the value specified in the text field (in Megabytes).
+	If this value is less than 1 megabyte, only one file will be
+	generated.  Multiple output databases will be automatically named
+	using the <b>Output Database</b> string concatenated with the numbers
+	<tt>001</tt>, <tt>002</tt>, etc.
+    </td>
+  </tr>
+  <tr>
+    <td><b>Refine&nbsp;Output Conformations</b></td>
+    <td>If on, conformations are energy minimized before being
+    written to the output database. The strain energy for each conformation
+    will be calculated using the minimized structure.</td>
+  </tr>
+  <tr>
+    <td><b>Input Files</b></td>
+    <td>The list displays the filenames and apparent file types of the files
+    that are used as a source of input compounds. Conformation Import will
+    process them in the order specified. Press the <b>Add</b> button to add a
+    file to the list. The <b>Up</b>, <b>Down</b>, <b>First</b> and
+    <b>Last</b> buttons change the order of files selected in the list. Files
+    that appear with a type of <b>???</b> will not be processed. Legal file
+    types are MDL SD files (<tt>sdf</tt>), MOE MDB files
+    (<tt>mdb</tt>), and files containing SMILES strings, one per line
+    (<tt>smi</tt>).</td>
+  </tr>
+  <tr>
+    <td><b>ID&nbsp;Fields</b></td>
+    <td>A list of field names in the input files from which the compound
+    IDs will be extracted.  Multiple space-separated names can be specified;
+    the ID will be taken from the first matching field.
+    Wildcards are permitted.</td>
+  </tr>
+  <tr>
+    <td><b>Filter</b></td>
+    <td>
+	If specified, this defines the criteria that are used to reject
+	compounds.  Molecules whose properties fall outside the specified
+	range(s) will be omitted. Any MOE 2D QuaSAR descriptor can be specified,
+	and the condition to be satisfied can be a range of values, a boolean
+	value, numeric comparisons, etc. evaluated on descriptors or SMARTS
+	patterns.  Descriptor Filters can include files, specified as
+	<tt>@<i>filename</i></tt>. If the filename contains spaces or other
+	non-alphanumeric characters, it must be enclosed in double quotes.
+	Files can be nested. The current Filter can be written to a file by
+	pressing <b>Save...</b> and providing a filename. Examples include:
+	<table class="titlebar">
+        <tr>
+          <th>Expression</th>
+          <th>Meaning</th>
+        </tr>
+        <tr>
+          <td><tt>Weight[100,500] SlogP&lt;5</tt></td>
+          <td>Molecular weight &ge; 100 and &le; 500 and SlogP &lt; 5</td>
+        </tr>
+        <tr>
+          <td><tt>!reactive 'b_1rotN'&lt;4</tt></td>
+          <td>Not reactive and less than 4 rotatable single bonds</td>
+        </tr>
+        <tr>
+          <td><tt>&quot;[NX3](=[OX1])[OX1]&quot;&lt;=2 not
+          &quot;[#M]&quot;</tt></td>
+          <td>Two or fewer nitro/nitrate groups and not metal atom</td>
+        </tr>
+        <tr>
+          <td><tt>@filter.txt TPSA&gt;80</tt></td>
+          <td>Use the contents of <tt>filter.txt</tt> and TPSA &gt; 80</td>
+        </tr>
+      </table>
+	To clear the Descriptor Filter, press <b>Clear</b>.<br>
+	<p>If <b>Protonate bases and deprotonate acids</b> is on, rules are
+	applied to set the protonation state of common acids and bases.</p>
+    </td>
+  </tr>
+</table>
+
+<p>After input of files and adjustment of the various parameters and
+  settings, press the <b>OK</b> button to begin the calculation. Press
+  <b>Batch</b> to open the
+  <a href="../moe/hpc.htm#BatchPanel">Batch</a> job submit
+  panel, which allows the user to create
+  a batch job that can be run locally outside of MOE,
+  or on a compute cluster via a queueing system such as slurm:
+
+      <img src="confgui/confimport_batchpanel.png" alt="Batch Panel"
+      class="center" />
+
+<!-- OUTPUT -->
+<a id="Output"></a>
+<h1>Output</h1>
+
+<p>The Output Conformation Database is specified in the
+  <b>Output&nbsp;Database</b> field. Conformations will be written in
+  <a href="../mdb/dbio.htm#MDB">packed format</a> to the
+  specified database which will be created at the start of calculation. This
+  database can become very large, so it is recommended to split the output
+  database (default).</p>
+
+<p> In all cases, it is advisable to verify that appropriate
+  disk space is available.  Note that running on a <a href=
+  "../install/smp_inst.htm">MOE/cluster (MOE/smp)</a> multi-processor has no
+  effect on the number of output conformation databases produced.</p>
+
+<p>The fields in the Output Conformation Database have the following
+  meaning:</p>
+
+<table class="titlebar">
+  <tr>
+    <th>Name</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><tt>mol</tt></td>
+    <td><tt>molecule</tt></td>
+    <td>The molecule for which conformations bave been generated.
+  </tr>
+  <tr>
+    <td><tt>ID</tt></td>
+    <td><tt>char</tt></td>
+    <td>The compound ID extracted from the input file.
+  </tr>
+  <tr>
+    <td><tt>mol:conf</tt></td>
+    <td><tt>int</tt></td>
+    <td>Binary compressed conformation field containing the multiple
+	conformation coordinates of the atoms in the <tt>mol</tt> field.
+	The energies of each conformation are also stored in this field.</td>
+  </tr>
+</table>
+
+<br clear="both" />
+
+<h1>See Also</h1>
+
+<p><a href="../quasar/fcnref/descrfcn.htm">QuaSAR-Descriptor
+  Functions</a><br />
+  <a href="../moe/pot.htm">MOE Potential Energy Model</a><br />
+  <a href="confsrch.htm">Generating and Analyzing Conformations</a><br />
+  <a href="../moe/prep3ddb.htm">Preparing a Conformation Database</a><br />
+  <a href="ph4_guide.htm">Introduction to Pharmacophores in MOE</a><br />
+  <a href="ph4_search.htm">Pharmacophore Search</a><br />
+  <a href="../moe/gui/mainwin.htm">MOE Window</a><br />
+  <a href="../mdb/db.htm">Molecular Database Viewer</a><br />
+  <a href="../moe/hpc.htm">High-Performance Computing Framework</a><br />
+  <a href="../install/smp_inst.htm">MOE/cluster (MOE/smp)</a>
+  </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../images/ccgicon.png" /> <a href="../index.htm"></a> <a href=
+    "../legal.htm"></a> &copy;<span class="versionyear"></span> <a href="http://www.chemcomp.com"></a>. All
+    rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

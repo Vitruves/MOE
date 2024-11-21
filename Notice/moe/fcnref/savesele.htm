@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: SaveSelection, RestoreSelection" />
+  <title>Atom Functions: SaveSelection, RestoreSelection</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Atom Functions: SaveSelection,
+    RestoreSelection
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+    <a class="fcnlink" href="#SaveSelection">SaveSelection</a> []
+    <a class="fcnlink" href="#RestoreSelection">RestoreSelection</a> []
+</pre>
+<a id="SaveSelection"></a>
+<a id="RestoreSelection"></a>
+
+<h1>Description</h1>
+<table class="noborder left">
+  <tr>
+    <td><tt>SaveSelection</tt></td>
+    <td>Saves the current atom selection set.</td>
+  </tr>
+  <tr>
+    <td><tt>RestoreSelection</tt></td>
+    <td>Restores the saved atom selection sets in
+    reverse-chronological order.</td>
+  </tr>
+</table>
+
+<p>Selections are saved onto a stack (last-in-first-out structure) of size
+  16. A saved selection is popped off the stack (and hence cleared from memory)
+  with each call to <tt>RestoreSelection</tt>, i.e. a particular selection may
+  be restored only once.</p>
+
+<h1>See Also</h1>
+
+<p><a href="atom.htm">Atom Functions</a>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

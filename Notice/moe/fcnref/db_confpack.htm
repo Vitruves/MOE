@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: db_ConfPack" />
+  <meta name="keywords" content="functions: db_ConfUnpack" />
+  <meta name="keywords" content="functions: db_ConfFieldNames" />
+  <meta name="keywords" content="functions: db_ConfFieldEnsure" />
+  <meta name="keywords" content="functions: db_ConfFieldUseE" />
+  <title>MOE Database Functions: db_ConfPack...</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    MOE Database Functions: db_ConfPack...
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    <a class="fcnlink" href="#db_ConfPack">db_ConfPack</a> [src, dst, opt]
+    <a class="fcnlink" href="#db_ConfUnpack">db_ConfUnpack</a> [src, dst, opt]
+
+    conffields = <a class="fcnlink" href=
+"#db_ConfFieldNames">db_ConfFieldNames</a> mdb;
+    conffields = <a class="fcnlink" href=
+"#db_ConfFieldNames">db_ConfFieldNames</a> [mdb, 'molfield'];
+
+    <a class="fcnlink" href=
+"#db_ConfFieldEnsure">db_ConfFieldEnsure</a> [mdb, 'conffield', eflag]
+    eflag = <a class="fcnlink" href=
+"#db_ConfFieldUseE">db_ConfFieldUseE</a> [mdb, 'conffield']
+</pre>
+
+<h1>Description</h1>
+
+<p>Conformational databases can be stored in two forms: <i>packed</i> or
+  <i>unpacked</i>.</p>
+
+<p>In the <i>packed</i> form of the database, each molecule is stored in one
+  entry. Its conformations are stored in a separate field. The name of the
+  conformation field is derived from the name of the molecule field by adding
+  the suffix <tt>':conf'</tt>. For example, the conformation field of
+  the molecule field <tt>'mol'</tt> is named
+  <tt>'mol:conf'</tt>.</p>
+
+<p>In the <i>unpacked</i> form of the database, each conformation is stored
+  in one entry. Conformations of the same molecule must be stored in
+  consecutive entries. A separate (optional) molecule sequence field, typically
+  an integer named <tt>'mseq'</tt>, helps to determine which
+  conformations represent the same molecule. Conformations of the same molecule
+  must share the same molecule sequence number. If the molecule sequence field
+  is missing or not used, the molecule sequence will be detected from the
+  molecule field.</p>
+
+<p>Other database fields are converted between the packed form according to
+  the following rules:</p>
+  <ul>
+    <li>Empty fields are packed and unpacked as empty fields.</li>
+    <li>Non-numerical fields (molecules and strings) are packed by copying the
+    value of the first conformation as-is. They are unpacked by copying
+    (duplicating) the packed value as-is to all conformations.</li>
+    <li>Numerical fields that store one scalar value per conformation are
+    packed by collecting the scalar values to a vector. If all conformations
+    share the same value, the value is packed as a scalar (and not as a vector
+    of duplicates). Scalar fields are unpacked by copying the packed value to
+    all conformations. Vector fields are unpacked by copying the individual
+    (scalar) elements to the corresponding conformations.</li>
+    <li>The length of a vector stored in a packed numerical field must be the
+    same as the number of stored conformations. If the packed field contains a
+    vector of a different length (&gt;1), the field cannot be unpacked and is
+    removed from the output. Also, if an unpacked numerical field stores vector
+    values (of length &gt;1), the field cannot be packed and is removed from
+    the output.</li>
+  </ul>
+
+<p>Note: Database applications automatically detect whether the conformation
+  database is packed or unpacked by examining the presence of the conformation
+  field (e.g. <tt>'mol:conf'</tt>).</p>
+<a id="db_ConfUnpack"></a>
+<a id="db_ConfPack"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">db_ConfPack</span> [src, dst, opt]
+<span class="fcndef">db_ConfUnpack</span> [src, dst, opt]
+</pre>
+
+<p>Converts a conformational database from the unpacked form to the packed
+  form or vice versa. The source (<tt>src</tt>) and destination (<tt>dst</tt>)
+  files must refer to physically different databases (i.e. the database
+  can't overwrite itself). Other options can specified in parameter
+  <tt>opt</tt>, which is an optional tagged vector with the following possible
+  tags:</p>
+  <dl>
+    <dt><tt>mol</tt></dt>
+    <dd>Molecule field name (default <tt>'mol'</tt>).</dd>
+    <dt><tt>mseq</tt></dt>
+    <dd>Molecule sequence field name (default <tt>'mseq'</tt>; a value
+    of <tt>''</tt> means that the field will not be written).</dd>
+    <dt><tt>E</tt></dt>
+    <dd>Conformational energy field name (default <tt>'E'</tt>; a value
+    of <tt>''</tt> means that the field will not be written).</dd>
+    <dt><tt>append</tt></dt>
+    <dd>Append at the end of the output database (default 0).</dd>
+    <dt><tt>copy</tt></dt>
+    <dd>Other fields to transcribe, specified as a vector of field name
+    tokens.</dd>
+    <dd></dd>
+  </dl>
+
+<p>Examples:</p>
+
+<pre>
+svl&gt; db_ConfUnpack ['$MOE/lib/linker.mdb', '$HOME/linker_unpacked.mdb', [append:1]]
+svl&gt; db_ConfPack ['vendor_conf.mdb', '$HOME/vendor_conf_packed.mdb', [copy:['ID','Vendor']]]
+</pre>
+<a id="db_ConfFieldNames"></a>
+<hr noshade="noshade" />
+
+<pre>
+conffields = <span class="fcndef">db_ConfFieldNames</span> mdb;
+conffields = <span class=
+"fcndef">db_ConfFieldNames</span> [mdb, 'molfield'];
+</pre>
+
+<p>Returns the names of conformation fields present in the database. If the
+  second parameter is not used, the function returns all conformation fields.
+  If the second parameter is the name of a molecule field or a pattern matching
+  a molecule field, only those conformation fields that correspond to the
+  specified molecule fields are returned.</p>
+<a id="db_ConfFieldEnsure"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class=
+"fcndef">db_ConfFieldEnsure</span> [mdb, 'conffield', eflag]
+</pre>
+
+<p>Creates (or validates) a field of name <tt>'conffield'</tt>
+  capable of storing conformations packed by function <tt>mol_EncodePos</tt>.
+  The field name must be of form <tt>'mol:conf'</tt>, where
+  <tt>'mol'</tt> refers to an existing molecule field. The
+  <tt>eflag</tt> parameter specifies whether or not the field will be used to
+  store conformation energies.</p>
+<a id="db_ConfFieldUseE"></a>
+<hr noshade="noshade" />
+
+<pre>
+eflag = <span class="fcndef">db_ConfFieldUseE</span> [mdb, 'conffield']
+</pre>
+
+<p>Detects whether or not the conformation field <tt>'conffield'</tt>
+  stores conformation energies. The field name must be of form
+  <tt>'mol:conf'</tt>, where <tt>'mol'</tt> refers to an
+  existing molecule field. If the field environment (or the first stored
+  molecule) indicate that energies are stored with the conformations, the
+  function returns 1. Otherwise, the function returns 0.</p>
+
+<h1>See Also</h1>
+
+<p><a href="introdb.htm">Database Functions</a></p>
+
+<p><a class="svl" href="db_envir.htm">db_FieldEnvironment</a><br />
+  <a class="svl" href="db_ftype.htm">db_EnsureField</a><br />
+  <a class="svl" href="db_ftype.htm">db_Fields</a><br />
+  <a class="svl" href="moe_const.htm">DB_FIELD_TYPES</a></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

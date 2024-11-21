@@ -1,0 +1,2720 @@
+<!DOCTYPE html>
+<html>
+
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../images/ccgicon.png" />
+  <title>Spectral Analysis</title>
+  <meta name="keywords" content="panel: NMR Analysis" />
+  <meta name="keywords" content="panel: VCD and ECD Analysis" />
+  <meta name="keywords" content="panel: Conformation Distribution" />
+  <meta name="keywords" content="panel: Spectral Analysis" />
+  <meta name="keywords" content=
+  "keywords: NMR, VCD, ECD, ORD, vibrational, dichroism, TMS, QM, quantum, SCF" />
+  <meta name="keywords" content=
+  "keywords: shielding, shift, correction, empirical, reference" />
+  <meta name="keywords" content=
+  "keywords: Boltzmann weighted, Spectral Analysis, Delta" />
+  <meta name="keywords" content="keywords: auto-assign, peak, experimental" />
+  <meta name="keywords" content=
+  "keywords: NAMFIS, Conformer Distribution, NOE, pairwise distance" />
+  <meta name="keywords" content="keywords: least squares" />
+  <meta name="keywords" content="keywords: eigenvalue problem, eigenvector" />
+  <meta name="keywords" content="keywords: harmonic oscillator" />
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../index.htm"><img src="../images/ccglogo.png" /></a>
+    <a href="../index.htm"><div class="moeversion"></div></a>
+    Spectral Analysis
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+  <ul>
+    <li><a href="#Introduction">Introduction</a></li>
+    <li>
+      <a href="#NMRAnalysis">NMR Analysis</a>
+      <ul>
+        <li><a href="#ReferenceMethod">Reference Method</a></li>
+        <li><a href="#ReferenceData">Reference Data</a></li>
+      </ul>
+    </li>
+    <li><a href="#RunNMR">Running NMR Analysis</a></li>
+    <li>
+      <a class="example" href="#NMRExamples">NMR Examples</a>
+      <ul>
+        <li><a class="example" href="#Cresol">Cresol Structural
+        Isomers</a></li>
+        <li><a class="example" href="#CalcTMS">Calculate TMS Reference
+        Shielding</a></li>
+        <li><a class="example" href="#QMinMOE">Perform QM Refinement in
+        MOE</a></li>
+      </ul>
+    </li>
+    <li><a href="#RunVCD">Running VCD and ECD Analysis</a></li>
+    <li>
+      <a class="example" href="#VCDExamples">VCD Example</a>
+      <ul>
+          <li><a class="example" href="#camphor">
+	  Camphor</a></li>
+      </ul>
+    </li>
+    <li>
+      <a class="example" href="#ECDExamples">ECD and ORD Example</a>
+      <ul>
+          <li><a class="example" href="#dimethyl">
+           Dimethyl-L-Tartrate</a></li>
+      </ul>
+
+    </li>
+    <li><a href="#FITAnalysis">Conformer Distribution Methodology
+	Overview</a></li>
+    <li><a href="#RunFIT">Running Conformer Distribution</a></li>
+    <li>
+      <a class="example" href="#FITExamples">Conformer Distribution Examples</a>
+      <ul>
+        <li><a class="example" href="#pairDists">Macrocycle Pair-Distances
+	</a></li>
+      </ul>
+    </li>
+
+    <li><a href="#Ref">References</a></li>
+  </ul>
+<a id="Introduction"></a>
+<h1>Introduction</h1>
+
+<p>
+The Spectral Analysis application supports computational studies of NMR,
+IR, VCD, UV, ECD and ORD spectra for small molecules and peptides.  In addition, chemical
+shift, coupling constant and/or pairwise distance data can be used to
+determine the relative populations within a set of conformers, yielding the
+in-solution conformer distribution.  This information can be used for
+compound analysis as well as for understanding the energetics of binding.
+</p>
+
+<p>
+NMR spectroscopy measures the magnetic properties of atomic nuclei, and
+can reveal detailed information about molecular structure. On the NMR
+Analysis page, NMR shielding tensors and spin-spin coupling constants
+(<b><i>J</i></b>) calculated by a quantum mechanical program [Bally&nbsp;2011]
+can
+be converted into chemical shifts, which can be displayed and (automatically)
+matched to experimental data.</p>
+
+<p>Vibrational Circular Dichroism (VCD) measures the differential infrared
+  (IR) spectrum produced with left&ndash; and right&ndash;circularly polarized
+  light as it interacts with vibrational transitions in a molecule
+  [Stephens&nbsp;1985, Dukor&nbsp;2000, Vargek&nbsp;1997]. Chiral centers will
+  exhibit optical activity in the IR range analogous to that seen in other
+  types of spectra such as polarimetry. Calculating the VCD response involves
+  determining the dipolar response of the perturbed Hamiltonian (&#x210B;')
+  due to the incident electric (<b><i>E</i></b>) and magnetic (<b><i>H</i></b>)
+  fields according to<br /></p>
+
+<p class="center">&#x210B;'(<b><i>E</i></b>,<b><i>H</i></b>) =
+  -(<i><b>&mu;</b><sub>el</sub> <b>&middot;</b> <b>E</b></i>)
+  (<i><b>&mu;</b><sub>mag</sub> <b>&middot;</b> <b>H</b></i>).</p>
+
+<p>
+These calculations require that both the polarizability and magnetic
+shielding tensors be calculated, which is handled by third-party quantum
+mechanics (QM) software.
+</p>
+
+<p>Electronic Circular Dichroism (ECD) measures the differential Ultraviolet
+  (UV) spectrum produced with left&ndash; and right&ndash;circularly polarized
+  light as it interacts with electronic transitions in a molecule
+  [Trander&nbsp;2017]. Calculating the ECD involves modeling 
+  excited electron states using time-dependent density functional theory.
+</p>
+
+<p>Optical rotation is the rotation of the orientation of the plane 
+   of polarization of linearly polarized light as it travels through certain materials.
+   It occurs as a consequence of different refractive indices for left and
+   right circularly polarized light. Optical rotation dispersion (ORD) measures
+   the dependence of optical rotation on wavelength. Quantum mechanics
+   computation of ORD does not involve time dependent DFT and may be faster
+   than the computation of ECD. Experimentally ORD is measured at a given wavelength,
+   and to compute it in MOE a set of wavelength values must be specified.
+</p>
+
+<p>
+   ECD and ORD are related by the Kramers–Kronig transformation [Polavarapu&nbsp;2006].
+   If experimental ECD data is available the Spectral Analysis application 
+   transforms it to ORD using the Kramers–Kronig transformation.
+   The transformation from molar ellipticity [&theta;(&mu;)]
+   (as a function of wavelength) to the molar rotation [&phi;(&lambda;] is given by
+   <img src="spectralanalysis/KKeq1.png" class="center" alt=
+  "KK1" />
+   Usually ECD is expressed as molar circular dichroism &epsilon;.
+   Mollar ellipticity  [&theta;] is given by 3298.2 * &epsilon;.
+   And ORD, expressed as specific rotation, is given by [&phi;] * 100 / molar mass.
+   The integral on the right side has a singularity and to overcome this problem the 
+   method suggested by Ohta and Ishida [Ohta&nbsp;1988] is utilized, as folllows
+   <img src="spectralanalysis/KKeq2.png" class="center" alt="KK1" />
+   The summation on the right uses alternate data points to avoid the singularity 
+   at &lambda; = &mu;: if the wavelength &lambda; where the molar rotation
+   is to be calculated corresponds to an odd-numbered data point, 
+   then the summation is carried over even-numbered data points.
+</p> 
+
+<p>
+Experimental information for a chemical structure can be estimated by
+generating a set of conformers and constructing a weighted sum of the
+appropriate calculated property:
+
+<p class="center"><i><b>p</b><sub>calc</sub></i> =
+<b>&Sigma;</b><sub><i>i</i></sub> <i><b>w</b><sub>i</sub></i>
+<i><b>p</b></i><sub><i>i</i></sub>,
+</p>
+
+where <i><b>w</b><sub>i</sub></i> is the weight and
+<i><b>p</b><sub>i</sub></i> is the
+calculated property for conformer <i>i</i>.  The best-fitting set of
+conformers can be determined by calculating the weights via a least-squares
+fit to a penalty function, <b><i>&Chi;</i></b><sup>2</sup>:
+
+<p class="center">
+<i><b>&Chi;</b></i><sup>2</sup> =
+<b>&Sigma;</b><sub><i>j</i></sub> ((<i><b>J</b><sub>exp,j</sub></i> -
+<i><b>J</b><sub>calc,j</sub></i>) /
+<i><b>&sigma;</b><sub>J,j</sub></i>)<sup>2</sup> +
+<b>&Sigma;</b><sub><i>j</i></sub> ((<i><b>r</b><sub>exp,j</sub></i> -
+<i><b>r</b><sub>calc,j</sub></i>) /
+<i><b>&sigma;</b><sub>r,j</sub></i>)<sup>2</sup> +
+<b>&Sigma;</b><sub><i>j</i></sub> ((<i><b>&delta;</b><sub>exp,j</sub></i> -
+<i><b>&delta;</b><sub>calc,j</sub></i>) /
+<i><b>&sigma;</b><sub>&delta;,j</sub></i>)<sup>2</sup>,
+</p>
+
+where <i>j</i> refers to the individual experimental (and calculated)
+measurements and the denominators, <i><b>&sigma;</b><sub>p,j</sub></i>,
+are the errors associated with individual measurements of type
+<i><b>p</b></i>.
+
+<p>
+Currently, MOE supports Gaussian 09 and Gaussian 16 for QM calculations.
+Conformers can be generated by either forcefield or QM-based methods.
+</p>
+<a id="NMRAnalysis"></a>
+<h1>NMR Analysis</h1>
+<a id="ReferenceMethod"></a>
+<h2>Reference Method</h2>
+
+<p>Calculated isotropic shielding constants, &sigma;, can be converted to
+  chemical shifts, &delta;, by a number of Reference Methods. We will use
+  <sup>13</sup>C
+  NMR as an example, but any atom that has a calculated shielding and a
+  Reference Method can be used. As with experiment, the <sup>13</sup>C
+  chemical shift can
+  be obtained by subtracting the isotropic shielding constants for the carbon
+  nuclei in the molecule of interest, {&sigma;<sub><i>i</i></sub>}, from those
+  of tetramethylsilane (TMS), &sigma;<sub>ref</sub>:</p>
+
+<p class="center">&delta;<sub><i>i</i></sub> = &sigma;<sub>ref</sub> -
+  &sigma;<sub><i>i</i></sub></p>
+
+<p>While there can be significant errors with any calculation, using the same
+  QM parameters for both will likely reduce them. Thus, chemical shifts
+  calculated in this way often benefit from cancellation of errors.</p>
+
+<p>Alternate reference compounds can be chosen that are more similar to the
+  molecules being studied. This can result in improved results due to greater
+  cancellation of errors. If the experimental chemical shift for the reference
+  compound is known, the isotropic shielding constants can be converted into
+  chemical shifts relative to TMS:</p>
+
+<p class="center">&delta;<sub><i>i</i></sub> = &sigma;<sub>ref</sub> -
+  &sigma;<sub><i>i</i></sub> + &delta;<sub>ref</sub></p>
+
+<p>where &delta;<sub><i>i</i></sub> is the chemical shift relative to TMS,
+  &sigma;<sub>ref</sub> is the computed shielding constant for the reference
+  molecule, &sigma;<sub><i>i</i></sub> is the computed shielding constant for
+  the nuclei in the molecule of interest and &delta;<sub>ref</sub> is the
+  experimental chemical shift for the reference compound. A logical extension
+  to using a single reference compound is to use one reference for
+  sp<sup>3</sup>-hybridized carbons and a different reference for sp- and
+  sp<sup>2</sup>-hybridized carbons. Typically, methanol is used for saturated
+  and benzene is used for unsaturated atoms. In the case of hydrogens, the
+  hybridization of the adjacent carbon is used.</p>
+
+<p>Alternatively, the reference compound(s) can be replaced by linear
+  regression models constructed from sets of compounds. If a large set of data
+  is used, the effect of mismatch between calculated and experimental chemical
+  shifts for any single compound is reduced. As above, all calculations must be
+  performed with the same QM parameters. The chemical shift can be calculated
+  by:</p>
+
+<p class="center">&delta;<sub><i>i</i></sub> = (<tt>intercept</tt> -
+  &sigma;<sub><i>i</i></sub>) / &minus;<tt>slope</tt></p>
+
+<p>Slope/intercept values can be tabulated for sets of molecules and QM
+  parameters; the <a href="http://cheshirenmr.info/index.htm">CHESHIRE chemical
+  shift repository</a> provides one such example [Lodewyk&nbsp;2011].</p>
+<a id="ReferenceData"></a>
+<h2>Reference Data</h2>
+
+<p>Calculated isotropic shielding constants are converted into chemical
+  shifts by applying a transformation rule that is dependent on the QM
+  parameters used for the calculation. These Reference Methods are collected
+  into a MOE database, where each entry specifies the QM parameters (method,
+  basis set, solvent model and solvent), the element, a transformation rule and
+  a description that appears in the <b>Method</b> menu of the NMR Analysis
+  panel. A sample portion of a Reference Database is provided below:</p>
+
+<img src="spectralanalysis/refsample.png" class="center" alt=
+  "Sample Reference Database" />
+  <table class="noborder">
+    <tr>
+      <td><b>Description</b></td>
+      <td>This is a description of the Reference Method defined in
+      the database entry. Examples are <b>TMS</b>, indicating that
+      tetramethylsilane is used as a reference, <span class="nobr"><b>Linear
+      Scaling</b></span>, indicating that a regression model relates shielding
+      to chemical shifts and <span class="nobr"><b>Two Reference</b></span>,
+      indicating that one model is used for saturated atoms and another for
+      unsaturated atoms. These appear in the <b>Method</b> menu of NMR
+      Analysis.</td>
+    </tr>
+    <tr>
+      <td><b>QM&nbsp;Method</b></td>
+      <td>This is the QM method used to calculate the isotropic
+      shielding constants. Typical methods would be a DFT method such as B3LYP,
+      Hartree-Fock (HF) or post-Hartree-Fock methods such as MP2.</td>
+    </tr>
+    <tr>
+      <td><b>Basis&nbsp;Set</b></td>
+      <td>This is the complete description of the basis set used
+      to calculate the isotropic shielding constants.</td>
+    </tr>
+    <tr>
+      <td><b>Solvent&nbsp;Model</b></td>
+      <td>This is the solvent model used to calculate the
+      isotropic shielding constants. If omitted, a gas-phase calculation was
+      performed.</td>
+    </tr>
+    <tr>
+      <td><b>Solvent</b></td>
+      <td>This is the solvent used (with the above mentioned
+      Solvent Model) used to calculate the isotropic shielding constants. It
+      can be the name of a solvent supported by the external QM program or the
+      value of the dielectric constant that was used. If omitted, a gas-phase
+      calculation was performed.</td>
+    </tr>
+    <tr>
+      <td><b>Element</b></td>
+      <td>The atomic symbol of the element the Reference Method
+      applies to. In this case carbon, indicated by <b>C</b>.</td>
+    </tr>
+    <tr>
+      <td><b>Transform</b></td>
+      <td>This specifies the one or two algebraic transformations
+      used to convert the calculated isotropic shielding constant into a
+      chemical shift. <b>x</b> is the value of the chemical shielding and the
+      result is the chemical shift. When two transformations are used, they
+      must be separated by a semicolon. The first equation is used for
+      saturated atoms and the second is used for unsaturated atoms. All
+      equations must be valid SVL expressions.</td>
+    </tr>
+  </table>
+
+<p>Ideally, all entries in a Reference Database should be unique. If
+  redundant entries are present, NMR Analysis will use the first matching entry
+  to calculate chemical shifts. If, for example, multiple regression models are
+  available for a particular set of QM parameters, the Description field must
+  be used to differentiate them. Note that the QM parameters are set when QM
+  Refinement is performed in <span class="nobr"><b>Conformational
+  Search</b></span>, which writes them to the output database.
+  <!-- ========================== RUNNING NMR ============================== !--></p>
+<a id="RunNMR"></a>
+<h1>Running NMR Analysis</h1>
+
+<p>To perform an NMR Analysis, open a database containing isotropic shielding
+  constants calculated via <span class="nobr"><a href=
+  "confsrch.htm#RefineOnly">QM Refinement</a></span> in the Database Viewer and
+  select <span class="menu">DBV | Compute | Molecule | Spectral
+  Analysis</span>. If the required fields are present, the Spectral Analysis
+  panel will appear.  The name of the associated database will be included in
+  the window header.  Select the NMR page using the buttons at the top of the
+  panel.</p>
+
+<img src="spectralanalysis/panel1.png" class="center" alt=
+  "NMR Analysis Panel" />
+
+  <table class="noborder">
+    <tr>
+      <td><b>Element</b></td>
+      <td>Specify the element of the current molecule to be
+      analyzed.</td>
+    </tr>
+    <tr>
+      <td><b>Method</b></td>
+      <td>Specify the method used to convert calculated
+      isotropic shielding constants to chemical shifts. This menu contains all
+      of the entries in the Reference Database that share the element being
+      analyzed and the QM parameters used in generating the isotropic shielding
+      constants. Typical methods would be <b>TMS</b>, <span class=
+      "nobr"><b>Linear Scaling</b></span> or <span class="nobr"><b>Two
+      Reference</b></span>, with the last referring to separate transformations
+      for saturated and unsaturated carbons (or hydrogens connected to such
+      carbons).</td>
+    </tr>
+    <tr>
+      <td><b>Chemical Shifts</b></td>
+      <td>Specify the name of the file containing the
+      experimental chemical shifts. This is a whitespace-delimited or CSV file.
+      The Experimental Data can be specified by pressing the <b>Browse</b>
+      icon and
+      selecting the appropriate file. The results are compared to the chemical
+      shifts for the current element being analyzed. Recently-used experimental
+      data files are provided as a shortcut.</td>
+    </tr>
+    <tr>
+      <td><b>Action Menu</b> <img src=
+      "spectralanalysis/triplebar.png" class="icon" /></td>
+      <td>This menu allows the user to Load experimental values
+      from a text file, Save the currently-loaded values to a text file,
+      View the experimental values for the current atom,
+      Clear the currently-loaded filename or
+      Clear all loaded experimental information. Values currently assigned
+      to individual atoms will be retained when the text file is cleared. When
+      loaded, the user selects values from the <b>Expt&nbsp;Data</b> option
+      menu. When no file is loaded, experimental values can be entered manually
+      in a text field.</td>
+    </tr>
+    <tr>
+      <td><b>Reference DB</b></td>
+      <td>Specify the name of the Reference Database, which
+      contains a set of transformation rules used to convert calculated
+      isotropic shielding constants to chemical shifts. Each transformation is
+      specific to the QM parameters (method, basis set, solvent model and
+      solvent) used in generating the isotropic shielding constants, the
+      element being analyzed, and a description field that describes each
+      method. The Reference Database can be specified by pressing the
+      <b>Browse</b> icon and selecting the appropriate database.</td>
+    </tr>
+    <tr>
+      <td><b>QM Parameters</b></td>
+      <td>Specify the QM parameters used in generating the
+      isotropic shielding constants, read from the input database. For example,
+      <tt>B3LYP/6-31+G**</tt> would be a gas-phase DFT calculation using the
+      B3LYP method and the 6-31+G** basis set. These parameters are set in the
+      <span class="nobr"><a href="confsrch.htm#RefineOnly"><b>QM
+      Refinement</b></a></span> configuration panel of <span class=
+      "nobr"><b>Conformational Search</b></span>.</td>
+    </tr>
+    <tr>
+      <td><b>Atom List</b></td>
+      <td>This list contains all of the available atom-centric
+      information. <b>Label</b> is the user-specified alphanumeric label
+      assigned to each atom, defaulting to the atom name in the input
+      structure. <b>Expt</b> is the experimental chemical shift associated
+      with each atom. <b>Calc</b> is the calculated chemical shift, determined
+      using the current Reference Data and Method.
+      <b>Corr</b> is the empirical correction applied to the calculated
+      chemical shift value.  <b>Corr&nbsp;Calc</b> is the corrected value
+      of the calculated chemical shift.
+      <b>Delta</b> is the
+      difference between calculated and experimental chemical shift values.
+      <b>Shielding</b> is
+      the calculated isotropic shielding constant, determined when the
+      conformer database is created.<br />
+      <br />
+      Selecting one or more atoms in this list highlights them in the 2D
+      depiction and the chemical shielding and shift plots. The Up and Down
+      arrow keys and the Home and End keys can be used to navigate this table.
+      The selected entries can be cleared by right-clicking on the table and
+      pressing <span class="nobr"><b>Clear Selection</b></span>.</td>
+    </tr>
+    <tr>
+      <td><b>Label</b></td>
+      <td>This text field contains the current alphanumeric label
+      for the selected atom in the Atom List. This label can be specified by
+      changing the current value and pressing <b>Apply</b>.</td>
+    </tr>
+    <tr>
+      <td><b>Expt&nbsp;Data</b></td>
+      <td>If an experimental data file has been read, this is an
+      option menu containing the sorted chemical shifts. Otherwise, this will
+      be a text field containing the currently-assigned experimental chemical
+      shift for the selected atom in the Atom List. This can be specified by
+      changing the current value and pressing <b>Apply</b>.</td>
+    </tr>
+    <tr>
+      <td><b>Correction</b></td>
+      <td>This text field contains the current empirical
+      correction for the selected atom in the Atom list. This correction can be
+      specified by changing the current value and pressing <b>Apply</b>.</td>
+    </tr>
+    <tr>
+      <td><b>Structure</b></td>
+      <td>When the input database contains conformers of multiple
+      molecules, pressing the <b>Structure</b> icon displays the 2D
+      depictions of each
+      structure: <img src="spectralanalysis/structure.png" class="center" alt=
+      "Structure Selection Panel" /> If there are more than nine molecules in
+      the input database, the <b>Page</b> text field and the forward and
+      backward buttons can be used to navigate the display. Selecting a
+      structure will use the associated conformers for the analysis, resetting
+      the Atom List, the 2D depiction and all plots as appropriate.</td>
+    </tr>
+    <tr>
+      <td><b>Weighting</b></td>
+      <td>Specify how the calculated chemical shifts are constructed from the
+      set of isotropic shielding constants.  <b>None</b> uses the shielding,
+      chemical shifts and coupling constants (if present) of individual
+      conformers.  <b>Boltzmann</b> uses an energy-weighted sum while
+      <b>Fitted</b> uses the weights from the Conformer Distribution panel
+      for all properties.  Individual conformers are shown in the MOE window.
+      Conformers with negative frequencies are ignored when doing the weighting.
+      The Back and Forward buttons can be used to navigate the individual
+      conformers, and the conformer text field can be used to specify
+      individual conformers.</td>
+    </tr>
+    <tr>
+      <td><b>2D Depiction</b></td>
+      <td>This contains a 2D depiction of the current structure
+      being analyzed. The label of each atom being analyzed is specified by the
+      <b>View</b> menu, and reflects the current information in the Atom List.
+      In the picture above, the atoms are labeled by their alphanumeric label.
+      A highlight is drawn for each selected atom in the Atom List. If the
+      Delta column is defined, the size of the highlight reflects the magnitude
+      of the delta value (the difference between individual experimental and
+      calculated chemical shifts). Coupling constant information can also be
+      displayed if present and a single atom is selected in the Atom List.</td>
+    </tr>
+    <tr>
+      <td><b>View</b></td>
+      <td>This specifies the atom label to use in the 2D
+      Depiction. <b>Label</b> is the user-specified alphanumeric label for each
+      atom, <b>Index</b> is the atom index in the input structure, <b>Expt</b>
+      is the experimental chemical shift, <b>Calc</b> is the calculated
+      chemical shift,
+      <b>Corr&nbsp;Calc</b> is the corrected chemical shift,
+      <b>Delta</b> is the difference between calculated and
+      experimental chemical shifts, <b>Shielding</b> is the
+      calculated isotropic shielding constant and <b>Coupling</b> is the
+      calculated coupling constant (vs. the selected atom). Both Shielding and
+      Coupling reflect values obtained from the QM calculation.</td>
+    </tr>
+    <tr>
+      <td><b>Coupling</b></td>
+      <td>This specifies how coupling constant information should
+      be displayed if available and if a single atom is selected in the Atom
+      List. The options are to show couplings to the same element (<span class=
+      "nobr"><b>C-C</b></span>, if carbon is being analyzed), <b>All</b>, which
+      shows the coupling constants associated with all of the atoms in the
+      structure and <b>None</b> which prevents display of coupling constants.
+      Positive values are shown as blue disks and negative values as orange
+      disks. The radius of each disk is proportional to the absolute value of
+      the coupling constant with a dark circle indicating that the value
+      exceeded the maximum radius.</td>
+    </tr>
+    <tr>
+      <td><b>Table</b></td>
+      <td>Shows the coupling constant matrix for all atoms as a
+      table in a separate window.</td>
+    </tr>
+    <tr>
+      <td><b>Information Plot</b></td>
+      <td>This provides a graphical representation of the
+      information contained in the Atom List, read from the Experimental Data
+      file (if present) and determined from association of calculated and
+      experimental chemical shifts. The particular representation is specified
+      by the <b>View</b> menu as one of the following options:
+
+      <img src="spectralanalysis/shielding.png" class="center" alt=
+      "Shielding Tensor Plot" />
+
+      Setting <b>View</b> to Shielding shows the
+      calculated isotropic shielding constants, determined using the current
+      Reference Data and Method. In this case, a single entry in the Atom List
+      is selected, and the corresponding shielding constant is highlighted. The
+      scroll wheel can be used to zoom or translate the Shielding plot.
+
+      <img src="spectralanalysis/shift.png" class="center" alt=
+      "Chemical Shift Plot" />
+
+      Setting <b>View</b> to Shift shows the
+      calculated chemical shifts (in black) and the chemical shifts read from
+      the from the Experimental Data file (in <font color="blue">blue</font>).
+      As calculated and experimental peaks have been associated, a graphical
+      representation of the Delta column of the Atom list is provided in
+      <font color="red">red</font> (the empirical correction is applied if
+      present). As above, a single entry in the Atom List is selected, and the
+      corresponding chemical shift is highlighted. The scroll wheel can be used
+      to zoom or translate the Shift plot.<br />
+      <br />
+      The <b>Display</b> checkboxes control what chemical shift values are
+      shown. If <b>Calculated</b> is on, calculated chemical shifts will be
+      shown. If <font color="blue">Experimental</font> is on, experimental
+      chemical shifts will be shown. If a single experimental chemical shift is
+      selected in the plot, its value will be shown.
+
+      <img src="spectralanalysis/delta.png" class="center" alt=
+      "Delta Plot" />
+
+      Setting
+      <b>View</b> to Delta shows the difference values (Delta) between
+      experimental and calculated chemical shifts (the empirical correction is
+      applied if present). In this case, there are seven experimental/calculated
+      chemical shift associations with errors ranging from roughly 7 to 15.
+      The Label associated with each row of the Atom List is included
+      with each histogram column. Selecting entries in the Delta plot will
+      select (or highlight) the appropriate entries in the Atom List and 2D
+      Depiction.
+
+      <img src="spectralanalysis/absdelta.png" class="center" alt=
+      "Absolute Delta Plot" />
+
+      Setting <b>View</b> to Abs Delta shows the
+      absolute Delta values between experimental and calculated chemical shifts
+      (the empirical correction is applied if present). This uses the data in
+      the above plot, with positive Deltas for all histogram entries.</td>
+    </tr>
+    <tr>
+      <td><b>View</b></td>
+      <td>This specifies the particular data representation to be
+      shown in the Information Plot. The four possibilities are shown
+      above.</td>
+    </tr>
+    <tr>
+      <td><b>Reset&nbsp;Zoom</b></td>
+      <td> This button is used to restore the <b>Shift</b> or
+      <b>Shielding</b> plots to their original view, removing the effect of any
+      zoom or translation that has been applied.
+     </td>
+    </tr>
+    <tr>
+    <td><b>RMSD&nbsp;Limit</b></td>
+      <td>
+      If two conformations have a root mean square distance between 
+      heavy atoms less than the specified value, then they are considered duplicates
+      and the conformation with higher energy is filtered out.</td>
+    </tr>
+    <tr>
+      <td><b>Auto-Assign</b></td>
+      <td>When pressed, unassigned experimental and calculated
+      chemical shifts will be associated such that the associated Deltas are a
+      minimum. Magnetically equivalent atoms, defined as topologically
+      equivalent atoms whose isotropic shielding constants are within 5 ppm,
+      will be determined. Such atoms, if present, are treated as a single atom
+      when associating calculated and experimental chemical shifts. This
+      process will <b>not</b> change manually-assigned atoms.</td>
+    </tr>
+    <tr>
+      <td><b>Reset Assignments</b></td>
+      <td>When pressed, all experimental and calculated chemical
+      shifts will be disassociated and all Expt and Delta columns cleared.
+      This can be used as a &quot;global reset&quot; of the chemical shift
+      assignments.</td>
+    </tr>
+    <tr>
+      <td><b>Create Report</b></td>
+      <td>When pressed, an HTML report reflecting the current
+      contents of the NMR Analysis panel will be created and loaded into the
+      default web browser. All images are saved in a subdirectory drawn from
+      the report filename. This report can be modified in any editor capable of
+      working with HTML files.</td>
+    </tr>
+  </table>
+
+  <!-- ============================= NMR EXAMPLE =========================== -->
+
+<a id="NMRExamples"></a>
+<h1>NMR Examples</h1>
+
+<p>In this section we will present a number of example NMR Analyses using the
+  Spectral Analysis application. Sample files are contained in
+  <tt>$MOE/sample/mol</tt> and <tt>$MOE/lib</tt>.</p>
+  <div class="example">
+<a id="Cresol"></a>
+<h2>Cresol Structural Isomers</h2>
+    <ol start="1">
+      <li>
+        <p><i>Open the database to analyze.</i></p>
+        <p>First, clear the system:</p>
+
+<p class="indent_novspace"><span class="menu">RHS |
+        Close</span></p>
+        <p>Open the MDB file:</p>
+
+<p class="indent_novspace"><span class="menu">RHS | Open</span></p>
+	<p>In the Open panel, select <span class=
+        "nobr"><tt>$MOE/sample/mol/cresols_dft_qm.mdb</tt></span> and press
+        <b>OK</b>.</p>
+        <p>Save a local copy to disk:</p>
+
+<p class="indent_novspace"><span class="menu">DBV | File |
+        Save as...</span></p>
+	<p>In the Save panel, enter <tt>cresols_dft_qm.mdb</tt> and
+        press <b>Save</b>. This will be used for the remainder of this example.
+        This database contains <i>o-</i>, <i>m-</i> and <i>p-</i>cresol, each
+        with a single conformer. It was created with QM Refinement in
+        <span class="nobr"><b>Conformational Search.</b></span></p>
+      </li>
+      <li>
+        <p><i>Start the Spectral Analysis application.</i></p>
+
+<p class="indent_novspace"><span class="menu">DBV | Compute | Molecule
+        | Spectral Analysis...</span></p>
+	<p>As the required fields are present in
+        the database, the NMR Analysis application panel will be shown.</p>
+      </li>
+      <li><p><i>Specify the Reference Database.</i></p>
+      <p>The default Reference Database is <tt>$MOE/lib/NMR_ref.mdb</tt>. To
+      select a different database, press <b>Browse</b> and in the Open panel,
+      select the database that will be used.</p>
+      </li>
+      <li>
+        <p><i>Specify the Experimental Data.</i></p>
+	<p>If the Chemical Shifts text field is empty, press
+        <b>Browse</b> to select the experimental data file.. In the Open
+        panel, select
+        <tt>$MOE/sample/mol/p_cresol_data.txt</tt> and press <b>OK</b>. At this
+        point, the NMR Analysis panel should look like this:</p>
+
+	<img src= "spectralanalysis/panel_ex1_1.png" class="center" alt=
+        "Ex 1 Initial Panel" />
+
+	<p>In the Atom List, the Shielding column
+        (offscreen to the right) contains the calculated isotropic shielding
+        constants read from the input database. The Calc column contains the
+        calculated chemical shifts obtained by applying the Reference Model
+        (TMS) to the shielding values. The Expt and Delta columns
+        are empty because no pairing of experimental and calculating data has
+        been performed. The Corr and Corr&nbsp;Calc columns are empty because no
+        empirical corrections have been entered.</p>
+
+<p>The atoms in the 2D Depiction are labeled by the Label column of the
+        Atom List, which defaults to the atom name in the mol field of the
+        input database. The plot shows the calculated chemical shifts (in
+        black) and the experimental chemical shifts (in <font color=
+        "blue">blue</font>). When a row is selected in the Atom List, the
+        corresponding atom in the 2D Depiction and the plot is
+        highlighted.</p>
+      </li>
+      <li><p><i>Assign atoms to Experimental Data.</i></p>
+      <p>Select the last atom in the atom list (roughly 125 ppm) and select the
+      smallest entry in the <b>Expt&nbsp;Data</b> option menu (roughly 20 ppm).
+      This is a mismatch, which will generate a large Delta. Select the third
+      atom in the atom list and the similar-value entry in the option menu
+      (both roughly 155). This is a match with a small Delta. Select both
+      entries in the Atom List; the NMR Analysis panel should look like this:
+      </p>
+
+      <img src="spectralanalysis/panel_ex1_2.png" class="center" alt=
+      "Ex 1 Partial Panel 1" />
+
+      <p>Note that the radius of the selection marks on
+      the 2D depiction corresponds to the values of the Delta column, as do the
+      representations of the absolute Delta on the Shift plot. The dark ring on
+      the larger circle indicates that the actual value is larger than the
+      maximum radius value. Two rows in the Atom List are selected, so two
+      calculated and two experimental chemical shifts are highlighted in the
+      Shift plot. As the experimental/calculated shift associations were
+      assigned manually, they are marked with a <tt>*</tt>.</p>
+      </li>
+      <li><p><i>Label individual atoms in the Atom List.</i></p>
+      <p>Select the third entry in the Atom List, enter <tt>C1</tt> in the
+      <b>Label</b> text field and press <b>Apply</b>. This changes the label
+      for the third atom. Repeat this process to change the label of the fifth
+      atom to <tt>C2</tt>. Note that the labels of the 2D Depiction change as
+      the Labels are changed.</p>
+      </li>
+      <li><p><i>Enter an empirical correction</i></p>
+      <p>Select the third entry in the Atom List, enter <tt>10.0</tt> in the
+      <b>Correction</b> text field and press <b>Apply</b>. The correction
+      appears in the appropriate column of the selected entry, which defines
+      the <b>Corr&nbsp;Calc</b> column value. Adding the correction decreases
+      the <b>Delta</b> column value.</p>
+      </li>
+      <li>
+        <p><i>Automatically assign atoms to Experimental Data.</i></p>
+        <p>Press <b>Reset Assignments</b> to clear the two manual assignments,
+	and
+        press <span class="nobr"><b>Auto-Assign</b></span> to automatically
+        associate calculated and experimental chemical shifts with minimum
+        Delta. The absolute Delta representations on the Shift plot are now
+        quite small, and reflect the presence of the empirical correction. The
+        magnitude of the Delta values can be easily seen by changing
+        <b>View</b> to Delta to display a histogram plot:</p>
+
+        <img src="spectralanalysis/histo_ex1_1.png" class="center" alt=
+        "Ex 1 Delta Plot" />
+      </li>
+      <li>
+        <p><i>Examine alternate structures.</i></p>
+        <p>Press the <img class="icon" src="spectralanalysis/icon_structure.png"
+        alt="Structure Icon"> (Structure) icon to display the 2D depictions of
+        each structure
+        in the input database. As the number of experimental peaks is less than
+        the number of carbon atoms, some of them must share chemical shifts or
+        be magnetically equivalent. Pick the third structure, p-cresol, as it
+        is the only symmetric structure. Change plot <b>View</b> to Shift to
+        show the calculated and experimental chemical shifts. The NMR Analysis
+        panel should now look like this:</p>
+
+        <img src="spectralanalysis/panel_ex1_3.png" class="center" alt=
+        "Ex 1 o-cresol Display" />
+      </li>
+      <li><p><i>Automatically assign atoms to Experimental Data</i></p>
+      <p>Press <b>Auto-Assign</b> to automatically associate calculated and
+      experimental chemical shifts with minimum Delta. Carbons in the 2 and 6
+      positions and the 3 and 5 positions of the phenyl ring are topologically
+      equivalent. As their calculated chemical shieldings are quite similar
+      (much less than the 5 ppm cutoff), they are considered magnetically
+      equivalent and the same experimental chemical shift is assigned to both
+      atoms of each pair. The chemical shifts group well on the Shift plot and
+      all Delta values are small, suggesting that <i>p-</i>cresol corresponds
+      to the experimental shifts.</p>
+      </li>
+      <li>
+        <p><i>Analyze elements other than carbon.</i></p>
+        <p>Change <b>Element</b> to <b>H</b> to analyze the hydrogen atoms of
+        p-cresol. As experimental results are tied to individual elements,
+        changing the element clears the previously loaded information. There is
+        an entry for hydrogen in the default Reference Database, so calculated
+        chemical shifts are available. The panel should look like this:</p>
+
+<img src="spectralanalysis/panel_ex1_4.png" class="center" alt=
+        "Ex 1 o-cresol H Display" />
+
+	<p>Note that hydrogens have appeared in
+        the 2D display. They will also appear when examining coupling constants
+        for all atoms.</p>
+      </li>
+      <li>
+        <p><i>Analyze Coupling Constants.</i></p>
+        <p>NMR spin-spin coupling constants (<b>J</b>) are calculated as a
+	matrix
+        of values, expressing the coupling of each atom with the other atoms in
+        the molecule. The coupling constants can be visualized for individual
+        atoms by selecting one of the atoms in the Atom List and changing the
+        <b>Coupling</b> menu to either the same-element (<b>H-H</b> in this
+        case) or <b>All</b>. If we select the hydrogen labeled <tt>H1</tt>, and
+        select <b>H-H</b> the following depiction shows the couplings with that
+        atom:</p>
+
+<img src="spectralanalysis/panel_ex1_5.png" class="center" alt=
+        "Ex 1 o-cresol H Coupling" />
+
+	<p>Positive values for <b>J</b> are
+        represented in blue, negative values in orange and the size of the disk
+        is proportional to the value (in Hz). The ring around the central carbon
+        indicates that the actual value is larger than that of the maximum
+        radius. The specific values of the coupling constants can be seen by
+        selecting <tt>Coupling</tt> in the <b>View</b> menu. If Boltzmann
+        weighting is turned off, a similar scheme is used to color the atoms of
+        the conformer shown in MOE. Pressing the <b>Table</b> button brings up
+        a table containing the full matrix of <b>J</b> values:</p>
+
+<img src="spectralanalysis/table_ex1_1.png" class="center" alt=
+        "Ex 1 o-cresol J Table" />
+
+	<p>Hydrogen <tt>H1</tt> is selected in the
+        Atom List, so its entry in the table is highlighted with an asterisk.
+        As with the other displays in NMR Analysis, the display is synced to
+        the settings of the panel, reflecting the current structure, conformer,
+        etc. If the atom labels are not sufficient to identify rows in the
+        table, the atom indices can be shown in the 2D display by setting the
+        <b>View</b> menu to <b>Index</b>.</p>
+      </li>
+    </ol>
+  </div>
+  <div class="example">
+
+<a id="CalcTMS"></a>
+<h2>Calculate TMS Reference Shielding</h2>
+<p>This example will use Gaussian to calculate the
+    gas-phase Reference values for TMS to be used with <b>B3LYP/6-311+G**</b>
+    calculations.
+</p>
+    <ol start="1">
+      <li>
+        <p><i>Load the TMS starting structure.</i></p>
+        <p>First, clear the system:</p>
+
+<p class="indent_novspace"><span class="menu">RHS |
+        Close</span></p>
+        <p>Open the file containing TMS:</p>
+
+<p class="indent_novspace"><span class="menu">RHS | Open</span></p>
+	<p>In the Open panel, select <span class=
+        "nobr"><tt>$MOE/sample/mol/TMS_qm.moe</tt></span> and press <b>OK</b>.
+        Starting structures for methanol and benzene are also provided in
+        <tt>$MOE/sample/mol</tt>.</p>
+      </li>
+      <li>
+        <p><i>Calculate isotropic shielding constants</i></p>
+        <ol type="a">
+          <li><p>Start Conformational Search:</p>
+
+<p class="indent_novspace"><span class="menu">MOE | Compute |
+            Conformations | Search...</span></p>
+          </li>
+          <li><p>In the Conformational Search panel, select <span class=
+          "nobr"><b>Refine with QM</b></span>.</p></li>
+          <li><p>Press the configure icon to bring up the
+	  <span class="nobr"><b>QM
+          Calculation Options</b></span> panel.</p></li>
+	  <li><p>Set the QM parameters for the calculation:</p>
+              Set <b>Engine</b> to <tt>Gaussian</tt><br />
+              Set <b>Method</b> to <tt>B3LYP</tt>.<br />
+              Set <b>Basis Set</b> to <tt>6-311G</tt>.<br />
+              Set <b>Polarization</b> to <tt>**</tt>.<br />
+              Set <b>Diffuse</b> to <tt>+</tt>.<br />
+          </li>
+          <li><p>Enable <b>Geometry&nbsp;Optimization</b>, <b>Keep QM Files</b>,
+          and <b>NMR&nbsp;Shielding</b>.</p></li>
+          <li><p>Enter <tt>symmetry=loose</tt> in <b>Keywords</b>.
+	    This instructs Gaussian to use loosen cutoffs
+            during symmetry determination in the first optimization cycle of
+            the calculation.</p>
+
+	    <p>If running MOE on a multi-core machine, specifying
+            <tt>%nproc=<i>n</i></tt>
+            (where <i>n</i> is the desired number of cores)
+	    in <b>Keywords</b> can be used to run Gaussian in parallel.</p>
+
+	    <p>As Gaussian is memory-intensive, it is recommended to explicitly
+		allocate sufficient memory: specify <tt>%mem=8gb</tt> in <b>Keywords</b>.
+
+	    <p>The QM Calculation Options panel should look similar to this:</p>
+
+	    <img src="spectralanalysis/tms_qm_options.png" class="center" alt=
+		"TMS Example: QM Calculation Options Panel" />
+
+          </li>
+	  <li><p>Press <b>OK</b> to close the <b>QM Calculation Options</b>
+	  panel and <b>OK</b> in the Conformational Search panel to run the MM calculation
+	  and then launch the QM calculation locally.</p>
+
+	    <p>Two files will be created: <tt>csearch.mdb</tt>, which contains
+	    the forcefield-minimized structure, and <tt>csearch_qm.mdb</tt>,
+	    which will be used to hold the QM-minimized structure and the NMR shielding
+	    values in the <b>NMR</b> field.  While the isotropic shielding
+	    constants can be extracted from <tt>csearch_qm.mdb</tt>, it might
+	    be easier to edit the Gaussian output file in the run-time
+	    directory that was created.</p>
+	    </li>
+	    <li><p>When the QM calculations are complete, use</p>
+	    <p class="indent_novspace"><span class="menu">DBV | Compute | QM |
+	    Import</span></p>
+
+	    <p>to import the QM results into <tt>csearch_qm.mdb</tt> if
+            this was not already done automatically.</p>
+	  </li>
+	</ol>
+
+<p>The directory <tt>csearch_qm_conffiles</tt> will have been created in the
+        current MOE directory. This should contain a single directory as only
+        one conformer for TMS was generated. This directory contains the input
+        and output files for Gaussian when the job completes. The output file,
+        <tt>gaussian.out</tt>, includes the isotropic shielding constants if
+        the calculation was successful. As TMS is highly symmetric, the full
+        point group of the calculation should be <tt>Td</tt> (i.e. all four
+        carbons are equivalent).</p>
+
+<p>Upon successful minimization, the isotropic shielding constants are
+        calculated in the second job step. Search for <span class=
+        "nobr"><tt>SCF GIAO Magnetic shielding</tt></span> in the
+	<tt>gaussian.out</tt> file. Successive lines
+        contain the <tt>Isotropic</tt> value for each atom; atoms 2, 6, 10 and
+        14 are carbons and their shielding constant should be equal to or very
+        close to 189.7772 (depending on Gaussian version, hardware, operating
+        system, etc.).</p>
+      </li>
+      <li>
+        <p><i>Create an updated Reference Database</i></p>
+        <p>Open the Reference Database:</p>
+
+<p class="indent_novspace"><span class="menu">RHS |
+        Open</span></p>
+        <p>In the Open panel, select <tt>$MOE/lib/NMR_ref.mdb</tt> and press
+        <b>OK</b>.</p>
+        <p>Save a local copy to disk:</p>
+
+<p class="indent_novspace"><span class="menu">DBV | File | Save
+        As</span></p>
+        <p>In the Save panel, enter <tt>local_NMR_ref.mdb</tt> and press
+        <b>Save</b>.</p>
+        <p>Add an entry for the gas-phase <b>B3LYP/6-311+G**</b> calculation by
+        bringing up the <b>Add&nbsp;Entry</b> panel:</p>
+
+<p class="indent_novspace"><span class="menu">DBV | Edit | New |
+        Entry</span></p>
+        <p>and entering the QM parameters into the panel. When complete,
+	the panel should look like:</p>
+
+<img src="spectralanalysis/newentry_ex2.png" class="center" alt=
+        "Ex 2 New Entry" />
+	<p>Press <b>OK</b> to create the new entry. Note
+        that the specific value used in <b>Transform</b> is that provided in
+        the Gaussian output file for the carbon isotropic shielding constant.
+        The bottom of the Reference Database should now look like this:</p>
+
+<img src="spectralanalysis/newrefdb_ex2.png" class="center" alt=
+        "Ex 2 New Database" />
+      </li>
+    </ol>
+  </div>
+  <div class="example">
+
+<a id="QMinMOE"></a>
+<h2>Perform QM Refinement in MOE</h2>
+<p>This example uses Gaussian to calculate and visualize NMR
+    shielding constants. It demonstrates running QM calculations in MOE.
+</p>
+    <ol start="1">
+      <li>
+        <p><i>Create the sample molecule.</i></p>
+        <p>First, clear the system:</p>
+
+<p class="indent_novspace"><span class="menu">RHS |
+        Close</span></p>
+        <p>Start the <b>Builder:</b></p>
+
+<p class="indent_novspace"><span class="menu">RHS |
+        Builder</span></p>
+        <p>and select <tt>C</tt> to create a new molecule (press <b>OK</b>)
+        and then <tt>C</tt>, <tt>N</tt>, <tt>C</tt>
+	to complete the structure. Press
+        <b>Close</b> to close the Builder.</p>
+      </li>
+      <li>
+        <p><i>Generate conformations.</i></p>
+        <ol type="a">
+          <li><p>Start <b>Conformational Search</b>:</p>
+
+<p class="indent_novspace"><span class="menu">MOE | Compute |
+            Conformations | Search</span></p>
+          </li>
+          <li><p>Select <b>Refine with QM</b> and press the Configuration
+	  button.  This brings up the <span class="nobr"><b>QM Calculation
+          Options</b></span> panel.</p></li>
+          <li><p>Set the QM parameters for the calculation:</p>
+              Set <b>Engine</b> to <tt>Gaussian</tt>.<br />
+              Set <b>Method</b> to <tt>HF</tt>.<br />
+              Set <b>Basis Set</b> to <tt>STO-3G</tt>.<br />
+              Set <b>Polarization</b> to <tt>*</tt>.<br />
+              Set <b>Diffuse</b> to <tt>none</tt>.<br />
+	  </li>
+	  <li>
+	  <p>As Gaussian is memory-intensive, it is recommended to explicitly
+	  allocate sufficient memory:</p>
+              Set <b>Keywords</b> to <tt>%mem=8gb</tt>.<br />
+          </li>
+          <li><p>Enable <b>Keep QM Files</b> and <b>NMR Shielding</b>,
+	  which also turns on <b>Vibrational Frequencies</b>.
+	  </p></li>
+        </ol>
+
+<p>The Options panel should look like this:</p>
+
+	<img src="spectralanalysis/panel_ex3_1.png" class="center" alt=
+        "QM Refinement Example: QM Calculation Options Panel" />
+	<p>Press <b>OK</b> to close the Options panel, and
+        <b>OK</b> in the Conformational Search panel to perform the
+        forcefield-based search (using LowModeMD) and then launch the QM
+	calculations locally. This creates
+        <tt>csearch.mdb</tt> containing the classical results, and
+        <tt>csearch_qm.mdb</tt>, which will be used to hold the QM-minimized
+	structures.  Also created in the current directory will be the
+	sub-directory <tt>csearch_qm_conffiles</tt>,
+        which will contain all of the files used in the QM calculation.</p>
+      </li>
+	<li><p>When the QM calculations are complete, use</p>
+<p class="indent_novspace"><span class="menu">DBV | Compute | QM |
+	    Import</span></p>
+
+	    <p>to import the QM results into <tt>csearch_qm.mdb</tt> if
+            this was not already done automatically.</p>
+	</li>
+      <li>
+        <p><i>Start the Spectral Analysis application.</i></p>
+
+<p class="indent_novspace"><span class="menu">DBV | Compute | Molecule
+        | Spectral Analysis...</span></p>
+        <p>As the required fields are present in the database, the NMR Analysis
+        application panel will be shown. It can be analyzed as with the first
+        example.</p>
+      </li>
+    </ol>
+  </div>
+  <!-- ========================== RUNNING VCD ============================== !-->
+<a id="RunVCD"></a>
+<h1>Running VCD and ECD Analysis</h1>
+
+<p>Spectral Analysis has separate tabs for VCD and ECD analysis
+  which are designed to be similar for user convenience.
+  To start the VCD or ECD Analysis application, open a database containing
+  the required data from a QM calculation in the Database Viewer and
+  select <span class="menu">DBV | Compute | Molecule | Spectral
+  Analysis</span>. The name of the associated database will be included
+  in the window header.  Use the buttons at the top of the
+  panel select the VCD tab to perform VCD analysis or ECD tab 
+  to perform ECD analysis.</p>
+
+<img src="spectralanalysis/vcd_main_panel.png" class="center" alt=
+  "VCD Analysis Panel" />
+  <table class="noborder">
+    <tr>
+      <td><b>QM Parameters</b></td>
+      <td>
+        The method, basis set, and solvent parameters (if present) used to
+        generate the data in the QM Database.  For example,
+        <tt>B3LYP/6-31G* PCM(78.4)</tt> would indicate that the hybrid B3LYP
+        density
+        functional was used with the 6-31G* basis set and solvation modeled with
+        the Polarizable Continuum Model using a dielectric constant of 78.4
+        (water).
+        These parameters are set in the
+        <span class="nobr"><a href=
+      "qmconfig.htm#QMCalcOptions"><b>QM Refinement</b></a></span> configuration
+      panel of <span class="nobr"><b>Conformational Search</b></span>.</td>
+    </tr>
+    <tr>
+      <td><b>Experimental Data</b></td>
+      <td>
+          The name of the file containing the experimental chemical shifts.
+          This is a whitespace-delimited or CSV file.
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <img src="spectralanalysis/icon_burger.png" class="top"
+        alt="VCD Analysis Panel" />
+      </td>
+      <td>
+      The Experimental Menu allows the user to load or clear experimental data.
+      Select <span class="nobr"><b>Load Data</b></span>
+      to open a file browser to select the desired file.  The data is read into
+      the analysis panel and recorded in the database environment for later use.
+      Select <b>Clear</b>
+      to remove the experimental data from the analysis panel and environment.
+      </td>
+    </tr>
+    <tr>
+      <td><b>Conformer Table</b></td>
+      <td>
+        The table on the left-hand side shows the list of stereoisomers and
+        their associated conformers imported from the QM Database.
+
+<img src="spectralanalysis/vcd_selection_table.png" class="center"
+        alt="VCD Conformer Table" />
+
+<p>A <b>+/-</b> in the far left column indicates if the conformer list
+        has been expanded (-) or if only the Boltzmann-weighted data is
+        currently displayed (+). Double-clicking on the row will expand or
+        collapse the list as desired. The columns
+        immediately following list the stereocenters with their labels as the
+        column headings (two in this example).  Names can be assigned by pressing
+        the <span class="nobr"><b>Stereocenter Names</b></span> button:</p>
+
+<img src="spectralanalysis/vcd_stereocenter_names.png" class=
+        "center" alt="VCD Stereocenter Names Menu" />
+<p>Press <b>OK</b> to change the stereocenter names or <b>Cancel</b> to exit
+  without changes.
+</p>
+
+  <p>
+    <b># Conformers</b> shows the number of conformers associated with
+    the stereoisomer.  When the
+    list is expanded, the <b>Qi</b> column contains the Boltzmann
+    weight and the <b>Energy</b> column contains its energy relative to
+    the lowest-energy conformer.
+    Qi values are not shown for the Boltzmann-weighted data.
+  </p>
+
+      </td>
+    </tr>
+    <tr>
+      <td><b>2D Depiction</b></td>
+      <td>
+    A 2D depiction of the molecule is shown in the right-hand panel with
+    its stereocenters indicated.  This default labeling of the figure shows the
+    chirality of the stereocenters with R/S notation.  This can be changed with
+    the <b>View</b> menu to show atom names or indices for the stereocenters.
+
+<img src="spectralanalysis/vcd_label_menu.png" class="center" alt=
+        "VCD Atom Labels Menu" />
+
+    The arrow buttons below the structure can be used to move up (left)
+        and down (right) the list of conformers in the table.
+      </td>
+    </tr>
+    <tr>
+      <td><b>Spectrum Display</b></td>
+      <td>
+  VCD spectra are displayed in standard form with the zero value on the right and
+  increasing wavenumbers from right to left.
+  ECD spectra are displayed as as a function of wavelength (nm).
+  Calculated spectra are displayed
+  in black and experimental data displayed in blue. The <b>Experimental</b> and
+  <b>Calculated</b> checkboxes can be used to select which spectra are shown.
+  All spectra will be independently autoscaled based on the current range
+  of the plot, and the plot can be zoomed and/or translated by dragging with 
+  the middle mouse button. If experimental data have been loaded, a
+  <span class="nobr"><b>Spectral Correlation</b></span> coefficient describing
+  the overlap of the calculated and experimental spectra in the highlighted
+  region will be shown.  A value of
+  1 indicates perfect overlap while a value of -1 indicates that the spectra are
+  mirror images.
+
+<img src="spectralanalysis/vcd_spectrum_with_expt.png" class=
+        "center" alt="VCD Spectrum with Experimental Data" />
+
+  <p>
+  The <b>Display</b> menu can be used to show additional information on the
+  plot.  When <span class="nobr"><b>IR Spectrum</b></span> or 
+  <span class="nobr"><b>UV Spectrum</b></span> is selected, the
+  selected spectrum will be shown in green above the corresponding VCD or ECD
+  spectrum. If ORD was computed, the ORD option
+  may be selected in the ECD panel and the computed ORD values will be shown as red circles.
+  If experimantal ECD data is available, the ORD values may be compared
+  to the Kramer-Kronig transformation of the experimental ECD.
+  </p>
+
+<img src="spectralanalysis/vcd_spectrum_with_expt_and_IR.png" class=
+        "center" alt="VCD Spectrum with IR" />
+
+<p>When <b>Difference</b> is selected, the difference between the calculated
+  and experimental spectra is shown in red above the calculated VCD or ECD spectrum.
+  As with <span class="nobr"><b>Spectral Correlation</b></span>, the difference
+  plot is restricted to the highlighted region.
+  </p>
+
+<img src="spectralanalysis/vcd_spectrum_with_expt_and_delta.png"
+        class="center" alt="VCD Spectrum with Difference" />
+      </td>
+    </tr>
+
+
+<tr>
+  <td>
+  <b>Zoom to</b>
+  </td>
+  <td>
+  The range to zoom can be changed via the mouse or by changing the entries in
+  the <span class="nobr"><b>Max</b></span> and
+  <span class="nobr"><b>Min</b></span> text boxes.
+  Pressing <span class="nobr"><b>Zoom to</b></span> centers the plot on the
+  currently-specified range.
+  The <b>Spectral Correlation</b> will be calculated over the selected region.
+  The <b>Max</b> and <b>Min</b> values can be manually changed by entering
+  new values in the appropriate text box and pressing return.
+  The text turns blue to indicate that the value has changed but not taken effect.
+  </td>
+  </tr>
+
+  <td>
+  <b>Reset Zoom</b>
+  </td>
+  <td>
+  Resets the plot to default scaling. 
+  </td>
+  </tr>
+
+  <tr>
+  <td>
+  <b>Offset</b>
+  </td>
+  <td>
+  The Offset value is applied to shift the calculated VCD or ECD spectrum relative
+  to the experimental spectrum.  The slider can be used to graphically
+  adjust the calculated spectrum, with the current offset value shown in the
+  text field.  The offset can be manually changed by
+  entering a new value in the text field and pressing return.  The text turns blue
+  to indicate that the value has changed but not taken effect.  The
+  <span class="nobr"><b>Spectral Correlation</b></span> (for the highlighted
+  region) is updated to reflect the current offset.
+  </td>
+  </tr>
+
+  <tr>
+  <td>
+  <b>Auto-Align</b>
+  </td>
+  <td>
+  Pressing
+  <span class="nobr"><b>Auto-Align</b></span> calculates the offset required
+  to maximize the absolute value of the
+  <span class="nobr"><b>Spectral Correlation</b></span> and updates the plot
+  accordingly.
+  </td>
+  </tr>
+
+  <tr>
+  <td>
+  <b>Reset Alignment</b>
+  </td>
+  <td>
+  Restores the default range for the spectral plot and sets the offset to zero.
+  </td>
+  </tr>
+
+  <tr>
+  <td>
+  <b>ESI</b>
+  </td>
+  <td>
+  The Enantiomeric Similarity Index (ESI) is the absolute difference of
+  the <span class="nobr"><b>Spectral Correlation</b></span> of one chiral
+  class vs. another.  For example, if the correlation for the <b>RR</b>
+  class is 0.8 and that for the <b>SS</b> class is -0.8, the ESI would be
+  1.6. Thus, ESI ranges from 0.0 to 2.0 and is a measure as to how well
+  the experimental spectrum separates the chiral class pair.  Pressing
+  <b>ESI</b> brings up the <span class="nobr"><b>ESI Table</b></span>:
+
+  <p>
+  <img src="spectralanalysis/vcd_ESI_table.png"
+  class="center" alt="VCD Spectrum with Difference" />
+  </p>
+
+  The diagonal elements are the <b>Spectral Correlation</b> for the indicated
+  chiral class and the off-diagonal elements are the ESI values for each
+  chiral class pair.
+  </td>
+  </tr>
+
+
+    <tr>
+      <td><b>Create Report</b></td>
+      <td>An HTML report can be generated using this button. All
+      of the figures in the report will be placed in a sub-directory for ready
+      access outside of an HTML viewer.</td>
+    </tr>
+  </table>
+
+<p>
+Pressing the Configure icon
+(<img src="spectralanalysis/gear_icon.png" class="icon" />)
+brings up a sub-panel, allowing the
+user to change some of the parameters used by VCD or ECD Analysis:</p>
+
+<img src="spectralanalysis/vcd_config_panel.png" class="center"
+  alt="VCD Config Panel" />
+
+<table class="noborder">
+  <tr>
+    <td>
+      <b>X&nbsp;Scaling Factor</b>
+    </td>
+    <td>
+      Specify the scaling factor to be applied to the X-axis 
+      of the calculated VCD or ECD spectrum. This acts as a correction
+      factor for the specific quantum chemical method, basis
+      set and solvation model being used.
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      <b>Y&nbsp;Scaling Factor</b>
+    </td>
+    <td>
+      Specify the scaling factor to be applied to the Y-axis (rotation
+      strength) of the calculated VCD or ECD spectrum. This can be
+      used to adjust the heights of the calculated vs. the
+      experimental spectrum in order to facilitate comparison.
+      Aside from the peak-broadening due to maximum-value clipping,
+      this has no effect on the Spectral Correlation.
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      <b>Y Zoom</b>
+    </td>
+    <td>
+      If on, zoom/translation can be done on both the X- and Y-axis
+      of the plot. This is done simultaneously when performed
+      in the plot area, and for a single axis when done beyond
+      the plot area near the desired axis. If off, only X-axis
+      zoom/translation is performed.
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      <b>Maximum Offset</b>
+    </td>
+    <td>
+      Specify the maximum offset that can be applied
+      to the calculated VCD or ECD spectrum. This acts as a limit
+      for the Offset slider and
+      <span class="nobr"><b>Auto-Align</b></span> calculation.
+  </tr>
+
+  <tr>
+    <td>
+      <b>Grid Resolution</b>
+    </td>
+    <td>
+      Specify the grid resolution for the calculated and experimental
+      spectra plots. These are histograms built up from the
+      wavenumber and rotational strengths for each peak, fit
+      to the appropriate waveforms. Smaller resolutions yield
+      a less-coarse curve with a corresponding performance
+      penalty.
+  </tr>
+
+  <tr>
+     <td>
+       <b>Line Shape</b>
+    </td>
+    <td>
+      The spectrum line shape. It may be Lorentzian or Gaussian.
+  </tr>
+
+  <tr>
+     <td>
+       <b>Peak Half-width</b>
+    </td>
+    <td>
+      Specify the half-width of the selected line shape.
+      This is useful when experimental values might have a lower
+      resolution than the calculated values.  By
+      broadening the peak, the theoretical calculation is effectively
+      performed at a coarser resolution, thus potentially
+      providing a better match to the experimental shape.
+  </tr>
+
+  <tr>
+    <td>
+      <b>Highlight Range</b>
+    </td>
+    <td>
+      Specify how (and whether) the current range used to calculate
+      the Spectral Correlation should be highlighted in the
+      spectra plot: <b>Shadow</b> draws a outline with
+      the interior of the box lightly shaded. <b>Outline</b>
+      merely draws the outline of the box while <b>None</b>
+      omits the box entirely. The box and shading are drawn
+      in red.
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      <b>Experimental Min</b>
+    </td>
+    <td>
+      Specify the minimum value for the range of experimental
+      data that will be used by VCD or ECD analysis. This is used
+      when setting the default range upon reading experimental
+      data, and can be used to exclude uninteresting regions
+      from consideration.
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      <b>Experimental Max</b>
+    </td>
+    <td>
+      Specify the maximum value for the range of experimental
+      data that will be used by VCD or ECD analysis. This is used
+      when setting the default range upon reading experimental
+      data, and can be used to exclude uninteresting regions
+      from consideration.
+    </td>
+  </tr>
+
+  <tr>
+  <td><b>RMSD&nbsp;Limit</b></td>
+  <td>
+      If two conformations have a root mean square distance between
+      heavy atoms less than the specified value, then they are considered duplicates
+      and the conformation with higher energy is filtered out.
+  </td>
+  </tr>
+
+</table>
+
+  <!-- ============================= VCD EXAMPLE =========================== -->
+<a id="VCDExamples"></a>
+<h1>VCD Example</h1>
+
+<p>In this section we present an example of how to calculate and analyze 
+  VCD and IR spectra. Sample files are contained in <tt>$MOE/sample/mol</tt>.</p>
+  <div class="example">
+  <a name="camphor"></a>
+  <h3>Camphor: Calculated and Experimental VCD Spectra</h3>
+
+    <ol start="1">
+      <li>
+        <p><i>Open the molecule.</i></p>
+        <p>First, clear the system:</p>
+
+<p class="indent_novspace"><span class="menu">RHS |
+        Close</span></p>
+        <p>Open the MOE file:</p>
+
+<p class="indent_novspace"><span class="menu">RHS |
+        Open</span></p>
+        <p>In the Open panel, select <span class=
+        "nobr"><tt>$MOE/sample/mol/vcd_camphor.moe</tt></span>
+        and press <b>OK</b>.</p>
+      </li>
+      <li>
+          <p><i>Generate the initial conformers.</i></p>
+
+<p class="indent_novspace"><span class="menu">Compute | Conformations |
+        Search</span></p>
+
+        <p>In the search panel, enter
+        <span class="nobr"><tt>vcd_camphor.mdb</tt></span>
+        for the <span class="nobr"><b>Output Database</b></span>.
+        For the <b>Method</b>, select <tt>Stochastic</tt> from
+        the dropdown
+        menu.  The defaults should be sufficient.  Next, enable the <B>Invert
+        unconstrained sp3 stereo centers</b> checkbox which instructs
+        Conformational Search to generate answers of multiple chiral classes.
+        The panel should look like this:</p>
+
+<img src="spectralanalysis/search_panel.png" class="center" alt=
+        "Search Panel" />
+
+    <p>
+      Press <b>OK</b> to start the Conformational Search calculation, which will
+      take a few minutes to run and creates <tt>vcd_camphor.mdb</tt>.  Two
+      low-energy structures (chiral classes RR and SS) will
+      be created, and additional high-energy structures might be created.  These
+      should be deleted if present via the
+      <span class="menu">DBV | Edit | Delete</span> command.
+      </p>
+      </li>
+
+      <li><p><i>Use QM Refinement to generate the VCD spectra.</i></p>
+
+	<ol>
+	<li>
+	    <p>Start Conformational Search for <tt>vcd_camphor.mdb</tt>:</p>
+
+	    <p class="indent_novspace">
+	    <span class="menu">DBV | Compute | Molecule | Conformational
+		Search</span>
+	    </p>
+
+	    <p>Enter <tt>vcd_camphor_conf_qm.mdb</tt> for the
+	    <span class="nobr"><b>Output Database</b></span>, select
+	    <span class="nobr"><tt>Refine Only</tt></span> as the
+	    <b>Method</b> and enable the <b>Refine with QM</b> checkbox.
+	    The panel should look like this:</p>
+
+	    <p>
+	    <img src="spectralanalysis/search_panel2.png" class="center"
+	    alt="Refine Panel" />
+	    </p>
+	</li>
+	<li>
+	    <p>
+	    To set up the QM calculation, click on the configuration gear.
+	    This will bring up the QM Calculation Options panel:
+	    <p>
+	      Set <b>Engine</b> to <tt>Gaussian</tt>.<br />
+	      Set <b>Method</b> to <tt>B3LYP</tt>.<br />
+	      Set <b>Basis Set</b> to <tt>cc-pVDZ</tt>.<br />
+	      Set <b>Polarization</b> to <tt>none</tt>.<br />
+	      Set <b>Diffuse</b> to <tt>none</tt>.<br />
+	    </p>
+	    <p> Note that <b>Basis Set</b> may be changed also by keywords.
+	    E.g. if <b>basis=TZVP</b> is specified in the <b>Keywords</b> field
+	    then the TZVP basis will be used.</p>
+	    <p>Next, enable the <b>
+	    Vibrational Circular Dichroism</b> checkbox.
+	    This will automatically select the <b>NMR Shielding</b>
+	    and <b>Vibrational Frequencies</b> checkboxes as well.
+
+	    </p>
+	    <p>To include solvent effects in the calculation, enable the
+	    <b>Solvent Model</b>
+	    checkbox and select <tt>CPCM</tt> as the Solvent Model.
+	    Set <b>Dielectric</b> to <tt>water</tt> (78.4).
+	    </p>
+	    <p>As Gaussian is memory-intensive, it is recommended to explicitly
+		allocate sufficient memory: set <b>Keywords</b> to
+		<tt>%mem=8gb</tt>.
+		If compute resources are available, Gaussian can be run in
+		multiprocessing mode by specifying the number
+		of cores to use via <tt>%nproc</tt> in
+		<span class="nobr"><b>Keywords</b></span>.  For example,
+		<tt>%nproc=8</tt> instructs Gaussian to use 8 cores for the
+		calculation.  The panel should look similar to this:
+	    </p>
+
+	    <img src="spectralanalysis/qm_options.png" class="center" alt=
+		"VCD Example: QM Calculations Options Panel" />
+	</li>
+	<li>
+	<p>
+	    To perform the calculation right away locally, press <b>OK</b>.
+	    To calculate VCD spectra check the Vibrational Circular Dichroism checkbox.
+	    This will perform the classical conformation search, then launch
+	    Gaussian to calculate the the selected spectra (and related information)
+	    for the two structures.  This calculation takes a few hours,
+	    so you may prefer to submit the calculation
+	    to a job management system by pressing
+	    <a href="qmconfig.htm#RunOutsideMOE"><b>Batch</b></a> and then
+	    download the results, once ready, from the
+	    <a href="../moe/hpc.htm#JobManager">Job Manager</a> panel.
+	    In either case,
+	    <span class="nobr"><tt>vcd_camphor_conf_qm.mdb</tt></span> is
+	    created, which will be used to hold the structural and
+	    wavefunction-related information from the calculation.
+	</p>
+	</li>
+	</ol>
+    </li>
+    <li><p><i>Import the QM results.</i></p>
+    <p>When the QM calculations are complete, use</p>
+    <p class="indent_novspace"><span class="menu">DBV | Compute | QM |
+    Import</span></p>
+
+    <p>to import the QM results into <tt>vcd_camphor_conf_qm.mdb</tt>.
+    For the purposes of this worked example, we will use the
+    previously-calculated database,
+    <span class="nobr"><tt>$MOE/sample/mol/vcd_camphor_conf_qm.mdb</tt></span>.
+    </p>
+    </li>
+
+      <li>
+        <p><i>Start Spectral Analysis and load the Experimental Data</i></p>
+        <p>Start Spectral Analysis:</p>
+        <p class="indent_novspace">
+        <span class="menu">DBV | Compute | Molecule | Spectral Analysis</span>
+        </p>
+        <p>Press the <b>VCD</b> button to switch to VCD Analysis.
+        Select the <img src="spectralanalysis/triplebar.png" class="icon" />
+        icon and choose <b>Load Data</b> from the menu.  Enter
+        <span class="nobr">
+          <tt>$MOE/sample/mol/vcd_camphor.txt</tt>
+        </span>
+        as the file name and select <b>OK</b>.
+        At this point, the panel should look like this:</p>
+
+<img src="spectralanalysis/experimental_loaded.png" class="center"
+        alt="VCD with Experimental Data" />
+
+
+    <p>The panel shows two chiral classes (RR and SS) each with one
+    conformer.  The 2D display shows the selected RR class with the chiral
+    centers labeled.  The calculated VCD spectrum extends from 0 to roughly
+    3100 wavenumbers and the experimental VCD spectrum extends from 989 to
+    1613 wavenumbers.  The resulting range is shown in red on the plot and
+    the initial Spectral Correlation is 0.304.</p>
+
+    <p>
+    The <b>Experimental</b> and <b>Calculated</b> checkboxes can be used
+    to change which spectra are shown.</p>
+
+    <p>
+    <img src="spectralanalysis/expanded_range.png" class="center"
+    alt="Expanded Range Plot" />
+    </p>
+      </li>
+    <li><p><i>Optimize the Spectral Correlation</i></p>
+    <p>The initial correlation is 0.304, indicating that there is a mismatch
+    between the calculated and experimental spectra.  Press
+    <span class="nobr"><b>Auto-Align</b></span> to determine the offset
+    with the largest absolute Spectral Correlation:</p>
+
+    <p>
+    <img src="spectralanalysis/best_fit.png" class="center"
+    alt="Auto-Aligned match" />
+    </p>
+
+    <p>
+    Note that the Spectral Correlation has increased to 0.797 and the resulting
+    Offset is 11.5 wavenumbers.  The Offset slider can be used to dynamically
+    shift the calculated spectra to higher or lower wavenumbers, changing the
+    correlation as the Offset is adjusted.  The display can be zoomed
+    and/or translated via the mouse scroll wheel, with the spectra
+    autoscaling as the plot is changed.  Press
+    <span class="nobr"><b>Zoom to</b></span> to restore the best-fit plot range.
+    </p>
+
+    <p>
+    <span class="nobr"><b>Auto-Align</b></span> can be pressed to determine
+    the optimal Offset for the reduced range, yielding:</p>
+
+    <p>
+    <img src="spectralanalysis/smaller_range.png" class="center"
+    alt="Smaller match" />
+    </p>
+
+    <p>In this case, the Spectral Correlation increased to 0.888.  The
+    <b>ESI</b> button can be pressed to bring up the ESI Table:</p>
+
+    <p>
+    <img src="spectralanalysis/ESITableEx.png" class="center"
+    alt="Example ESI table" />
+    </p>
+
+    <p>Looking at the table, the Spectral Correlations are 0.888 for RR
+    and -0.860
+    for SS.  This results in an (off-diagonal) ESI value of 1.748 which suggests
+    that this example can differentiate between the two chiral classes for
+    camphor.
+    </p>
+
+    <p>
+    Finally, the <b>Display</b> menu can be used to change the appearance of
+    the spectrum plot.  <span class="nobr"><b>VCD Only</b></span> is the
+    default, showing the calculated and/or experimental spectra using the
+    full plot.  <span class="nobr"><b>IR Spectrum</b></span> splits the
+    plot into two regions vertically, showing the calculated IR spectrum
+    in the top half.  <b>Difference</b> also splits the plot into two
+    regions, showing the difference between the calculated and experimental
+        VCD spectra (if present).
+        </p>
+</div>
+  <!-- ============================= ECD EXAMPLE =========================== -->
+<a id="ECDExamples"></a>
+<h1>ECD and ORD Examples</h1>
+
+<p>In this section we present an example of how to calculate and analyze 
+  ECD and UV spectra and ORD. Sample files are contained in <tt>$MOE/sample/mol</tt>.</p>
+  <div class="example">
+
+  <a name="dimethyl"></a>
+  <h3>Dimethyl-L-tartrate: ECD and ORD</h3>
+
+    <ol start="1">
+      <li>
+        <p><i>Open the molecule.</i></p>
+        <p>First, clear the system:</p>
+
+<p class="indent_novspace"><span class="menu">RHS |
+        Close</span></p>
+        <p>Open the MOE file:</p>
+
+<p class="indent_novspace"><span class="menu">RHS |
+        Open</span></p>
+        <p>In the Open panel, select <span class=
+        "nobr"><tt>$MOE/sample/mol/Dimethyl-L-tartrate.moe</tt></span>
+        and press <b>OK</b>.</p>
+      </li>
+      <li>
+          <p><i>Generate the initial conformers.</i></p>
+
+<p class="indent_novspace"><span class="menu">Compute | Conformations |
+        Search</span></p>
+
+        <p>In the search panel, enter
+        <span class="nobr"><tt>Dimethyl-L-tartrate.mdb</tt></span>
+        for the <span class="nobr"><b>Output Database</b></span>.
+	</p>
+	<p>
+	Select <b>Refine with QM</b> checkbox.
+	Click on the configuration gear to set up the QM calculation.
+	This will bring up the QM Calculation Options panel:
+
+	<ol>
+	<li>
+	    <p>
+	    <p>
+	      Set <b>Engine</b> to <tt>Gaussian</tt>.<br />
+	      Set <b>Method</b> to <tt>B3LYP</tt>.<br />
+	      Set <b>Basis Set</b> to <tt>cc-pVDZ</tt>.<br />
+	      Set <b>Polarization</b> to <tt>none</tt>.<br />
+	      Set <b>Diffuse</b> to <tt>AUG</tt>.<br />
+	    </p>
+	    <p>Next, enable the <b>
+	    Electronic Circular Dichroism</b> checkbox.
+	    </p>
+	    </p>
+            <p>To enable ORD select the <b>
+            Optical Rotation Dispersion</b> checkbox and specify the desired
+	    wavelength values. For this example, the following wavelengths should
+	    be used to match the experimental data: 633, 589, 546, 436, 405 and 365 nm.
+            </p>
+	    <p>To include solvent effects in the calculation, enable the
+	    <b>Solvent Model</b>
+	    checkbox and select <tt>CPCM</tt> as the Solvent Model.
+	    Set <b>Dielectric</b> to <tt>water</tt> (78.4).
+	    </p>
+	    <p>As Gaussian is memory-intensive, it is recommended to explicitly
+		allocate sufficient memory: set <b>Keywords</b> to
+		<tt>%mem=8gb</tt>.
+		If compute resources are available, Gaussian can be run in
+		multiprocessing mode by specifying the number
+		of cores to use via <tt>%nproc</tt> in
+		<span class="nobr"><b>Keywords</b></span>.  For example,
+		<tt>%nproc=8</tt> instructs Gaussian to use 8 cores for the
+		calculation.  The panel should look similar to this:
+	    </p>
+
+	    <img src="spectralanalysis/qm_ecd_options.png" class="center" alt=
+		"ECD Example: QM Calculations Options Panel" />
+
+	    </p>
+	</li>
+	<li>
+	<p>
+	    To perform the calculation right away locally, press <b>OK</b>.
+	    This will perform the classical conformation search, then launch
+	    Gaussian to calculate the the selected spectra (and related information)
+	    for the two structures.  This calculation takes a few hours. The output database
+	    <tt>Dimethyl-L-tartrate_qm.mdb</tt> will be created and will contain the structural 
+	    and wavefunction-related information from the calculation.
+	</p>
+	</li>
+	</ol>
+    </li>
+
+    For the purposes of this worked example, we will use the
+    previously-calculated database,
+    <span class="nobr"><tt>$MOE/sample/mol/Dimethyl-L-tartrate_qm.mdb</tt></span>.
+    </p>
+    </li>
+
+      <li>
+        <p><i>Start Spectral Analysis and load the Experimental Data</i></p>
+        <p>Start Spectral Analysis:</p>
+        <p class="indent_novspace">
+        <span class="menu">DBV | Compute | Molecule | Spectral Analysis</span>
+        </p>
+        <p>Press the <b>ECD</b> button to switch to ECD Analysis tab if it is not the current tab yet.
+        Select the <img src="spectralanalysis/triplebar.png" class="icon" />
+        icon and choose <b>Load Data</b> from the menu.  Enter
+        <span class="nobr">
+          <tt>$MOE/sample/mol/Dimethyl-L-tartate_ECD.csv</tt>.
+        </span>
+	as the file name and select <b>OK</b>. in <b>Display</b> menu select
+	<b>ORD spectrum</b> to visualize both the computed ECD and ORD.
+	Enable the <b>Experimental</b> checkbox to compare the
+	computed and experimental ECD spectrum and to compare
+	computed ORD with the Kramers-Kronig transformation of experimetnal ECD.
+        At this point, the panel should look like this:</p>
+
+<img src="spectralanalysis/ecd_ord_example.png" class="center"
+        alt="VCD with Experimental Data" />
+
+    <p>
+    The <b>Experimental</b> and <b>Calculated</b> checkboxes can be used
+    to change which spectra are shown.
+    The <b>Display</b> menu can be used to change the appearance of
+    the spectrum plot.  <span class="nobr"><b>ECD Only</b></span> shows
+    the calculated and/or experimental spectra using the
+    full plot.  <span class="nobr"><b>UV Spectrum</b></span> splits the
+    plot into two regions vertically, showing the calculated UV spectrum
+    in the top half.  <b>ORD</b> also splits the plot into two
+    regions.
+        </p>
+ 
+
+        </li>
+      </ol>
+    </div>
+
+<!-- ======================== CONFORMER DISTRIBUTION ===================== !-->
+
+<a id="FITAnalysis"></a>
+<h1>Conformer Distribution Methodology Overview</h1>
+
+<p>An important application of NMR and NOE studies is the elucidation
+of dominant conformers of a compound in solution.  Knowledge of the
+dominant conformers can be used to understand and optimize the
+compound's biological activity.  The population distribution of
+individual conformers, and thus the dominant solution conformations, can
+be determined by comparing calculated to known experimental values
+[Navarro-Vazquez&nbsp;2018], and then finding the distribution of
+conformers that yields the best agreement with the experimental
+measurements.</p>
+
+<p>
+A set of conformers can be computationally generated for a compound
+via forcefield or QM-based methods based on structure and energetics.
+Calculated measurements can then be obtained for every conformer through
+simulation: pairwise distances can be obtained via classical or quantum
+chemical methods, while chemical shifts and coupling constants can be
+calculated via quantum chemical simulation.
+</p>
+
+<p>The problem of finding a compound's conformer population distribution
+can be cast as a Least Squares Error optimization, in which the sum of
+squared residuals &ndash; differences between weighted calculated values
+and experimentally measured values &ndash; is minimized over all
+conformations by adjusting the weights.  Measurement error is taken into
+account to reduce the impact of less reliable measurements, and
+experimental measurement distance bias is alleviated by applying
+vibrational analysis.</p>
+
+<p>The simulation protocol is as follows:</p>
+
+<img src="spectralanalysis/conformer_simulation_protocol.png" class="center"
+    alt="Conformer Distribution Simulation Protocol" />
+
+<h3>Least Squares Error Optimization</h3>
+
+<p>The Least Squares method used in the Conformer Distribution
+application seeks to minimize the overall difference or <i>error</i>
+between the experimental measurements and a weighted average of the
+simulated measurements.  The weights in this weighted average represent
+each conformer's contribution to the simulated measurement values, and
+are meant to reflect the relative proportion of each conformer expressed
+within the in-solution conformer population.  When the weights
+accurately reflect the true conformer distribution, the observed
+(experimental) measurement should in principle correspond closely with
+the simulated weighted-average values.</p>
+
+<p>The objective function of the optimization, the score
+<i><b>F</b></i>, is composed of three terms, one for each of the NMR
+shift <i>I</i>, NOE distance <i>&delta;</i>, and J-coupling
+measurements, respectively.  When a particular type of measurement data
+is not available, the corresponding term is omitted from the
+expression.</p>
+
+<img src="spectralanalysis/conformer_least_squares_fit.png" class="center"
+    alt="Conformer Distribution Least Squares" />
+
+<p>where:</p>
+
+<ul>
+  <li><i>N<sub>i</sub></i>, <i>N<sub>&delta;</sub></i>,
+    and <i>N<sub>J</sub></i> are the number of experimental observations;
+  </li>
+  <li>The asterisk (*) indicates experimental values;
+  </li>
+  <li>The &sigma; values are the experimental error;
+  </li>
+  <li><i>I<sub>i</sub></i>, <i>&delta;<sub>i</sub></i>,
+    and <i>J<sub>i</sub></i> are the calculated NOE intensity,
+    chemical shift, and coupling constants, respectively, given as follows:
+  </li>
+</ul>
+
+<img src="spectralanalysis/conformer_weighted_averages.png" class="center"
+    alt="Calculate shift term" />
+
+<p>where:</p>
+
+<ul>
+  <li><i>m</i> is the conformation count; and
+  </li>
+  <li><i>w<sub>k</sub></i> are the weights, or normalized
+    population distribution.
+  </li>
+</ul>
+
+<p>
+Thus, <i>I<sub>i</sub></i>, <i>&delta;<sub>i</sub></i>, and
+<i>J<sub>i</sub></i> are weighted averages over conformation values.
+The result of the fitting is the optimal weights <i>w<sub>k</sub></i>.
+</p>
+
+<!--
+<img src="spectralanalysis/conformer_calc_shift.png" class="center"
+    alt="Calculate shift term" />
+<img src="spectralanalysis/conformer_calc_dist.png" class="center"
+    alt="Calculated distance term" />
+<img src="spectralanalysis/conformer_calc_J.png" class="center"
+    alt="Calculated J-coupling term" />
+
+<p>In the foregoing, <i>exp</i> refers to the experimental measurements,
+and <i>sim</i> refers to the simulated measurements made over <i>m</i>
+conformers.  <i>n<sub>I</i>, <i>n<sub>&delta;</sub></i>, and
+<i>n<sub>J</sub></i> are the number of shift, distance, and J-coupling
+measurements, respectively.  <i>I<sub>sim,i</sub></i>,
+<i>&delta;<sub>sim,i</sub></i>, and <i>J;<sub>sim,i</sub></i> are the
+shift, distance, and J-coupling weighted averages, respectively, over
+all <i>m</i> conformers for a particular measurement <i>i</i>.</p>
+
+<p>The weights <i>w</i> must satisfy the following constraints, given
+that they represent conformer proportions or probabilities:</p>
+
+<img src="spectralanalysis/neq_1a.png" class="center"
+    alt="Theory Constraints 1" />
+<img src="spectralanalysis/neq_1b.png" class="center"
+    alt="Theory Constraints 2" />
+-->
+
+<p>Note that each term in <b><i>F</i></b> is normalized by the variance
+<i>&sigma;</i><sup>2</sup> of the respective measurement errors, which
+are typically different for each type of measurement (<i>I</i>,
+<i>&delta;</i>, <i>J</i>), and can also be different for each of the
+<i>n</i> measurements of a given type.  The experimental measurement
+error is used when available, otherwise, an estimated value is
+applied.</p>
+
+
+<h4>Data Requirements for Accuracy</h4>
+
+<p>The Least Squares method used by the Conformer Distribution
+application relies on non-degenerate measurement data that cover key
+areas of the molecule under study, and on accurate error estimates.</p>
+
+<ul>
+
+<li>The calculated set of conformers used to perform the Least Squares
+analysis should avoid including conformers with highly similar
+measurement values, otherwise, degeneracy can result, in which multiple
+possible optimal solutions present themselves, all very similar.  When
+this happens, it becomes difficult to obtain a meaningful interpretation
+of the results.</li>
+
+<li>The calculated (<b>A<sup>T</sup></b>) and experimental (<b>b</b>)
+values are normalized by the standard deviation of the measurement
+errors.  Because this calculation is sensitive to the values of
+<i>&sigma;</i>, an accurate estimate of the measurement error is vital
+to obtaining an accurate computed conformer distribution.</li>
+
+
+<li>The pairwise NOE values must cover the areas of interest on the
+target molecule, and it is best to have as many input data
+values as possible.  The addition of coupling constant or chemical shift
+experimental results (or both) will increase the likelihood of arriving
+at a correct solution.</li>
+
+</ul>
+
+<h3>Vibrational Analysis</h3>
+
+<p>Forcefield and QM simulations yield the 3D atomic coordinates of a
+conformer at its local energetic minimum, but the measurements obtained
+from standard NOE experiments are in the form of intensity values
+corresponding to the atomic vibrations of the molecule, time-averaged
+over the timespan of the measurement.  NOE intensity peaks are a result
+of pairwise interatomic interactions, and the peak height is
+proportional to the internuclear atomic distance <i>r</i> of the atom
+pair according to the following inverse exponential function:</p>
+
+<img src="spectralanalysis/neq_vib_1.png" class="center"
+    alt="Intensity is proportional to &lt;r&gt;^-6" />
+
+<p>where the angle brackets represent a time-averaged quantity.</p>
+
+<p>In simulations, although the average interatomic distance
+&lt;<i>r</i>&gt; or mean-squared distance &lt;<i>r</i><sup>2</sup>&gt;
+are readily calculable, the value of &lt;<i>r</i>&nbsp;<sup>-6</sup>&gt;
+is generally unavailable.  Furthermore, attempting to approximate this
+value, for example with &lt;<i>r</i>&gt;<sup>-6</sup>, can lead to large
+inaccuracies, as, in general:</p>
+
+<img src="spectralanalysis/neq_vib_2.png" class="center"
+    alt="&lt;r^-6&gt; &gt; &lt;r&gt;^-6" />
+
+<p>To make a meaningful comparison between calculated and experimental
+results therefore requires simulating the effect of NOE time-averaging.
+This is achieved by vibrational analysis, in which a sampling of the
+normal modes of the molecule is performed.  A simulated value for
+&lt;<i>r</i>&nbsp;<sup>-6</sup>&gt; can then be calculated from the
+generated samples.  Normal modes are described in the next section.
+
+<img src="spectralanalysis/normal_mode_sampling.png" class="center"
+alt="Averaging Normal Modes"/>
+
+
+<h4>Overview of Normal Modes</h4>
+
+<p>The normal modes of a molecule are the independent vibrational
+motions of that molecule.  Each normal mode can be approximated as a
+simple harmonic oscillator, and can be assigned a coordinate that
+follows the path of the vibrational motion.  The coordinate is expressed
+in terms of changes to the positions of the atoms; in particular, the
+<i>normal coordinate</i> <b>q</b> describes the displacement of an atom
+from its equilibrium position.</p>
+
+<p>Expressing the mass-weighted coordinate vector <b>q</b> in terms of
+the matrix <b>M</b> of masses, where <i>m</i> is the mass of each atom,
+the Cartesian position vector <i><b>x</b></i> of all atoms, and the
+equilibrium position <i><b>x</b><sub>0</sub></i> of all atoms in their
+potential well yields:</p>
+
+<img src="spectralanalysis/neq_6a.png" class="center"
+    alt="Mass-Weighted Coordinates 1" />
+<img src="spectralanalysis/neq_6b.png" class="center"
+    alt="Mass-Weighted Coordinates 2" />
+
+<p>where <i>&delta;<sub>ij</sub></i> is the Kronecker delta.</p>
+
+<p>The energy of a harmonic oscillator (in a local minimum) can be written
+as:</p>
+
+<img src="spectralanalysis/neq_7.png" class="center"
+    alt="Harmonic Oscillator" />
+
+<p>where <i>V</i> is the electrostatic potential, and the
+mass-weighted force constraints matrix <b>H</b> is of dimensions <span
+class="nobr">3<i>n</i> x 3<i>n</i></span>, where <i>n</i> is the number
+of atoms.  Diagonalizing the system by a change of
+coordinates to <i>&Chi;</i> space, defined below,
+allows for restating the problem in terms of diagonal matrix
+<b>L</b>, where the diagonal is formed of the eigenvalues
+<i>&omega;<sub>1</sub><sup>2</sup></i>,
+<i>&omega;<sub>2</sub><sup>2</sup></i>, ...
+<i>&omega;<sub>n</sub><sup>2</sup></i>,
+and the matrix <b>A</b> of eigenvectors
+<b>a</b><i><sub>i</sub></i>&nbsp;:</p>
+
+<img src="spectralanalysis/neq_7b.png" class="center"
+    alt="Eigenvector Matrix 1" />
+<img src="spectralanalysis/neq_7c.png" class="center"
+    alt="Eigenvector Matrix 2" />
+
+<p><b><i>&Chi;</i></b> can be reformulated as a probability
+distribution:</p>
+
+<img src="spectralanalysis/neq_8.png" class="center"
+    alt="Reformulated Distribution" />
+
+<p>which is just a normal distribution with a mean of 0
+and a standard deviation of:</p>
+
+<img src="spectralanalysis/neq_9.png" class="center"
+    alt="Gaussian Distribution" />
+
+<p>and allows for a straightforward sampling procedure.</p>
+
+<h4>Sampling the Normal Modes</h4>
+
+<p>Sampling the vibrational space of a molecule is accomplished by
+generating vectors <i><b>&Chi;<sub>&sigma;</sub></b></i> in the
+diagonalized eigensystem, where each is a sample of the normal
+distribution of a particular eigenmode with the corresponding standard
+deviation <i>&sigma;</i>, as given by the equation above, multiplied by
+the eigenvalue of that mode.</p>
+
+<p>The final step is to convert back from the diagonalized system of
+coordinates into the atomic Cartesian coordinate system:</p>
+
+<img src="spectralanalysis/neq_10a.png" class="center"
+    alt="Convert To Cartesians 1" />
+<img src="spectralanalysis/neq_10b.png" class="center"
+    alt="Convert To Cartesians 2" />
+<img src="spectralanalysis/neq_10c.png" class="center"
+    alt="Convert To Cartesians 3" />
+
+where <i>&delta;<sub>ij</sub></i> is the Kronecker delta.
+
+
+<a id="RunFIT"></a>
+<h1>Running Conformer Distribution</h1>
+
+<p>
+To start the Conformer Distribution application, open a database containing
+conformers in the Database Viewer and
+select <span class="menu">DBV | Compute | Molecule | Spectral Analysis</span>.
+If the required fields are present, the Spectral Analysis panel will
+appear.  If QM-derived chemical shifts and/or coupling constants are present,
+select the Conformer Distribution page using the buttons at
+the top of the panel.
+</p>
+
+<img src="spectralanalysis/fit_main_panel.png" class="center"
+    alt="Conformer Distribution Panel" />
+
+<table class="noborder">
+<tr>
+<td><b>Fit&nbsp;Using:</b></td>
+<td>Specify one or more types of experimental data to be used when determining
+a Conformer Distribution.
+<span class="nobr"><b>Chemical Shifts</b></span> refer to
+paired calculated and experimental spectra for one or more elements.
+These are created via NMR Analysis, and their availability is indicated.
+<span class="nobr"><b>Coupling Constants</b></span> provide a measure of the
+interaction of proximate atoms.  QM calculations are used to obtain
+calculated
+coupling constants while experimental values are read from the specified
+filename.  This can be selected by pressing the <b>Browse</b> icon.
+<span class="nobr"><b>Pairwise Distances</b></span> refer to
+interatomic distances between specific
+atom-pairs.  Experimental values are read from the specified filename,
+which can be selected by pressing the <b>Browse</b> icon.  Calculated
+pair-distances corresponding to the experimental data are extracted from
+each conformer.
+</td></tr>
+
+<tr>
+<td><b>Mode&nbsp;of Operation</b></td>
+<td>Specify the mode of operation: <b>Conformers</b> allows the user to
+generate a series of weights for varying number of conformers.  This can
+be used to determine the set of <i>n</i> conformers that best satisfy
+experimental data. <b>Subset</b> allows the user to generate weights while
+holding a conformer subset fixed [Cicero&nbsp;1995].  This can be used
+to evaluate the
+relevance of a subset to the various solutions.  <b>Labels</b> allows
+the user to review and modify the atom labels.  This can be used
+to synchronize the labels with the experimental datafile and possibly
+indicate equivalent atoms.  The labels are shared with NMR Analysis.
+</td></tr>
+
+<tr>
+<td>
+<img src="spectralanalysis/icon_burger.png" class="top"
+    alt="Fit DBV Options" />
+</td>
+<td>This menu allows the user to perform various actions on the database
+from which Conformer Distribution was started.
+<span class="nobr"><b>Open DBV</b></span> opens the database in the
+Database Viewer. <span class="nobr"><b>Select In DBV</b></span> alters the
+entry selection state to conform to that of the Conformer List.
+<span class="nobr"><b>Select From DBV</b></span> alters the row selection
+state of the Conformer List to conform to that of the entry selection in
+the Database Viewer.
+</td></tr>
+
+<tr>
+<td><b>Conformer List</b></td>
+<td>This list contains the conformer-centric information.
+
+<img src="spectralanalysis/fit_conf_list.png" class="center"
+    alt="Fit Conf list" />
+
+<table class="noborder">
+<tr>
+<td><b>Conf</b></td>
+<td>This is the conformer (or database entry) number.</td></tr>
+<tr>
+<td><b>Status</b></td>
+<td>This indicates whether the individual conformers are ignored when
+calculating the Conformer plot,<i><b>i</b></i>, part of the set of
+conformers used to calculate the Subset plot, <i><b>s</b></i>, or the
+conformer that is currently shown in the MOE window, <i><b>*</b></i>.
+The conformer number currently shown is indicated above the 2D depiction.
+</td></tr>
+<tr>
+<td><b>Energy</b></td>
+<td>This is the conformer energy in kcal/mol, relative to the
+lowest-energy conformer.
+</td></tr>
+<tr>
+<td><b>Weight</b></td>
+<td>This is the weight associated with each conformer based on the current
+calculation and/or plot selection.  This is shared with NMR Analysis.
+</td></tr>
+<tr>
+<td><b>stdDev</b></td>
+<td>This is the calculated standard deviation of the conformer weight based on
+the current calculation and/or plot selection.
+</td></tr>
+</table>
+
+Conformers can be omitted from the Conformer Plot calculation by selecting
+them in the Conformer List and pressing <b>Ignore</b>.  When pressed,
+conformers that are currently active will be ignored.  If only ignored
+conformers are selected, they will be made active.  Conformers can be
+included in the Subset Plot calculation by selecting them in the
+Conformer List and pressing <b>Subset</b>.  When pressed, conformers
+that are currently independent will be included in the subset.  If only
+subset conformers are selected, they will be made independent.  The
+<b>Status</b> field in the Conformer List is updated to reflect the
+current status of each conformer.
+</td></tr>
+
+<tr>
+<td><b>Label List</b></td>
+<td>This list contains the atom-centric information (which is assumed to
+be shared by all conformers).
+
+<img src="spectralanalysis/fit_label_list.png" class="center"
+    alt="Fit Label List" />
+
+<table class="noborder">
+<tr>
+<td><b>Index</b></td>
+<td>This is the atom index for each atom (their order in the structure file).
+</td></tr>
+<tr>
+<td><b>Element</b></td>
+<td>This is the chemical element for each atom.</td></tr>
+<tr>
+<td><b>Label</b></td>
+<td>This is the atom label for each atom.  It is a token that can be
+changed to reflect experimental labeling and/or to indicate atom
+association.
+</td></tr>
+</table>
+
+Labels can be changed by selecting them in the Label List, entering their
+new value in the <b>Label</b> field and pressing <sub>
+
+<img src="spectralanalysis/icon_ok.png" alt="Label OK Icon"
+style="vertical-align: middle" />
+
+</sub> (or pressing return).  Atoms sharing a label are considered
+equivalent when a Conformer Distribution is calculated.  Pressing
+<span class="nobr"><b>Reset Labels</b></span> resets the atom labels
+to a token representation of their atom indices.
+</td></tr>
+
+<tr>
+<td>
+<img src="spectralanalysis/icon_structure.png" class="top"
+    alt="Fit Pick Structure" />
+</td>
+<td>When the input database contains conformers of multiple molecules,
+pressing the <b>Structure</b> icon displays the 2D depictions of each
+structure:
+
+<img src="spectralanalysis/fit_pick_structs.png" class="center"
+    alt="Fit Structure Panel" />
+
+If there are more than nine molecules in the input database, the <b>Page</b>
+text field and the forward and backward buttons can be used to navigate the
+display.  Selecting a structure will use the associated conformers for
+the analysis (resetting all displays and lists).  Conformer Distribution can
+only process one structure at a time.
+</td></tr>
+
+<tr>
+<td><b>Experimental Information</b><br>
+<img src="spectralanalysis/expt_icon.png" class="icon" />
+</td>
+<td>Pressing the Experimental Information icon brings up a sub-panel, allowing
+the user to review, display, and/or ignore individual chemical shifts,
+coupling constants or pairwise interactions:
+
+<img src="spectralanalysis/fit_expt_info.png" class="center"
+    alt="Fit Experimental Panel" />
+
+<table class="noborder">
+<tr>
+<td><b>Atom Label</b></td>
+<td>This is the <b>Atom</b> or the atom pair
+<span class="nobr"><b>Atom1, Atom2</b></span> associated with each
+experimental value.
+</td></tr>
+
+<tr>
+<td><b>Element</b></td>
+<td>This is the chemical element associated with each chemical shift.
+</td></tr>
+
+<tr>
+<td><b>Status</b></td>
+<td>This indicates whether the individual experimental data values are
+ignored when performing Conformer Distribution calculations, <i>i</i>, or
+shown in the MOE window, <i>*</i>.
+</td></tr>
+
+<tr>
+<td><b>Calc</b></td>
+<td>This is the calculated value that is associated with the individual
+experimental data values.  The Conformer Distribution calculation tries to
+determine the set of conformer weights that
+minimize the difference between experimental and calculated values.
+</td></tr>
+
+<tr>
+<td><b>Expt</b></td>
+<td>This is the experimental value that is read from the input data
+file (or paired in the NMR application).
+The Conformer Distribution calculation tries to determine the set of
+conformer weights that
+minimize the difference between experimental and calculated values.
+</td></tr>
+
+<tr>
+<td><b>Diff</b></td>
+<td>This is the difference between the calculated and experimental data
+for the individual chemical shift or atom-pair value.  This value,
+compared to the associated error, is used to color the interaction when
+shown in the MOE window.
+</td></tr>
+
+
+
+</table>
+</td></tr>
+
+<tr>
+<td><b>2D Depiction</b></td>
+<td>This contains a 2D depiction of the current structure
+being analyzed. The label of each atom being analyzed is specified by the
+<b>View</b> menu, and reflects the current information in the Label List.
+In the picture above, the atoms are labeled by their alphanumeric label.
+A highlight is drawn for each selected atom in the Label List.
+</td></tr>
+
+<tr>
+<td><b>View</b></td>
+<td>This specifies the atom label to use in the 2D
+Depiction. <b>Label</b> is the user-specified alphanumeric label for each
+atom, <b>Index</b> is the atom index in the input structure.
+</td></tr>
+
+<tr>
+<td><b>Conformer Plot</b></td>
+<td>This plots shows the <span class="nobr">log p-value</span> or
+<span class="nobr">chi-square</span>
+on the Y-axis and the number of conformers on the X-axis:
+
+<img src="spectralanalysis/fit_conf_plot.png" class="center"
+    alt="Fit Conformer Plot" />
+
+Selecting a particular region of the plot
+shows the appropriate weights in the Conformer List and shares them with
+the NMR application.  In the above example, the
+<span class="nobr">p-value</span> is <tt>0.22</tt>
+when the
+number of conformers is <tt>5</tt>.  The Conformer Plot calculation stops
+when adding additional conformers is statistically insignificant.
+</td></tr>
+
+<tr>
+<td><b>Subset Plot</b></td>
+<td>This plots shows the
+<span class="nobr">chi-square</span> value on the Y-axis and the total (fixed)
+weight of the subset on the X-axis:
+
+<img src="spectralanalysis/fit_subset_plot.png" class="center"
+    alt="Fit Subset Plot" />
+
+Selecting a particular region of the plot shows the appropriate weights
+in the Conformer List and shares them with the NMR application.  Note that
+the weights of individual subset conformers are <i>not</i> fixed, merely
+their sum.  In the above example, the
+<span class="nobr">chi-square</span> value is <tt>8.66</tt>
+when the subset fraction is <tt>0.5</tt>.
+</td></tr>
+
+<tr>
+<td><b>Configure</b><br>
+<img src="spectralanalysis/gear_icon.png" class="icon" />
+</td>
+<td>Pressing the Configure icon brings up a sub-panel, allowing the user
+to change some of the parameters used by Conformer Distribution:
+
+<!-- update -->
+<img src="spectralanalysis/fit_config_info.png" class="center"
+    alt="Fit Config Panel" />
+
+<table class="noborder">
+<tr>
+<td><b>Default Errors</b></td>
+<td>The user can enter the default error associated with coupling constant,
+pairwise distance and chemical shift experimental values.  These are
+used for paired chemical shifts from the NMR Analysis application, and
+for coupling constant and pairwise distances that lack
+explicit experimental errors. For
+<span class="nobr"><b>Coupling Constants</b></span>, the default error is
+in <tt>Hz</tt>, for <span class="nobr"><b>Pairwise Distance</b></span>,
+the default error is in <tt>angstrom</tt> and for
+<span class="nobr"><b>Chemical Shifts</b></span>, the default error is in
+<tt>ppm</tt>.  As the NMR application pairs chemical shifts for individual
+chemical elements, their default error can be set here.
+</td></tr>
+
+<tr>
+<td><b>Fitting Weights</b></td>
+<td> If more than one experimental property is selected, it is possible to set a larger
+weight to one property and smaller weight to the other one.
+For instance if chemical shifts are more accurate than parwise distances,
+the user can select larger weights for chemical shifts and smaller weights
+for parwise distances.
+</td></tr>
+
+<tr>
+<td><b>Atom Indication</b></td>
+<td>Specify the color (and transparency if desired) of the spheres that
+indicate selected atoms in the Experimental Information List,  This is
+used  when
+chemical shifts are shown in the MOE window for a particular conformer.
+</td></tr>
+
+<tr>
+<td><b>Within Error</b></td>
+<td>Specify the color of the spheres for selected atoms or the lines
+connecting selected atom-pairs in the Experimental Information List when
+the property difference is within the specified error range.  This is
+used to color each atom or atom-pair in the MOE window for a particular
+conformer.
+</td></tr>
+
+<tr>
+<td><b>Exceeds Error</b></td>
+<td>Specify the color of the spheres for selected or the lines connecting
+selected atom-pairs in the Experimental Information List when the property
+difference exceeds the specified error range.  This is used to color
+each atom or atom-pair in the MOE window for a particular conformer.
+</td></tr>
+
+<tr>
+<td><b>Center Conformers</b></td>
+<td>If on, the view will be centered on the individual conformers
+being browsed in MOE.
+This is useful as there is no relationship between the position
+and orientation of the output of Conformational Search.  This should be
+deselected if the input database has superposed conformations so that
+their relative positions will be maintained.
+</td></tr>
+
+<tr>
+<td><b>Select Results</b></td>
+<td>Specify the units of the Y-axis for the Conformer Plot.
+<span class="nobr"><b>log p-value</b></span> shows
+the statistical value for each set of <i>n</i> conformers while
+<span class="nobr"><b>Chi-square</b></span> shows the value of the error
+function for each set of conformers.  The units of the Y-axis for the Subset
+Plot are always <span class="nobr"><b>chi-square</b></span>.
+</td></tr>
+
+<!-- <tr>
+<td><b>Minimum <span class="nobr">p-value</span></b></td>
+<td>Specify the minimum desired
+<span class="nobr">p-value</span>.  This is used to terminate
+the Conformer Plot calculation when adding additional conformers would
+be statistically insignificant.
+</td></tr> -->
+
+</table>
+</td></tr>
+
+</table>
+
+<p>
+After selecting the Mode of Operation and specifying the appropriate
+information, press <b>Calculate</b> to start
+the plot calculation.  Status and progress information is provided in the
+SVL Commands window at the bottom of the Conformer Distribution panel.
+The currently-displayed plot can be exported by pressing
+<span class="nobr"><b>Export Plot</b></span>.
+</p>
+
+<!-- ==================== CONFORMER DISTRIBUTION EXAMPLE ================= -->
+
+<a id="FITExamples"></a>
+<h1>Conformer Distribution Examples</h1>
+
+<p>
+In this section we will present a number of examples of generating conformer
+weights using the Conformer Distribution application.  Sample files are
+contained in <tt>$MOE/sample/mol</tt>.
+</p>
+
+<div class="example">
+<a id="pairDists"></a>
+<h2>Macrocycle Pair Distances</h2>
+
+<ol start="1">
+<li><p><i>Create the starting macrocycle structure.</i></p>
+<p>First, clear the system:</p>
+<p class="indent_novspace"><span class="menu">RHS | Close</span></p>
+
+<p>Open the macrocycle structure file:</p>
+<p class="indent_novspace"><span class="menu">RHS | Open</span></p>
+<p>In the Open panel, select <span class= "nobr">
+<tt>$MOE/sample/mol/5N1Z_ligand.moe</tt></span> and press <b>OK</b>.</p>
+
+<p>Check that the forcefield is set to <tt>Amber10:EHT</tt> and the
+partial charges are fixed:
+<p class="indent_novspace"><span class="menu">MOE | Footer | Potential Setup
+</span></p>
+
+<p>If the currently loaded forcefield is not Amber10:EHT, select it from
+the <b>Load</b> menu.  The change is effected immediately.  Press
+<span class="nobr"><b>Fix Charges</b></span> if the partial charges
+require calculation.  Press <b>OK</b> to close the panel.</p>
+
+<p>Minimize the structure:</p>
+<p class="indent_novspace"><span class="menu">RHS | Minimize</span></p>
+<p>This provides an unstrained input structure for Conformational Search.
+</p>
+
+<p>Save a local copy to disk:</p>
+<p class="indent_novspace"><span class="menu">MOE | File | Save</span></p>
+<p>In the Save panel, enter <tt>5N1Z_ligand_fixed.moe</tt> and press
+<b>Save</b>.  This will be used for the remainder of this example.</p>
+</li>
+
+<li><p><i>Create a conformer database to analyze.</i></p>
+<p>Start the Conformational Search application:</p>
+<p class="indent_novspace"><span class="menu">
+MOE | Compute | Conformations | Search</span></p>
+<p>Change the <span class="nobr"><b>Output Database</b></span> to
+<tt>5N1Z_conf.mdb</tt>.<br />
+<br />
+Press <b>OK</b> to start the search.  This should take a few minutes.
+</p></li>
+
+<li><p><i>Determine the conformer distribution.</i></p>
+<p>Start the Conformer Distribution application:</p>
+<p class="indent_novspace"><span class="menu">
+DBV | Compute | Molecule | Spectral Analysis</span></p>
+<p>The status display will show
+<span class="nobr"><tt>Calculating NOE Intensities</tt></span>,
+which will take a few seconds to complete.  This is calculated when the
+database is opened the first time and uses the conformer geometries and
+current forcefield as no QM-based hessian
+information is present.  This adds an
+<span class="nobr"><b>NOE_Intensity</b></span> column to the conformer
+database.</p>
+
+<p>Load the experimental information file for
+<span class="nobr"><b>Pairwise Distances</b></span> by
+pressing the <b>Browse</b> icon and entering
+<span class="nobr"><tt>$MOE/sample/mol/5N1Z_dists.txt</tt></span> and
+pressing <b>OK</b>.  Press <b>Calculate</b> to start the Conformer Plot.
+This will take a few seconds to complete, with progress indicated in the
+status display.  When complete, the Weight column in the Conformer List
+can be sorted to show the dominant conformations.  The
+Conformer Distribution panel should look something like this:
+
+<img src="spectralanalysis/ex1_1.png" class="center"
+    alt="Ex 1 Conformer Plot" />
+
+The Conformer List reveals that there are only two relevant
+conformations (the others are statistically insignificant).  Note that the
+specific conformers returned by Conformer Search can change, so the specific
+conformer numbers might not be reproduced.  The
+<span class="nobr"><b>Select Results</b></span> Configuration option can
+be changed to <span class="nobr"><b>Chi-square</b></span>, resulting
+in a plot that looks something like this:
+
+<img src="spectralanalysis/ex1_2.png" class="center"
+    alt="Ex 1 Conformer Plot 2" />
+
+</p></li>
+
+<li><p><i>Create a subset plot.</i></p>
+<p>The effect of varying weights of a conformer subset can be determined
+by creating a subset plot. Using the Conformer list created above,
+select the fourth and sixth conformers
+when sorted by Weight. Click on the 6 conformers solution on the conformer plot.
+This should align the vertical red line with the 6 on the x-axis. Switch the
+<span class="nobr"><b>Mode of Operation</b></span> to <b>Subset</b> and
+press the <b>Subset</b> button to create a 2-conformer subset using the
+previously selected rows.  Press <b>Calculate</b> to start the calculation,
+which will take a few seconds to complete.  This creates a Subset plot:
+
+<img src="spectralanalysis/ex1_3.png" class="center"
+    alt="Ex 1 Subset Plot" />
+
+which shows the effect of varying the aggregate weight of these two
+conformers from 0.0 to 1.0.
+</p></li>
+
+<li><p><i>Review conformer data.</i></p>
+<p>The experimental and calculated data for individual conformers can be
+easily reviewed.  Using the above example, the data for the first conformer
+can be viewed by selecting it in the Conformer list and pressing
+<img src="spectralanalysis/expt_icon.png" class="icon" />.  This brings
+up the following list:
+
+<img src="spectralanalysis/ex1_4.png" class="center"
+    alt="Ex 1 Conformer 9 Data" />
+
+which shows the individual pairwise distances as read from the experimental
+data file.  This can be sorted by the <b>Diff</b> column to show the
+distances where the calculated value greatly exceeds the experimental
+data.  Selecting the first row (the distance between atoms with labels
+<tt>47</tt> and <tt>60</tt>)
+and pressing <b>Display</b> shows this
+interaction in the MOE window, colored and labeled by the <b>Diff</b>
+value:
+
+<img src="spectralanalysis/ex1_5.png" class="center"
+    alt="Ex 1 Conformer 9 Worst Fit" />
+
+The line is drawn in <font color="green">green</font> because the difference
+is within the (default) error value for pairwise distances.
+</p>
+</ol>
+
+</div>
+
+
+
+
+  <!-- ============================= REFERENCES ============================ -->
+
+<h1>See Also</h1>
+
+<p><a href="confsrch.htm">Conformational Search</a><br />
+  <a href="../mdb/db.htm">Molecular Database Viewer</a><br />
+  <a href="../moe/extprog.htm">Interfacing to External Programs</a></p>
+<a id="Ref"></a>
+<h1>References</h1>
+  <table class="ref">
+    <tr>
+      <td>[Bally&nbsp;2011]</td>
+      <td>Bally, T. and Rablen, P.R.; Quantum-Chemical Simulation
+      of 1H NMR Spectra. 2. Comparison of DFT-Based Procedures for Computing
+      Proton-Proton Coupling Constants in Organic Molecules; <i>J. Org.
+      Chem.</i> (<b>2011</b>) 4818&ndash;4830.</td>
+    </tr>
+    <tr>
+      <td>[Cicero&nbsp;1995]</td>
+      <td>Cicero, D.O., Barbato, G. and Bazzo, R;
+      NMR Analysis of Molecular Flexibility in Solution: A New Method for
+      the Study of Complex Distributions of Rapidly Exchanging Conformations.
+      Application to a 13-Residue Peptide with an 8-Residue Loop.;
+      <i>J. Am. Chem. Soc.</i>, (<b>1995</b>) 1027&dash;1033.</td>
+    </tr>
+    <tr>
+      <td>[Dukor&nbsp;2000]</td>
+      <td>R.K. Dukor and L.A. Nafie, in <i>Encyclopedia of
+      Analytical Chemistry: Instrumentation and Applications</i>, Ed. R.A.
+      Meyers (Wiley, Chichester, 2000) 662&ndash;676.</td>
+    </tr>
+    <tr>
+      <td>[Lodewyk&nbsp;2011]</td>
+      <td>Lodewyk, M.W., Siebert, M.R., Tantillo, D.J.;
+      Computational Prediction of 1H and 13C Chemical Shifts: A Useful Tool for
+      Natural Product, Mechanistic, and Synthetic Organic Chemistry; <i>Chem.
+      Rev.</i> (<b>2011</b>) 1839&ndash;1862.</td>
+    </tr>
+    <tr>
+      <td>[Navarro-Vazquez&nbsp;2018]</td>
+      <td>Navarro-Vazquez, A., Gil, R.R and Blinov, K.;
+      Computer-Assisted 3D Structure Elucidation (CASE-3D) of Natural
+      Products Combining Isotropic and Anisotropic NMR Parameters;
+      <i>J. Nat. Prod.</i>, (<b>2018</b>) 203&ndash;210.</td>
+    </tr>
+    <tr>
+      <td>[Ohta&nbsp;1988]</td>
+      <td> Ohta, K., Ishida, H,
+      Comparison among several numerical integration methods for Kramers-Kronig transformation
+      <i>Applied spectroscopy</i>, (<b>1988</b>) 952&ndash;957.</td>
+    </tr>
+    <tr>
+      <td>[Polavarapu&nbsp;2006]</td>
+      <td> Polavarapu, Prasad L., Ana G. Petrovic, and Peng Zhang.;
+      Kramers–Kronig Transformation of Experimental Electronic Circular Dichroism: 
+      Application to the Analysis of OpticalRotatory Dispersion in Dimethyl- L -Tartrate
+      <i>Chirality</i>, (<b>2006</b>) 723&dash;732. </td>
+    </tr>
+    <tr>
+      <td>[Stephens&nbsp;1985]</td>
+      <td>P.J. Stephens; Theory of vibrational circular dichroism;
+      <i>J. Phys. Chem.</i>, (<b>1985</b>) 748&ndash;752.</td>
+    </tr>
+    <tr>
+      <td>[Trander&nbsp;2017]</td>
+      <td> G.E. Tranter,
+      Protein Structure Analysis by CD, FTIR, and Raman Spectroscopies
+      <i>Encyclopedia of Spectroscopy and Spectrometry</i>, 
+      Ed. J. C. Lindon, G. E. Tranter, D. W. Koppenaal (Academic press 2017) 740&ndash;758.</td>
+    </tr>
+    <tr>
+      <td>[Vargek&nbsp;1997]</td>
+      <td>M. Vargek, T.B. Freedman, and L.A. Nafie; Improved
+      backscattering dual circular polarization Raman optical activity
+      spectrometer with enhanced performance for biomolecular applications;
+      <i>Raman Spectrosc.</i> , (<b>1997</b>) 627&ndash;633.</td>
+    </tr>
+  </table><!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../images/ccgicon.png" /> <a href="../index.htm"></a> <a href=
+    "../legal.htm"></a> &copy;<span class="versionyear"></span> <a href="http://www.chemcomp.com"></a>. All
+    rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</body>
+</html>
+

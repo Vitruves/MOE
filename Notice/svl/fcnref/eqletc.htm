@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: eqL,neL,ltL,leL,gtL,geL,cmpL" />
+  <meta name="keywords" content="SVL:symbol: ===" />
+  <title>Lexicographic Comparisons: eqL, neL, ...</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Lexicographic Comparisons: eqL, neL, ...
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+val = funcL [v1, v2]
+val = funcL [v1, v2, v3, ...]
+
+val = a === b    // infix notation for <a class="fcnlink" href=
+"#eqL">eqL</a>
+</pre><!-- DESC -->
+
+<h1>Description</h1>
+
+<p>Relational lexicographic functions. Arguments being compared need not be
+  conformable, i.e. need not be of same shape or type (although comparison may
+  be meaningless if types are different). Comparisons are performed at the top
+  level of the argument vector. Each function returns 1 if the comparison is
+  true, 0 otherwise. Tokens are compared lexicographically by their
+  contents.</p>
+
+<p>When more than two arguments are passed, reduction takes place, i.e.:</p>
+
+<pre class="code">
+funcL [v1, v2, v3, ...]
+</pre>
+
+<p>is equivalent to:</p>
+
+<pre class="code">
+funcL [v1, v2] and funcL [v2, v3, ...]
+</pre>
+
+<p><b>Note:</b> Only <tt>eqL</tt> has an infix form.</p>
+<table class="titlebar">
+  <tr>
+    <th>Function</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><tt>cmpL</tt></td>
+    <td>
+      Lexicographic comparison.<br />
+      This function returns:
+      <div class="indent">
+      <table class="noborder left">
+        <tr>
+          <td>-1</td>
+          <td>if <tt>ltL [v1, v2, ...]</tt></td>
+        </tr>
+        <tr>
+          <td>0</td>
+          <td>if <tt>eqL [v1, v2, ...]</tt></td>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>if <tt>gtL [v1, v2, ...]</tt></td>
+        </tr>
+      </table>
+    </div>
+<pre class="code">
+svl&gt; cmpL [ 'b', 'a' ]           // 'b' &gt; 'a'
+1
+svl&gt; cmpL [ [4,5,6], 5 ]         // 4 &lt; 5
+-1
+svl&gt; cmpL [ &quot;ab&quot;, &quot;ab&quot; ]     // &quot;ab&quot; == &quot;ab&quot;
+0
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td>
+<a id="eqL"></a>
+<tt>eqL</tt></td>
+      <td>
+        Shorthand notation: <tt>===</tt><br />
+        Returns 1 if the top level arguments are identical.
+
+<pre class="code">
+svl&gt; eqL [1,1,1]
+1
+svl&gt; eqL [ [1,2], [1,3] ]
+0
+svl&gt; [ 0.3, 'cart' ] === [ 0.3, 'cat' ]
+0
+</pre>
+    </td>
+  </tr>
+  <tr>
+    <td><tt>neL</tt></td>
+    <td>Equivalent to <tt>not&nbsp;eqL</tt>.<br />
+    Returns 1 if the top level arguments are not identical.</td>
+  </tr>
+  <tr>
+    <td><tt>geL</tt></td>
+    <td>
+      Lexicographic greater than or equal to comparison.<br />
+      Returns 1 if the top level arguments are sorted in decreasing order
+      from left to right.
+
+<pre class="code">
+svl&gt; geL [3,2,1]
+1
+svl&gt; geL [ 3, 2, [1,4] ]
+1
+svl&gt; geL ['a','c','b']
+0
+svl&gt; geL [3,2,2,1]
+1
+</pre>
+    </td>
+  </tr>
+  <tr>
+    <td><tt>gtL</tt></td>
+    <td>
+      Lexicographic greater than comparison.<br />
+      Returns 1 if the top level arguments are sorted in strictly decreasing
+      order from left to right.
+
+<pre class="code">
+svl&gt; gtL [3,2,1]
+1
+svl&gt; gtL [ 3, 2, [1,4] ]
+1
+svl&gt; gtL ['a','c','b']
+0
+svl&gt; gtL [3,2,2,1]
+0
+</pre>
+  </td>
+  </tr>
+  <tr>
+    <td><tt>leL</tt></td>
+    <td>
+      Lexicographic less than or equal to comparison.<br />
+      Returns 1 if the top level arguments are sorted in increasing order
+      from left to right.
+
+<pre class="code">
+svl&gt; leL [1,2,3]
+1
+svl&gt; leL ['a','c','b']
+0
+svl&gt; leL [1,1,2]
+1
+</pre>
+    </td>
+  </tr>
+  <tr>
+    <td><tt>ltL</tt></td>
+    <td>
+      Lexicographic less than comparison.<br />
+      Returns 1 if the top level arguments are sorted in strictly increasing
+      order from left to right.
+
+<pre class="code">
+svl&gt; ltL [1,2,3]
+1
+svl&gt; ltL ['a','c','b']
+0
+svl&gt; ltL [1,1,2]
+0
+</pre>
+    </td>
+  </tr>
+</table><!-- ENDDESC -->
+
+<h1>See Also</h1>
+
+<p>
+  <a href="introlexico.htm">Introduction to Relational Functions</a><br />
+  <a href="eqeetc.htm">Element-Wise Comparisons</a>
+</p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

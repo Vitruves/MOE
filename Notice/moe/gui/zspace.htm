@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html>
+
+
+<!--
+!!	zspace.htm		zSpace stereo display /
+!!-->
+
+<!--
+!!    MOE Online Manuals
+!!    COPYRIGHT (C) 1997-2018
+!!        CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta id="keywords" content="zSpace, zspace, stereo, display, stylus, 6DOF"/>
+
+  <title>zSpace Stereo Display</title>
+</head>
+
+<body>
+<div class="center-page">
+<!-- START MOE_HEADER -->
+<div class="MOE_HEADER">
+  <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+  <a href="../../index.htm"><div class="moeversion"></div></a>
+    zSpace Stereo Display
+</div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<ul>
+<li>
+  <a href="#zSpace_stereo_display">
+    zSpace Stereo Display
+  </a>
+</li>
+<li>
+  <a href="#zSpace_input_stylus">
+    zSpace Input Stylus
+  </a>
+</li>
+<li>
+  <a href="#On-screen_control_buttons">
+    On-screen Control Buttons
+  </a>
+</li>
+<li>
+  <a href="#Object_selection">
+    Object Selection
+  </a>
+</li>
+<li>
+  <a href="#Manipulating_objects">
+    Manipulating Objects
+  </a>
+</li>
+<li>
+  <a href="#Additional_actions">
+    Additional Actions
+  </a>
+</li>
+<li>
+  <a href="#Mouse_emulation">
+    Mouse emulation
+  </a>
+</li>
+<li>
+  <a href="#zSpace_configuration_settings">
+    zSpace Configuration Settings
+  </a>
+</li>
+<li>
+  <a href="#SpaceMouse">
+    Combination with 3D Connexion's SpaceMouse
+  </a>
+</li>
+<li>
+  <a href="#SVL_Commands">
+    SVL Commands
+  </a>
+</li>
+<li>
+  <a href="#See_Also">
+    See Also
+  </a>
+</li>
+</ul>
+
+<a id="zSpace_stereo_display"></a>
+<h1>zSpace Stereo Display</h1>
+
+<p><i>zSpace and zSpace product names are either registered trademarks
+  or trademarks of zSpace, Inc. in the U.S. and/or other countries.
+  </i></p>
+
+<img src="zspace/zspace_moe_final_tiny.jpg" alt="zSpace Display"
+     class="floatright" />
+
+<p> MOE supports the <a href="http://zspace.com">zSpace</a> stereo
+display, Tracking Eyewear 3D glasses and 6 degrees-of-freedom (DOF)
+zSpace Stylus technologies. The zSpace display is able to track
+head movement which dramatically enhances stereo quality. MOE uses the
+dynamic eye position from the zSpace head tracking data to
+recalculate stereo perspective on the fly consistent with the viewers
+head position, thus improving the quality of stereo perception significantly.
+</p>
+<p>
+To switch to head-tracked stereo, set
+<span class="menu">MOE | Render | Stereo | Stereo Mode | zSpace</span>
+as the default stereo mode and then enable stereo by choosing
+<span class="menu">MOE | Render | Stereo | Stereo</span>. The head tracking time
+interval is optimized for smooth head movements while still maintaining the
+ability to visualize complex molecular systems.
+</p>
+<p> The head tracking parameters can be configured for various graphics
+hardware if necessary.</p>
+<p> MOE will monitor if the zSpace stereo glasses are in front of the
+display. If they are not visible because, for example, the user has put them
+down, MOE will automatically switch to mono (non-stereo) display mode after 3
+seconds. When the glasses are detected once again, MOE will re-enable
+the head-tracked stereo display mode immediately.
+</p>
+<p>The zSpace stereo display also supports out-of-the box standard OpenGL
+quad-buffer stereo. OpenGL quad-buffer stereo is also supported by any MOE
+version, if a stereo capable graphics card such as an NVidia Quadro card is
+present and the <tt>quad-buffer</tt> stereo mode is set.</p>
+
+<div class="extra_info">
+<h3>Important NVIDIA graphics driver settings</h3>
+<p>Make sure that your NVIDIA Quadro graphics driver parameters are
+set up correctly.</p>
+<p>On Windows, open the <span class="menu">NVIDIA Control Panel | 3D Settings
+| Manage 3D settings</span>, then choose the following options in the
+settings list:</p>
+
+<ul>
+    <li> Buffer-flipping mode: Use block transfer </li>
+    <li> Stereo &ndash; Display Mode: Generic active stereo</li>
+    <li> Stereo &ndash; Enable: On</li>
+    <li> Threaded optimization: Off</li>
+</ul>
+
+</div>
+
+<a id="zSpace_input_stylus"></a>
+<h1>zSpace Input Stylus</h1>
+
+<img src="zspace/stylus-buttons.jpg" alt="Stylus Buttons" class="center" />
+
+<p>
+The zSpace system tracks the location and orientation of the input stylus
+when it is in front of the display and allows it to interact in an intuitive
+manner with virtual objects displayed on the screen. </p>
+<p> The stylus has three buttons: 1 main/bigger button in the middle, flanked
+by two secondary buttons on the left and right. For this documentation, they
+are referred similarly to those on a three-button mouse as left, middle,
+and right button (the middle is the main/big button on the stylus).
+</p>
+<p> The zSpace/MOE integration uses the stylus location, orientation, and
+buttons to interact with the molecular system similarly to using a traditional
+mouse, but enhanced to give the impression of a true 3-dimensional
+interaction. The stylus is automatically enabled as the MOE input device
+when zSpace stereo mode is enabled in MOE. Similarly to MOE's traditional
+2D mouse actions, the left stylus button is used to select objects,
+the middle (main) button is used to move and to interact with molecules,
+and the right button can popup a context menu with further options.
+</p>
+<p> When held in front of and pointing towards the display, the stylus extends
+into the virtual 3D space, shown as a line extending from its physical
+tip. At the end of the virtual extension, located 10 cm (by default)
+beyond the end of the physical stylus, a small ball indicates the locus
+of interaction of the stylus with the contents of the 3D workspace.
+This ball is the input element which will interact with the molecule on
+the screen. The length of the extension as well as the size of the
+ball are configurable. We will refer to that focus ball as the stylus tip.
+</p>
+
+<img src="zspace/stylus-VirtualTip.jpg" alt="Stylus Tip" class="center" />
+
+<a id="On-screen_control_buttons"></a>
+<h1>On-Screen Control Buttons</h1>
+<p>
+To make some zSpace-specific actions and mode switches easy, a bank of
+on-screen buttons in the MOE Window are available. The buttons are operated
+with the stylus by pointing the stylus tip at them. When the line emanating
+from the stylus tip approaches the buttons, an on-screen cursor is shown
+to make it easy to use the buttons.</p>
+<p>The first three buttons (Move, Zoom, Z-Clip) are radio buttons to switch
+between the three main action modes of the middle stylus button. The
+current active mode is marked in green. The &quot;Selection&quot; button is
+next, and allows switching between the two different area/volume selection
+region shapes. The &quot;Rotate Bond&quot; button as described above allows to
+quickly change a bond torsion. &quot;Undo&quot; and &quot;Redo&quot; buttons
+undo unwanted changes, such as moving selected atoms only or a bond torsion
+change, or redoes them. The last button, &quot;Stylus Length&quot;, is used to
+adjust the distance between the physical and virtual stylus tips.
+</p>
+
+<img src="zspace/menu.png" alt="zSpace menu" class="center" />
+
+<a id="Object_selection"></a>
+<h1>Object Selection</h1>
+<p>
+The zSpace stylus object selection gestures and modifier are similar in
+nature to those used by MOE's default selection configuration with a
+<a href="mouse.htm">traditional mouse</a>, but abstracted to an interaction
+in 3D. Instead of moving the mouse cursor over the object to be selected,
+the stylus is used to touch the object to be selected.
+</p>
+
+<ul>
+  <li>
+  <b>Pick a single object</b>. A single press and subsequent release
+  of the left stylus button will select the atom which is currently
+  in contact with the stylus tip. In the same manner, one can also
+  pick a bond or a ribbon segment. Picking a ribbon segment will
+  select all atoms associated with the corresponding residue.
+  </li>
+<li>
+  <b>Clear selection</b>. A single press and release in empty space
+  will deselect all atoms/ribbons.
+  </li>
+<li>
+  <b>Select multiple objects within a range</b>. Pressing the left button
+  and then moving the stylus while still holding the left mouse button
+  down (i.e. left-drag) will perform an area/volume selection within
+  either a spherical or a box selection region centered on the location
+  of the stylus tip when the button was pressed initially. When the
+  left stylus button is released, all atoms within the selection region
+  will be selected. To switch the shape of the selection region between
+  sphere and box on the fly, double left click in empty space or use
+  the corresponding on-screen button.
+  </li>
+
+<div class="center">
+  <img src="zspace/selection-sphere.png" alt="Spherical selection region"
+  class="icon" />
+  <img src="zspace/selection-cube.png" alt="Cubic selection region"
+  class="icon" />
+</div>
+
+<li>
+  <b>Select atoms of residues</b>. To select all atoms of a residue,
+  left click on one of the residue's atom while holding down the
+  Control key on the keyboard. This applies also to the area/volume
+  drag selection; in this case, the atom selection will be extended
+  to include the residue atoms of all residues having at least one
+  selected atom within the selection region.
+  </li>
+  <li>
+  <b>Toggle + additive selection</b>. The normal press and release pick
+  is a replace action -- it will clear the existing selection before
+  selecting the picked object. If the Shift key is pressed on the
+  keyboard, the pick action will toggle the selection state of the
+  picked object, leaving the selection state of all other objects
+  unchanged. In this way, objects can be added to or removed from
+  the existing selection. This mode works with the area/volume drag
+  selection as well, and can be combined with the Control modifier
+  key for whole residue selection.
+  </li>
+  <li>
+  <b>Select connected component</b>. A double left click on an atom
+  or ribbon segment will automatically select all atoms which are
+  connected to the picked object by bonds and which are in the same
+  RLS (Receptor/Ligand/Solvent) class. The double click can be combined
+  with the Shift modifier key to toggle the selection state of the
+  picked object or objects.
+  </li>
+  <li>
+    <b>Switch area/volume selection region shape</b>. To switch between
+    a sphere and a box selection region, double click left in empty
+    space or press the &quot;Selection&quot; on-screen button.
+  </li>
+</ul>
+
+<div class="center">
+    <img src="zspace/menu-select-sphere.png" alt="Spherical selection button"
+    class="icon">
+    <img src="zspace/menu-select-cube.png" alt="Cubic selection button"
+    class="icon">
+</div>
+
+<a id="Manipulating_objects"></a>
+<h1>Manipulating Objects</h1>
+<p>
+Manipulation of objects controlling the display of objects is done with
+the main (middle) button of the stylus. There are three main manipulation
+action modes: Move, Zoom, Z-Clip. By default, MOE is in &quot;Move&quot; mode.
+The mode can be set explicitly with the on-screen menu buttons.
+</p>
+
+<ul>
+  <li>
+  <b>Moving the view</b>. Looking at the molecular system from different
+  vantage points is achieved by pressing the middle stylus button
+  while the stylus tip is over empty space, and then moving the stylus
+  while still holding down the middle button (i.e. middle-drag). The
+  molecular system will then follow the stylus position and orientation,
+  allowing rotation and translation with one motion/gesture. Moving
+  the whole system does not change the internal coordinates, only
+  the view orientation is changed.
+<p> Since this is not seen as a destructive action on its own, view change
+  is not part of the Undo facility.
+</p>
+  </li>
+<li>
+  <b>Moving only currently selected atoms</b>. To move only selected
+  atoms, position the stylus tip to touch one of the selected atoms
+  and then press the middle button while moving the stylus (middle-drag).
+  The selected atoms will move together with the stylus, as if they
+  are attached to the stylus tip. Moving selected atoms changes their
+  coordinates; the movement can be undone.
+<p> Alternatively to picking one of the selected atoms with the stylus tip,
+  one can also press and hold the Alt keyboard key while performing a
+  stylus middle-drag, to move only the selected atoms.
+</p>
+  </li>
+<li>
+  <b>Moving a single connected component (e.g. ligand)</b>. To move
+  e.g. the ligand within a receptor pocket, pick with the stylus
+  tip the unselected atom or ribbon segment of the molecule (connected
+  component) to move and then press and hold the middle button while
+  moving the stylus (middle-drag). This is similar to the action for
+  moving only selected atoms, except that here, only the atoms which
+  are connected to the initially picked atom are moved. Moving the
+  connected atoms changes their coordinates; the movement can be
+  undone.
+  <p class="clear-both"></p>
+  </li>
+
+
+<li>
+    <img src="zspace/menu-move.png" alt="Menu Move button" class="floatright" />
+  <b>Switch between Move and Zoom mode</b>. The main action mode (Move,
+  Zoom, Z-Clip) of the middle button can be switched with the on-screen
+  buttons. Alternatively, one can double click the middle button in
+  empty space to quickly switch back and forth between Move and Zoom
+  modes. On switching, a temporary tooltip at the stylus tip will
+  appear, indicating the new mode. The stylus tip itself will change,
+  depicting the different action modes.
+  <p class="clear-both"></p>
+</li>
+
+
+<li>
+      <img src="zspace/menu-zoom.png" alt="Menu Zoom button"
+      class="floatright" />
+  <b>Change Zoom level</b>. To change the zoom/magnification of the
+  molecular system, enter zoom mode either with the on-screen button
+  or with double middle click in empty space. Alternatively, one can
+  also press and hold the Control key together with the middle button,
+  which will switch temporarily to the Zoom mode. Zooming requires
+  that the middle button be pressed. To zoom in, middle-drag, pulling
+  the stylus away from the zSpace display; to zoom out, middle-drag,
+  pushing the stylus towards the monitor.
+  <p class="clear-both"></p>
+</li>
+
+
+<li>
+      <img src="zspace/menu-zclip.png" alt="Menu Z-Clip button"
+      class="floatright" />
+  <b>Change Z-Clip Start and Width</b>. MOE supports z-clipping of objects
+  outside of a slab defined by two virtual planes parallel to the monitor.
+  This makes it easy to look &quot;inside&quot; of molecules to be able to
+  explore interactions within. To enter Z-Clip mode either select it with the
+  on-screen button, or press and hold the Shift key while holding
+  the middle mouse button. The position of the Z-Clip slab is moved back
+  and forth (along the z-direction) relative to the physical
+  stylus tip, while the width/thickness of the slab is controlled
+  by a rotation of the stylus. A rotation towards the viewer will
+  narrow the slab, while a rotation away will increase the thickness
+  of the slab.
+<p> MOE supports a second Z-Clip slab. The main slab, described above, applies
+  to all objects. This second one cuts away only molecular surfaces.
+  The surface Z-Clipping slab is controlled by additionally pressing
+  the Control key, together with the middle button.
+</p>
+</li>
+</ul>
+
+<a id="Additional_actions"></a>
+<h1>Additional Actions</h1>
+
+<p class="clear-both"></p>
+<ul>
+
+
+  <li>
+        <img src="zspace/menu-rotate-bond.png" alt="Menu Rotate Bond button"
+        class="floatright" />
+  <b>Rotate around bond, change bond torsion</b>. If a single bond is
+  selected (i.e. two connected atoms), one can change its torsion
+  angle if it is a freely rotatable bond. To rotate, press the left
+  stylus button while the Alt modifier key is pressed. Moving the
+  stylus away from and towards the screen will rotate the bond. Alternatively,
+  one can use the on-screen button to initiate the bond rotation:
+  place the on-screen cursor over the &quot;Rotate Bond&quot; button, then
+  press and hold middle stylus button while moving the stylus towards/from
+  the screen.
+  <p>
+  Bond rotation requires that the bond be rotatable and not in a ring system,
+  and that there be no fixed atoms preventing the rotation. Bond rotation can
+  be undone.
+</p>
+  </li>
+
+
+  <p class="clear-both">
+<li>
+      <img src="zspace/menu-stylus-length.png" alt="Menu Stylus length button"
+      class="floatright" />
+  <b>Change stylus extension length</b>. By default the virtual stylus
+  tip (ball) is 10 cm from the physical end of the stylus. Sometimes
+  it is desirable to be able to quickly change that distance to either
+  have finer control (shorter distance) or have greater reach and
+  be able to move farther (longer distance). To change the length
+  of the virtual extension, use the &quot;Stylus Length&quot; on-screen button.
+  With the cursor over the button, press middle stylus button to
+  snap the stylus tip to the monitor plane; then, moving the stylus
+  back and forth while the button is held will change the stylus
+  extension length. A double click on the &quot;Stylus Length&quot; on-screen
+  button will revert back to the default length.
+<p class="clear-both"></p>
+</li>
+
+<li>
+    <img src="zspace/menu-context.png" alt="Context Menu"
+    class="floatright" />
+
+  <b>Open context menu</b>. To open a context (popup) menu with additional
+  options, such as to show/hide atoms, change the display style,
+  create surfaces, etc., click and release the right stylus button
+  without moving the stylus.
+<p> When the popup menu appears, move the stylus near the monitor to be
+  able to select items in the menu. The physical stylus needs to be
+  within 15 cm of the screen for the stylus motion to be able to assume
+  the controls of the normal mouse cursor.
+</p>
+  </li>
+
+<li>
+    <b>Undo/Redo</b>. To undo and redo destructive actions, use the on-screen
+    &quot;Undo&quot; and &quot;Redo&quot; buttons or Control+Z/Control+Y key
+    combinations.
+</li>
+</ul>
+
+<div class="center">
+    <img src="zspace/menu-undo.png" alt="Menu Undo button" class="icon">
+    <img src="zspace/menu-redo.png" alt="Menu Redo button" class="icon">
+</div>
+
+
+<a id="Mouse_emulation"></a>
+<h1 class="clear-both">Mouse Emulation</h1>
+<p>
+Mouse emulation allows for controlling all of MOE using just the zSpace
+stylus. </p>
+<p> The main stylus interaction is with the molecule objects in the 3D drawing
+area of the MOE Window. But the stylus is also able to control all
+aspects and user interface elements of MOE by controlling the traditional
+mouse cursor and buttons. If the stylus tip is positioned on a MOE interface
+element outside of the 3D drawing area, such as a menu, the button
+bar, a popup, or dialog panel, and the stylus is within 15 cm of that
+interface element, the stylus automatically assumes the role of the
+mouse; pushing the stylus buttons then activates and controls the MOE
+UI elements as if a mouse was being used. By default, the left and middle
+button of the stylus are mapped to the left mouse button, and the right
+stylus button to the right mouse button. Few applications in MOE use
+the middle mouse button; if needed, the stylus mouse emulation mapping can
+be reconfigured for that. Furthermore, the screen distance to activate
+the mouse emulation is configurable.
+</p>
+<p> Note: if the screen resolution is changed while MOE is open, please restart
+  MOE for the mouse emulation to track the screen size properly.
+  </p>
+
+<a id="zSpace_configuration_settings"></a>
+<h1>zSpace Configuration Settings</h1>
+<p>
+Some aspects of the zSpace MOE implementation are configurable. The
+settings can be set in:
+<span class="menu">MOE | Render | Stereo | StereoMode | zSpace Settings</span>.
+All changes will be remembered for subsequent MOE sessions. The following
+options are configurable:</p>
+<ul>
+  <li>Exchange of stylus button mapping (e.g. for left handed use)</li>
+  <li>Default stylus tip length </li>
+  <li>Tip radius (sensitivity of object pick) </li>
+  <li>Position of on-screen control buttons </li>
+  <li>Eye separation</li>
+  <li>Cross-Eye option </li>
+  <li>Toggle mouse emulation</li>
+  <li>Distance to active mouse emulation </li>
+  <li>Stylus to mouse button mapping</li>
+</ul>
+
+<img src="zspace/panel-zSpaceSettings.png" alt="zSpace Settings Panel"
+     class="center">
+
+<a id="SpaceMouse"></a>
+<h1>Combination With 3D Connexion's SpaceMouse</h1>
+
+
+<p>
+<img src="mouse/spacemouse2.png" alt="SpaceNavigator" class="floatright" />
+MOE supports manipulation of the molecule with 6DOF devices from 3D Connexion
+such as the SpaceMouse devices or the SpaceNavigator. This can be used
+in combination with the zSpace stylus. For example, the SpaceNavigator
+is used to move a whole protein ligand system and the stylus is employed to pick
+and move the ligand separately; or, the SpaceNavigator moves the Protein
+while the ligand is attached to and moved by the stylus.
+</p>
+
+<a id="SVL_Commands"></a>
+<h1>SVL Commands</h1>
+<p>
+  <a href="../fcnref/stereo.htm"><tt>Stereo</tt></a>
+</p>
+
+<a id="See_Also"></a>
+<h1>See Also</h1>
+<p>
+  <a href="mouse.htm#SpaceNavigator">SpaceNavigator</a><br />
+  <a href="mouse.htm">Mouse</a><br />
+</p>
+
+<!-- START MOE_FOOTER -->
+<div class="MOE_FOOTER">
+<img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+<a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+<a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+<a href="mailto:info@chemcomp.com"></a>
+</div><!-- END MOE_FOOTER -->
+
+</div></div>
+</body>
+</html>
+

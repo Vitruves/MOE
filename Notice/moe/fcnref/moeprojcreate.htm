@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!		MOE On-Line Manuals
+!!		COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: proj_Create, proj_Update, proj_Merge" />
+  <meta name="keywords" content="obsolete: ProjectCreate" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <title>MOE Project Database Generation Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    MOE Project Database Generation Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    <a class="fcnlink" href=
+"#proj_Create">proj_Create</a> ['output_mdb', 'cfg_file', 'ref_file', 'data_src', opt]
+</pre>
+
+<pre>
+    <a class="fcnlink" href=
+"#proj_Update">proj_Update</a> ['input_mdb', 'output_mdb', 'data_src', opt]
+</pre>
+
+<pre>
+    <a class="fcnlink" href=
+"#proj_Merge">proj_Merge</a> ['input_mdb1', 'input_mdb2', 'output_mdb']
+</pre>
+
+<h2 class="obsolete">Obsolete</h2>
+
+<pre>
+    <a class="fcnlink" href=
+"#ProjectCreate">ProjectCreate</a> ['config_file', opt]
+</pre>
+
+<p>Use <tt>proj_Create</tt> and <tt>proj_Update</tt>.</p>
+
+<h1>Description</h1>
+
+<h2>MOE Project</h2>
+
+<p><a href="../../proteins/moeproject.htm">MOE Project</a> is a highly
+  configurable meta-protocol for data organization. It takes a set of standard
+  format data files as input, processes this data, and outputs a single .mdb
+  file. Structures can be aligned and superposed, optionally with electron
+  density around the active site and/or ligand topology correction. Various
+  forms of structure preparation can also be carried out, and associated data
+  assembled or calculated, possibly using SOAP, HTTP or a number of other
+  common access methods. After the input data, a reference file, and an XML
+  configuration file have all been prepared, the actual project database .mdb
+  file can be generated. An existing database can be updated when
+  new data becomes available.
+</p>
+
+<a id="proj_Create"></a>
+<a id="proj_Update"></a>
+<hr noshade="noshade" />
+
+<p>
+
+<tt>proj_Create</tt> and <tt>proj_Update</tt> allow for downloading and
+processing structures from either a remote source or a local directory.
+<tt>proj_Create</tt> is used to create a new database or to regenerate an
+existing one (e.g. when the reference file and/or XML file are updated), and
+<tt>proj_Update</tt> is used to update an existing one.  They share most of the
+same arguments and options.
+
+</p>
+
+<pre><span class="fcndef">proj_Create</span> ['output_mdb', 'cfg_file', 'ref_file', 'data_src', opt]
+<span class="fcndef">proj_Update</span> ['input_mdb', 'output_mdb', 'data_src', opt]
+
+    data_src = 'local' | 'psilo' | 'rcsb',
+    opt = [
+	rcsburl       : 'RCSB server url',
+	since         : 'YYYY-MM-DD',
+	upto          : 'YYYY-MM-DD',
+	pfam          : ['PF###', 'PF###', 'PF###', ...],
+	include       : ['pat1', 'pat2', ...],
+	exclude       : ['pat1', 'pat2', ...],
+	data_dir      : ['path1', 'path2', ...],
+	log           : 'filename',
+	logappend     : flag,
+	showlog       : flag,
+	opendbv       : flag
+    ]
+
+</pre>
+
+  <dl>
+    <dt><tt>input_mdb</tt></dt>
+    <dd>Filename of the database to update.</dd>
+
+    <dt><tt>output_mdb</tt></dt>
+
+    <dd>Filename of the database to create or of the updated database to
+	output.  If identical to <tt>input_mdb</tt>, the output will be
+	assembled in a temporary file and then moved over only when
+	complete.</dd>
+
+    <dt><tt>cfg_file</tt></dt>
+    <dd>An XML configuration file that specifies the formats and protocols that
+    will be used to generate the Project Database (MDB file). This argument
+    is used only when creating a new project database.
+    The XML configuration is stored in the project database file, and will be
+    used whenever the project database is subsequently updated.
+    </dd>
+
+    <dt><tt>ref_file</tt></dt>
+    <dd>A MOE Reference file that specifies the protein family to be built.
+    This argument is used only when creating a new project database.
+    The reference file is stored in the project database file, and will be
+    used whenever the project database is subsequently updated.
+    </dd>
+
+    <dt><tt>data_src: 'local' | 'psilo' | 'rcsb'</tt></dt>
+    <dd>The source of project data.
+	<ul>
+	<li><tt>'local'</tt>: An in-house directory of data files.
+	</li><li><tt>'psilo'</tt>: A PSILO server.  The PSILO website address
+	    (URL) and user credentials will be as specified in the
+      <a href="../../appendix/settings.htm#PSILO">Configuration Options</a>
+	    panel.
+	</li><li><tt>'rcsb'</tt>: The RCSB website.  The RCSB website address
+	    (URL) will be taken either
+	    from the <tt>rcsburl</tt> option, if specified, otherwise from
+	    the
+      <a href="../../appendix/settings.htm#RCSB">Configuration Options</a>
+	    panel.
+	</li>
+	</ul>
+
+	<p><b>Note:</b> When <tt>data_src</tt> is 'local', the
+	    source data directory, specified by the
+	    <a href="#data_dir"><tt>data_dir</tt></a>, is a required
+	    option.
+	</p>
+	<p><b>Note:</b> When <tt>data_src</tt> is 'rcsb' or 'psilo',
+	    and when calling <tt>proj_Create</tt>, the
+	    <a href="#pfam"><tt>pfam</tt></a>
+	    specification is a required option.
+	</p>
+    </dd>
+
+    <dt><tt>opt</tt></dt>
+    <dd>An optional list of parameters, supplied as a tagged vector:</dd>
+  </dl>
+
+  <div style="margin-left: 2em;">
+    <!-- indent -->
+    <dl>
+      <dt>
+	<p><b>Options for 'rcsb' or 'psilo' data source</b></p>
+	<tt>rcsburl: 'RCSB server url'</tt></dt>
+
+      <dd>The website address (URL) for the RCSB server (e.g.
+	<tt>https://files.rcsb.org</tt>) to use when <tt>'rcsb'</tt> is
+	specified as the data source. If omitted, the value as found in
+	the
+	<a href="../../appendix/settings.htm#PSILO">Configuration Options</a>
+	panel is used.</dd>
+
+      <dt><tt>since: 'YYYY-MM-DD'</tt></dt>
+      <dd>Only RCSB/PSILO structures newer than this date, specified as
+	YYYY-MM-DD, will be downloaded.  When calling <tt>proj_Update</tt>, this
+	is by default the last time the database was updated.  Note that when
+	downloading from RCSB, the actual file dates may be up to one week
+	earlier.</dd>
+
+      <dt><tt>upto: 'YYYY-MM-DD'</tt></dt>
+      <dd>Only RCSB/PSILO structures older than this date, specified as
+      YYYY-MM-DD, will be downloaded.</dd>
+
+      <dt><tt><a name="pfam">pfam</a>: ['PF###', 'PF###', 'PF###',
+	...]</tt></dt>
+      <dd>Limit downloaded records to
+	those matching at least one of the given PFAM ids, given as a vector
+	of tokens.  This option is applicable only when the data source
+	is RCSB or PSILO, and only when calling <tt>proj_Create</tt>, and
+	is a required option in these cases.
+	The setting is stored in the project database file, and will be
+	used whenever the project database is subsequently updated.
+	When the data source is RCSB and building an RNA family, a list
+	of RFAM codes may be provided here instead.  RFAM is a database
+	of RNA families analogous to PFAM for proteins.
+
+      </dd>
+
+      <dt><tt>data_dir: 'download_path'</tt>
+      </dt>
+      <dd>For <tt>data_src</tt> 'rcsb' or 'psilo', specifies the
+	location to which to download files.  If omitted, then
+	<tt>$TMP</tt> will be used by default.
+      </dd>
+
+      <dt>
+	<p><b>Options for 'local' data source</b></p>
+        <tt>include: ['pat1', 'pat2', ...]</tt></dt>
+      <dd>For <tt>data_src</tt> 'local' only, a vector of filename pattern
+	tokens to match against possible input files.  Only those filenames
+	matching at least one of the patterns will be processed.</dd>
+
+      <dt><tt>exclude: ['pat1', 'pat2', ...]</tt></dt>
+      <dd>For <tt>data_src</tt> 'local' only, a vector of filename pattern
+      tokens to match against possible input files.  Any filenames matching
+      at least one of the patterns will be skipped over.</dd>
+
+      <dt><tt><a name="data_dir">data_dir</a>: ['path1', 'path2', ...]</tt>
+      </dt>
+      <dd>For <tt>data_src</tt> 'local',
+	Specifies the location(s) where the data files are to be found.
+	This is a required option when <tt>data_src</tt> is 'local'.
+      </dd>
+
+      <dt>
+	<p><b>General Options</b></p>
+        <tt>log: 'filename'</tt></dt>
+      <dd>Filename to use for the log file; if null, the <tt>output_mdb</tt>
+      name will be used but with a .log extension.</dd>
+
+      <dt><tt>logappend: flag</tt></dt>
+      <dd>If non-zero, append to log file instead of overwriting.</dd>
+
+      <dt><tt>showlog: flag</tt></dt>
+      <dd>If non-zero, open the log file in the MOE text editor when done.
+      </dd>
+
+      <dt><tt>opendbv: flag</tt></dt>
+      <dd>If non-zero, open the updated database in a database viewer
+      when the operation is complete.</dd>
+
+    </dl>
+  </div><!-- indent -->
+
+<a id="proj_Merge"></a>
+<hr noshade="noshade" />
+
+<p>
+<tt>proj_Merge</tt> is used to merge two existing project databases into
+a single new one.  Currently only the T-Cell Receptor (TCR) and Major
+Histocompatibility Complex (MHC) databases may be merged, but others
+may become possible in the future.  Trying to merge any other combinations
+of databases will result in an error.
+</p>
+
+<span class="fcndef">proj_Merge</span> ['input_mdb1', 'input_mdb2', 'output_mdb']
+
+  <dl>
+    <dt><tt>input_mdb1</tt></dt>
+    <dd>Filename of the first database to be merged (must be a TCR database).
+    </dd>
+
+    <dt><tt>input_mdb2</tt></dt>
+    <dd>Filename of the second database to be merged (must be an MHC database).
+    </dd>
+
+    <dt><tt>output_mdb</tt></dt>
+
+    <dd>Filename of the merged database to be created.</dd>
+  </dl>
+
+<hr noshade="noshade" />
+
+<h4 class="obsolete">Obsolete</h4>
+
+<a id="ProjectCreate"></a>
+
+<pre><span class="fcndef">ProjectCreate</span> ['config_file', opt]
+
+    opt = [
+        path              : 'path1,path2,...',
+        include           : 'pat1,pat2,...',
+        exclude           : 'pat1,pat2,...',
+        reffile           : 'reference_filename',
+        outfile           : 'output_filename',
+        errorfile         : filename or file_handle,
+        forcerebuild      : flag,
+        deletemissing     : flag,
+<!-- PSILO-only option
+        sid               : 'session_id',
+-->        progress_fcn      : 'function',
+        progress_fcn_data : data
+    ]
+
+</pre>
+  <dl>
+    <dt><tt>config_file</tt></dt>
+    <dd>An XML configuration file that specifies the formats and protocols that
+    will be used to generate the Project Database (MDB file). If updating an
+    existing database, this argument may be null since the configuration is
+    stored within the MDB file itself.</dd>
+
+    <dt><tt>opt</tt></dt>
+    <dd>A tagged vector with the following options:</dd>
+  </dl>
+  <div style="margin-left: 2em;">
+    <!-- indent -->
+    <dl>
+      <dt><tt>path : 'path1;path2;...'</tt></dt>
+      <dd>Specifies the location of the files (PDB, MTZ, SDF, etc.) that are
+      used to create the project. This can be a semicolon-separated list of paths.
+      All paths given are automatically searched recursively downwards. If
+      omitted, the path to <tt>config_file</tt> will be used.
+
+      <!-- Use the special value $PSILO### to get the data from PSILO where ### is
+the family id in the database. --></dd>
+
+      <dt><tt>include : 'pat1;pat2;...'</tt></dt>
+      <dd>An optional semicolon-separated list of patterns, in the style of the
+      <a href="../../svl/fcnref/findetc.htm"><tt>findmatch</tt></a> command,
+      which will be applied to the list of files and directories found in
+      <tt>path</tt>. Only those matching one of the patterns will be included
+      in the processing. If omitted, all files and directories are
+      processed.</dd>
+
+      <dt><tt>exclude : 'pat1;pat2;...'</tt></dt>
+      <dd>An optional semicolon-separated list of patterns, in the style of the
+      <a href="../../svl/fcnref/findetc.htm"><tt>findmatch</tt></a> command,
+      that indicates which files and paths should be excluded when gathering
+      source files to be used to build the project database. Matching files and
+      directories are excluded <i>after</i> <tt>include</tt> has been applied.
+      If omitted, no additional files or directories are excluded from
+      processing.</dd>
+
+      <dt><tt>reffile : 'reference_filename'</tt></dt>
+      <dd>The filename of the .moe reference file, which must exist in one of
+      the root directories in <tt>path</tt>.
+      <!-- This is ignored for PSILO (it comes from the database instead). -->
+       Normally this will be a .moe file containing one or more aligned
+      sequences, with one or more structures, from the family or project of
+      interest. This is in many ways the heart of the project file, used to
+      identify what goes into the final project file and how each structure is
+      processed.<br style="margin-bottom: 0.75em;" />
+
+      As an alternative, a single .pdb file can be provided as a quick mode, in
+      which case the ligand will be set to $ligand and the pocket will be set
+      to $superpose, the collection used for superposition. In this quick mode,
+      only the first polymer chain is used as the reference; the other polymer
+      chains are deleted.<br style="margin-bottom: 0.75em;" />
+
+      If this argument is omitted, the reference file is assumed to have the
+      same name as <tt>config_file</tt> but with a .moe extension. An error
+      will be reported if the reference file does not exist. However, if
+      updating an existing database, this argument may be null since the
+      reference file is stored within the MDB file itself.</dd>
+
+      <dt><tt>outfile : 'output_filename'</tt></dt>
+      <dd>The output MDB file to create. If omitted, it will be named the same
+      as the <tt>config_file</tt> (and in the same directory), but with an .mdb
+      extension.</dd>
+
+      <dt><tt>errorfile : filename or file_handle</tt></dt>
+      <dd>An optional output stream for errors and other messages to be written
+      to, instead of the SVL window.</dd>
+
+      <dt><tt>forcerebuild : flag</tt></dt>
+      <dd>If non-zero and <tt>outfile</tt> exists, MOE Project will overwrite
+      the existing database. If zero (the default), MOE Project will check if
+      the reference or configuration files have changed since the database was
+      created. If they have, it will exit with an error, otherwise it will run
+      in update mode (only add new records, delete old ones).</dd>
+
+      <dt><tt>deletemissing : flag</tt></dt>
+      <dd>If non-zero and in update mode, any rows in the MDB file whose source
+      files are no longer present in the source directory will be deleted; this
+      can be used to remove obsolete entries from the database when
+      updating.</dd>
+
+<!-- PSILO-specific option
+<dt><tt>sid : 'session_id'</tt>
+</dt><dd>The current active PHP session ID, if any, to allow MOE Project to
+query PSILO without logging in to PSILO.
+</dd>
+-->
+      <dt><tt>progress_fcn : 'function'</tt></dt>
+      <dd>An optional callback function to report progress. It will be called
+      with three arguments: 1) the progress (from 0 to 1); 2) the filename of
+      the structure file currently being processed; and 3) the
+      <tt>progress_fcn_data</tt> argument as a tagged options vector. A typical
+      callback function will be of the form: <b><tt>local function my_progress
+      [prog, msg, opt]</tt></b>, where <i><tt>opt.progress_data</tt></i> is the
+      <tt>progress_fcn_data</tt> argument that was provided.</dd>
+
+      <dt><tt>progress_fcn_data : data</tt></dt>
+      <dd>An argument that is passed to the <tt>progress_fcn</tt> callback
+      function. This can be used to pass any additional information needed by
+      the callback function. Often, this is used to pass a filename to which
+      progress can be written.</dd>
+
+    </dl>
+  </div><!-- indent -->
+
+<h1>See Also</h1>
+
+<p><a href="../../proteins/moeproject.htm">MOE Project</a><br />
+  <a href="../../moeweb_apps/moeweb_intro.htm#Configure_Project_Database">Configure Project
+  Database</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content=
+  "functions: Undo, Redo, UndoSnapshot, UndoReset" />
+  <title>Undo Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Undo Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    <a class="fcnlink" href="#Undo">Undo</a> []
+    <a class="fcnlink" href="#Redo">Redo</a> []
+    <a class="fcnlink" href="#UndoSnapshot">UndoSnapshot</a> []
+    <a class="fcnlink" href="#UndoReset">UndoReset</a> []
+</pre>
+
+<h1>Description</h1>
+
+<p>The global undo system in MOE applies to the MOE molecular system and to
+  graphic objects. Note that changes to parameters in panels are not
+  undoable.</p>
+
+<p>The undo system is based on a stack of snapshots of the molecular system
+  in MOE. Successive undo operations traverse the stack backwards in time, and
+  successive redo operations traverse the stack forwards in time. If a
+  modification to the system takes place when the undo stack is partially
+  traversed, the more recent elements of the stack are cleared, and are
+  superseded by a snapshot corresponding to the most recent change.</p>
+<a id="Undo"></a>
+<hr noshade="noshade" />
+
+<pre><span class="fcndef">Undo</span> []
+</pre>
+
+<p>Undoes the last change to the molecular system in MOE up to the nearest
+  call to <tt>UndoSnapshot</tt>.</p>
+<a id="Redo"></a>
+<hr noshade="noshade" />
+
+<pre><span class="fcndef">Redo</span> []
+</pre>
+
+<p>Reverts the state of the MOE molecular system to its condition prior to
+  the most recent undo action.</p>
+<a id="UndoSnapshot"></a>
+<hr noshade="noshade" />
+
+<pre><span class="fcndef">UndoSnapshot</span> []
+</pre>
+
+<p>Adds a frame to the undo stack which corresponds to the most recent
+  changes to the molecular system in MOE.</p>
+<a id="UndoReset"></a>
+<hr noshade="noshade" />
+
+<pre><span class="fcndef">UndoReset</span> []
+</pre>
+
+<p>Clears the entire undo stack; subsequently, there will be no possible undo
+  and redo actions until <tt>UndoSnapshot</tt> is called.</p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

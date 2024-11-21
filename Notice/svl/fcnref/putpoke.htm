@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content=
+  "functions: poke, put, mput, apt mput, putadd" />
+  <meta name="keywords" content="SVL:symbol: ()= []=, |= ||=" />
+  <title>Data Access Functions: put, poke, ...</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Data Access Functions: put, poke, ...
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+result = <a class="fcnlink" href="#poke">poke</a> [ v, index_list, b ]
+v(index_list) = b
+
+result = <a class="fcnlink" href="#put">put</a> [ v, index_list, b ]
+v[index_list] = b
+
+result = <a class="fcnlink" href="#putadd">putadd</a> [v, index_list, b]
+
+newvec = <a class="fcnlink" href="#mput">mput</a> [ v, mask, b ]
+v | mask = b
+
+v || mask_list = val_list
+</pre>
+
+<h1>Notation</h1>
+<table class="titlebar">
+<tr>
+  <th>Longhand</th>
+  <td>
+    <tt>poke<br />
+      put<br />
+      mput<br />
+      apt&nbsp;mput
+    </tt>
+  </td>
+  <td>Does not alter the source vector.</td>
+</tr>
+<tr>
+  <th>Shorthand</th>
+  <td>
+    <tt>
+      ()=<br />
+      []=<br />
+      |=<br />
+      ||=
+    </tt>
+  </td>
+  <td>Overwrites the source vector with its return value. In this case, the
+  vector must be an lvalue, i.e. an addressable, writable location.</td>
+</tr>
+</table>
+<a id="poke"></a>
+<h1>Description</h1>
+
+<pre>
+result = <span class="fcndef">poke</span> [ v, index_list, b ]
+v<span class="fcndef">(</span>index_list<span class="fcndef">)</span> = b
+</pre>
+
+<p><tt>poke</tt> replaces a single element at any level of nesting in vector
+  <tt>v</tt> with vector <tt>b</tt>. <tt>index_list</tt> gives the index of the
+  element to be replaced, and must be a flat numeric vector. If
+  <tt>index_list</tt> has more than one element, each successive element refers
+  to a deeper level of nesting.</p>
+
+<p>For example:</p>
+
+<pre class="code">
+svl&gt; poke [ [1,2,3,4,5], 2, 99 ]
+[1,99,3,4,5]
+
+svl&gt; a = [ 1, [2,3], 4, 5 ]
+svl&gt; poke [ a, 2, 99 ]
+[1,99,4,5]
+
+svl&gt; poke [ a, [2,1], 99 ]
+[ 1, [99,3], 4, 5 ]
+
+svl&gt; a     // till now, a unchanged
+[ 1, [2,3], 4, 5 ]
+
+svl&gt; a( [2,1] ) = 100; a
+[ 1, [100,3], 4, 5 ]
+</pre>
+<a id="put"></a>
+<hr noshade="noshade" />
+
+<pre>
+result = <span class="fcndef">put</span> [ v, index_list, b ]
+v<span class="fcndef">[</span>index_list<span class="fcndef">]</span> = b
+</pre>
+
+<p>Like <tt>poke</tt>, <tt>put</tt> is also used to replace elements however
+  it behaves differently, as shown in the following table:</p>
+<table class="noborder">
+<tr>
+  <td width="50%"><tt>poke</tt></td>
+  <td width="50%"><tt>put</tt></td>
+</tr>
+<tr>
+  <td>Replaces one element</td>
+  <td>Replaces several elements</td>
+</tr>
+<tr>
+  <td>Inserts at any level</td>
+  <td>Inserts at top level</td>
+</tr>
+<tr>
+  <td>Inserted elements have increased level of nesting</td>
+  <td>Inserted elements have same level of nesting</td>
+</tr>
+</table>
+
+<p><tt>put</tt> returns a vector having the same number of elements as source
+  vector <tt>v</tt>, but with elements, as indicated by <tt>index_list</tt>,
+  replaced by corresponding values in vector <tt>b</tt>. The lengths of
+  <tt>b</tt> and <tt>index_list</tt> must be the same.</p>
+
+<pre class="code">
+svl&gt; v = [1,2,3,4,5]
+svl&gt; put [ v, 2, 99 ]  // replace element 2
+[1,99,3,4,5]
+
+svl&gt; put [ v, [2,3], 99 ] // unit-extension
+[1,99,99,4,5]
+
+svl&gt; put [ v, [3,2], [99,100] ]
+[1,100,99,4,5]
+
+svl&gt; v       // up to now, v unchanged
+[1,2,3,4,5]
+
+svl&gt; v[4] = 100; v
+[1,2,3,100,5]
+
+svl&gt; v[ [1,2] ] = [&#39;a&#39;,&#39;b&#39;]; v
+[ &#39;a&#39;, &#39;b&#39;, 3, 100, 5 ]
+</pre>
+<hr noshade="noshade" />
+
+<a id="putadd"></a>
+<pre>result = <span class="fcndef">putadd</span> [v, index_list, b]
+</pre>
+
+<p>The <tt>putadd</tt> function is a variant of <tt>put</tt> in that it
+  combines the <tt>add</tt> function with the <tt>put</tt> function. The values
+  of <tt>b</tt> will be added to the values of <tt>v</tt> at the corresponding
+  positions specified by <tt>index_list</tt>. The <tt>index_list</tt> vector
+  may contain duplicate indices. The <tt>putadd</tt> function is equivalent
+  to</p>
+
+<pre class="code">
+local i;
+local result = v;
+
+for i = 1, l_length [index_list,b] loop
+    result(index_list(i)) = result(index_list(i)) + b(i);
+endloop
+
+return result;
+</pre>
+
+<p>assuming that <tt>index_list</tt> and <tt>b</tt> have the same length; if
+  they do not then they will be unit extended so that they have the same
+  length. If <tt>index_list</tt> has values larger than the length of
+  <tt>v</tt> then null vectors will be inserted and <tt>v</tt> resized to have
+  a length equal to the largest value in <tt>index_list</tt>. The original
+  vector <tt>v</tt> will not be altered.</p>
+<a id="mput"></a>
+<hr noshade="noshade" />
+
+<pre>
+newvec = <span class="fcndef">mput</span> [ v, mask, b ]
+v <span class="fcndef">|</span> mask = b
+</pre>
+
+<p><tt>mput</tt> uses a mask instead of an index list to specify which
+  elements to replace. <tt>mput</tt> returns <tt>v</tt> with those elements
+  specified by non-zero values in <tt>mask</tt> replaced by the elements in
+  <tt>b</tt>. The lengths of <tt>v</tt> and <tt>mask</tt> must match and,
+  unless unit extension applies, the length of <tt>b</tt> should be the number
+  of non-zero values in <tt>mask</tt>. <tt>mask</tt> must be a flat numeric
+  vector.</p>
+
+<p><b>Note:</b> <tt>mput</tt> is equivalent to <tt>unpack [ b, a | not m, m
+  ]</tt>.</p>
+
+<pre class="code">
+svl&gt; mput [ [1,2,3,4,5], [0,1,0,0,0], 99 ]
+[1,99,3,4,5]
+
+svl&gt; mput [ [1,2,3,4,5], [0,1,1,0,0], 99 ] // unit-extension
+[1,99,99,4,5]
+
+svl&gt; mput [ [1,2,3,4,5], [0,1,1,0,0], [99,100] ]
+[1,99,100,4,5]
+
+svl&gt; mput [ &quot;soybean&quot;, [0,1,1,0,0,0,1], &quot;unm&quot; ]
+&quot;sunbeam&quot;
+</pre>
+
+<p><tt>|=</tt> is shorthand for <tt>mput</tt>, with assignment; i.e.
+  <span class="nobr"><tt>v | mask = b</tt></span> is equivalent to <span class=
+  "nobr"><tt>v = mput[v, mask, b]</tt></span>. In this case, <tt>v</tt> must be
+  an lvalue.</p>
+
+<pre class="code">
+svl&gt; a = &quot;ABCDE&quot;;
+svl&gt; a | [0,1,0,1,0] = &quot;bd&quot;; a
+&quot;AbCdE&quot;
+</pre>
+  <hr noshade="noshade" />
+
+<pre>
+v <span class="fcndef">||</span> mask_list = val_list
+</pre>
+
+<p><tt>||=</tt> is shorthand for <tt>apt&nbsp;mput</tt>, with assignment; i.e.
+  <tt>v</tt> must be a vector of lvalues, whose values are modified by the
+  operation.</p>
+
+<pre class="code">
+svl&gt; a = [ &quot;Hello&quot;, &quot;Dolly&quot; ];
+svl&gt; a || [ [1,0,1,1,0] ] = &quot;pq&quot;; a
+[ &quot;peppo&quot;, &quot;qoqqy&quot; ]
+</pre>
+
+<h1>See Also</h1>
+
+<p><a href="introstruct.htm">Structural Functions</a></p>
+
+<p>
+  <a class="svl" href="getpeek.htm">get []</a><br />
+  <a class="svl" href="getpeek.htm">peek ()</a><br />
+  <a class="svl" href="getpeek.htm">mget |</a><br />
+  <a class="svl" href="getpeek.htm">apt&nbsp;mget ||</a><br />
+  <a class="svl" href="app.htm">apt</a><br />
+  <a class="svl" href="tagpeek.htm">tagpoke</a><br />
+  <a class="svl" href="packetc.htm">unpack</a>
+</p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

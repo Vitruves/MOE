@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../images/ccgicon.png" />
+  <title>2D Sketcher Programs</title>
+  <meta name="keywords" content=
+  "keywords: sketcher, copy, rxn, med chem transformations" />
+  <meta name="keywords" content="ChemDraw, Biovia, JDraw, Marvin, Sketch" />
+  <meta name="keywords" content="Accelrys, Symyx" />
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../index.htm"><img src="../images/ccglogo.png" /></a>
+    <a href="../index.htm"><div class="moeversion"></div></a>
+    2D Sketcher Programs
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+  <ul>
+    <li><a href="#Introduction">Introduction</a></li>
+    <li><a href="#Setting_Up">Setting Up</a></li>
+    <li><a href="#Running">Running a Sketcher Program from MOE</a></li>
+    <li><a href="#Import">Import Sketches</a></li>
+  </ul>
+<a id="Introduction"></a>
+<h1>Introduction</h1>
+
+<p>MOE provides functionality to edit molecules in a 2D environment by
+  seamlessly connecting to the following chemical drawing programs: Biovia
+  Draw, ISIS/Draw, ChemDraw, Symyx Draw, Accelrys Draw, MarvinSketch, and
+  JDraw. These programs are not included as part of the MOE package and must
+  obtained separately and installed on your workstation.</p>
+<a id="Setting_Up"></a>
+<h1>Setting Up</h1>
+
+<p>MOE can connect to a variety of 2D sketchers. The supported sketchers and
+  their operating systems are summarized in the following table.</p>
+
+<table class="titlebar">
+  <tr>
+    <th>program</th>
+    <th>program ID</th>
+    <th>system</th>
+    <th>minimum version required</th>
+    <th>supported data format</th>
+  </tr>
+  <tr>
+    <td><a href=
+    "https://www.3ds.com/products-services/biovia/products/scientific-informatics/biovia-draw"
+    >Biovia Draw/Accelrys Draw/Symyx Draw</a></td>
+    <td>MDLDraw.Document</td>
+    <td>Windows only</td>
+    <td>3.3</td>
+    <td>skc, ctab, rxn</td>
+  </tr>
+  <tr>
+    <td><a href=
+    "https://www.3ds.com/products-services/biovia/products/scientific-informatics/biovia-draw"
+    >Biovia Draw (Version 17+)</a></td>
+    <td>BioviaDraw</td>
+    <td>Windows only</td>
+    <td>17</td>
+    <td>ctab, rxn</td>
+  </tr>
+  <tr>
+    <td><a href=
+    "https://revvitysignals.com/products/research/chemdraw">ChemDraw</a></td>
+    <td>ChemDraw.Document</td>
+    <td>Windows only</td>
+    <td>12.0</td>
+    <td>skc, ctab, rxn</td>
+  </tr>
+  <tr>
+    <td><a href=
+    "https://chemaxon.com/products/marvin">MarvinSketch (Java)</a></td>
+    <td>MarvinSketcher</td>
+    <td>All platforms</td>
+    <td>5.9</td>
+    <td>ctab, rxn</td>
+  </tr>
+  <tr>
+    <td><a href=
+    "https://chemaxon.com/products/marvin">MarvinSketch (OLE)</a></td>
+    <td>MarvinOLE.Document</td>
+    <td>Windows only</td>
+    <td>5.9</td>
+    <td>ctab, rxn</td>
+  </tr>
+  <tr>
+    <td>JDraw</td>
+    <td>JDraw</td>
+    <td>All platforms</td>
+    <td>1.1</td>
+    <td>ctab, rxn</td>
+  </tr>
+</table>
+
+<p>By default, the sketcher that will be used is taken from the above table
+  in the order given and based on availability. However, user preferences can
+  also be specified in the <b>Builder</b> page of the
+  <span class="menu">Configuration Options</span>
+  panel, opened using <span class="menu">MOE |
+  <img src="sketcher/settings.png" alt="Settings" style=
+  "vertical-align: middle" /></span>.
+</p>
+
+  <div class="center"><img src="sketcher/config_builder.png" alt=
+  "Builder" class="center" /></div>
+
+<p>The <b>Set</b> button allows for specifying the preferred
+sketcher or sketchers to be used when a <b>Sketch</b> button
+is pressed in MOE.
+The <b>Class Path</b> text field is used to specify the location of
+the jar files of those Java sketchers.  The full paths of all jar
+files are entered as a semi-colon separated list.  To specify all
+jar files in a directory, use the wildcard <tt>&quot;*&quot;</tt>.
+</p>
+
+<p>
+  The sketcher preferences can also be set explicitly using the RC variables
+  <tt>sketcher.programs</tt> and <tt>sketcher.classpath</tt>.
+</p>
+
+<p>
+  By using the <tt>sketcher.programs</tt> RC variable, the
+  order of preference of the sketchers associated with MOE
+  can be set.  For example,
+  the following SVL command makes ChemDraw the default sketcher
+  program, and Biovia/Accelrys/Symyx Draw the second choice after
+  ChemDraw:</p>
+
+<pre class="code">
+svl> SetRC ['sketcher.programs', 'ChemDraw.Document MDLDraw.Document']
+</pre>
+
+<p>For MOE to connect to the Java sketchers MarvinSketch(Java) and JDraw, the
+  appropriate Java jar files must be specified using the
+  <tt>sketcher.classpath</tt> RC variable. The Java classes will be dynamically
+  loaded each time the sketcher is launched. <b>Note</b>: MOE uses the forward
+  slash '/' as a path separator. The following is an example of an SVL
+  command for specifying the Java sketchers on Windows:</p>
+
+<pre class="code">
+svl&gt; SetRC ['sketcher.classpath', \
+        '%chemaxon_marvin_path%/MarvinBeans/lib/MarvinBeans.jar;\
+         %accelrys_jdraw_path%/lib/jdrawcore.jar' ]
+</pre>
+
+<p>Alternatively, the jar files can be included in the environment variable
+  <tt>CLASSPATH/SVL_CLASSPATH</tt>.</p>
+
+<p>Here is an example of how this is done on Windows. In a Windows
+  terminal:</p>
+
+<pre class="code">
+set CLASSPATH=%chemaxon_marvin_path%\MarvinBeans\lib\MarvinBeans.jar;^
+ %accelrys_jdraw_path%\lib\jdrawcore.jar
+</pre>
+
+<p><span class="tip">Note:</span>
+When using MarvinSketch, make sure its <a href=
+  "https://docs.chemaxon.com">licenses</a> are installed before launching it
+  from MOE. Newer MarvinSketch versions might not provide the file
+  <tt>MarvinBeans.jar</tt> in their <tt>lib</tt> directory; if this is the case,
+  specify the MarvinSketch <tt>lib</tt> directory path in the class
+  path RC variable.
+  </p>
+
+
+<a id="Running"></a>
+<h1>Running a Sketcher Program from MOE</h1>
+
+<p><span class="menu">MOE | RHS | Sketch</span> invokes a sketcher program
+  and transfers molecular data between the sketcher and MOE. For example,
+  molecules from MOE can be displayed and edited in ChemDraw, and then the
+  changes brought back into MOE once editing in the sketcher is complete. A 2D
+  sketcher is most suitable for small edits to small molecules and is a
+  complementary tool to the 3D small molecule <a href=
+  "../moe/molsystems/build.htm">Builder</a>.</p>
+  <ul>
+    <li>
+      <b>Selection</b>. When <b>Sketch</b> is pressed, the currently selected
+      atoms are sent to the sketcher. The selection will auto-extend to the
+      residues and, if belonging to a ligand, to the entire molecule. If no
+      atoms are selected, the data received from the sketcher will be created
+      as a new molecule centered in the MOE Window. Selection of multiple
+      molecules is also permitted, but it is recommended to edit only one
+      molecule at a time for best performance.
+
+<p><b>Note:</b> Sending large molecules to a sketcher can be time
+      consuming. The number of atoms transferred cannot exceed 999 due to
+      limitations of the <tt>mol</tt> file format.</p>
+
+<img src="sketcher/sketch_sel.jpg" alt=
+      "Molecule Selection" class="center" />
+    </li>
+    <li>
+      <b>Data Transfer</b>. Molecular data is sent to the sketcher program once
+      the <span class="menu">Sketch</span> button is pressed. A recognized
+      transfer action is required for sending data back to MOE. For ChemDraw,
+      this action occurs when the program window is closed. For others, the
+      action occurs when <b>Transfer</b> is pressed in the sketcher program.
+
+<p><b>Note:</b> Some features are not supported through this transfer,
+      such as query structures and special symbols e.g. '*', etc.</p>
+
+<img src="sketcher/sketch_trf.png" alt=
+      "Sketch & Transfer" class="center" />
+    </li>
+    <li>
+      <b>Molecule Updates</b>. The molecular data received from the sketcher
+      will be converted into 3D and hydrogens will be added to fill valence. A
+      maximum of 20 embedding attempts will be made to generate the 3D
+      structure, followed by energy minimization. A warning will appear if the
+      conformation does not match the current stereochemistry in MOE.
+
+<img src="sketcher/sketch_upd.jpg" alt=
+      "Molecule Update" class="center" />
+    </li>
+  </ul>
+
+
+<a id="Import"></a>
+<h1>Import Sketches</h1>
+
+<img src="sketcher/sketch_imp.png"
+ alt="Sketcher Import panel" class="floatright" />
+
+<p>
+  If a sketcher program is launched while the
+  MOE system is empty or no atoms are selected, a new molecule or new
+  molecules will be created.  In this case, the transferred sketched molecule(s)
+  will first be shown in the
+  <b><span class="nobr">Import Sketch</span></b> panel, where
+  the sketched molecule(s) can be reviewed.</p>
+<p>
+  The upper portion of the panel shows in 2D
+  the transferred sketched molecule. If more than one
+  molecule was transferred, they can be browsed individually using the
+  <img src="sketcher/browse_icon.png" class="icon" /> buttons.
+  To modify the currently shown molecule, press
+  <img src="sketcher/edit_icon.png" class="icon" />,
+  which will reopen the external sketcher program with that molecule loaded.
+  To add more molecules to the Import Sketch panel, press
+  <img src="sketcher/add_icon.png" class="icon" />, which will reopen
+  the sketcher.
+  To remove the current molecule from the import list, use the
+  <img src="sketcher/delete_icon.png" class="icon" /> button.</p>
+
+<p>
+  The sketched molecule(s) can either be loaded into MOE, or added
+  to a new or existing database:</p>
+
+<table class="noborder">
+  <tr>
+    <td><b>Load into MOE</b></td>
+    <td>Sketched molecule(s) are loaded into the MOE system.</td>
+  </tr>
+  <tr>
+    <td><b>Create New Database</b></td>
+    <td>A new database is created, and the sketched molecule(s) added
+    as separate entries. The name of the new database file can be
+    specified.</td>
+  </tr>
+  <tr>
+    <td><b><span class="nobr">Add to Existing Database</span></b></td>
+    <td>Add sketched molecule(s) to an existing database. Currently
+    open databases which are writeable and have a molecule field can be
+    selected as the destination. If a database has more than one molecule
+    field, the <b>Field</b> to receive the sketched molecules can
+    be specified.
+    Additional databases can be added to the list of database choices
+    with the <img src="sketcher/open_icon.png" class="icon" /> button.
+    </td>
+  </tr>
+</table>
+
+
+<a id="See_Also"></a>
+<h1>See Also</h1>
+
+<p><a href="extprog.htm#2DSketchers">External Programs: 2D
+  Sketchers</a><br />
+  <a href="../moe/fcnref/sketcherfcn.htm">Sketcher Functions</a><br />
+  <a href="../moe/gui/mainwin.htm#Copy">Copy and Paste</a><br />
+  <a href="../moe/gui/mainwin.htm#SketchView">Sketch View</a>
+  </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../images/ccgicon.png" /> <a href="../index.htm"></a> <a href=
+    "../legal.htm"></a> &copy;<span class="versionyear"></span> <a href="http://www.chemcomp.com"></a>. All
+    rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

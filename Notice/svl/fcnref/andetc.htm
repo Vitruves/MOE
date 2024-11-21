@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: andE,and,orE,or,xorE" />
+  <title>Logical Functions: andE, and, orE, or, xorE</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Logical Functions: andE, and, orE, or, xorE
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+val = <a class="fcnlink" href="#andE">andE</a> [a,b]
+val = <a class="fcnlink" href="#andE">andE</a> [a,b,c,...] // reduction
+
+val = <a class="fcnlink" href="#orE">orE</a> [a,b]
+val = <a class="fcnlink" href="#orE">orE</a> [a,b,c,...] // reduction
+
+val = <a class="fcnlink" href="#xorE">xorE</a> [a,b]
+val = <a class="fcnlink" href="#xorE">xorE</a> [a,b,c,...] // reduction
+
+val = a <a class="fcnlink" href="#and">and</a> b // infix notation
+val = a <a class="fcnlink" href="#or">or</a> b // infix notation
+</pre>
+<a id="andE"></a>
+<a id="xorE"></a>
+<a id="orE"></a>
+<a id="and"></a>
+<a id="or"></a>
+<h1>Description</h1>
+
+<p>Element-wise AND, OR and XOR. Arguments must be of the same shape
+  (allowing for unit extension), and contain only numerical data. The infix
+  notation for <tt>andE</tt> is <tt>and</tt>, whereas the infix notation for
+  <tt>orE</tt> is <tt>or</tt>. <tt>xorE</tt> has no infix form.</p>
+
+<p><strong>Note:</strong> All operands are evaluated before application of
+  the logical operator. These are not &quot;short-circuited&quot;
+  operations.</p>
+
+<pre class="code">
+svl&gt; 1 <span class="fcndef">and</span> 2
+1
+svl&gt; 0 <span class="fcndef">and</span> 2
+0
+svl&gt; [1,0] <span class="fcndef">and</span> [2,2]
+[1,0]
+svl&gt; <span class="fcndef">orE</span> [ 0, [2,0] ] // unit extension
+[1,0]
+svl&gt; <span class="fcndef">xorE</span> [3,4]
+0
+svl&gt; <span class="fcndef">xorE</span> [3,0]
+1
+svl&gt; <span class="fcndef">xorE</span> [3,3,4] // xorE [ 3, xorE [3,4] ]
+1
+svl&gt; <span class="fcndef">xorE</span> [0,0]
+0
+</pre>
+
+<h1>See Also</h1>
+
+<p><a href="introlexico.htm">Lexicographic Functions</a></p>
+
+<p><a class="svl" href="bitwise.htm">bitand</a> <a class="svl" href=
+  "bitwise.htm">bitnot</a> <a class="svl" href="bitwise.htm">bitor</a>
+  <a class="svl" href="bitwise.htm">bitxor</a> <a class="svl" href=
+  "notnot.htm">not</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

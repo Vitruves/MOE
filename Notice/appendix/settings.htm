@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../images/ccgicon.png" />
+  <title>MOE Settings Menu</title>
+  <meta name="keywords" content="panel: Configuration Options" />
+  <meta name="keywords" content="panel: Mouse Configuration" />
+  <meta name="keywords" content=
+  "keywords: keyboard accelerator, accel, ReadMenuFile, submenu, menu bar" />
+  <meta name="keywords" content=
+  "keywords: popup, button bar, function keys, Java, JDBC" />
+  <meta name="keywords" content=
+  "keywords: mouse sensitivity, mouse configuration, user interface" />
+  <meta name="keywords" content="keywords: align, superpose" />
+  <meta name="keywords" content="keywords: assign action, database viewer" />
+  <meta name="keywords" content="keywords: protein defaults" />
+  <meta name="keywords" content="keywords: QuickPrep" />
+  <meta name="keywords" content="keywords: proxy, RCSB, Web, PSILO" />
+  <meta name="keywords" content="keywords: sketcher, quickprep" />
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../index.htm"><img src="../images/ccglogo.png" /></a>
+    <a href="../index.htm"><div class="moeversion"></div></a>
+    MOE Settings Menu
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+  <ul>
+    <li><a href="#Appearance">Appearance</a></li>
+    <li><a href="#Builder">Builder</a></li>
+    <li><a href="#QuickPrep">QuickPrep</a></li>
+    <li><a href="#AlignSuperpose">Align/Superpose</a></li>
+    <li><a href="#ProteinDefaults">Protein Defaults</a></li>
+    <li><a href="#JDBC">Java/JDBC</a></li>
+    <li><a href="#MOEWeb">Web Settings</a></li>
+    <li><a href="#DatabaseViewer">Database Viewer</a></li>
+    <li><a href="#MainMouse">Mouse (MOE Window)</a></li>
+    <li><a href="#FKeys">Function Keys</a></li>
+    <li><a href="#Miscellaneous">Miscellaneous</a></li>
+    <li><a href="#UserInterface">User Interface</a></li>
+    <li><a href="#DrawMenu">Draw Settings</a></li>
+    <li><a href="#StereoMenu">Stereo Mode</a></li>
+    <li><a href="#SVL">SVL Commands</a></li>
+  </ul>
+
+<p>Many aspects of the MOE interface can be configured and customized. Many
+  customizations are performed through the Settings menu, <span class=
+  "menu">MOE | <img src="settings/settings.png" alt="Settings" style=
+  "vertical-align: middle" /></span>, with changes being made primarily through
+  the <span class="menu">Configuration Options</span> panel. The settings are
+  stored in an RC (resource configuration) file,
+  <tt>$HOME/moefiles/moe-rc</tt>.</p>
+
+<p><b>Note:</b> The user resource configuration file is rewritten each time a
+  MOE session ends normally. Any changes made during the session are saved at
+  this time. This means that if you wish to edit your configuration file
+  manually, you must do so <b>after</b> closing MOE to avoid losing any
+  changes. Note that comments in a user configuration file are not saved.</p>
+
+<p>The <img src="settings/settings.png" alt="Settings" style=
+  "vertical-align: middle" /> menu is available in the <b>MOE</b>, <b>Sequence
+  Editor</b>, and <b>Database Viewer</b> window header line. The three windows
+  have different options in their <img src="settings/settings.png" alt=
+  "Settings" style="vertical-align: middle" /> menus:</p>
+<table class="titlebar">
+  <tr>
+    <th>Window</th>
+    <th>Options</th>
+  </tr>
+  <tr>
+    <td><b>MOE</b></td>
+    <td>Appearance, Builder, QuickPrep,
+    Align/Superpose, Protein Defaults, Java/JDBC Database, Web Settings,
+    Mouse, Function Keys, Miscellaneous, User Interface, Draw Settings,
+    Stereo Mode</td>
+  </tr>
+  <tr>
+    <td><b>Sequence&nbsp;Editor</b></td>
+    <td>Appearance, Align/Superpose, Protein
+    Defaults, Java/JDBC Database, Web Settings, Function Keys,
+    Miscellaneous, User Interface</td>
+  </tr>
+  <tr>
+    <td><b>Database&nbsp;Viewer</b></td>
+    <td>Database Viewer, Function Keys</td>
+  </tr>
+</table>
+
+<p><span class="tip">Tip!</span> Changes in the <span class=
+  "menu">Configuration Options</span> panel are saved and put into effect by
+  pressing <span class="menu">Apply</span> or <span class="menu">OK</span> (in
+  this latter case, the panel will close after saving). Note, however, that
+  only changes to settings on the currently displayed page will be saved. Each
+  page must be saved separately, to avoid saving unseen changes. Unsaved
+  changes to settings are displayed in blue font.</p>
+
+<h1><a id="Appearance">Appearance</a></h1>
+
+<p>Select the MOE color scheme. The choice is between classic light
+  colored <b>MOE Blanc</b>, modern <b>MOE Noir</b>, and
+  colorful <b>MOE Espoir</b>.</p>
+  <center>
+    <table class="noborder">
+      <tr>
+        <td>
+          <img src="settings/moeblanc.png" alt="MOE Blanc" />
+
+<p class="caption">MOE Blanc</p>
+        </td>
+        <td></td>
+        <td>
+          <img src="settings/moenoir.png" alt="MOE Noir" />
+
+<p class="caption">MOE Noir</p>
+        </td>
+      </tr>
+    </table>
+  </center>
+
+<h1><a id="Builder">Builder</a></h1>
+  <div class="floatright"><img src="settings/config_builder.png" alt=
+  "Builder" class="floatright" /></div>
+
+<p>The <b>Controls</b> section is used to enable or disable the display of
+  the hybridization, SMILES input and atom name controls in the molecule
+  builder.</p>
+
+<p>The <b>Options</b> section contains checkboxes used to turn on or off
+  the Create New Molecule popup to set chain and tag names of new molecules,
+  the option to adjust the view while building so that newly created atoms
+  are visible, and the automatic labeling of atoms with incorrect topology.
+  When the <b>keyboard shortcuts</b> are enabled, one can build molecules by
+  pressing keys when the mouse focus is in the MOE 3D Window:</p>
+  <table class="titlebar">
+    <tr>
+      <th>Key(s)</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td><b><tt>1,2,3</tt></b></td>
+      <td>Create or change to single/double/triple bond</td>
+    </tr>
+    <tr>
+      <td><b><tt>x</tt></b></td>
+      <td>Remove bond</td>
+    </tr>
+    <tr>
+      <td><b><tt>c,n,h,o,s,p</tt></b></td>
+      <td>Change Element to C, N, H, O, S, or P</td>
+    </tr>
+    <tr>
+      <td><b><tt>f,l,b,i</tt></b></td>
+      <td>Change Element to F, Cl, Br, or I</td>
+    </tr>
+    <tr>
+      <td><b><tt>0,-,+</tt></b></td>
+      <td>Set Charge to 0, -1, +1</td>
+    </tr>
+ </table>
+
+<p>The <b>Fragments</b> section is used to enable or disable the
+  Combinatorial Builder option, whether the conformation space of free rotors
+  will be sampled prior to structure generation and the R-group library that
+  will be used.</p><!--
+
+<p>
+The <b>Chirality Limit</b> specifies the maximum number of atoms under which
+the molecule builder stereochemistry controls are automatically updated to
+reflect the current state.
+</p>
+-->
+
+<p>The <b>Sketcher</b> section allows to set the preferred sketcher(s) to
+ be used with MOE and to specify the class path for Java sketchers such
+ as MarvinSketch (see
+ <a href="../moe/sketcher.htm#Setting_Up">2D Sketcher Programs</a>
+ for more details).</p>
+
+<p>You must press <span class="menu">Apply</span> or <span class=
+  "menu">OK</span> to put any changes into effect.</p>
+
+<br clear="both" />
+
+<h1>
+<a id="QuickPrep">QuickPrep</a></h1>
+  <div class="floatright"><img src="settings/config_ligx.png" alt=
+  "QuickPrep" class="floatright" /></div>
+
+<p>The rendering style (<b>Solid</b>, <b>Line</b>, <b>Dot</b>), material
+  property, and coloring mode of &quot;Quick&quot; surfaces (<b>Receptor
+  Surface</b>, <b>Ligand Surface</b>, <b>Interaction Surface</b> and <b>Protein
+  Surface</b>) are set in the top part of the page. The color widget is used
+  for color selection when <b>Constant</b> color is chosen. Quick surfaces can
+  be created via <span class="menu">MOE | RHS | Surface</span> or the <a href=
+  "../moe/gui/system.htm"><b>System Manager</b></a>. If <b>Clear Surface</b>
+  is enabled <span class="menu">MOE | RHS | Surface | Clear</span>
+  will remove all surfaces. Otherwise only molecular, interaction,
+  and patch surfaces are deleted. The <b>Replace existing</b> option controls
+  whether newly created Quick surfaces will replace existing
+  surfaces of the same type without confirmation.  When disabled, a
+  confirmation dialog is raised.
+  </p>
+
+<p><b>R-Vector</b> specifies the van der Waals interaction energy threshold
+  and color used to draw <a href="../apps/ligx.htm#RVectors">exit
+  vectors</a>.</p>
+
+<p>The <b>Duplicate</b> options specify properties of the molecule object
+  that are created using
+  <span class="menu">MOE | RHS | Ligand | Duplicate</span> or
+  <span class="menu">MOE | Edit | Duplicate</span>.</p>
+  <ul>
+    <li><b>Activate+Show</b>. If on, the duplicate will be shown and all atoms
+    will be active (the original molecule/ligand in all cases will be
+    hidden and made inert). If off, the active state and visibility will be that
+    of the original ligand atoms.  The newly created atoms will be selected.</li>
+    <li><b>Copy Render Style</b>. If on, the atom and ribbon
+    render style will be also duplicated.
+    <li><b>Ligand Stick</b>. If on, duplicated ligands will be rendered
+    in stick mode. If off, it will be rendered in the same way as
+    the original ligand atoms.</li>
+    <li><b>Element Color</b>. If on, the duplicate atoms will be colored by
+    element, duplicate ribbons by secondary structure. If off, they
+    will be colored in the same way as the original atoms and ribbons.</li>
+  </ul>
+
+<p>The <b>Minimize (Vac)</b> options are used to control the <span class=
+  "menu">MOE | RHS | Ligand | Minimize (Vac)</span> operation. If the
+  <b>Display message</b> option is on, a message reporting the minimized strain
+  energy and RMSD will be displayed for the specified number of seconds. If
+  off, no message will be displayed. If <b>Color newly created carbons</b> is
+  on, the duplicate of the ligand will have its carbon atoms colored by the
+  specified color. If off, the carbon atom coloring will be the same as that of
+  the original ligand.<br clear="both" /></p>
+
+<p>The <b>SiteView Cutoff</b> distance is used to identify which nearby
+  residues to show when using <span class="menu">MOE | RHS | SiteView</span>.
+  Any residues which contain an atom within this distance of the ligand and/or
+  selected atoms will be shown. All other residues are hidden.
+  If the <b>Toggle Site</b> option is enabled, the <b>SiteView</b> button will
+  toggle between showing the ligand site and reshowing the structure outside
+  of the ligand binding site.
+  If <b>Ignore inert</b> is enabled, residues which have all atoms hidden and
+  inert are ignored by <b>SiteView</b>, and neither shown nor hidden.
+  If <b>Preserve render style</b> is enabled, current atom render style
+  settings will not be changed by <b>SiteView</b>.</p>
+
+<p>You must press <span class="menu">Apply</span> or <span class=
+  "menu">OK</span> to put any changes into effect.</p>
+
+<a id="AlignSuperpose"></a>
+<h1>Align/Superpose</h1>
+  <div class="floatright"><img src="settings/config_align.png" alt=
+  "Align/Superpose" class="floatright" /></div>
+
+<p>The parameters used for protein alignments and superpositions with the
+  <a href="../proteins/alignsup.htm">Protein Align and Superpose</a> panel are
+  controlled via the <b>Sequence Alignment</b> and <b>Structural
+  Superposition</b> options. The <b>Score Matrix</b> specifies the directory in
+  which the amino and nucleic acid similarity score matrices reside, which
+  are selected via the dropdown menus. MOE is distributed with 70 score
+  matrices derived from the literature. The chosen matrix is also used
+  by the Sequence Editor similarity coloring and plots.</p>
+
+<p><b>Gap Start</b> specifies the gap penalty used during sequence alignment,
+  whereas <b>Gap Extend</b> is the penalty for extending a gap. The maximum
+  number of iterations allowed during the refinement procedure is given by
+  <b>Iteration Limit</b>. <b>Failure Limit</b> sets the number of consecutive
+  failures that will cause termination of the refinement procedure. Here a
+  failure is defined as an iteration that does not improve the alignment score.
+  <b>Build-up</b> selects the strategy for use in generating the initial
+  estimate of the sequence alignment.</p>
+
+<p>The default subset of atoms used for structural alignment is controlled
+  with the <b>Atom Sets</b> option. By default, alpha carbons are used. The
+  <b>Custom</b> button may be used to choose any subset available via the
+  checkboxes, which will activate when the button is selected. These atom sets
+  are also used by the RMSD coloring and RMSD plots in the Sequence Editor.</p>
+
+<p>Two default weighting options for protein structure superposition can be
+  selected. <b>Secondary Structure</b> will upweight residues with matching
+  secondary structure. The <b>Refine by Distance</b> option enables an
+  iterative algorithm with dynamic residue weights based on residue pair
+  distances during the superposition calculation.</p>
+
+<p>When enabled, <b>Result Output</b> will cause the pairwise sequence
+  identity or RMSD values to be printed in the SVL command window.</p>
+
+<p>You must press <span class="menu">Apply</span> or <span class=
+  "menu">OK</span> to put any changes into effect.</p>
+
+<p><br clear="both" />
+<a id="ProteinDefaults"></a>
+</p>
+
+<h1>Protein Defaults</h1>
+  <div class="floatright"><img src="settings/config_pro_defaults.png" alt=
+  "Protein Defaults" class="floatright" /></div>
+
+<p>The <b>Project Path</b> field specifies the default search path to be used
+  by the <a href="../proteins/projsrch.htm">Project Search</a> panel, as well
+  as for the <b>SE | Annotate | Auto-Annotate</b> and
+  <b>SE | Alignment | Constraints | Auto-Constraints</b> menus. It
+  is also used to populate the <b>MOE | Protein | Search</b>
+  and <b>SE | Protein | Search</b> menus.  If the path
+  includes <tt>$MOE/project</tt>, then databases installed on the
+  <a href="#MOEWeb">Default MOE/web Server</a>, if any, will be included as
+  well (with local databases of the same name taking precedence).
+  If <b>Include Remote PSILO Families</b> is enabled, any databases installed on
+  the configured <a href="#PSILO">PSILO server</a> will also be included.</p>
+
+<p>The <b>Rotamer Library</b> is used by multiple applications. The Rotamer
+  Library is used to defined the standard library residues in <a href=
+  "../apps/structprep.htm">Structure Preparation</a>, and the rotamers and
+  amino acids available for rotamer exploration in the <a href=
+  "../apps/prodesign.htm">Protein Design</a>, <a href=
+  "../proteins/probuild.htm">Protein Builder</a>, <a href=
+  "../proteins/dnabuild.htm">DNA/RNA Builder</a> and the <a href=
+  "../proteins/promodel.htm">Homology Modeler</a>. Multiple libraries can be
+  specified in a semicolon separated list.</p>
+
+<p>The <b>Loop Library</b> is used by the <a href=
+  "../apps/proloop.htm#LoopSearch">Loop Modeler</a> application. It is also
+  used for the loop building stage of the <a href=
+  "../proteins/promodel.htm">Homology Modeler</a>. Multiple libraries can be
+  specified in a semicolon separated list.</p>
+
+<p>Click the <b>Validate</b> button to validate both the <b>Rotamer
+  Library</b> and <b>Loop Library</b> specified above the button. A validation
+  report will be opened in a text editor.</p>
+
+<p><b>Render Protein</b> is used to enable or disable the highlighting of key
+  structural features when reading from PDB or mmCIF files. For more
+  information, see <a href="../proteins/pdb_mdb.htm#RenderProtein">Rendering
+  PDB and CIF files</a>.</p>
+
+<p><b>Ligand/Peptide</b> specify the maximum number of residues allowed in a
+peptide/nucleotide chain to be considered as a ligand in e.g.
+the System Manager. When working with large peptide ligands it might be
+beneficial to increase this setting.
+</p>
+
+
+<p>You must press <span class="menu">Apply</span> or <span class=
+  "menu">OK</span> to put any changes into effect.</p>
+
+<p><br clear="both" />
+<a id="JDBC"></a>
+</p>
+
+<h1>Java/JDBC</h1>
+  <div class="floatright"><img src="settings/jdbc.png" alt=
+  "JDBC Options" class="floatright" /></div>
+
+<p>The <b>Java Executable</b> text field sets the path of the Java Executable
+  that is used by MOE.
+
+<!--
+  By default, MOE will look for Java in the <a href=
+  "../install/install.htm#SVL_JVM">Java Environment Variables</a> section, and
+  will display it here if found.
+-->
+  However, if Java is not found, or a different
+  version is preferred, this field can be used to modify the default
+  setting. The text shortcut shows possible locations for the Java executable.
+  The <b>Test</b> button will test the specified Java executable and
+  display its version when successful.</p>
+
+<p>The <a href="samples.htm#JDBCViewer">JDBC Database Viewer</a> and other
+  applications that use the JDBC relational database access library generally
+  require server and user specification.</p>
+
+<p>Up to four connection configurations may be specified.</p>
+
+<p>The fields and commands in this window are as follows:</p>
+  <ul>
+    <li><b>Alias</b>. String used for the <b>Database Alias</b> option menu in
+    the JDBC Database Viewer. If no alias is given, then the URL itself will be
+    used in the menu.</li>
+    <li><b>URL</b>. The URL specifying the database to which to connect. This
+    is a JDBC URL that begins with the protocol string <tt>jdbc:</tt>. The
+    specific form of this URL will be defined in the documentation of the JDBC
+    driver used.</li>
+    <li><b>Driver</b>. The JDBC driver class file to be used to communicate
+    with the database server. Refer to the documentation of the JDBC driver
+    used for the exact string to enter.</li>
+    <li><b>Username</b>. The user account to use when connecting to the
+    database server.</li>
+    <li><b>Password</b>. Defines the password to use when logging-in to the
+    database server. This must be either the <tt>mpu_</tt> encoded password for
+    the given <b>Username</b> or the non-encoded password. If the non-encoded
+    password is entered, then <tt>mpu_password[]</tt> will be run on the text
+    when <tt>Return</tt> is pressed. If the desired password is an empty
+    string, press <tt>Return</tt> in the textfield when the textfield is blank.
+    A pre-encoded password can be pasted into this field.</li>
+  </ul>
+
+<p><b>Validate Connection</b> calls <tt>jdbc_open</tt> with the currently
+  displayed values to determine if the data allows for a valid connection to be
+  established. To clear each entry in the form, press <b>Clear Form</b>.
+  <b>OK</b> or <b>Apply</b> must be pressed before the changes will take
+  effect.</p>
+
+<p><font color="#FF0000"><b>Warning!</b></font>&nbsp;&nbsp; The JDBC Database
+  Viewer must be closed and reopened to have new connections recognized by the
+  viewer.</p>
+
+<p><br clear="both" />
+<a id="MOEWeb"></a>
+<a id="PSILO"></a>
+<a id="Proxy"></a>
+</p>
+
+<h1>Web Settings</h1>
+  <div class="floatright">
+  <img src="settings/config_web_proxy_sys.png" alt="Web Settings"/>
+  <br /><br />
+  <img src="settings/config_web_proxy_manual.png" alt="Proxy Settings" /></div>
+
+<p>The <b>MOE/web</b> field specifies the name and listening port
+  (<tt>hostname:port</tt>) of the default MOE/web server to be used. Recent
+  choices are available in the shortcut of the text field. The <b>Test</b>
+  button will contact MOE/web and report its state; if successful, the
+  MOE/web version is shown as well. To start a MOE/web server
+  on the local machine, please refer to <a href=
+  "../install/web_inst.htm#StartA">Start the Web Server</a>.</p>
+
+<p>Connecting to <b>PSILO</b> requires setting the PSILO URL, user name, and
+  password. If you have access to a <a href=
+  "http://www.chemcomp.com/PSILO-Protein_Structure_Database_System.htm" target=
+  "_blank">PSILO</a> server, you can configure MOE to connect to it, for
+  example using the <a href="../moe/gui/fileopen.htm">Open</a> panel. Enter the
+  <b>PSILO</b> server address (host address and port), <b>Username</b>, and
+  <b>Password</b>, each time hitting enter in the text field to acknowledge the
+  data entry. The <b>Test</b> button allows to validate the connection to the
+  PSILO server and the login credentials.</p>
+
+<a id="RCSB"></a>
+<p><b>RCSB</b> is the host address of an RCSB mirror site (or other
+  compatible site). Connecting to the <b>RCSB</b> requires no username or
+  password. By default, MOE will connect to the main RCSB site
+  <tt>https://files.rcsb.org</tt>, as maintained by the <a href=
+  "http://www.wwpdb.org">World Wide Protein Data Bank</a> consortium.
+</p>
+<p><b>PDB Archive</b> specifies an HTTP or FTP address of a valid PDB FTP
+Archive. This URL will be used to update the entry list on the RCSB page
+of the Open panel.</p>
+<!--
+<p>
+  Note that the RCSB page of the Open panel also requires an http address
+  supporting the RCSB RESTful web service in order to load index data.  This
+  is specified in <b>RCSB REST</b>, which by default is set to
+  <tt>https://www.rcsb.org</tt>, and should generally point somewhere in the
+  same domain as the <b>RCSB</b> site.  However, MOE can
+  download files from mirrors of the RCSB ftp site, or from any http address
+  that will serve RCSB-style file URLs, i.e. <span class=
+  "nobr">&quot;<tt>/pdb/files/{code}.ent.gz</tt>&quot;.</span> <b>Note!</b> The
+  RCSB setting must be set to a proper mirror site or FTP site (e.g.
+  <tt>https://files.rcsb.org</tt> is a valid HTTPS site).</p>
+-->
+
+<p>If your network uses an internet proxy server or if your machine requires
+  a proxy server to access the internet or intranet, you may need to configure
+  the <b>Proxy</b> server. There are a number of modes to choose from, but in
+  all cases, if the environment variables <tt>http_proxy</tt>,
+  <tt>https_proxy</tt>, and/or <tt>ftp_proxy</tt> are set, they will take
+  precedence over any other setting.  If used, these variables should contain
+  the information in the form <i>host:port</i>. See
+  <a href="../install/install.htm#PROXY_OPTS">Using a Proxy Server</a> for more
+  information.  Possible modes include:</p>
+  <ul>
+    <li><b>System</b>: This will inherit the settings from the Internet Option
+    Control Panel on Windows, or the Network Control Panel on macOS computers.
+    It has no further effect on other UNIX platforms.</li>
+    <li><b>Auto-Detect</b>: This option is only available on Windows and macOS.
+    MOE will attempt to automatically detect the location of a proxy
+    configuration script, and use it. If this fails, it will use the
+    configuration script specified, if any, under the following option. If none
+    is specified, the manual proxy configuration specified will be used.</li>
+    <li><b>URL Script</b>: This option is only available on Windows and macOS.
+    Your network administrator will give you the address of the <b>Script</b>
+    to fill in here. This script tells MOE, for each URL, whether the proxy
+    should be used or not, and which proxy to use (there may be multiple). If
+    the script cannot be accessed, it will default to the manual proxy
+    configuration from this panel instead.</li>
+    <li><b>Manual</b>: Specify the proxy host and port for each protocol (HTTP,
+    HTTPS and/or FTP), <b>Use HTTP Proxy Server Setting for all Protocols</b>
+    to copy the information from the HTTP boxes to the HTTPS and FTP ones. A
+    SOCKS proxy, if any, will be used for any protocols other than HTTP, HTTPS
+    and FTP, as well as for any of those which do not have an explicit proxy
+    server specified. <b>Bypass proxy for</b> <b>Local Addresses</b>, if
+    enabled, means the proxy will not be used to any URL where the hostname
+    does not contain a period (.). An additional semi-colon (;) separated list
+    of hosts, domains or IPs for which the proxy should not be used can be
+    specified below. These are usually machines on the local network.</li>
+    <li><b>None</b>: Do not use a proxy.</li>
+  </ul>
+
+<p>You must press <span class="menu">Apply</span> or <span class=
+  "menu">OK</span> to put any changes into effect.</p>
+
+<p><br clear="both" />
+  <br />
+<a id="DatabaseViewer"></a>
+</p>
+
+<h1>Database Viewer</h1>
+  <div class="floatright"><img src="settings/dbv.png" alt=
+  "Database Viewer" class="floatright" /></div>
+
+<p>Database plots, such as the data and correlation plot, can be attached to
+  the database viewer window or created as separate windows.
+  The option <b>Plot Location</b> specifies the default behavior.</p>
+
+<p>The <b>Modifier</b> fields contain SVL commands to execute when the left
+  mouse is double-clicked in any cell of the database viewer. <b>None</b> means
+  a plain double click, <b>Control</b> means a double-click with the Ctrl key
+  held down and similarly for <b>Shift</b> and <b>Alt</b>.</p>
+
+<p><b>Row Color</b> sets the color of alternate rows in the Database
+  Viewer.</p>
+
+<p><b>Invert text color on dark background</b> controls, whether the default
+cell text/foreground color will be inverted when the cell has a dark
+background color. This improves the readability of the cell content
+when field coloring is used.</p>
+
+<p><b>Show popup menu shortcut markers</b>, when selected, will cause a popup
+  menu to appear in the cell the mouse currently points to: <img src=
+  "settings/dbv_popup.png" class="icon" alt="popup" />. Clicking on the
+  triangle brings up the same menu as a right-click in the cell.</p>
+
+<p>
+<p><b>Bubble Help</b> controls the display of bubble help on molecule cells
+in the Database Viewer.
+Note that the bubble help is only shown if the database rows are minimized
+to their minimum height. Additionally a modifier key can be set
+which needs to be pressed before the mouse hovers over the
+molecule cell to pop up a 2D diagram of the molecule in the cell.</p>
+
+<p>The <b>Browser</b> option sets the default rendering style
+  and carbon color of ligand structures when browsing <tt>molecule</tt>
+  fields in the <a href="../mdb/dbbrowse.htm#Browser">Database Browser</a>.</p>
+
+<p>You must press <span class="menu">Apply</span> or <span class=
+  "menu">OK</span> to put any changes into effect.</p>
+
+<p><br clear="both" />
+<a id="MainMouse"></a>
+</p>
+
+<h1>Mouse (MOE Window)</h1>
+  <div class="floatright"><img src="settings/mouse2.png" alt=
+  "Mouse Configuration" class="floatright" /></div>
+
+<p>MOE allows the user to completely reconfigure the mouse behavior in the
+  MOE main 3D window. This is useful, if e.g. only a two button mouse is
+  available or the user is accustomed to a specific mouse mapping. To change
+  the mouse configuration, select the mouse event to change (e.g. <b>Left
+  Button Drag</b>, <b>Right Button Click</b>, etc.) and then choose the action
+  from the pulldown list which MOE should perform in case of released mouse
+  events. To unset an action select the empty line on the bottom of the
+  pulldown list. If the chosen action is not the default action for this mouse
+  event a red exclamation will appear beside it, and the bubble help for the
+  exclamation mark will describe the default action for this mouse event. At
+  the top of the panel the <b>Modifier Key</b> can be selected for the mouse
+  events to be configured. A <b>Status</b> line at the bottom of the panel
+  summarizes the number of changes and additions with respect to the MOE
+  default mouse configuration.</p>
+
+<p>SVL commands can also be assigned to mouse single click and double click
+  events. When <b>Execute SVL Command</b> is selected in the pulldown list a
+  <b>Set</b> button will appear on the event line. It opens a popup with a text
+  field, in which the SVL expression to execute can be entered. To assign the
+  expression the <b><tt>Enter</tt></b> key must be pressed. In this expression,
+  the <tt>$</tt> character is replaced by the atom key of the clicked atom (or
+  zero if no atom is clicked). For example, to toggle the label setting of
+  selected atoms using the shift right mouse button in the MOE Window, you
+  would enter the following SVL expression in the <b>Shift + Right Button
+  Click</b> text field:</p>
+
+<pre>
+if $ then aSetLabelName[$, not aLabelName $]; endif
+</pre>
+
+<p>The <b>Sensitivity</b> controls the sensitivity of rotation and
+  translation as a function of mouse movements. Higher values provide more
+  precise control in the rendering area than lower values. The sensitivity is a
+  floating-point number with default value of 250; this value provides fine
+  control without significant loss of speed. Values ranging from 100 to 1000
+  produce good results.</p>
+
+<p><b>Buttons</b> is used to specify the number of mouse buttons. Normally
+  the default <i>Auto Detect</i> will work correctly. When a 2-button mouse is
+  detected or selected, the functions of the middle button are mapped to the
+  right mouse button. In this case, the Alt key may be used to access popup
+  menus.</p>
+
+<p>The mouse configuration changes are applied right away (Note that the
+  changes will be written to the user <tt>moe-rc</tt> file when MOE is closed).
+  To discard the changes and return to the settings when the Mouse
+  Configuration panel was opened, press <b>Undo Changes</b>. If you want to
+  return the default mouse configuration of MOE, press <b>MOE
+  Default</b>.<br />
+  <b>Note!</b> Returning to the <b>MOE Default</b> configuration will still
+  retain any <b>Execute SVL Command</b> mouse actions that do not interfere
+  with the default mapping. To remove such actions as well, each of them have
+  to be unset explicitly in the panel.</p>
+
+<p>The <b>Manage</b> button allows to retain and manage multiple different
+  mouse configurations. It opens a popup which allows to name and save the
+  current mouse configuration, as well as to load previously saved mouse
+  settings.</p>
+
+<p><br clear="both" /></p>
+
+<h1>
+<a id="FKeys">Function Keys</a></h1>
+  <div class="floatright"><img src="settings/fkeys.png" alt=
+  "Function Keys" class="floatright" /></div>
+
+<p>MOE normally does not make use of the F1-F11 keyboard function keys.
+  However, these may be programmed to invoke SVL expressions. To configure
+  these keys enter the expression to be associated with the function key, or
+  the <b>Ctrl</b>+, <b>Alt</b>+ or <b>Shift</b>+ modified function key. Press
+  <b>OK</b> or <b>Apply</b> (the latter leaves the panel open). The function
+  key configuration will be written to the MOE configuration file.</p>
+
+<p><b>Note:</b> On some operating systems, certain function key combinations
+  have been appropriated by the system for keyboard shortcuts and cannot be
+  overridden by the Configuration Options panel. For example, Alt+F4 is
+  commonly used to exit programs and on GNOME, Alt+F7 is used to move the
+  focused window.<br clear="both" /></p>
+
+<p><br clear="both" />
+  <a id="Miscellaneous"></a>
+</p>
+
+<h1>Miscellaneous</h1>
+  <div class="floatright"><img src="settings/misc.png" alt=
+  "Miscellaneous" class="floatright" /></div>
+
+<p><b>Bubble Help Mode</b> controls the display of bubble help in all MOE
+  panels. To enable the display of bubble help, select <b>on</b>. To disable
+  the display of bubble help, select <b>off</b>. Select <b>key</b> to display
+  bubble help only when the <tt>Ctrl</tt> key is held down for over a
+  second.</p>
+
+<p><b>3D Window</b> and <b>Sequence Editor</b> toggle the bubble help
+  over atoms, bond, or ribbons in the main 3D window and residues/chains in
+  the Sequence Editor. Additionally a modifier key can be set, which needs
+  to be pressed while the mouse hovers over the atoms and residues, to pop
+  up the bubble help with the object information.
+
+<p><b>Contextual Help</b> enables, on all application panels, help icons which
+  directly link to the corresponding manual pages or videos.
+  MOE must be restarted for a change of this option to take effect.</p>
+
+<p><b>SVL Output History</b> controls the number of text lines to maintain in
+  the scrolling area of the SVL Commands window. <b>SVL Color Annotation</b>
+  enables color annotation in the SVL output history; if on, SVL commands are
+  displayed in blue, errors in red.
+  <b>SVL Command History</b> controls the number of previous commands to keep
+  in the command line (CLI) history buffer. Previous commands are retrieved
+  at the CLI with the up/down arrow keys.</p>
+
+<p>The <b>Warning Beep</b> checkbox determines whether or not the operating
+  system will produce a sound when a warning or error panel is produced within
+  MOE. Note that on Linux and macOS systems, the sound may not be produced
+  regardless of this setting, due to its dependence on the installed
+  implementation of X11.</p>
+
+<p>The <b>Start In Folder</b> text field sets the initial working directory
+  for MOE. The &quot;.&quot; character (dot) sets the initial working directory
+  to the directory from which MOE was launched. The &quot;~&quot; character
+  (tilde) sets the initial working directory to your home directory. In
+  addition to the dot and tilde characters, you can enter any file path
+  here. The <b>CWD</b> button will populate the text field with the
+  path to the current working directory.</p>
+
+<p>The <b>Course Download Folder</b> text field sets the directory where
+  Courses and Tutorials downloaded through the MOE Help menus will be
+  saved to.  Environment variables, such as $HOME, may be included in
+  the path.</p>
+
+<p>The MOE installer will set <b>File Associations</b> for several file
+  formats to the MOE applications on Microsoft Windows and Linux, so that these
+  files can be opened directly in MOE from the Desktop or File Explorer with a
+  simple double click. These associations can also be set or unset from within
+  MOE with the <b>File&nbsp;Associations:&nbsp;Setup</b> popup: Select the file
+  types to be associated to MOE and press <b>Set</b>. Unselected file types
+  will get disassociated from MOE. On Microsoft Windows only, a new extension
+  that is not part of the default extensions can be associated to MOE by
+  clicking the <b>Add New</b> button in the
+  <b>File&nbsp;Associations:&nbsp;Setup</b> popup.</p>
+
+<p><b>Note!</b> The selection state upon opening the popup reflects the
+  current file association state. Enabled and disabled extensions reflect set
+  and unset extensions, respectively, while a red extension signifies that the
+  extension is not associated with the current version of MOE.</p>
+
+<p>The MOE installer will also create a desktop shortcut to MOE on Microsoft
+  Windows and Linux, if desired. The ability to create additional desktop
+  shortcuts is available from within MOE by using the <b>Desktop
+  Shortcut: Create</b> popup.
+  Existing shortcuts can be updated using this panel (on Windows only).</p>
+
+<p>You must press <span class="menu">Apply</span> or <span class=
+  "menu">OK</span> to put any changes into effect.</p>
+
+<p><br clear="both" />
+<a id="UserInterface"></a>
+</p>
+
+<h1>User Interface</h1>
+  <div class="floatright"><img src="settings/config_ui.png" alt=
+  "User Interface" class="floatright" /></div>
+
+<p>The <b>Window Positions</b> buttons allow the user to:</p>
+  <ul>
+    <li><b>Save</b>: Saves the position of all named windows in MOE.</li>
+    <li><b>Restore</b>: Moves all windows to their saved positions.</li>
+    <li><b>Reset</b>: Reset stored positions to default values.</li>
+  </ul>
+
+<p>If multiple monitors are available, one can specify whether the monitor
+  assignments of each window should be stored and restored the next time they
+  are opened. The dropdown list defines which monitor will be used when
+  new windows are opened:</p>
+  <ul>
+    <li><b>Primary monitor.</b> As defined by the operating system.</li>
+    <li><b>MOE.</b> The monitor in which the MOE Main Window resides.</li>
+    <li><b>Mouse.</b> The monitor in which the mouse is currently located.</li>
+  </ul>
+
+<p>On Microsoft Windows, the behavior of the MOE <b>Input Focus</b> (i.e.
+  which window receives the keyboard input) can be configured. If <b>Focus
+  follows mouse</b> is enabled, the window under the mouse will be
+  automatically activated without the need of a mouse click. This mode is
+  common on Unix systems. The option <b>Click on title to raise windows</b>
+  controls whether clicking anywhere into a MOE panel or just on its title bar
+  activates and raises it. Selecting <b>Activate windows on show</b> will make
+  sure that newly opened application windows will get activated and have the
+  input focus. For this option to have an effect <b>Focus follows mouse</b>
+  must be deactivated.</p>
+
+<p> MOE has enhanced support for <b>Multi-Monitor</b> systems and can configure
+  the <b>UI Zoom</b> on a per <b>Monitor</b> basis:</br>
+  A schematic drawing shows the available monitors and their arrangement as
+  defined by the operating system.
+  One can set for each monitor the scaling factor, to be applied to all
+  MOE windows on it, in order to fine-tune the display according to the actual
+  screen resolution. For example, on some high-definition screens it may
+  be necessary to select a higher magnification value to make the default
+  fonts and icons appear as expected. By default the zoom is set according
+  to the OS recommendations.</p>
+<p> By default the window scaling is done by <b>MOE</b> separately for
+  each monitor; this is the recommended setting.
+  If set to <b>None</b> all monitors will use the same zoom factor;
+  this should be only used if all available monitors are identical.
+  If set to <b>OS</b>, the Windows OS will do internal scaling,
+  so that windows have the same physical size on all monitors,
+  but this can produce a slight fuzzy display. </p>
+
+<p>You must press <span class="menu">Apply</span> or <span class=
+  "menu">OK</span> to put any changes into effect.
+  If the requested UI zoom changes are significant one has to confirm
+  the changes in a popup dialog, otherwise the previous zoom settings
+  will be restored after 15 seconds.
+</p>
+
+<h1><a id="DrawMenu">Draw Settings</a></h1>
+
+<p>The Draw menu is used to control the rendering quality and font of the MOE
+  Window rendering area. The display of the system coordinate axes is also set
+  here.</p>
+  <center>
+    <table class="titlebar">
+      <tr>
+        <th>Command</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td><b>Coordinate
+        Axes</b></td>
+        <td>
+          <div style="vertical-align:top">
+            <img src="settings/axes.png" alt="Coordinate Axes" style=
+            "vertical-align:top; float:right" /> Displays X-Y-Z axes. The
+            origin of the axes is drawn at the <a href=
+            "../moe/gui/mainwin.htm#Changing_the_Center_of_Rotation">center of
+            rotation</a> of the system, which is, by default, the center of
+            mass of all atoms in the system.
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td><b>High Quality Rotation</b></td>
+        <td>When off, lower quality graphics is used
+        to display the molecular system any time the view is translated or
+        rotated, or the zoom is increased or decreased, and similarly when
+        atoms of the molecule are moved (using the <a class="svl" href=
+        "../moe/gui/mainwin.htm#EditingAtomsUsingTheMouse">Alt</a> key). The
+        use of lower quality graphics accelerates view transformations when
+        large numbers of graphic objects and space-filling atoms are present.
+        When on, high quality graphics rendering is used throughout.</td>
+      </tr>
+      <tr>
+        <td><b>High Quality Anti-Alias</b></td>
+        <td>Enables <a href=
+        "viewsetup.htm#AntiAliasing">Full-Scene Accumulation Anti-Aliasing</a>,
+        which produces high quality graphics with smooth lines and polygons. On
+        some low-end graphics cards this option might not be supported or very
+        slow.</td>
+      </tr>
+      <tr>
+        <td><b>Font</b></td>
+        <td>The font used for drawing labels or for
+        displaying messages in the MOE Window are controlled by the options
+        here. The font size can be set to one of <b>Small</b>, <b>Medium</b> or
+        <b>Large</b>. The default font is a proportional font, but can be
+        changed to <b>Fixed Width</b>. The font style can also be set to
+        <b>Bold</b>.</td>
+      </tr>
+    </table>
+  </center>
+
+<p>To save the current values for future MOE sessions, use the <span class=
+  "nobr"><b>Save As Default</b></span> option. <a id="StereoMenu"></a>
+</p>
+
+<h1>Stereo Mode</h1>
+
+<p>MOE supports a wide variety of stereo display methods. Select the default
+  stereo mode, which is used when enabling stereo display:</p>
+  <center>
+    <table class="titlebar">
+      <tr>
+        <th>Mode</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td>
+          <a id="Anaglyph"><b>Green-Magenta</b></a>
+        </td>
+        <td>In this anaglyph stereo mode, the left
+        and right images are drawn in complementary colors. The stereo effect
+        is achieved by wearing green-magenta tinted glasses. To enhance color
+        perception, the <b>Anaglyph Stereo</b> <a href=
+        "viewsetup.htm#Themes">visualization theme</a> can be used.<br />
+        Besides the tinted glasses no other special display equipment is
+        needed.</td>
+      </tr>
+      <tr>
+        <td>
+          <a id="AnaglyphRedCyan"><b>Red-Cyan</b></a>
+        </td>
+        <td>Same principle as the
+        <b>Green-Magenta</b> anaglyph stereo mode for use with red-cyan tinted
+        glasses.</td>
+      </tr>
+      <tr>
+        <td>
+          <a id="Quad"><b>Quad&nbsp;Buffer</b></a>
+        </td>
+        <td>Stereo mode using special hardware of
+        high-end graphics cards. The video card you are using must support
+        OpenGL quad-buffered stereo, such as e.g. NVidia Quadro graphics cards
+        or similar workstation class graphics systems. Additionally you must
+        also be equipped with special shutter glasses, a passive stereo
+        projection system, or other stereo devices supported by the graphics
+        card drivers.</td>
+      </tr>
+      <tr>
+        <td>
+          <a id="Interlace"><b>Interlace</b></a>
+        </td>
+        <td>In this mode, the left and right images
+        are drawn on alternate scan lines (to support certain stereo display
+        technologies such as Zalman and SeeReal 2D/3D monitors, as well as DLP
+        projectors).</td>
+      </tr>
+      <tr>
+        <td>
+          <a id="SplitPair"><b>Left-Right</b></a>
+        </td>
+        <td>Displays split stereo images of
+        left/right eye simultaneously for freeviewing. Configuration parameters
+        for this option can be found in the <a href=
+        "viewsetup.htm#StereoSettings"><b>Stereo Settings</b></a> panel</td>
+      </tr>
+      <tr>
+        <td>
+          <a id="OverUnder"><b>Over-Under</b></a>
+        </td>
+        <td>Displays split stereo images in the top
+        and bottom half of the fullscreen monitor. This mode is designed to be
+        used in fullscreen mode and can be used with some Stereo TV systems.
+        Configuration parameters for these options can be found in the <a href=
+        "viewsetup.htm#StereoSettings"><b>Stereo Settings</b></a> panel</td>
+      </tr>
+      <tr>
+        <td>
+          <a id="SideBySide"><b>Side-By-Side</b></a>
+        </td>
+        <td>Displays split stereo images side by
+        side on a fullscreen monitor. This mode is designed to be used in
+        fullscreen mode and can be used with some Stereo TV systems.</td>
+      </tr>
+      <tr>
+        <td>
+          <a id="zSpace"><b>zSpace</b></a>
+        </td>
+        <td>
+        Enables <a href="../moe/gui/zspace.htm">zSpace</a>
+        compatible stereo mode. A zSpace display and 3D
+        glasses are required to view the images properly. This mode uses
+        head tracking data to calculate accurate parallax movements.</td>
+      </tr>
+    </table>
+  </center>
+
+<p>To set additional stereo mode related settings such as the eye location,
+  eye separation distance, or swapping the left and right eye, open the
+  <a href="viewsetup.htm#StereoSettings"><b>Stereo Settings</b></a> panel.
+  <a id="SVL"></a>
+</p>
+
+<h1>SVL Commands</h1>
+
+<p><a class="svl" href=
+  "../svl/fcnref/svlmpu.htm#mpu_password">mpu_password</a><br />
+  <a class="svl" href="../svl/fcnref/jdbc_fcn.htm#jdbc_open">jdbc_open</a></p>
+
+<h1>See Also</h1>
+
+<p><a href="../moe/gui/mainwin.htm">The MOE Window</a><br />
+  <a href="../moe/gui/mouse.htm">Using the Mouse</a><br />
+  <a href="samples.htm#JDBCViewer">JDBC Database Viewer</a><br />
+  <a href="viewsetup.htm">Visualization Setup</a><br />
+  <a href="../moe/fcnref/rc.htm">Configuration File Functions</a><br />
+  <a href="../moe/gui/fileopen.htm">PSILO/RCSB Download</a><br />
+  <a href="../install/moeconfig.htm">Configuring MOE</a><br />
+  <a href="../svl/manual/jdbc_man.htm">SVL Relational Database Access</a><br />
+  <a href="../svl/fcnref/jdbc_fcn.htm">SVL Relational Database
+  Functions</a><br />
+  </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../images/ccgicon.png" /> <a href="../index.htm"></a> <a href=
+    "../legal.htm"></a> &copy;<span class="versionyear"></span> <a href="http://www.chemcomp.com"></a>. All
+    rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: where" />
+  <title>Crash History Function: where</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Crash History Function: where
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    <a class="fcnlink" href="#where">where</a> []
+    [fcn_names, counts, file_names, line_numbers] = <a class="fcnlink" href=
+"#where">where</a> []
+
+    <a class="fcnlink" href="#where">where</a> tkey
+    [fcn_names, counts, file_names, line_numbers] = <a class="fcnlink" href=
+"#where">where</a> tkey
+</pre>
+<a id="where"></a>
+<h1>Description</h1>
+
+<p>Prints an account of the latest error that resulted in abnormal
+  termination of an executing task. This includes the name of the function, the
+  filename, and the line number of its source code. This information is printed
+  for all functions in the chain of nested calls (function stack trace). Only
+  one line of information is printed for a chain of identical recursive calls,
+  with recursion depth printed beside the function name. For example,</p>
+
+<pre>
+    svl&gt; <span class="fcndef">where</span>[]
+    factorial       line 25, fact.svl
+    factorial (8)   line 27, fact.svl
+    my_func         line 32, fact.svl
+</pre>
+
+<p>indicates that the error occurred when function &#39;my_func&#39; (on line
+  32) invoked function &#39;factorial&#39;, which (on line 27) called itself
+  recursively 8 times, before finally terminating on error on line 25.</p>
+
+<p>If given a task key, the function returns information about a given task.
+  Task key <tt>-1</tt> specifies the current task.</p>
+
+<p>Note: when available, the CrashHistory window provides the same
+  information. <tt>where</tt> is similar to the &quot;where&quot; command of
+  the UNIX utility &quot;dbx&quot;.</p>
+
+<p>The functional version of where returns the crash history information
+  (instead of printing it out).</p>
+
+<h1>See Also</h1>
+
+<p><a class="svl" href="taskfcn.htm">task_info</a>
+  </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

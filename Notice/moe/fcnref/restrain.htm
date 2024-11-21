@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content=
+  "functions: Restraints, RestraintCreate, RestraintDestroy" />
+  <title>Potential Energy Functions: Restraints</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Potential Energy Functions: Restraints
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+res_keys = <a class="fcnlink" href=
+"#RestraintCreate">RestraintCreate</a> [ types, atom_vecs, target_vecs, weights ]
+
+<a class="fcnlink" href="#RestraintDestroy">RestraintDestroy</a> res_keys
+
+[res_keys, types, atom_vecs, target_vecs, weights] = <a class="fcnlink"
+href="#Restraints">Restraints</a> []
+</pre>
+
+<h1>Description</h1>
+
+<p>Restraints are additional terms in the potential energy model intended to
+  impose geometric constraints. Because these constraints are not strictly
+  enforced they are called restraints. More precisely, these terms serve as
+  <i>penalty functions</i> which have high potential energy when the constraint
+  is violated and zero otherwise.</p>
+
+<p>The following table lists the types of restraints supported:</p>
+<table class="titlebar">
+  <tr>
+    <th>Type</th>
+    <th>Function</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><tt>'distance'</tt></td>
+    <td>
+      <span class="nobr">
+        <i>w</i> max (0, L<sup>2</sup> - <i>r</i><sup>2</sup>)<sup>3</sup><br/>
+      + <i>w</i> max (0, <i>r</i><sup>2</sup> - U<sup>2</sup>)<sup>3</sup>
+      </span>
+    </td>
+    <td>Restrains the distance, <i>r</i>, between two
+    atoms, to lie in the interval [L,U] (in angstroms). The scale factor
+    <i>w</i> controls the strength of the restraint. Both L and U must be
+    non-negative and L must be less than or equal to U.</td>
+  </tr>
+  <tr>
+    <td><tt>'angle'</tt></td>
+    <td>
+      <span class="nobr">
+        100<i>w</i> max(0, cos <i>a</i> - cos L)<sup>3</sup><br/>
+      + 100<i>w</i> max(0, cos U - cos <i>a</i>)<sup>3</sup>
+      </span>
+    </td>
+    <td>Restrains the angle, <i>a</i>, involving three
+    atoms, to lie in the interval [L,U] (in radians). The scale factor
+    <i>w</i> controls the strength of the restraint. Both L and U must be
+    non-negative and L must be less than or equal to U.</td>
+  </tr>
+  <tr>
+    <td><tt>'dihedral'</tt></td>
+    <td>
+      <span class="nobr">
+        10000<i>w</i> (1 - cos max(0,<i>d</i> - L))<sup>3</sup><br />
+      + 10000<i>w</i> (1 - cos max(0,U - <i>d</i>))<sup>3</sup>
+      </span>
+    </td>
+    <td>Restrains the dihedral angle, <i>d</i>, involving
+    four atoms, to lie in the interval [L,U] assuming L is not greater than
+    U and both L and U are in the interval [-PI,PI]. If L is greater than U
+    then the interval [L,U+PI] is implied. The scale factor <i>w</i>
+    controls the strength of the restraint. Angles are measured in
+    clockwise radians.</td>
+  </tr>
+</table>
+<a id="RestraintCreate"></a>
+<hr noshade="noshade" />
+
+<pre>
+res_keys = <span class=
+"fcndef">RestraintCreate</span> [types, atom_vecs, target_vecs, weights]
+</pre>
+
+<p>Creates a collection of restraints. Assuming that each of the input
+  arguments are of compatible lengths <i>n</i> (unit extension applies) then
+  <i>n</i> restraints will be created.</p>
+<dl>
+<dt><tt>types(i)</tt></dt>
+<dd>restraint type (defined above)</dd>
+<dt><tt>atom_vecs(i)</tt></dt>
+<dd>vector of atom keys of appropriate length for the restraint (2 for
+<tt>'distance'</tt>, 3 for <tt>'angle'</tt> and 4 for
+<tt>'dihedral')</tt></dd>
+<dt><tt>target_vecs(i)</tt></dt>
+<dd>defines the interval [L,U] in the units of the restraint (angstroms or
+radians). A vector of length one will be unit extended.</dd>
+<dt><tt>weights(i)</tt></dt>
+<dd>scale factor, or strength, of the restraint.</dd>
+<dt><tt>res_keys(i)</tt></dt>
+<dd>the identifying number of the restraint (for use with
+<tt>RestraintDestroy</tt>).</dd>
+</dl>
+
+<p>For example, to restrain two atoms <tt>a1</tt> and <tt>a2</tt> so that
+  their separation is in the interval [1.5,1.8] with a strength of 100:</p>
+
+<pre class="code">
+RestraintCreate [ 'distance', [ [a1,a2] ], [ [1.5,1.8] ], 100 ]
+</pre>
+
+<p>To create a distance restraint between atoms <tt>a1</tt> and <tt>a2</tt>
+  (target 1.5 A) and an angle restraint between atoms <tt>a1</tt>, <tt>a2</tt>
+  and <tt>a3</tt> (target 0 radians) with the weight being 100 in both cases,
+  use:</p>
+
+<pre class="code">
+RestraintCreate [
+    ['distance','angle'],
+    [ [a1,a2], [a1,a2,a3] ],
+    [ [1.5,1.5] , [0,0] ],
+    100
+]
+</pre>
+<a id="RestraintDestroy"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">RestraintDestroy</span> res_keys
+</pre>
+
+<p>Destroys all restraints with keys specified by <tt>res_keys</tt>.</p>
+<a id="Restraints"></a>
+<hr noshade="noshade" />
+
+<pre>
+[res_keys, types, atom_vecs, target_vecs, weights] = <span class=
+"fcndef">Restraints</span> []
+</pre>
+
+<p>Returns information on all defined restraints in the system. The return
+  elements are in the same form as described in <tt>RestraintCreate</tt>. Note:
+  the returned values may not be the same as those that were used to specify
+  the restraint; for example, distance interval values less than zero are set
+  to zero and angle restraints intervals moved to <span class="nobr">[-PI,
+  PI]</span>.</p>
+
+<h1>See Also</h1>
+
+<p><a class="svl" href="draw.htm">DrawConstr</a><br />
+  <a class="svl" href="meters.htm">Meters</a><br />
+  <a class="svl" href="rconstraint.htm">rConstraints</a><br />
+  <a class="svl" href="moe_const.htm">RESTRAINT_TYPES</a></p>
+
+<p><a href="potfcn.htm"><span class="nobr">Potential Energy
+  Functions</span></a><br />
+  <a href="atom_p.htm"><span class="nobr">Atom Potential
+  Functions</span></a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

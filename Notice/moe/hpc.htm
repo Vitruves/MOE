@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../images/ccgicon.png" />
+  <title>High Performance Computing Framework</title>
+  <meta name="keywords" content="keywords: hpc, job manager" />
+  <meta name="keywords" content="keywords: slurm, sge, lsf, ssh" />
+  <meta name="keywords" content="panel: Job Manager" />
+  <meta name="keywords" content="panel: Batch" />
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../index.htm"><img src="../images/ccglogo.png" /></a>
+    <a href="../index.htm"><div class="moeversion"></div></a>
+    High Performance Computing Framework
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+  <ul>
+    <li>
+      <a href="#Overview">Overview</a>
+    </li>
+    <li>
+      <a href="#BatchPanel">Batch Job Submit Panel</a>
+    </li>
+    <li>
+      <a href="#JobDirectory">Job Directory</a>
+    </li>
+    <li>
+      <a href="#JobManager">Job Manager Panel</a>
+    </li>
+    <li>
+      <a href="#hpccfg">HPC Framework Configuration and Setup</a>
+    </li>
+    <li>
+      <a href="#SeeAlso">See Also</a>
+    </li>
+  </ul>
+
+<a id="Overview"></a>
+<h1>Overview</h1>
+
+<p>Large, parallelizable calculations can be submitted to external
+queueing systems directly from MOE through MOE's high performance
+computing (HPC) framework.  Using this framework, MOE applications
+are able to
+provide a simple interface for submitting batch jobs to a job management
+system, and for monitoring their status.  At the same time, the ability
+to run locally as a batch process or to save a job directory for
+calculation at a later time are also easily accessed.</p>
+
+<p>The HPC framework is diagrammed in the figure below:</p>
+
+<p><img src="hpc/hpc.png" alt="MOE HPC Framework" class="center" /></p>
+
+<p>The key elements are:</p>
+  <ul>
+  <li><b>Batch job submit panel.</b>
+    <ul>
+    <li>The Batch job submit panel opens directly from MOE applications.
+    </li>
+    <li>A batch action is chosen from the Batch panel.</li>
+    </ul>
+  </li>
+  <li><b>Job directory.</b>
+    <ul>
+    <li>A local job directory is automatically created, containing
+      an automatically-generated job submission script, <tt>run.sh</tt>.
+    </li>
+    <li>If running remotely, the job directory is uploaded to the machine
+      where the calculation will take place, and results are collected
+      in the directory; the job directory containing the results can be
+      downloaded later from the <a href="#JobManager">Job Manager</a>
+      panel.
+    </li>
+    </ul>
+  </li>
+  <li><b>Local and remote execution.</b>
+    <ul>
+    <li>Both local and remote execution are possible, using the same
+        run script (<tt>run.sh</tt>).
+    </li>
+    <li>If external third party software is being run as part of the job,
+      <a href="#InitScripts">utility scripts</a> in MOE are used to
+      locate the software.
+    </li>
+    <li>The script <tt>run.sh</tt> can also be executed in SVL as a run
+    file with SVL command <tt>run&nbsp;'run.sh'</tt>.
+    </li>
+    <li>For remote execution, files can be either accessed via a shared 
+    network drive, or uploaded to the remote server.</li>
+    </ul>
+  </li>
+  </ul>
+
+<a id="BatchPanel"></a>
+<h1>Batch Job Submit Panel</h1>
+
+<p>When the <b>Batch...</b> button in the footer of an application is pressed,
+the Batch panel is raised; for example:
+</p>
+
+<p><img src="hpc/dock_batchpanel.png" alt="Dock Batch Panel" class="center" />
+</p>
+
+<p>Every Batch panel consists of three sections:</p>
+<ul>
+  <li><b>Job Directory</b>. Specifies the path to the local job directory.
+  </li>
+  <li><b>Application-specific options.</b>  For example, in the above Batch
+      panel, <b>Partitions</b> and <b>Copy</b> are options specific to
+      <a href="../apps/docking.htm#Parallel_Docking_with_HPC">Docking</a>.
+      Note that some applications do not have any batch options,
+      in which case this section of the panel will not appear.
+  </li>
+  <li><b>Submit options.</b>
+      <table class="noborder">
+      <tr>
+      <td><b>Title</b></td>
+      <td>Specifies a title that will appear in the
+	<a href="#JobManager">Job Manager</a> panel.
+      </td>
+      </tr>
+      <tr>
+      <td><b>Action</b></td>
+      <td>An option menu offering the following actions:
+	<ul>
+	  <li><i>Save job directory.</i> Save local job directory which
+          can later be submitted to a queue or run locally.
+	  </li>
+	  <li><i>Run job locally.</i> Save local job directory, and run
+          the job by executing the run script in the job directory
+	  with the shell command: <tt>sh&nbsp;run.sh</tt>.
+	  In this way, the job is run as a batch process independently
+	  of the current MOE instance.
+	  </li>
+	  <li><i>Submit to <b>queue</b></i>.  For each queue specified in
+	      the queue configuration file
+	      <a href="#hpccfg"><tt>hpc.cfg</tt></a>, there will be
+	      a separate entry in the Action menu.  Note that the queue
+	      <a href="#qalias">alias</a> names are used in the menu.
+
+	      <div class="floatright"><img src="hpc/batch_keywords.png"
+		  alt="Batch Extra Keywords" /></div>
+
+	      <p>When one of the queue submission options is selected,
+	      the configuration button next to the Action menu becomes
+	      available.  Pressing this button expands the panel to
+	      include two text fields for entering keywords:
+	      </p>
+	      <ul>
+		<li><b>Resources.</b> Job resource keywords for specifying
+		    requirements for the job.  The format is
+		    <i>resource_name</i> or <i>resource_name</i>=<i>value</i>,
+		    if there is an associated value or range of values.
+		    Commonly used are keywords for specifying memory,
+		    number of CPUs, and job execution time.  For example:
+
+		    <div class="example">
+			mem=2GB cpu=[1,8] time=3d
+		    </div>
+
+		    specifies that the queue for running the job needs to be
+		    able to provide 2GB of memory and from 1 to 8
+		    CPUs, as well as allowing jobs to run for 3 days.
+
+		    <p>The valid resource keywords are:
+		        <table class="noborder">
+			<tr>
+			  <td><tt>cpu</tt></td>
+			  <td>CPUs on one node</td>
+			</tr>
+			<tr>
+			  <td><tt>cpumem</tt></td>
+			  <td>memory (MB) per CPU</td>
+			</tr>
+			<tr>
+			  <td><tt>disk</tt></td>
+			  <td>available disk space (MB) per node</td>
+			</tr>
+			<tr>
+			  <td><tt>mem</tt></td>
+			  <td>memory per computer node, accepts multipliers
+			    (K, M, G, T, KB, MB, GB, TB)
+			  </td>
+			</tr>
+			<tr>
+			  <td><tt>nodes</tt></td>
+			  <td>available sizes of node clusters</td>
+			</tr>
+			<tr>
+			  <td><tt>time</tt></td>
+			  <td>job execution time, accepts units
+			    s, m, h, d; default is s (seconds).
+			  </td>
+			</tr>
+			<tr>
+			  <td><tt>gpu</tt>
+			  <td>job requires an available GPU processing unit</td>
+			</tr>
+			</table>
+		</li>
+		<li><b><i>Queue_type</i>.</b> Queue-specific additional keywords.
+		    The title of the field will be the type of queue, e.g.
+		    Slurm.  This field typically can be left blank.
+		</li>
+	      </ul>
+          </li>
+        </ul>
+      </td>
+      </tr>
+      </table>
+  </li>
+</ul>
+
+<a id="JobDirectory"></a>
+<h1>Job Directory</h1>
+
+<p>A local job directory containing the automatically-generated
+batch shell script
+<tt>run.sh</tt>, along with any input files needed to make the job directory
+standalone, is always created.  The name of the local job directory
+is as specified in the Batch panel <b>Job Directory</b> field.
+</p>
+
+<p>When submitting for remote calculation, the job directory
+is uploaded and specially renamed according to the following convention
+to ensure a unique directory name:
+<tt>MOE(<i>username</i>)(<i>randomcode</i>)<i>jobtitle</i></tt>,
+where <i>jobtitle</i> is the name that was entered in the Batch panel
+<b>Title</b> field.  An example of a typical job directory name is
+<tt>MOE(guest)(ya0pyf)quickprep</tt>.
+</p>
+
+<p>The results of the batch calculations are collected
+into the remote job directory, and when the job is
+finished, the job directory can be downloaded via the
+<a href="#JobManager">Job Manager</a> panel.  At this point, the downloaded
+directory will
+contain all the original files, plus the results file(s), and possibly even
+auxiliary files that were generated along the way (e.g. Gaussian input
+files created for Gaussian calculations).
+</p>
+
+<a id="JobManager"></a>
+<h1>Job Manager Panel</h1>
+
+<p>The Job Manager panel monitors submitted jobs, and, in addition to
+reporting status, can be used to submit, stop, resubmit, and delete jobs.
+It opens automatically when a job is submitted to a queue from a
+<a href="#BatchPanel">Batch</a> panel, and can also be launched using
+<span class="menu">MOE | File | Job Manager</span>.
+</p>
+
+<p><img src="hpc/jobmanager.png" alt="Job Manager Panel" class="center" />
+</p>
+
+<p>When a new job is submitted to a queue,
+a new line corresponding to the newly submitted job will
+be added to the list of jobs in the Job Manager panel.  The lines in the
+Job Manager job list provide the following information:
+</p>
+
+<ul>
+  <li><b>Title.</b> The batch job name, as entered in the Batch panel.
+  </li>
+  <li><b>State.</b> The current state of the batch job.  Valid states
+    include <tt>started</tt>, <tt>pending</tt>, <tt>running</tt>,
+    <tt>stopped</tt>, <tt>done</tt>.
+  </li>
+  <li><b>Queue.</b> The queue executing the job.  This field will
+    be populated only for running jobs.
+    Note that the <a href="#qalias">alias</a> name of the queue is
+    shown here.
+  </li>
+</ul>
+
+<p>Hovering over a line in the Job Manager panel will
+display additional information, notably the name of the job directory.
+</p>
+
+<p>The following operations can be performed using the Job Manager:</p>
+
+<ul>
+  <li><b>Stop.</b> Stop the currently selected job(s) in the job list.
+  </li>
+  <li><b>Delete.</b> Stop the jobs selected in the job list, if 
+      they are still running, and delete the associated
+      remote job directories.  The removal is permanent.
+  </li>
+  <li><b>Submit.</b>  When exactly one job is selected in the job list,
+      pressing Submit allows for resubmitting the selected job.
+      The area under the
+      job list will open into an embedded resubmission panel, from which
+      the queue and additional keywords can be specified.
+      
+	<p><img src="hpc/jobmanager_resubmit.png"
+	alt="Job Manager Panel Resubmit" class="center" /></p>
+
+      <p><b>Location</b> indicates the host and remote directory in which
+      the job directory to be resubmitted is currently located.
+      </p>
+      
+      <p>
+      If no job is selected in the job list, pressing
+      Submit will open an embedded submission panel.
+      In this subpanel, the job directory to submit must be chosen
+      in addition to the queue.  Press the Directory browse button
+      <img src="../images/browse_icon.png" class="icon"
+      alt="Browse Icon" /> to select a valid job directory.
+      </p>
+
+	<p><img src="hpc/jobmanager_submit.png"
+	alt="Job Manager Panel Submit" class="center" /></p>
+
+      <p>The Submit button is not available when multiple jobs are
+      selected in the job list.</p>
+  </li>
+  <li><b>Download.</b> Download the job directory containing the job results
+      from the remote server; a selection prompt for choosing where to save
+      the results job directory will open.  This option is available when
+      exactly one job is selected in the job list.
+  </li>
+  <li><b>Update.</b> Refresh the Job Manager job list.  The job list
+      is periodically refreshed automatically.  Pressing the Update
+      button will force the refresh to take place immediately.
+  </li>
+</ul>
+
+<a id="ConfigurationSetup"></a>
+<h1>HPC Framework Configuration and Setup</h1>
+
+<p>Submitting jobs to a queue via the HPC framework requires the following
+setup:</p>
+  <ul>
+  <li>A queue configuration file <a href="#hpccfg">hpc.cfg</a>.</li>
+
+  <li>An <tt>ssh</tt> connection to the machine where submission of
+  jobs to the queue will take place.  Typically, this is the <i>head
+  node</i> or gateway node of a cluster &ndash; the launch point for a job
+  running on the cluster.
+
+  <p>On Linux and macOS machines, <tt>ssh</tt> is typically a built-in
+  utility.  On Windows 10, <tt>ssh</tt> can be installed onto the Windows
+  Subsystem for Linux (WSL).  In all cases, <i>passwordless ssh</i>
+  between the user's machine and the remote server from where the calculations
+  will be launched
+  is needed, i.e. it is required that no authentication credentials be
+  requested when logging in to the remote server via ssh.
+  </p>
+
+
+  </li>
+
+  <li><a href="#InitScripts">Scripts</a> for locating third party software
+  external to MOE, if
+  such applications are to be run as part of the batch job.
+  </li>
+
+  </ul>
+
+<a id="hpccfg"></a>
+<h2>Queue Configuration File</h2>
+
+<p>A configuration file specifying which queues are to be accessible
+through the HPC framework is required.  This is best prepared
+with the help of a queue or systems administrator.</p>
+
+<p>The configuration file must be named <tt>hpc.cfg</tt>, and must be located
+in the root directory of the MOE installation, or, equivalently, at the
+top-level of one of the <a href="../install/moeconfig.htm#Custom">customization
+directories</a>; i.e. in one of the following locations:</p>
+  <ul>
+  <li><tt>$MOE</tt></li>
+  <li><tt>$HOME/moefiles</tt></li>
+  <li><tt>$MOE/custom</tt></li>
+  <li><tt>$MOE/profile/&lt;profilename&gt;</tt></li>
+  </ul>
+
+<p>The syntax of the individual queue specification lines in <tt>hpc.cfg</tt> is
+described <a href="../svl/fcnref/hpcfcn.htm#Description">here</a>.  A template
+file can be found in <tt>$MOE/custom</tt>.
+</p>
+
+<p>Here is an example:</p>
+
+<div class="example">
+<pre>#
+#	hpc.cfg		Job queue configuration file
+#
+slurm		slurm	cluster0.mycompany.com:$HOME/hpc	*
+fast_slurm	slurm	cluster0.mycompany.com:$HOME/hpc	fast.q
+shortjob_slurm	slurm	cluster0.mycompany.com:$HOME/hpc	*	time=3h
+sge		sge	cluster0.mycompany.com:$HOME/hpc	all.q
+sge_himem	sge	cluster0.mycompany.com:$HOME/hpc	all.q	cpu=32 mem=64GB
+lsf		lsf	cluster0.mycompany.com:$HOME/hpc	*
+gpu		slurm	gpu0.mycompany.com:$HOME/hpc		*	gpu
+</pre>
+</div>
+
+<p>This example specifies 7 available queues where jobs may be
+submitted under the HPC framework, and can be broken down as follows:</p>
+<ul>
+  <li><a id="qalias"></a>The first column provides an alias,
+  which is intended to serve as an easily-remembered mnemonic,
+  and which will appear in the Batch submit panel.
+  </li>
+  <li>The second column is the type of queue management software.</li>
+  <li>The third column specifies the URL of the head node.
+
+    <p>An optional directory, signalled by a colon
+    (<tt>:</tt>), specifies the path on the head node where the job
+    directory will be uploaded (if unspecified, the login directory
+    will be used).  In the example above, the job directory will be created
+    in the subdirectory <tt>hpc</tt> of the user's home directory on
+    the node <tt>cluster0</tt>.</p>
+
+    <p>The login username can also optionally be specified with a
+    <tt><i>username</i>@</tt> prefix, e.g.
+    <tt>guest@cluster0.mycompany.com</tt>.
+    </p>
+
+  </li>
+  <li>The fourth column gives the actual name of the queue
+    on the head node into which jobs will be submitted; an asterisk
+    <tt>*</tt> denotes the default queue.
+  </li>
+  <li>In the fifth column, optional properties can be provided, specifying
+    resources or imposing limits.  For example, the <tt>shortjob_slurm</tt>
+    queue limits jobs to 3 hours.
+  </li>
+</ul>
+
+<a id="InitScripts"></a>
+<h2>Scripts for Locating Third Party Software</h2>
+
+<p>Scripts for locating third party software external to MOE are
+located in <tt>$MOE/lib/sh</tt> or equivalent (e.g. $MOE/custom/lib/sh).
+They have been named according to the convention
+<tt><i>application</i>_init.sh</tt>; for example, <tt>gold_init.sh</tt>.</p>
+
+<p>If any of the third party software packages represented in
+<tt>$MOE/lib/sh</tt> are to be used via the HPC framework, their
+corresponding <tt><i>application</i>_init.sh</tt> file must be
+appropriately configured.
+</p>
+
+<p>As an example, here is an extract from <tt>$MOE/lib/sh/gold_init.sh</tt>.
+The script first checks to see if the <tt>MOE_GOLD_EXE</tt> environment
+variable already exists.  As a fallback, it also checks if the
+executable is in the path.
+</p>
+
+<div class="example">
+<pre>    # Set MOE_GOLD_EXE if not already set.
+
+if [ -z "$MOE_GOLD_EXE" ]; then
+#   [1] insert code to set MOE_GOLD_EXE here
+    true
+fi
+
+    # Check if the gold_auto executable can be found,
+    # i.e. it is in the PATH.
+
+if [ -z "$MOE_GOLD_EXE" ]; then
+    if command -v gold_auto 1>/dev/null 2>&1; then # gold_auto is in the path
+	MOE_GOLD_EXE="$(command -v gold_auto)"
+    fi
+fi
+
+export MOE_GOLD_EXE</pre>
+</div>
+
+<p>The line following where the numeral <tt>[1]</tt> appears, i.e. the
+line consisting of the word <tt>true</tt>, can be replaced by
+a line of code setting the environment variable <tt>MOE_GOLD_EXE</tt>
+to the actual location of the GOLD executable, for example:
+</p>
+
+<div class="example">
+<pre>if [ -z "$MOE_GOLD_EXE" ]; then
+#   [1] insert code to set MOE_GOLD_EXE here
+    if [ -f "/net/myserver/CCDC/lnx64/Discovery_2020/bin/gold_auto" ]; then
+	MOE_GOLD_EXE=/net/myserver/CCDC/lnx64/Discovery_2020/bin/gold_auto
+    else
+	exit 1
+    fi
+fi</pre>
+</div>
+
+<a id="SeeAlso"></a>
+<h1>See Also</h1>
+
+<p>
+<a href="../proteins/antibody.htm">Antibody Modeler</a><br />
+<a href="../apps/breed.htm">BREED</a><br />
+<a href="../apps/frag_combi.htm">Combinatorial Builder</a><br />
+<a href="../apps/confgui.htm">Conformation Import</a><br />
+<a href="../apps/confsrch.htm">Conformation Search</a><br />
+<a href="../apps/docking.htm">Docking</a><br />
+<a href="../apps/emin.htm">Energy Minimize</a><br />
+<a href="../proteins/ensprop.htm">Ensemble Protein Properties</a><br />
+<a href="../proteins/promodel.htm">Homology Model</a><br />
+<a href="../apps/proloop.htm">Loop/Linker Modeler</a><br />
+<a href="../apps/shaman.htm">MedChem Transformations</a><br />
+<a href="../apps/prodesign.htm">Protein Design</a><br />
+<a href="../apps/ligx.htm">QuickPrep</a><br />
+<a href="../apps/qmconfig.htm">QM Configuration</a><br />
+<a href="../apps/scaffold.htm">Scaffold Replacement</a><br />
+<a href="../apps/rism.htm">Solvent Analysis</a><br />
+<a href="../apps/torprofile.htm">Torsion Profile</a><br />
+<a href="../apps/ti.htm">AMBER Thermodynamic Integration</a><br />
+</p>
+<p>
+<a href="../svl/fcnref/hpcfcn.htm">High Performance
+Computing Functions</a></p>
+
+  <div class="MOE_FOOTER">
+    <img src="../images/ccgicon.png" /> <a href="../index.htm"></a> <a href=
+    "../legal.htm"></a> &copy;<span class="versionyear"></span> <a href="http://www.chemcomp.com"></a>. All
+    rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

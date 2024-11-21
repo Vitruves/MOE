@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: uniq, m_uniq, x_uniq" />
+  <meta name="keywords" content="functions: freq" />
+  <title>SVL Functions: uniq, m_uniq, x_uniq, freq</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    SVL Functions: uniq, m_uniq, x_uniq, freq
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    unique_vals = <a class="fcnlink" href="#uniq">uniq</a> v
+    mask = <a class="fcnlink" href="#m_uniq">m_uniq</a> v
+    indices = <a class="fcnlink" href="#x_uniq">x_uniq</a> v
+
+    v = <a class="fcnlink" href="#freq">freq</a> [v,w]
+</pre>
+<a id="x_uniq"></a>
+<a id="m_uniq"></a>
+<a id="uniq"></a>
+<h1>Description</h1>
+
+<pre>
+unique_values = <span class="fcndef">uniq</span> v
+mask = <span class="fcndef">m_uniq</span> v
+indices = <span class="fcndef">x_uniq</span> v
+</pre>
+  <table class="noborder left">
+    <tr>
+      <td valign="top"><tt>uniq</tt></td>
+      <td valign="top">Returns <tt>v</tt> with all duplicates removed. The
+      original order of elements is preserved.</td>
+    </tr>
+    <tr>
+      <td valign="top"><tt>m_uniq</tt></td>
+      <td valign="top">Returns a mask such that <span class="nobr"><tt>uniq v
+      === v|<em>mask</em></tt></span>.</td>
+    </tr>
+    <tr>
+      <td valign="top"><tt>x_uniq</tt></td>
+      <td valign="top">Returns an index list such that <span class=
+      "nobr"><tt>uniq v === v[<em>indices</em>]</tt></span>.</td>
+    </tr>
+  </table>
+
+<pre>
+    svl&gt; uniq [1,1,2,2,3,3]
+    [1,2,3]
+
+    svl&gt; m_uniq [1,1,2,2,3,3]
+    [1,0,1,0,1,0]
+
+    svl&gt; x_uniq [1,1,2,2,3,3]
+    [1,3,5]
+
+    svl&gt; m_uniq &quot;mississippi&quot;
+    [1,1,1,0,0,0,0,0,1,0,0]
+</pre>
+<a id="freq"></a>
+<hr noshade="noshade" />
+
+<pre>
+v = <span class="fcndef">freq</span> [v,w]
+</pre>
+
+<p>Replaces each element of <tt>v</tt> by its frequency of occurrence in
+  <tt>w</tt>, i.e.</p>
+
+<pre>
+    freq [v,w] === app length indicesof [v,w]
+</pre>
+
+<p>For example:</p>
+
+<pre>
+    svl&gt; freq [&quot;afc&quot;, &quot;aafffe&quot;]
+    [2,3,0]
+
+    svl&gt; freq [&quot;affc&quot;, &quot;aafffe&quot;]
+    [2,3,3,0]
+</pre>
+
+<h1>See Also</h1>
+
+<p><a href="introstruct.htm">Structural Functions</a></p>
+
+<p><a class="svl" href="joinetc.htm">join</a> <a class="svl" href=
+  "diffetc.htm">diff</a><br />
+  <a class="svl" href="sam.htm">sam</a> <a class="svl" href=
+  "sortetc.htm">sort</a><br />
+  <a class="svl" href="indexetc.htm">indexof</a> <a class="svl" href=
+  "indexetc.htm">indicesof</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

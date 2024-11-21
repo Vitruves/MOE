@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content=
+  "functions: rot, rotl, rotr, rotlpoke, rotrpoke" />
+  <title>Rotate Functions: rot...</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Rotate Functions: rot...
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    rotated_v = <a class="fcnlink" href="#rot">rot</a> [v,num]
+
+    rotated_left_v = <a class="fcnlink" href="#rotl">rotl</a> v
+    rotated_right_v = <a class="fcnlink" href="#rotr">rotr</a> v
+
+    rot_left_poked_v = <a class="fcnlink" href=
+"#rotlpoke">rotlpoke</a> [ v, val ]
+    rot_right_poked_v = <a class="fcnlink" href=
+"#rotrpoke">rotrpoke</a> [ v, val ]
+</pre>
+
+<h1>Description</h1>
+<a id="rot"></a>
+<hr noshade="noshade" />
+
+<pre>
+rotated_v = <span class="fcndef">rot</span> [ v, num ]
+</pre>
+
+<p>Rotates source vector <tt>v</tt> by <tt>num</tt> positions. Positive
+  <tt>num</tt> rotates right, negative rotates left.</p>
+
+<pre>
+    svl&gt; rot [ [1,2,3], 1 ] // rotate right
+    [3,1,2]
+
+    svl&gt; rot [ [1,2,3], -1 ] // rotate left
+    [2,3,1]
+</pre>
+<a id="rotr"></a>
+<a id="rotl"></a>
+<hr noshade="noshade" />
+
+<pre>
+rotated_left_v = <span class="fcndef">rotl</span> v
+rotated_right_v = <span class="fcndef">rotr</span> v
+</pre>
+
+<p>Left and right rotate by one position. Note that:</p>
+
+<pre>
+    rotl a === rot [a, -1]
+    rotr a === rot [a, 1]
+</pre>
+
+<pre>
+    svl&gt; rotl [1,2,3]
+    [2,3,1]
+
+    svl&gt; rotr [1,2,3]
+    [3,1,2]
+</pre>
+<a id="rotrpoke"></a>
+<a id="rotlpoke"></a>
+<hr noshade="noshade" />
+
+<pre>
+rot_left_poked_v = <span class="fcndef">rotlpoke</span> [ v, val ]
+rot_right_poked_v = <span class="fcndef">rotrpoke</span> [ v, val ]
+</pre>
+
+<p>Rotate left or right by one position, replacing the element that is
+  carried from one end of the vector to the other by <tt>val</tt>. Note
+  that:</p>
+
+<pre>
+    rotlpoke a === poke [ rotl a, len a, val ]
+    rotlpoke a === rotl poke [ a, 1, val ]
+</pre>
+
+<pre>
+    svl&gt; rotlpoke [ &quot;sword&quot;, &quot;y&quot; ]
+    &quot;wordy&quot;
+
+    svl&gt; rotrpoke [ [1,2,3,4,5], 99 ]
+    [99,1,2,3,4]
+</pre>
+
+<h1>See Also</h1>
+
+<p><a href="introstruct.htm">Structural Functions</a></p>
+
+<p><a class="svl" href="reverse.htm">shift</a> <a class="svl" href=
+  "reverse.htm">shiftl</a> <a class="svl" href="reverse.htm">shiftr</a></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

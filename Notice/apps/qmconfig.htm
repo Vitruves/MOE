@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html>
+
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+<meta http-equiv="x-ua-compatible" content="IE=9" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="../include/manstyle.css" />
+<link rel="icon" type="image/png" href="../images/ccgicon.png" />
+<link rel="shortcut icon" type="image/png" href="../images/ccgicon.png" />
+
+<title>Configuring a QM Engine</title>
+<meta name="keywords" content="panel: QM Calculation Options" />
+<meta name="keywords" content=
+  "keywords: QM, quantum, SCF, frequency, vibrational, NMR, VCD, ONIOM" />
+
+</head>
+<body>
+<div class="center-page">
+<!-- START MOE_HEADER -->
+<div class="MOE_HEADER">
+<a href="../index.htm"><img src="../images/ccglogo.png" /></a>
+<a href="../index.htm"><div class="moeversion"></div></a>
+Configuring a QM Engine
+</div>
+<!-- END MOE_HEADER -->
+
+<div class="content">
+<ul>
+<li><a href="#Introduction">Introduction</a></li>
+<li><a href="#QMCalcOptions">QM Calculation Options</a></li>
+<li><a href="#QMexternal">Running QM Calculations</a></li>
+<ul>
+<li><a href="#RunInMOE">Running within MOE</a></li>
+<li><a href="#RunOutsideMOE">Running outside of MOE</a></li>
+<li><a href="#QMimport">Importing QM Results</a></li>
+</ul>
+<li><a href="#QMEngines">Supported QM Engines</a></li>
+<li><a href="#References">References</a></li>
+</ul>
+
+<a id="Introduction"></a>
+<h1>Introduction</h1>
+
+<p>
+There are two main categories of algorithms for describing molecular
+properties as a function of constituent atoms, their connectivity, and
+their positions. The simpler of the two is the classical forcefield
+method, in which the <span class="nobr"><q>ball &amp; spring</q></span>
+metaphor is applied to atoms and bonds, using parameters trained to reproduce
+quantitative data. The calculation of potential energy and gradients is
+computationally efficient, allowing discovery of minimum energy geometries of
+huge molecular species such as proteins.  These calculations are typically
+known as Molecular Mechanics (MM).
+</p>
+
+<p>
+The other main category is the quantum chemical (QM) method, which starts by
+assigning to each atom a set of atomic orbitals (comprised of basis
+functions), and a number of electrons to populate them.  Given this and
+the atomic positions, one of the many theoretical approaches can be used to
+determine the wavefunction for the molecule (the solution of the
+Schr&ouml;dinger Equation).  Various atomic and molecular properties can
+then be determined from the wavefunction as needed.
+</p>
+
+<p>
+Compared to the use of forcefields, calculation of molecular properties
+using wavefunction-based methods is computationally intensive, with a
+(very) strong molecular size dependence.  Theoretical approaches include
+semi-empirical, Hartree-Fock, Density Functional Theory (DFT) and
+post-Hartree-Fock methods.  The level of approximation, and thus the time
+required to perform a calculation, is chosen to yield the desired
+information with the least effort.  Fortunately, these approaches are
+amenable to multi-processor calculations.
+</p>
+
+<a id="ONIOM"></a>
+<h2>ONIOM (QM/MM)</h2>
+<p>
+Large systems, such as ligand/pocket complexes, can be treated by QM/MM
+methods.  In this, a (small) region of interest (the inner layer) &ndash;
+for example,
+the locus of charge transfer or bond making/breaking, i.e. "where
+chemistry occurs" &ndash; is treated quantum-chemically,
+while the rest of the system
+(the outer layer) is modeled by a forcefield.  In complex systems,
+a middle layer might be included that is treated quantum-chemically using a
+lower level of theory.
+Determining the 
+complex energy or minimized geometry using this heterogeneous
+approach can gain a significant reduction in computation time over
+treating all atoms with QM.
+</p>
+
+<p>
+The ONIOM approach ([Vreven&nbsp;2005] and
+references therein) is one way of implementing such calculations.
+The HDAC8 complex provides an example of how the molecular system
+might be partitioned:
+</p>
+
+<img src="qmconfig/oniom_hdac8.png" alt="ONIOM Partitioning" class="center" />
+
+<p>
+Here, the inner region has been specified as the zinc ion plus atoms up to
+2 angstroms away.  The yellow region highlights this inner layer, including
+any adjustments
+necessary to satisfy partitioning rules, and which will be treated at the 
+highest level of theory.  The blue region is the middle layer, which will
+be optimized at a lower level of theory (such as semi-empirical).  The remaining
+atoms constitute the outer layer, which will be
+treated via a forcefield.  The ONIOM method, as implemented in the third-party
+QM engine, performs the necessary calculations in each layer to create an
+overall solution for the system.  As it is an approximate method, some
+properties of the system are unavailable.
+</p>
+
+<p>
+For a two-layer ONIOM calculation, three separate subcalculations are
+performed:
+<ol>
+<li>The full system using a forcefield, yielding <tt>E_RealLow</tt>.</li>
+<li>The inner layer using a QM method, yielding <tt>E_ModelHigh</tt>.</li>
+<li>The inner layer using a forcefield, yielding <tt>E_ModelLow</tt>.</li>
+</ol>
+<br />
+These subcalculations are used to obtain the ONIOM energy:
+<br /></br>
+<span class="nobr"><tt>E_ONIOM = E_RealLow - E_ModelLow + E_ModelHigh.
+</tt></span><br /><br />
+Three-layer ONIOM involves more subcalculations, but the principle is
+the same, and the overall ONIOM energy is calculated in a fashion
+similar to that of the two-layer case.
+</p>
+
+<a id="QMCalcOptions">
+<h1>QM Calculation Options</h1>
+</a>
+
+<p>
+This is the setup panel for MOE applications that use quantum chemical
+methods.  It specifies the QM Engine and the various settings and keywords
+needed to perform the calculation.  The name of the associated application
+is included in the window title.  Pressing the configure icon brings up
+the panel:</p>
+
+<a id="QMpanelImage"></a>
+<img src="qmconfig/QMpanel1.png" alt="QM Config" class="center" />
+
+<table class="noborder">
+<tr>
+<td><b>Engine</b></td>
+<td>The third-party Quantum Mechanics program to use. By
+default, MOPAC is selected (and distributed with MOE). See
+<a href="#QMEngines">Supported QM Engines</a> below for more
+information. The configure icon, if supported by the QM engine, provides
+an easier means of setting the RC settings required to run the external
+application.  While all engines have significant feature overlap, changing
+the engine will cause menus to change and unsupported options to be
+insensitive.
+</td></tr>
+<td><b>ONIOM</b></td>
+<td>If disabled, a single-layer calculation will be performed using the
+specified method and basis set for all atoms.  If enabled, a two- or
+three-layer calculation will be performed using the specified method and
+basis set for each group of atoms.
+</td></tr>
+<tr>
+<td><b>Method</b></td>
+<td>The computational method that will be used for the
+calculation.  This can include Forcefield, Semi-Empirical, Hartree-Fock,
+Density Functional Theory and/or post-Hartree-Fock options. Each QM engine
+provides a range of methods of varying cost and complexity.
+</td></tr>
+<tr>
+<td><b>Basis Set</b></td>
+<td>All QM engines present a variety of basis sets which
+affect the quality and performance of the calculation. This menu contains
+Hamiltonians (e.g. the AM1, PM3 and MNDO methods) with the <tt>MOPAC</tt>
+engine and atomic orbital basis sets (e.g.
+<span class="nobr">STO-3G</span>,
+<span class="nobr">6-31G*</span> etc.)
+otherwise. Atomic orbital basis sets can be modified via the
+<b>Polarization</b> and/or <b>Diffuse</b> menus if active.  Note that
+some methods do not rely on a basis set.
+</td></tr>
+<tr>
+<td><b>Polarization</b></td>
+<td>Polarization functions, if available, can be used to
+augment the atomic orbital basis set and are particularly valuable when
+hypervalent atoms are present. These are denoted by <tt>*</tt> and
+<tt>**</tt> in the Pople basis sets (e.g. <span class="nobr">6-31G*</span>).
+Other basis sets will have other designations.
+</td></tr>
+<tr>
+<td><b>Diffuse</b></td>
+<td>Diffuse functions, if available, can be used to augment
+the atomic orbital basis set and are particularly valuable when anions or
+&quot;soft&quot; atoms are present. These are denoted by <tt>+</tt> and
+<tt>++</tt> in the Pople basis sets (e.g. <span class="nobr">6-31+G</span>).
+Other basis sets will have other designations.
+</td></tr>
+<tr>
+<th style="text-align:left; vertical-align:top:">Multi-step Convergence</th>
+<td style="padding: 0.5em;">
+If on, a multi-step calculation is performed to increase the likelihood
+of successful geometry optimization:<br /><br />
+<ol>
+<li>Run the optimization as specified by the user.</li>
+<li>If (1) is unsuccessful, the results are discarded. The
+optimization is reattempted with the force constant matrix calculated at
+the start and again after every 10 optimization cycles.  A 10<sup>-4</sup>
+angstrom perturbation is applied to each coordinate before starting each
+cycle.</li>
+<li>If (2) is unsuccessful, the results are discarded. The
+optimization is reattempted with the force constant matrix calculated at
+each optimization cycle.<br /><br /></li>
+</ol>
+The user is informed if (3) fails. The initial geometry and QM
+engine options should be reviewed before repeating the calculation.
+This is supported for the <tt>Gaussian</tt> engine only.
+</td></tr>
+<tr>
+<td><b>Geometry Optimization</b></td>
+<td>If off, the calculation will be done as a stationary point.  It is assumed
+that the input coordinates are already suitable for calculating the
+wavefunction and any derived properties.  If on, all output will reflect
+the minimized structure.
+</td></tr>
+<tr>
+<td><b>Linear&nbsp;Scaling</b></td>
+<td>If on and supported by the QM engine, linear scaling
+methods will be used. This makes calculations on a large-scale possible in
+reasonable amounts of time and can result in some loss of precision.
+</td></tr>
+<tr>
+<td><b>Keep&nbsp;QM&nbsp;Files</b></td>
+<td>If on, the input and output files from the QM
+calculation will be retained. These will be saved in the execution
+directory whose name and location is based on the particular application
+being run.  This can be TMP, a directory based on the output database name in
+the working directory, or one based on a specified Wavefunction file.
+<td></tr>
+<tr>
+<td><b>Update Connectivity</b></td>
+<td>If on, the topology of the system is recalculated when
+the calculation completes: bonds, hybridization, ionization and hintLP
+values are determined from the resulting geometry. This is typically used
+after a chemical reaction has taken place.
+</td></tr>
+<tr>
+<td><b>NMR&nbsp;Shielding</b></td>
+<td>If on and supported by the QM engine, NMR shielding
+tensors (in ppm) will be calculated for each atom. These can be
+visualized with the <span class="nobr"><a href=
+"spectralanalysis.htm#NMRAnalysis">NMR Analysis</a></span> application.
+When enabled, the <span class="nobr"><b>Vibrational
+Frequencies</b></span> option is also enabled. This is required to
+generate Boltzmann-weighted NMR spectra.  Conformers with negative
+frequencies are ignored when calculating weighted properties.
+<td></tr>
+<tr>
+<td><b>Vibrational Frequencies</b></td>
+<td>If on and supported by the QM engine, vibrational
+frequencies and their normal modes will be calculated. This yields IR
+spectra that can be used to evaluate whether the geometry optimization
+has converged successfully.
+</td></tr>
+<tr>
+<td><b>Coupling Constants</b></td>
+<td>If on and supported by the QM engine, NMR spin-spin
+coupling constants (in Hz) will be calculated for each atom. These can be
+visualized with the <span class="nobr"><a href=
+"spectralanalysis.htm#NMRAnalysis">NMR Analysis</a></span> option of the
+Spectral Analysis application. When enabled, the <span class="nobr">NMR
+Shielding</span> and <span class="nobr">Vibrational Frequencies</span>
+options are also enabled. This calculation is typically very resource
+intensive.
+</td></tr>
+<tr>
+<td><b>Vibrational Circular Dichroism</b></td>
+<td>If on and supported by the QM engine, the vibrational
+circular dichroism spectrum will be calculated for each conformer. These
+can be visualized with the <span class="nobr"><a href=
+"spectralanalysis.htm#RunVCD">VCD Analysis</a></span> option of the
+Spectral Analysis application. When enabled, the <span class="nobr">NMR
+Shielding</span> and <span class="nobr">Vibrational Frequencies</span>
+options are also enabled. This calculation is typically very resource
+intensive.
+</td></tr>
+<tr>
+<td><b>Solvent&nbsp;Model</b></td>
+<td>Many computational engines support one or more types of
+solvent models in order to mimic the effect of being in solution. When
+available, the solvent model may be selected from a list, and the
+dielectric (&epsilon;) and solute radius may be tweaked as
+necessary.
+</td></tr>
+<tr>
+<td><b>Job&nbsp;Title</b></td>
+<td>An arbitrary name can be given to the calculation.
+</td></tr>
+<tr>
+<td><b>Keywords</b></td>
+<td>If available, additional engine-specific keywords can be
+specified to affect the calculation. They can be entered (space-separated)
+in this text box.  Consult the third-party
+documentation for a description of supported keywords.  For some
+QM engines, MOE has added pseudo-keywords to extend menu selections
+or simplify option input.  For QM engines supported in the
+<a href="../moe/hpc.htm">HPC Framework</a> the keywords can be used
+to specify the resources used in queue submission.
+</td></tr>
+<tr>
+<td><b>Save Settings</b></td>
+<td>Pressing <b>Save Settings</b> saves the current settings
+of the <span class="nobr"><b>QM Options</b></span> panel as
+the new defaults. These defaults will be used when the panel is
+reopened.  Each QM-aware application maintains its own set of
+default values.
+</td></tr>
+<tr>
+<td><b>Standard Settings</b></td>
+<td>Pressing <b>Standard Settings</b> restores the settings
+of the <span class="nobr"><b>QM Options</b></span> panel to
+the predefined default values for the current QM engine. As these
+defaults are defined for the engine, all QM-aware applications share
+the same default values.
+</td></tr>
+</table>
+
+<a id="QMONIOM"></a>
+<p>
+If <b>ONIOM</b> is selected, the panel changes to allow the <b>Method</b> and
+</span class="nobr"><b>Basis Set</b> to be specified for each layer:
+
+<img src="qmconfig/oniom_options.png" alt="QM ONIOM Config" class="center" />
+
+<table class="noborder">
+<tr>
+<td><b>Inner</b></td>
+<td>The <a href="../moe/fcnref/aselect.htm">Selection Expression</a> that
+specifies the seed atoms for the Inner layer.  The smallest set of atoms
+that meet the partitioning criteria will be highlighted in
+<a font color="yellow">yellow</a>.  Pressing the <b>?</b> button to the
+right of the selection text will briefly flash the seed atoms in the
+MOE window.  The <b>Method</b> and
+<span class="nobr"><b>Basis Set</b></span> (if appropriate) will be shown
+next to the <b>?<b>.
+</td></tr>
+<tr>
+<td><b>Middle</b></td>
+<td>The seed atoms for the Middle layer are defined as those within the
+specified radius (in angstroms) of the Inner layer atoms (those shown
+in yellow in the MOE window).  The smallest set of atoms that meet the
+partitioning criteria will be highlighted in
+<a font color="blue">blue</a>.  Pressing the <b>?</b> button to the right
+of the radius value will briefly flash the seed atoms in the MOE window.
+The <b>Method</b> and <span class="nobr"><b>Basis Set</b></span>
+(if appropriate) will be shown next to the <b>?</b>.
+</td></tr>
+<tr>
+<td><b>Outer</b></td>
+<td>The Outer layer consists of all atoms that are not in the Inner or
+Middle (if present) layers.  This layer must contain atoms for the calculation
+to proceed.  The <b>Method</b> and <span class="nobr"><b>Basis Set</b></span>
+(if appropriate) will be shown next to the number of atoms in the layer..
+</td></tr>
+</table>
+</p>
+<p>
+Pressing the Configuration icon for an
+individual layer opens a popup:
+
+<img src="qmconfig/oniom_layer_config.png" alt="QM ONIOM Popup"
+class="center" />
+
+for selecting the <b>Method</b> and
+<span class="nobr"><b>Basis Set</b></span> for that layer.  Press <b>OK</b> to
+accept the change.  The method used for each layer must be in decreasing
+levels of theory, and only one semi-empirical and one forcefield method
+may be selected.
+</p>
+
+<a id="QMexternal"></a>
+<h2>Running QM Calculations</h2>
+
+<p>
+Quantum chemical calculations (using third-party software packages) can
+take a significant amount of time to complete. This is particularly true when
+spectral properties such as NMR, VCD or spin-spin coupling constants are
+being generated. These calculations can be run within MOE, using MOE/web
+or on large-scale
+clusters external to MOE. Either way, the results can then be imported into
+MOE and the appropriate database updated. This is controlled by the
+<span class="menu">DBV | Compute | QM</span> menu items of the (empty) output
+database created by applications such as
+<a href="confsrch.htm"><span class="nobr">
+<b>Conformation Search</b></span></a>,
+<a href="emin.htm#DBMin">
+<span class="nobr"><b>Energy Minimization</b></span></a> or
+<a href="torprofile.htm"><span class="nobr"><b>Torsion Profile</b></a>.
+</p>
+
+<a id="RunInMOE"></a>
+<h3>Running within MOE</h3>
+
+<p>
+These applications will run the calculation(s) under MOE's control if the
+user presses <b>OK</b>.  The calculation's settings and
+working directories are associated with the output database.
+If MOE (or MOE/web) is MPU-enabled, multiple calculations will be run
+simultaneously. Progress can be tracked in the <span class="nobr"><b>SVL
+Commands</b></span> window, as well as status fields in the database as
+appropriate. MOE must remain active while performing these calculations. When
+the calculation is completed, the results can be imported into the database
+(see <a href="#QMimport">below</a>). A worked example can be found <a href=
+"spectralanalysis.htm#QMinMOE">here</a>.
+</p>
+<p>
+For example, if the default name of <tt>csearch.mdb</tt> was used for a
+Conformation Search with QM refinement, the database <tt>csearch_qm.mdb</tt>
+will be created with the necessary settings and the directory
+<tt>csearch_qm_conffiles</tt> will be created with the necessary input
+files and shell scripts.
+Each subdirectory in <tt>csearch_qm_conffiles</tt> corresponds
+to an entry in <tt>csearch_qm.mdb</tt>, and must contain all information
+associated (input and output) with this entry's calculation.  These
+directories are created after the forcefield-based calculation has completed.
+</p>
+
+<a id="RunOutsideMOE"></a>
+<h3>Running Outside of MOE</h3>
+
+<p>
+Pressing <b>Batch</b> carries out any calculation performed by MOE
+(e.g. in Conformation Search) and then writes out
+the information needed to run the QM portion outside of MOE
+to a job directory, along with the
+data needed to create the output database (or update the input
+database).  When external QM calculations
+are performed, the job directory also contains the working subdirectory for
+each row of the output database.  These subdirectories, if kept, contain
+the input file(s) passed to the external program and all of the output
+that was generated.
+The QM calculations can be started from the output database via
+<span class="menu">DBV | Compute | QM | Run</span>. This will launch the
+calculations using the settings and directories associated with the
+output database.  The calculation can also be run outside MOE by
+executing the shell script in the job directory.
+</p>
+
+<p>
+For supported QM engines such as Gaussian, the entire calculation can be
+carried out on a remote <a href="../moe/hpc.htm">queueing system</a>.
+The <b>Batch</b> button opens the
+<a href="../moe/hpc.htm#BatchPanel">Batch</a> job submit panel,
+where the information needed to run the calculation
+outside of MOE can be provided.  In this case the remote job will consist
+of a moebatch process which will write out the job directory as described
+above and then submit the QM refinement jobs individually to the queueing
+system.  In the case of Gaussian, the Keywords provided in the
+<a href="#QMCalcOptions">Calculation Options</a> will be used to submit
+the jobs with the required number of CPUs and amount of memory to run
+correctly.  In this case the remote job will also automatically import
+the QM results into the appropriate output database after all QM jobs
+have completed.
+</p>
+
+<a id="QMimport"></a>
+<h3>Importing QM results</h3>
+
+<p>
+When the QM calculation has completed without updating the output
+database, the results can be imported into
+the currently active database by selecting <span class="menu">DBV | Compute |
+QM | Import</span>. This will load the application-specific information
+generated by the QM package into the appropriate fields; these were created
+by the application that generated the database. If <span class="nobr"><b>Keep
+QM Files</b></span> was specified when the calculation was set up, the input
+and output files will be retained, otherwise for successful calculations
+they will be
+deleted.  Note that the output files must be present in the MOE-created
+subdirectory to import the data into the database.
+</p>
+
+<a id="QMEngines"></a>
+<h1>Supported QM Engines</h1>
+<p>
+MOE includes support for several QM engines, each of which provides an
+interface to an external package.  Specific configuration settings, as
+described below, may be required in order to run these applications.
+MOE can use the data that has been calculated using one of these engines
+even if the application itself is not locally installed.
+</p>
+
+<a id="MOPAC"></a>
+<h2>MOPAC Engine</h2>
+
+<p>
+The <tt>MOPAC</tt> external application is included with MOE, and is generally
+fully functional without any special configuration steps.
+</p>
+
+<a id="ADF"></a>
+<h2>ADF Engine</h2>
+
+<p>
+The <tt>ADF</tt> (Amsterdam Density Functional) application is available from
+<a href="https://www.scm.com">Software for Chemistry and Materials</a> (SCM).
+A single configuration setting is required in order to run the executable
+files.  This can be specified by clicking on the configure icon of the
+<b>Engine</b> menu when the ADF engine is used:
+</p>
+
+<img src="scf/ADFRC.png" alt="ADF setup panel" class="center" />
+
+<p>
+Additional information is available in the
+<span class="nobr"><a href= "../moe/extprog.htm#ADF">
+Interfacing to External Programs</a></span> section of the manual.
+</p>
+
+<a id="GAMESS"></a>
+<h2>GAMESS Engine</h2>
+
+<p>
+The <tt>GAMESS</tt> (General Atomic and Molecular Electronic Structure
+System) application is available from the Gordon research group at
+<a href="https://www.msg.chem.iastate.edu/gamess">Iowa State University</a>.
+A single configuration setting is required in order to run the executable
+files.  This can be specified by clicking on the configure icon of the
+<b>Engine</b> menu when the GAMESS engine is used:
+</p>
+
+<img src="scf/GAMESSRC.png" alt="GAMESS setup panel" class="center" />
+
+<p>
+and entering the full or relative path of the appropriate GAMESS file.
+If the path is omitted, the 
+<a href="../appendix/settings.htm#MOEWeb">Default MOE/web Server</a>
+will be used for all calculations.  The user can specify the number
+of threads to use for the calculation, and on a Windows PC can specify
+the version of GAMESS to use.
+Additional information is available in the
+<span class="nobr"><a href= "../moe/extprog.htm#GAMESS">
+Interfacing to External Programs</a></span> section of the manual.
+</p>
+
+<a id="Gaussian"></a>
+<h2>Gaussian Engine</h2>
+
+<p>
+The <tt>Gaussian</tt> application is available from
+<a href="https://www.gaussian.com">Gaussian, Inc</a>.
+The <span class="nobr"><b>Gaussian Settings</b></span> panel allows the user
+to specify how Gaussian calculations are set up and possibly performed by
+MOE:
+</p>
+
+<img src="scf/GaussianRC.png" alt="Gaussian setup panel" class="center" />
+
+<p>
+<table class="noborder">
+<tr>
+<td><b>Executable</b></td>
+<td>
+The full or relative path of the Gaussian executable, or the name of
+a shell script that runs Gaussian and the necessary utilities in the
+local environment.  If the path to the Gaussian executable is omitted, the
+<a href="../appendix/settings.htm#MOEWeb">Default MOE/web Server</a>
+will be used for all calculations.
+</td></tr>
+<tr>
+<td><b>Input Suffix</b></td>
+<td>
+The filename suffix used when creating Gaussian input files.
+</td>
+</tr><tr>
+<td><b>Output Suffix</b></td>
+<td>
+The filename suffix of the output file created by Gaussian as the calculation
+proceeds.
+</td></tr>
+<tr>
+<td><b>Validate Calculations</b></td>
+<td>
+If on, a short calculation will be performed by Gaussian to check whether
+the structure and settings are valid and consistent.  If Gaussian is
+unavailable, this option should be disabled.
+</td></tr>
+</table>
+
+<p>
+Additional information is available in the
+<span class="nobr"><a href="../moe/extprog.htm#Gaussian">
+Interfacing to External Programs</a></span> section of the manual.
+</p>
+
+<a id="References"></a>
+<h1>References</h1>
+<table class="ref">
+<tr>
+<td>[Vreven&nbsp;2005]</td>
+<td>Vreven, T., Byun, K.S., Komaromi, I., Dapprich, S., Montgomery Jr., J.A.,
+Morokuma, K., Frisch, M.J.; Combining Quantum Mechanics Methods with
+Molecular Mechanics Methods in ONIOM; <i>J. Chem. Theory Comput. 2</i>
+(<b>2006</b>) 815&ndash;826.</td>
+</tr>
+</table>
+
+<h1>See Also</h1>
+
+<p>
+<a href="emin.htm">Energy Minimization</a><br />
+<a href="confsrch.htm">Generating and Analyzing Conformations</a><br />
+<a href="torprofile.htm">Torsion Profile</a><br />
+<a href="../mdb/db.htm">Molecular Database Viewer</a><br />
+<a href="../install/smp_inst.htm">MOE/cluster (MOE/smp)</a><br />
+<a href="../moe/hpc.htm">High-Performance Computing Framework</a></p>
+</p>
+
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../images/ccgicon.png" /> <a href="../index.htm"></a> <a href=
+    "../legal.htm"></a> &copy;<span class="versionyear"></span> <a href="http://www.chemcomp.com"></a>. All
+    rights reserved.
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

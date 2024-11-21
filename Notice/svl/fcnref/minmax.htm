@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content=
+  "functions: min, max, minE, maxE, minL, maxL, x_minL, x_maxL, x_min, x_max" />
+  <meta name="keywords" content="functions: minR, maxR, maxabsR" />
+  <title>Min/Max Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Min/Max Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    val = <a class="fcnlink" href="#min">min</a> [a,b]
+    val = <a class="fcnlink" href="#max">max</a> [a,b]
+    val = <a class="fcnlink" href="#min">min</a> [a,b,c,...] // reduction
+    val = <a class="fcnlink" href="#max">max</a> [a,b,c,...] // reduction
+
+    val = <a class="fcnlink" href="#x_min">x_min</a> [a,b]
+    val = <a class="fcnlink" href="#x_max">x_max</a> [a,b]
+    val = <a class="fcnlink" href="#x_min">x_min</a> [a,b,c,...] // reduction
+    val = <a class="fcnlink" href="#x_max">x_max</a> [a,b,c,...] // reduction
+
+    val = <a class="fcnlink" href="#minL">minL</a> [a,b]
+    val = <a class="fcnlink" href="#maxL">maxL</a> [a,b]
+    val = <a class="fcnlink" href="#minL">minL</a> [a,b,c,...] // reduction
+    val = <a class="fcnlink" href="#maxL">maxL</a> [a,b,c,...] // reduction
+
+    val = <a class="fcnlink" href="#x_minL">x_minL</a> [a,b]
+    val = <a class="fcnlink" href="#x_maxL">x_maxL</a> [a,b]
+    val = <a class="fcnlink" href="#x_minL">x_minL</a> [a,b,c,...] // reduction
+    val = <a class="fcnlink" href="#x_maxL">x_maxL</a> [a,b,c,...] // reduction
+
+    val = <a class="fcnlink" href="#minE">minE</a> [a,b]
+    val = <a class="fcnlink" href="#maxE">maxE</a> [a,b]
+    val = <a class="fcnlink" href="#minE">minE</a> [a,b,c,...] // reduction
+    val = <a class="fcnlink" href="#maxE">maxE</a> [a,b,c,...] // reduction
+
+    val = <a class="fcnlink" href="#minR">minR</a> v
+    val = <a class="fcnlink" href="#maxR">maxR</a> v
+    val = <a class="fcnlink" href="#maxabsR">maxabsR</a> v
+</pre>
+<a id="max"></a>
+<a id="min"></a>
+<h1>Description</h1>
+
+<p><tt>min</tt> and <tt>max</tt> are numerical minimum and maximum functions.
+  The argument must be a flat numerical vector, and the result is a scalar
+  number. Unlike the general element-wise functions, the flat numerical
+  versions can accept an empty vector as a valid argument. The numerical
+  minimum of an empty set is <tt>+Inf</tt>, the numerical maximum is
+  <tt>-Inf</tt>.</p>
+
+<p>For example:</p>
+
+<pre>
+    svl&gt; <span class="fcndef">min</span> [3,6,1,5]
+    1
+
+    svl&gt; <span class="fcndef">min</span> []
+    Inf
+
+    svl&gt; <span class="fcndef">max</span> [3,6,1,5]
+    6
+
+    svl&gt; <span class="fcndef">max</span> []
+    -Inf
+</pre>
+<a id="x_max"></a>
+<a id="x_min"></a>
+<hr noshade="noshade" />
+
+<p><tt>x_min</tt> and <tt>x_max</tt> return the index of the first minimum or
+  maximum. The argument must be a non-empty flat numerical vector, i.e.</p>
+
+<pre>
+    <span class="fcndef">x_min</span> v === first x_fsort v
+    <span class="fcndef">x_max</span> v === last x_fsort v
+</pre>
+
+<p>For example:</p>
+
+<pre>
+    svl&gt; x_min [2,4,1,5,1,6]
+    3
+</pre>
+<a id="maxL"></a>
+<a id="minL"></a>
+<hr noshade="noshade" />
+
+<p><tt>minL</tt> and <tt>maxL</tt> are lexicographic minimum and maximum
+  functions. They use the lexicographic comparison to find the first top-level
+  element that is lesser (or greater) than all other top-level elements,
+  i.e.</p>
+
+<pre>
+    <span class="fcndef">minL</span> v = first sort v
+    <span class="fcndef">maxL</span> v = last sort v
+</pre>
+
+<p>For example:</p>
+
+<pre>
+    svl&gt; minL [ [-3,&quot;b&quot;], [10,&quot;a&quot;] ]
+    [-3, &quot;b&quot;]
+</pre>
+<a id="x_minL"></a>
+<a id="x_maxL"></a>
+<hr noshade="noshade" />
+
+<p><tt>x_minL</tt> and <tt>x_maxL</tt> return the index of the lexicographic
+  minimum or maximum. Unlike numerical functions <tt>x_min</tt> and
+  <tt>x_max</tt>, the lexicographic functions <tt>x_minL</tt> and
+  <tt>x_maxL</tt> accept arguments of any type and shape.</p>
+
+<p>For example:</p>
+
+<pre>
+    svl&gt; <span class=
+"fcndef">x_minL</span> [ [ -3, &quot;b&quot;], [ 10, &quot;a&quot; ] ]
+    1
+</pre>
+<a id="maxE"></a>
+<a id="minE"></a>
+<hr noshade="noshade" />
+
+<p><tt>minE</tt> and <tt>maxE</tt> are element-wise minimum and maximum
+  functions. The arguments must be of the same compatible shape and data types.
+  The result is the minimum of the corresponding leaves, i.e.</p>
+
+<pre>
+    (<span class="fcndef">minE</span> [v,w] == v) === (v &lt;= w)
+    (<span class="fcndef">maxE</span> [v,w] == v) === (v &gt;= w)
+</pre>
+
+<p>For example:</p>
+
+<pre>
+    svl&gt; minE [ [-3,&quot;b&quot;], [10,&quot;a&quot;] ]
+    [-3, &quot;a&quot;]
+
+    svl&gt; maxE [15, [14, [23, 24, 26]], [[13,16], 25] ]
+    [[15,16], [25,25,26]]
+</pre>
+<a id="maxR"></a>
+<a id="maxabsR"></a>
+<a id="minR"></a>
+<hr noshade="noshade" />
+
+<p>These functions are numerical minimum and maximum functions that work on
+  arbitrarily nested numerical vectors. The &quot;R&quot; in the function names
+  stands for &quot;recursive&quot;. The result is a scalar number.</p>
+  <table class="noborder">
+      <tr>
+        <td valign="baseline"><span class="fcndef"><tt>minR</tt></span></td>
+        <td valign="baseline">Returns the minimum value found in the argument
+        vector.</td>
+      </tr>
+      <tr>
+        <td valign="baseline"><span class="fcndef"><tt>maxR</tt></span></td>
+        <td valign="baseline">Returns the maximum value found in the argument
+        vector.</td>
+      </tr>
+      <tr>
+        <td valign="baseline"><span class="fcndef"><tt>maxabsR</tt></span></td>
+        <td valign="baseline">Returns the maximum value found in the absolute
+        value of the argument vector.</td>
+      </tr>
+    </table>
+
+<p>For example:</p>
+
+<pre>
+    svl&gt; v = [ [1,2,3], [-100,-200], [10,20,30,40] ]
+
+    svl&gt; minR v
+    -200
+
+    svl&gt; maxR v
+    40
+
+    svl&gt; maxabsR v
+    200
+</pre>
+
+<h1>See Also</h1>
+  <table class="functionList">
+    <tr>
+      <td valign="top"><a href="eqletc.htm">cmpL</a><br />
+      <a href="eqeetc.htm">eqE</a><br />
+      <a href="eqletc.htm">eqL</a><br />
+      <a href="eqeetc.htm">geE</a><br />
+      <a href="eqletc.htm">geL</a><br />
+      <a href="eqeetc.htm">gtE</a><br />
+      <a href="eqletc.htm">gtL</a></td>
+      <td valign="top"><a href="eqeetc.htm">leE</a><br />
+      <a href="eqletc.htm">leL</a><br />
+      <a href="eqeetc.htm">ltE</a><br />
+      <a href="eqletc.htm">ltL</a><br />
+      <a href="eqeetc.htm">neE</a><br />
+      <a href="eqletc.htm">neL</a><br />
+      <a href="getpeek.htm">peek</a></td>
+    </tr>
+  </table><!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

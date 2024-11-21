@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: db_ImportMOL2" />
+  <meta name="keywords" content="functions: db_ExportTriposMOL2" />
+  <title>MOL2 Database Import/Export Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    MOL2 Database Import/Export Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    <a class="fcnlink" href=
+"#db_ImportMOL2">db_ImportMOL2</a> [ 'MOL2_file', 'mdb_file', 'mol_field', options ]
+</pre>
+  <p class="blockquote">
+    where options is
+  </p>
+
+<pre class="code">
+[
+    overwrite:      flag,
+    file_field:     flag
+]
+</pre>
+
+<pre>
+    <a class="fcnlink" href=
+"#db_ExportTriposMOL2">db_ExportTriposMOL2</a> ['mdb_file', 'MOL2_file', 'mol_field', options]
+</pre>
+  <p class="blockquote">
+    where options is
+  </p>
+
+<pre class="code">
+[
+    esel:   flag
+]
+</pre>
+<a id="db_ImportMOL2"></a>
+<h1>Description</h1>
+
+<pre>
+<span class=
+"fcndef">db_ImportMOL2</span> [ 'MOL2_file', 'mdb_file', 'mol_field', options ]
+</pre>
+
+<p>Imports molecules from a MOL2 formatted file to the specified molecule
+  field in a MOE molecular database file.</p>
+
+<dl>
+  <dt><tt>'MOL2_file'</tt></dt>
+  <dd>Name of the source MOL2 format file to import, specified as a
+  token.</dd>
+  <dt><tt>'mdb_file'</tt></dt>
+  <dd>Name of the destination MOE molecular database to which the imported
+  structures will be written, specified as a token.</dd>
+  <dt><tt>'mol_field'</tt></dt>
+  <dd>The name (a token) of the molecule field in the destination database
+  where the molecular data will be written. The default is <tt>mol</tt>. If
+  this field name currently exists, the import operation may overwrite the
+  contents of the field. Otherwise, a new field will be created.</dd>
+  <dt><tt>options</tt></dt>
+  <dd>
+    The import options are attribute-value colon-separated pairs:
+    <dl>
+      <dd></dd>
+      <dt><tt>overwrite:flag</tt></dt>
+      <dd>If <tt>flag</tt> is zero, the imported molecules are appended to
+      the destination database. Otherwise, molecules are added to the
+      specified database field starting from the first entry; if the
+      destination molecule field already exists, any molecule data already
+      present will be overwritten. The default value is 0.</dd>
+      <dt><tt>file_field:flag</tt></dt>
+      <dd>If <tt>flag</tt> is non-zero, then the name of the source database
+      file for each entry is written to the destination database file. The
+      default is 0.</dd>
+    </dl>
+  </dd>
+</dl>
+
+<p>The following example illustrates how to import the molecules in file
+  <tt>molpack.mol2</tt> into the field <tt>mol</tt> of database
+  <tt>molpack.mdb</tt> starting at the first entry:</p>
+
+<pre class="code">
+db_ImportMOL2 [ 'molpack.mol2', 'molpack.mdb', 'mol', [overwrite:1] ]
+</pre>
+<a id="db_ExportTriposMOL2"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class=
+"fcndef">db_ExportTriposMOL2</span> ['mdb_file', 'MOL2_file', 'mol_field', options]
+</pre>
+
+<p>Exports a MOE molecular database file to a Tripos MOL2 database file.</p>
+<dl>
+  <dt><tt>'mdb_file'</tt></dt>
+  <dd>Name of the MOE molecular database file, specified as a token, to be
+  exported to the Tripos MOL2 format.</dd>
+  <dt><tt>'MOL2_file'</tt></dt>
+  <dd>Name of the file to be created, specified as a token. If the file
+  already exists it will be overwritten.</dd>
+  <dt><tt>'mol_field'</tt></dt>
+  <dd>Name of the molecular field to use for the export. If no field name is
+  given then the first molecule field in the database will be used.</dd>
+  <dt><tt>options</tt></dt>
+  <dd>
+    Output options are specified as a tagged vector:
+    <dl>
+      <dt><tt>esel</tt></dt>
+      <dd>If non-zero, only entries that are selected in the Database Viewer
+      will be exported. If no database viewer is currently displaying
+      <tt>mdb_file</tt> then this option will be ignored.</dd>
+    </dl>
+  </dd>
+</dl>
+
+<h1>See Also</h1>
+
+<p><a href="introdb.htm">Database Functions</a></p>
+<table class="functionList">
+  <tr>
+    <td><a href="db_ascii.htm">db_ImportASCII</a></td>
+    <td><a href="db_ascii.htm">db_ExportASCII</a></td>
+  </tr>
+  <tr>
+    <td><a href="db_sd.htm">db_ImportSD</a></td>
+    <td><a href="db_sd.htm">db_ExportSD</a></td>
+  </tr>
+  <tr>
+    <td><a href="macromodel.htm">macromodel_ImportMDB</a></td>
+    <td><a href="macromodel.htm">macromodel_ExportMDB</a></td>
+  </tr>
+  <tr>
+    <td><a href="db_port.htm">db_ImportDB</a></td>
+    <td><a href="db_port.htm">db_ExportDB</a></td>
+  </tr>
+</table><!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

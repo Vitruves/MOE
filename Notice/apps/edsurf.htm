@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../images/ccgicon.png" />
+  <title>Electron Density Surface</title>
+  <meta name="keywords" content="panel: Electron Density Surface" />
+  <meta name="keywords" content=
+  "main_keywords: cutplane, isosurface, MTZ, difference map" />
+  <meta name="keywords" content=
+  "keywords: structure factor, unit cell, grid, periodic box, ccp4" />
+  <meta name="keywords" content=
+  "keywords: reflection, hkl, phi, distribution, indices" />
+  <meta name="keywords" content=
+  "keywords: fourier transform, space group, angle" />
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../index.htm"><img src="../images/ccglogo.png" /></a>
+    <a href="../index.htm"><div class="moeversion"></div></a>
+    Electron Density Surface
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+  <ul>
+    <li>
+      <a href="#ElectronDensitySurface">Electron Density Surface</a>
+    </li>
+    <li>
+      <a href="#CreatingSurface">Creating an Electron Density Surface</a>
+      <ul>
+        <li>
+          <a href="#FileInfo">Crystallographic and Surface Information</a>
+        </li>
+        <li>
+          <a href="#SpecifyingIsosurface">Specifying an Electron Density
+          Isosurface</a>
+        </li>
+        <li>
+          <a href="#SpecifyingCutplane">Specifying an Electron Density
+          Cutplane</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+<a id="ElectronDensitySurface"></a>
+<h1>Electron Density Surface</h1>
+
+<p>An electron density surface is a representation of the electron-density
+  distribution in a unit cell, sampled over a grid. To visualize the electron
+  density surface, either isosurfaces or cutplanes can be used. MOE calculates
+  the electron density surface from reflection data stored in the MTZ (CCP4)
+  file format. Both structure factor amplitude and phase data must be present
+  in the file.</p>
+  <center>
+    <img src="edsurf/unitcell_iso.png" alt=
+    "Electron Density Isosurface of Sperm Whale Myoglobin" /><br />
+    <i>Electron Density Isosurface of Sperm Whale Myoglobin</i>
+  </center>
+
+<p>Electron density is calculated from the expression:
+  <!-- <span class='LaTeX'>
+\begin{align}
+\rho \left( x,y,z \right) =
+    \frac{1}{V} \sum_{h} \sum_{k} \sum_{l}
+        F\left( h,k,l \right) \textrm{e}^{-2 \pi \textrm{i} \left( hx + ky + lz \right)}
+\end{align}
+</span> --></p>
+
+<img src="edsurf/math_edsurf_eq0.png" class="center" />
+
+<p>where</p>
+  <table class="noborder">
+    <tr>
+      <td>&rho;</td>
+      <td>electron density</td>
+    </tr>
+    <tr>
+      <td><em>x,y,z</em></td>
+      <td>the <em>x</em>, <em>y</em>, <em>z</em> fractional coordinates in the
+      unit cell</td>
+    </tr>
+    <tr>
+      <td><em>F</em></td>
+      <td>structure factor, having magnitude and phase</td>
+    </tr>
+    <tr>
+      <td><em>h,k,l</em></td>
+      <td>the <em>h</em>, <em>k</em>, <em>l</em> indices of reflection</td>
+    </tr>
+    <tr>
+      <td><em>V</em></td>
+      <td>volume of the unit cell</td>
+    </tr>
+  </table>
+
+<p>From this expression, it is seen that the electron density is the inverse
+  Fourier transform of the structure factor. In MOE, Fast Fourier Transform
+  (FFT) techniques are used to perform the calculation.
+<a id="CreatingSurface"></a>
+</p>
+
+<h1>Creating an Electron Density Surface</h1>
+
+<p>To open the Electron Density Surface panel, use <b><nobr>MOE | File |
+  Open</nobr></b> to open an MTZ file. The following panel appears:</p>
+
+<img src="edsurf/panel.png" alt="Electron Density Surface Panel" class="center" />
+
+<p>You can also invoke the panel by entering</p>
+
+<pre>
+    run 'edsurf.svl'
+</pre>
+
+<p>which will prompt you for the name of the MTZ file to read.</p>
+
+<p>At the top of the panel, the name of the source file containing the
+  reflection data is displayed in the <b>File</b> text field. The <b>Map</b>
+  pulldown menu allows you to select from the maps that have been calculated,
+  if any. Map names are constructed from the parameters used in the map
+  calculations. For example, <tt>F,PHIC</tt> would be the name of a map
+  computed using the columns <tt>F</tt> and <tt>PHIC</tt>. These map names are
+  used to prefix the graphic objects (isosurface, cutplanes, unit cell box,
+  etc.) that are created for visualizing the density field, and appear in the
+  <a href="../moe/gui/gobjman.htm">Graphics Object Manager</a>, which can be
+  used to hide or delete the surfaces, or to change their material and
+  transparency properties. Maps can be deleted using the <b>Delete</b> button
+  next to the <b>Map</b> pulldown menu. Deleting a map will delete all
+  associated graphic objects (isosurface, cutplanes, etc.).</p>
+
+<p>The remainder of the panel is occupied by a pager. The <b>File
+  Information</b> page contains crystallographic information gleaned from the
+  source file, as well as information about the electron density surface. Here,
+  you can specify which columns to use, and whether a difference map is to be
+  calculated.</p>
+
+<p>The <b>Isosurface</b> and <b>Cutplanes</b> pages are dedicated to controls
+  for rendering the surface using either an isosurface or cutplanes,
+  respectively.</p>
+
+<p>Before an electron density surface can be rendered, it must be calculated.
+  Select the columns to be used and press <b>Calculate Map</b> to do the
+  calculation. The <b>Map</b> pulldown menu will be updated to reflect the
+  newly computed map. Several maps can be held in memory concurrently, and you
+  can switch between them simply by making a selection in this menu. Once the
+  calculation is complete, use the <b>Isosurface</b> and <b>Cutplanes</b> pages
+  to generate graphical renderings of the map. Subsequent changes made to the
+  isosurface and cutplane parameters do not require recalculation of the
+  electron density map. Most changes are made automatically. Pressing
+  <b>Apply</b> will ensure any changes are put into effect.</p>
+
+<p>The electron density surface calculation may take a few moments to
+  complete. Progress information is displayed in both the MOE Window and the
+  SVL Commands window.
+<a id="FileInfo"></a>
+</p>
+
+<h2>Crystallographic and Surface Information</h2>
+
+<p>The <b>File Info</b> page displays space group and unit cell information,
+  as well as the size and range of values of the calculated electron density
+  surface. The size and minimum and maximum values of the map (<b>Grid
+  Size</b>, <b>Min</b>, and <b>Max</b>) are displayed only after the electron
+  density surface has been calculated, i.e. after <b>Calculate Map</b> has been
+  pressed.</p>
+
+<p>Difference map calculation is achieved by turning on <b>Difference Map</b>
+  and selecting the kind of map to compute, as well as a second F column, then
+  pressing <b>Calculate Map</b>.</p>
+
+<img src="edsurf/fileinfo.png" alt="File Information Page" class="center" />
+
+<p>The data columns to be used as the structure factor magnitude and phase
+  data in the electron density calculation are specified using the following
+  options:</p>
+  <table class="noborder">
+    <tr>
+      <td><b>F</b></td>
+      <td>Name of the MTZ file data column in which the structure
+      factor amplitude data is stored. Only columns of type 'F' are
+      listed here.</td>
+    </tr>
+    <tr>
+      <td><b>phi</b></td>
+      <td>Name of the MTZ file data column in which the calculated
+      structure factor phase data is stored. Only columns of type 'P'
+      are listed here.</td>
+    </tr>
+    <tr>
+      <td><b>Use&nbsp;A&nbsp;and&nbsp;B</b></td>
+      <td>In some files, the real and imaginary parts (<i>A</i>
+      and <i>B</i>) of the structure factor are present as data columns. In
+      this case, turning on <b>Use A and B</b> will allow these fields to be
+      specified and used instead of magnitude and phase data.</td>
+    </tr>
+    <tr>
+      <td><b>A</b></td>
+      <td>Name of the MTZ file data column in which the real part
+      of the structure is stored. Only columns of type 'R' are listed
+      here.</td>
+    </tr>
+    <tr>
+      <td><b>B</b></td>
+      <td>Name of the MTZ file data column in which the imaginary
+      part of the structure factor is stored. Only columns of type 'R'
+      are listed here.</td>
+    </tr>
+    <tr>
+      <td><b>Difference Map</b></td>
+      <td>Currently, 3 kinds of difference map can be calculated:
+      <tt>Fo-Fc</tt>, <tt>2Fo-Fc</tt>, and <tt>3Fo-2Fc</tt>.</td>
+    </tr>
+    <tr>
+      <td><b>F2</b></td>
+      <td>The second F column to be used in computing a difference
+      map. The values in this column will be subtracted from those in column
+      <b>F</b>, both weighted according to the type of map chosen, and the
+      result used as the magnitude data for calculating the map.</td>
+    </tr>
+  </table>
+
+<p>When any of the magnitude (<b>|F|</b>) and phase (<b>phi</b>), <b>A</b>
+  and <b>B</b> fields, or difference map parameters are changed, the electron
+  density map must be recalculated. Press <b>Calculate Map</b> to do so.</p>
+
+<p>The following information is displayed for the currently loaded map:</p>
+  <table class="noborder">
+    <tr>
+      <td><b>Space Group</b></td>
+      <td>International Tables for Crystallography space group
+      name and number.</td>
+    </tr>
+    <tr>
+      <td><b>Unit Cell</b></td>
+      <td>Unit cell dimensions, in angstroms.</td>
+    </tr>
+    <tr>
+      <td><b>Angles</b></td>
+      <td>Unit cell angles, in degrees.</td>
+    </tr>
+    <tr>
+      <td><b>Grid Size</b></td>
+      <td>Number of samples of the electron density field along
+      each dimension of the unit cell.</td>
+    </tr>
+    <tr>
+      <td><b>Min</b></td>
+      <td>Minimum density value in the map.</td>
+    </tr>
+    <tr>
+      <td><b>Max</b></td>
+      <td>Maximum density value in the map.</td>
+    </tr>
+  </table>
+<a id="SpecifyingIsosurface"></a>
+<h2>Specifying an Electron Density Isosurface</h2>
+
+<p>When rendering an electron density surface using an isosurface, the
+  extent, contour level, color, and rendering mode can all be specified.</p>
+
+<img src="edsurf/iso_panel.png" alt="Isosurface Page" class="center" />
+
+<p>The electron density isosurface can be drawn throughout a single unit cell
+  or can be restricted to a box and/or to a subset of atoms of the asymmetric
+  unit and its crystallographic symmetry images within the unit cell or its
+  immediate neighboring cells.</p>
+
+<p>The restricting atoms are specified by turning on the <b>Near</b>
+  checkbox. You can choose from any of the currently recognized named atom
+  collections in the system, e.g. Ligand, Receptor, All Atoms, Selected Atoms,
+  etc.</p>
+
+<p>In all cases, the following can be set:</p>
+  <ul>
+    <li><b>Within</b>. The value here defines the <i>proximity to the
+    restricting set of atoms</i>. The surface is rendered only within the
+    specified distance of the set of restricting atoms.</li>
+    <li><b>Visible</b>. If on, only visible atoms of the restricting set will
+    be used.</li>
+  </ul>
+
+<p>The isosurface can be further restricted to a box by turning on
+  <b>Restrict to Box</b>. The box position and size can be controlled using the
+  <b>Position</b> trackball (translation only) and <b>Box Size</b> sliders, and
+  its display can be turned on and off using the <b>Show Restricting Box</b>
+  toggle. Box size is specified as fractions of the unit cell. The trackball
+  operates as follows:</p>
+  <ul>
+    <li><b>Translation in X-Y</b>. <tt>&lt;Shift&gt;</tt>-left drag. The
+    movement will be in viewing coordinates (i.e. moving the mouse right will
+    result in movement to the right).</li>
+    <li><b>Translation in Z</b>. <tt>&lt;Ctrl&gt;</tt>-left drag. The movement
+    will be in viewing coordinates, moving the box towards or away from the
+    viewer.</li>
+  </ul>
+
+<p>Choosing a lower density for rendering the isosurface when using the
+  restricting box will result in smoother, more responsive motion of the
+  restricted isosurface.</p>
+  <center>
+    <img src="edsurf/nearatoms.jpg" alt=
+    "Isosurface Restricted to Nearby Atoms" /><br />
+    <i>Isosurface restricted to atoms of selected residues.<br />
+    Coloring is by atom element.</i>
+  </center>
+
+<p>The controls to change the rendering style of the isosurface are:</p>
+  <table class="noborder">
+    <tr>
+      <td><b>Render</b></td>
+      <td>The isosurface can be rendered in one of three modes: as
+      a dot surface (<b>Dot</b>), a mesh surface (<b>Line</b>), or a shaded
+      surface (<b>Solid</b>). Selecting <b>None</b> will prevent the isosurface
+      from being calculated. This is useful for saving time when the isosurface
+      is not needed.</td>
+    </tr>
+    <tr>
+      <td><b>Level</b></td>
+      <td>The contour level of the isosurface is specified using
+      the <b>Level</b> slider. The level is given in units of sigma (standard
+      deviation of the density). The slider value can alternatively be
+      controlled by entering a value in the text field and pressing
+      <tt>Enter</tt>.</td>
+    </tr>
+    <tr>
+      <td><b>Color</b></td>
+      <td>
+        The colors used for coloring the surface can be set using one of the
+        following schemes:
+        <table class="noborder">
+          <tr>
+            <td><b>Grid</b></td>
+            <td>Color taken from the map colormap, where low values are mapped
+            to blue, high to red.</td>
+          </tr>
+          <tr>
+            <td><b>Gradient</b></td>
+            <td>Gradient of the electron density distribution.</td>
+          </tr>
+          <tr>
+            <td><b>Atom</b></td>
+            <td>Color by the atom color of the nearest atom; dark gray if no
+            atoms nearby.</td>
+          </tr>
+          <tr>
+            <td><b>Residue</b></td>
+            <td>Color by the residue color of the nearest atom's residue;
+            dark gray if no atoms nearby.</td>
+          </tr>
+          <tr>
+            <td><b>Chain</b></td>
+            <td>Color by the chain color of the nearest atom's chain; dark
+            gray if no atoms nearby.</td>
+          </tr>
+          <tr>
+            <td><b>Atom Scalar</b></td>
+            <td>Color by the atom scalar value of the nearest atom, where low
+            values are mapped to red, high to blue; dark gray if no atoms
+            nearby.</td>
+          </tr>
+          <tr>
+            <td><b>Custom Scalar</b></td>
+            <td>User-selected color from the color widget.</td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td><b>T</b></td>
+      <td>
+        5 levels of surface transparency are provided. <b>0</b> gives an opaque
+        surface (fastest drawing mode). Transparency can also be controlled
+        from the <a href="../moe/gui/gobjman.htm">Graphics Object Manager</a>,
+        which also has controls for setting material properties.
+      </td>
+    </tr>
+    <tr>
+      <td><b>Density</b></td>
+      <td>Specifies the relative density of the isosurface sample
+      points with respect to the average density of the grid points. The
+      isosurface can be rendered more coarsely by choosing a lower rendering
+      resolution, resulting in faster drawing.</td>
+    </tr>
+  </table>
+<a id="SpecifyingCutplane"></a>
+<h2>Specifying an Electron Density Cutplane</h2>
+
+<p>An electron density surface can be visualized using cutplanes. A cutplane
+  is created by pressing <b>New</b>. To switch between existing cutplanes, use
+  the pulldown menu. All cutplanes can be rendered simultaneously. Cutplanes
+  can also be deleted.</p>
+  <img src="edsurf/cut_panel.png" alt="Cutplane Page" class="center" />
+
+<p>When a cutplane is first created, it is oriented perpendicular to the
+  <i>a</i>-axis of the unit cell. Subsequently, the cutplane can be translated
+  and rotated. It can also be &quot;snapped&quot;, by pressing one of the
+  <b>Snap</b> buttons, to one of the major axes of the unit cell, or to the
+  current set of selected (<b>sel</b>), visible (<b>vis</b>), or restricting
+  (<b>near</b>) atoms. The center of rotation and normal to the plane are
+  indicated by a small green ball and a green arrow, respectively, whose
+  display can be turned on and off using the <b>Show Cutplane Center and
+  Normal</b> toggle.</p>
+
+<p>The rendering parameters for each cutplane are set independently:</p>
+<table class="noborder">
+  <tr>
+    <td><b>Render</b></td>
+    <td>Each cutplane can be rendered independently of the
+    others as either dots, lines, or a solid sheet. To turn off the rendering
+    of the chosen cutplane, select <b>None</b>.</td>
+  </tr>
+  <tr>
+    <td><b>T</b></td>
+    <td>
+      5 levels of cutplane transparency are provided. <b>0</b> gives an
+      opaque surface (fastest drawing mode). Transparency can also be
+      controlled from the <a href="../moe/gui/gobjman.htm">Graphics Object
+      Manager</a>, which also has controls for setting material properties.
+      The <b>Color Scale</b> can also be used to set cutplane transparency.
+    </td>
+  </tr>
+  <tr>
+    <td><b>Density</b></td>
+    <td>Specifies the relative density of the cutplane sample
+    points with respect to the average density of the grid points. The
+    cutplane can be rendered more coarsely by choosing a lower rendering
+    resolution.</td>
+  </tr>
+  <tr>
+    <td><b>Color Scale</b></td>
+    <td>
+      Cutplane colormap. The three colors are used to color to low, medium,
+      and high density areas, respectively. The density values are specified
+      in units of sigma (standard deviation of the density). Density values
+      equal to or lower than the lower bound are colored by the corresponding
+      color (default blue). Similarly, values equal to or higher than the
+      upper bound are colored by the corresponding color (default red). For
+      intermediate density values, color interpolation is performed.
+
+<p>Each color has a separate transparency channel, accessible through
+      the pulldown area of the color widget. A transparency value of 0 or
+      less produces an opaque surface. Higher values provide more
+      transparency. This can be useful, for instance, for making areas of low
+      density transparent, while leaving the high-density areas opaque.</p>
+    </td>
+  </tr>
+  <tr>
+    <td><b>Position</b></td>
+    <td>
+      The position of the center of the cutplane. The trackball operates as
+      follows:
+      <ul>
+        <li><b>Rotation</b>. Left drag.</li>
+        <li><b>Translation in X-Y</b>. <tt>&lt;Shift&gt;</tt>-left drag. The
+        movement will be in viewing coordinates (i.e. moving the mouse right
+        will result in movement to the right).</li>
+        <li><b>Translation in Z</b>. <tt>&lt;Ctrl&gt;</tt>-left drag. The
+        movement will be in viewing coordinates, moving the box towards or
+        away from the viewer.</li>
+      </ul>
+
+<p>The wheel is used to translate the plane in the direction of its
+      normal.</p>
+    </td>
+  </tr>
+</table>
+
+<p>Like isosurfaces, cutplanes can be restricted to named atom sets. Turn on
+  <b>Near</b> to access the list of currently available restricting atom sets.
+  The <b>Within</b> field dictates how large a patch is drawn around the atoms.
+  When <b>Visible</b> is on, only visible atoms of the restricting set are
+  used.</p>
+
+  <img src="edsurf/cutsolid.png" alt="Cutplane Rendered as Solid Sheet" class="center"/>
+  <p class="caption">Cutplane Rendered as Solid Sheet</p>
+
+<h1>See Also</h1>
+
+<p><a href="surfmap.htm">Surfaces and Maps</a><br />
+  <a href="crystal.htm">Building Crystals</a> </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../images/ccgicon.png" /> <a href="../index.htm"></a> <a href=
+    "../legal.htm"></a> &copy;<span class="versionyear"></span> <a href="http://www.chemcomp.com"></a>. All
+    rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

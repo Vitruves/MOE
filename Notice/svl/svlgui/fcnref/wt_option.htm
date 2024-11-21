@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href=
+  "../../../include/manstyle.css" />
+  <meta name="keywords" content="keywords: Option" />
+  <meta name="keywords" content="functions: Widget:Option" />
+  <meta name="keywords" content="functions: Option (widget)" />
+  <title>Option Menu Widget</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../../index.htm"><img src="../../../images/ccglogo.png" /></a>
+    <a href="../../../index.htm"><div class="moeversion"></div></a>
+    Option Menu Widget
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Description</h1>
+
+<p>A pull-down menu of options of which exactly one is selected at any given
+  time. The name of the selected option appears in the widget.</p>
+
+<h2>Attributes</h2>
+
+<p><tt>Option</tt> inherits all <a class="svl" href="wt_core.htm">core</a>
+  attributes and defines the following attributes:</p>
+  <table class="titlebar">
+    <tr>
+      <th>Attribute</th>
+      <th>Description</th>
+      <th>Values</th>
+      <th>Default</th>
+    </tr>
+    <tr>
+      <td><tt>text</tt></td>
+      <td>Pull-down menu item labels
+      </td>
+      <td>Vector of tokens</td>
+      <td><tt>[]</tt></td>
+    </tr>
+    <tr>
+      <td><tt>columns</tt></td>
+      <td>Number of columns for layout</td>
+      <td>1 to 127</td>
+      <td><tt>1</tt></td>
+    </tr>
+    <tr>
+      <td><tt>type</tt></td>
+      <td>Return value data type</td>
+      <td><tt>&#39;char&#39;</tt>,
+      <tt>&#39;int&#39;</tt></td>
+      <td><tt>&#39;char&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>minWidth</tt></td>
+      <td>Minimum width (in characters) of each of the menu
+      items</td>
+      <td>0 to 127</td>
+      <td><tt>0</tt></td>
+    </tr>
+   <tr>
+      <td><tt>foreground</tt></td>
+      <td>Option label text color.
+      <p>
+      Set a vector of colors to color each item in the pull-down
+      menu separately.
+      </p>
+      <p>
+      <span class="tip">Note!</span>
+      The Option label itself inherits the attribute
+      from the currently selected menu item
+      The vector length must match the number of menu items
+      (<tt>text</tt>) and a <tt>foreground</tt> vector must be specified after
+      the <tt>text</tt> attribute.
+      </p>
+      </td>
+      <td><a class="svl" href=
+      "wt_const.htm">WINDOW_COLORS</a></td>
+      <td><tt>&#39;foreground&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>background</tt></td>
+      <td>Option label background color.
+      <p>
+      Set a vector of colors to color each item in the pull-down
+      menu.
+      </p><p>
+      See <tt>foreground</tt> attribute for details.
+      </p>
+      </td>
+      <td><a class="svl" href=
+      "wt_const.htm">WINDOW_COLORS</a></td>
+      <td><tt>&#39;background&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>font</tt></td>
+      <td>Option label text font.
+      <p>
+      Set a vector of fonts to have different text fonts for each item
+      in the pull-down menu.
+      </p><p>
+      See <tt>foreground</tt> attribute for details.
+      </p>
+      </td>
+      <td><a class="svl" href=
+      "wt_const.htm">WINDOW_FONTS</a></td>
+      <td><tt>&#39;medium&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>sensitive</tt></td>
+      <td>Option sensitivity.
+      <p>
+      If a vector of sensitivities is specified, each item in the pull-down
+      menu is enabled/disabled separately. Disabled menu items can not be
+      selected.
+      </p><p>
+      See <tt>foreground</tt> attribute for details.
+      </p>
+      </td>
+      <td><a class="svl" href=
+      "wt_const.htm">WINDOW_COLORS</a></td>
+      <td><tt>&#39;foreground&#39;</tt></td>
+    </tr>
+     <tr>
+      <td><tt>graphics</tt></td>
+      <td>A vector of graphics object keys (see <a class=
+      "svl" href="../../fcnref/grfcn.htm">gr_create</a>) or graphics content
+      (see <a class="svl" href="../../fcnref/grfcn.htm">gr_data</a>). The
+      number of elements in the vector defines the number of buttons, and must
+      be consistent with the <tt>text</tt> attribute.</td>
+      <td>Vector of keys or content.</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td><tt>grPosition</tt></td>
+      <td>Layout of graphic object with respect to text, when
+      both are present</td>
+      <td><tt>&#39;left&#39;, &#39;right&#39;,
+      &#39;above&#39;, &#39;below&#39;, &#39;overlay&#39;</tt></td>
+      <td><tt>&#39;left&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>grScale</tt></td>
+      <td>Scaling policy for the graphic object</td>
+      <td><tt>&#39;none&#39;, &#39;anisotropic&#39;,
+      &#39;isotropic&#39;, &#39;isotropic-shrink&#39;</tt></td>
+      <td><tt>&#39;isotropic&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>bubbleHelp</tt></td>
+      <td>Option label bubble help text.
+      <p>
+      Set a vector of bubble helps to have different help text for each item
+      in the pull-down menu.
+      </p><p>
+      See <tt>foreground</tt> attribute for details.
+      </p>
+      </td>
+      <td>token</td>
+      <td><tt>&#39;&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>bubbleHelpGraphics</tt></td>
+      <td>Option label bubble help graphics object.
+      <p>
+      Set a vector of bubble helps graphics to have different help graphics
+      for each item in the pull-down menu.
+      </p><p>
+      See <tt>foreground</tt> attribute for details.
+      </p>
+      </td>
+      <td>Vector of keys or content.</td>
+      <td>0</td>
+    </tr>
+  </table>
+
+
+<h2>Trigger</h2>
+
+<p>A change in the option menu displayed item. Selecting the same item will
+  not cause a trigger.</p>
+
+<h2>Data Value</h2>
+
+<p>The value of the option menu is returned as a token or one-based index
+  (depending on the state of the <tt>type</tt> attribute) denoting the
+  currently selected menu item. The default value is the first item.</p>
+
+<h1>See Also</h1>
+
+<p><a href="wt_core.htm">Core Attributes</a><br />
+  <a href="../wt_intro.htm">SVL Window Toolkit</a><br />
+  <a href="introwt.htm">Window Toolkit Functions</a></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../../images/ccgicon.png" /> <a href="../../../index.htm"></a>
+    <a href="../../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

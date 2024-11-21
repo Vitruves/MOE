@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="functions: hpc_jctl:jlist" />
+  <meta name="keywords" content="functions: hpc_jctl:jsubmit" />
+  <meta name="keywords" content="functions: hpc_jctl:jcancel" />
+  <meta name="keywords" content="functions: hpc_jctl:jdelete" />
+  <meta name="keywords" content="functions: hpc_jctl:jstatus" />
+  <title>High Performance Computing Job-Control Shell Utilities</title>
+</head>
+<body>
+<div class="center-page">
+<!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    High Performance Computing Job-Control Shell Utilities
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    sh <a class="fcnlink" href="#hpc_jctl"
+    ><b>hpc_jctl.sh</b></a
+    > <a class="fcnlink" href="#command"><b>-<i>command</i></b></a
+    > <i><b>arg</b></i> <i><b>arg</b></i> ...<i></i
+    > <a class="fcnlink" href="#command"><b>-<i>command</i></b></a
+    > <i><b>arg</b></i> <i><b>arg</b></i> ...
+
+    sh hpc_jctl.sh <a
+	class="fcnlink" href="#jlist"><b>-jlist</b></a
+	> <a class="fcnlink" href="#host"><i>host</i></a
+	> <a class="fcnlink" href="#host"><i>host</i></a> ...
+    sh hpc_jctl.sh <a
+	class="fcnlink" href="#jsubmit"><b>-jsubmit</b></a
+	> <a class="fcnlink" href="#job"><i>job</i></a
+	> <a class="fcnlink" href="#params"><i>params</i></a> ... { <a
+	class="fcnlink" href="#jsubmit"><b>-jend</b></a> }
+    sh hpc_jctl.sh <a
+	class="fcnlink" href="#jstatus"><b>-jstatus</b></a
+	> <a class="fcnlink" href="#job"><i>job</i></a
+	> <a class="fcnlink" href="#job"><i>job</i></a> ...
+    sh hpc_jctl.sh <a
+	class="fcnlink" href="#jcancel"><b>-jcancel</b></a
+	> <a class="fcnlink" href="#job"><i>job</i></a
+	> <a class="fcnlink" href="#job"><i>job</i></a> ...
+    sh hpc_jctl.sh <a
+	class="fcnlink" href="#jdelete"><b>-jdelete</b></a
+	> <a class="fcnlink" href="#job"><i>job</i></a
+	> <a class="fcnlink" href="#job"><i>job</i></a> ...
+</pre><i></i>
+
+<h5>Additional Switches</h5>
+<pre>
+    <a
+    class="fcnlink" href="#switch"><b>-h</b></a> | <a
+    class="fcnlink" href="#switch"><b>--help</b></a> | <a
+    class="fcnlink" href="#switch"><b>-jsilent</b></a> | <a
+    class="fcnlink" href="#switch"><b>-user</b></a> username |
+    <a
+    class="fcnlink" href="#jtime"><b>-jtimeout</b></a> secs | <a
+    class="fcnlink" href="#jtime"><b>-jdelay</b></a> secs | <a
+    class="fcnlink" href="#jtime"><b>-jwait</b></a> secs |
+    <a
+    class="fcnlink" href="#jtest"><b>-jtest_qsys</b></a> | <a
+    class="fcnlink" href="#jtest"><b>-jtest_scall</b></a> | <a
+    class="fcnlink" href="#jtest"><b>-jtest_jcmd</b></a> | <a
+    class="fcnlink" href="#jtest"><b>-jtest_clist</b></a> | <a
+    class="fcnlink" href="#jtest"><b>-jtest_slist</b
+    ></a>
+</pre><i></i>
+
+<h1>Description</h1>
+
+<a id="hpc_jctl"></a>
+
+<p>The <b><span class="fcndef">hpc_jctl.sh</span></b> file is a Unix shell
+script for controlling jobs associated with MOE HPC functionality.
+It can be executed using any <nobr>POSIX-compliant</nobr> shell,
+including <tt>bash</tt> and <tt>dash</tt>.
+</p>
+
+<p><i>Note</i>: The names of commands for <tt>hpc_jctl.sh</tt> script are all
+prefixed with <tt>-j</tt>.  This is meant to help differentiating between
+them from the commands for the <tt>run.sh</tt> script, which can be specified
+between <tt>-jsubmit</tt> and <tt>-jend</tt>.
+</p>
+
+<p>
+The arguments to <tt>hpc_jctl.sh</tt> are of the following form:
+</p>
+
+<div class="indent">
+<dl>
+
+<a id="command"></a>
+
+  <dt><b><i>command</i></b></dt>
+  <dd>One of the following job control commands:
+    <pre
+    >    { -jlist | -jstatus | -jcancel | -jdelete | -jsubmit | -jend }</pre>
+<p>
+
+Note that all <tt>hpc_jctl.sh</tt> commands output to <tt><i>stdout</i></tt>
+the same output as that of the <a href="#jlist" class="svl">-jlist</a> command;
+i.e. in addition to performing their specific function, the commands also
+perform the action of <tt>-jlist</tt>.
+
+</p>
+
+  </dd>
+
+<a id="host"></a>
+
+  <dt><b><i>host</i></b></dt>
+  <dd>The host is specified in the same format as the <i>qhost</i> parameter
+    of the function
+    <a href="../../svl/fcnref/hpcfcn.htm#hpc_Script" class="svl"
+    >hpc_Script</a>, i.e.
+
+    <pre>    [user@]hostname[:dir]</pre>
+
+    <p>The optional &quot;<tt>dir</tt>&quot; component specifies a path to the
+job parent directory that holds job directories accessible on the given host.
+The path may contain environment variables, which will be expanded on the
+submission host (not on the calling host).  If the path is relative, it will be
+interpreted as being relative to the ssh login directory (typically the same as
+<tt>$HOME</tt>).  </p>
+
+    <p><span class="warning">Warning:</span> The caller must have a
+passwordless <tt>ssh</tt> access to the submission host.  Furthermore, the
+login shell script <nobr>(e.g.  <tt>.cshrc</tt>)</nobr> used by passwordless
+<tt>ssh</tt> must <b><i>not</i></b> output any data to <tt><i>stdout</i></tt>.
+(This is typically the case.) </p>
+
+    </dd>
+
+<a id="job"></a>
+
+  <dt><b><i>job</i></b></dt>
+  <dd>The job must be specified as a
+    host specification followed by a job name, separated by a
+    forward slash; i.e.
+
+    <pre>    <b><i>host</i></b>/<b><i>jobname</i></b></pre>
+
+    <p>where the job name must be prefixed by
+&quot;<tt>MOE(<i>user</i>)</tt>&quot;:
+
+    <pre
+    >    [<i>user</i>@]<i>hostname</i>[:<i>dir</i>]/MOE(<i>user</i>)...</pre>
+
+    <p>Here, <i>user</i> is the username of the MOE user that generated the
+job, and is given by the value of <tt>$USER</tt> or <tt>$LOGNAME</tt> (on
+Unix systems), or is derived (on Windows) from <tt>%USERPROFILE%</tt>, on
+the calling host.  This is usually the same as, but may be different from, the
+username of the owner of the submitted job, i.e. the username on the submission
+host. </p>
+
+    <p>The job name is of the form
+
+    <pre
+    >    MOE(<i>user</i>)(<i>id_string</i>)name</pre>
+
+    <p>where <i>id_string</i> is automatically assigned by the
+MOE job control system, and <i>name</i> is an optional user-specified name.
+</p>
+
+    <p>Note that the job name also serves as the tailname of the job directory
+itself.</p>
+
+  </dd>
+
+<a id="params"></a>
+
+  <dt><b><i>params</i></b></dt>
+  <dd>Optional specifications.  This is a subset of the options to
+    <a href="../../svl/fcnref/hpcfcn.htm#hpc_Script" class="svl"
+    >hpc_Script</a>.
+
+    <ul>
+    <li><tt>-qsys { sh | sge | slurm }</tt></li>
+    <li><tt>-qname</tt> <i>quename</i></li>
+    <li><tt>+qargs</tt> <i>string</i></li>
+    <li><tt>-qargs</tt> <i>string</i></li>
+    </ul>
+  </dd>
+</dl>
+</div>
+
+
+<p><span class="warning">Note:</span> The commands <tt>-jsubmit</tt> and
+<tt>-jcancel</tt> only notify the queueing system of the requested operation.
+They do not wait for the operation to be completed.  As a result, their
+<tt>-jlist</tt>-format output listing may not reflect the result of the given
+request; e.g. the output from the <tt>-jcancel</tt> command may still show the
+given job as <i>not</i> yet canceled.  This is normal.  The time it takes for
+the system to reflect the requested change is not determined, but is usually
+very short.
+
+</p>
+
+<p><span class="warning">Warning:</span> For correct operation,
+<tt>hpc_jctl.sh</tt> requires that the file <tt>run.sh</tt> be located in the
+<a href="hpcfcn.htm#jobdirectory">job directory</a> of the job of interest and
+be responsive to commands as described in <a href="hpcfcn.htm#runsh">High
+Performance Computing Functions</a>.
+
+</p>
+
+<a id="jlist"></a>
+<hr noshade="noshade" />
+
+<pre>
+sh hpc_jctl.sh <span class="fcndef"><b>-jlist</b></span
+> <i>host</i> <i>host</i> ...
+</pre>
+
+<p><tt>-jlist</tt> collects and outputs to <tt><i>stdout</i></tt> information on
+all jobs associated with the user on the specified hosts.  Additionally, the
+output will also contain a list of the job directories (associated with
+the user) on the given host.
+
+</p>
+
+<p>Jobs are reported one per line, with fields
+separated and terminated by a vertical bar: <b><tt>|</tt></b>.  The reported
+fields are:
+</p>
+
+<pre>
+    | qsys | host | jobname | mstate | jobid | jobqueue| jobstate |
+</pre>
+    For example:
+<pre>
+    |slurm|head:hpc|MOE(guest)(tdq1up)MyTest 19|w|18950|CLUSTER|PD: Dependency|
+    |slurm|head:hpc|MOE(guest)(tdq1up)MyTest 19|f|18951|CLUSTER|CD|
+    |slurm|head:hpc|MOE(guest)(tdq1up)MyTest 19|r|18949|CLUSTER|R|
+    |ls|head:hpc|MOE(guest)(tdq1up)MyTest 19|x|2900516||x|
+</pre>
+
+<p>where:</p>
+
+<div class="indent">
+  <dl>
+      <dt><tt>qsys</tt>
+      </dt>
+      <dd>The <i>type</i> of queueing system:
+	<nobr>
+	<b>{</b> <tt>sh</tt>
+	<b>|</b> <tt>sge</tt>
+	<b>|</b> <tt>slurm</tt>
+	<b>|</b> <tt>ls</tt>
+	<b>}</b>
+	</nobr>.
+
+	Here, <tt>ls</tt> is a special case, representing a directory listing,
+	not a running job.  </dd>
+
+      <dt><tt>host</tt>
+      </dt>
+      <dd>The &quot;<tt>[<i>user</i>@]<i>hostname</i>[:<i>dir</i>]</tt>&quot;
+      string for host specification.
+      </dd>
+
+      <dt><tt>jobname</tt>
+      </dt>
+      <dd>The
+      <nobr>&quot;<tt>MOE(<i>user</i>)(<i>id_string</i>)...</tt>&quot;</nobr>
+	string for job specification.
+
+      </dd>
+
+      <dt><tt>mstate</tt>
+      </dt>
+      <dd>The MOE-specific, single-letter current <i>state</i> of the job:
+	<p class="indent">
+	<b><tt>r</tt></b>: running,
+	<b><tt>w</tt></b>: waiting,
+	<b><tt>e</tt></b>: error,
+	<b><tt>f</tt></b>: finished,
+	<b><tt>k</tt></b>: killed,
+	<b><tt>s</tt></b>: suspended,
+	<b><tt>d</tt></b>: deleted,
+	<b><tt>x</tt></b>: other
+	</p>
+      </dd>
+
+      <dt><tt>jobid</tt>
+      </dt>
+      <dd>The internal ID of the queued job, specific to the queueing system.
+      </dd>
+
+      <dt><tt>jobqueue</tt>
+      </dt>
+      <dd>The name of the queue to which the job was submitted.
+      </dd>
+
+      <dt><tt>jobstate</tt>
+      </dt>
+      <dd>The <i>qsys</i>-specific <i>state</i> string of the job. Error and
+	pending states may be followed by a semicolon and further explanation.
+	For example, on SLURM:
+
+	<p class="indent">
+	<b><tt>PD</tt></b>: pending/waiting,
+	<b><tt>CA</tt></b>: canceled, etc.
+	</p>
+	where <b><tt>PD</tt></b> may have form
+	<span class="nobr"><tt>&quot;PD: Dependency&quot;</tt></span>
+	or similar.
+      </dd>
+  </dl>
+</div>
+
+<a id="jstatus"></a>
+<hr noshade="noshade" />
+
+<pre>
+sh hpc_jctl.sh <span class="fcndef"><b>-jstatus</b></span
+> <i>job</i> <i>job</i> ...
+</pre>
+
+<p>Command <tt>-jstatus</tt> reports the status of the given job or jobs.
+The job is specified using a <a href="#job">job specification
+string</a>, and must include the host, the job parent directory, and the job
+directory, which must be prefixed by <tt>&quot;MOE(<i>user</i>)&quot;</tt>.
+The output is the same as that for
+<tt>-jlist</tt>, except that the lines referring to the specific jobs under
+inquiry are suffixed by a colon (<tt>:</tt>).
+</p>
+
+<p>Example of usage:</p>
+
+<pre>
+    sh hpc_jctl.sh <span class="fcndef"><b>-jstatus</b></span> \
+	"head:hpc/MOE(guest)(tdq1up)MyTest 19" \
+	"head:hpc/MOE(guest)(tdq1up)MyTest 20" \
+	"head:hpc/MOE(guest)(tdq1up)MyTest 21"
+</pre>
+
+<a id="jcancel"></a>
+<hr noshade="noshade" />
+
+<pre>
+sh hpc_jctl.sh <span class="fcndef"><b>-jcancel</b></span
+> <i>job</i> <i>job</i> ...
+</pre>
+
+<p>Command <tt>-jcancel</tt> cancels the given job or jobs.
+The job is specified using a <a href="#job">job specification
+string</a>, and must include the host, the job parent directory, and the job
+directory, which must be prefixed by <tt>&quot;MOE(<i>user</i>)&quot;</tt>.
+The output will be identical to that of <tt>-jlist</tt>.
+</p>
+
+<p>Example of usage:</p>
+
+<pre>
+    sh hpc_jctl.sh <span class="fcndef"><b>-jcancel</b></span> \
+	"head:hpc/MOE(guest)(tdq1up)MyTest 19" \
+	"head:hpc/MOE(guest)(tdq1up)MyTest 20"
+</pre>
+
+<p><i>Warning:</i> The function does <i>not</i> wait for the job to
+actually be canceled.  It only notifies the queueing system of the requested
+action.
+</p>
+
+<a id="jdelete"></a>
+<hr noshade="noshade" />
+
+<pre>
+sh hpc_jctl.sh <span class="fcndef"><b>-jdelete</b></span
+> <i>job</i> <i>job</i> ...
+</pre>
+
+<p>Command <tt>-jdelete</tt> deletes the job directory/directories of the given
+job or jobs.
+The job is specified using a <a href="#job">job specification
+string</a>, and must include the host, the job parent directory, and the job
+directory, which must be prefixed by <tt>&quot;MOE(<i>user</i>)&quot;</tt>.
+The output will be identical to that of <tt>-jlist</tt>.
+</p>
+
+<p>Example of usage:</p>
+
+<pre>
+    sh hpc_jctl.sh <span class="fcndef"><b>-jdelete</b></span> \
+	"head:hpc/MOE(guest)(tdq1up)MyTest 19" \
+	"head:hpc/MOE(guest)(tdq1up)MyTest 20"
+</pre>
+
+<p><i>Note:</i> If any of the the specified jobs is running at that time, it
+will be canceled first before its job directory is deleted.  </p>
+
+<p><i>Warning:</i> The function does <i>not</i> wait for the job to
+actually be deleted.  It only notifies the queueing system of the requested
+action.
+</p>
+
+<a id="jsubmit"></a>
+<hr noshade="noshade" />
+
+<pre>
+sh hpc_jctl.sh <span class="fcndef"><b>-jsubmit</b></span
+> <i>job</i> <i>params</i> ...
+sh hpc_jctl.sh <span class="fcndef"><b>-jsubmit</b></span
+> <i>job</i> <i>params</i> ... <span class="fcndef"><b>-jend</b></span
+> ...
+</pre>
+
+<p>Command
+<tt>-jsubmit</tt> submits a given job using the default parameters from
+<tt>run.sh</tt>, or, optionally, modified parameters <a
+href="#params"><i><tt>params</tt></i></a> explicitly provided on the command
+line.  The job is specified using a <a href="#job">job specification
+string</a>, and must include the host, the job parent directory, and the job
+directory, which must be prefixed by <tt>&quot;MOE(<i>user</i>)&quot;</tt>.
+
+All <tt>hpc_jctl.sh</tt> parameters between <tt>-jsubmit</tt> and <tt>-jend</tt>
+will be given to <tt>run.sh</tt>, preceded by the <tt>-submit</tt> switch.
+If <tt>-jend</tt> is missing, then all parameters following <tt>-jsubmit</tt>
+will be given to <tt>run.sh</tt>.
+
+For example: </p>
+
+<pre>
+    sh hpc_jctl.sh <span class="fcndef"><b>-jsubmit</b></span> \
+	"head:hpc/MOE(guest)(tdq1up)MyTest 19" \
+	-qsys sge -qname my_queue
+</pre>
+
+<p>The output will be identical to that of <tt>-jlist</tt>.</p>
+
+<p><i>Warning:</i> The function does <i>not</i> wait for the job to
+actually be submitted.  It only notifies the queueing system of the requested
+action.
+</p>
+
+<a id="switch"></a>
+<hr noshade="noshade" />
+<h5>Additional switches</h5>
+
+<pre>
+<span
+    class="fcndef"><b>-h</b></span> | <span
+    class="fcndef"><b>--help</b></span> | <span
+    class="fcndef"><b>-jsilent</b></span> | <span
+    class="fcndef"><b>-user</b></span> <i>username</i>
+</pre>
+
+<div class="indent">
+  <dl>
+      <dt><tt>-h</tt>, <tt>--help</tt> </dt> <dd>
+	Print help text to <tt><i>stdout</i></tt>
+      </dd>
+
+      <dt><tt>-jsilent</tt> </dt> <dd>
+	Suppresses the output of job info to <tt><i>stdout</i></tt>.
+	<br /><i>Note:</i>
+	This will skip all status queries of the queing system and
+	all parsing of those results.
+      </dd>
+
+      <dt><tt>-user</tt> <i>username</i></dt> <dd>
+	Sets the value of the user component in the job name prefix, i.e.
+	<tt>MOE(<i>username</i>)(id)...</tt><br>
+	Only jobs of the given prefix will be affected or reported.
+      </dd>
+  </dl>
+</div>
+
+<a id="jtime"></a>
+<hr noshade="noshade" />
+<h5>Timing switches</h5>
+
+<pre>
+<span
+    class="fcndef"><b>-jtimeout</b></span> <i>secs</i> | <span
+    class="fcndef"><b>-jdelay</b></span> <i>secs</i> | <span
+    class="fcndef"><b>-jwait</b></span> <i>secs</i>
+</pre>
+
+<div class="indent">
+  <dl>
+      <dt><tt>-jtimeout</tt> <i>seconds</i></dt> <dd>
+	Kill the script if not finished after the specified amount of time,
+	<i>seconds</i>.
+	<br /><i>Note:</i>
+	This allows the call to be self-contained without the need of
+	a separate SVL task or Java thread to implement and monitor
+	the timeout.
+      </dd>
+
+      <dt><tt>-jdelay</tt> <i>seconds</i></dt> <dd>
+	Wait a for a specified amount of time, <i>seconds</i>, after executing
+	an action command (e.g. <tt>-jcancel</tt>) before collecting any job
+	info.
+	<br ><i>Note:</i>
+	This allows the caller to collect updated status info without
+	the need of a subsequent call and <tt>ssh</tt> connection.
+	However, typically, such commands are called with <tt>-jsilent</tt>,
+	i.e. they do not collect any job info and do not need to specify
+	<tt>-jdelay</tt>.
+      </dd>
+
+      <dt><tt>-jwait</tt> <i>seconds</i> (not yet implemented)</dt> <dd>
+	Wait up to the specified amount of time, <i>seconds</i>, after executing
+	an action command (e.g. <tt>-jcancel</tt>) for the status of the given
+	job to change before collecting any job info.
+	<br ><i>Note:</i>
+	This allows the caller to be notified as soon as the status changes.
+	However, typically, such commands are called with <tt>-jsilent</tt>,
+	i.e. they do not collect any job info and do not need to specify
+	<tt>-jwait</tt>.
+      </dd>
+
+  </dl>
+</div>
+
+<a id="jtest"></a>
+<hr noshade="noshade" />
+<h5>Testing/debugging switches</h5>
+
+<pre><span
+class="fcndef"><b>-jtest_qsys</b></span> | <span
+class="fcndef"><b>-jtest_scall</b></span> | <span
+class="fcndef"><b>-jtest_jcmd</b></span> | <span
+class="fcndef"><b>-jtest_clist</b></span> | <span
+class="fcndef"><b>-jtest_slist</b></span>
+</pre>
+
+<div class="indent">
+  <dl>
+      <dt><tt>-jtest_qsys</tt></dt>
+      <dd>
+	Connects to the remote host(s) and reports (to stdout) the list of
+        qsys types (e.g. slurm) available on that host; will <i>not</i>
+        produce any job info listing
+      </dd>
+
+      <dt><tt>-jtest_scall</tt> </dt> <dd>
+	Reports commands that will be sent to the <tt>_ssh_commands</tt>
+	function without actually calling <tt>ssh</tt>
+      </dd>
+
+      <dt><tt>-jtest_jcmd</tt> </dt> <dd>
+	Reports but does <i>not</i> executed given commands (i.e.
+	<tt>-jcancel</tt>, <tt>-jdelete</tt>, <tt>-jsubmit</tt>) on the
+	the remote host
+      </dd>
+
+      <dt><tt>-jtest_clist</tt> </dt> <dd>
+	Reports unsorted job specifications to be parsed into commands sent
+	to <tt>_ssh_commands</tt>.
+      </dd>
+
+      <dt><tt>-jtest_slist</tt> </dt> <dd>
+	Same as <tt>-jtest_clist</tt>, except that the list is sorted.
+      </dd>
+  </dl>
+</div>
+
+<h1>See Also</h1>
+<p>
+<a href="../../svl/fcnref/hpcfcn.htm#hpc_Script" class="svl"
+>hpc_Script</a><br />
+<a href="../../svl/fcnref/hpcfcn.htm#hpc_JobControl" class="svl"
+>hpc_JobControl</a>
+</p>
+
+<!-- START MOE_FOOTER -->
+
+<div class="MOE_FOOTER">
+<img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+<a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+<a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+<a href="mailto:info@chemcomp.com"></a>
+</div>
+
+<!-- END MOE_FOOTER -->
+
+</div>
+</div>
+</body>
+</html>
+

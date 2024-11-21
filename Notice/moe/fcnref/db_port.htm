@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: db_ImportDB, db_ExportDB" />
+  <title>MOE Database Import/Export Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    MOE Database Import/Export Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    <a class="fcnlink" href="#db_ImportDB">db_ImportDB</a> [
+        'dst_db',
+        'src_db',
+        fields,
+        names,
+        types,
+        options
+    ]
+
+    where options is
+
+    [
+        append:         flag,
+        file_field:     flag,
+        start_entry:    startnum,
+        end_entry:      end_num
+    ]
+
+    <a class="fcnlink" href=
+"#db_ExportDB">db_ExportDB</a> [ 'dst_db', 'src_db', field_names, entry_keys ]
+</pre>
+<a id="db_ImportDB"></a>
+<h1>Description</h1>
+
+<p><tt><span class="fcndef">db_ImportDB</span></tt> imports specified fields
+  and entries from a source MOE molecular database to a destination MOE
+  molecular database.</p>
+<dl>
+  <dt><tt>'dst_db'</tt></dt>
+  <dd>Name of the destination MOE molecular database file to import to,
+  specified as a token.</dd>
+  <dt><tt>'src_db'</tt></dt>
+  <dd>Name of the source MOE molecular database file to import from,
+  specified as a token.</dd>
+  <dt><tt>fields</tt></dt>
+  <dd>The names of the fields to import, specified as a vector of tokens. New
+  fields are created in the destination database if necessary. If
+  <tt>fields</tt> is unspecified (i.e, <tt>[]</tt>), then all fields are
+  imported from the source database, under the original field names (i.e. the
+  <tt>names</tt> option is ignored).</dd>
+  <dt><tt>names</tt></dt>
+  <dd>The names to be assigned to the imported fields in the destination
+  database, specified as a vector of tokens. The names must be unique, and
+  the <tt>names</tt> vector must be the same length as the <tt>fields</tt>
+  vector.</dd>
+  <dt><tt>types</tt></dt>
+  <dd>The destination database field types, specified as a vector of tokens.
+  Valid types are given in <a href="moe_const.htm">DB_FIELD_TYPES</a>. The
+  <tt>types</tt> vector must unit extend to the length of the <tt>fields</tt>
+  vector.</dd>
+  <dt><tt>options</tt></dt>
+  <dd>
+    The import options are specified as a tagged vector:
+    <dl>
+      <dt><tt>append:flag</tt></dt>
+      <dd>If <tt>flag</tt> is non-zero, database entries are appended to the
+      destination database. Otherwise, data is &quot;merged&quot; into the
+      database starting from the first entry, i.e. the source data overwrites
+      the destination, beginning at the first entry of the destination
+      database. The default is 1.</dd>
+      <dt><tt>file_field:flag</tt></dt>
+      <dd>If <tt>flag</tt> is non-zero, then the name of the source database
+      file for each entry is written to the destination database file. The
+      default is 0.</dd>
+      <dt><tt>start_entry:startnum</tt></dt>
+      <dd>Specifies the entry number (n.b. this is <i>not</i> the entry
+      <i>key</i> but the cardinal number of the entry in the database) at
+      which to begin importing. <tt>startnum</tt> is an
+      integer&nbsp;&gt;=&nbsp;1. If <tt>start_entry</tt> is unspecified (i.e.
+      <tt>[]</tt>), the default is 1 (begin importing from the first entry in
+      the source database).</dd>
+      <dt><tt>end_entry:endnum</tt></dt>
+      <dd>Specifies the entry number of the last entry to import.
+      <tt>endnum</tt> is an integer&nbsp;&gt;=&nbsp;<tt>start_entry</tt>. If
+      <tt>end_entry</tt> is unspecified (i.e. <tt>[]</tt>), the default is
+      the number of entries in the source database (import up to and
+      including the last entry in the source database).</dd>
+    </dl>
+  </dd>
+</dl>
+
+<a id="db_ExportDB"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class=
+"fcndef">db_ExportDB</span> [ 'dst_db', 'src_db', field_names, entry_keys ]
+</pre>
+
+<p>Exports the specified fields and entries from a source MOE molecular
+  database to a destination MOE molecular database which is overwritten, if it
+  exists.</p>
+  <dl>
+    <dd></dd>
+    <dt><tt>src_db</tt></dt>
+    <dd>The name of the source MOE molecular database to export, specified as a
+    token.</dd>
+    <dt><tt>dst_db</tt></dt>
+    <dd>The name of the destination MOE molecular database file, specified as a
+    token.</dd>
+    <dt><tt>field_names</tt></dt>
+    <dd>The names of the fields to export from the source database, specified
+    as a vector of tokens. The same names are used in the destination
+    database.</dd>
+    <dt><tt>entry_keys</tt></dt>
+    <dd>The entry keys of the entries to export from the source database.</dd>
+  </dl>
+
+<h1>See Also</h1>
+
+<p><a href="introdb.htm">Database Functions</a></p>
+<table class="functionList">
+  <tr>
+    <td><a href="db_ascii.htm">db_ImportASCII</a></td>
+    <td><a href="db_ascii.htm">db_ExportASCII</a></td>
+  </tr>
+  <tr>
+    <td><a href="db_sd.htm">db_ImportSD</a></td>
+    <td><a href="db_sd.htm">db_ExportSD</a></td>
+  </tr>
+  <tr>
+    <td><a href="db_mol2.htm">db_ImportMOL2</a></td>
+    <td><a href="db_mol2.htm">db_ExportTriposMOL2</a></td>
+  </tr>
+  <tr>
+    <td><a href="macromodel.htm">macromodel_ImportMDB</a></td>
+    <td><a href="macromodel.htm">macromodel_ExportMDB</a></td>
+  </tr>
+</table><!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../images/ccgicon.png" />
+  <meta name="keywords" content="panel: Polymer Properties" />
+  <title>Polymer Property Prediction</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../index.htm"><img src="../images/ccglogo.png" /></a>
+    <a href="../index.htm"><div class="moeversion"></div></a>
+    Polymer Property Prediction
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+  <ul>
+    <li>
+      <a href="#Run">Running the Calculation</a>
+    </li>
+    <li>
+      <a href="#Ref">References</a>
+    </li>
+    <li>
+      <a href="#SeeAlso">See Also</a>
+    </li>
+  </ul>
+
+<p>The Polymer Properties application in MOE implements Jozef Bicerano's
+  methodology described in [Bicerano&nbsp;1996]. The properties predicted rely
+  on the specification of only a monomer repeat unit of a polymer along with
+  its atomic coordinates in an extended conformation. This repeat unit
+  specification is analyzed and its polymer properties are predicted using
+  connectivity indices and specialized structural fragment descriptors. In MOE,
+  a monomer repeat unit is a connected molecule (in a single chain) with two
+  named hydrogen atoms indicating polymerization connection points. The chain
+  name is used as the polymer name. The hydrogen at the tail of the chain must
+  be named A0 and the hydrogen at the head of the chain must be named A1. For
+  example, the polystyrene monomer unit is represented with:</p>
+
+<table class="noborder">
+  <tr>
+    <td class="middle">
+      <img src="polymer/polystyrene.jpg" alt="Polystyrene" class="icon" />
+    </td>
+    <td class="middle">
+      <img src="polymer/polystyrene2d.gif" alt="Polystyrene" class="icon" />
+    </td>
+  </tr>
+</table>
+
+<p>Select the indicated hydrogen atoms and use the <span class="nobr"><b>MOE
+  Footer</b></span> to name these atoms. Alternatively, <span class="menu">MOE
+  | Edit | Build | <a href="polybld.htm">Polymer</a></span> can be used to
+  specify the attachment points and name the polymer chain. An alternating
+  polymer &ndash;(A&ndash;B)<sub>n</sub> is specified by creating the repeat
+  unit for (&ndash;A&ndash;B)<sub>n</sub>.</p>
+
+<h1>
+<a id="Run">Running the Calculation</a></h1>
+
+<p>Use <b><nobr>MOE | Compute | Simulations | Polymer Properties</nobr></b>
+  to open the Polymer Properties window. Press <b>Predict</b> to calculate
+  polymer properties for the repeat units currently loaded in MOE. If
+  successful, the window will contain a list of polymer properties:</p>
+  <img src="polymer/polypanel.png" alt="Polymer Properties Panel" class="center" />
+
+<p>If more than one polymer is loaded, choose the polymer of interest in the
+  <b>Polymer</b> option menu to display its respective properties and values in
+  the list. MOE predicts over 50 polymer properties. They are divided into two
+  groups: <b>Scalar Properties</b> and plottable temperature-dependent
+  properties, and are listed in the <b>Property</b> option menu. The following
+  Scalar Properties are calculated:</p>
+
+<p><!-- generated from $MOE/svl/run/polyprop.svl --></p>
+  <table class="titlebar">
+    <tr>
+      <th>Tag</th>
+      <th>Description</th>
+      <th>Units</th>
+      <th>Tag</th>
+      <th>Description</th>
+      <th>Units</th>
+    </tr>
+    <tr>
+      <td>M</td>
+      <td>Molecular Weight of Repeat Unit</td>
+      <td>g/mol</td>
+      <td>Ps</td>
+      <td>Molar Parachor</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>lm</td>
+      <td>Length of Extended Repeat Unit</td>
+      <td>&Aring;</td>
+      <td>PLL</td>
+      <td>Molar Polarization</td>
+      <td>cc/mol</td>
+    </tr>
+    <tr>
+      <td>V298</td>
+      <td>Amorphous Molar Volume</td>
+      <td>cc/mol</td>
+      <td>vr298</td>
+      <td>Volume Resistivity (log10)</td>
+      <td>ohm cm</td>
+    </tr>
+    <tr>
+      <td>Vvdw</td>
+      <td>van der Waals Volume</td>
+      <td>cc/mol</td>
+      <td>mag</td>
+      <td>Magnetic Susceptibility</td>
+      <td>1e-6 cc/g</td>
+    </tr>
+    <tr>
+      <td>p298</td>
+      <td>Amorphous Density</td>
+      <td>g/cc</td>
+      <td>Me</td>
+      <td>Entanglement Molecular Weight</td>
+      <td>g/mol</td>
+    </tr>
+    <tr>
+      <td>Ecoh1</td>
+      <td>Cohesive Energy (Fedors)</td>
+      <td>J/mol</td>
+      <td>sigma</td>
+      <td>Steric Hindrance Parameter</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>Ecoh2</td>
+      <td>Cohesive Energy (van Krevelen)</td>
+      <td>J/mol</td>
+      <td>Cinf</td>
+      <td>Characteristic Ratio</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>sol_Ecoh1</td>
+      <td>Solubility Parameter (Fedors)</td>
+      <td>(J/cc)**0.5</td>
+      <td>stiffness</td>
+      <td>Molar Stiffness</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>sol_Ecoh2</td>
+      <td>Solubility Parameter (van Krevelen)</td>
+      <td>(J/cc)**0.5</td>
+      <td>Mcr</td>
+      <td>Critical Molecular Weight</td>
+      <td>g/mol</td>
+    </tr>
+    <tr>
+      <td>Tg</td>
+      <td>Glass Transition Temperature</td>
+      <td>K</td>
+      <td>Eact</td>
+      <td>Activation Energy for Viscous Flow</td>
+      <td>J/mol</td>
+    </tr>
+    <tr>
+      <td>a298</td>
+      <td>Volumetric Thermal Expansion</td>
+      <td>1e-6 1/K</td>
+      <td>l298</td>
+      <td>Thermal Conductivity</td>
+      <td>J/Kms</td>
+    </tr>
+    <tr>
+      <td>C298</td>
+      <td>Heat Capacity</td>
+      <td>J/molK</td>
+      <td>pO2</td>
+      <td>Permeability to O2</td>
+      <td>Dow&nbsp;Units</td>
+    </tr>
+    <tr>
+      <td>DeltaCpTg</td>
+      <td>Heat Capacity Jump at Tg</td>
+      <td>J/molK</td>
+      <td>pN2</td>
+      <td>Permeability to N2</td>
+      <td>Dow&nbsp;Units</td>
+    </tr>
+    <tr>
+      <td>g298_Ecoh1</td>
+      <td>Surface Tension (Fedors)</td>
+      <td>dyn/cm</td>
+      <td>pCO2</td>
+      <td>Permeability to CO2</td>
+      <td>Dow&nbsp;Units</td>
+    </tr>
+    <tr>
+      <td>g298_Ecoh2</td>
+      <td>Surface Tension (van Krevelen)</td>
+      <td>dyn/cm</td>
+      <td>Eact_d</td>
+      <td>Activation Energy of Decomposition</td>
+      <td>kJ/mol</td>
+    </tr>
+    <tr>
+      <td>g298</td>
+      <td>Surface Tension (molar parachor)</td>
+      <td>dyn/cm</td>
+      <td>T0_d</td>
+      <td>Temperature of Initial Decomposition</td>
+      <td>K</td>
+    </tr>
+    <tr>
+      <td>n298</td>
+      <td>Refractive Index</td>
+      <td>-</td>
+      <td>T_d</td>
+      <td>Temperature of Half Decomposition</td>
+      <td>K</td>
+    </tr>
+    <tr>
+      <td>RLL</td>
+      <td>Molar Refraction</td>
+      <td>cc/mol</td>
+      <td>Tmax_d</td>
+      <td>Temperature of Maximum Decomposition</td>
+      <td>K</td>
+    </tr>
+    <tr>
+      <td>eps298</td>
+      <td>Dielectric Constant</td>
+      <td>-</td>
+      <td>Y_d</td>
+      <td>Molar Thermal Decomposition Function</td>
+      <td>kgK/mol</td>
+    </tr>
+    <tr>
+      <td>dipole</td>
+      <td>Effective Dipole Moment</td>
+      <td>debyes</td>
+      <td>Fd</td>
+      <td>Dispersion Component of Molar Attraction</td>
+      <td>-</td>
+    </tr>
+  </table>
+
+<p>When a plottable property is selected, the window will display the
+  property plot. Use the <b>Plot All</b> checkbox to plot all of the loaded
+  polymers simultaneously.</p>
+  <center>
+    <table class="noborder">
+      <tr>
+        <td><img src="polymer/polyplot.png" />&nbsp;&nbsp;&nbsp;</td>
+        <td>
+          <table class="titlebar">
+            <tr>
+              <th>Tag</th>
+              <th>Description</th>
+              <th>Units</th>
+            </tr>
+            <tr>
+              <td>V(T)</td>
+              <td>Molar Volume</td>
+              <td>cc/mol</td>
+            </tr>
+            <tr>
+              <td>p(T)</td>
+              <td>Amorphous Density</td>
+              <td>g/cc</td>
+            </tr>
+            <tr>
+              <td>C(T)</td>
+              <td>Heat Capacity</td>
+              <td>J/molK</td>
+            </tr>
+            <tr>
+              <td>g(T)</td>
+              <td>Surface Tension</td>
+              <td>dyn/cm</td>
+            </tr>
+            <tr>
+              <td>n(T)</td>
+              <td>Refractive Index</td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <td>B(T)</td>
+              <td>Bulk Modulus</td>
+              <td>MPa</td>
+            </tr>
+            <tr>
+              <td>v(T)</td>
+              <td>Poisson's Ratio</td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <td>E(T)</td>
+              <td>Young's Modulus</td>
+              <td>MPa</td>
+            </tr>
+            <tr>
+              <td>G(T)</td>
+              <td>Shear Modulus</td>
+              <td>MPa</td>
+            </tr>
+            <tr>
+              <td>F(T)</td>
+              <td>Brittle Fracture Stress</td>
+              <td>Mpa</td>
+            </tr>
+            <tr>
+              <td>Y(T)</td>
+              <td>Shear Yield Stress</td>
+              <td>Mpa</td>
+            </tr>
+            <tr>
+              <td>l(T)</td>
+              <td>Thermal Conductivity</td>
+              <td>J/Kms</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </center>
+
+<p>The <b>Plot Attributes</b> button opens a sub-panel for controlling plot
+  rendering. A detailed list of all attributes can be found in the <a href=
+  "../svl/svlgui/fcnref/wt_plot.htm">Plot Widget</a> documentation.</p>
+
+<p>The <b>Report</b> button will output all properties, both scalar and
+  temperature-dependent, of all the polymers whose properties have been
+  calculated. The list of plottable temperature-dependent properties is given
+  in the above table. The report is written into a new SVL Text Editor.
+  <a id="Ref"></a>
+</p>
+
+<h1>References</h1>
+  <table class="ref">
+    <tr>
+      <td valign="top">[Bicerano&nbsp;1996]</td>
+      <td valign="top">Bicerano J., <i>Prediction of Polymer Properties, 2nd
+      ed.</i>, Marcel Dekker Inc., New York (1996).</td>
+    </tr>
+  </table>
+<a id="SeeAlso"></a>
+<h1>See Also</h1>
+
+<p><a href="polybld.htm">Building Polymers</a> </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../images/ccgicon.png" /> <a href="../index.htm"></a> <a href=
+    "../legal.htm"></a> &copy;<span class="versionyear"></span> <a href="http://www.chemcomp.com"></a>. All
+    rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

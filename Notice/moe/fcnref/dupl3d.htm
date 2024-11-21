@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords: duplicate, clone, 3D, window" />
+  <meta name="keywords" content="keywords: fullscreen" />
+  <meta name="keywords" content="functions: Duplicate3DWindow" />
+  <meta name="keywords" content="functions: UISetup" />
+  <title>Duplicate3DWindow Function</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Duplicate3DWindow Function
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    [enabled, monitor_id, 'stereo'] = <a class="fcnlink" href="#Duplicate3DWindow">Duplicate3DWindow</a> []
+    <a class="fcnlink" href="#Duplicate3DWindow">Duplicate3DWindow</a> [enable, monitor_id, 'stereo']
+
+    current_options = <a class="fcnlink" href="#UISetup">UISetup</a> []
+    <a class="fcnlink" href="#UISetup">UISetup</a> options
+    options = [
+        smallMonitor: flag
+    ]
+</pre>
+
+<a id="Duplicate3DWindow"></a>
+<h1>Description</h1>
+
+<pre>
+[enabled, monitor_id, 'stereo'] = <a class="fcndef">Duplicate3DWindow</a> []
+<a class="fcndef">Duplicate3DWindow</a> [enable, monitor_id, 'stereo']
+</pre>
+
+<p>The <tt>Duplicate3DWindow</tt> function makes a duplicate of the 3D view
+of the main window into a separate window or in fullscreen onto another
+monitor. The view of both windows are synchronized.
+This is useful for presentations.
+The duplicated window can be set to use a different stereo mode than
+the main MOE window. If no arguments are specified, the current mode
+parameters are returned.
+
+  <dl>
+    <dt><tt>enable</tt></dt>
+    <dd>Flag indicating if the main 3D view should be duplicated/cloned
+    into a separate window or fullscreen.
+    </dd>
+    <dt><tt>monitor_id</tt></dt>
+    <dd>Number of monitor to open duplicate window in fullscreen mode.
+    If <tt>0</tt> duplicate as resizable window which can be moved around
+    on the desktop. The default value is <tt>0</tt>
+    </dd>
+    <dt><tt>stereo</tt></dt>
+    <dd>The stereo mode is specified by the argument token and can be one of
+    the following. The default is <tt>'none'</tt>.
+
+    <center>
+    <table class="titlebar">
+      <tr>
+        <th>Stereo Mode</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td valign="baseline"><tt>'none'</tt></td>
+        <td valign="baseline">Disables stereo projection.</td>
+      </tr>
+      <tr>
+        <td valign="baseline"><tt>'quad-buffer'</tt></td>
+        <td valign="baseline">Enables quad buffer stereo video. Each eye is
+        rendered into a separate image buffer and special hardware (e.g. NVidia
+        3DVision Por Kit or StereoGraphics shutter glasses) is used to rapidly
+        alternate the display of each image. On some computer platforms, the
+        graphics driver can be configured for passive stereo equipment
+        (polarized glasses) by outputting the images for both eyes to separate
+        outputs (e.g. two projectors). Other stereo devices might be supported
+        by the graphics drivers as well.</td>
+      </tr>
+      <tr>
+        <td valign="baseline"><tt>'left-right'</tt></td>
+        <td valign="baseline">Enables left/right or split pair stereo. The left
+        eye is rendered on the left half of the screen and the right eye on the
+        right. By relaxing one's eyes (&quot;looking through the
+        monitor&quot;) one can overlay the two images and see stereo.</td>
+      </tr>
+      <tr>
+        <td valign="baseline"><tt>'over-under'</tt></td>
+        <td valign="baseline">Enables over/under stereo video. The left eye is
+        rendered on the top half of the screen and the right eye on the bottom
+        half. This mode is intended for fullscreen use and is supported by some
+        Stereo TV systems. No operating system drivers are required.</td>
+      </tr>
+      <tr>
+        <td valign="baseline"><tt>'side-by-side'</tt></td>
+        <td valign="baseline">Enables side by side stereo video. The left eye
+        is rendered on the left half of the screen and the right eye on the
+        right half. This mode is intended for fullscreen use and is supported
+        by some Stereo TV systems. No operating system drivers are
+        required.</td>
+      </tr>
+      <tr>
+        <td valign="baseline"><tt>'interlace'</tt></td>
+        <td valign="baseline">Enables line-by-line interleaving of left and
+        right eye images used by some polarized filter stereo systems (e.g.
+        Zalman and SeeReal 2D/3D monitors). Some DLP projectors support the
+        interlace mode with a checker pattern.</td>
+      </tr>
+      <tr>
+        <td valign="baseline"><tt>'anaglyph'</tt></td>
+        <td valign="baseline">Enables anaglyph stereo. Anaglyph stereo colors
+        the left and right eye images complementary colors and superposes the
+        two images on the screen. The 3D effect is then achieved by wearing
+        glasses with one lens of each complementary color. MOE supports two
+        types of colored glasses: green-magenta (green on the left eye) and
+        red-cyan (red on the left eye). The video card you are using must
+        support GLSL shaders.</td>
+      </tr>
+      <tr>
+        <td valign="baseline"><tt>'parallel'</tt></td>
+        <td valign="baseline">Enables parallel projection mode. This is not
+        really a stereo mode but a mode in which the molecular system is
+        rendered without perspective.</td>
+      </tr>
+      <tr>
+        <td valign="baseline"><tt>'zspace'</tt></td>
+        <td valign="baseline">Enables zSpace compatible stereo mode.
+        A zSpace display and 3D glasses are required to view the images
+        properly. This mode uses head tracking data to calculate accurate
+        parallax movements.
+        </td>
+      </tr>
+    </table>
+    </center>
+
+    </dd>
+  </dl>
+
+<h3>Examples:</h3>
+
+<pre>
+    svl&gt; Duplicate3DWindow [1, 0, 'none'];     // open duplicate 3D window
+    svl&gt; Duplicate3DWindow [1, 2, 'anaglyph']; // duplicate 3D fullscreen on second
+                                               // monitor in anaglyph stereo mode
+    svl&gt; Duplicate3DWindow 0;                  // close duplicate window
+</pre>
+
+<a id="UISetup"></a>
+<hr noshade="noshade" />
+<pre>
+<a class="fcndef">UISetup</a> options
+current_options = <a class="fcndef">UISetup</a> []
+</pre>
+
+<p>
+Set user interface configuration options for the MOE main window.
+</p>
+
+<p>
+<tt>options</tt> is a tagged vector of attribute-value pairs:
+
+  <dl>
+    <dt><tt>smallMonitor</tt></dt>
+    <dd>Flag indicating if the small monitor mode is enabled or not.
+    In small monitor mode some user interface elements are shrunken or
+    rearranged to make it possible to run the MOE user interface on monitors
+    with a very low resolution (e.g. below 1024x768 pixels).
+    </dd>
+  </dl>
+
+<h1>See Also</h1>
+
+<p>
+<a class="svl" href="stereo.htm">Stereo</a><br />
+<a class="svl" href="quality.htm">FullScreen</a><br />
+<a href="../gui/mainwin.htm#DuplicateWindow">Duplicate 3D Window</a><br />
+<a href="../gui/zspace.htm">zSpace Stereo Display</a>
+</p>
+
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

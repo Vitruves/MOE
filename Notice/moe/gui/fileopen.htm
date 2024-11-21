@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="panel: Open" />
+  <title>MOE Open System</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    MOE Open System
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+  <ul>
+    <li><a href="#OpenPanelFSB">Opening Files</a></li>
+    <ul>
+      <li><a href="#FileTypes">Available File Types</a></li>
+    </ul>
+    <li><a href="#PSILODownload">Downloading PDB Files from PSILO</a></li>
+    <li><a href="#RCSBDownload">Downloading PDB Files from the RCSB</a></li>
+    <li><a href="#MOEPDB">Browsing the MOE Protein Database</a></li>
+  </ul>
+
+<h1>
+<a id="OpenPanelFSB">Opening Files</a></h1>
+
+<p>The MOE open file system is used to perform a variety of &quot;open&quot;
+  operations on files of different formats. File formats are recognized
+  automatically, but forcing a particular format interpretation is possible if
+  necessary. Where additional options are available, a secondary panel will
+  open. For example, when molecular data from a PDB file are being loaded into
+  MOE, the <a href="../../proteins/pdb_mdb.htm#OpeningPDBFiles">Load PDB
+  File</a> panel will be raised, or when an SKC file (sketch file) is opened,
+  the <a href="mainwin.htm#SketchView">Sketch View</a> panel is raised.</p>
+
+<p>In MOE, the notion of <i>opening</i> a file has been extended beyond such
+  simple operations as opening a molecule file into the system or opening a
+  database file into a database viewer. MOE's system for opening files
+  allows you to browse files, to operate on multiple files, and to select from
+  a variety of operations. For example, you can choose to either load a
+  molecule into MOE or add it to a database file. The Open system is not
+  limited to files containing molecular data. Opening an SVL file for example,
+  allows you to load or run the SVL module.</p>
+
+<p>To open a file, choose <span class="nobr"><b>File | Open</b></span> in
+  either the MOE Window or the Sequence Editor, or use <span class="menu">MOE |
+  RHS | Open</span>.</p>
+
+<img src="fileopen/fileopen.png" alt=
+  "Open Panel" class="center" />
+<div class="floatright">
+  <img src="fileopen/fileopen_filter.png" alt="File Filters"/>
+  <p class="caption">Filters</p>
+</div>
+
+<p>The panel is made up of different pages, for opening files from folders,
+  or from obtaining structure files from PSILO or the PDB. <a href=
+  "../hellomoe.htm#File_Selection_Box">Navigation controls</a> are found at the
+  top of the panel.</p>
+
+<p>The first page of the Open panel presents a list of files from which you
+  can select one or more to open, and a list of operations, common to all
+  selected files, from which you can choose the operation to perform. For
+  information on browsing files and directories, see the documentation on the
+  <a href="../hellomoe.htm#File_Selection_Box">File Selection Box</a>.</p>
+
+<p>Choose <b>All Files</b> to filter the list by file extensions of common
+  types. In addition to the given file extensions, arbitrary file patterns can
+  be entered in the filter text field.</p>
+
+<p><span class="tip">Tip</span>&nbsp; File patterns are recognized only in
+  the filter text field. File patterns will not be recognized if entered in the
+  file text field. Items in the file text field must match an existing file to
+  allow for any open operation to proceed.</p>
+
+<p><br clear="both" /></p>
+
+<p>To open files, select them in the list, or type their names into the file
+  text field. If a single file is selected, its type will be shown in the
+  <b>Open As</b> field, and the default action for that type will be shown in
+  the <b>Action</b> field. If MOE does not correctly identify a file's
+  type, you can enforce a file type by choosing from the <b>Open As</b> option
+  list. Similarly, you can choose a non-default operation from the
+  <b>Action</b> list.</p>
+
+<img src="fileopen/fileopen_actions.png" alt="Action" class=
+  "floatright" />
+
+<p>If multiple files are selected, they will be shown in the text field as a
+  comma-separated list. If all the selected files are the same type, that type
+  will be shown in <b>Open As</b> option list, otherwise the type will be
+  blank. The <b>Action</b> option list will initially show the default
+  operation for the current type. If more than one type of file is selected,
+  the <b>Action</b> option list will be populated with the operations (if any)
+  common to all the selected files.</p>
+
+<p>If the selected operation is <b>Open Molecule</b>, then the <b>Close
+  System</b> checkbox will be available. If enabled, the current molecular
+  system will be closed, and the new molecular data will be centered in the MOE
+  Window.</p>
+
+<p>To perform the currently chosen action on the selected files, press
+  <b>OK</b> or <b>Apply</b>. Double-clicking in the list is the same as
+  selecting a single file and pressing <b>OK</b>, in which case the default
+  action associated with the selected file will be performed. Press <b>Edit</b>
+  to load all the selected files into individual <a href="ted.htm">SVL Text
+  Editors</a>. When either <b>Apply</b> or <b>Edit</b> is pressed, the panel
+  remains open.</p>
+
+<p><br clear="both" /></p>
+
+<h2><a id="FileTypes">Available File Types</a></h2>
+
+<p>The <b>Open As</b> field displays the detected file type of the selected
+  file(s). If the file type is unrecognized, or if files of different types are
+  selected, then the field is blank. The pulldown menu lists all file types
+  currently recognized by MOE. Selecting from the menu forces the selected
+  files to be treated as being of the specified type. The types currently
+  recognized by the Open system are:</p>
+  <div class="indent">
+    <table class="titlebar">
+      <tr>
+        <th>File Type</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td>aeon_msd</td>
+        <td>Aeon model structure data file</td>
+      </tr>
+      <tr>
+        <td>aeon_msf</td>
+        <td>Aeon combined model structure and forcefield parameter file</td>
+      </tr>
+      <tr>
+        <td>aeon_ppf</td>
+        <td>Aeon forcefield parameter file</td>
+      </tr>
+      <tr>
+        <td>ascii</td>
+        <td>Delimited ASCII Database</td>
+      </tr>
+      <tr>
+        <td>bcif</td>
+        <td>Binary Crystallographic Information File</td>
+      </tr>
+      <tr>
+        <td>ccdc_dat</td>
+        <td>Cambridge Crystallographic Data Centre FDAT file type</td>
+      </tr>
+      <tr>
+        <td>ccp4</td>
+        <td>CCP4 format grid data</td>
+      </tr>
+      <tr>
+        <td>cif</td>
+        <td>Crystallographic Information File</td>
+      </tr>
+      <tr>
+        <td>clustal</td>
+        <td>Clustal sequence file</td>
+      </tr>
+      <tr>
+        <td>cns</td>
+        <td>CNS format grid data</td>
+      </tr>
+      <tr>
+        <td>cv</td>
+        <td>CNS/CNX Structure Factor File</td>
+      </tr>
+      <tr>
+        <td>dsn6</td>
+        <td>O DSN6 format map file</td>
+      </tr>
+      <tr>
+        <td>embl</td>
+        <td>European Molecular Biology Labs sequence file</td>
+      </tr>
+      <tr>
+        <td>fasta</td>
+        <td>Fasta sequence file</td>
+      </tr>
+      <tr>
+        <td>gcg</td>
+        <td>GCG single sequence file</td>
+      </tr>
+      <tr>
+        <td>gcg_msf</td>
+        <td>GCG Multiple Sequence File</td>
+      </tr>
+      <tr>
+        <td>genbank</td>
+        <td>GenBank sequence file</td>
+      </tr>
+      <tr>
+        <td><a href="../../svl/fcnref/gridfile.htm">grid</a></td>
+        <td>MOE grid file</td>
+      </tr>
+      <tr>
+        <td>hkl</td>
+        <td>HKL reflection file</td>
+      </tr>
+      <tr>
+        <td>html</td>
+        <td>HTML file</td>
+      </tr>
+      <tr>
+        <td>macmod</td>
+        <td>MacroModel file</td>
+      </tr>
+      <tr>
+        <td>maestro</td>
+        <td>Schrodinger Maestro file</td>
+      </tr>
+      <tr>
+        <td>mdl_mol</td>
+        <td>MDL molecule file</td>
+      </tr>
+      <tr>
+        <td>mdl_rdf</td>
+        <td>MDL reaction-data file</td>
+      </tr>
+      <tr>
+        <td>mdl_rgf</td>
+        <td>MDL R-Group file</td>
+      </tr>
+      <tr>
+        <td>mdl_rxn</td>
+        <td>MDL reaction file</td>
+      </tr>
+      <tr>
+        <td>mdl_sdf</td>
+        <td>MDL Standard Database (SD)</td>
+      </tr>
+      <tr>
+        <td>mdl_skc</td>
+        <td>MDL Sketch File</td>
+      </tr>
+      <tr>
+        <td>mmtf</td>
+        <td>MacroMolecular Transmission Format File</td>
+      </tr>
+      <tr>
+        <td><a href="../fcnref/moefmt.htm">moe</a></td>
+        <td>MOE molecule file (MOE format 2001.01 and later)</td>
+      </tr>
+      <tr>
+        <td><a href="../../quasar/qbct.htm">moe_bct</a></td>
+        <td>MOE binary classification tree file</td>
+      </tr>
+      <tr>
+        <td><a href="../fcnref/ff_file.htm">moe_ff</a></td>
+        <td>MOE forcefield file</td>
+      </tr>
+      <tr>
+        <td><a href="../../mdb/fpmodel.htm">moe_fp</a></td>
+        <td>MOE fingerprint model file</td>
+      </tr>
+      <tr>
+        <td><a href="../../mdb/db.htm">moe_mdb</a></td>
+        <td>MOE molecular database</td>
+      </tr>
+      <tr>
+        <td><a href="../../install/moeconfig.htm#CustomMenus">moe_menu</a></td>
+        <td>MOE menu file</td>
+      </tr>
+      <tr>
+        <td><a href="../../quasar/modcomp.htm">moe_model</a></td>
+        <td>MOE composite model file</td>
+      </tr>
+      <tr>
+        <td>moe_old</td>
+        <td>Old MOE molecule file (MOE format prior to 2001.01)</td>
+      </tr>
+      <tr>
+        <td><a href="../../apps/ph4_query.htm">moe_ph4</a></td>
+        <td>MOE Pharmacophore Query file</td>
+      </tr>
+      <tr>
+        <td><a href="../../quasar/model.htm">moe_qsar</a></td>
+        <td>MOE QSAR model file</td>
+      </tr>
+      <tr>
+        <td><a href="../../apps/scf.htm">moe_wfn</a></td>
+        <td>MOE SCF Wavefunction</td>
+      </tr>
+      <tr>
+        <td><a href="../../apps/edsurf.htm">mtz</a></td>
+        <td>CCP4 MTZ file (electron density map)</td>
+      </tr>
+      <tr>
+        <td><a href="../../proteins/pdb_mdb.htm#OpeningPDBFiles">pdb</a></td>
+        <td>Protein Data Bank file</td>
+      </tr>
+      <tr>
+        <td>phylip</td>
+        <td>Phylip sequence file</td>
+      </tr>
+      <tr>
+        <td>pir</td>
+        <td>NBRF/Protein Identification Resource sequence file</td>
+      </tr>
+      <tr>
+        <td>raw_seq</td>
+        <td>Raw sequence file</td>
+      </tr>
+      <tr>
+        <td>res</td>
+        <td>SHELXL RES file</td>
+      </tr>
+      <tr>
+        <td><a href="../../svl/manual/index.htm">svl</a></td>
+        <td>SVL source file</td>
+      </tr>
+      <tr>
+        <td>tripos</td>
+        <td>Tripos MOL2 file</td>
+      </tr>
+      <tr>
+        <td>xml</td>
+        <td>PDBML XML File</td>
+      </tr>
+      <tr>
+        <td>xtl</td>
+        <td>MSI Crystal File</td>
+      </tr>
+      <tr>
+        <td>xyz</td>
+        <td>XYZ file format</td>
+      </tr>
+    </table>
+  </div>
+
+<p><br clear="both" /></p>
+
+
+<h1><a id="PSILODownload">Downloading PDB Files from PSILO</a></h1>
+
+<p>The <span class="menu">PSILO</span> page of the Open panel is a direct link
+between MOE and a
+<a href="http://www.chemcomp.com/PSILO-Protein_Structure_Database_System.htm"
+    target="_blank">PSILO server</a>.
+
+<p class="center"><img src="fileopen/PSILO_browse.png" alt="PSILO Browse"/></p>
+
+<p>When selected, the <span class="menu">PSILO</span> page immediately checks
+for an index file in the
+<a href="../../install/install.htm#RunEnv">DOWNLOADS</a> directory and uses its
+contents when reporting search results in the Open panel.  This index file
+will be created if necessary and automatically updated using web services.
+</p>
+
+<p class="blockquote">
+<span class="tip">Note:</span> Downloading files from PSILO
+may require configuring MOE to work with a proxy server. Depending on the
+server, a dialog may pop up requesting a username and password for the proxy
+server to continue. Please read instructions on
+<a href="../../appendix/settings.htm#Proxy">Proxy&nbsp;Settings</a> if there are
+problems opening structures.
+</p>
+
+<p>The version of PSILO being run on the PSILO server and the server's
+URL are indicated in the titlebar of the Open panel.</p>
+
+<a id="PSILOQuery"></a>
+<h2>Querying PSILO</h2>
+
+<img src="fileopen/psilo_query.png" alt="PSILO Query" class="floatright"/>
+
+<p>
+The PSILO query widget is found
+at the top of the panel.  To perform a search:
+
+<ol>
+<li>Choose
+which field or fields are to be searched (default is <b>All Text Fields</b>).
+Depending on the field, different types of searches
+(<span class="menu">keywords</span>, <span class="menu nobr">begins with</span>,
+etc.) may be available.  The
+data source for the query, e.g.
+<span class="menu">MOE</span>, <span class="menu">Sketch</span> or
+<span class="menu">Manual</span>, might also be specifiable.
+<span class="tip">Note:</span> The list of possible search
+fields is dynamically obtained from the PSILO server and may
+vary depending on the server.
+</li>
+<li>Enter or choose a search term.  The exact format varies,
+depending on the chosen search field. With some fields, such as <b>All Text
+Fields</b> or <span class="menu nobr">GO Annotation</span>, after a few letters
+have been typed, possible autocomplete options become available.
+Press the
+<img src="fileopen/down_arrow.png" alt="down arrow" class="icon" />
+(textfield shortcut)
+button to access these options. If the <i>Too many matches</i> message is
+displayed, type a few more letters and try again.
+Other fields, such as <span class="menu nobr">Space Group</span>, produce a
+drop-down list of search terms from which to choose. Still others, such
+as, <span class="menu nobr">Ligand | SMILES</span> search, allow choosing
+<span class="menu">MOE</span> (to use selected atoms in the MOE Window as the
+query) or <span class="menu">Sketch</span> (to define a query with a molecular
+sketcher accessible through the
+<img src="fileopen/sketch.png" alt="sketch" class="icon" />
+button). Most fields support a <span class="menu">Manual</span> entry mode
+which allows, for example, to enter a SMILES string
+directly.
+</li>
+<li>Press the <span class="menu">Search</span>
+button at top right to execute the search.
+</li>
+</ol>
+
+<a id="PSILO3DQueries"></a>
+<h3>3D Interaction Queries</h3>
+
+<p>3D interaction queries can be specified from the MOE Window if the
+query data
+source is set to <span class="menu">MOE</span> from the drop-down, and the
+<img src="fileopen/restraint.png" alt="restraints" class="icon" />
+(restraint) button to build distance, angle
+and/or dihedral restraints is pressed. The query is specified by
+selecting all restrained atoms and any other relevant atoms.
+Unselected atoms will be ignored.  Each
+molecular fragment is defined to be either ligand or receptor, as
+indicated in the MOE <a href="system.htm">System Manager</a>.  In general,
+there should be one ligand and one receptor fragment in each
+Interaction query.  Solvent atoms are considered
+'ligand' for this purpose.  Atoms can be explicitly designated as
+ligand atoms by selecting them and then choosing
+<span class="menu">MOE | RHS | Ligand | Choose Ligand</span>.
+Note that any query
+fragment which contains a mixture of ligand and receptor atoms is considered
+to be neither.</p>
+
+<p>If an interaction search involves a ligand and a receptor fragment,
+upon completion of the search, a button
+<img src="fileopen/3d_environment.png" alt="3D environment button"
+class="icon" /> will appear in the bottom right of the
+panel to open an MDB file containing clustered ligands along with
+their environment.
+The ligands in each hit are first grouped by protomer, and then each protomer is
+clustered with a very tight RMSD cutoff. This results in a number of clusters of
+ligands with very similar conformations.  Each row of the MDB represents one
+cluster and includes the superposed ligand fragments, as well as the interacting
+receptor atoms.  This allows one to see if there are any patterns to the
+distribution of receptor atoms in 3D space around the ligand, possibly dependent
+on ligand conformation. When clustering the ligands, possible symmetries are
+taken into account.</p>
+
+<a id="PSILOOngoingSearch"></a>
+<h3>Ongoing Search</h3>
+
+<p>After launching a search, a progress bar replaces the query at the top
+of the window.  While the search is ongoing, the
+<span class="menu">Search</span> button is replaced by an
+<img src="fileopen/cancel.png" alt="cancel" class="icon" />
+button. Pressing this button will interrupt the current search.
+A confirmation dialog will be displayed, and upon confirmation, the current
+search is canceled and the panel will display the previous state.</p>
+
+<a id="PSILOCompletedSearch"></a>
+<h3>Completed Search</h3>
+
+<p>When the search is complete, the number of hits returned is reported at the
+bottom right, and the hitlist is displayed.
+Hovering the mouse over any of the hitlist entries will
+show a 2D depiction of the primary ligand for that structure, if
+any. Select hits from the hitlist by clicking on them in the list. The total
+number of selected hits is reported next to the total number of hits.  Buttons
+below the hitlist give access to additional operations:</p>
+
+<ul>
+<li><img src="fileopen/favorite.png" alt="favorites" class="icon" /> Open
+the Favorites prompter:
+
+<img class="center" src="fileopen/favorite_prompter.png"
+alt="favorite prompter"/>
+
+Enter a unique name for the query, then press
+<span class="menu">Save</span> to save the query as a favorite on the PSILO
+server. Use the <img src="fileopen/clear.png" alt="clear" class="icon" />
+button to clear the <span class="menu">Query Name</span> field, and
+<img src="fileopen/cancel.png" alt="cancel" class="icon" /> to cancel without
+saving.  A previously defined favorite can be retrieved from
+the <span class="menu">Query | Favorite | Favorite Query</span> menu.
+Press <span class="menu">Search</span> to perform a search with the favorite
+query, or press
+<img src="fileopen/cancel.png" alt="delete" class="icon" /> to permanently
+delete the favorite from the PSILO server.
+</li>
+
+<li><img src="fileopen/subset.png" alt="subset" class="icon" /> Open
+the Subset prompter.
+
+<img src="fileopen/subset_prompter.png"
+alt="subset prompter" class="center" />
+
+The Subset prompter is available when there are selected entries in the
+hitlist.  These selected entries can be saved under a name for later
+access.  Enter a unique name for the subset, then press
+<span class="menu">Save</span> to save the hitlist selection
+to the PSILO server.
+A previously defined subset can be retrieved from the
+<span class="menu nobr">Query | Favorite | Subset</span> menu.
+Press <span class="menu">Search</span> to retrieve the entries of
+the selected subset, or press
+<img src="fileopen/cancel.png" alt="delete" class="icon" /> to
+permanently delete the subset from the PSILO server.
+Note: Subsets not available for servers running a
+2019 version of PSILO or earlier.
+</li>
+
+<li><span class="menu nobr">Browse in PSILO...</span> Launch PSILO
+in a web browser.  The PSILO main search page will open with the current
+search, if any, already loaded and with results displayed.</li>
+</ul>
+
+<a id="PSILODownloadDlg"></a>
+<h3>Downloading Hits</h3>
+
+<p>To open hits from a search hitlist into MOE,
+select the desired hits in the hitlist and then press either
+<b>Apply</b> or <b>OK</b>.  Both will open the
+<span class="menu">PSILO Download</span> sub-panel
+to download the selected hits in various formats.  After successfully downloading
+the hits, OK will additionally close the Open panel; Apply will leave
+the Open panel raised.</p>
+
+<p>
+The <span class="menu">PSILO Download</span> panel is used to transfer the
+selected search results from the PSILO server into MOE.  Use
+<span class="menu">Open as</span> to select how structures are transferred:</p>
+
+<img src="fileopen/download_panel.png" alt="download panel" class="center" />
+
+<ul>
+<li><span class="menu">PDB</span>. Structures are downloaded as PDB files
+and opened in
+MOE.  Those with primary ligands defined also fetch a ligand CIF file,
+which is used for dictionary correction to ensure the bond order and formal
+charges match those defined in PSILO.  If
+<span class="menu nobr">Load Electron Density Map</span> is on, the
+electron density is computed for those records which have structure
+factors in PSILO, and loaded as well.</li>
+
+<li><span class="menu nobr">MOE MDB</span>. Structures are downloaded
+into the MOE Database (MDB) specified in the panel, which will be
+opened into a
+<a href="../../mdb/db.htm">Database Viewer</a>.  The MDB will include
+additional fields for each record, such as <tt>header</tt>, <tt>compnd</tt>,
+<tt>source</tt>, as well as a separate field for the primary ligand, if any.
+</li>
+
+<li><span class="menu nobr">MOE MDB Biological Unit</span>.  Similar to
+<span class="menu nobr">MOE MDB</span>, but here
+the first Biological Unit is
+created for each structure when building the database.</li>
+
+<li><span class="menu">Ligands</span>. Open only the ligands from each
+structure into MOE.
+</li>
+
+<li><span class="menu">Sequences</span>.  Open only the polymer sequences
+into MOE; no atoms are created.
+</li>
+</ul>
+
+<p><span class="menu">Superpose by</span> provides several options for how
+structures will be superposed after opening into MOE, as follows.
+<span class="tip">Note:</span> Superposition is not supported for
+<span class="menu">MOE MDB Biological Unit</span> or
+<span class="menu">Sequences</span>.</p>
+
+<ul>
+<li><span class="menu">None</span>. Coordinates are left as-is, with no
+superposition performed.</li>
+
+<li><span class="menu">Structure</span>. A standard sequence alignment followed
+by superposition is performed.  This works well when all the sequences are
+fairly similar.</li>
+
+<li><span class="menu">Family</span>.  This option works best
+when all the structures belong
+to a single PSILO Family.  The precalculated matrices which superpose each
+structure onto the Family Reference are used to superpose all structures into
+the same frame of reference.  Any structures which do not belong to the largest
+common Family will be left at their original coordinates.</li>
+
+<li><span class="menu">Ligand</span>. Superposition is performed using a rigid
+version of the <a href="../../apps/flex.htm">Flexible Alignment</a> algorithm on
+the primary ligands only.  This is normally limited to a maximum of 5 structures
+as performance can degrade appreciably above this limit.</li>
+
+<li><span class="menu">Pocket</span>. Superpose based on the C&alpha; atoms of
+the pocket in PSILO's pocket database for each structure.  Records which do not
+superpose well onto the other pockets will be left at their original
+coordinates. If the query was a pocket search using atoms in MOE, the
+loaded structures will also be superposed onto the original query.</li>
+
+<li><span class="menu">3D Query</span>.  This option is only available when an
+<span class="menu">Interaction</span> search is performed.  Structures will be
+superposed based on the atoms matching the 3D query, and their correspondence to
+atoms in the query.  If the query was <span class="menu">From MOE</span>, the
+loaded structures will also be superposed onto the original query.</li>
+</ul>
+
+
+<p class="blockquote">
+<span class="tip">Note for PSILO 2017 users:</span> The 2020.09 Open panel is
+no longer compatible with PSILO 2017. An upgrade to PSILO 2020 is
+highly recommended.
+</p>
+
+<h1><a id="RCSBDownload">Downloading PDB Files from the RCSB</a></h1>
+
+<p>The <b>RCSB</b> page of the Open panel is a direct link
+  between MOE and the <a href="http://www.rcsb.org">RCSB Protein
+  Data Bank</a> website.</p>
+
+<img src="fileopen/RCSB_browse.png" class="center" />
+
+<p>When selected, the <b>RCSB</b> page immediately checks
+  for an index file in the <a href=
+  "../../install/install.htm#RunEnv">DOWNLOADS</a> directory and uses its
+  contents to initialize the Open panel file list. This index file will be
+  created if necessary and automatically updated using web services. To
+  download files, select their entries in the list or type their codes into the
+  <b>Codes</b> text field, then press <b>OK</b> or <b>Apply</b>.
+  Double-clicking in the list is the same as selecting a single
+  entry and pressing <b>OK</b>.  The RCSB Chemical Component dictionary CIF
+  files for ligands in each structure will be downloaded automatically when
+  available, and used to correct bond orders and/or charges in the ligands.
+  In doing so, the local 3D environment of the ligand is taken into account,
+  so a different tautomer or charge state may result compared to that in
+  the dictionary entry. Note that files can be downloaded even if the index file
+  is not available, or if its code is not in the current index file. There is
+  no need to wait for the index to finish updating before downloading files
+  this way.</p>
+
+  <img src="fileopen/fileopen_load.png" alt="Load" class=
+  "floatright" />
+<p>mmCIF files are downloaded by default, however this can be changed with
+    the <b>Load</b> drop-down to PDB format if desired.  For structures not
+    available in PDB format, mmCIF will be fetched regardless of this setting.
+    If the <b>Electron Density Map</b> box is checked,
+    the structure factors for the PDB file will be downloaded as well, and used
+    to calculate the Electron Density maps.  These can then be toggled on and
+    off using the <a href="../../apps/surfmap.htm">Surfaces and Maps</a>
+    application.</p>
+
+  <p class="blockquote">
+    <span class="tip">Note:</span>&nbsp;&nbsp; Downloading files from the RCSB
+    may require configuring MOE to work with a proxy server. Depending on the
+    server, a dialog may pop up requesting a username and password for the proxy
+    server to continue. Please read
+    instructions on <a href=
+    "../../appendix/settings.htm#Proxy">Proxy&nbsp;Settings</a> if there are
+    problems using the download tool.
+  </p>
+
+<p>The index list displays the code, (accession) date, resolution (blank if
+  NMR) and the entry name (title). The <b>Codes</b> and <b>Filter</b> fields
+  can be used to search for specific database entries. The <b>Codes</b> field
+  restricts the visible entries to those that match at least one code or
+  pattern entered in the text field. The <b>Filter</b> field searches the index
+  file for words, word fragments or quoted phrases. If <b>&quot;Or&quot; with
+  Filter</b> is on, filter matches will be added to the list of visible
+  entries; otherwise the <b>Filter</b> field will be used to further restrict
+  which entries are displayed in the list.</p>
+
+<p>The <b>Codes</b> and <b>Filter</b> text fields both admit the use of
+  wildcards:</p>
+  <table class="noborder">
+    <tr>
+      <td><tt>*</tt></td>
+      <td>matches 0 or more of any character</td>
+    </tr>
+    <tr>
+      <td><tt>?</tt></td>
+      <td>matches any single character</td>
+    </tr>
+    <tr>
+      <td><tt>@</tt></td>
+      <td>matches any single character in [a..z, A..Z, _ ]</td>
+    </tr>
+    <tr>
+      <td><tt>#</tt></td>
+      <td>matches any single digit [0..9]</td>
+    </tr>
+    <tr>
+      <td><tt>[...]</tt></td>
+      <td>matches any character in the set; ranges (using dash (<tt>-</tt>)
+      symbol) are allowed</td>
+    </tr>
+    <tr>
+      <td><tt>[^</tt>...<tt>]</tt></td>
+      <td>matches any character <i>not</i> in the set</td>
+    </tr>
+  </table>
+
+<p>Note that an implicit <b>*</b> is placed at the beginning and end of each
+  word. For more on wildcards, see <a href="../../svl/fcnref/findetc.htm"
+  class="svl">findmatch</a>.</p>
+
+
+<h1><a id="MOEPDB">Browsing the MOE Protein Database</a></h1>
+
+<p>The <b>PDB</b> page is used to load molecules from MOE's <a href=
+  "../../proteins/pdb_mdb.htm#MOEPDB">internal protein database</a>. Note that
+  this database consists of individual protein domains however, not complete
+  structures, so it may be of limited use for this purpose. Alternatively, the
+  <b>PDB</b> page can be used to browse any molecular database file with a code
+  (or chain name) field and a molecule field.</p>
+
+<img src="fileopen/MOEPDB_browse.png" class="center" />
+
+<p>When selected, the <b>PDB</b> page immediately loads index data from the
+  specified MDB file (use <b>Browse</b> to select a different file). To load
+  molecules into MOE, select their entries in the list and press <b>OK</b> or
+  <b>Apply</b>. Double-clicking in the list is the same as selecting a single
+  entry and pressing <b>OK</b>.</p>
+
+<p>The index list displays the code, (accession) date, resolution (blank if
+  NMR) and the entry name (title). The <b>Codes</b> and <b>Filter</b> fields
+  can be used to search for specific database entries. The <b>Codes</b> field
+  restricts the visible entries to those that match each at least one code or
+  code pattern entered in the text field. The <b>Filter</b> field searches the
+  index file for words, word fragments or quoted phrases. If <b>&quot;Or&quot;
+  with Filter</b> is on, filter matches will be added to visible list;
+  otherwise the visible list will be further restricted to entries matching
+  both fields.</p>
+
+<p>The <b>Codes</b> and <b>Filter</b> text fields both admit the use of
+  wildcards:</p>
+  <table class="noborder">
+    <tr>
+      <td><tt>*</tt></td>
+      <td>matches 0 or more of any character</td>
+    </tr>
+    <tr>
+      <td><tt>?</tt></td>
+      <td>matches any single character</td>
+    </tr>
+    <tr>
+      <td><tt>@</tt></td>
+      <td>matches any single character in [a..z, A..Z, _ ]</td>
+    </tr>
+    <tr>
+      <td><tt>#</tt></td>
+      <td>matches any single digit [0..9]</td>
+    </tr>
+    <tr>
+      <td><tt>[...]</tt></td>
+      <td>matches any character in the set; ranges (using dash (<tt>-</tt>)
+      symbol) are allowed</td>
+    </tr>
+    <tr>
+      <td><tt>[^</tt>...<tt>]</tt></td>
+      <td>matches any character <i>not</i> in the set</td>
+    </tr>
+  </table>
+
+<p>Note that an implicit <b>*</b> is placed at the beginning and end of each
+  word. For more on wildcards, see <a href="../../svl/fcnref/findetc.htm"
+  class="svl">findmatch</a>.</p>
+
+<p>The selected entries can be written to another MDB file by pressing
+  <b>Copy</b>. The following panel will open:</p>
+
+<img src="fileopen/CopyToDatabase.png" class="center" />
+
+<p>If <b>Overwrite</b> is on, a new database will be created, otherwise the
+  selected entries will be appended to the target file.</p>
+
+
+<a id="SVLCommands"></a>
+<a id="SVL_Commands"></a>
+
+<h1>SVL Commands</h1>
+
+<p><a class="svl" href="../../svl/fcnref/loadetc.htm">load</a><br />
+  <a class="svl" href="../fcnref/openclo.htm">Open</a><br />
+  <a class="svl" href="../fcnref/molrw.htm">ReadAuto</a><br />
+<a id="See_Also"></a>
+</p>
+
+<h1>See Also</h1>
+
+<p><a href="../../mdb/dbio.htm">Importing and Exporting Data</a>
+  </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

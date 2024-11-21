@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../images/ccgicon.png" />
+  <title>Crystal Diffraction Simulation</title>
+  <meta name="keywords" content="panel: Crystal Diffraction Simulation" />
+  <meta name="keywords" content=
+  "main_keywords: scattering factor, lattice, reciprocal" />
+  <meta name="keywords" content="main_keywords: asymmetric unit" />
+  <meta name="keywords" content=
+  "keywords: temperature factor, anomalous scattering, camera" />
+  <meta name="keywords" content=
+  "keywords: radiation, reflection, geometry, Bragg, structure" />
+  <meta name="keywords" content=
+  "keywords: powder, fiber, single crystal, amplitude, phase" />
+  <meta name="keywords" content=
+  "keywords: hkl, theta, phi, lambda, wavelength, plane" />
+  <meta name="keywords" content=
+  "keywords: Miller indices, anisotropic, vibration" />
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../index.htm"><img src="../images/ccglogo.png" /></a>
+    <a href="../index.htm"><div class="moeversion"></div></a>
+    Crystal Diffraction Simulation
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+  <!-- <div id="useMathJax"></div> -->
+  <ul>
+    <li>
+      <a href="#BasicDiffraction">Basic Principles of Diffraction</a>
+      <ul>
+        <li>
+          <a href="#Radiation">Radiation Used in Diffraction Studies</a>
+        </li>
+        <li>
+          <a href="#XrayScattering">X-ray Scattering</a>
+        </li>
+        <li>
+          <a href="#AtomScatteringFactors">Atom Scattering Factors</a>
+        </li>
+        <li>
+          <a href="#StructureFactors">Structure Factors</a>
+        </li>
+        <li>
+          <a href="#ScatteringGeometry">Scattering Geometry: Conditions for
+          Diffraction</a>
+          <ul>
+            <li>
+              <a href="#BraggsEquation">Bragg's Equation</a>
+            </li>
+            <li>
+              <a href="#LaueEquations">Laue Equations</a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="#ReciprocalLattice">The Reciprocal Lattice</a>
+        </li>
+        <li>
+          <a href="#GeneralCorrectionFactors">General Correction Factors</a>
+          <ul>
+            <li>
+              <a href="#TemperatureFactors">Temperature Factors</a>
+            </li>
+            <li>
+              <a href="#LorentzGeometricCorrection">Lorentz Geometric
+              Correction</a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="#XrayCorrectionFactors">X-ray Correction Factors</a>
+          <ul>
+            <li>
+              <a href="#PolarizationCorrection">Polarization Correction</a>
+            </li>
+            <li>
+              <a href="#AnomalousScattering">Anomalous Scattering</a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="#DataCollection">Data Collection</a>
+          <ul>
+            <li>
+              <a href="#SampleTypes">Sample Types</a>
+            </li>
+            <li>
+              <a href="#Cameras">Cameras</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <a href="#Running">Running MOE-Diffraction</a>
+      <ul>
+        <li>
+          <a href="#SpecifyingTheCrystalAsymmetricUnit">Specifying the Crystal
+          Asymmetric Unit</a>
+        </li>
+        <li>
+          <a href="#SettingTheSampleType">Setting the Sample Type</a>
+          <ul>
+            <li>
+              <a href="#SettingPowderParameters">Setting Powder Parameters</a>
+            </li>
+            <li>
+              <a href="#SettingFiberParameters">Setting Fiber Parameters</a>
+            </li>
+            <li>
+              <a href="#SettingSingleCrystalParameters">Setting Single Crystal
+              Parameters</a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="#SettingCrystalParameters">Setting Crystal Cell
+          Parameters</a>
+        </li>
+        <li>
+          <a href="#SettingRadiationParameters">Setting Radiation
+          Parameters</a>
+        </li>
+        <li>
+          <a href="#SettingGeneralCorrections">Setting General Corrections</a>
+        </li>
+        <li>
+          <a href=
+          "#CalculatingStructureFactorsAndDiffractionIntensities">Calculating
+          Structure Factors and Diffraction Intensities</a>
+        </li>
+        <li>
+          <a href="#IsolatingReflections">Isolating Reflections</a>
+        </li>
+        <li>
+          <a href="#ChangingDisplayIntensities">Changing Display
+          Intensities</a>
+        </li>
+        <li>
+          <a href="#EditingThePlotAttributes">Editing the Plot Attributes</a>
+        </li>
+        <li>
+          <a href="#WritingAReportFile">Writing a Report File</a>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <a href="#References">References</a>
+    </li>
+    <li>
+      <a href="#SeeAlso">See Also</a>
+    </li>
+  </ul>
+
+<h1>
+<a id="BasicDiffraction">Basic Principles of
+  Diffraction</a></h1>
+
+<p>A diffraction pattern is the image obtained from shining short-wavelength
+  radiation through a material and projecting the resulting pattern onto a
+  surface. The incident radiation is scattered by the atoms constituting the
+  material, and the coherently scattered rays generate a unique interference
+  pattern for a given crystal of a given substance.</p>
+
+<h2><a id="Radiation">Radiation Used in Diffraction
+  Studies</a></h2>
+
+<p>Three kinds of radiation are commonly used in crystal diffraction studies:
+  X-ray, electron, and neutron.</p>
+
+<p>X-rays are scattered by the electrons, or, more specifically, by the
+  electron density distributions around the nuclei of atoms. The approximate
+  range of wavelengths is 0.1 to 100 angstroms, but in practice, only
+  wavelengths in the range 0.5 to 3 angstroms are used. The wavelengths 0.8 to
+  2.0 angstroms are of particular interest to crystallographers [Stout and
+  Jensen, 1989], being on the order of inter-atomic separations and therefore
+  well-suited for diffraction studies.</p>
+
+<p>Electrons are scattered by the nuclei of atoms. The Coulombic potential of
+  an atom nucleus determines an atom's electron scattering power. The
+  wavelength of a beam of electrons is much shorter than that of X-rays,
+  providing, in principle, a commensurately greater resolving power. Electron
+  diffraction, however, requires very thin specimens and is more sensitive than
+  X-rays to physical effects that reduce observed diffracted intensities.</p>
+
+<p>Neutrons are also scattered by atom nuclei. The wavelength of neutron
+  radiation is generally about 1 angstrom. There are two primary applications
+  for neutron diffraction: the study of magnetic crystals (neutrons interact
+  with magnetic fields whereas X-rays do not) and the study of materials
+  containing light atoms (neutron scattering interaction is not proportional to
+  atomic number; lighter elements may have greater scattering power than
+  heavier ones).</p>
+
+<h2><a id="XrayScattering">X-ray Scattering</a></h2>
+
+<p>We will examine the case of X-rays, with the understanding that the
+  principles apply analogously to electron and neutron diffraction.</p>
+
+<p>When an X-ray beam impinges on a material, part of the incident power is
+  scattered. The ratio of the power in the scattered beam to that in the
+  incident beam is called the <em>scattering power</em> of the material. The
+  intensity <i>I</i> of the scattered radiation is a function of amplitude
+  <i>A</i> of the scattered radiation (<i>K</i> is some constant of
+  proportionality): <!-- <span class='LaTeX'>
+\begin{align}
+I = K A^2
+\end{align}
+</span> --></p>
+
+<img src="diffract/math_diffract_eq0.png" class="center" />
+
+<p>In the first approximation, we can consider X-rays as being scattered by
+  point atoms, or, equivalently, by point electrons at the locations of the
+  scattering atoms. The amplitude of the radiation scattered by an electron
+  density distribution can then be expressed in terms of that scattered by a
+  point electron, scaled by a term that is a function solely of the magnitude
+  of the <em>scattering vector</em> <i><b>s</b></i>. The scattering vector is
+  the vector difference between the incident ray (represented by vector
+  <i><b>S</b></i><sub>0</sub>) and the associated scattered ray (represented by
+  vector <i><b>S</b><sub>s</sub></i>): <!-- <span class='LaTeX'>
+\begin{align}
+\textbf{s} = \textbf{S}_{s} - \textbf{S}_0
+\end{align}
+</span> --></p>
+
+<img src="diffract/math_diffract_eq1.png" class="center" />
+
+<p>This implies that the scattering intensity <i>I</i> varies with the angle
+  that the scattered beam makes with respect to the incident beam. The amount
+  of variance in <i>I</i> is different for each element, and is encapsulated in
+  a scale factor called the <em>atom scattering factor</em>. The atom
+  scattering factor describes the scattering power of an atom as a function of
+  scattering angle. Using these scattering factors, an expression for the
+  radiation scattered by the electron density distribution of an entire crystal
+  array of atoms can be constructed.</p>
+
+<h2><a id="AtomScatteringFactors">Atom
+  Scattering Factors</a></h2>
+
+<p>If atoms are assumed to be spherical, the scattering power of an atom is
+  characterized by a scattering factor &fnof;<i><sub>a</sub></i> which is a
+  function solely of element and of scattering angle, and not of the position
+  of the atom. The scattering factor is expressed in terms of the scattering
+  power of an equivalent number of electrons located at the position of the
+  atom nucleus. At angle 0, &fnof;<i><sub>a</sub></i> is always equal to the
+  total number of electrons in the atom. &fnof;<i><sub>a</sub></i> decreases as
+  the angle of incidence increases, due to the destructive interference of
+  radiation scattered from different parts of the electron cloud. The size of
+  the electron cloud therefore has an impact on the scattering factor -- an
+  atom that has a relatively diffuse cloud of electrons has a faster-decaying
+  scattering factor than one with electrons more tightly bound.</p>
+
+<p>Note: Since neutron scattering occurs at the point-like nucleus, neutron
+  scattering factors are independent of scattering angle.</p>
+
+<h2><a id="StructureFactors">Structure
+  Factors</a></h2>
+
+<p>The actual expression for the amplitude of the radiation scattered from a
+  single atom <i>A</i> in a crystal unit cell, expressed in terms of that
+  scattered from a single electron at the origin of the unit cell, is:
+  <!-- <span class='LaTeX'>
+\begin{align}
+f_{A} \textrm{e}^{2 \pi \mathrm{i} \left( \mathbf{r}_{A} \cdot \mathbf{s} \right)}
+\end{align}
+</span> --></p>
+
+<img src="diffract/math_diffract_eq2.png" class="center" />
+
+<p>where</p>
+  <ul>
+    <li>&fnof;<i><sub>A</sub></i> is the scattering factor of atom
+    <i>A</i></li>
+    <li><b>r</b><i><sub>A</sub></i> is the position vector giving the location
+    of the atom</li>
+    <li><i>i</i> is the complex number: <i>i</i> = &radic;(-1)</li>
+    <li><b>s</b> is the scattering vector</li>
+  </ul>
+
+<p>If there are <i>N</i> atoms in the unit cell, we can write:
+  <!-- <span class='LaTeX'>
+\begin{align}
+F_{hkl} = \sum_{j=1}^{N} f_{j} \textrm{e}^{2 \pi \textrm{i} \left( \textbf{r}_{j} \cdot \textbf{s} \right)}
+\end{align}
+</span> --></p>
+
+<img src="diffract/math_diffract_eq3.png" class="center" />
+
+<p>The quantity <i>F<sub>hkl}</sub></i> is called the <em>structure
+  factor</em>, and integers <i>h</i>, <i>k</i>, and <i>l</i> the <em>indices of
+  reflection</em>. These <i>hkl</i> values are integers defined by the <a href=
+  "#ScatteringGeometry">scattering geometry</a>, described below.</p>
+
+<p>Since <i>F<sub>hkl</sub></i> is a complex exponential, we can write:
+  <!-- <span class='LaTeX'>
+\begin{align}
+F_{hkl} = A_{hkl} + \textrm{i} B_{hkl}
+\end{align}
+</span> --></p>
+
+<img src="diffract/math_diffract_eq4.png" class="center" />
+
+<p>where <!-- <span class='LaTeX'>
+\begin{equation}
+A_{hkl} = \sum_{j} f_{j} \cos \left( 2 \pi \left( h x_{j} + k y_{j} + l z_{j} \right) \right)
+\end{equation}
+</span> --></p>
+
+<p> <img src="diffract/math_diffract_eq5.5.png" class="center" /></p>
+
+<p><i>x<sub>j</sub></i>, <i>y<sub>j</sub></i>, and <i>z<sub>j</sub></i> are
+  the coordinates of atoms with respect to the origin of the crystal unit
+  cell.</p>
+
+<p>The magnitude and phase of the structure factor are:
+  <!-- <span class='LaTeX'>
+\begin{equation}
+\left| F_{hkl} \right| = \sqrt{A_{hkl}^2 + B_{hkl}^2}
+\end{equation}
+</span> --></p>
+
+<p> <img src="diffract/math_diffract_eq7.png" class="center" /></p>
+
+<p>The intensity <i>I<sub>hkl</sub></i> of a particular reflection is
+  proportional to the square of the structure factor: <!-- <span class='LaTeX'>
+\begin{align}
+I_{hkl} \propto F_{hkl}^{2} = A_{hkl}^2 + B_{hkl}^2
+\end{align}
+</span> --></p>
+
+<img src="diffract/math_diffract_eq8.png" class="center" />
+
+<p>where <i>F<sub>hkl</sub></i> is calculated over all atoms in the unit
+  cell.</p>
+
+<h2><a id="ScatteringGeometry">Scattering Geometry:
+  Conditions for Diffraction</a></h2>
+
+<h3><a id="BraggsEquation">Bragg's
+  Equation</a></h3>
+
+<p>X-ray diffraction by a single crystal can be cast in terms of reflections
+  from regular, parallel arrays of planes within a crystal. Only under special
+  conditions would the reflected radiation interfere constructively and a
+  diffracted beam be observed. The required condition is that the angle of
+  incidence &theta; of the incident beam obey the following relationship:
+  <!-- <span class='LaTeX'>
+\begin{align}
+\sin \theta = n \frac{\lambda}{2} \frac{1}{d}
+\end{align}
+</span> --></p>
+
+<img src="diffract/math_diffract_eq9.png" class="center" />
+
+<p>where</p>
+  <ul>
+    <li>&lambda; is the wavelength of incident radiation</li>
+    <li><i>d</i> is the inter-planar spacing</li>
+    <li><i>n</i> is an integer called the <em>order of diffraction</em>.</li>
+  </ul>
+
+<p>This relationship is known as <em>Bragg's equation</em>, and &theta;
+  is known as the <em>Bragg angle</em>. Since the angle of reflection off a
+  plane surface is equal to the angle of incidence, the Bragg angle also
+  defines the scattering angle: the angle between the incident and scattered
+  radiation is 2&theta;.</p>
+
+<h3><a id="LaueEquations">Laue Equations</a></h3>
+
+<p>Another way to look at crystal diffraction is in terms of point
+  scatterers. The scattering vector <b>s</b> can be written as the vector
+  difference between unit vectors lying along the directions of the incident
+  and scattered (reflected) vectors, scaled by 1/&lambda;:
+  <!-- <span class='LaTeX'>
+\begin{align}
+\textbf{s} = \frac{\textbf{S}'_{S} - \textbf{S}'_{0}}{\lambda}
+\end{align}
+</span> --></p>
+
+<img src="diffract/math_diffract_eq10.png" class="center" />
+
+<p>The magnitude of <b>s</b> is then: <!-- <span class='LaTeX'>
+\begin{align}
+\left| \textbf{s} \right| = \frac{2 \sin \theta}{\lambda}
+\end{align}
+</span> --></p>
+
+<img src="diffract/math_diffract_eq11.png" class="center" />
+
+<p>where &lambda; is the wavelength of both the incident and scattered
+  radiation.</p>
+
+<p>For a row of scatterers, spaced at vector distances <b>a</b>, constructive
+  interference between the scattered rays will occur only where:
+  <!-- <span class='LaTeX'>
+\begin{align}
+\textbf{a} \cdot \textbf{s} = h
+\end{align}
+</span> --></p>
+
+<img src="diffract/math_diffract_eq12.png" class="center" />
+
+<p><i>h</i> is the difference, in wavelengths, between the paths of waves
+  scattered by neighboring scatterers. <i>h</i> will always be an integer. No
+  significant intensity will be observed except when this condition is
+  satisfied.</p>
+
+<p>Extensions to two and three dimensions follow readily. To each diffracted
+  beam, a pair or triple of integers <i>hk</i> or <i>hkl</i> can be assigned.
+  In three dimensions, the conditions for observed diffraction are:
+  <!-- <span class='LaTeX'>
+\begin{equation}
+\textbf{a} \cdot \textbf{s} = h
+\end{equation}</span> --></p>
+
+<p> <img src="diffract/math_diffract_eq15.png" class="center" /></p>
+
+<p>These conditions are known as the Laue equations.</p>
+
+<h2><a id="ReciprocalLattice">The Reciprocal
+  Lattice</a></h2>
+
+<p>Since the Bragg approach and the Laue approach both describe the same
+  phenomenon, there should be an exact relation between the two. The connection
+  is that the <i>hkl</i> indices specify the Bragg reflecting planes for a
+  given order of diffraction. These indices resemble <em>Miller indices</em> --
+  integers used to represent directions in a crystal with reference to the
+  crystallographic axes -- except that Miller indices do not have common
+  factors. Indices of reflection have the common factor <i>n</i>, the order of
+  diffraction.</p>
+
+<p>Representing diffraction reflections by indices suggests that diffraction
+  patterns can be expressed in terms of a lattice whose coordinates are
+  <i>h</i>, <i>k</i>, and <i>l</i> It turns out that this lattice can be
+  constructed by applying simple reciprocal transformations to the vectors
+  <b>a</b>, <b>b</b>, and <b>c</b> describing the direct crystal lattice. The
+  new lattice is called the <em>reciprocal lattice</em>. Its points represent
+  all the possible reflecting conditions, each of which can be associated with
+  a structure factor.</p>
+
+<p>The reciprocal lattice is specified by reciprocal lattice vectors
+  <b>a</b><sup>*</sup>, <b>b</b><sup>*</sup>, and <b>c</b><sup>*</sup>, defined
+  in the following way: <!-- <span class='LaTeX'>
+\begin{equation}
+  \begin{array}{r l r l r l}
+      \textbf{a} \cdot \textbf{a}^{*} & = 1
+    & \textbf{a} \cdot \textbf{b}^{*} & = 0
+    & \textbf{a} \cdot \textbf{c}^{*} & = 0
+\\
+      \textbf{b} \cdot \textbf{a}^{*} & = 0
+    & \textbf{b} \cdot \textbf{b}^{*} & = 1
+    & \textbf{b} \cdot \textbf{c}^{*} & = 0
+\\
+      \textbf{c} \cdot \textbf{a}^{*} & = 0
+    & \textbf{c} \cdot \textbf{b}^{*} & = 0
+    & \textbf{c} \cdot \textbf{c}^{*} & = 1
+        \end{array}
+\end{equation}
+</span> --></p>
+
+<img src="diffract/math_diffract_eq16.png" class="center" />
+
+<p>The scattering vector <b>s</b> can be conveniently expressed in terms of
+  the reciprocal lattice vectors as: <!-- <span class='LaTeX'>
+\begin{align}
+\textbf{s} = h \textbf{a}^{*} + k \textbf{b}^{*} + l \textbf{c}^{*}
+\end{align}
+</span> --></p>
+
+<img src="diffract/math_diffract_eq17.png" class="center" />
+
+<p>which clearly satisfies the Laue equations. If we introduce
+  <b>d</b><i><sub>hkl</sub></i>, the distance vector between reflection planes,
+  into the Laue equations, we obtain: <!-- <span class='LaTeX'>
+\begin{align}
+\textbf{s} = \textbf{d}_{hkl} / d_{hkl}^2
+\end{align}
+</span> --></p>
+
+<img src="diffract/math_diffract_eq18.png" class="center" />
+
+<p>The magnitude of <b>s</b> is: <!-- <span class='LaTeX'>
+\begin{align}
+\left| \textbf{s} \right| =  1 / d_{hkl}
+\end{align}
+</span> --></p>
+
+<img src="diffract/math_diffract_eq19.png" class="center" />
+
+<p>In other words, the magnitude of the scattering vector is the inverse of
+  the direct lattice inter-planar spacing. Putting this back into Bragg's
+  equation, we obtain the following simple relationship that provides an easy
+  test for determining whether a reciprocal lattice point is a potential source
+  of diffraction: <!-- <span class='LaTeX'>
+\begin{align}
+\left| \textbf{s} \right| =  \frac{2 \sin \theta}{\lambda} \le \frac{2}{\lambda}
+\end{align}
+</span> --></p>
+
+<img src="diffract/math_diffract_eq20.png" class="center" />
+
+<p>The inequality merely expresses the fact that the magnitude of (sin
+  &theta;) must be less than or equal to 1.</p>
+
+<h2><a id="GeneralCorrectionFactors">General
+  Correction Factors</a></h2>
+
+<p>Diffraction intensity of a particular reflection is calculated from the
+  square of the associated structure factor. To be able to make a meaningful
+  comparison to experimentally observed values, terms must be included to
+  account for various physical aspects of diffraction.</p>
+
+<h3><a id="TemperatureFactors">Temperature
+  Factors</a></h3>
+
+<p>Atoms are not stationary. They possess thermal energy and are in constant
+  oscillation. The resultant effect is that atom scattering factors fall off
+  faster with diffraction angle than in the stationary model since the atom
+  electron clouds are effectively spread over a larger volume of space.</p>
+
+<p>To correct for thermal motion, the following temperature factor correction
+  is applied to each scattering factor: <!-- <span class='LaTeX'>
+\begin{align}
+\textrm{e}^{-B \sin^{2} \theta / \lambda^2}
+\end{align}
+</span> --></p>
+
+<img src="diffract/math_diffract_eq21.png" class="center" />
+
+<p>If atom oscillation is assumed to be isotropic (the same in all
+  directions), <em>B</em>, the <em>Debye-Waller factor</em>, is proportional to
+  the isotropic mean-square amplitude of atom vibration:
+  <!-- <span class='LaTeX'>
+\begin{align}
+B = 8 \pi^2 \left< u^2 \right>
+\end{align}
+</span> --></p>
+
+<img src="diffract/math_diffract_eq22.png" class="center" />
+
+<p>where <i>u</i> is the amplitude of vibration (more specifically, it is the
+  projection of the atom position vector onto the scattering vector <b>s</b>.
+  Angle brackets denote a quantum statistical mechanical average.</p>
+
+<p>If global anisotropic temperature factors are used, the mean-squared
+  amplitudes of oscillation are required in three directions; for convenience,
+  the directions can be expressed with reference to the direct lattice axes
+  <b>a</b>, <b>b</b>, and <b>c</b>. The term &quot;global&quot;, when referring
+  to temperature factors, implies that the temperature factors apply to all
+  atoms, regardless of element.</p>
+
+<p>More precise temperature factor correction requires atom temperature
+  factors --- temperature factors which depend on atom element.</p>
+
+<h3><a id="LorentzGeometricCorrection">Lorentz Geometric Correction</a></h3>
+
+<p>Diffraction data collection usually involves a crystal rotating through a
+  stationary beam of incident radiation. When a crystal is rotated, different
+  planes of the crystal present themselves in their reflecting orientations at
+  different rates, with result that reflections with small Bragg angles and
+  with large Bragg angles are enhanced. The <em>Lorentz factor</em> is used to
+  correct intensity values for this effect: <!-- <span class='LaTeX'>
+\begin{align}
+L = \frac{1}{\sin 2 \theta}
+\end{align}
+</span> --></p>
+
+<img src="diffract/math_diffract_eq23.png" class="center" />
+
+<p>In the case of fiber samples, a modified correction factor has been
+  proposed by de Wolff [de Wolff, 1962] to account for fiber texture:</p>
+  <ul>
+    <li>Equatorial reflections (i.e. radial): <!-- <span class='LaTeX'>
+\begin{align}
+L = 8 \pi \sin^{2} \theta \cos \theta
+\end{align}
+</span> -->
+     <img src="diffract/math_diffract_eq24.png" /></li>
+    <li>Diatropic reflections (i.e. axial): <!-- <span class='LaTeX'>
+\begin{align}
+L = 8 \pi t \sin^{2} \theta \cos \theta
+\end{align}
+</span> -->
+       <img src="diffract/math_diffract_eq25.png" />
+
+<p>where <i>t</i> is given by: <!-- <span class='LaTeX'>
+\begin{align}
+t = 0.815 \omega
+\end{align}
+</span> --></p><img src="diffract/math_diffract_eq26.png" />
+
+<p>Here, &omega; is the azimuthal angle for which the intensity falls to
+      half the maximum peak value, assuming a Gaussian azimuthal
+      distribution.</p>
+    </li>
+    <li>General nondiatropic reflections: <!-- <span class='LaTeX'>
+\begin{align}
+L = 8 \pi \sin^{2} \theta \cos \theta \cos \phi
+\end{align}
+</span> -->
+       <img src="diffract/math_diffract_eq27.png" />
+
+<p>where &phi; is the angle between the normal to the reflecting plane
+      (i.e. the scattering vector) and the fiber axis (assumed to be along the
+      <b>c</b>.</p>
+    </li>
+  </ul>
+
+<h2><a id="XrayCorrectionFactors">X-ray
+  Correction Factors</a></h2>
+
+<h3><a id="PolarizationCorrection">Polarization
+  Correction</a></h3>
+
+<p>The efficiency of X-ray reflection varies with the angle of reflection.
+  When unpolarized X-ray radiation strikes a reflecting plane, the component
+  parallel to the plane is fully reflected while that perpendicular to the
+  plane is reduced in amplitude by the cosine of the reflection angle. To
+  correct for this effect, the following polarization factor for unpolarized
+  radiation can be used: <!-- <span class='LaTeX'>
+\begin{align}
+p = \frac{1 + \cos^{2} 2 \theta}{2}
+\end{align}
+</span> --></p>
+
+<img src="diffract/math_diffract_eq28.png" class="center" />
+
+<p>This term is independent of the method of data collection except if a
+  crystal monochromator is used. When using a crystal monochromator, the
+  resultant X-ray beam is partly polarized. For partly polarized radiation, the
+  polarization correction factor can be expressed as: <!-- <span class='LaTeX'>
+\begin{align}
+p = \frac{P + K \cos^{2} 2 \theta}{P + K}
+\end{align}
+</span> --></p>
+
+<img src="diffract/math_diffract_eq29.png" class="center" />
+
+<p>where</p>
+  <ul>
+    <li>
+      <i>K</i> is the ratio of the power of the perpendicular to the parallel
+      components in the monochromatized beam, and can be approximated as:
+      <!-- <span class='LaTeX'>
+\begin{align}
+\cos^4 2 \theta_{m}
+\end{align}
+</span> -->
+       <img src="diffract/math_diffract_eq30.png" />
+
+<p>where &theta;<i><sub>m</sub></i> is the Bragg angle of the strongly
+      reflecting planes in the monochromatizing crystal.</p>
+    </li>
+    <li><i>P</i> accounts for the degree of polarization of the X-ray beam,
+    given as the fractional amount of the parallel component in the beam.</li>
+  </ul>
+
+<p>When using X-ray radiation, the Lorentz factor is commonly combined with
+  the polarization correction factor. Together they are referred to as the
+  <i>L<sub>p</sub></i> correction factor.</p>
+
+<h3><a id="AnomalousScattering">Anomalous
+  Scattering</a></h3>
+
+<p>The scattering theory behind the diffraction model described in this
+  chapter (Thomson scattering) assumes that the frequency of incident radiation
+  differs significantly from that of the natural absorption frequencies of
+  electrons in the diffracting atoms. For electrons closest to the nucleus (K
+  electrons), however, this assumption is generally violated. Anomalous phase
+  changes occur on scattering, i.e. the phase and amplitude of the scattered
+  wave is modified from that expected under Thomson scattering assumptions. To
+  account for this, atom scattering factors are corrected by a complex term
+  that describes the modification. <!-- <span class='LaTeX'>
+\begin{align}
+f = f_{0} + f' + f''
+\end{align}
+</span> --></p>
+
+<img src="diffract/math_diffract_eq31.png" class="center" />
+
+<p>The correction terms are effectively independent of scattering angle.</p>
+
+<h2><a id="DataCollection">Data Collection</a></h2>
+
+<h3><a id="SampleTypes">Sample Types</a></h3>
+
+<p>Some compounds can be made to crystallize into sizeable single crystals,
+  others can be obtained only as powders. Some materials have an oriented
+  texture, such as fibrous materials.</p>
+
+<p>Diffraction patterns from single crystals are arrays of sharp spots.
+  Powder samples are composed of many tiny crystallites of all orientations.
+  Thus, instead of single diffracted beams being generated for a given Bragg
+  angle, a family of beams is generated, all lying on a cone with semi-angle
+  2&theta;; the image obtained is then a series of concentric circles. Fiber
+  samples comprise crystallites strongly oriented in a given direction, and so
+  generate a picture that is somewhere in between that from single crystals and
+  that from powders.</p>
+
+<p>Powder crystallites may exhibit a propensity to orient in a particular
+  direction. If there is a preferred orientation, correction factors can be
+  introduced to account for it. There are several different kinds of
+  corrections that can be made, two of which described here.</p>
+
+<p>The <em>March-Dollase</em> preferred-orientation correction characterizes
+  the strength of the preferred orientation of crystallites using the March
+  variable <i>R</i>: <!-- <span class='LaTeX'>
+\begin{align}
+\left( R^{2} \cos^{2} \alpha + R^{-1} \sin^{2} \alpha \right)^{-\frac{3}{2}}
+\end{align}
+</span> --></p>
+
+<img src="diffract/math_diffract_eq32.png" class="center" />
+
+<p>This variable is defined differently for different crystal morphologies.
+  For platy crystallites, <i>R</i> is defined to be <i>d / d</i><sub>0</sub>,
+  while for needle-like crystallites it is defined to be the inverse,
+  <i>d</i><sub>0</sub> / <i>d</i>. <i>d</i><sub>0</sub> is the hypothetical
+  thickness of the uncompacted/unextended sample, and <i>d</i> is the sample
+  thickness after axial compaction or extension. <i>R</i> = 1.0 implies no
+  preferred orientation.</p>
+
+<p>The <em>Rietveld-Toraya</em> method uses a Gaussian expression to model
+  the effects of preferred orientation: <!-- <span class='LaTeX'>
+\begin{align}
+G_{2} + \left( 1 - G_{2} \right) \textrm{e}^{-G_{1} \alpha^2}
+\end{align}
+</span> --></p>
+
+<img src="diffract/math_diffract_eq33.png" class="center" />
+
+<p><i>G</i><sub>1</sub> = 0 or <i>G</i><sub>2</sub> = 1 implies no preferred
+  orientation.</p>
+
+<h3><a id="Cameras">Cameras</a></h3>
+
+<p>The reciprocal lattice represents a full three-dimensional diffraction
+  pattern. When recording a diffraction pattern, however, only a projection of
+  the data can be captured, and information may be lost. Peaks in the
+  diffraction pattern may overlap and become unresolvable. For powder samples,
+  the diffraction data is effectively reduced to one-dimension: at each Bragg
+  angle a peak is observed, the height of which is the sum of the intensities
+  of all <i>hkl</i> reflections of that angle. For single crystal and fiber
+  samples, overlaps can still occur. Moving-film techniques have been developed
+  to eliminate spot coincidence in 2-D diffraction patterns.</p>
+
+<p>Powder samples are commonly recorded using either a strip of film within a
+  cylindrical camera setting, or a diffractometer that counts the number of
+  X-ray photons.</p>
+
+<p>There are many 2-D diffraction cameras, including flat plate, cylindrical
+  film, precession, and Weissenberg. Flat plate and cylindrical film methods
+  involve a stationary recording medium in either a planar configuration or a
+  cylinder surrounding the sample configuration. Precession and Weissenberg
+  imaging techniques are more complicated as they require a moving photographic
+  film cartridge. They offer, however, a means for photographing diffraction
+  patterns without overlapped spots. The Buerger precession method is
+  particularly valuable as it provides an undistorted projection of the
+  reciprocal lattice. Its chief disadvantage is that it records less of
+  reciprocal space than does, for instance, the Weissenberg camera.</p>
+
+<h1><a id="Running">Running MOE-Diffraction</a></h1>
+
+<p>To open the Crystal Diffraction Simulation panel, choose <b><nobr>MOE |
+  Compute | Simulations | Diffraction</nobr></b> in the MOE window.</p>
+  <img src="diffract/diffr.png" class="center" />
+
+<p>There are several sections in the diffraction panel. The main display is
+  that of the plot. This area is used to display the results of the
+  calculations.</p>
+
+<p>The Current Parameters section, at the bottom of the panel, shows the
+  values which will be used during the calculations. These values reflect the
+  changes made in the parameters panels.</p>
+
+<p>The buttons and controls to the right of the plot area control the
+  parameters and display. Each one is discussed in a section below.</p>
+
+<h2><a id="SpecifyingTheCrystalAsymmetricUnit">Specifying the Crystal Asymmetric
+  Unit</a></h2>
+
+<p>To specify the crystal asymmetric unit, select the atoms that are to
+  constitute the asymmetric unit in the MOE window. The <i>asymmetric unit</i>
+  is the set of atoms that is replicated within a crystallographic unit cell
+  according to the symmetries of the associated crystallographic space group.
+  If no atoms are selected, all atoms in the system will be used to make up the
+  asymmetric unit.</p>
+
+<h2><a id="SettingTheSampleType">Setting the
+  Sample Type</a></h2>
+
+<p>Select the sample type -- Powder, Fiber, or Single Crystal -- from the
+  Sample Type option menu. The Current Parameters report is immediately
+  updated.</p>
+
+<p>For each sample type there is a panel for setting the related
+  parameters.</p>
+
+<h3><a id="SettingPowderParameters">Setting
+  Powder Parameters</a></h3>
+
+<p>Press <b>Powder</b> to open the Powder Parameters panel.</p>
+  <img src="diffract/powder.png" class="center" />
+  <ul>
+    <li>Choose whether or not to include corrections for powder crystallite
+    preferred orientation.
+
+<p>For the March-Dollase preferred-orientation correction, set the March
+      variable <em>R</em>, which characterizes the strength of the preferred
+      orientation of crystallites. <i>R</i> = 1.0 implies no preferred
+      orientation.</p>
+
+<p>For the Rietveld-Toraya method, set the weighting and the Gaussian
+      width parameters <i>G</i><sub>1</sub> and <i>G</i><sub>2</sub>.
+      <i>G</i><sub>1</sub> = 0 or <i>G</i><sub>2</sub> = 1 implies no preferred
+      orientation. <i>G</i><sub>2</sub> must be in the range [0 .. 1].</p>
+    </li>
+    <li>Set the shape of the displayed peaks. The field labeled <tt>G</tt>
+    representing the parameter &Gamma; is the full width at half the maximum of
+    the peak.
+      <table class="noborder">
+        <tr>
+          <td>Delta</td>
+          <td>each intensity is represented by a spike.</td>
+        </tr>
+        <tr>
+          <td>Lorentzian</td>
+          <td>
+            <!-- <span class='LaTeX'>
+\begin{align}
+\frac{2 / \pi \Gamma}{1 + 4 \left( D / \Gamma \right)^2}
+\end{align}
+</span> -->
+            <img src="diffract/math_diffract_eq34.png" />
+
+<p><i>D</i> is the angular difference (&theta; -
+            &theta;<sub>Bragg</sub>.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>Gaussian</td>
+          <td>
+            <!-- <span class='LaTeX'>
+\begin{align}
+\frac{2}{\Gamma} \sqrt{ \frac{\log 2}{\pi} } \textrm{e}^{-4 \log 2 \left( D/\Gamma \right)^2}
+\end{align}
+</span> -->
+            <img src="diffract/math_diffract_eq35.png" />
+
+<p><i>D</i> is the angular difference (&theta; -
+            &theta;<sub>Bragg</sub>.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>Pseudo-Voigt</td>
+          <td>
+            linear combination of Lorentzian and Gaussian forms:
+            <!-- <span class='LaTeX'>
+\begin{align}
+\eta \times \textrm{Lorentzian} + \left( 1 - \eta \right) \times \textrm{Gaussian}
+\end{align}
+</span> -->
+             <img src="diffract/math_diffract_eq36.png" />
+
+<p>&eta; must be in the range [0 .. 1] . &eta; = 0 is equivalent to
+            a Gaussian peak shape, &eta; = 1 is equivalent to a Lorentzian peak
+            shape.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>Thompson Cox Hastings</td>
+          <td>
+            same as Pseudo-Voigt, except <em>eta</em> is calculated as follows
+            (the parameter G in the panel is substituted for
+            <em>Gamma</em><sub>L</sub> in the following equations):
+            <!-- <span class='LaTeX'>
+\begin{align}
+\eta =    1.36603 \frac{\Gamma_{L}}{\Gamma}
+        - 0.47719 \left( \frac{\Gamma_{L}}{\Gamma} \right)^{2}
+        + 0.11116 \left( \frac{\Gamma_{L}}{\Gamma} \right)^{3}
+\end{align}
+</span> -->
+             <img src="diffract/math_diffract_eq37.png" />
+
+<p>and &Gamma; is calculated from the Gaussian and Lorentzian
+            &Gamma; values as follows: <!-- <span class='LaTeX'>
+\begin{align}
+\Gamma =
+    \left(
+    \begin{array}{ccccccc}
+        \Gamma_{G}^{5}
+            & +
+            & 2.69269 \Gamma_{G}^{4} \Gamma_{L}
+            & +
+            & 2.42843 \Gamma_{G}^{3} \Gamma_{L}^{2}
+            &
+            &
+        \\
+            & +
+            & 4.47163 \Gamma_{G}^{2} \Gamma_{L}^{3}
+            & +
+            & 0.07842 \Gamma_{G}     \Gamma_{L}^{4}
+            & +
+            & \Gamma_{L}^{5}
+    \end{array}
+    \right)^{\frac{1}{5}}
+\end{align}
+</span> --></p><img src="diffract/math_diffract_eq38.png" />
+
+<p>The value of &Gamma;<i><sub>L</sub></i> must be greater than or
+            equal to zero.</p>
+          </td>
+        </tr>
+      </table>
+    </li>
+  </ul>
+
+<p>Press <b>Set</b> to apply the Powder parameter settings. If structure
+  factors have been calculated and only the peak shape changed, no
+  re-calculation is necessary. Press <b>Re-plot</b> in the Crystal Diffraction
+  panel to update the plot display.</p>
+
+<h3><a id="SettingFiberParameters">Setting
+  Fiber Parameters</a></h3>
+
+<p>Press <b>Fiber</b> to open the Fiber Parameters panel.</p>
+  <img src="diffract/fiber.png" class="center" />
+  <ul>
+    <li>Set the azimuthal half-width at half-height angle of the fiber
+    orientation distribution. This value is used to calculate the Lorentz
+    geometric correction for fiber samples. The value must be in the range
+    [0..90] degrees.</li>
+    <li>Set the fiber display parameters. The tilt angle gives the tilt of the
+    fiber axis with respect to the crystallographic <b>c</b> axis. It is
+    assumed the fiber is oriented more or less along the <b>c</b> axis. The
+    fiber tilt affects the diffraction pattern display for only the Flat and
+    Cylindrical cameras. The value must be in the range [0..90] degrees.</li>
+  </ul>
+
+<p>Press <b>Set</b> to apply the Fiber parameter settings. If structure
+  factors have been calculated and only the display parameters changed, no
+  re-calculation is necessary. Press <b>Re-plot</b> in the Diffraction panel to
+  update the plot display.</p>
+
+<h3><a id="SettingSingleCrystalParameters">Setting Single Crystal Parameters</a></h3>
+
+<p>Press <b>Single Crystal</b> to open the Single Crystal Parameters
+  panel.</p>
+  <img src="diffract/singcrys.png" class="center" />
+
+<p>The single crystal parameters are for display only. If structure factors
+  have been calculated, no re-calculation is necessary; press <b>Re-plot</b> to
+  update the plot display.</p>
+
+<p>The Zone Symbol <i>UVW</i> <em>UVW</em> describes a crystal zone of order
+  <i>n</i>: <!-- <span class='LaTeX'>
+\begin{align}
+h U + k V + I W = n
+\end{align}
+</span> --></p>
+
+<img src="diffract/math_diffract_eq39.png" class="center" />
+
+<p>The zone axis <i>a U + b V + c W</i> is perpendicular to the projection
+  plane of the diffraction image.</p>
+
+<h2><a id="SettingCrystalParameters">Setting
+  Crystal Cell Parameters</a></h2>
+
+<p>Please refer to the <a href="crystal.htm">Crystal Parameters</a> panel
+  reference for more information about setting the crystal cell parameters. The
+  panel is available from the MOE Window, using <nobr><b>MOE | Window | Crystal
+  Parameters</b></nobr>.</p>
+
+<h2><a id="SettingRadiationParameters">Setting Radiation Parameters</a></h2>
+
+<p>Press <b>Radiation</b> to open the Radiation Source panel.</p>
+  <img src="diffract/radsrc.png" class="center" />
+
+<p>There are 3 types of radiation to choose from: X-ray, Electron, or
+  Neutron.</p>
+  <ul>
+    <li>
+      <b>X-ray radiation</b>
+      <ul>
+        <li>Choose the X-ray source. The wavelength (in angstroms) associated
+        with each of the Cu, Cr, Fe, Mo, and Ag anodes is calculated from their
+        K-alpha emission wavelengths using the approximation that the alpha
+        line is composed of alpha1 and alpha2 components in the ratio of 2:1.
+        If Synchrotron is chosen, you may specify the wavelength.</li>
+        <li>Specify whether to include the polarization correction factor. If
+        the X-rays are polarized (e.g. Synchrotron source), set the
+        polarization fraction accordingly. A polarization fraction of 0.5
+        indicates that the radiation is unpolarized. The value must be in the
+        range [0..1].</li>
+        <li>Specify whether to include anomalous scattering corrections.</li>
+        <li>If using Synchrotron radiation, specify whether a crystal
+        monochromator is being used. The sine of the diffraction angle of a
+        single or double crystal monochromator is related to the incident
+        radiation wavelength by a constant. Specifying the diffraction angle
+        results in the wavelength being recalculated, and vice-versa. A new
+        monochromator constant can be set by selecting New and then specifying
+        either the monochromator angle or radiation wavelength or both. To
+        recover the default monochromator constant, press <b>Default</b>.</li>
+      </ul>
+    </li>
+    <li>
+      <b>Electron radiation</b>
+      <ul>
+        <li>Specify either the wavelength in angstroms or the energy of the
+        incident beam. To specify energy, turn on Specify Electron Radiation
+        Energy (in kV) and enter a value at the text field. The energy value
+        must be in the range [0.00005 .. 54.8474] kV.</li>
+      </ul>
+    </li>
+    <li>
+      <b>Neutron radiation</b>
+      <ul>
+        <li>Enter the wavelength in angstroms.</li>
+      </ul>
+    </li>
+  </ul>
+
+<p>Press <b>Set</b> to apply the radiation parameter settings. The Current
+  Parameters report area in the Crystal Diffraction Simulation panel will be
+  automatically updated.</p>
+
+<h2><a id="SettingGeneralCorrections">Setting General Corrections</a></h2>
+
+<p>Press <b>Corrections</b> to open the General Corrections panel.</p>
+  <ul>
+    <li>Choose whether to include the Lorentz geometric correction factor.</li>
+    <li>Choose whether to include Temperature Factor correction. For Global
+    isotropic temperature factors, specify either <b>B</b>, the Debye-Waller
+    factor, or <i>u</i>, the mean amplitude of vibration of the atom. <b>B</b>
+    and <i>u</i> are directly related, and both are measured in square
+    angstroms. For Global anisotropic temperature factor correction, specify
+    the mean amplitude of vibration in each of the <b>a</b>, <b>b</b>, and <b>
+      c</b> directions.
+
+<p>If the molecule loaded in the system has atom temperature factors set
+      (this will be the case, for instance, if you loaded a PDB file containing
+      temperature factor data), you can elect to use Atom isotropic temperature
+      factor corrections.</p>
+    </li>
+  </ul>
+  <img src="diffract/correct.png" class="center" />
+
+<p>Press <b>Set</b> to apply the changes and update the Current Parameters
+  report area.</p>
+
+<h2><a id="CalculatingStructureFactorsAndDiffractionIntensities">Calculating Structure
+  Factors and Diffraction Intensities</a></h2>
+
+<p>Press <b>Calculate</b> to perform structure factor calculation followed by
+  plotting. You will be asked whether to use only selected atoms or all atoms
+  as the asymmetric unit.</p>
+  <img src="diffract/calc.png" class="center" />
+
+<h2><a id="IsolatingReflections">Isolating
+  Reflections</a></h2>
+
+<p>To isolate families of reflections or individual reflections, use the Show
+  Reflections options. Turn off the All checkbox and enter the desired
+  reflection index in the associated text field. You must press <tt>Return</tt>
+  for the value to be applied.</p>
+
+<h2><a id="ChangingDisplayIntensities">Changing Display Intensities</a></h2>
+
+<p>The display intensities for the fiber and single crystal plots may be
+  altered using the Intensity Levels sliders. These sliders are not visible
+  when the sample type is set to powder. <i>t</i><sub>0</sub> sets the zero
+  level; all intensities below <i>t</i><sub>0</sub> will not be displayed. The
+  three displayed intensity levels are controlled using <i>t</i><sub>1</sub>
+  and <i>t</i><sub>2</sub>. Values are normalized and must be in the range
+  [0..1].</p>
+
+<h2><a id="EditingThePlotAttributes">Editing
+  the Plot Attributes</a></h2>
+
+<p>Press <b>Plot Attributes</b> to edit plot attributes.</p>
+  <img src="diffract/attr.png" class="center" />
+
+<p>Attributes such as plot titles, colors, and axis ranges can be set.</p>
+
+<h2><a id="WritingAReportFile">Writing a Report
+  File</a></h2>
+
+<p>Press <b>Report</b> to write the structure factor and intensity data to a
+  file.</p>
+  <img src="diffract/save.png" class="center" />
+
+<p>The data can be sorted according to increasing Bragg angle, decreasing
+  intensity values, or <i>hkl</i> reflection indices. Either a summary (where
+  unique intensity values are reported) or a full report can be written.</p>
+
+<h1><a id="References">References</a></h1>
+  <table class="ref">
+    <tr>
+      <td>[Andrew&nbsp;1971]</td>
+      <td>Andrew, K.W., Dyson, D.J., Keown, S.R.;
+      <em>Interpretation of Electron Diffraction Patterns</em>; 2nd ed. Plenum
+      Press, NY (1971).</td>
+    </tr>
+    <tr>
+      <td>[Caglioti&nbsp;1958]</td>
+      <td>Caglioti, G., Paoletti, A., Ricci, F.P.; Choice of
+      Collimators for a Crystal Spectrometer for Neutron Diffraction.
+      <em>Nuclear Instruments 3</em> (<b>1958</b>) 223&ndash;228.</td>
+    </tr>
+    <tr>
+      <td>[de&nbsp;Wolff&nbsp;1962]</td>
+      <td>de Wolff, P.M.; On the Lorentz Factor for Integrated
+      Intensities from Azimuthal and Radial Diffractometer Records of Fiber
+      Patterns; <em>Journal of Polymer Science 60</em> (<b>1962</b>)
+      S34&ndash;S36.</td>
+    </tr>
+    <tr>
+      <td>[Dollase&nbsp;1986]</td>
+      <td>Dollase, W.A.; Correction of Intensities for Preferred
+      Orientation in Powder Diffractometry: Application of the March Model;
+      <em>J. Appl. Cryst. 19</em> (<b>1986</b>) 267&ndash;272.</td>
+    </tr>
+    <tr>
+      <td>[Doyle&nbsp;1968]</td>
+      <td>Doyle, P.A., Turner, P.S.; Relativistic Hartree-Fock
+      X-ray and Electron Scattering Factors; <em>Acta Cryst. A24</em>
+      (<b>1968</b>) 390&ndash;397.</td>
+    </tr>
+    <tr>
+      <td>[Hahn&nbsp;2002]</td>
+      <td><em>International Tables for Crystallography</em>. Vol.
+      A, 5th ed. Hahn, Theo (Ed.). Kluwer Academic Publishers,
+      Dordrecht/Boston/London (2002).</td>
+    </tr>
+    <tr>
+      <td>[Kasper&nbsp;1985]</td>
+      <td><em>International Tables for X-Ray Crystallography</em>.
+      Vol. II. Kasper, J.S., Lonsdale, K., (Ed.); D. Reidel Publishing Company,
+      Dordrecht, Holland (1985).</td>
+    </tr>
+    <tr>
+      <td>[MacGillavry&nbsp;1962]</td>
+      <td><em>International Tables for X-Ray Crystallography</em>.
+      Vol. III. MacGillavry, C.H., Rieck, G.D. (Ed.). The Kynoch Press,
+      Birmingham, England (1962).</td>
+    </tr>
+    <tr>
+      <td>[Jeffery&nbsp;1971]</td>
+      <td>Jeffery, J.W.; <em>Methods in X-Ray
+      Crystallography</em>. Academic Press Inc. (London) Ltd. (1971).</td>
+    </tr>
+    <tr>
+      <td>[Ladd&nbsp;1985]</td>
+      <td>Ladd, M.F.C., Palmer, R.A.; <em>Structure Determination
+      by X-Ray Crystallography</em>, 2nd ed. Plenum Press, New York
+      (1985).</td>
+    </tr>
+    <tr>
+      <td>[Lipson&nbsp;1970]</td>
+      <td>Lipson, H.S.; <em>Crystals and X-Rays</em>.
+      Springer-Verlag New York Inc., New York (1970).</td>
+    </tr>
+    <tr>
+      <td>[Stout&nbsp;1989]</td>
+      <td>Stout, G.H., Jensen, L.H.; <em>X-Ray Structure
+      Determination</em>. 2nd ed. John Wiley &amp; Sons, Inc., New York
+      (1989).</td>
+    </tr>
+    <tr>
+      <td>[Thompson&nbsp;1987]</td>
+      <td>Thompson, P., Cox, D.E., Hastings, J.B.; Rietveld.
+      Refinement of Debye-Scherrer Synchrotron X-ray Data from
+      Al<sub>2</sub>O<sub>3</sub>; <em>J. Appl. Cryst. 20</em> (<b>1987</b>)
+      79&ndash;83.</td>
+    </tr>
+    <tr>
+      <td>[Woolfson&nbsp;1997]</td>
+      <td>Woolfson, M.M. <em>An Introduction to X-Ray
+      Crystallography</em>. 2nd ed. Cambridge University Press, UK (1997).</td>
+    </tr>
+  </table>
+
+<a id="SeeAlso"></a>
+<h1>See Also</h1>
+
+<p><a href="crystal.htm">Building Crystals</a><br />
+  <a href="surfmap.htm">Surfaces and Maps</a> </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../images/ccgicon.png" /> <a href="../index.htm"></a> <a href=
+    "../legal.htm"></a> &copy;<span class="versionyear"></span> <a href="http://www.chemcomp.com"></a>. All
+    rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href=
+  "../../../include/manstyle.css" />
+  <meta name="keywords" content="keywords: Wheel" />
+  <meta name="keywords" content="functions: Widget:Wheel" />
+  <meta name="keywords" content="functions: Wheel (widget)" />
+  <title>Wheel Widget</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../../index.htm"><img src="../../../images/ccglogo.png" /></a>
+    <a href="../../../index.htm"><div class="moeversion"></div></a>
+    Wheel Widget
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Description</h1>
+
+<p>A graphical dial for entering numeric data. As the wheel is turned (by
+  dragging the mouse cursor over it), its associated numeric value is
+  increased/decreased. If minimum and maximum values are specified (if one is
+  specified, the other must be too), and if <tt>min</tt> &lt; <tt>max</tt>, the
+  dial&#39;s range of rotation is limited. Otherwise, the <tt>Wheel</tt> can
+  spin continuously. In all cases, one complete rotation of the <tt>Wheel</tt>
+  corresponds to <tt>2*PI</tt> radians. In continuous-rotation mode, values are
+  limited to the range [0..<tt>2*PI</tt> ]; i.e. the values wrap. In
+  specified-range mode, the initial value of the wheel is the middle of the
+  range. In continuous-range mode, the initial value is zero.</p>
+
+<h3>Attributes</h3>
+
+<p><tt>Wheel</tt> inherits all <a class="svl" href="wt_core.htm">core</a>
+  attributes and defines the following attributes:</p>
+  <table class="titlebar">
+    <tr>
+      <th width="10%" valign="baseline">Attribute</th>
+      <th width="50%" valign="baseline">Description</th>
+      <th width="25%" valign="baseline">Values</th>
+      <th width="10%" valign="baseline">Default</th>
+    </tr>
+    <tr>
+      <td valign="baseline"><tt>min</tt></td>
+      <td valign="baseline">Minimum value</td>
+      <td valign="baseline">number</td>
+      <td valign="baseline">0</td>
+    </tr>
+    <tr>
+      <td valign="baseline"><tt>max</tt></td>
+      <td valign="baseline">Maximum value</td>
+      <td valign="baseline">number</td>
+      <td valign="baseline">0</td>
+    </tr>
+    <tr>
+      <td valign="baseline"><tt>resetButton</tt></td>
+      <td valign="baseline">If 0, then the reset button will not be drawn.</td>
+      <td valign="baseline">0/1</td>
+      <td valign="baseline">1</td>
+    </tr>
+    <tr>
+      <td valign="baseline"><tt>vertical</tt></td>
+      <td valign="baseline">Specifies orientation of wheel</td>
+      <td valign="baseline">0=horizontal 1=vertical</td>
+      <td valign="baseline">0</td>
+    </tr>
+    <tr>
+      <td valign="baseline"><tt>width</tt></td>
+      <td valign="baseline">Size of wheel in character widths</td>
+      <td valign="baseline">1 to 255</td>
+      <td valign="baseline">20</td>
+    </tr>
+  </table>
+
+<h3>Trigger</h3>
+
+<p>Mouse drag movement on the wheel.</p>
+
+<h3>Data Value</h3>
+
+<p>The number corresponding to the graphic dial position. The value is
+  limited by the <tt>max</tt> and <tt>min</tt> values specified. If
+  unspecified, the wheel has no range limit. The default value is 0 in this
+  case.</p>
+
+<h1>See Also</h1>
+
+<p><a href="../wt_intro.htm">SVL Window Toolkit</a><br />
+  <a href="wt_core.htm">Core Attributes</a><br />
+  <a href="introwt.htm">Window Toolkit Functions</a><br /></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../../images/ccgicon.png" /> <a href="../../../index.htm"></a>
+    <a href="../../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: ReadMOE, WriteMOE" />
+  <meta name="keywords" content="functions: ReadMDLMOL, WriteMDLMOL" />
+  <meta name="keywords" content="functions: ReadPDB, WritePDB" />
+  <meta name="keywords" content="functions: ReadTriposMOL2, WriteTriposMOL2" />
+  <meta name="keywords" content="functions: Read_Formats, Write_Formats" />
+  <meta name="keywords" content="functions: ReadAuto, WriteAuto" />
+  <meta name="keywords" content="functions: ReadClustal, WriteClustal" />
+  <meta name="keywords" content="functions: ReadEMBL, WriteEMBL" />
+  <meta name="keywords" content="functions: ReadFasta, WriteFasta" />
+  <meta name="keywords" content="functions: ReadGB, WriteGB" />
+  <meta name="keywords" content="functions: ReadGCG, WriteGCG" />
+  <meta name="keywords" content="functions: ReadIG, WriteIG" />
+  <meta name="keywords" content="functions: ReadMSF, WriteMSF" />
+  <meta name="keywords" content="functions: ReadPIR, WritePIR" />
+  <meta name="keywords" content="functions: ReadPhylip, WritePhylip" />
+  <meta name="keywords" content="functions: ReadMacroModel, WriteMacroModel" />
+  <meta name="keywords" content="functions: ReadCIF, ReadBCIF, ReadPDBML" />
+  <title>Read/Write Molecular Data Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Read/Write Molecular Data Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+new_chains = <a class="fcnlink" href=
+"#ReadAuto">ReadAuto</a> [ 'filename', options, 'format' ]
+<a class="fcnlink" href=
+"#WriteAuto">WriteAuto</a> [ 'filename', options, 'format' ]
+
+format_tokens = <a class="fcnlink" href="#Read_Formats">Read_Formats</a> []
+format_tokens = <a class="fcnlink" href=
+"#Write_Formats">Write_Formats</a> []
+
+<a class="fcnlink" href="#ReadXXX">ReadXXX</a> filename
+<a class="fcnlink" href="#ReadXXX">ReadXXX</a> [ filename, options ]
+chain_keys = <a class="fcnlink" href="#ReadXXX">ReadXXX</a> filename
+chain_keys = <a class="fcnlink" href=
+"#ReadXXX">ReadXXX</a> [ filename, options ]
+
+<a class="fcnlink" href="#WriteXXX">WriteXXX</a> filename
+<a class="fcnlink" href="#WriteXXX">WriteXXX</a> [ filename, options ]
+</pre>
+<h1>Description</h1>
+
+<p>MOE can read and write several molecular formats. The <tt>ReadXXX</tt>
+  functions read molecular files with explicitly specified formats and create
+  the molecules in MOE. Similarly, the <tt>WriteXXX</tt> functions can be used
+  to write the current molecular system into files of given formats. In the
+  case of <tt>ReadAuto</tt> and <tt>WriteAuto</tt>, MOE automatically detects
+  the file format based on file extension alone.</p>
+
+<p>MOE is able to read and write the following formats:</p>
+  <ul>
+    <li>Molecular files</li>
+    <li>Sequence-only files</li>
+    <li>Custom formats</li>
+  </ul>
+<a id="Read_Formats"></a>
+<a id="Write_Formats"></a>
+<p>The current list of recognized formats can be obtained using
+  <tt>Read_Formats</tt> and <tt>Write_Formats</tt>.</p>
+  <table class="noborder">
+    <tr>
+      <td><tt><span class="fcndef">Read_Formats</span></tt></td>
+      <td>
+        Returns a vector of tokens, each specifying a currently supported read
+        format. The presence of a token, for example, <tt>'XXX'</tt>,
+        in the <tt>format_tokens</tt> vector indicates that there exists an SVL
+        function called <tt>ReadXXX</tt>.
+
+<pre class="code">
+svl&gt; Read_Formats[]
+['Auto','moe','pdb','tripos','mdl_mol','macmod','IG/Stan','genbank',
+'embl','pir','gcg','fasta','clustal','gcg_msf','phylip','xtl','cif','maestro']
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td><tt><span class="fcndef">Write_Formats</span></tt></td>
+      <td>
+        Returns a vector of tokens, each specifying a currently supported write
+        format. The presence of token <tt>'XXX'</tt> in the returned
+        vector indicates that there exists an SVL function called
+        <tt>WriteXXX</tt>.
+
+<pre class="code">
+svl&gt; Write_Formats[]
+['Auto','moe','pdb','tripos','mdl_mol','macmod','IG/Stan','genbank',
+'embl','pir','gcg','fasta','clustal','gcg_msf','phylip','fmt_seq','xtl',
+'maestro']
+</pre>
+      </td>
+    </tr>
+  </table>
+<a id="ReadAuto"></a>
+<a id="WriteAuto"></a>
+<p><tt><span class="fcndef">ReadAuto</span></tt> reads molecular data from a
+  file in the format specified by the token <tt>format</tt>. For example, if
+  <tt>'PDB'</tt> is specified, then Protein Data Bank data is assumed.
+  If the format is <tt>[]</tt>, then an attempt is made to detect the format
+  from the file extension. If the filename is <tt>[]</tt> or
+  <tt>''</tt>, a prompt is displayed for file and format selection.</p>
+
+<p><tt>options</tt> is a tagged vector which can contain the options:</p>
+  <ul>
+    <li><tt>center:flag</tt> a non-zero <tt>flag</tt> value cause the newly
+    read-in atoms to have their center of mass at the origin, otherwise
+    not.</li>
+    <li><tt>select:flag</tt> if <tt>flag</tt> is non-zero, all newly created
+    objects (atoms, residues, chains) will be added to their respective
+    selection sets.</li>
+  </ul>
+
+  <p>Additionally, <tt>ReadPDB</tt>, <tt>ReadCIF</tt>, <tt>ReadBCIF</tt> and
+  <tt>ReadPDBML</tt> may take:</p>
+
+  <ul>
+    <li><tt>localdict:'filename'</tt> an optional file that can be provided
+    in CCP4 MONLIB cif format, describing the bond orders and charges of
+    ligands in the structure.  If provided, the file will be treated as a
+    'ligand dictionary' and bond correction logic will be applied.  Ligands
+    are matched to the dictionary entries by 3-letter HETNAM code, and the
+    heavy atom sigma-skeleton must match the dictionary entry as well.
+    Account is taken of the 3D environment of the ligand, so that a different
+    tautomer or protonation state from what is in the dictionary may be
+    applied.  Covalent ligands are also handled in most cases.  An example
+    minimal cif file might look like
+    <a href="cif.htm#example_monlib_cif">so</a>.
+    </li>
+  </ul>
+
+
+<p><tt><span class="fcndef">WriteAuto</span></tt> writes the current
+  molecular data from MOE to the file <tt>filename</tt> in the format. If the
+  file name is <tt>[]</tt> or <tt>''</tt>, a prompt is displayed for
+  file and format selection.</p>
+
+<a id="ReadXXX"></a>
+<a id="WriteXXX"></a>
+<p><tt><span class="fcndef">ReadXXX</span></tt> and
+  <tt><span class="fcndef">WriteXXX</span></tt>
+  are standard reading and writing functions which follow a naming convention
+  where <tt>XXX</tt> is a format identifier such as <tt>MOE</tt> or
+  <tt>MDLMOL</tt> (e.g. <tt>ReadMOE</tt>, <tt>WriteMDLMOL</tt>).</p>
+
+<p>If the return value of <tt>ReadXXX</tt> is needed, <tt>ReadXXX</tt>
+  returns the keys of the newly read-in chains. Otherwise, <tt>ReadXXX</tt>
+  returns null.</p>
+
+<p> Additional <a href="#FormatNotes">Format-specific options</a>
+  are listed below.</p>
+
+<h3>Reading and Writing Molecular Files</h3>
+
+<p>The following read and write file formats store complete 3D
+  representations of molecular data.</p>
+<table class="noborder">
+  <tr>
+    <td><tt>ReadMOE</tt></td>
+    <td><tt>WriteMOE</tt></td>
+    <td><tt>moe</tt></td>
+    <td>Native <a href="../../moe/fcnref/moefmt.htm">MOE file format</a></td>
+  </tr>
+  <tr>
+    <td><tt>ReadTriposMOL2</tt></td>
+    <td><tt>WriteTriposMOL2</tt></td>
+    <td><tt>mol2</tt></td>
+    <td>Tripos Associates MOL2 format</td>
+  </tr>
+  <tr>
+    <td><tt>ReadPDB</tt></td>
+    <td><tt>WritePDB</tt></td>
+    <td><tt>pdb</tt></td>
+    <td>Protein Data Bank format</td>
+  </tr>
+  <tr>
+    <td><tt>ReadMDLMOL</tt></td>
+    <td><tt>WriteMDLMOL</tt></td>
+    <td><tt>mdl_mol</tt></td>
+    <td>MDL Standard Database format</td>
+  </tr>
+  <tr>
+    <td><tt>ReadMacroModel</tt></td>
+    <td><tt>WriteMacroModel</tt></td>
+    <td><tt>macmod</tt></td>
+    <td>Schrodinger molecular model format</td>
+  </tr>
+  <tr>
+    <td><tt>ReadCIF</tt></td>
+    <td>&nbsp;</td>
+    <td><tt>cif</tt></td>
+    <td>[macromolecular] Crystallographic Information File</td>
+  </tr>
+  <tr>
+    <td><tt>ReadBCIF</tt></td>
+    <td>&nbsp;</td>
+    <td><tt>bcif</tt></td>
+    <td>Binary [macromolecular] Crystallographic Information File</td>
+  </tr>
+  <tr>
+    <td><tt>ReadPDBML</tt></td>
+    <td>&nbsp;</td>
+    <td><tt>xml</tt></td>
+    <td>PDBML XML File</td>
+  </tr>
+</table>
+
+
+<h3>Reading and Writing Sequence-Only Files</h3>
+
+<p>The following read and write file formats store sequence-only information
+  for proteins, DNA and RNA sequences. <tt>filename</tt> must be a token. There
+  is no return vector.</p>
+  <table class="noborder">
+    <tr>
+      <td><tt>ReadClustal</tt></td>
+      <td><tt>WriteClustal</tt></td>
+      <td><tt>clustal</tt></td>
+      <td>Format used by the CLUSTAL multiple sequence alignment software</td>
+    </tr>
+    <tr>
+      <td><tt>ReadEMBL</tt></td>
+      <td><tt>WriteEMBL</tt></td>
+      <td><tt>embl</tt></td>
+      <td>European Molecular Biology Laboratories data bank format</td>
+    </tr>
+    <tr>
+      <td><tt>ReadFasta</tt></td>
+      <td><tt>WriteFasta</tt></td>
+      <td><tt>fasta</tt></td>
+      <td>Fasta format</td>
+    </tr>
+    <tr>
+      <td><tt>ReadPIR</tt></td>
+      <td><tt>WritePIR</tt></td>
+      <td><tt>pir</tt></td>
+      <td>Protein Identification Resource format</td>
+    </tr>
+    <tr>
+      <td><tt>ReadGB</tt></td>
+      <td><tt>WriteGB</tt></td>
+      <td><tt>genbank</tt></td>
+      <td>GenBank format</td>
+    </tr>
+    <tr>
+      <td><tt>ReadGCG</tt></td>
+      <td><tt>WriteGCG</tt></td>
+      <td><tt>gcg</tt></td>
+      <td>Genetics Computer Group single sequence format</td>
+    </tr>
+    <tr>
+      <td><tt>ReadIG</tt></td>
+      <td><tt>WriteIG</tt></td>
+      <td><tt>IG/Stan</tt></td>
+      <td>Stanford/Intelligenetics format</td>
+    </tr>
+    <tr>
+      <td><tt>ReadMSF</tt></td>
+      <td><tt>WriteMSF</tt></td>
+      <td><tt>gcg_msf</tt></td>
+      <td>Genetics Computer Group multiple sequence format</td>
+    </tr>
+    <tr>
+      <td><tt>ReadPhylip</tt></td>
+      <td><tt>WritePhylip</tt></td>
+      <td><tt>phylip</tt></td>
+      <td>PHYLogeny Inference Package format</td>
+    </tr>
+  </table>
+
+<a id="FormatNotes"></a>
+<h3>Format Specific Notes</h3>
+
+<p><tt>WriteMDLMOL</tt> uses the CTAB format which can specify up to 999
+  atoms in a molecular system. Attempting to write a larger system to this
+  format is an error.</p>
+
+  <a id="ReadPDB"></a>
+<h4>ReadPDB options</h4>
+  <p>
+    Here are the different options for reading the PDB format. We will refer to
+    PDB tags in capital letters (i.e.: CONECT, SEQRES, etc.). For further
+    reading on the details of this format or a specific tag, consult the
+    <a href="http://www.wwpdb.org/documentation/file-format">RSCB website</a>
+  </p>
+
+  <table class="titlebar">
+  <tr>
+  <th>Tag&nbsp;Name</th>
+  <th>Format</th>
+  <th>Default</th>
+  <th>Description</th>
+  </tr>
+
+  <tr>
+  <td>multi_model</td>
+  <td>0, 1</td>
+  <td>0</td>
+  <td>
+    If on, read all Nuclear-Magnetic Resonance (NMR) models present in the PDB
+    files. If off, only the first model is read.
+  </td>
+  </tr>
+
+  <tr>
+  <td>collate_res</td>
+  <td>0, 1</td>
+  <td>1</td>
+  <td>
+    If on, align amino and nucleic acid residues to those in the corresponding
+    SEQRES records (if any) and create any implied empty residues for display in
+    the Sequence Editor.
+  </td>
+  </tr>
+
+  <tr>
+  <td>ignore_conect</td>
+  <td>0, 1</td>
+  <td>1</td>
+  <td>
+    If on, CONECT records will not be used in bond assignment.
+  </td>
+  </tr>
+
+  <tr>
+  <td>auto_connect</td>
+  <td>0, 1</td>
+  <td>1</td>
+  <td>
+    If on, automatic bond detection will be enabled. Standard residue bonding
+    and (if enabled) CONECT records are always applied first.
+  </td>
+  </tr>
+
+  <tr>
+  <td>ignore_hoh</td>
+  <td>0, 1</td>
+  <td>0</td>
+  <td>If on, ignore water residues in the file.</td>
+  </tr>
+
+  <tr>
+  <td>ignore_hetero</td>
+  <td>0, 1</td>
+  <td>0</td>
+  <td>If on, ignore hetero residues in the file.</td>
+  </tr>
+
+  <tr>
+  <td>save_variants</td>
+  <td>0, 1</td>
+  <td>1</td>
+  <td>
+    This allows the reading of all sequence variants. Variants are put into
+    separate chains and given a special header. Those are cases of
+    <a href="https://www.wwpdb.org/documentation/procedure">
+      sequence microheterogeneity
+    </a>
+    where one residue of the sequence has multiple possible
+    identities tied to different occupancy levels.
+    <br>
+    See <tt>$MOE/sample/mol/1cbn.pdb</tt> as an example of variants.
+  </td>
+  </tr>
+
+  <tr>
+  <td>use_element</td>
+  <td>0, 1</td>
+  <td>0</td>
+  <td>If on, apply element column of PDB file</td>
+  </tr>
+
+  <tr>
+  <td>chain_tag</td>
+  <td>
+    'auto', 'filename', '*'
+  </td>
+  <td>'auto'</td>
+  <td>
+    <tt>'auto'</tt> uses the molecule RSCB code (traditionally four alpha-numeric
+    characters). If no code is defined the name of the file is used
+    <br>
+    <tt>'filename'</tt> uses the name of the file,
+    <br>
+    <tt>'*'</tt>: Any other token gets parsed as the chain tag.
+  </td>
+  </tr>
+
+  <tr>
+  <td>gen_symm</td>
+  <td>0, 1</td>
+  <td>0</td>
+  <td>
+    If on, Apply non-crystallographic transforms from MTRIXn
+    records to create the asymmetric units
+  </td>
+  </tr>
+
+  <tr>
+  <td>gen_biomt</td>
+  <td>0, 1</td>
+  <td>0</td>
+  <td>
+    If on, Apply BIOMT transforms (if any) to create the biomolecule. Select
+    a particular biomolecule transformation with the <tt>biomol</tt> option.
+    Note: If on while biomol is off, this will build biomolecule 1.
+  </td>
+  </tr>
+
+  <tr>
+  <td>biomol</td>
+  <td>0, n, 'all'</td>
+  <td>0</td>
+  <td>
+    Select which of the available biomolecule to fabricate by choosing the id
+    number of the corresponding PDB Biomolecule record. (REMARK 300 and 350 in
+    PDB v3.3)
+    <br>
+    <tt>0</tt> do not build the biomolecule. (Note: if gen_biomt is on, this
+    will be overridden and build the biomol 1).
+    <br>
+    <tt>'all'</tt>: build every id
+  </td>
+  </tr>
+
+  <tr>
+  <td>crystal_contacts</td>
+  <td>0, 1</td>
+  <td>0</td>
+  <td>
+    Create symmetry-related atoms within <tt>crystal_contact_rad</tt> &Aring;
+    of the biomolecule. Place clashes in the set <tt>'PDB_CrystalContacts'</tt>.
+  </td>
+  </tr>
+
+  <tr>
+  <td>crystal_contact_rad</td>
+  <td>real positive</td>
+  <td>4.5</td>
+  <td>
+    Crystal parameter for inter-cell distance in &Aring;
+  </td>
+  </tr>
+
+  <tr>
+  <td>consecutive_atoms </td>
+  <td>0, 1</td>
+  <td>0</td>
+  <td>
+    If on, residue atoms must be contiguous. This is a strict one-way reading
+    where the residue is changed everytime the id is changed with no possibility
+    of a later record adding atoms to a previous residue id.
+  </td>
+  </tr>
+
+  <tr>
+  <td>preserve_order </td>
+  <td>0, 1</td>
+  <td>0</td>
+  <td>
+    Within a residue, put the atoms in the order you encounter them in the PDB.
+  </td>
+  </tr>
+
+  <tr>
+  <td>install_cryst</td>
+  <td>0, 1</td>
+  <td>0</td>
+  <td>
+    Use space group &amp; cell dimensions from the CRYST1 record.
+  </td>
+  </tr>
+
+  <tr>
+  <td>use_charges</td>
+  <td>0, 1</td>
+  <td>0</td>
+  <td>
+    Use the values to set atomic partial charges (aSetCharge) instead of atomic
+    temperature factors (aSetTempFactor)
+  </td>
+  </tr>
+
+  <tr>
+  <td>alt_loc</td>
+  <td>0, 1</td>
+  <td>0</td>
+  <td>
+    Specifies the treatment of alternate atom locations. If off, only the highest
+    occupancy positions will be read into MOE. Otherwise, all alternative
+    positions will also be read and inert atoms will be created at these
+    alternative positions
+    <br>
+    Note that <tt>alt_loc_sets</tt> is coerced to true if <tt>alt_loc</tt>
+    is true (but not vice versa).
+  </td>
+  </tr>
+
+  <tr>
+  <td>alt_loc_sets</td>
+  <td>0, 1</td>
+  <td>0</td>
+  <td>
+    If on, atom collections named PDB_ALTLOC_?, will be created, where "?" is
+    replaced by the alternate location character of those atoms.
+  </td>
+  </tr>
+
+  <tr>
+  <td>no_render</td>
+  <td>0, 1</td>
+  <td>0</td>
+  <td>
+    If on, the atoms will not be created in the display of MOE.
+  </td>
+  </tr>
+
+  <tr>
+  <td>multi_entry</td>
+  <td>0, 1</td>
+  <td>1</td>
+  <td>
+    This option allows the reading of multiple PDB entries in the same file.
+  </td>
+  </tr>
+  </table>
+
+
+<a id="WritePDB"></a>
+<h4> WritePDB options</h4>
+
+  <table class="titlebar">
+  <tr>
+    <th>Tag&nbsp;Name</th>
+    <th>Format</th>
+    <th>Default</th>
+    <th>Description</th>
+  </tr>
+
+  <tr>
+  <td>use_chain_id</td>
+  <td>0, 1</td>
+  <td>1</td>
+  <td>
+    If on, try to extract <tt>chain_id</tt> from chain name. If this flag is
+    turned off then nothing is written in the chain id.
+  </td>
+  </tr>
+
+  <tr>
+  <td>cryst1</td>
+  <td>0, 1</td>
+  <td>0</td>
+  <td>
+    If on, a CRYST1 record will be written based on the current cell parameters.
+  </td>
+  </tr>
+
+  <tr>
+  <td>hnames</td>
+  <td>'PDB&nbsp;v3.0', 'PDB', 'IUPAC'</td>
+  <td>'PDB&nbsp;v3.0'</td>
+  <td>
+    If on, hydrogen names will be translated before being written according to
+    the chosen nomenclature convention.
+    <br>
+    <tt>'PDB v3.0'</tt> refers to the atom naming conventions adopted during the
+    remediation project by members of the Worldwide Protein Data Bank consortium
+    [Berman&nbsp;2003].
+    <br>
+    <tt>'PDB'</tt> refers to the conventions
+    in place prior to the RCSB data remediation project; this choice is appropriate
+    when writing files intended to be read by older, unmaintained software.
+    <br>
+    <tt>'IUPAC'</tt> [IUPAC&nbsp;1998] is identical to <tt>'PDB v3.0'</tt> except
+    for the naming of the peptide hydrogen atom, which is "HN" as opposed to "H".
+    <b>Note:</b> the IUPAC treatment of the carboxyl or carboxylate
+    terminus (O', O'' and H'') is <i>not</i> implemented here.
+  </td>
+  </tr>
+
+  <tr>
+  <td>amber</td>
+  <td>0, 1</td>
+  <td>0</td>
+  <td>
+    If on, neutral versions of the typically charged residues
+    Asp, Glu, Arg and Lys will be renamed. Histidine residues will be named
+    according to their protonation state; half-cystines will be named CYX,as will
+    de-protonated cysteines.
+  </td>
+  </tr>
+
+  <tr>
+  <td>atom_prop</td>
+  <td>array of real</td>
+  <td>[]</td>
+  <td>
+    This will write these values instead of the values of aTempFactor.
+    Note: technically, any scalar values can be written here and this field is
+    sometimes used for other information unrelated to the aTempFactor. For
+    example, in MOE you get the option to save
+    <a href="asmref.htm" class="svl">aSlogP</a>,
+    <a href="atom_p.htm" class="svl">aCharge</a>,
+    <a href="atom.htm" class="svl">aIdealVSA</a>,
+    <a href="potfcn.htm" class="svl">Potential</a>,
+    <a href="atom_d.htm" class="svl">aScalar</a>, and
+    <a href="atom.htm" class="svl">aTempFactor</a>
+    in this field.
+  </td>
+  </tr>
+
+  <tr>
+  <td>occupancy</td>
+  <td>array of real</td>
+  <td>[]</td>
+  <td>
+    This will write these values instead of the values of occupancy.
+    Note: technically, any scalar values can be written here and this field is
+    sometimes used for other information unrelated to the occupancy.
+  </td>
+  </tr>
+
+  <tr>
+  <td>force_TER</td>
+  <td>0, 1</td>
+  <td>0</td>
+  <td>
+    If on, chains will
+    be written in the same order that they are seen in the Sequence Editor,
+    and TER records will be written after each chain. Otherwise, protein
+    chains will be written before non-protein chains, and only protein
+    chains will be followed by TER records.
+
+    <p>
+    Enabling this option may be necessary for some non-standard PDB readers
+    to properly interpret PDB files written by MOE.
+    </p>
+  </td>
+  </tr>
+  </table>
+
+<h1>See Also</h1>
+
+<p><a class="svl" href="openclo.htm">Close</a><br />
+  <a class="svl" href="openclo.htm">Open</a><br />
+  <a class="svl" href="save.htm">DataFilename</a><br />
+  <a class="svl" href="save.htm">DataModified</a><br />
+  <a class="svl" href="save.htm">Save</a><br />
+  <a class="svl" href="save.htm">SaveAs</a><br /></p>
+
+<p><a href="rwcustom.htm">Creating Customized Reading and Writing
+  Formats</a></p>
+
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

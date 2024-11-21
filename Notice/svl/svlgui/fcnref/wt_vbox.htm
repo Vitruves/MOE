@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href=
+  "../../../include/manstyle.css" />
+  <meta name="keywords" content="keywords: Vbox, Hbox, Mbox, Sbox" />
+  <meta name="keywords" content="functions:" />
+  <meta name="keywords" content="functions: Widget:Mbox" />
+  <meta name="keywords" content="functions: Widget:Vbox" />
+  <meta name="keywords" content="functions: Widget:Hbox" />
+  <meta name="keywords" content="unsupported: Widget:Sbox" />
+  <meta name="keywords" content="functions: Mbox (widget)" />
+  <meta name="keywords" content="functions: Hbox (widget)" />
+  <meta name="keywords" content="functions: Vbox (widget)" />
+  <meta name="keywords" content="unsupported: Sbox (widget)" />
+  <title>Manager Widgets: Mbox, Vbox, Hbox</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../../index.htm"><img src="../../../images/ccglogo.png" /></a>
+    <a href="../../../index.htm"><div class="moeversion"></div></a>
+    Manager Widgets: Mbox, Vbox, Hbox
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Description</h1>
+
+<p>Manager objects are containers for other widgets. The children of a
+  manager are specified as attributes of the manager.</p>
+  <table class="titlebar">
+    <tr>
+      <th valign="baseline">Object</th>
+      <th valign="baseline">Description</th>
+    </tr>
+    <tr>
+      <td><tt>Mbox</tt></td>
+      <td>Manager that arranges its children in a geometric
+      grid.</td>
+    </tr>
+    <tr>
+      <td><tt>Vbox</tt></td>
+      <td><tt>Mbox</tt> with only 1 column.</td>
+    </tr>
+    <tr>
+      <td><tt>Hbox</tt></td>
+      <td><tt>Mbox</tt> with only 1 row.</td>
+    </tr>
+  </table>
+</p>
+
+<h2>Attributes</h2>
+
+<p><tt>Vbox, Hbox,</tt>
+ and <tt>Mbox</tt> inherit all <a class="svl" href=
+  "wt_core.htm">core</a> attributes and define the following attributes</p>
+  <table class="titlebar">
+    <tr>
+      <th valign="baseline">Attribute</th>
+      <th valign="baseline">Description</th>
+      <th valign="baseline">Values</th>
+      <th valign="baseline">Default</th>
+    </tr>
+    <tr>
+      <td><tt>spacingH</tt></td>
+      <td>Amount of horizontal space between the widget&#39;s
+      children</td>
+      <td><a class="svl" href=
+      "wt_const.htm">WINDOW_SPACING</a></td>
+      <td><tt>&#39;none&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>spacingV</tt></td>
+      <td>Amount of vertical space between the widget&#39;s
+      children</td>
+      <td><a class="svl" href=
+      "wt_const.htm">WINDOW_SPACING</a></td>
+      <td><tt>&#39;none&#39;</tt></td>
+    </tr>
+  </table>
+</p>
+
+<p>
+<tt>Mbox</tt>
+further defines:</p>
+  <table class="titlebar">
+    <tr>
+      <th valign="baseline">Attribute</th>
+      <th valign="baseline">Description</th>
+      <th valign="baseline">Values</th>
+      <th valign="baseline">Default</th>
+    </tr>
+    <tr>
+      <td><tt>columnMajor</tt></td>
+      <td>Traverse manager&#39;s children by rows or
+      columns</td>
+      <td>0 (by rows)<br />
+      <nobr>1 (by column)</nobr></td>
+      <td><tt>0</tt></td>
+    </tr>
+    <tr>
+      <td><tt>columns</tt></td>
+      <td>Number of columns</td>
+      <td>1 to 127</td>
+      <td><tt>1</tt></td>
+    </tr>
+    <tr>
+      <td><tt>uniformRows</tt></td>
+      <td>Uniform height sets all rows to have height equal
+      to the tallest widget in <tt>Mbox</tt>. Non-uniform height sets the
+      height of a given row to the height of the tallest widget in that
+      row.</td>
+      <td>1 (uniform)<br />
+      <nobr>0 (non-uniform)</nobr></td>
+      <td><tt>0</tt></td>
+    </tr>
+    <tr>
+      <td><tt>uniformCols</tt></td>
+      <td>Uniform width sets all columns to have width equal
+      to the widest widget in <tt>Mbox</tt>. Non-uniform width sets the width
+      of a given column to the width of the widest widget in that column.</td>
+      <td>1 (uniform)<br />
+      <nobr>0 (non-uniform)</nobr></td>
+      <td><tt>0</tt></td>
+    </tr>
+  </table>
+</p>
+
+
+<h2>Trigger</h2>
+
+<p>None.</p>
+
+<h2>Data Value</h2>
+
+<p>A vector of the values of all the manager&#39;s children that return
+  values. The values appear in the child creation order.</p>
+
+<h1>See Also</h1>
+
+<p><a href="wt_core.htm">Core Attributes</a><br />
+  <a href="../wt_intro.htm">SVL Window Toolkit</a><br />
+  <a href="introwt.htm">Window Toolkit Functions</a></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../../images/ccgicon.png" /> <a href="../../../index.htm"></a>
+    <a href="../../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

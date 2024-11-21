@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: db_Calculator" />
+  <title>MOE Database Functions: db_Calculator</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    MOE Database Functions: db_Calculator
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    <a class="fcnlink" href="#db_Calculator">db_Calculator</a> []
+    value = <a class="fcnlink" href=
+"#db_Calculator">db_Calculator</a> [ mdb, eqn ]
+    <a class="fcnlink" href=
+"#db_Calculator">db_Calculator</a> [ mdb, eqn, out_field, opt ]
+</pre>
+<a id="db_Calculator"></a>
+<h1>Description</h1>
+
+<p>Performs computations on numerical data stored in a molecular database.
+  When invoked with a null argument, <tt>db_Calculator</tt> will prompt you to
+  select a molecular database before it opens the Molecular Database Calculator
+  panel.</p>
+
+<p>The arguments are:</p>
+  <dl>
+    <dt><tt>mdb</tt></dt>
+    <dd>Molecular database on which calculations will be performed. The
+    database is identified by filename (a token) or by key, as returned by
+    <tt>db_Open</tt>.</dd>
+    <dt><tt>eqn</tt></dt>
+    <dd>
+      Token that specifies the mathematical operations to be performed on the
+      database. Standard SVL mathematical conventions are followed except field
+      name identifiers which are surrounded by curly brackets and the
+      <tt>pow</tt> and <tt>logb</tt> operators which are used in their infix
+      form.
+
+<p>See <a href="../../mdb/dbcalc.htm">Molecular Database Calculator</a>
+      for more on equation syntax.</p>
+    </dd>
+    <dt><tt>out_field</tt></dt>
+    <dd>Token representing the name of the field that will contain the results
+    of the operations performed on the database. If <tt>out_field</tt> already
+    exists in the database, its contents will be overwritten. If
+    <tt>out_field</tt> is null, the function <tt>db_Calculator</tt> will return
+    a numerical vector containing the results of the operation.</dd>
+
+    <dt><tt>opt</tt></dt>
+    <dd>
+    The options are:
+    <dl>
+        <dt><tt>dst_type</tt></dt>
+	<dd>Destination field type, one of <tt>'int'</tt>, <tt>'float'</tt>,
+	    <tt>'double'</tt>, or <tt>'byte'</tt>.  The default is
+	    <tt>'float'</tt>.
+	</dd>
+	<dt><tt>zero_null</tt></dt>
+	<dd>Set to 1 to treat null values (empty database cells) as zero in
+	    calculations.  The default is 0.
+	</dd>
+    </dl>
+    </dd>
+  </dl>
+
+<p>The following example calculates the number of carbon and oxygen atoms for
+  each compound in the database specified by <tt>dbkey</tt>. Results are stored
+  in a new field called <tt>nO_nC</tt>.</p>
+
+<pre>
+    <span class=
+"fcndef">db_Calculator</span> [ dbkey, '{a_nC} + {a_nO}', 'nO_nC' ]
+</pre>
+
+<p>The following example code is used to compute the mean molecular weight of
+  all compounds in the database specified by <tt>dbkey</tt>. Results are saved
+  in an SVL variable called <tt>mean_weight</tt>.</p>
+
+<pre>
+    local mean_weight = db_Calculator [ dbkey, 'mean {Weight}'];
+</pre>
+
+<h1>See Also</h1>
+
+<p><a href="introdb.htm">Database Functions</a><br />
+  <a href="../../mdb/dbcalc.htm">Molecular Database Calculator</a>
+  </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="SVL: const, local, global, static" />
+  <meta name="keywords" content="SVL: function, endfunction, return" />
+  <meta name="keywords" content=
+  "SVL:syntax: Function Declarations, Variable Declarations" />
+  <meta name="keywords" content="SVL:syntax: Constant Declarations" />
+  <title>SVL Declarations</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    SVL Declarations
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+<table class="noborder left">
+  <tr>
+    <td><i>module</i></td>
+    <td>: <b>{</b> <i>declaration</i> <b>}</b>*</td>
+  </tr>
+  <tr>
+    <td><i>declaration</i></td>
+    <td>: <tt>const</tt> <i>identifier</i> <tt>=</tt> <i>expression</i>
+    <tt>;</tt><br />
+    : <tt>function</tt> <i>identifier</i> <b>{</b> <tt>,</tt>
+    <i>identifier</i> <b>}</b>* <tt>;</tt><br />
+    : <b>{</b> <tt>local</tt> <b>|</b> <tt>global</tt> <b>}</b>
+    <tt>function</tt> <i>identifier</i> <b>{</b> <i>loc_lvalue</i> <b>|</b>
+    <tt>[]</tt> <b>}<sup>1</sup></b> <tt>=</tt> <i>expression</i>
+    <tt>;</tt><br />
+    : <b>{</b> <tt>local</tt> <b>|</b> <tt>global</tt> <b>}</b>
+    <tt>function</tt> <i>identifier</i> <b>{</b> <i>loc_lvalue</i> <b>|</b>
+    <tt>[]</tt> <b>}<sup>1</sup></b> <b>{</b> <i>statement</i> <b>}</b>*
+    <tt>endfunction</tt><br />
+    : <tt>global</tt> <i>identifier</i> <b>{</b> <tt>,</tt>
+    <i>identifier</i> <b>}</b>* <tt>;</tt><br />
+    : <tt>local</tt> <i>loc</i> <b>{</b> <tt>,</tt> <i>loc</i> <b>}</b>*
+    <tt>;</tt><br />
+    : <tt>static</tt> <i>identifier</i> <b>{</b> <tt>,</tt>
+    <i>identifier</i> <b>}</b>* <tt>;</tt><br /></td>
+  </tr>
+  <tr>
+    <td><i>loc</i></td>
+    <td>: <i>identifier</i><br />
+    : <i>loc_lvalue</i> <tt>=</tt> <i>expression</i></td>
+  </tr>
+  <tr>
+    <td><i>loc_lvalue</i></td>
+    <td>: <i>identifier</i><br />
+    : <tt>[</tt> <i>loc_lvalue</i> <b>{</b> <tt>,</tt> <i>loc_lvalue</i>
+    <b>}</b>* <tt>]</tt></td>
+  </tr>
+  <tr>
+    <td><i>statement</i></td>
+    <td>: <i>declaration</i><br />
+    : <tt>return</tt> <b>{</b> <i>expression</i> <b>}</b> <tt>;</tt></td>
+  </tr>
+</table>
+
+<h1>Description</h1>
+
+<p>The following notation is used to describe SVL syntax and syntactic
+  categories. The name of a category is printed in italics, e.g. <i>lvalue</i>.
+  SVL keywords and symbols are printed in teletype, e.g. <tt>loop</tt> or
+  <tt>[]</tt>. Each category is defined as a list of syntactic patterns
+  composed of SVL keywords or symbols and of names of other categories (like
+  BNF notation); for example, <i>lvalue</i> : <i>identifier</i> <tt>[</tt>
+  <i>expression</i> <tt>]</tt> means &quot;an lvalue can be an identifier
+  followed by a bracketed expression&quot;. Bold braces are used to apply a
+  special rule to the part of the pattern inside the braces:</p>
+<ul>
+  <li><b>{</b>...<b>}</b> specifies an optional pattern, e.g. <span class=
+  "nobr"><b>{</b><em>for</em><b>}</b> <tt>loop</tt></span></li>
+  <li><b>{</b>...<b>}<sup>*</sup></b> specifies a sequence of zero or more
+  repetitions, e.g. <span class=
+  "nobr"><b>{</b><em>while</em><b>}<sup>*</sup></b> <tt>loop</tt></span></li>
+  <li><b>{</b>...<b>}<sup>+</sup></b> specifies a sequence of one or more
+  repetitions, e.g. <span class=
+  "nobr"><b>{</b><em>digit</em><b>}<sup>*</sup></b></span></li>
+  <li><b>{</b>...<b>|</b>...<b>}</b> and
+  <b>{</b>...<b>|</b>...<b>}<sup>1</sup></b> specify (optional and
+  compulsory) alternative patterns, e.g. <span class=
+  "nobr"><b>{</b><tt>local</tt> <b>|</b> <tt>global</tt><b>}</b>
+  <tt>function</tt></span></li>
+</ul>
+
+<p><b>Modules</b>. An SVL module is a file containing a sequence of
+  declarations defining constants, variables and functions. Constants are
+  symbols representing values calculated at compile time. Variables are used
+  for run-tim storage of values. Functions contain program statements that
+  effect calculations. Functions can be either &quot;local&quot; or
+  &quot;global&quot; depending on whether they are visible outside of the
+  module file. Variables can be &quot;local&quot;, &quot;global&quot; or
+  &quot;static&quot; depending on their value-retention and visibility
+  characteristics. These objects differ also in where they can be declared. The
+  following table summarizes some of these characteristics (more details can be
+  found further in this document).</p>
+  <center>
+    <table class="titlebar">
+      <tr>
+        <th>Characteristic</th>
+        <th><tt>const</tt></th>
+        <th><tt>local<br />
+        function</tt></th>
+        <th><tt>global<br />
+        function</tt></th>
+        <th><tt>global</tt><br />
+        variable</th>
+        <th><tt>local</tt><br />
+        variable</th>
+        <th><tt>static</tt><br />
+        variable</th>
+      </tr>
+      <tr>
+        <td>Declare outside functions</td>
+        <td class="center"><b>Yes</b></td>
+        <td class="center"><b>Yes</b></td>
+        <td class="center"><b>Yes</b></td>
+        <td class="center"><b>Yes</b></td>
+        <td class="center">No</td>
+        <td class="center"><b>Yes</b></td>
+      </tr>
+      <tr>
+        <td>Declare inside functions</td>
+        <td class="center"><b>Yes</b></td>
+        <td class="center"><b>Yes</b></td>
+        <td class="center">No</td>
+        <td class="center">No</td>
+        <td class="center"><b>Yes</b></td>
+        <td class="center"><b>Yes</b></td>
+      </tr>
+      <tr>
+        <td>Declare inside <tt>if</tt> and <tt>loop</tt> constructs</td>
+        <td class="center"><b>Yes</b></td>
+        <td class="center">No</td>
+        <td class="center">No</td>
+        <td class="center">No</td>
+        <td class="center"><b>Yes</b></td>
+        <td class="center"><b>Yes</b></td>
+      </tr>
+      <tr>
+        <td>Visible outside module file</td>
+        <td class="center">No</td>
+        <td class="center">No</td>
+        <td class="center"><b>Yes</b></td>
+        <td class="center"><b>Yes</b></td>
+        <td class="center">No</td>
+        <td class="center">No</td>
+      </tr>
+      <tr>
+        <td>Retains value/definition across function invocations</td>
+        <td class="center"><b>Yes</b></td>
+        <td class="center"><b>Yes</b></td>
+        <td class="center"><b>Yes</b></td>
+        <td class="center"><b>Yes</b></td>
+        <td class="center">No</td>
+        <td class="center"><b>Yes</b></td>
+      </tr>
+      <tr>
+        <td>Set value/definition in declaration</td>
+        <td class="center"><b>Yes</b></td>
+        <td class="center"><b>Yes</b></td>
+        <td class="center"><b>Yes</b></td>
+        <td class="center">No</td>
+        <td class="center"><b>Yes</b></td>
+        <td class="center">No</td>
+      </tr>
+      <tr>
+        <td>Can use in left-hand-side of assignment operator</td>
+        <td class="center">No</td>
+        <td class="center">No</td>
+        <td class="center">No</td>
+        <td class="center"><b>Yes</b></td>
+        <td class="center"><b>Yes</b></td>
+        <td class="center"><b>Yes</b></td>
+      </tr>
+    </table>
+  </center>
+
+<p>By convention, an SVL module file begins with some comments and compiler
+  directives:</p>
+
+<pre class="code">
+#svl
+//      myfile.svl
+//
+//      dd-mmm-yyyy (xx) created
+//
+
+#set title &#39;My Program&#39;
+</pre>
+
+<p>which marks the file as an SVL module (with the <tt>#svl</tt> compiler
+  directive), identifies the file, the initials of its creator (xx), contains a
+  change log and assign the name of the module (with the <tt>#set title</tt>
+  compiler directive). This header is not required however it is
+  recommended.</p>
+
+<p><b>Constants</b>. The <tt>const</tt> keyword is used to define constant
+  values and bind them to identifiers. More than one comma separated constant
+  definition can appear in the <tt>const</tt> construct. For example,</p>
+
+<pre class="code">
+<b>const</b> A = 5, B = &#39;hello world&#39;, C = cos [1,2,3] ;
+</pre>
+
+<p>defines three constants <tt>A</tt>, <tt>B</tt> and <tt>C</tt>. Each
+  supplied <i>expression</i> in the definition of a constant is evaluated by
+  the compiler and, therefore, can contain no calls to functions that depend on
+  global state (e.g., random number generators, file input/output routines, or
+  user functions). The compiler will generate an error if an attempt is made to
+  use a function that may depend on global states. Once the value is calculated
+  it is bound to the identifier for the life-time of the constant. Constant
+  declarations can appear outside functions, inside functions and inside
+  <tt>if</tt> and <tt>loop</tt> constructs. The identifiers bound in
+  <tt>const</tt> declarations may not appear on the left-hand-side of
+  assignment operators.</p>
+
+<p><b>Local Variables</b>. Local variables exist only when the function in
+  which they are defined is executing. Local variables can only be declared
+  inside of a function (possibly in an <tt>if</tt> or <tt>loop</tt> construct).
+  Each function invocation is associated with a new version of the local
+  variable, with no memory of the variable&#39;s value from previous
+  invocations. Thus, in recursive function calls, each recursion allocates a
+  private version of each local variable so that variable values in each call
+  are unaffected by other calls. The declaration</p>
+
+<pre class="code">
+<b>local</b> a, b, c ;
+</pre>
+
+<p>declares that <tt>a</tt>, <tt>b</tt> and <tt>c</tt> are local variables.
+  Optionally, an initialization expression may be provided for any of the
+  individual declarations. For example,</p>
+
+<pre class="code">
+<b>local</b> a = [1,2,3], b = &#39;hello&#39; ;
+</pre>
+
+<p>not only declares <tt>a</tt> and <tt>b</tt> to be local variables but
+  assigns values to them. This evaluation of the expressions is performed at
+  run-time at the point in the code where the declaration is made. Typically,
+  the <i>identifier</i> <tt>=</tt> <i>expression</i> form of the initialization
+  is used; however, the <i>loc_lvalue</i> can be more complex (similar to the
+  assignment operator). A nested vector of identifiers can take the place of
+  the single identifier. This is a short hand for the extraction of several
+  values from the value of the expression. For example,</p>
+
+<pre class="code">
+<b>local</b> [a,[b,c]] = val;
+</pre>
+
+<p>is equivalent to</p>
+
+<pre class="code">
+<b>local</b> a, b, c;
+<b>local</b> t = val;
+a = t(1);
+b = t(2)(1);
+c = t(2)(2);
+</pre>
+
+<p>Note that the <i>expression</i> is evaluated only once.</p>
+
+<p><b>Global Variables</b>. The <tt>global</tt> <i>identifier</i> <b>{</b>
+  <tt>,</tt> <i>identifier</i> <b>}</b>* <tt>;</tt> construct is used to
+  declare that the given identifiers are global variables. Global variables are
+  used to share data between module files and the SVL command line. This
+  construct must appear outside functions (otherwise a compile-time error will
+  result). For example,</p>
+
+<pre class="code">
+<b>global</b> a, b, c <b>;</b>
+</pre>
+
+<p>declares that <tt>a</tt>, <tt>b</tt> and <tt>c</tt> are global variables.
+  These identifiers can then be used in functions subsequent to the
+  declaration. These identifiers may not be used in constant definitions. There
+  is only one shared global variable space and it is used by all modules and
+  tasks. The values of global variables only change through an explicit
+  run-time assignment operator. Even if modules are re-compiled, global
+  variables will retain their values.</p>
+
+<p>Global variables share the same name space as global functions (including
+  built-in functions). A load-time error will result if there is a conflict
+  between modules; for example, one module declares that <tt>X</tt> is a global
+  variable and another defines a global function called <tt>X</tt>. A load-time
+  error will also result if a global variable has the same name as a built-in
+  function. As a result, it is highly recommended that globals have long and
+  non-obvious names to reduce the likelihood of a conflict. It is best to avoid
+  using globals in the first place; however, they can be useful when
+  debugging.</p>
+
+<p><b>Static Variables</b>. The <tt>static</tt> <i>identifier</i> <b>{</b>
+  <tt>,</tt> <i>identifier</i> <b>}</b>* <tt>;</tt> construct is used to
+  declare that the given identifiers are static variables. Static variables are
+  used to share data between top-level functions in a module file. They also
+  have the property that they retain their values between function invocations.
+  As such, they are similar to global variables except that they are visible
+  only to functions with a single module file. For example,</p>
+
+<pre class="code">
+<b>static</b> a, b, c <b>;</b>
+</pre>
+
+<p>declares that <tt>a</tt>, <tt>b</tt> and <tt>c</tt> are static variables.
+  These identifiers can then be used in functions subsequent to the
+  declaration. These identifiers may not be used in constant definitions. The
+  values of static variables only change through an explicit run-time
+  assignment operator. The initial value of a static is the null vector;
+  however, this initialization is made only upon task creation (and provided
+  that the statics are not shared between tasks). Static variable declarations
+  can appear outside functions, inside functions and inside <tt>if</tt> and
+  <tt>loop</tt> constructs.</p>
+
+<p><b>Functions</b>. Functions are declared with the <tt>function</tt>
+  keyword and typically use the</p>
+  <center>
+    <b>{</b> <tt>local</tt> <b>|</b> <tt>global</tt> <b>}</b> <tt>function</tt>
+    <i>identifier</i> <b>{</b> <i>loc_lvalue</i> <b>|</b> <tt>[]</tt>
+    <b>}<sup>1</sup></b> <b>{</b> <i>statement</i> <b>}</b>*
+    <tt>endfunction</tt><br />
+  </center>
+
+<p>form of the declaration. Optionally, <tt>local</tt> or <tt>global</tt> can
+  precede the <tt>function</tt> keyword to define a local or global function,
+  respectively. If neither <tt>local</tt> nor <tt>global</tt> is present then
+  the default is <tt>local</tt> if the function is declared inside of another
+  function and <tt>global</tt> otherwise. The <i>identifier</i> supplied is the
+  name of the function. The names of global functions exist in the same space
+  as global variables (including built-in functions). A load-time error will
+  result if there is a conflict between modules; for example, one module
+  declares that <tt>X</tt> is a global variable and another defines a global
+  function called <tt>X</tt> or if two different modules define the same global
+  function. A load-time error will also result if a global variable has the
+  same name as a built-in function. As a result, it is highly recommended that
+  global functions be given long and non-obvious names to reduce the likelihood
+  of a conflict.</p>
+
+<p>The <i>loc_lvalue</i> is the specification of the argument to the
+  function. SVL functions accept exactly one argument and return exactly one
+  return value. However, like local variable declarations the <i>loc_lvalue</i>
+  can be used to assign symbols to particular elements of the single argument.
+  For example,</p>
+
+<pre class="code">
+<b>function</b> fcn1 [a,b]
+        ....
+    <b>endfunction</b>
+</pre>
+
+<p>defines a function called <tt>fcn1</tt> whose single argument will be
+  interpreted as a vector of length two. This is equivalent to the
+  following</p>
+
+<pre class="code">
+<b>function</b> fcn1 arg
+    local [a,b] = arg;
+    ....
+<b>endfunction</b>
+</pre>
+
+<p>and the same rules and interpretations apply as when initializing local
+  variables. The <tt>[]</tt> argument form is used when the function ignores
+  its argument.</p>
+
+<p>Functions can be defined within other functions (but not in neither
+  <tt>if</tt> nor <tt>loop</tt> constructs). In such cases the inner function
+  can use all variables already defined in the outer function. Moreover, these
+  outer variables will retain their values across invocations of the inner
+  function (similar to globals).</p>
+
+<p>The <tt>=</tt> <i>expression</i> <tt>;</tt> form of defining the function
+  body is merely a shorthand notation. It is equivalent to using then
+  <tt>function</tt> ... <tt>endfunction</tt> form with a single statement in
+  the body consisting of <tt>return</tt> <i>expression</i> <tt>;</tt>. For
+  example, the function</p>
+
+<pre class="code">
+<b>function</b> mean x = add x * invz length x ;
+</pre>
+
+<p>is equivalent to</p>
+
+<pre class="code">
+<b>function</b> mean x
+    return add x * invz length x;
+<b>endfunction</b>
+</pre>
+
+<p>In other words, a function that has a single expression for a body returns
+  the value of that expression as its result. The expression can use any
+  identifiers defined in the <i>loc_lvalue</i> argument specification.</p>
+
+<p>The <tt>function</tt> <i>identifier</i> <b>{</b> <tt>,</tt>
+  <i>identifier</i> <b>}</b>* <tt>;</tt> form of the function declaration is
+  used to reserve the given identifiers as function symbols. No definition of
+  the function is given. It is expected that the definition will be supplied
+  further down in the module file (possibly in the same function); if no such
+  definition exists then the function is assumed to be an externally defined
+  global function. The local/global characteristics are specified when the
+  function is defined. For example, to define two mutually recursive local
+  functions, one can use</p>
+
+<pre class="code">
+<b>function</b> fcn2;
+
+<b>local function</b> fcn1 x
+    ....
+    fcn2 x;
+    ....
+<b>endfunction</b>
+
+<b>local function</b> fcn2 x
+    ....
+    fcn1 x;
+    ....
+<b>endfunction</b>
+</pre>
+
+<p>The first <tt>function</tt> declaration indicates to the compiler that the
+  symbol <tt>fcn2</tt> is a function. Its definition is supplied in the third
+  <tt>function</tt> declaration.</p>
+
+<p><b>Return</b>. The <tt>return</tt> construct is used to terminate an
+  invocation of a function (independent of the state of any loops) and return
+  the run-time value of the function. Execution proceeds to the code that
+  invoked the function. An optional <i>expression</i> can be supplied as the
+  return value. If no such <i>expression</i> is given then the null vector is
+  returned. If execution of a function proceeds to the <tt>endfunction</tt>
+  then an implicit return of the null vector is performed. For example,</p>
+
+<pre class="code">
+function mean x
+    local sum = add x;
+    <b>return</b> sum * invz length x;
+endfunction
+</pre>
+
+<p>defines a function that returns the mean value of a given vector. The
+  <tt>return</tt> construct can appear anywhere in a function, even inside
+  <tt>if</tt> and <tt>loop</tt> constructs. It is a syntax error to use a
+  <tt>return</tt> construct outside of a function definition.</p>
+
+<h1>See Also</h1>
+
+<p><a href="s_lex.htm">SVL Lexical Analysis</a><br />
+  <a href="s_expr.htm">SVL Expressions</a><br />
+  <a href="s_stmt.htm">SVL Statements</a> </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

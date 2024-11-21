@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content=
+  "functions: bOrder, bRotatable, bInteraction" />
+  <meta name="keywords" content=
+  "functions: bInRing, bInHRing, bIn3Ring, bIn4Ring" />
+  <meta name="keywords" content=
+  "functions: bIn5Ring, bIn6Ring, bIn7Ring, bIn8Ring" />
+  <meta name="keywords" content=
+  "functions: Bond, Unbond, RotateBond, bInvertStereoBond" />
+  <meta name="keywords" content="intro: Bond Functions" />
+  <title>Bond Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Bond Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    i_codes     = <a class="fcnlink" href=
+"#bInteraction">bInteraction</a> [atom_keys, atom_keys]
+    bond_orders = <a class="fcnlink" href=
+"#bOrder">bOrder</a>       [atom_keys, atom_keys]
+    flags       = <a class="fcnlink" href=
+"#bRotatable">bRotatable</a>   [atom_keys, atom_keys]
+    flags       = <a class="fcnlink" href=
+"#bIn3Ring">bIn3Ring</a>     [atom_keys, atom_keys]
+    flags       = <a class="fcnlink" href=
+"#bIn4Ring">bIn4Ring</a>     [atom_keys, atom_keys]
+    flags       = <a class="fcnlink" href=
+"#bIn5Ring">bIn5Ring</a>     [atom_keys, atom_keys]
+    flags       = <a class="fcnlink" href=
+"#bIn6Ring">bIn6Ring</a>     [atom_keys, atom_keys]
+    flags       = <a class="fcnlink" href=
+"#bIn7Ring">bIn7Ring</a>     [atom_keys, atom_keys]
+    flags       = <a class="fcnlink" href=
+"#bIn8Ring">bIn8Ring</a>     [atom_keys, atom_keys]
+    flags       = <a class="fcnlink" href=
+"#bInHRing">bInHRing</a>     [atom_keys, atom_keys]
+    flags       = <a class="fcnlink" href=
+"#bInRing">bInRing</a>      [atom_keys, atom_keys]
+
+    <a class="fcnlink" href="#Bond">Bond</a>       [atom_keys, atom_keys]
+    <a class="fcnlink" href=
+"#RotateBond">RotateBond</a> [a_atom_keys, b_atom_keys, angles]
+    <a class="fcnlink" href="#Unbond">Unbond</a>     [atom_keys, atom_keys]
+
+    flags       = <a class="fcnlink" href=
+"#bInvertStereoBond">bInvertStereoBond</a> [atom_keys, atom_keys]
+</pre>
+
+<h1>Description</h1>
+
+<p>In MOE, molecular data is organized as a hierarchy of <i>molecular
+  objects</i> or <i>objects</i>. A molecular system consists of zero or more
+  chains, and each chain consists of zero or more residues. A residue consists
+  of zero or more atoms. A molecule may consist of one or more chains and/or
+  one or more residues. Each molecular object (atom, residue, chain) has its
+  own <i>unique identifying key</i>. This key is valid during the lifetime of
+  the object, and is not maintained from run to run. The key is used to
+  reference the molecular object in order to obtain or modify the object's
+  properties.</p>
+
+<p>Bond functions require pairs of atom object keys. The following bond
+  functions are available: <!-- DESC --></p>
+  <table class="titlebar">
+    <tr>
+      <th>Function</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="bInteraction"></a>
+<tt>bInteraction</tt></td>
+      <td valign="baseline">For each bond defined by a pair of atom keys, the
+      interaction code of the pair is returned. Codes are: 1:identical atoms,
+      2:bond, 3:angle, 4:torsion, 0:none of the above. When nonzero, the
+      smallest applicable code is returned. This function can be used on
+      arbitrarily nested vectors.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="bOrder"></a>
+<tt>bOrder</tt></td>
+      <td valign="baseline">For each bond defined by a pair of atom keys, the
+      integral bond order is returned. If the atoms are not bonded, 0 is
+      returned. This function can be used on arbitrarily nested vectors.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="bRotatable"></a>
+<tt>bRotatable</tt></td>
+      <td valign="baseline">For each bond defined by a pair of atom keys, 1 is
+      returned if the pair defines a rotatable bond; otherwise, 0 is returned.
+      Bonds to atoms with an explicit degree of one are not rotatable. This
+      function can be used on arbitrarily nested vectors.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="bInHRing"></a>
+<tt>bInHRing</tt></td>
+      <td valign="baseline">For each bond defined by a pair of atom keys in an
+      aromatic ring, 1 is returned; otherwise, 0 is returned. This function can
+      be used on arbitrarily nested vectors.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="bInRing"></a>
+<tt>bInRing</tt></td>
+      <td valign="baseline">For each bond defined by a pair of atom keys in a
+      ring, 1 is returned; otherwise, 0 is returned. This function can be used
+      on arbitrarily nested vectors.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="bIn3Ring"></a>
+<a id="bIn4Ring"></a>
+<a id="bIn5Ring"></a>
+<a id="bIn6Ring"></a>
+<a id="bIn7Ring"></a>
+<a id="bIn8Ring"></a>
+<tt>bIn#Ring</tt></td>
+      <td valign="baseline">For each bond defined by a pair of atom keys in a
+      ring of size <tt>#</tt>, 1 is returned; otherwise, 0 is returned. This
+      function can be used on arbitrarily nested vectors.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="Bond"></a>
+<tt>Bond</tt></td>
+      <td valign="baseline">Creates a bond between each pair of atom keys. It
+      is an error to bond an atom to itself. If the atoms were bonded prior to
+      the call, then the call will have no effect. This function can be used on
+      arbitrarily nested vectors.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="RotateBond"></a>
+<tt>RotateBond</tt></td>
+      <td valign="baseline">
+        Rotates about bonds. The elements of the arguments are formed into the
+        triplets. For each such triplet, a rotation by <tt>angle</tt> (radians)
+        about the bond (<tt>a</tt>,<tt>b</tt>) is performed if and only if:
+        <ul>
+          <li><tt>a</tt> and <tt>b</tt> form a rotatable bond, and</li>
+          <li>fixed atoms (if any) do not prevent the rotation.</li>
+        </ul>
+
+<p>The rotation is performed counterclockwise about a vector with head
+        at <tt>b</tt> and tail at <tt>a</tt> (i.e. this vector defines the
+        positive z-axis about which a counterclockwise rotation is performed in
+        the x-y plane).</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="Unbond"></a>
+<tt>Unbond</tt></td>
+      <td valign="baseline">Removes any existing bond between each pair of atom
+      keys. This function can be used on arbitrarily nested vectors.</td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="bInvertStereoBond"></a>
+<tt>bInvertStereoBond</tt></td>
+      <td valign="baseline">Bonds which are described in the parameter list are
+      considered for stereochemical bond inversion. Only double bonds which are
+      classified as stereochemically active by <a href="atom_g.htm" class=
+      "svl">aEZStereoBond</a> are considered. If fixed atoms exist on both
+      sides of the bond, the inversion is not carried out. Inversion is done by
+      rotating one side of the bond by 180&deg;. If the bond had a
+      stereochemical constraint (see <a href="atom_p.htm" class=
+      "svl">aForceRS</a>), it will be set appropriately to the new
+      stereoisomer. The return parameter is a mask which is true if the bond
+      was successfully inverted.</td>
+    </tr>
+  </table><!-- ENDDESC -->
+
+<h1>See Also</h1>
+
+<p><a href="atom.htm">Atom&nbsp;Functions</a><br />
+  <a href="chain.htm">Chain&nbsp;Functions</a><br />
+  <a href="obj.htm">Object&nbsp;Functions</a><br />
+  <a href="residue.htm">Residue&nbsp;Functions</a><br />
+  <a href="atom_g.htm">Atom Geometry Functions</a><br />
+  <a href="atom_p.htm">Atom Potential Functions</a></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

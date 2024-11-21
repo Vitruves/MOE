@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: tagcat" />
+  <meta name="keywords" content="functions: tagget" />
+  <meta name="keywords" content="functions: tagpeek" />
+  <meta name="keywords" content="functions: tagpoke" />
+  <meta name="keywords" content="functions: tagput" />
+  <meta name="keywords" content="functions: taguniq" />
+  <meta name="keywords" content="functions: tagjoin" />
+  <meta name="keywords" content="functions: tagdiff" />
+  <title>Tag Functions: tagpeek, tagpoke, ...</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Tag Functions: tagpeek, tagpoke, ...
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    value = <a class="fcnlink" href=
+"#tagpeek">tagpeek</a> [ v, &#39;attr&#39; ]
+    value = <a class="fcnlink" href="#tagpeek">tagpeek</a> [ v, tags ]
+
+    u = <a class="fcnlink" href="#tagpoke">tagpoke</a> [ v, &#39;attr&#39;, x ]
+    u = <a class="fcnlink" href="#tagpoke">tagpoke</a> [ v, tags, x ]
+
+    values = <a class="fcnlink" href="#tagget">tagget</a> [ v, tags ]
+    u = <a class="fcnlink" href="#tagput">tagput</a> [ v, tags, x ]
+
+    u = <a class="fcnlink" href="#tagcat">tagcat</a> [ v1, v2, ... ]
+
+    u = <a class="fcnlink" href="#taguniq">taguniq</a> v
+
+    u = <a class="fcnlink" href="#tagjoin">tagjoin</a> [v, t]
+    u = <a class="fcnlink" href="#tagdiff">tagdiff</a> [v, t]
+</pre>
+<a id="tagpeek"></a>
+<h1>Description</h1>
+
+<pre>
+value = <span class="fcndef">tagpeek</span> [ v, &#39;attr&#39; ]
+value = <span class="fcndef">tagpeek</span> [ v, tags ]
+</pre>
+
+<p>Searches vector <tt>v</tt> of tagged values and returns the first value
+  found that is tagged by <tt>&#39;attr&#39;</tt>.</p>
+
+<pre class="code">
+svl&gt; v = [ a:1, b:2 ]; tagpeek [v, &#39;a&#39;]
+1
+svl&gt; v = [ a:1, b:2, a:3 ]; tagpeek [v, &#39;a&#39;] // finds first value
+1
+</pre>
+
+<p>The dot . operator is shorthand notation for <tt>tagpeek</tt>.</p>
+
+<pre class="code">
+svl&gt; v = [ a:1, b:2 ]; v.a
+1
+svl&gt; x = &#39;b&#39;; v.(x)
+2
+</pre>
+
+<p>If a vector of tags is passed to <tt>tagpeek</tt>, the first value in
+  <tt>v</tt> tagged by the first value in <tt>tags</tt> is itself searched in
+  turn for the first value tagged by the second value in <tt>tags</tt>, and so
+  forth. In other words,</p>
+
+<pre class="code">
+value = tagpeek [ tagpeek [v, first tags], dropfirst tags] ]
+</pre>
+
+<p>The shorthand dot notation also supports multiple tags.</p>
+
+<pre class="code">
+svl&gt; v = [ a : [ p:1, q:2 ], b : [ r:3, s:4 ] ]
+svl&gt; tagpeek [v, [&#39;a&#39;,&#39;q&#39;]]
+2
+svl&gt; v.b.r
+3
+</pre>
+<a id="tagpoke"></a>
+<hr noshade="noshade" />
+
+<pre>
+u = <span class="fcndef">tagpoke</span> [ v, &#39;attr&#39;, x ]
+u = <span class="fcndef">tagpoke</span> [ v, tags, x ]
+</pre>
+
+<p>Returns the source vector <tt>v</tt> with the first value found that is
+  tagged by <tt>&#39;attr&#39;</tt> replaced by <tt>x</tt>. Note that
+  <tt>tagpoke</tt> leaves the original source vector unaltered.</p>
+
+<pre class="code">
+svl&gt; v = [ a:1, b:2 ]; tagpoke [v, &#39;a&#39;, 10]
+[ a:10, b:2 ]
+</pre>
+
+<p>The dot operator . in conjunction with = also serves as shorthand for
+  <tt>tagpoke</tt>, with assignment. Note that using this shorthand will alter
+  the source vector <tt>v</tt>.</p>
+
+<pre class="code">
+svl&gt; v = [ a:1, b:2 ]; v.a = 10; print v
+[ a:10, b:2 ]
+</pre>
+
+<p>If <tt>tagpoke</tt> is passed a vector of tags, the following operation is
+  performed:</p>
+
+<pre class="code">
+tagpoke [ v, first tags, tagpoke [v.(first tags), dropfirst tags, x] ]
+</pre>
+
+<p>The shorthand notation also supports multiple tags.</p>
+
+<pre class="code">
+svl&gt; v = [ a : [ p:1, q:2 ], b : [ r:3, s:4 ] ]
+
+svl&gt; tagpoke [v, [&#39;a&#39;,&#39;p&#39;], 10]
+[ a : [ p:10, q:2 ], b : [ r:3, s:4 ] ]
+
+svl&gt; v.b.r = 10; print v
+[ a : [ p:1, q:2 ], b : [ r:10, s:4 ] ]
+</pre>
+<a id="tagget"></a>
+<hr noshade="noshade" />
+
+<pre>
+values = <span class="fcndef">tagget</span> [ v, tags ]
+</pre>
+
+<p>Searches vector <tt>v</tt> of tagged values and returns the (first)
+  corresponding value for each tag in the vector <tt>tags</tt>. The default
+  values for tags not found is <tt>[]</tt>.</p>
+
+<pre> class="code"
+svl&gt; v = [ a:1, b:2 ]; tagget [v, [&#39;a&#39;,&#39;c&#39;]]
+[1, []]
+</pre>
+<a id="tagput"></a>
+<hr noshade="noshade" />
+
+<pre>
+u = <span class="fcndef">tagput</span> [ v, tags, x ]
+</pre>
+
+<p>Searches vector <tt>v</tt> of tagged values and replaces the (first)
+  corresponding value for each tag <tt>tags(i)</tt> with <tt>x(i)</tt>. The
+  tags and values not found in <tt>v</tt> are appended to <tt>v</tt>. The
+  function returns the new tag vector.</p>
+
+<pre class="code">
+svl&gt; v = [ a:1, b:2 ]; tagput [v, [&#39;a&#39;, &#39;c&#39;], [10, 20]]
+[ a:10, b:2, c:20 ]
+</pre>
+<a id="tagcat"></a>
+<hr noshade="noshade" />
+
+<pre>
+u = <span class="fcndef">tagcat</span> [ v1, v2, ... ]
+</pre>
+
+<p>Returns a tag vector composed of unique tags from vectors <span class=
+  "nobr"><tt>v1</tt>, <tt>v2</tt>, ...</span>. The function first removes all
+  tags that are associated with the null vector and then it removes all
+  duplicate tags. The function is suited for adding the default values to a
+  tagged vector of optional arguments, commonly passed to various
+  applications.</p>
+
+<pre class="code">
+svl&gt; v1 = [a:11, b:12]; v2 = [a:21, c:22]; v3 = [b:31, c:32, d:33];
+svl&gt; tagcat [v1, v2, v3]
+[ a:11, b:12, c:22, d:33 ]
+
+svl&gt; tagcat [[a:[], b:2], [a:3, b:4, c:5]]
+[a:3, b:2, c:5]
+
+svl&gt; opt = tagcat [opt, OPT_DEFAULT]     // append default values
+</pre>
+
+<a id="taguniq"></a>
+<hr noshade="noshade" />
+
+<pre>
+u = <span class="fcndef">taguniq</span> v
+</pre>
+
+<p>Returns a tag vector composed of unique tags of vector <tt>v</tt> and the
+  (first) corresponding values. The function first removes all tags that are
+  associated with the null vector and then it removes all duplicate tags.</p>
+
+<pre class="code">
+svl&gt; taguniq [a:11, b:12, a:21, c:22, b:31, c:32, d:33]
+[ a:11, b:12, c:22, d:33 ]
+
+svl&gt; taguniq [a:[], b:[], b:3, c:4, c:5]
+[b:3, c:4]
+</pre>
+
+<a id="tagjoin"></a>
+<hr noshade="noshade" />
+
+<pre>
+u = <span class="fcndef">tagjoin</span> [v, t]
+</pre>
+
+<p>Returns the tag-value pairs from the source tag vector v
+whose tags occur in token vector t.
+</p>
+
+<pre class="code">
+svl&gt; tagjoin [[a:1, b:2, c:3, a:4, b:5, d:6], ['a', 'c']]
+[ a:1, c:3, a:4 ]
+</pre>
+
+
+<a id="tagdiff"></a>
+<hr noshade="noshade" />
+
+<pre>
+u = <span class="fcndef">tagdiff</span> v
+</pre>
+
+<p>Returns the tag-value pairs from the source tag vector v
+whose tags do not occur in token vector t.
+</p>
+
+<pre class="code">
+svl&gt; tagdiff [[a:1, b:2, c:3, a:4, b:5, d:6], ['a', 'c']]
+[  b:2, b:5, d:6 ]
+</pre>
+
+<h1>See Also</h1>
+
+<p>
+<a class="svl" href="tagetc.htm">tag</a><br />
+<a class="svl" href="tagetc.htm">untag</a><br />
+<a class="svl" href="tagetc.htm">tags</a><br />
+<a class="svl" href="getpeek.htm">peek</a><br />
+<a class="svl" href="putpoke.htm">poke</a>
+</p>
+
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

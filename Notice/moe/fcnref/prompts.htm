@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content=
+  "functions: AtomPrompt, ResiduePrompt, ChainPrompt" />
+  <title>Prompt Functions: AtomPrompt...</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Prompt Functions: AtomPrompt...
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre><tt>
+    <a class="fcnlink" href=
+"#AtomPrompt">AtomPrompt</a> 'prompt_string'
+    <a class="fcnlink" href="#AtomPrompt">AtomPrompt</a> []
+
+    <a class="fcnlink" href=
+"#ResiduePrompt">ResiduePrompt</a> 'prompt_string'
+    <a class="fcnlink" href="#ResiduePrompt">ResiduePrompt</a> []
+
+    <a class="fcnlink" href=
+"#ChainPrompt">ChainPrompt</a> 'prompt_string'
+    <a class="fcnlink" href="#ChainPrompt">ChainPrompt</a> []
+</tt></pre>
+<a id="AtomPrompt"></a>
+<h1>Description</h1>
+
+<pre>
+<span class="fcndef">AtomPrompt</span> 'prompt_string'
+<span class="fcndef">AtomPrompt</span> []
+</pre>
+
+<p>Prompts the user to select an atom in the MOE Window. The
+  <tt>prompt_string</tt> is displayed in the prompt area of the MOE window. If
+  no prompt string is supplied to the function, the default string
+  <tt>'Pick an atom:'</tt> is used.</p>
+<a id="ResiduePrompt"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">ResiduePrompt</span> 'prompt_string'
+<span class="fcndef">ResiduePrompt</span> []
+</pre>
+
+<p>Prompts the user to select a residue from the Sequence Editor. The
+  <tt>prompt_string</tt> will be displayed in the prompt area of the Sequence
+  Editor. If no prompt string is supplied to the function, the default string
+  <tt>'Pick a residue:'</tt> is used.</p>
+<a id="ChainPrompt"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">ChainPrompt</span> 'prompt_string'
+<span class="fcndef">ChainPrompt</span> []
+</pre>
+
+<p>Prompts the user to select a chain from the Sequence Editor. The
+  <tt>prompt_string</tt> will be displayed in the prompt area of the Sequence
+  Editor. If no prompt string is supplied to the function, the default string
+  <tt>'Pick a chain:'</tt> is used.</p>
+
+<p>In all cases, selecting the object causes the prompt string to disappear
+  and returns the key of the selected object. The selected object is not added
+  to the selection set, which is preserved. Prompting can be canceled by typing
+  <tt>Esc</tt> in the window displaying the prompt.</p>
+
+<h1>See Also</h1>
+
+<p><a class="svl" href="measure.htm">AtomPrompt4</a></p>
+
+<p><a href="atom.htm">Atom Functions</a><br />
+  <a href="chain.htm">Chain Functions</a><br />
+  <a href="residue.htm">Residue Functions</a></p>
+
+<p><a href="../molsystems/molrep.htm">Representation of Molecular Systems in
+  MOE</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

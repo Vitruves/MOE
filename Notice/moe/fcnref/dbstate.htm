@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content=
+  "functions: db_State, db_DataState, db_EntriesState, db_FieldsState" />
+  <meta name="keywords" content="functions: db_FieldsDataState" />
+  <title>MOE Database State Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    MOE Database State Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    stamp = <a class="fcnlink" href="#db_DataState">db_DataState</a> mdb
+    stamp = <a class="fcnlink" href="#db_EntriesState">db_EntriesState</a> mdb
+    stamp = <a class="fcnlink" href="#db_FieldsState">db_FieldsState</a> mdb
+    stamp = <a class="fcnlink" href="#db_State">db_State</a> mdb
+
+    [stamp1, stamp2, ...] = <a class="fcnlink" href="#db_FieldsDataState">db_FieldsDataState</a> [mdb, ['field1', 'field2', ...]]
+</pre>
+
+<h1>Description</h1>
+
+<p>Functions allowing the caller to determine whether a change has occurred
+  in a MOE database. The <b>stamp</b> returned is a numeric value. If this
+  value has changed since the previous call to the <i>State</i> function then a
+  change has occurred and an update may be required. Changes which can be
+  monitored through these functions are the selection and visibility status of
+  the entries and fields.</p>
+
+<p><tt>mdb</tt> specifies the MOE database and may be either a key or a
+  filename.</p>
+<a id="db_DataState"></a>
+<hr noshade="noshade" />
+
+<pre>
+stamp = <span class="fcndef">db_DataState</span> mdb
+</pre>
+
+<p>Returns a <i>stamp</i> used to monitor the values in the specified
+  database. The data state of the database will change if the content of any
+  entry is updated or if any non empty field or entry is deleted.</p>
+<a id="db_EntriesState"></a>
+<hr noshade="noshade" />
+
+<pre>
+stamp = <span class="fcndef">db_EntriesState</span> mdb
+</pre>
+
+<p>Returns a <i>stamp</i> used to monitor the entry keys of the specified
+  database. The entries state of the database will change if any entries are
+  created, deleted or reordered.</p>
+<a id="db_FieldsState"></a>
+<hr noshade="noshade" />
+
+<pre>
+stamp = <span class="fcndef">db_FieldsState</span> mdb
+</pre>
+
+<p>Returns a <i>stamp</i> used to monitor the fields of the specified
+  database. The fields state of the database will change if any fields are
+  created, deleted, renamed or reordered.</p>
+<a id="db_State"></a>
+<hr noshade="noshade" />
+
+<pre>
+stamp = <span class="fcndef">db_State</span> mdb
+</pre>
+
+<p>Returns a <i>stamp</i> used to monitor activities on the specified
+  database. The state of the database will change if any one of the data,
+  entries or fields states change.</p>
+
+<a id="db_FieldsDataState"></a>
+<hr noshade="noshade" />
+
+<pre>
+[stamp1, stamp2 ...] = <span class="fcndef">db_FieldsDataState</span> [mdb, ['field1', 'field2', ...]
+</pre>
+
+<p>Returns <i>stamps</i> used to monitor data of the specified fields in a
+  database. The fields data states of the database will change if any cell
+  content of the specified fields is changed. This allows monitoring changes
+  in specfied fields only.</p>
+
+<h1>See Also</h1>
+
+<p><a href="introdb.htm">Database Functions</a></p>
+
+<p><a class="svl" href="dbvstate.htm">dbv_State</a></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

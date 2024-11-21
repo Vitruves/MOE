@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html>
+
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../images/ccgicon.png" />
+  <meta name="keywords" content="panel: Filter Database" />
+  <meta name="keywords" content="panel: Database Filter" />
+  <meta name="keywords" content="keywords: Database Filter, filter, filters" />
+  <meta name="keywords" content="keywords: entries, select entries" />
+  <meta name="keywords" content="keywords: hide entries, show entries" />
+  <title>Filter Database</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../index.htm"><img src="../images/ccglogo.png" /></a>
+    <a href="../index.htm"><div class="moeversion"></div></a>
+    Filtering Database Entries
+  </div>
+<!-- END MOE_HEADER -->
+
+<div class="content">
+
+  <ul>
+    <li>
+      <a href="#Overview">Overview</a>
+    </li>
+    <li>
+      <a href="#FilterSelection">Filter Selection</a>
+    </li>
+    <li>
+      <a href="#FilterStatus">Filter Status Bar</a>
+    </li>
+   <li>
+      <a href="#FilterControls">General Filter Controls</a>
+      <img src="dbfilter/dbv_filter_database.png"
+       alt="Filter Database" class="floatright">
+    </li>
+    <li>
+      <a href="#FilterNumericalValues">Filter By Numerical Values</a>
+    </li>
+    <li>
+      <a href="#FilterText">Filter By Text Categories</a>
+    </li>
+  </ul>
+
+<h3><a id="Overview">Overview</a></h3>
+
+<p>
+The <b>Filter Database</b> application provides a quick interactive way to
+filter database entries by their properties. It is accessible from
+<span class="menu"><b>DBV | Edit | Filter</b></span>. The panel can
+also be opened conveniently with the
+<img src="dbfilter/ico_filter.png" class="icon"> button in the top bar
+of the <a href="db.htm"><b>Database Viewer</b></a>.
+</p>
+
+<p>
+By default the the Filter Database panel is attached to the left
+side of the Database Viewer, but it can be also detached and operated
+as an independent window by pressing the <b>Detach</b> button in the
+footer of the panel. Conversely the detached panel can be reattached
+to the associated Database Viewer with the <b>Attach</b> button.
+</p>
+
+<p>
+The <b>Filter Database</b> panel allows selecting up to 10 filters
+to do a multi-variable analysis of molecular properties in a database.
+Each of the filters will define a search criterion on a defined molecular
+property stored in the database fields for the molecule entries.
+Filters can act on numerical data and text data:
+<ul>
+    <li>
+    For numerical data, one can choose a property value range in the
+    filter histogram which represents the whole value distribution in the
+    database.The Filter Database application will then show the molecule
+    entries which match the chosen criteria in the Database Viewer.
+    </li>
+    <li>
+    For text data the filter will let the user choose categorical
+    keywords or phrases taken from the text field in order to
+    include or exclude database entries from the database viewer display.
+    Categories can consist of the entire text value or be taken from
+    a list of values as described in
+    <a href="#FilterSettings"><b>Filter Settings</b></a>.
+    </li>
+</ul>
+</p>
+
+
+<a id="FilterSelection">
+
+</a><h3>Filter Selection</h3>
+
+<p>There are several ways to select the field data on which one
+wants to filter the database:
+</p>
+
+<img src="dbfilter/select_filters.png" alt="Filter Selection"
+style="float:left; margin:0em 3em 1em 0em" />
+
+<p>
+    <ol>
+    <li>Use the <b>N Filters</b> popup at the top left of the panel.
+    It opens a popup (shown on the left) in which one can choose the
+    fields available for filtering from a list.
+    Click <b>OK</b> to confirm the new filter selection. If more than
+    the allowed 10 filters are selected in the list, a warning is shown
+    on pressing OK and the first 10 selected filters are displayed.
+    <p>
+    The filters which are visible in the list can be restricted using
+    the text search field below the list to display only those filters
+    that contain each of the words entered in the text field.
+    Note: Searching only affects the display, but not the selection
+    state of the filters.
+    </p>
+    </li>
+
+    <li>Open the <span class="menu">DBV | Field Popup</span> menu in the
+    Database Viewer and select the <b>Filter</b> menu item.
+    If the Filter Database panel is already open, the filter for
+    this field will be added, if not the application is opened with
+    this one field filter.
+    </li>
+
+    <li>Select the fields to filter in the Database Viewer and <i>then</i>
+    open the filter application. This works only if the Filter Database
+    application is not yet open.</li>
+    </ol>
+</p>
+
+<p>
+<span class="tip">Tip:</span>
+The current filter selection and overall state of the filter panel is stored
+in the database environment when the filter panel is closed. This state
+is reapplied the next time the Filter Database application is started.
+<span class="tip">Note!</span> The saved state is always reset when
+the filter panel is started with a selection of fields in the Database
+Viewer or started from the <span class="menu">Field Popup</span> menu!
+</p>
+
+
+<a id="FilterStatus">
+</a><h3>Filter Status Bar</h3>
+
+The footer of the filter panel displays the status or result of the filtering,
+i.e. how many database entries are shown or selected by the filter criteria.
+The total number of filtered entries as well as the percentage are shown.
+<p>
+While the Filter Database application is running one can still change the
+visibility or selection of database entries manually or with other applications.
+In such a case the database entry visibility/selection can get out of sync
+with the filter criteria. This will be recognized by the Filter panel and
+the footer filter status is displayed in bright red (see below). To restore
+the filtering state press the
+<img src="dbfilter/ico_apply.png" class="icon"/> button.
+</p>
+<p>
+<span class="tip">Note!</span> When opening the filter application it will
+try to restore its previous state, but the filter state is not
+automatically applied to the entry visibility or selection
+when opening the application.
+In this case the footer status is displayed in red as mentionend above
+and the filters can be applied as described.
+</p>
+
+<center>
+<table style="width:80%">
+<tr>
+    <td>
+	<img src="dbfilter/status.png" alt="Status Line" class="center"/>
+    </td>
+    <td>
+	<img src="dbfilter/status2.png" alt="Status Line - Out of Sync"
+	class="center"/>
+    </td>
+<tr>
+</table>
+</center>
+</p>
+
+
+<a id="FilterControls">
+</a><h3>General Filter Controls</h3>
+
+<p>
+The top two lines of the Filter Database panel control the general options
+of the filter process. The <b>N Filters</b> popup on the top left
+selects the fields to be filtered. The other options are described below:
+</p>
+
+<table class="titlebar">
+    <tr>
+	<th>Control</th>
+	<th>Description</th>
+    </tr>
+    <tr>
+	<td><img src="dbfilter/ico_reset.png" class="icon"/></td>
+	<td>Reset the selection range and individual settings
+	of all field filters, i.e. as if one presses the
+	<img src="dbfilter/ico_reset_small.png" class="icon"/>
+	button on each filter individually. Note: The selection range
+	of temporarily disabled filters will be reset, but the filters
+	stay disabled..
+    </tr>
+    <tr>
+	<td>
+	<img src="dbfilter/ico_on.png" class="icon"/>
+	<img src="dbfilter/ico_off.png" class="icon"/>
+	</td>
+	<td>
+	<img src="dbfilter/noactive.png" class="floatright"/>
+	Enable or disable all filters.
+	<p><i>Disabled</i> filter are still present in the filter
+	list, but temporarily desensitized.
+	</p>
+	<p>
+	If no active filters are present, the last database entry
+	visibility and selection state is retained and a reminder
+	(see on the right) is shown above the disabled filters
+	with buttons to	<b>Show or Deselect All Entries</b>.
+	</p>
+	</td>
+    </tr>
+    <tr>
+	<td><img src="dbfilter/ico_delete.png" class="icon"/></td>
+	<td>Remove all filters from the filter list.
+	<p>
+	If no active filters are present, the last database entry
+	visibility and selection state is retained and a reminder
+	is shown with buttons to <b>Show or Deselect All Entries</b>.
+	</p>
+</td>
+    </tr>
+    <tr>
+	<td>
+	    <span class="nobr">
+	    <img src="dbfilter/ico_up.png" class="icon"/>
+	    <img src="dbfilter/ico_down.png" class="icon"/>
+	    </span>
+	</td>
+	<td>Collapse or expand all displayed filters.
+	<p>
+	Collapsed filters take less vertical space.
+	E.g. collapsed numerical filters hide the histogram view
+	and show only the range slider.
+	This can be useful if one has lots of filters defined and wants
+	to concentrate on only one or two of them.
+	</p>
+	<p>
+	</td>
+    </tr>
+    <tr>
+	<a id="FilterSettings">
+	<td>
+	    <img src="dbfilter/ico_settings.png" class="icon"/>
+	</td>
+	<td>
+	<img src="dbfilter/filter_settings.png" class="floatright"/>
+	Open the Filter Settings popup panel which provides access to
+	the configurable options of numerical and text filters.
+	<p>
+	Numerical fields in the database have typically a single value
+	in each cell, but can also contain a vector of values.
+	One can choose how to handle <b>Multi Value</b> database cells
+	in the filter process:
+	<p><ul>
+	<li><b>First</b>: Consider only first value.</li>
+	<li><b>Min</b>: Use minimum value.</li>
+	<li><b>Max</b>: Use maximum value.</li>
+	<li><b>Mean</b>: Calculate and use average value</li>
+	</ul></p>
+	Enabling the <b>Empty Cells</b> checkbox will always filter out
+	empty cells and cells with a non-finite values.
+	</p>
+	<p>
+	The text field filters interpret the text content of the
+	database cells as categorical data. By default the whole
+	text in a cell is taken as one key-phrase or category.
+	If the <b>Keywords</b> option is enabled, the text in a cell is
+	regarded as a comma-separated list of keywords.
+	</p>
+	</td>
+    </tr>
+    <tr>
+	<td><b>Mode</b></td>
+	<td>
+	Choose on how to combine the results of multiple active filters:
+	<p><ul>
+	<li><b>And</b>: 
+	Show/Select entries which satify all individual filter criteria.</li>
+	<li><b>Or</b>:
+	Show/Select entries which satify any one filter criterion.</li>
+	</ul></p>
+	</td>
+    </tr>
+    <tr>
+	<td><b>Invert</b></td>
+	<td>
+	Invert the filter results: If enabled, show/select database
+	entries which are <b>NOT</b> selected by the current filter selections.
+	</td>
+    </tr>
+    <tr>
+	<td>
+	    <b>Filter/Select Entries</b><br />
+	</td>
+	<td>
+	Choose between <b>filtering</b> (<i>showing/hiding</i>) of entries
+	in the Database	Viewer or <b>selecting/deselecting</b>
+	them based on the filter selections.
+	<p>
+	When switching from <b>Filter Entries</b> to <b>Select Entries</b> all
+	database entries will be reshown in the Database Viewer.
+	Conversely, switching from <b>Select Entries</b> to
+	<b>Filter Entries</b> will deselect all entries.
+	</p>
+	</td>
+    </tr>
+</table>
+
+<a id="FilterNumericalValues">
+</a><h3>Filter By Numerical Values</h3>
+
+<img src="dbfilter/numerical_filter.png" alt="Numerical Filter"
+class="floatright"/>
+
+Each numerical filter tile displays in the upper left corner the name
+of the database field whose values can manipulated with the filter.
+At the top right are generic controls for the specific filter (reset,
+invert, etc), as described in the table below.
+<p>
+A histogram bar plot displays the distribution of the values stored in the
+database field. The bar width is automatically chosen to best represent
+the values. The range slider under the histogram shows the current
+selected property value range and can be used to change it interactively.
+Clicking on the range label (numerical value below the slider)
+opens a text widget for entering a value directly.
+Alternatively one can also choose the value range in the histogram plot
+by dragging with the left mouse button across the desired value range.
+A left mouse click on a single histogram bar will select the values it
+is representing. Histogram bars which are within the chosen value range
+are colored dark blue, while the ones outside are faint blue.
+</p>
+<p>
+Hovering the mouse over the field name (top left) or the range slider below
+the histogram lists the data range (minimum and maximum property values in the
+database field) as well as how many entries fall into the selected
+value range of this one filter.
+</p>
+<p>
+Note: By default empty cells or cells with non-finite values are filtered
+out automatically, This can be configured in the Filter Settings popup.
+</p>
+
+<center> <table class="titlebar">
+    <tr>
+	<th>Control</th>
+	<th>Description</th>
+    </tr>
+    <tr>
+	<td><img src="dbfilter/ico_reset_small.png" class="icon"/></td>
+	<td>Reset numerical range selection.
+	Note: The selection range of a temporarily disabled filter
+	will be reset, but the filter stays disabled..</td>
+    </tr>
+    <tr>
+	<td>
+	    <img src="dbfilter/ico_invert_small.png" class="icon"/>
+	    <img src="dbfilter/ico_inverted_small.png" class="icon"/>
+	</td>
+	<td>
+	    Invert the numerical selection range.
+	    <p>
+	    If <i>inverted</i>, the entries which are outside of the
+	    selected value range are shown or selected.
+	    The histogram bars colored dark blue indicate
+	    which part of the distribution will be shown or selected.
+	    </p>
+	    <table style="width:100%">
+		<tr>
+		    <td>
+			<img src="dbfilter/acount.png"
+			alt="Normal Selection Range" class="center"/>
+			<p class="caption">
+			    Selection Within a Value Range (20&lt;x&lt;30)
+			</p>
+		    </td>
+		    <td>
+		    </td>
+		    <td>
+			<img src="dbfilter/acount_invert.png"
+			alt="Inverted Selection Range" class="center" />
+			<p class="caption">
+			    Inverted Selection Range (x&lt;20 or x&gt;30)
+			</p>
+		    </td>
+		</tr>
+	    </table>
+	</td>
+    </tr>
+    <tr>
+	<td>
+	<img src="dbfilter/ico_on_small.png" class="icon"/>
+	<img src="dbfilter/ico_off_small.png" class="icon"/>
+	</td>
+	<td>Enable or disable the numerical filter.
+	<p> A <i>disabled</i> filter is still present in the filter
+	list, but temporarily desensitized and not applied. This can be
+	useful to quickly see how a specific property influence the overall
+	selection state.
+	</p>
+	</td>
+    </tr>
+    <tr>
+	<td>
+	    <img src="dbfilter/ico_delete_small.png" class="icon"/>
+	</td>
+	<td>Remove the specific numerical filter from the filter list.</td>
+    </tr>
+    <tr>
+	<td>
+	<img src="dbfilter/ico_up_small.png" class="icon"/>
+	<img src="dbfilter/ico_down_small.png" class="icon"/>
+	</td>
+	<td>Collapse or expand the histogram view of the numerical
+    filter. The range slider is always shown.</td>
+    </tr>
+</table></center>
+
+<img src="dbfilter/preview.png" class="floatright"/>
+<p>
+The histogram data and plots of the numerical field filters can be exported by
+clicking with the right mouse button on the histogram plot to show the
+the following context menu:
+</p>
+<table class="noborder">
+    <tr>
+	<td><b>Export Histogram</b></td>
+	<td>
+	Opens a Preview Histogram Export panel, which allows
+	to customize the histogram view by opening the 
+	<a href="dbplot.htm#PlotAttributes">Plot Attributes</a>
+	with a right mouse click. One can then
+	<a href="../apps/print.htm#GraphicExportPanel">
+	export the histogram plot</a> in a variety of graphics
+	file formats with the <b>Export</b> button.
+	</td>
+    </tr>
+    <tr>
+	<td><b>Copy to Clipboard</b></td>
+	<td>
+	Send the current
+	histogram data to the clipboard.  The data can then be imported into
+	an external application for further evaluation.
+	</td>
+    </tr>
+</table>
+
+<a id="FilterText">
+</a><h3>Filter By Text Categories</h3>
+
+<img src="dbfilter/text_filter.png" alt="Text Filter"
+class="floatright"/>
+
+Each text filter tile displays in the upper left corner the name
+of the database field containing the text values or categories
+to be used for filtering.
+At the top right are generic controls for the specific filter (reset,
+invert, etc), as described in the table below.
+<p>
+The text filter shows a list of categories (keywords or phrases)
+from the database field. A maximum of the 100 most common categories
+will be shown in that list.
+If more than 100 categories exist in the database field, then all the
+remaining ones will be combined in the special category <tt>&lt;OTHER&gt;</tt>.
+Empty cells are represented by the category <tt>&lt;none&gt;</tt>.
+The right column of the list shows the percentage of database entries
+which match that category.
+</p>
+<p>
+The list selects or deselects the text categories for including or excluding
+the respective database entries in the filter selection.
+Right click the list to select or deselect all, or to invert the selection.
+</p>
+<p>
+The bubble help on the field name (top left) lists the number of
+selected and total categories as well as how many entries
+are selected by the current selection.
+</p>
+
+<center> 
+<table class="titlebar">
+    <tr>
+	<th>Control</th>
+	<th>Description</th>
+    </tr>
+    <tr>
+	<td><img src="dbfilter/ico_reset_small.png" class="icon"/></td>
+	<td>Reset the category selection to include all.
+	Note: The selection of a temporarily disabled filter
+	will be reset, but the filter stays disabled..</td>
+    </tr>
+    <tr>
+	<td>
+	    <img src="dbfilter/ico_invert_small.png" class="icon"/>
+	    <img src="dbfilter/ico_inverted_small.png" class="icon"/>
+	</td>
+	<td>
+	    Invert the category selection.
+	    <p>
+	    If <i>inverted</i>, the list displays red crosses
+	    <img src="dbfilter/ico_red_cross.png" class="icon"/>
+	    instead of black check marks
+	    <img src="dbfilter/ico_black_check.png" class="icon"/>
+	    to indicate that the <i>selected</i> categories will
+	    be <i>excluded</i> instead of <i>included</i> during the
+	    filtering process.
+	    </p>
+	    <table style="width:100%">
+		<tr>
+		    <td>
+			<img src="dbfilter/brand.png"
+			alt="Normal Selection" class="center"/>
+			<p class="caption">
+			    Selection of Categories to Include
+			</p>
+		    </td>
+		    <td>
+		    </td>
+		    <td>
+			<img src="dbfilter/brand_invert.png"
+			alt="Inverted Selection" class="center" />
+			<p class="caption">
+			    Selection of Categories to Exclude
+			</p>
+		    </td>
+		</tr>
+	    </table>
+	</td>
+    </tr>
+    <tr>
+	<td>
+	    <img src="dbfilter/ico_on_small.png" class="icon"/>
+	    <img src="dbfilter/ico_off_small.png" class="icon"/>
+	</td>
+	<td>Enable or disable the text filter.
+	<p> A <i>disabled</i> filter is still present in the filter
+	list, but temporarily desensitized and not applied. This can be
+	useful to quickly see how a specific property influence the overall
+	selection state.
+	</p>
+	</td>
+    </tr>
+    <tr>
+	<td>
+	    <img src="dbfilter/ico_delete_small.png" class="icon"/>
+	</td>
+	<td>Remove the specific text filter from the filter list.</td>
+    </tr>
+    <tr>
+	<td>
+	    <span class="nobr">
+	    <img src="dbfilter/ico_up_small.png" class="icon"/>
+	    <img src="dbfilter/ico_down_small.png" class="icon"/>
+	    <img src="dbfilter/ico_double_down_small.png" class="icon"/>
+	    </span>
+	</td>
+	<td>Collapse or expand the category list of the text
+	filter. The list shows by default 6 lines at a time.
+	In the collapsed state only 3 lines are visible, and in
+	fully expanded mode up to 16.
+	The list is scrollable if necessary to display all available
+	text categories.
+	</td>
+    </tr>
+</table></center>
+
+
+<h1>See Also</h1>
+<p>
+  <a href="db.htm">Database Viewer</a><br />
+  <a href="db.htm#SelectingEntries">
+  Selecting Entries in Database Viewer</a><br />
+  <a href="db.htm#HideShowEntries">
+  Hiding and Showing Entries in Database Viewer</a>
+  </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../images/ccgicon.png" /> <a href="../index.htm"></a> <a href=
+    "../legal.htm"></a> &copy;<span class="versionyear"></span> <a href="http://www.chemcomp.com"></a>. All
+    rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

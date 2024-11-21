@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content=
+  "functions: SEScalarPlotName, SEDisplayPos, SEDisplaySize" />
+  <title>Sequence Editor Functions: SEScalarPlotName ...</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Sequence Editor Functions: SEScalarPlotName
+    ...
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    value = <a class="fcnlink" href=
+"#SEScalarPlotName">SEScalarPlotName</a> index
+    old_name = <a class="fcnlink" href=
+"#SEScalarPlotName">SEScalarPlotName</a> [ index, 'name' ]
+
+    [old_ridx, old_cidx] = <a class="fcnlink" href=
+"#SEDisplayPos">SEDisplayPos</a> [ ridx, cidx ]
+
+    [nres, nchains] = <a class="fcnlink" href=
+"#SEDisplaySize">SEDisplaySize</a> []
+</pre>
+<a id="SEScalarPlotName"></a>
+<h1>Description</h1>
+
+<pre>
+value = <span class="fcndef">SEScalarPlotName</span> index
+old_name = <span class="fcndef">SEScalarPlotName</span> [index, 'name']
+</pre>
+
+<p>Reports/sets the name of the Sequence Editor scalar plot indicated by
+  <tt>index</tt>. Index values begin at 1.</p>
+
+<p>When passed only an index, returns the name of the associated plot. When
+  passed both a name token and an index, the name of the scalar plot is set to
+  <tt>name</tt>; the pre-modified value is returned.</p>
+<a id="SEDisplayPos"></a>
+<hr noshade="noshade" />
+
+<pre>
+[old_ridx, old_cidx] = <span class="fcndef">SEDisplayPos</span> [ ridx, cidx ]
+</pre>
+
+<p>Reports/sets the indices of the residue and chain to appear in the top
+  left corner of the Sequence Editor drawing area. The pre-modified display
+  positions are always returned. Indices start at 1. Out-of-range values are
+  clamped. If <tt>SEDisplayPos</tt> is passed <tt>[]</tt>, the current top left
+  residue and chain indices are returned without modification to their
+  values.</p>
+<a id="SEDisplaySize"></a>
+<hr noshade="noshade" />
+
+<pre>
+[nres, nchains] = <span class="fcndef">SEDisplaySize</span> []
+</pre>
+
+<p>Reports the size of the Sequence Editor display in units of current
+  residue width (which varies depending on whether single-letter display is
+  enabled) and current chain height. In other words, a maximum of <tt>nres</tt>
+  residues and <tt>nchains</tt> chains are visible in the Sequence Editor at a
+  time.</p>
+
+<h1>See Also</h1>
+
+<p><a href="drawse.htm">Sequence Editor Drawing Functions</a></p>
+
+<p><a class="svl" href="caligpos.htm">cAlignmentPositions</a><br />
+  <a class="svl" href="residue.htm">rScalar</a><br />
+  <a class="svl" href="residue.htm">rSetScalar</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

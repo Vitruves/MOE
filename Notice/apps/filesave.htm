@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../images/ccgicon.png" />
+  <title>Saving the System</title>
+  <meta name="keywords" content="panel: Save" />
+  <meta name="keywords" content="panel: Ray Tracing Settings" />
+  <meta name="keywords" content="main_keywords: POV-Ray, MDL, SDF, SD" />
+  <meta name="keywords" content="main_keywords: PDB, MOE, CIF, MMCIF, MDB" />
+  <meta name="keywords" content="main_keywords: PNG, JPEG, GIF, BMP, TIF, EPS, PDB" />
+  <meta name="keywords" content="main_keywords: STL, VRML, WRL" />
+  <meta name="keywords" content=
+  "main_keywords: Fasta, FST, PIR, ALN, EMBL, GB, GCG, IG, MSF, PHY" />
+  <meta name="keywords" content=
+  "main_keywords: Schrodinger, MacroModel, mmd, mol, mol2, sdf" />
+  <meta name="keywords" content=
+  "main_keywords: mae, xtl, protein data bank, maestro, MSI" />
+  <meta name="keywords" content="main_keywords: tripos, Phylip, NBRF" />
+  <meta name="keywords" content=
+  "main_keywords: vrml, wrl, stl, 3D print, PowerPoint, x3d" />
+  <meta name="keywords" content=
+  "main_keywords: POV-Ray, povray, raytracing, encapsulated postscript" />
+  <meta name="keywords" content="main_keywords: theme" />
+  <meta name="keywords" content=
+  "keywords: export, graphics, ray-tracing, periodic box, Wall restraint" />
+  <meta name="keywords" content=
+  "keywords: viewing, crystal parameters, temperature factor, format" />
+  <meta name="keywords" content="keywords: temperature factor" />
+  <meta name="keywords" content="keywords: raw, sequence, graphic, quality" />
+  <meta name="keywords" content=
+  "keywords: anti-aliasing, file system, color, resolution, dimension" />
+  <meta name="keywords" content=
+  "keywords: depict, 2D, B-factor, transparent, compression" />
+  <meta name="keywords" content=
+  "keywords: CMYK, YCbCr, sRGB, RGB, clipboard, scene file, bitmap" />
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../index.htm"><img src="../images/ccglogo.png" /></a>
+    <a href="../index.htm"><div class="moeversion"></div></a>
+    Saving the System
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+  <ul class="index">
+    <li>
+      <a href="#Intro">Introduction</a>
+    </li>
+    <li>
+      <a href="#Select">Selecting a Format</a>
+      <ul>
+        <li>
+          <a href="#Molecule">Molecular Format</a>
+        </li>
+        <li>
+          <a href="#Sequence">Sequence Format</a>
+        </li>
+        <li>
+          <a href="#Picture">Graphic Format: Saving an Image File</a>
+        </li>
+        <li>
+          <a href="#RTrace">Using POV-Ray</a>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <a href="#SVL">SVL Commands</a>
+    </li>
+  </ul>
+
+<h1>
+<a id="Intro">Introduction</a></h1>
+
+<p>The MOE Save menu command allows you to write the current molecular system
+  to a file. Different file formats are available to accommodate a variety of
+  uses, including recording project data, sharing information with colleagues,
+  or illustrating presentations and reports.</p>
+
+<p>To save the current molecular system to a file, choose <nobr><b>File |
+  Save</b></nobr> in either the MOE Window or the Sequence Editor.</p>
+
+<img src="filesave/save_panel.png" alt=
+  "Save Panel" class="center" />
+
+<p>Specifying the save filename is done in the file selection box area of the
+  Save panel (upper half), and can be accomplished either by selecting a file
+  from the files list or by entering the name in the Files text field beneath
+  the Files list. For more information, please see <a href=
+  "../moe/hellomoe.htm#File_Selection_Box">File Selection Box</a>.</p>
+
+<h1><a id="Select">Selecting a Format</a></h1>
+  <div class="floatright"><img src="filesave/save_select.png" alt=
+  "Format Selection" class="floatright" /></div>
+
+<p>Three categories of file formats are available: Molecule, Sequence, and
+  Picture. Molecule formats preserve the 3D coordinate data of the original
+  system. Sequence formats record sequence-only information. Picture formats
+  store a graphical representation of the current molecular system.</p>
+
+<p>The <b>Save</b> pulldown menu is used to pick a category of file formats
+  while the <b>Format</b> pulldown menu selects a specific format within that
+  category.</p>
+
+<p>The <b>Automatic Extension</b> checkbox specifies whether the typical file
+  extension for the selected format should automatically be appended to the
+  filename when no extension is specified. This automatic file extension
+  is visible in grey while typing the filename.</p>
+
+<p>When only parts of a molecular system are of interest, use the <b>Only
+  Selected</b> checkbox to save only the selected atoms, residues, or chains.
+  This feature is available only for Molecule and Sequence formats.</p>
+
+<p>When a given file format has been selected, the bottom of the Save panel
+  displays additional save options available for that format.</p>
+
+<h2><a id="Molecule">Molecule Format</a></h2>
+
+<p>The following molecule formats are currently available:</p>
+  <ul>
+    <li><a href="#MOE">MOE Molecule File (.moe)</a>
+    </li>
+    <li><a href="#MDB">Molecular Database File (.mdb)</a>
+    </li>
+    <li><a href="#PDB">Protein Data Bank (.pdb)</a>
+    </li>
+    <li><a href="#mmCIF">Macromolecular CIF File (.cif)</a>
+    </li>
+    <li><a href="#MDL">MDL SDfile or Molfile (.sdf, .mol)</a>
+    </li>
+    <li><a href="#PRMTOP">AMBER Topology File (.prmtop)</a>
+    </li>
+    <li><a href="#DMS">DMS Molecule File (.dms)</a>
+    </li>
+    <li><a href="#XYZ">XYZ File Format (.xyz)</a>
+    </li>
+    <li>Schrodinger Maestro (.mae)</li>
+    <li>Schrodinger MacroModel (.mmd)</li>
+    <li>Tripos MOL2 (.mol2)</li>
+    <li>MSI Crystal File (.xtl)</li>
+  </ul>
+
+<p>Options specific to the MOE, MDL, and other file formats are described below;
+  options specific to the PDB file format are also described in the chapter on
+  <a href="../proteins/pdb_mdb.htm">Protein Sequence and Structure
+  Data</a>.</p>
+
+<h3><a id="MOE">MOE Molecule File</a></h3>
+  <div class="floatright"><img src="filesave/save_moe.png" alt="MOE Parameters"
+  class="snap" /></div>
+
+<p>The MOE molecule file format can save graphic objects, periodic box
+  parameters, and view parameters in addition to molecular data. Optionally,
+  sequence-only information of the molecular objects can be saved. Note that
+  rendering parameters, such as atom and bond rendering modes, are
+  automatically saved, as are parameters for backbone ribbon rendering and for
+  coloring atoms and residues.</p>
+  <ul>
+    <li>
+      <b>Graphics.</b> Specifies whether to save user-created graphics objects,
+      such as molecular surfaces.
+      <ul>
+        <li><i>None.</i> No graphics objects are saved.</li>
+        <li><i>Visible Only.</i> Only the currently-visible graphics objects are
+          saved. Hidden graphics objects (e.g. using the <a href=
+          "../moe/gui/gobjman.htm">Graphic Object Manager</a>) are not saved.
+        </li>
+        <li><i>All.</i> All graphics objects (hidden and visible) are
+        saved.</li>
+        <li><i>Only Near Ligand.</i> If on, graphics objects will be
+        truncated to within 10&Aring; of all ligand atoms in the system.
+	This has no effect if there are no ligands defined.</li>
+      </ul>
+    </li>
+    <li><b>Save.</b> Specifies whether to save viewing and periodic box
+      parameters, and whether or not to save atom data.
+      <ul>
+        <li>
+          <i>View Parameters.</i> If on, the current viewing parameters are
+          saved. The parameters to be saved are the view &quot;look-at&quot;
+          point, the view y- and z-direction vectors, the view scale, and the
+          Z-clip front and depth values. When the molecular data is loaded from
+          the file into MOE the viewing parameters will be set to these saved
+          values. If off, the viewing parameters are not saved, and no change
+          to the viewing parameters will be made when the molecule is opened
+          into MOE from the file.
+
+	  <p>For more information on these parameters see <a href=
+          "../moe/fcnref/view.htm" class="svl">ViewLookAt</a>, <a href=
+          "../moe/fcnref/view.htm" class="svl">ViewOrientation</a>, <a href=
+          "../moe/fcnref/view.htm" class="svl">ViewScale</a>, <a href=
+          "../moe/fcnref/view.htm" class="svl">ViewZFront</a>, and <a href=
+          "../moe/fcnref/view.htm" class="svl">ViewZWidth</a>.</p>
+        </li>
+        <li><i>Sequence Only.</i> If on, only residue and chain data are saved;
+        i.e. atom data are not written. If off, atoms are saved along with
+        their residues and chains.</li>
+        <li>
+          <i>Periodic Box.</i> If on, the periodic box state and dimensions are
+          saved. Otherwise, the periodic box parameters are not saved. The
+          dimensions of the periodic box are set using the <a href=
+          "./crystal.htm">Crystal Parameters</a> panel.
+        </li>
+        <li>
+          <i>Wall Restraints.</i> If on, wall restraints are saved. Wall
+          restraints are defined using the Wall page of the <a href=
+          "../moe/pot.htm#Wall">Potential Setup</a> window.
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+<h3><a id="MDB">Molecular Database File</a></h3>
+  <div class="floatright"><img src="filesave/save_mdb.png" alt="MOE Parameters"
+  class="snap" /></div>
+
+<p>Molecular data can be extracted from the MOE system and inserted into a
+  new or previously existing database. The options below are to save only the
+  molecular data to the database, in a single field. For a complete database
+  creation and edition discussion, refer to the chapter on <a href="../mdb/dbedit.htm">
+  Creating and Editing Molecular Databases </a>. </p>
+
+  <ul>
+    <li>
+      <i>Type.</i> The molecular type (for new database files only).
+      <ul>
+        <li><i><tt>Auto (molecule/moe)</tt></i>.
+          A type is chosen automatically depending on the molecular properties
+          to store; override by selecting one of the options below.</li>
+        <li><i><tt>molecule</tt></i>. MOE molecular format (see <a class="svl" href=
+          "../moe/fcnref/extract.htm#mol_Extract">mol_Extract</a>).</li>
+        <li><i><tt>moe</tt></i>. Extended MOE molecular format (see <a class="svl"
+          href="../moe/fcnref/moemdb.htm#_moe_Extract">_moe_Extract</a>).</li>
+      </ul>
+    </li>
+    <li>
+      <i>Field.</i> The molecule field
+      (when writing to an existing database file only).
+      <ul>
+        <li><i><tt>Field Names</tt></i>.
+          Choose one of the existing molecule fields in the database file
+          to which the molecules will be added.</li>
+        <li><i><tt>&lt;new&gt; (molecule)</tt></i>. Create a new field of type
+          MOE molecular format (see <a class="svl" href=
+          "../moe/fcnref/extract.htm#mol_Extract">mol_Extract</a>)</li>
+        <li><i><tt>&lt;new&gt; (moe)</tt></i>. Create a new field of type
+          Extended MOE molecular format (see <a class="svl"
+          href="../moe/fcnref/moemdb.htm#_moe_Extract">_moe_Extract</a>) .</li>
+      </ul>
+    </li>
+    <li>
+      <i>Visibility.</i> Filters objects to restrict the extraction based on visibility.
+      <ul>
+        <li><i>Ignore</i>. Visibility status of atoms and residues
+        is ignored. All atoms are considered for extraction.</li>
+        <li><i>Atoms</i>. Only visible atoms are considered for extraction.</li>
+        <li><i>Atoms and Ribbons</i>. Only visible atoms and residues whose ribbon
+        is visible in the MOE Window are considered for extraction.</li>
+      </ul>
+    </li>
+    <li>
+      <i>Mode.</i> The MOE system can be entered as a single component or can be
+      split over several database entries.
+      <ul>
+        <li><i>System</i>. Create a single entry with the objects
+        that pass through the visibility and selection filters.</li>
+        <li><i>Chain</i>. Create a separate entry for each chain in the system. If
+        a chain is left with no residues after filtering then it is not given
+        an empty entry.</li>
+        <li><i>Chain Tag</i>. Create a separate entry for each distinct chain tag
+        in the system. Blank chain tags are not grouped together.</li>
+        <li><i>Chain Name</i>. Create a separate entry for each distinct chain name
+        in the system. Blank chain names are not grouped together.</li>
+        <li><i>Molecule</i>. Create a separate entry for each connected component
+        in the system.</li>
+        <li><i>None</i>. Molecular data is not extracted from the system.</li>
+      </ul>
+    </li>
+    <li>
+      <i>Selection.</i> Filters objects to restrict the extraction based on the selection.
+      <ul>
+        <li><i>Ignore</i>. Selection status of atoms, residues and
+          chains is ignored. All atoms, residues and chains are considered for
+          extraction.</li>
+        <li><i>Selected Atoms</i>. Only selected atoms are considered for
+          extraction.</li>
+        <li><i>All Selected Objects</i>. Only selected atoms, residues and chains
+          are considered for extraction.</li>
+      </ul>
+    </li>
+    <li>
+      <i>Name.</i> Method to set the molecule name in the database:
+      <ul>
+        <li><i>Auto</i>. Use first tag name, if empty, use first chain name.</li>
+        <li><i>Chain Tag</i>. Use first non-empty chain tag.</li>
+        <li><i>Chain Name</i>. Use first non-empty chain name.</li>
+      </ul>
+    </li>
+    <li>
+      <i>Open Database Viewer.</i> If on, open the database file in a
+      Database Viewer after the data has been saved.
+    </li>
+    <li>
+      <i>Sequence Only.</i> If on, only chains and residues will be extracted. No
+      atom information will be written to the database.
+    </li>
+  </ul>
+  <p>If, after filtering, there are no objects in the system to extract, then a
+    single empty entry is added to the database.</p>
+
+ <p>If the molecule type is <tt>moe</tt>, additional data, like the
+    data stored in the <tt>.moe</tt> file format, will be stored in the
+    database cell. In addition to all current rendering color and style
+    information, which is always stored within the <tt>moe</tt> fields, one can
+    specify to save graphics objects, as well as view, periodic boundary
+    condition, and wall restraint information. If the molecule  type is
+    <tt>Auto</tt>, this additional data will be stored if the first
+    molecular field type is of type <tt>moe</tt>, otherwise it will be ignored.</p>
+   <ul>
+     <li>
+       <i>Graphics.</i>
+       <ul>
+        <li><i>All</i>. All graphics objects (e.g. molecular
+          surfaces) are extracted and saved in the database.</li>
+        <li><i>Visible</i>. Only currently visible graphics objects are
+          considered for extraction.</li>
+        <li><i>All Associated</i>. Extract only surfaces which are associated to
+          the molecules to be extracted. Associated surfaces are created with
+          e.g. the <a href="../moe/gui/system.htm#QuickSurfacePopup">System
+          Manager</a>, <a href="../apps/surfmap.htm">Surfaces and Maps</a> or
+          <a href="../proteins/propatch.htm">Protein Patch Analyzer</a>. If the
+          molecule extraction <i>Mode</i> separates the system into multiple
+          cells, the surfaces will be saved in the cell with the molecule it is
+          associated with.</li>
+        <li><i>Visible Associated</i>. Save only the associated and currently
+          visible surfaces.</li>
+        <li><i>None</i>. No graphics objects are saved in the database.</li>
+       </ul>
+     </li>
+     <li>
+       <i>View.</i> If on, all view transformation information, such as molecule
+         position, orientation, and scaling as well as clipping plane
+         positions will be written to the database. For more information on these
+         parameters see <a href=
+           "../moe/fcnref/view.htm" class="svl">ViewLookAt</a>, <a href=
+           "../moe/fcnref/view.htm" class="svl">ViewOrientation</a>, <a href=
+           "../moe/fcnref/view.htm" class="svl">ViewScale</a> and <a href=
+           "../moe/fcnref/view.htm" class="svl">ViewZFront</a>, <a href=
+           "../moe/fcnref/view.htm" class="svl">ViewZWidth</a>.
+         
+       </li>
+       <li>
+         <i>Periodic&nbsp;Box.</i> If on, the periodic boundary box state and
+         dimensions, as defined in the <a href="../apps/crystal.htm">Crystal
+         Parameters</a> panel, are saved.
+       </li>
+       <li>
+         <i>Wall&nbsp;Restraints.</i> If on, wall restraints are saved. Wall restraints
+         are defined using the Wall page of the <a href=
+         "../moe/pot.htm#Wall">Potential Setup</a> window.
+       </li>
+     </ul>
+  </ul>
+
+<h3><a id="PDB">PDB File</a></h3>
+  <div class="floatright"><img src="filesave/save_pdb.png" alt=
+  "PDB Parameters" class="floatright" /></div>
+  <ul>
+    <li><i>Write Unique Chain IDs</i>.
+    If on, then each protein or nucleic acid chain will be assigned a unique,
+    non-space, chain id in the output file. Existing chain ids will be
+    preserved, if possible. Blank identifiers of non-protein chains will be
+    changed to the last non-blank chain id written to file.</li>
+    <li><i>Write Chain Tags into HEADER</i>.
+	If on, the unique chain tag, if any, of the molecular data being
+	written, will be written into the HEADER line of the output file,
+	starting at column 63, and truncated at 8 characters.
+    </li>
+    <li><i>Conform Naming</i>. If on, hydrogen names will be translated before
+      being written according to the chosen nomenclature convention.
+      <table class="noborder">
+        <tr>
+          <td>PDB</td>
+          <td>Refers to the conventions in place prior to the RCSB data
+          remediation project; this choice is appropriate when writing files
+          intended to be read by older, unmaintained software.</td>
+        </tr>
+        <tr>
+          <td><nobr>PDB v3.0</nobr></td>
+          <td>Refers to the atom naming conventions adopted during the
+          remediation project by members of the Worldwide Protein Data Bank
+          consortium [Berman 2003].</td>
+        </tr>
+        <tr>
+          <td>IUPAC</td>
+          <td>[IUPAC 1998] is identical to PDB v3.0 except for the naming of
+          the peptide hydrogen atom, which is &quot;HN&quot; as opposed to
+          &quot;H&quot;.</td>
+        </tr>
+        <tr>
+          <td>AMBER</td>
+          <td>Neutral versions of the typically charged residues Asp, Glu, and
+          Arg will be renamed. Histidine residues will be named according to
+          their protonation state; half-cystines will be named CYX, as will
+          de-protonated cysteines.</td>
+        </tr>
+        <tr>
+          <td>AMBER22</td>
+          <td>The same changes as in AMBER apply, with the addition that the
+          atom naming of the ACE/NME caps is in accordance with the new AMBER22
+          naming scheme.</td>
+        </tr>
+      </table>
+    </li>
+    <li><i>Replace B-Factor</i>. If on, atom temperature factors will be
+      replaced with one of the following:
+      <table class="noborder">
+        <tr>
+          <td>Partial Charges</td>
+          <td>The atom's partial charge.</td>
+        </tr>
+        <tr>
+          <td>Hydrophobicity</td>
+          <td>The value of the SlogP descriptor for the atom.</td>
+        </tr>
+        <tr>
+          <td>Ideal VSA</td>
+          <td>The idealized VDW surface area for the atom, calculated using
+          molecular topology rather than 3D methods.</td>
+        </tr>
+        <tr>
+          <td>Force</td>
+          <td>The gradient of the potential energy of the atom, as calculated
+          using the current force field.</td>
+        </tr>
+        <tr>
+          <td>Atom Scalar</td>
+          <td>
+            The value stored in the atom scalar (see <a href=
+            "../moe/fcnref/atom_d.htm" class="svl">aScalar</a> and <a href=
+            "../moe/fcnref/atom_d.htm" class="svl">aSetScalar</a>).
+          </td>
+        </tr>
+        <tr>
+          <td>Accessible Surface Area</td>
+          <td>The solvent accessible surface area for the atom, calculated
+          using a probe radius of 1.4 angstroms.</td>
+        </tr>
+      </table>
+    </li>
+    <li><i>Scale B-Factor Values</i>. If on, atom temperature factors will be
+    scaled to fit in the range [0, 100].</li>
+    <li><i>Write Crystal Parameters</i>. The current crystal space group and
+      cell dimensions will be written to a CRYST1 record in the output file.
+      This option is only available if the periodic system is enabled in MOE
+      (see <a href="./crystal.htm">Crystal Parameters</a>).
+    </li>
+    <li><i>Write ... as Separate</i>. If on, molecules will be written
+    individually (<b>Molecules</b>) or separated by tag (<b>Tags</b>).
+    Individual molecules will be saved one per file. Protein and nucleic
+    acid chains are treated as single molecules even if there are chain
+    breaks. Individual tags can be saved as distinct <b>Models</b>
+    denoted by pairs of MODEL/ ENDMDL records in a single file, as distinct
+    successive <b>Entries</b> in a single file, or separated one per
+    file. When saving into mutliple files, the filenames are generated
+    from the <b>Prefix</b> field and chain names or chain tags. The
+    files will be written to the directory currently displayed in the file
+    selection box, but any filename specified in the file selection box is
+    ignored.</li>
+  </ul>
+
+<h3><a id="mmCIF">mmCIF File</a></h3>
+  <div class="floatright"><img src="filesave/save_mmcif.png" alt=
+  "mmCIF Parameters" class="floatright" /></div>
+  <p>The mmCIF options are all analogous to the
+    <a href="#PDB">PDB</a> options of the same name, as
+    described above.</p>
+    <br clear="both" />
+
+<h3><a id="MDL">MDL SDfile or Molfile</a></h3>
+  <div class="floatright"><img src="filesave/save_mdl.png" alt=
+  "MDL Mol Parameters" class="floatright" /></div>
+  <ul>
+    <li><i>One Molecule per File (.mol)</i>. If on, molecules will be saved into
+      individual MDLMOL format files, with filenames generated from the <b>File
+      Prefix</b> field and molecule chain names. The files will be written to
+      the directory currently displayed in the file selection box. <b>Note:</b>
+      Any filename specified in the file selection box is ignored.
+
+<p>If off, molecules are saved, one per record, into a single SD file. In
+      this case, the filename specified in the file selection box is used, and
+      the <b>File Prefix</b> field is ignored.</p>
+    </li>
+    <li><i>Use Molecule Name in Title field</i>. If on, molecule chain names
+    will be written into the record title field.</li>
+    <li><i>Omit H and LP Atoms</i>. If on, only heavy atoms are saved.
+    Otherwise, all atoms are saved.</li>
+    <li><i>Depict as 2D</i>. If on, atom coordinates are rebuilt in 2D using a
+    flat layout algorithm. Otherwise, current atom coordinates are saved.</li>
+    <li><i>V3000</i>. If on, save using the V3000 MDL MOL format
+    instead of the default V2000 format.</li>
+  </ul>
+
+<h3><a id="PRMTOP">AMBER Topology File</a></h3>
+  <div class="floatright"><img src="filesave/save_prmtop.png" alt=
+  "AMBER Topology Parameters" class="floatright" /></div>
+  <ul>
+    <li><b>Coordinate File</b>.  A PRMTOP file does not contain
+    coordinates and is typically paired with a coordinate file for
+    input to simulations.</li>
+    <li><i>Rigid Water</i>.  If on, water molecules will be constrained
+    and rigid.</li>
+    <li><i>HMR</i>.  If on, enables Hydrogen Mass Repartitioning, which
+    distributes 2 atomic mass units from heavy atoms to connected
+    hydrogen atoms to speed up simulations.</li>
+  </ul>
+  <p>The saved file will include
+  <a href="https://www.slu.edu/medicine/medical-education/graduate-programs/biochemistry-molecular-biology/facilities/gemini/amber14.pdf"
+  target="_blank">OBC (igb5)</a> implicit solvent parameters.
+  </p>
+  <p>The AMBER CMAP is saved to the PRMTOP file.
+  </p>
+
+<h3><a id="DMS">DMS Molecule File</a></h3>
+  <div class="floatright"><img src="filesave/save_dms.png" alt="DMS Parameters"
+  class="snap" /></div>
+  <ul>
+    <li><i>Save into Existing File</i>. If checked and the molecule is the same
+    as what was originally in the file, then the position data will be updated
+    and all other data will be preserved. If checked and the molecule has
+    changed, all data tables are recreated except for the <b>provenance</b>
+    table. In both cases, an entry is added to the <b>provenance</b>
+    table.</li>
+    <li><i>User Provenance</i>. Allows entering of user identification to be
+    stored in the <b>provenance</b> table portion of the DMS file.</li>
+    <li><i>Provenance Source</i>. Allows specifying another DMS file from which
+    to copy the <b>provenance</b> table. The current provenance data is also
+    appended to the table.</li>
+  </ul>
+
+<h3><a id="XYZ">XYZ File Format</a></h3>
+  <div class="floatright"><img src="filesave/save_xyz.png" alt=
+  "XYZ File Format Parameters" class="floatright" /></div>
+  <ul>
+    <li><i>Write Molecule into Separate</i>. If off, all atoms will be
+      written into a single entry in the output file. If on, chains
+      will be written as separate <b>Files</b> or as separate <b>Entries</b>
+      in a single file. When writing molecules into separate files, chains
+      will be saved one per file, with filenames generated from the 
+      <b>File Prefix</b> field and the chain names. The files
+      will be written to the directory currently displayed in the file
+      selection box. If a file is selected but the <b>File Prefix</b>
+      field is empty, the selected filename is used as a prefix.</li>
+    <li><i>Center</i>.  If on, each entry will be recentered.</li>
+  </ul>
+
+<h2><a id="Sequence">Sequence Format</a></h2>
+
+<p>The Sequence formats currently available are:</p>
+  <ul>
+    <li>Clustal sequence file (.aln)</li>
+    <li>European Molecular Biology Labs sequence file (.embl)</li>
+    <li>Fasta sequence file (.fst)</li>
+    <li>Genetics Computer Group single sequence file (.gcg)</li>
+    <li>GenBank sequence file (.gb)</li>
+    <li>Stanford/Intelligenetics (.ig)</li>
+    <li>Genetics Computer Group multiple sequence file (.msf)</li>
+    <li>Phylip sequence file (.phy)</li>
+    <li>NBRF/Protein Identification Resource sequence file (.pir)</li>
+    <li>Raw sequence file (.seq)</li>
+    <li>Formatted sequence file (.fsq)</li>
+  </ul>
+  <div class="floatright"><img src="filesave/save_seq.png" alt=
+  "Sequence Parameters" class="floatright" /></div>
+
+<p>All sequence formats define a common parameter used to determine if the
+  sequence alignment should be preserved.</p>
+  <ul>
+    <li><i>Reset Alignment</i>. If on, the residues become positioned according
+    to cardinal numbering. Otherwise, any gaps in the alignment are
+    recorded.</li>
+  </ul>
+  <div class="floatright"><img src="filesave/save_fsq.png" alt=
+  "Formatted Sequence Parameters" class="floatright" /></div>
+
+<p>The formatted sequence file format (.fsq) allows also set the set number of
+  <b>Residues Per Line</b>.</p>
+
+<h2><a id="Picture">Graphic Format</a></h2>
+
+<p>The Picture category of the Save As panel comprises all graphic file
+  formats. MOE can currently write (output) image files in the following
+  formats:</p>
+  <ul>
+    <!--
+        <li><a href="#GIF">CompuServe Bitmap</a> (.gif)</li>
+-->
+    <li>
+      <a href="#BMP">Windows Bitmap Image</a> (.bmp)
+    </li>
+    <li>
+      <a href="#EPS">Encapsulated PostScript</a> (.eps)
+    </li>
+    <li>
+      <a href="#JPG">JPEG Bitmap</a> (.jpg)
+    </li>
+    <li>
+      <a href="#PNG">Portable Network Graphics</a> (.png)
+    </li>
+    <li>
+      <a href="#RTrace">POV-Ray Scene File</a> (.pov)
+    </li>
+    <li>
+      <a href="#STL">STL 3D Printer File</a> (.stl)
+    </li>
+    <li>
+      <a href="#TIF">Tagged Image File</a> (.tif)
+    </li>
+    <li>
+      <a href="#VRML">VRML 97 3D Printer File</a> (.wrl)
+    </li>
+  </ul>
+
+<p>Selecting one of the image formats changes the Save panel to show options
+  relevant to that format. Five of the options are common to the formats BMP,
+  EPS, JPG, PNG and TIF:</p>
+  <ul>
+    <li><i>Dimension</i>. Specifies the image size in pixels, inches,
+    centimeters, or percent. Images of any size can be created; if a size
+    larger than the current screen resolution is specified, it will be drawn as
+    separate tiles and assembled into a single output file off-screen. Units of
+    percent are calculated relative to the current MOE window size. Several
+    common format sizes are available in the text field shortcut. Any of these
+    sizes or a custom size can be saved to be the default size with the
+    <span class="nobr"><b>Save As Default</b></span> shortcut.</li>
+    <li><i>Resolution</i>. Specifies the image printing resolution in Dots per
+    Inch (dpi) or Dots per Centimeter (dpc). The image printing resolution
+    determines the size of the image when printed. For example, a 300 dpi image
+    of 300x300 pixels will occupy a 1 inch square when printed.</li>
+    <li><i>Anti-Alias Picture</i>. This will apply high quality anti-aliasing to
+      the output image. If disabled, the level of anti-aliasing specified in
+      the <a href="../appendix/viewsetup.htm">Visualization Setup</a> panel
+      will be used.
+    </li>
+    <li><i>High Quality</i>. If enabled, the maximum ribbon and focal blur
+      quality will be applied during the image creation. Otherwise the current
+      quality settings from the <a href=
+      "../appendix/viewsetup.htm">Visualization Setup</a> panel will be used.
+    </li>
+    <li><i>2D Ligand</i>. If enabled, include the
+      <a href="../moe/gui/mainwin.htm#2dLigandOverlay">2D Ligand Overlay</a>
+      in the saved picture (only when the 2D Ligand Overlay is currently
+      active).
+  </ul>
+
+<p>Other image options are specific to particular formats:</p>
+
+<h3><a id="BMP">Windows Bitmap</a></h3>
+  <div class="floatright"><img src="filesave/save_bmp.png" alt=
+  "BMP Parameters" class="floatright" /></div>
+
+<p>The Save BMP Parameters section covers all parameters related to saving a
+  BMP file.</p>
+  <ul>
+    <li><i>Transparent Background</i>. With transparency turned-on, the image
+      pixels matching the color of the MOE Window background are marked as
+      transparent. If off, the background color is retained in the image file.
+      This option is only available if the color channels are set to RGBA.
+      Modifying the background color of the MOE Window is accomplished using
+      the <a href="../appendix/viewsetup.htm">Visualization Setup</a> panel.
+    </li>
+    <li><i>BMP Version</i>. Choose the BMP file format version to be written.
+    The default and most commonly supported format is version 3. Versions 4 and
+    5 support RGBA channels, which are needed to save images with a transparent
+    background, but very few programs can read BMP files with an alpha channel
+    (RGBA).</li>
+    <li><i>Render with POV-Ray</i>. If on, use the free ray-tracer <a href=
+      "http://www.povray.org">POV-Ray</a> to render the current molecular
+      system. See the <a href="#RTrace">Using POV-Ray</a> section below for
+      more information (only available after installing POV-Ray).
+    </li>
+    <li><i>Save to Clipboard</i>. This function is only available under
+    Microsoft Windows. If selected, the image is saved to the clipboard,
+    otherwise the image is saved to the specified file.</li>
+  </ul>
+
+<h3><a id="EPS">Encapsulated PostScript</a></h3>
+  <div class="floatright"><img src="filesave/save_eps.png" alt=
+  "EPS Parameters" class="floatright" /></div>
+
+<p>When saving an encapsulated postscript file, the colormap can be
+  specified.</p>
+  <ul>
+    <li><i>Colormap</i>. Selecting Color for the colormap will preserve the
+    colors of the image, while the Grayscale colormap will generate a black and
+    white (grayscale) picture.</li>
+  </ul>
+
+<h3><a id="JPG">JPEG</a></h3>
+  <div class="floatright"><img src="filesave/save_jpg.png" alt=
+  "JPEG Parameters" class="floatright" /></div>
+
+<p>Additional options for the JPEG format allow control of the quality, and
+  the option to render the image with POV-Ray.</p>
+  <ul>
+    <li><i>Quality</i>. The Quality level of the image can be set from 0
+    (lowest) to 100 (best). The size of the file is proportional to the quality
+    of the image. Setting the quality level to a low value generates smaller
+    files and, as expected, setting the quality level to a high value produces
+    larger files.</li>
+    <li><i>Render with POV-Ray</i>. If on, use the free ray-tracer <a href=
+      "http://www.povray.org">POV-Ray</a> to render the current molecular
+      system. See the <a href="#RTrace">Using POV-Ray</a> section below for
+      more information (only available after installing POV-Ray).
+    </li>
+  </ul>
+
+<h3><a id="PNG">Portable Network Graphics</a></h3>
+  <div class="floatright"><img src="filesave/save_png.png" alt=
+  "PNG Parameters" class="floatright" /></div>
+
+<p>Additional options available for the PNG format allow control of the
+  compression level, color space, the ability to have a transparent background
+  and use of POV-Ray to render the image.</p>
+  <ul>
+    <li><i>Color Space</i>. The selected color space affects how colors are
+      stored in the image file. All image formats support the <b>RGB</b> color
+      space which is used by most computer monitors. PNG's also support
+      <a href="http://www.w3.org/Graphics/Color/sRGB">sRGB</a>, a standard
+      internet colorspace.
+    </li>
+    <li><i>Compression</i>. The compression level of the image can be set
+    between 0 (no compression) and 10 (maximum compression). Since the PNG
+    format uses a <i>lossless</i> algorithm, the compression level does not
+    influence the image quality. However, writing a PNG file using a high
+    compression level typically require more time compared to writing the same
+    image with a lower compression level.</li>
+    <li><i>Transparent Background</i>. With transparency turned-on, the image
+      pixels matching the color of the MOE Window background are marked as
+      transparent. If off, the background color is retained in the image file.
+      Modifying the background color of the MOE Window is accomplished using
+      the <a href="../appendix/viewsetup.htm">Visualization Setup</a> panel.
+    </li>
+    <li><i>Render with POV-Ray</i>. If on, use the free ray-tracer <a href=
+      "http://www.povray.org">POV-Ray</a> to render the current molecular
+      system. See the <a href="#RTrace">Using POV-Ray</a> section below for
+      more information (only available after installing POV-Ray).
+    </li>
+  </ul>
+
+<!--
+<h3><a id="GIF">CompuServe Bitmap</a></h3>
+
+<div class="floatright">
+<img src="filesave/save_gif.png" alt="GIF Parameters">
+</div>
+
+<p>
+The Save GIF Parameters provides the option to set the background transparent
+or to render the the image with POV-Ray.
+</p>
+
+<ul>
+
+<p>
+<li><i>Transparent Background</i>. With transparency turned-on, the image
+pixels matching the color of the MOE Window background are marked as
+transparent. If off, the background color is retained in the image file.
+
+Modifying the background color of the MOE Window is accomplished using the
+<a href="../appendix/viewsetup.htm">Visualization Setup</a> panel.</li>
+
+</p>
+
+<p>
+
+<li><i>Render with POV-Ray</i>. If on, use the free ray-tracer
+<a href="http://www.povray.org">POV-Ray</a> to render the current
+molecular system. See the <a href="#RTrace">Using POV-Ray</a> section
+below for more information (only available after installing POV-Ray).
+</li>
+</p>
+</ul>
+-->
+
+<h3><a id="POVRayScene">POV-Ray Scene File</a></h3>
+  <div class="floatright"><img src="filesave/save_pov.png" alt=
+  "Ray Tracing Settings" class="floatright" /></div>
+
+<p>Saves the POV-Ray settings required to render the current image using
+  POV-Ray.</p>
+  <ul>
+    <li><i>Atom Theme</i>. Selects a pre-defined material style for rendering
+    atom nuclei and bonds. The default material is plastic.</li>
+    <li><i>Ribbon Theme</i>. Selects a pre-defined material style for rendering
+    backbone ribbons. The default material is plastic.</li>
+  </ul>
+
+<h3><a id="STL">STL 3D Printer File</a></h3>
+  <div class="floatright"><img src="filesave/save_stl.png" alt=
+  "STL Parameters" class="floatright" /></div>
+
+<p>The STL format stores the molecular scene in the MOE 3D window as a 3D
+  model description. STL files store 3D geometry as a triangle mesh.
+  It is often used as input for 3D printers,
+  but does not support colors and produces very large files.</p>
+
+<p>The additonal options when saving a STL file allow tuning the output for
+  different use cases. The default settings are optimal for use with 3D
+  printers.</p>
+  <ul>
+    <li><i>Quality</i>. Set the triangulation quality of the spheres and
+    cylinders which are output as triangle mesh. The value ranges from 1
+    (lowest quality) to 6 (highest quality). Higher quality values increase the
+    size of the output file.</li>
+    <li><i>Scale</i>. Scale the molecule scene in the STL file. This is only
+    needed if the 3D printer software does not allow to set the size of the
+    printed model.</li>
+  </ul>
+
+<h3><a id="TIF">Tagged Image File</a></h3>
+  <div class="floatright"><img src="filesave/save_tif.png" alt=
+  "EPS Parameters" class="floatright" /></div>
+
+<p>The additional options available when saving a TIF file allow control over
+  the compression method, whether the background should be transparent or not,
+  and whether to use POV-Ray to render the scene.</p>
+  <ul>
+    <li><i>Compress</i>. This controls the method of file compression used
+    (this is not image compression such as in PNG or JPEG formats). <b>None</b>
+    results in no file compression, <b>RLE</b> compresses the file using a run
+    length encoding while <b>ZIP</b> makes use of the same compression
+    algorithm as used by zip files.</li>
+    <li><i>Transparent Background</i>. With transparency turned-on, the image
+      pixels matching the color of the MOE Window background are marked as
+      transparent. If off, the background color is retained in the image file.
+      This option is only available if the color space is set to RGBA.
+      Modifying the background color of the MOE Window is accomplished using
+      the <a href="../appendix/viewsetup.htm">Visualization Setup</a> panel.
+    </li>
+    <li><i>Render with POV-Ray</i>. If on, use the free ray-tracer <a href=
+      "http://www.povray.org">POV-Ray</a> to render the current molecular
+      system. See the <a href="#RTrace">Using POV-Ray</a> section below for
+      more information (only available after installing POV-Ray).
+    </li>
+  </ul>
+
+<h3><a id="VRML">VRML 97 3D Printer File</a></h3>
+  <div class="floatright"><img src="filesave/save_vrml.png" alt=
+  "VRML Parameters" class="floatright" /></div>
+
+<p>The VRML 97 format stores the molecular scene in the MOE 3D window as a 3D
+  model description. VRML files can be imported and processed by many programs
+  dealing with 3D models. VRML models can be also embedded into Microsoft
+  PowerPoint&reg; slides with 3rd party plugins and the VRML format is a common
+  input file format for 3D printers.</p>
+
+<p>The additonal options when saving a VRML file allow tuning the output for
+  different use cases. The default settings are optimal for use with 3D
+  printers.</p>
+  <ul>
+    <li><i>Output as triangle mesh</i>. If enabled, atoms and bonds are stored
+    as triangle meshes instead of sphere and cylinder primitives. This
+    increases the file size considerably, but some 3D printer software does not
+    process the VRML sphere and cylinder primitives correctly.</li>
+    <li><i>Output as cylinders/spheres</i>. Output lines and points (e.g.
+    line/point surfaces) as solid objects such as thin cylinders and small
+    spheres. This is needed if the program to import the VRML file can only
+    deal with &quot;solid&quot; geometry objects.</li>
+    <li><i>Quality</i>. Set the triangulation quality of the spheres and
+    cylinders which are output as triangle mesh. The value ranges from 1
+    (lowest quality) to 6 (highest quality). Higher quality values increase the
+    size of the output file.</li>
+    <li><i>Scale</i>. Scale the molecule scene in the VRML file. This is only
+    needed if the 3D printer software does not allow to set the size of the
+    printed model. By default 1 angstrom (&Aring;) in the MOE window
+    corresponds to 1 meter (m) in the VRML file.</li>
+  </ul>
+
+<p>To embed a VRML molecule scene into a PowerPoint&reg; slide deck, a VRML
+  plugin such as e.g. the <a href=
+  "http://www.cortona3d.com/cortona3dviewer">Cortona3D Viewer</a> needs to be
+  obtained and installed; it is not included with MOE. Please see the <a href=
+  "http://support.cortona3d.com/kb/articles/how-insert-cortona3d-viewer-power-point-presentation">
+  Cortona3D instructions</a> on how to install the plugin and how to add a VRML
+  file to a PowerPoint&reg; presentation. For VRML output to be embedded into
+  Microsoft Powerpoint&reg; the options <i>Output as triangle mesh</i> and
+  <i>Output as cylinders/spheres</i> should be disabled to minimize the file
+  size and complexity.</p>
+
+<h2><a id="RTrace">Using POV-Ray</a></h2>
+
+<p>Fully ray-traced images of MOE scenes can be created using <a href=
+  "http://www.povray.org">POV-Ray</a> (Persistence of Vision Raytracer).
+  POV-Ray is not included with MOE and must be obtained from the POV-Ray
+  website <a href="http://www.povray.org/download/">download area</a> and
+  installed on your workstation. Version 3.7 or above is required for full
+  compatibility with MOE.</p>
+
+<p>Images can be rendered using POV-Ray directly from MOE by checking the
+  <b>Render with POV-Ray</b> box in the image format's options.
+  Additionally, a <i>POV-Ray scene file</i> may be saved by choosing that
+  format.</p>
+
+<p>To open the Ray Tracing Settings panel, click the <b>POV-Ray Settings</b>
+  button in any of the image formats listed above.</p>
+
+<img src="filesave/rtset.png" alt=
+  "Ray Tracing Settings" class="center" />
+
+<p>Within the Ray Tracing Settings panel you can specify the path to your
+  POV-Ray executable. Additionally, this panel can be used to customize many
+  ray tracing related options</p>
+  <ul>
+    <li><i>Executable</i>. Specifies the location of the POV-Ray executable on
+    your workstation.</li>
+    <li><i>Include Path</i>. Specifies the POV-Ray include directory.</li>
+    <li><i>Hide Preview Window</i>. If enabled, POV-Ray will show the
+    image's progress during the render process. If disabled, no preview
+    will be shown.</li>
+    <li><i>Anti-Aliasing</i>. Anti-aliasing is used to eliminate ray-tracing
+      sampling errors or at least reduce the negative impact they have on the
+      image (rough edges). The following anti-aliasing method are available:
+      <ul>
+        <li><tt>None</tt>. No anti-aliasing is performed.</li>
+        <li><tt>Adaptive</tt>. Pixels differing from their neighbors by more
+        than a given threshold are super-sampled to construct a pixel
+        representing the appropriate color based on the color of the
+        surrounding pixels.</li>
+        <li><tt>Recursive</tt>. Each pixel is divided into quarters which are
+        subsequently divided into quarters again in a recursive manner until
+        each new pixel is a uniformed color that is defined by the assigned
+        threshold value. Once the colors for all the sub-pixels are determined
+        the average color for the entire pixel is determined.</li>
+      </ul>
+
+<p>The anti-aliasing <b>Threshold</b> is the maximum difference between
+      two neighboring pixels allowing the pixels to be considered the same
+      color and thus not triggering the anti-aliasing procedure. The color of
+      each pixel is defined as the components of rgb, for example r1,g1,b1 and
+      r2,g2,b2 for pixel1 and pixel2, respectively; allowing their difference
+      to be calculated as follows:</p>
+
+<p style="text-align:center"><tt>diff = abs(r1-r2) + abs(g1-g2) +
+      abs(b1-b2)</tt></p>
+
+<p>The value of each rgb component ranges between 0.0 and 1.0; therefore
+      the maximum deviation of two pixels is 3.0. In case the anti-aliasing
+      threshold is set to 0.0 every pixel is super-sampled, and conversely,
+      when threshold is set to 3.0 no anti-aliasing is performed.</p>
+
+<p>Depending on the anti-aliasing mode selected, the anti-aliasing
+      <b>Depth</b> specifies how the pixels are sampled. In <tt>Adaptive</tt>
+      mode, the antialiasing depth assigns the matrix size of a super-sampled
+      pixel. For example, in <tt>Adaptive</tt> mode a <b>Depth</b> value of 4
+      would give 4 * 4 = 16 samples per pixel. In <tt>Recursive</tt> mode, the
+      anti-aliasing <b>Depth</b> specifies the maximum number of subdivisions
+      per pixel.</p>
+    </li>
+    <li><i>Atom Theme</i>. Selects a pre-defined material style for rendering
+    atom nuclei and bonds. The default material is plastic.</li>
+    <li><i>Ribbon Theme</i>. Selects a pre-defined material style for rendering
+    backbone ribbons. The default material is plastic.</li>
+  </ul>
+
+<h1><a id="SVL">SVL Commands</a></h1>
+
+<p><a href="../moe/fcnref/molrw.htm">Write Molecular Data Functions</a><br />
+  <a href="../moe/fcnref/draw.htm">Display Attribute Functions</a><br />
+  <a href="../moe/fcnref/quality.htm">Rendering Quality Functions</a><br />
+  <a href="../moe/fcnref/atom_d.htm">Atom Display Properties
+  Functions</a><br />
+  <a href="../moe/fcnref/image.htm">Export Images and 3D Models Functions</a>
+  <br /></p>
+
+<h1>See Also</h1>
+
+<p><a href="../moe/gui/fileopen.htm">MOE Open System</a><br />
+  <a href="../appendix/viewsetup.htm">Visualization Setup</a><br />
+  <a href="../moe/gui/mainwin.htm#Copy">Copy and Paste</a>
+  </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../images/ccgicon.png" /> <a href="../index.htm"></a>
+<a href=
+    "../legal.htm"></a> &copy;<span class="versionyear"></span> <a href="http://www.chemcomp.com"></a>. All
+    rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

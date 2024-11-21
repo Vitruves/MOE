@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="keywords" content="panel: Polymer Builder" />
+  <link rel="stylesheet" type="text/css" href="../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../images/ccgicon.png" />
+  <title>Building Polymers and Defining Repeat Units</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../index.htm"><img src="../images/ccglogo.png" /></a>
+    <a href="../index.htm"><div class="moeversion"></div></a>
+    Building Polymers and Defining Repeat Units
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+  <ul>
+    <li>
+      <a href="#PolymerBuilder">Building Polymers</a>
+      <ul>
+        <li><a href="#PolymerBuilderPanelRef">Polymer Builder Panel
+        Reference</a></li>
+      </ul>
+    </li>
+    <li><a href="#RepeatUnit">Creating New Repeat Units</a></li>
+    <li><a class="example" href="#Example1">Example: Building polyvinyl
+    chloride</a></li>
+    <li><a href="#SeeAlso">See Also</a></li>
+  </ul>
+
+<p>This chapter describes how to specify repeat units and to
+  combine them to create polymeric molecules.</p>
+
+<h1>
+<a id="PolymerBuilder">Building Polymers</a></h1>
+
+<p>The Polymer Builder is used to build polymer molecules composed of either
+  a single repeat unit (homopolymers) or two or more repeat units
+  (copolymers).</p>
+
+<p>To open the Polymer Builder, choose <span class="menu">MOE | Edit | Build
+  | Polymer</span>. The following panel appears:</p>
+
+<img src="polybld/polybld.png" alt="Polymer Builder panel" class="center" />
+
+<a id="PolymerBuilderPanelRef"></a>
+<h2>Polymer Builder Panel Reference</h2>
+  <table class="noborder">
+    <tr>
+      <td valign="top"><b>Polymer Name</b></td>
+      <td valign="top">Set the name of the resulting polymer chain. Residue
+      names in the polymer chain will be set to the first three letters of the
+      repeat unit chain names, or the first three letters of the result chain name
+      if the former is null.</td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Type</b></td>
+      <td valign="top">Choose how to combine the repeat units. <b>Homo</b>
+      builds a homopolymer from a single repeat unit, <b>Random</b> builds
+      a co- or multipolymer by randomly selecting from the input repeat units,
+      <b>Alternating</b> will alternate between all input repeat units, and
+      <b>Block</b> will create a block of n repeats of each unit in turn, where
+      n is specified in the <b>Multiplicity</b> column. Only the first repeat
+      unit menu will be active in <b>Homo</b> mode. In
+      <b>Alternating</b> mode, only the first Multiplicity entry will be
+      active, and determines the number of repeats of each unit.</td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Preserve Multimeric Repeat Units</b></td>
+      <td valign="top">If enabled, then the repeat unit is replicated
+      as-is.  If disabled, the repeat unit is converted into a monomer
+      by reparenting the atoms of all residues in the repeat unit to the
+      first residue.  Note that if the repeat unit is retain in its
+      multimeric form, the residue ordering may not follow a linear
+      sequence in the resulting polymer chain, depending on where the
+      tail and head connection points are.  This option only has effect
+      when the repeat unit comprises multiple residues.
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Dihedral Mode</b></td>
+      <td valign="top">Set the backbone angles of the polymer. In <b>Angle</b>
+      mode, each bond between repeat units is set to the specified angle. In
+      <b>Helix</b> mode, all bonds between backbone atoms are set to the
+      specified angle. In <b>Random</b> mode, each bond between repeat
+      units is set to a random angle.</td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Repeat Units</b></td>
+      <td valign="top">Select which repeat units are to be combined in the
+      final polymer, the number of times each unit will appear
+      (<b>Multiplicity</b>) and their <b>Tacticity</b>, which is the relative
+      arrangement of the repeat unit sidechains with respect to polymer
+      backbone.
+      Chains will be listed as a potential repeat unit if they contain a single
+      connected molecule which has head and tail atoms defined, i.e. hydrogen
+      atoms named A1 and A0 respectively. Setting a tacticity of 0 (zero) means
+      that all the sidechains will be on the same side of the polymer backbone
+      (isotactic). Setting tacticity to 1 will create a syndiotactic polymer,
+      where the sidechains alternate from one side of the backbone to the
+      other along the chain. Non-integral tacticity values are interpreted as
+      the probability of the sidechain appearing on a particular side of the
+      backbone.</td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Monomer Database</b></td>
+      <td valign="top">A database of 253 standard monomeric repeat units
+      is supplied
+      with MOE in the file <tt>$MOE/lib/polymer.mdb</tt>. Clicking <b>Open</b>
+      will open this file in a Database Viewer, and Close will close it again.
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Show Entries</b></td>
+      <td valign="top">Use this bank of checkboxes to restrict the visible
+      entries of the Monomer Database in the Database Viewer to those that
+      contain a particular chemical group. If multiple checkboxes are enabled,
+      then all the specified groups must be contained in the repeat unit. If
+      the desired monomer is not available in the database, a new monomer can
+      be defined using the <a href="#RepeatUnit"><b>Define Repeat Unit</b></a>
+      tool, as described below.</td>
+    </tr>
+  </table>
+
+<p>Press the <b>OK</b> button to create the polymer.</p>
+
+<h1>
+<a id="RepeatUnit">Creating New Repeat Units</a></h1>
+
+<p>If the desired repeat unit is not already defined in MOE's database of
+  standard repeat units (contained in <tt>$MOE/lib/polymer.mdb</tt>), a
+  molecule can be marked as a repeat unit for use with the Polymer builder using
+  the <b>Define Repeat Unit</b> application. To launch the application, choose
+  <span class="menu">MOE | Edit | Build | Repeat Unit</span>.</p>
+
+<img src="polybld/defrepunit.png" alt="Define Repeat Unit panel"
+ class="center" />
+
+<p>To define a new repeat unit, first build a molecule in MOE using the
+  <a href="../moe/molsystems/build.htm">Builder</a>, for example. Select a
+  hydrogen atom and click <b>Define Tail</b> to set the tail of the repeat unit,
+  select a second hydrogen atom and click <b>Define Head</b> to set the head,
+  then select one of the heavy atoms that link the head and tail and click
+  the Set Backbone button. The name of the repeat unit can be specified by
+  entering it into
+  the <b>Name</b> text box and clicking <b>Apply</b>. The repeat unit can
+  now be used with the <b>Polymer Builder</b> application.</p>
+
+<p>Note that for multimeric repeat units, the tail atom (A0) is best defined
+in the first residue of the repeat unit, and the head atom (A1) in the
+last residue.  This is to ensure the sequential nature of the resulting
+polymer chain.</p>
+
+<a id="Example1"></a>
+<div class="example">
+
+<h2>Example: Building polyvinyl chloride</h2>
+
+<p>Polyvinyl chloride (PVC) is formed by a free-radical mechanism, and as
+    such it is an atactic polymer with an amorphous structure. To build a PVC
+    molecule using the <b>Polymer Builder</b> in MOE:</p>
+    <ol>
+      <li>
+        <i>Launch the Polymer Builder.</i><br />
+
+<p class="menu">MOE | Edit | Build | Polymer</p>
+      </li>
+      <li>
+        <i>Select the repeat unit.</i><br />
+        In the Polymer Builder panel:
+        <ol type="a">
+          <li>Press <b>Open</b> to open the database of standard repeat units
+          <tt>$MOE/lib/polymer.mdb</tt> into a Database Viewer.</li>
+          <li>Turn on the <b>Halide</b> box. In the Database Viewer, only those
+          repeat units that contain halogen atoms will be shown.</li>
+          <li>The polyvinyl chloride unit is entry 209 and has the name
+          &quot;poly(vinyl chloride)&quot;. Load this entry into MOE:
+
+<p class="indent_novspace"><span class="menu">DBV | Molecule Cell |
+            Popup | Send to MOE</span>.</p>
+
+<img src="polybld/monomer.png" class="center" alt=
+            "Loading the repeat into MOE" />
+          </li>
+          <li>In the <b>Polymer Builder</b> panel, set the repeat unit name by
+          entering <tt>polyvinyl chloride</tt> into the <b>Polymer Name</b>
+          box.</li>
+        </ol>
+      </li>
+      <li>
+        <i>Set the polymer properties.</i><br />
+        <ol type="a">
+          <li>Choose <b>Random</b> from the <b>Dihedral Mode</b> menu.</li>
+          <li>Set the <b>Multiplicity</b> to 20 and the <b>Tacticity</b> to
+          0.5.</li>
+        </ol>
+
+<img src="polybld/buildpvc.png" class="center" alt=
+        "The completed panel" />
+      </li>
+      <li>
+        <i>Build the polymer.</i><br />
+        Press <b>OK</b> in the Polymer Builder panel. Use <span class=
+        "menu">MOE | Render | Center</span> to center the resulting PVC
+        polymer in the MOE Window, then press <span class="menu">
+	MOE | RHS | Minimize</span> to obtain the following result.
+
+<img src="polybld/polymer_ex.jpg" class="center" alt=
+        "PVC Polymer" />
+      </li>
+    </ol>
+  </div>
+<a id="SeeAlso"></a>
+<h1>See Also</h1>
+
+<p><a href="../moe/molsystems/build.htm">Building and Editing
+  Molecules</a><br />
+  <a href="../apps/polymer.htm">Polymer Property Prediction</a><br /></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../images/ccgicon.png" /> <a href="../index.htm"></a> <a href=
+    "../legal.htm"></a> &copy;<span class="versionyear"></span> <a href="http://www.chemcomp.com"></a>. All
+    rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

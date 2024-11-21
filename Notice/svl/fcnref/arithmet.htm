@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content=
+  "functions: add, div, div1p, mul, sub, iadd, imul, isub, inc, dec" />
+  <meta name="keywords" content=
+  "functions: inv, invz, mod, pscan, abs, neg, sign, sgn" />
+  <meta name="keywords" content=
+  "functions: isnan, finite, infinite, ceil, floor, round, roundf, one, zero" />
+  <meta name="keywords" content="functions: anynan, allfinite" />
+  <meta name="keywords" content="functions: even, odd, mod1" />
+  <meta name="keywords" content="keywords:" />
+  <title>Arithmetic Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Arithmetic Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+v = x + y
+v = x / y
+v = x * y
+v = x - y
+v = -x
+
+v = <a class="fcnlink" href="#abs">abs</a>       x
+v = <a class="fcnlink" href="#add">add</a>       [x1,...,xN]
+v = <a class="fcnlink" href="#allfinite">allfinite</a> x
+v = <a class="fcnlink" href="#anynan">anynan</a>    x
+v = <a class="fcnlink" href="#ceil">ceil</a>      x
+v = <a class="fcnlink" href="#dec">dec</a>       x
+v = <a class="fcnlink" href="#div">div</a>       [x,y]
+v = <a class="fcnlink" href="#div1p">div1p</a>     [x1,...,xN]
+v = <a class="fcnlink" href="#even">even</a>      x
+v = <a class="fcnlink" href="#finite">finite</a>    x
+v = <a class="fcnlink" href="#floor">floor</a>     x
+v = <a class="fcnlink" href="#iadd">iadd</a>      [x1,...,xN]
+v = <a class="fcnlink" href="#inc">inc</a>       x
+v = <a class="fcnlink" href="#infinite">infinite</a>  x
+v = <a class="fcnlink" href="#inv">inv</a>       x
+v = <a class="fcnlink" href="#invz">invz</a>      x
+v = <a class="fcnlink" href="#isnan">isnan</a>     x
+v = <a class="fcnlink" href="#imul">imul</a>      [x1,...,xN]
+v = <a class="fcnlink" href="#isub">isub</a>      [x,y]
+v = <a class="fcnlink" href="#mod">mod</a>       [x,y]
+v = <a class="fcnlink" href="#mod1">mod1</a>      x
+v = <a class="fcnlink" href="#mul">mul</a>       [x1,...,xN]
+v = <a class="fcnlink" href="#neg">neg</a>       x
+v = <a class="fcnlink" href="#odd">odd</a>       x
+v = <a class="fcnlink" href="#one">one</a>       x
+v = <a class="fcnlink" href="#pscan">pscan</a>     [x1,...,xN]
+v = <a class="fcnlink" href="#round">round</a>     x
+v = <a class="fcnlink" href="#roundf">roundf</a>    x
+v = <a class="fcnlink" href="#sgn">sgn</a>       [x,y]
+v = <a class="fcnlink" href="#sign">sign</a>      x
+v = <a class="fcnlink" href="#sub">sub</a>       [x,y]
+v = <a class="fcnlink" href="#zero">zero</a>      x
+</pre>
+
+<h1>Description</h1>
+
+<p>SVL provides a number of <i>arithmetic functions</i> that are used for
+  basic arithmetic operations like addition, subtraction, multiplication and
+  division. The binary infix notation <tt>+, -, *, /</tt> are shorthand for the
+  <tt>add</tt>, <tt>sub</tt>, <tt>mul</tt> and <tt>div</tt> functions,
+  respectively, with two arguments. <!-- DESC --></p>
+
+<table class="titlebar">
+  <tr>
+    <th>Function</th>
+    <th align="center">Value</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>
+<a id="abs"></a>
+<tt>abs&nbsp;x</tt></td>
+    <td class="center">|&nbsp;<i>x</i>&nbsp;|</td>
+    <td>The absolute value of <tt>x</tt>. Returns <tt>-x</tt> for negative
+    <tt>x</tt> and <tt>x</tt> otherwise.</td>
+  </tr>
+  <tr>
+    <td>
+<a id="add"></a>
+<tt>add&nbsp;[x1,...,xN]</tt></td>
+    <td class="center">
+    <i>x</i><sub>1</sub>&nbsp;+&nbsp;...&nbsp;+&nbsp;<i>x<sub>N</sub></i></td>
+    <td>The sum of the {<i>x<sub>i</sub></i>}. Addition is carried out in
+    floating point.</td>
+  </tr>
+  <tr>
+    <td>
+<a id="allfinite"></a>
+<tt>allfinite&nbsp;x</tt></td>
+    <td class="center"></td>
+    <td>Returns 1 if all elements of <tt>x</tt> are finite, i.e. not NaN or
+    Inf, otherwise returns 0.</td>
+  </tr>
+  <tr>
+    <td>
+<a id="anynan"></a>
+<tt>anynan&nbsp;x</tt></td>
+    <td class="center"></td>
+    <td>Returns 1 if any elements of <tt>x</tt> are NaN, otherwise returns
+    0.</td>
+  </tr>
+  <tr>
+    <td>
+<a id="ceil"></a>
+<tt>ceil&nbsp;x</tt></td>
+    <td class="center">round_up&nbsp;(<i>x</i>)</td>
+    <td>Rounds each given value up (towards <tt>+Inf</tt>) to the nearest
+    integer.</td>
+  </tr>
+  <tr>
+    <td>
+<a id="dec"></a>
+<tt>dec&nbsp;x</tt></td>
+    <td class="center">decrement&nbsp;(<i>x</i>)</td>
+    <td>For integer values
+<a href="#isub">
+<tt>isub&nbsp;[x,1]</tt></a> is returned. For floating point
+    values <tt>sub&nbsp;[x,1]</tt> is returned. For character values the
+    previous ASCII character is returned. Use this function carefully since
+    integer or character overflow is possible.</td>
+  </tr>
+  <tr>
+    <td>
+<a id="div"></a>
+<tt>div&nbsp;[x,y]</tt></td>
+    <td class="center"><i>x</i>&nbsp;/&nbsp;<i>y</i></td>
+    <td>The quotient <tt>x</tt> divided by <tt>y</tt>. If <tt>y</tt> is
+    zero then <tt>Inf</tt> or <tt>-Inf</tt> will result. If <tt>x</tt> and
+    <tt>y</tt> are both zero or both infinite then <tt>NaN</tt> results.
+    Division is carried out in floating point.</td>
+  </tr>
+  <tr>
+    <td>
+<a id="div1p"></a>
+<tt>div1p&nbsp;[x1,...,xN]</tt></td>
+    <td class="center"><img src="arithmet/div1p.gif" /></td>
+    <td>Evaluation of continued fractions. For two values <tt>x</tt> and
+    <tt>y</tt> use <tt>div1p&nbsp;[x,y]</tt> for improved precision to
+    calculate <tt>x</tt>/(1+<tt>y</tt>) when <tt>y</tt> is near zero.
+    Division is carried out in floating point.</td>
+  </tr>
+  <tr>
+    <td>
+<a id="even"></a>
+<tt>even&nbsp;x</tt></td>
+    <td class="center"><i>x</i>&nbsp;+&nbsp;1&nbsp;(mod&nbsp;2)</td>
+    <td>Returns 1 if the given value is even otherwise 0. Fractional values
+    are rounded to the nearest integer.</td>
+  </tr>
+  <tr>
+    <td>
+<a id="finite"></a>
+<tt>finite&nbsp;x</tt></td>
+    <td class="center">isfinite(<i>x</i>)</td>
+    <td>Returns 1 if the given value is finite; that is, neither
+    <tt>+Inf</tt>, -<tt>Inf</tt> nor <tt>NaN</tt>. Otherwise 0 is
+    returned.</td>
+  </tr>
+  <tr>
+    <td>
+<a id="floor"></a>
+<tt>floor&nbsp;x</tt></td>
+    <td class="center">round_down&nbsp;(<i>x</i>)</td>
+    <td>Rounds each given value down (towards <tt>-Inf</tt>) to the
+    nearest integer.</td>
+  </tr>
+  <tr>
+    <td>
+<a id="iadd"></a>
+<tt>iadd&nbsp;[x1,...,xN]</tt></td>
+    <td class="center">
+    <i>x</i><sub>1</sub>&nbsp;+&nbsp;...&nbsp;+&nbsp;<i>x<sub>N</sub></i></td>
+    <td>The integer sum of the {<i>x<sub>i</sub></i>}. Floating point
+    values are first rounded to integer values, then converted to integer
+    representation. Addition is carried out with integer arithmetic:
+    <i>integer overflow is possible</i>. This function should only be used
+    when space and memory are at a premium, and when the data are known to
+    be integers.</td>
+  </tr>
+  <tr>
+    <td>
+<a id="inc"></a>
+<tt>inc&nbsp;x</tt></td>
+    <td class="center">increment&nbsp;(<i>x</i>)</td>
+    <td>For integer values
+<a href="#iadd">
+<tt>iadd&nbsp;[x,1]</tt></a> is returned. For floating point
+    values <tt>add&nbsp;[x,1]</tt> is returned. For character values the
+    next ASCII character is returned. Use this function carefully since
+    integer or character overflow is possible.</td>
+  </tr>
+  <tr>
+    <td>
+<a id="infinite"></a>
+<tt>infinite&nbsp;x</tt></td>
+    <td class="center">not&nbsp;isfinite(<i>x</i>)</td>
+    <td>Returns 1 if the given value is not finite; that is, one of
+    <tt>+Inf</tt>, -<tt>Inf</tt> or <tt>NaN</tt>. Otherwise 0 is
+    returned.</td>
+  </tr>
+  <tr>
+    <td>
+<a id="inv"></a>
+<tt>inv&nbsp;x</tt></td>
+    <td class="center">1&nbsp;/&nbsp;x</td>
+    <td>The multiplicative inverse of <tt>x</tt>. If <tt>x</tt> is zero
+    then <tt>Inf</tt> is returned.</td>
+  </tr>
+  <tr>
+    <td>
+<a id="invz"></a>
+<tt>invz&nbsp;x</tt></td>
+    <td class="center">1&nbsp;/&nbsp;x</td>
+    <td>The multiplicative inverse of <tt>x</tt> with zero check. If
+    <tt>x</tt> is zero then 0 is returned.</td>
+  </tr>
+  <tr>
+    <td>
+<a id="imul"></a>
+<tt>imul&nbsp;[x1,...,xN]</tt></td>
+    <td class="center"><img src="arithmet/imul.gif" /></td>
+    <td>The integer product of the {<i>x<sub>i</sub></i>}. Floating point
+    values are first rounded to integer values, then converted to integer
+    representation. Multiplication is carried out with integer arithmetic:
+    <i>integer overflow is possible</i>. This function should only be used
+    when space and memory are at a premium, and when the data are known to
+    be integers.</td>
+  </tr>
+  <tr>
+    <td>
+<a id="isnan"></a>
+<tt>isnan&nbsp;x</tt></td>
+    <td class="center">isnan(<i>x</i>)</td>
+    <td>Returns 1 if the given value is <tt>NaN</tt> (&quot;not a
+    number&quot;) otherwise 0.</td>
+  </tr>
+  <tr>
+    <td>
+<a id="isub"></a>
+<tt>isub&nbsp;[x,y]</tt></td>
+    <td class="center"><i>x</i>&nbsp;-&nbsp;<i>y</i></td>
+    <td>The integer difference <tt>x</tt> minus <tt>y</tt>. Floating point
+    values are first rounded to integer values, then converted to integer
+    representation. Subtraction is carried out with integer arithmetic:
+    <i>integer overflow is possible</i>. This function should only be used
+    when space and memory are at a premium, and when the data are known to
+    be integers.</td>
+  </tr>
+  <tr>
+    <td>
+<a id="mod"></a>
+<tt>mod&nbsp;[x,y]</tt></td>
+    <td class="center"><i>x</i>&nbsp;(mod&nbsp;<i>y</i>)</td>
+    <td>The value of <tt>x</tt> modulo <tt>y</tt>. Loosely speaking, this
+    is the remainder when <tt>x</tt> is divided by <tt>y</tt>. The returned
+    value is always in the range [0,<i>x</i>) when <i>y</i> is positive and
+    (<i>x</i>,0] when <i>y</i> is negative. Zero is returned when
+    <i>y</i>=0.</td>
+  </tr>
+  <tr>
+    <td>
+<a id="mod1"></a>
+<tt>mod1&nbsp;x</tt></td>
+    <td class="center"><i>x</i>&nbsp;(mod&nbsp;<i>1</i>)</td>
+    <td>The value of <tt>x</tt> modulo <tt>1</tt>. This is equivalent to
+    <tt>mod&nbsp;[x,1]</tt>.</td>
+  </tr>
+  <tr>
+    <td>
+<a id="mul"></a>
+<tt>mul&nbsp;[x1,...,xN]</tt></td>
+    <td class="center"><img src="arithmet/mul.gif" /></td>
+    <td>The product of the {<i>x<sub>i</sub></i>}. Multiplication is
+    carried out in floating point.</td>
+  </tr>
+  <tr>
+    <td>
+<a id="neg"></a>
+<tt>neg&nbsp;x</tt></td>
+    <td class="center">-&nbsp;<i>x</i></td>
+    <td>Negate <tt>x</tt>.</td>
+  </tr>
+  <tr>
+    <td>
+<a id="odd"></a>
+<tt>odd&nbsp;x</tt></td>
+    <td class="center"><i>x</i>&nbsp;(mod&nbsp;2)</td>
+    <td>Returns 1 if the given value is odd otherwise 0. Fractional values
+    are rounded to the nearest integer.</td>
+  </tr>
+  <tr>
+    <td>
+<a id="one"></a>
+<tt>one&nbsp;x</tt></td>
+    <td class="center">1</td>
+    <td>Returns 1 for every value in the input vector.</td>
+  </tr>
+  <tr>
+    <td>
+<a id="pscan"></a>
+<tt>pscan&nbsp;[x1,...,xN]</tt></td>
+    <td class="center"><img src="arithmet/pscan.gif" /></td>
+    <td>The vector of partial sums. The resulting vector <tt>v</tt> is such
+    that <tt>v(i)</tt> is the sum of the first <tt>i</tt> elements of the
+    input vector. Addition is carried out in floating point.</td>
+  </tr>
+  <tr>
+    <td>
+<a id="round"></a>
+<tt>round&nbsp;x</tt></td>
+    <td class="center">round&nbsp;(<i>x</i>)</td>
+    <td>Rounds each given value towards the nearest integer.</td>
+  </tr>
+  <tr>
+    <td>
+<a id="roundf"></a>
+<tt>roundf&nbsp;x</tt></td>
+    <td class="center">round&nbsp;(<i>x</i>)</td>
+    <td>Rounds each given value towards the nearest IEEE 32-bit floating
+    point number.</td>
+  </tr>
+  <tr>
+    <td>
+<a id="sgn"></a>
+<tt>sgn&nbsp;[x,y]</tt></td>
+    <td class="center"><img src="arithmet/sgn.gif" /></td>
+    <td>Returns <tt>x</tt> if <tt>y</tt>&gt;0 and <tt>-x</tt> otherwise.
+    Note that the IEEE standard provides for two representations of zero: 0
+    and -0.</td>
+  </tr>
+  <tr>
+    <td>
+<a id="sign"></a>
+<tt>sign&nbsp;x</tt></td>
+    <td class="center">sign(<i>x</i>)</td>
+    <td>Returns -1 for negative <tt>x</tt>, 0 when <tt>x</tt>=0 and 1 for
+    positive <tt>x</tt>. Note that the IEEE standard provides for two
+    representations of zero: 0 and -0.</td>
+  </tr>
+  <tr>
+    <td>
+<a id="sub"></a>
+<tt>sub&nbsp;[x,y]</tt></td>
+    <td class="center"><i>x</i>&nbsp;-&nbsp;<i>y</i></td>
+    <td>The difference <tt>x</tt> minus <tt>y</tt>. Subtraction is carried
+    out in floating point.</td>
+  </tr>
+  <tr>
+    <td>
+<a id="zero"></a>
+<tt>zero&nbsp;x</tt></td>
+    <td class="center">0</td>
+    <td>Returns 0 for every value in the input vector.</td>
+  </tr>
+</table>
+<!-- ENDDESC -->
+
+<p>The unary operators (like <tt>inc</tt> and <tt>dec</tt>) apply to all
+  scalar values in the argument vector (no matter how deeply nested). The
+  binary operators (like <tt>add</tt> and <tt>mul</tt>) match elements of the
+  arguments in pair no matter how deeply nested. Unit extension applies.</p>
+
+<h1>See Also</h1>
+
+<p><a href="exponent.htm">Exponentiation Functions</a><br />
+  <a href="specfcn.htm">Special Functions</a><br />
+  <a href="trigfcn.htm">Trigonometric Functions</a></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

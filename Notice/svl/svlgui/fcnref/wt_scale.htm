@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href=
+  "../../../include/manstyle.css" />
+  <meta name="keywords" content="keywords: Scale" />
+  <meta name="keywords" content="functions: Widget:Scale" />
+  <meta name="keywords" content="functions: Scale (widget)" />
+  <title>Scale Widget</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../../index.htm"><img src="../../../images/ccglogo.png" /></a>
+    <a href="../../../index.htm"><div class="moeversion"></div></a>
+    Scale Widget
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Description</h1>
+
+<p>A numeric text input field accompanied by a slider. The precision of the
+  numeric value is determined by <tt>incr</tt> in the <tt>range</tt> attribute.
+  <tt>Scale</tt> behaves identically to the <tt>Spin</tt> button except that a
+  slider exists instead of the two arrow buttons.</p>
+
+<h2>Attributes</h2>
+
+<p><tt>Scale</tt> inherits all <a class="svl" href="wt_core.htm">core</a>
+  attributes and defines the following attributes:</p>
+  <table class="titlebar">
+    <tr>
+      <th valign="baseline">Attribute</th>
+      <th valign="baseline">Description</th>
+      <th valign="baseline">Values</th>
+      <th valign="baseline">Default</th>
+    </tr>
+    <tr>
+      <td valign="baseline"><tt>width</tt></td>
+      <td valign="baseline">Size of the slider in character widths</td>
+      <td valign="baseline">1 to 255</td>
+      <td valign="baseline"><tt>10</tt></td>
+    </tr>
+    <tr>
+      <td valign="baseline"><tt>vertical</tt></td>
+      <td valign="baseline">Orientation of slider</td>
+      <td valign="baseline">1 = vertical<br />
+      0 = horizontal</td>
+      <td valign="baseline"><tt>0</tt></td>
+    </tr>
+    <tr>
+      <td valign="baseline"><tt>len</tt></td>
+      <td valign="baseline">Number of characters displayed in the text
+      field</td>
+      <td valign="baseline">1 to 255</td>
+      <td valign="baseline"><tt>10</tt></td>
+    </tr>
+    <tr>
+      <td valign="baseline"><tt>range</tt></td>
+      <td valign="baseline">
+        Data increment and range multipliers: <tt>[minfac,maxfac,incr]</tt>
+
+<p>The actual data range is given by
+        <tt>[minfac*incr,maxfac*incr]</tt>; the end values are included in the
+        range</p>
+      </td>
+      <td valign="baseline"><tt>[minfac, maxfac, increment]</tt></td>
+      <td valign="baseline"><tt>[INT_MIN, INT_MAX, 1]</tt></td>
+    </tr>
+    <tr>
+      <td><tt>enableWheel</tt></td>
+      <td>Enable scrolling with the mouse wheel</td>
+      <td>1 (True)</br>0 (False)</td>
+      <td><tt>1</tt></td>
+    </tr>
+  </table>
+
+<h2>Trigger</h2>
+
+<p>Mouse drag on the slider or <tt>Return</tt> pressed within the scale&#39;s
+  text field.</p>
+
+<h2>Data Value</h2>
+
+<p>The floating point number corresponding to the slider position.</p>
+
+<h1>See Also</h1>
+
+<p><a href="wt_core.htm">Core Attributes</a><br />
+  <a href="../wt_intro.htm">SVL Window Toolkit</a><br />
+  <a href="introwt.htm">Window Toolkit Functions</a></p>
+
+<p><a class="svl" href="wt_spin.htm">Spin</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../../images/ccgicon.png" /> <a href="../../../index.htm"></a>
+    <a href="../../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

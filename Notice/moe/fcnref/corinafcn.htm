@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="functions: CorinaTest" />
+  <meta name="keywords" content=
+  "functions: CorinaEmbedCTAB, CorinaEmbedSMI, CorinaEmbedMOL" />
+  <title>Corina Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Corina Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    err_token = <a class="fcnlink" href="#CorinaTest">CorinaTest</a> []
+    ctab      = <a class="fcnlink" href=
+"#CorinaEmbedCTAB">CorinaEmbedCTAB</a> [ctab, options]
+    ctab      = <a class="fcnlink" href=
+"#CorinaEmbedSMI">CorinaEmbedSMI</a>  [smiles_token, options]
+    mol       = <a class="fcnlink" href=
+"#CorinaEmbedMOL">CorinaEmbedMOL</a>  [mol , options]
+
+    options = [
+        add_h     : flag,
+        errormode : 'mode_token'
+    ]
+</pre>
+
+<h1>Description</h1>
+
+<p>The Corina functions in MOE implement an interface to the Corina program
+  distributed by <a href="http://www.mn-am.com">Molecular Networks GmbH</a>.
+  Corina is a program that automatically generates a set of 3D coordinates for
+  a molecule from a connection table. The interface of Corina implemented in
+  MOE will automatically start Corina and give it connection table information
+  and extract the 3D coordinate information from the Corina output. Before the
+  Corina functions can used, the Corina program must be licensed from Molecular
+  Networks and properly installed.</p>
+
+<p>By default, MOE assumes that the command <tt>corina</tt> will run Corina;
+  that is, <tt>corina</tt> is in the executable search path. The
+  <tt>moe-rc</tt> entry <tt>corina.exe</tt> can be used to override this
+  default; for example, adding</p>
+
+<pre>
+corina.exe=/usr/local/corina
+</pre>
+
+<p>to the <tt>.moe-rc</tt> file in a user's home directory will override
+  the default and specify that the Corina program executable is located in the
+  <tt>/usr/local</tt> directory. For seamless multi-platform support, the
+  <tt>corina</tt> command or the <tt>corina.exe</tt> file should be a script
+  that detects the appropriate platform and launches the correct executable.
+<a id="CorinaTest"></a>
+</p>
+
+<p>The <tt><span class="fcndef">CorinaTest</span></tt> function can then be
+  used to verify the installation. If <tt>CorinaTest[]</tt> returns the empty
+  token, <tt>''</tt>, then Corina will likely function correctly.
+  Otherwise, an error message is returned indicating the source of any problem.
+  For example,</p>
+
+<pre>
+local err = CorinaTest [];
+
+if err &lt;&gt; '' then
+    // there is a problem with Corina
+    // and err contains the error message
+    exit tok_cat ['Cannot run Corina: ', err];
+endif
+
+// all appears well with Corina
+</pre>
+<a id="CorinaEmbedCTAB"></a>
+<a id="CorinaEmbedSMI"></a>
+<a id="CorinaEmbedMOL"></a>
+
+<p>The <tt>CorinaEmbedCTAB</tt>, <tt>CorinaEmbedSMI</tt> and
+  <tt>CorinaEmbedMOL</tt> all function similarly in that they generate 3D
+  coordinates for input molecules. The differences between them are only the
+  format of the argument and returned molecule:</p>
+  <ul>
+    <li><tt><span class="fcndef">CorinaEmbedCTAB</span></tt> accepts a CTAB and
+    returns a CTAB.</li>
+    <li><tt><span class="fcndef">CorinaEmbedSMI</span></tt> accepts a SMILES
+    token and returns a CTAB.</li>
+    <li><tt><span class="fcndef">CorinaEmbedMOL</span></tt> accepts a Molecular
+    Database MOL and returns a MOL.</li>
+  </ul>
+
+<p>The <tt>options</tt> argument is a tagged vector with options that modify
+  the behavior of the embedding functions. The options are</p>
+  <div class="indent">
+    <dl>
+      <dt><tt>add_h</tt> : <i>flag</i></dt>
+      <dd>If <i>flag</i> is true then Corina will be instructed to add
+      hydrogens to the molecule as required to fill normal valence rules. The
+      hydrogens will appended to the molecule (not disturbing the original
+      atoms nor their order). If <i>flag</i> is false, then Corina will be
+      instructed to return the same number of atoms as the input molecule (and
+      in the same order). The default is 0.</dd>
+      <dt><tt>errormode</tt> : <i>token</i></dt>
+      <dd>
+        The <tt>errormode</tt> option controls how Corina failures are dealt
+        with. The <i>token</i> value can be one of
+        <ul>
+          <li><tt>'org'</tt> - On Corina failure the original molecule
+          will be returned.</li>
+          <li><tt>'null'</tt> - On Corina failure a null vector will be
+          returned.</li>
+          <li><tt>'error'</tt> - On Corina failure an error message
+          will be generated and the SVL program will be terminated.</li>
+        </ul>
+
+<p>The default is <tt>'org'</tt>.</p>
+      </dd>
+    </dl>
+  </div>
+
+<h1>See Also</h1>
+
+<p><a class="svl" href="extract.htm">mol_Extract</a><br />
+  <a class="svl" href="ctabfcn.htm">ctab_Extract</a><br />
+  <a href="../molsystems/smiles.htm">SMILES: Molecule Input Language</a>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

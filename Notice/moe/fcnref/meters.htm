@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content=
+  "functions: Meters, MeterCreate, MeterDestroy, MeterChanged" />
+  <title>Meter and Measurement Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Meter and Measurement Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    [meter_keys, types, atom_vectors] = <a class="fcnlink" href=
+"#Meters">Meters</a> []
+    meter_keys = <a class="fcnlink" href=
+"#MeterCreate">MeterCreate</a> [ types, atom_vectors ]
+    serial = <a class="fcnlink" href="#MeterChanged">MeterChanged</a> []
+    <a class="fcnlink" href="#MeterDestroy">MeterDestroy</a> meter_keys
+</pre>
+<a id="Meters"></a>
+<h1>Description</h1>
+
+<pre>[meter_keys, types, atom_vectors] = <span class=
+  "fcndef">Meters</span> []</pre>
+
+<p>Returns information on all meters in the system:</p>
+  <dl>
+    <dt><tt>meter_keys</tt></dt>
+    <dd>Identifying key of meter. Returns a vector of <tt>meter_keys</tt> if
+    there is more than one meter in the system.</dd>
+    <dd></dd>
+    <dt><tt>types</tt></dt>
+    <dd>
+      Type of meter:
+      <ul>
+        <li><tt>'distance'</tt></li>
+        <li><tt>'angle'</tt></li>
+        <li><tt>'dihedral'</tt></li>
+      </ul>
+
+<p>Returns a vector of types if there is more than one meter in the
+      system.</p>
+    </dd>
+    <dd></dd>
+    <dt><tt>atom_vectors</tt></dt>
+    <dd>Vector of atoms involved in meter measurement. There are as many atom
+    vectors as there are meters in the system. The number of atoms reflects the
+    type of meter: 4 atoms for dihedral angle measurements, 3 for angles, and 2
+    for distances.</dd>
+  </dl>
+<a id="MeterCreate"></a>
+<hr noshade="noshade" />
+
+<pre>meter_keys = <span class=
+  "fcndef">MeterCreate</span> [ types, atom_vectors ]</pre>
+
+<p>Creates as many meters as there are vectors of atoms in
+  <tt>atom_vectors</tt> and returns the key of each meter.</p>
+
+<p>Arguments used in this function are as described above in
+  <tt>Meters</tt>.</p>
+
+<p>Lengths of <tt>types</tt> and <tt>atom_vectors</tt> must match; unit
+  extension applies.</p>
+
+<p>For example, to create an angle meter to measure the angle between atoms
+  <tt>a1</tt>, <tt>a2</tt> and <tt>a3</tt>, use:</p>
+
+<pre>
+    svl&gt; MeterCreate ['angle', [ [a1,a2,a3] ] ]
+</pre>
+<a id="MeterChanged"></a>
+<hr noshade="noshade" />
+
+<pre>serial = <span class="fcndef">MeterChanged</span> []</pre>
+
+<p>Returns the <i>serial number</i> (an identifier internal to the MOE
+  system) of the last modification to a meter or a restraint. For instance, two
+  calls to <tt>MeterChanged</tt> which return the same serial number indicates
+  that no changes have occurred during the time between the calls.</p>
+<a id="MeterDestroy"></a>
+<hr noshade="noshade" />
+
+<pre><span class="fcndef">MeterDestroy</span> meter_keys</pre>
+
+<p>Destroys all meters specified by keys in <tt>meter_keys</tt>.</p>
+
+<h1>See Also</h1>
+
+<p><a class="svl" href="atom_g.htm">aDist</a> <a class="svl" href=
+  "atom_g.htm">aAngle</a> <a class="svl" href=
+  "atom_g.htm">aDihedralCW</a><br />
+  <a class="svl" href="draw.htm">DrawMeters</a> <a class="svl" href=
+  "moe_const.htm">METER_TYPES</a><br />
+  <a class="svl" href=
+  "../../proteins/fcnref/pro_bkdi.htm">pro_BackboneDihedrals</a> <a class="svl"
+  href="restrain.htm">Restraints</a></p>
+
+<p><a href="measure.htm"><span class="nobr">Molecular System Measure
+  Functions</span></a><br />
+  <a href="atom_p.htm"><span class="nobr">Atom Potential
+  Functions</span></a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

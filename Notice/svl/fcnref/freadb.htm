@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: freadb,fwriteb,sreadb,swriteb" />
+  <title>Binary Read/Write Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Binary Read/Write Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+v = <a class="fcnlink" href=
+"#freadb">freadb</a> [filenum, &#39;format&#39;, n]
+v = <a class="fcnlink" href=
+"#freadb">freadb</a> [&#39;filename&#39;, &#39;format&#39;, n]
+v = <a class="fcnlink" href=
+"#sreadb">sreadb</a> [string_data, &#39;format&#39;, n]
+
+<a class="fcnlink" href=
+"#fwriteb">fwriteb</a> [filenum, &#39;format&#39;, data]
+<a class="fcnlink" href=
+"#fwriteb">fwriteb</a> [&#39;filename&#39;, &#39;format&#39;, data]
+string_data = <a class="fcnlink" href=
+"#swriteb">swriteb</a> [&#39;format&#39;, data]
+</pre>
+
+<h1>Description</h1>
+
+<p><tt>freadb</tt> and <tt>fwriteb</tt> are binary file reading and writing
+  functions; <tt>sreadb</tt> and <tt>swriteb</tt> read from and write to a
+  string instead of a file. <tt>format</tt> is a token and indicates the binary
+  format to use. The table below lists recognized binary formats:</p>
+<table class="titlebar">
+  <tr>
+    <th>Format</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><tt>int4m</tt></td>
+    <td>4 byte integer MSB first</td>
+  </tr>
+  <tr>
+    <td><tt>int4l</tt></td>
+    <td>4 byte integer LSB first</td>
+  </tr>
+  <tr>
+    <td><tt>int2m</tt></td>
+    <td>2 byte signed integer MSB first</td>
+  </tr>
+  <tr>
+    <td><tt>int2l</tt></td>
+    <td>2 byte signed integer LSB first</td>
+  </tr>
+  <tr>
+    <td><tt>int1</tt></td>
+    <td>1 byte signed integer LSB first</td>
+  </tr>
+  <tr>
+    <td><tt>char</tt></td>
+    <td>character</td>
+  </tr>
+  <tr>
+    <td><tt>IEEE4m</tt></td>
+    <td>IEEE 4 byte float MSB first</td>
+  </tr>
+  <tr>
+    <td><tt>IEEE4l</tt></td>
+    <td>IEEE 4 byte float LSB first</td>
+  </tr>
+  <tr>
+    <td><tt>IEEE8m</tt></td>
+    <td>IEEE 8 byte float MSB first</td>
+  </tr>
+  <tr>
+    <td><tt>IEEE8l</tt></td>
+    <td>IEEE 8 byte float LSB first</td>
+  </tr>
+  <tr>
+    <td><tt>short</tt></td>
+    <td>native format signed short integer</td>
+  </tr>
+  <tr>
+    <td><tt>int</tt></td>
+    <td>native format signed integer</td>
+  </tr>
+  <tr>
+    <td><tt>line</tt></td>
+    <td>line of characters up to a newline</td>
+  </tr>
+  <tr>
+    <td><tt>long</tt></td>
+    <td>native format signed long</td>
+  </tr>
+  <tr>
+    <td><tt>float</tt></td>
+    <td>native format signed float</td>
+  </tr>
+  <tr>
+    <td><tt>double</tt></td>
+    <td>native format signed double</td>
+  </tr>
+  <tr>
+    <td><tt>SVL</tt></td>
+    <td>binary formatted SVL vector</td>
+  </tr>
+</table>
+
+<p>Binary formats that store numbers starting with the most significant byte
+  (MSB) use the suffix <tt>m</tt>.</p>
+
+<p>Formats that store numbers in the opposite order, starting with the least
+  significant byte (LSB), use the suffix <tt>l</tt> (note: do not confuse the
+  lower-case L with the numeral digit <tt>1</tt>).</p>
+
+<p>A native format refers to the default data storage format of the computer,
+  which may be either MSB or LSB. External programs that read and write
+  non-portable binary data are most likely to use this format. For instance,
+  this format applies when C writes the memory image of a number, as in
+  <span class=
+  "nobr">&quot;<tt>fwrite(&amp;n,sizeof(n),...)</tt>&quot;.</span></p>
+<a id="freadb"></a>
+<a id="sreadb"></a>
+<hr noshade="noshade" />
+
+<p>Both <tt>freadb</tt> and <tt>sreadb</tt> read items of the specified
+  binary format until <tt>n</tt> items are read or there is no more data. The
+  successfully read items are returned in vector <tt>v</tt>; the length of
+  <tt>v</tt> represents the number of items successfully read.</p>
+
+<p>The following commands</p>
+
+<pre class="code">
+v = <span class="fcndef">freadb</span> [filenum, &#39;format&#39;, n]
+v = <span class=
+"fcndef">freadb</span> [&#39;filename&#39;, &#39;format&#39;, n]
+</pre>
+
+<p>read binary data from the file specified by file number <tt>filenum</tt>
+  or token <tt>&#39;filename&#39;</tt>. If the file is specified by its name,
+  it will be automatically opened before the read operation and closed
+  afterwards.</p>
+
+<pre class="code">
+v = <span class="fcndef">sreadb</span> [string_data, &#39;format&#39;, n]
+</pre>
+
+<p>This command interprets a string as binary data.</p>
+<a id="fwriteb"></a>
+<a id="swriteb"></a>
+<hr noshade="noshade" />
+
+<p><tt>fwriteb</tt> and <tt>swriteb</tt> write data according to the
+  <tt>format</tt> token. The specified format must match the type of data
+  otherwise an error will occur.</p>
+
+<p>When <tt>&#39;line&#39;</tt> format is used, string data is expected, and
+  a line break is appended to the input string. The newline characters that are
+  added are operating system-dependent. For example, on Linux systems, LF (line
+  feed, <tt>&#39;\n&#39;</tt>) is used as the line break, whereas on Windows it
+  is CR-LF (carriage return-line feed, <tt>&#39;\r\n&#39;</tt>).</p>
+
+<p>The following commands</p>
+
+<pre class="code">
+<span class="fcndef">fwriteb</span> [filenum, &#39;format&#39;, data]
+<span class=
+"fcndef">fwriteb</span> [&#39;filename&#39;, &#39;format&#39;, data]
+</pre>
+
+<p>write binary data <tt>data</tt> to the file specified by <tt>filenum</tt>
+  or <tt>&#39;filename&#39;</tt>. If the file is specified by its name, it will
+  be automatically opened before the write operation and closed afterwards.</p>
+
+<pre class="code">
+string_data = <span class="fcndef">swriteb</span> [&#39;format&#39;, data]
+</pre>
+
+<p>This command writes binary data to a string.</p>
+  <hr noshade="noshade" />
+
+<h3>Examples:</h3>
+  <ul>
+    <li>Write a line of text to a file. The line break is appended, for example
+    on Windows, <tt>&quot;\r\n&quot;</tt>.
+
+<pre class="code">
+svl&gt; fwriteb [&#39;test.txt&#39;, &#39;line&#39;, &quot;Hello World&quot;];
+</pre>
+
+The following command reads all characters from the file. Note the line
+termination characters.
+
+<pre class="code">
+svl&gt; freadb [&#39;text.txt&#39;, &#39;char&#39;, INT_MAX];
+&quot;Hello World\r\n&quot;
+</pre>The following command reads all lines from the file. Each line is a
+separate string, with line termination characters stripped.
+
+<pre class="code">
+svl&gt; freadb [&#39;text.txt&#39;, &#39;line&#39;, INT_MAX];
+[ &quot;Hello World&quot; ]
+</pre>
+    </li>
+    <li>Read text from a file and open it in an <a href=
+    "../../moe/gui/ted.htm">SVL Text Editor</a>.
+
+<pre class="code">
+svl&gt; ted_SetData [ted_Open[], freadb [&#39;test.txt&#39;, &#39;char&#39;, INT_MAX]];
+</pre>
+    </li>
+    <li>Read a file a line at a time and process it.
+
+<pre class="code">
+while not isnull (line = freadb [fnum, &#39;line&#39;, 1]) loop
+    ...
+endloop
+</pre>
+
+If the file has no line breaks, but lines are known to be 80 characters,
+wide:
+
+<pre class="code">
+while length (line = freadb[ fnum, char, 80]) loop
+    ...
+endloop
+</pre>
+    </li>
+    <li>Read a line of text and split it into words based on space boundaries.
+
+<pre class="code">
+svl&gt; wordsplit [first freadb [test.txt, &#39;line&#39;, 1], &quot; &quot;];
+[ &quot;Hello&quot;, &quot;World&quot; ]
+</pre>
+    </li>
+    <li>Write integers to a file.
+
+<pre class="code">
+    svl&gt; fwriteb [&#39;test1.io&#39;, &#39;int&#39;, igen 10]
+svl&gt; freadb [&#39;test1.io&#39;, &#39;int&#39;, 10]
+[1,2,3,4,5,6,7,8,9,10]
+</pre>
+    </li>
+    <li>Write a vector of data to a file.
+
+<pre class="code">
+svl&gt; fwriteb [&#39;test2.io&#39;, &#39;SVL&#39;, [ [1,2,3], &quot;abc&quot; ]]
+
+svl&gt; freadb [&#39;test2.io&#39;, &#39;SVL&#39;, 2]
+[[1,2,3], &quot;abc&quot;]
+</pre>
+    </li>
+  </ul>
+
+
+<h1>See Also</h1>
+<table class="functionList">
+  <tr>
+    <td colspan="2"><a href="introio.htm">I/O Functions</a><br />
+    <a href="constants.htm">SVL Built-in Constants</a></td>
+  </tr>
+  <tr>
+    <td><a href="fopenetc.htm">fclose</a><br />
+    <a href="fopenetc.htm">fflush</a><br />
+    <a href="flistetc.htm">flist</a><br />
+    <a href="flistetc.htm">fname</a><br />
+    <a href="fopenetc.htm">fopen</a><br />
+    <a href="fopenetc.htm">fopenr</a><br />
+    <a href="fopenetc.htm">fopenw</a></td>
+    <td><a href="freadetc.htm">fread</a><br />
+    <a href="flistetc.htm">fseek</a><br />
+    <a href="flistetc.htm">fsize</a><br />
+    <a href="flistetc.htm">ftell</a><br />
+    <a href="flistetc.htm">ftype</a><br />
+    <a href="freadetc.htm">fwrite</a></td>
+  </tr>
+</table><!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

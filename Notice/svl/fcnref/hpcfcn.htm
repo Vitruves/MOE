@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <title>High Performance Computing Functions</title>
+  <meta name="keywords" content="functions: hpc_Script, hpc_QueueList" />
+  <meta name="keywords" content="functions: hpc_JobList, hpc_JobSubmit" />
+  <meta name="keywords" content="functions: hpc_JobControl" />
+  <meta name="keywords" content="keywords: hpc.cfg" />
+  <meta name="keywords" content="keywords: queue, hpc, host" />
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    High Performance Computing Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    $MOE/hpc.cfg
+
+		<a class="fcnlink" href="#hpc_Script"
+		>hpc_Script</a>     [file, N, res, [I,J], opt]
+    queuedata = <a class="fcnlink" href="#hpc_QueueList"
+		>hpc_QueueList</a>  []
+
+    run.sh
+
+    [joblist] = <a class="fcnlink" href="#hpc_JobList"
+		>hpc_JobList</a>    []
+    [joblist] = <a class="fcnlink" href="#hpc_JobList"
+		>hpc_JobList</a>    [['<a class="fcnlink" href="#args"
+		>host</a>', 'host', ...], <a
+		class="fcnlink" href="#opt">opt</a> ]
+
+    [joblist] = <a class="fcnlink" href="#hpc_JobStatus"
+		>hpc_JobStatus</a> '<a class="fcnlink" href="#args"
+		>job</a>'
+    [joblist] = <a class="fcnlink" href="#hpc_JobStatus"
+		>hpc_JobStatus</a>  [['<a class="fcnlink" href="#args"
+		>job</a>', 'job', ...], <a
+		class="fcnlink" href="#opt">opt</a>]
+
+		<a class="fcnlink" href="#hpc_JobControl"
+		>hpc_JobControl</a> [ '<a class="fcnlink" href="#args"
+		>job</a>', 'command' ]
+		<a class="fcnlink" href="#hpc_JobControl"
+		>hpc_JobControl</a><i
+		    ></i> [['<a class="fcnlink" href="#args"
+		    >job</a>', 'job', ...], ['cmd', 'cmd', ...], <a
+		    class="fcnlink" href="#opt">opt</a> ]
+
+		<a class="fcnlink" href="#hpc_JobSubmit"
+		>hpc_JobSubmit</a>  '<a class="fcnlink" href="#args"
+		>jobdir</a>'
+		<a class="fcnlink" href="#hpc_JobSubmit"
+		>hpc_JobSubmit</a>  [ '<a class="fcnlink" href="#args"
+		>jobdir</a>', ['arg1', 'arg2', ...], <a
+		class="fcnlink" href="#opt">opt</a> ]
+</pre>
+
+<a id="Description"></a>
+<h1>Description</h1>
+
+<p>
+The high performance computing functions provide a means to submit and control
+jobs on work load managers and queueing systems such as Sun Grid Engine and
+SLURM.
+Access to such systems is controlled by the <tt>$MOE/hpc.cfg</tt>
+configuration file which contains host names, queue names and properties
+for all available hosts.  The <tt>hpc.cfg</tt> has the following format:
+</p>
+
+<blockquote>
+<table>
+<tr>
+    <td><i>file</i></td><td>:&nbsp;</td>
+    <td><b>{</b> <i>line</i> <b>}<sup>*</sup></b></td>
+
+</tr><tr>
+    <td><i>line</i></td><td>:</td>
+    <td><tt><b>#</b> one line comment</tt></td>
+</tr><tr>
+    <td></td><td>:</td>
+    <td><b>{</b> <i>whitespace</i> <b>}<sup>*</sup></b></td>
+</tr><tr>
+    <td></td><td>:</td>
+    <td>
+	<i>alias</i>
+	<i>type</i>
+	<i>host</i>
+	<i>queuename</i>
+	<b>{</b> <i>property</i> <b>}<sup>*</sup></b>
+    </td>
+
+</tr><tr>
+    <td><i>alias</i></td><td>:</td>
+    <td>
+	<b>{</b>
+	<i>letter</i> |
+	<i>number</i> |
+	<tt>_</tt>
+	<b>}<sup>+</sup></b>
+    </td>
+</tr><tr>
+    <td></td><td>:</td>
+    <td><b><tt>*</tt></b></td>
+
+</tr><tr>
+    <td><i>type</i></td><td>:</td>
+    <td>
+	<b>{</b> <tt>sh</tt>
+	<b>|</b> <tt>sge</tt>
+	<b>|</b> <tt>slurm</tt>
+	<b>|</b> <tt>lsf</tt>
+	<b>}</b>
+    </td>
+
+</tr><tr>
+    <td><i>host</i></td><td>:</td>
+    <td>
+	<b>{</b>	   <i>username</i>
+	<b><tt>@</tt>}</b> <i>hostname</i>
+	<b>{<tt>:</tt></b> <i>directory</i>
+	<b>}</b>
+    </td>
+
+</tr><tr>
+    <td><i>queuename</i></td><td>:</td>
+    <td>
+	<b>{</b>
+	<i>letter</i> |
+	<i>number</i> |
+	<tt>_</tt>
+	<b>}<sup>+</sup></b>
+    </td>
+</tr><tr>
+    <td></td><td>:</td>
+    <td><b><tt>"</tt></b><i>string</i><b><tt>"</tt></b></td>
+</tr><tr>
+    <td></td><td>:</td>
+    <td><b><tt>*</tt></b></td>
+
+</tr><tr>
+    <td><i>property</i></td><td>:</td>
+    <td>
+	<b>{</b><i>letter</i><b>}<sup>+</sup>{</b>
+	<i>empty</i> |
+	<tt>=</tt><i>number</i> |
+	<i>range</i> |
+	<tt>=</tt><i>range</i>
+	<b>}</b>
+    </td>
+</tr><tr>
+    <td><i>range</i></td><td>:</td>
+    <td>
+	<b><tt>[</tt></b>
+	<i>number</i><b><tt>,</tt></b>
+	<i>number</i>
+	<b><tt>]</tt></b>
+    </td>
+</tr>
+</table>
+</blockquote>
+
+<p>
+Lines ending with backslash <tt>\</tt> indicate that the next line should
+be concatenated with the current line as though entered on one line.
+Fundamentally, each line describes a <i>head node</i> host used for
+queueing jobs with a named queue and its properties.
+</p>
+
+<p><span class="tip">Warning!</span> Head node hosts are accessed
+with <i>passwordless</i> <tt>ssh</tt> (Secure Shell) which must be properly
+configured for the HPC functions to work properly.
+</p>
+
+<p>Each line configures one host and describes how to access the job queue
+managed by that host.</p>
+
+<div class="indent"> <dl>
+    <dt><i>alias</i></dt>
+
+    <dd>An alias for the <i>queuename</i> to be used in user interfaces. The
+    aliases should be unique.</dd>
+
+    <dt><i>type</i></dt>
+
+    <dd>The workload manager type: <tt>sge</tt> for Sun Grid Engine and
+    <tt>slurm</tt> for SLURM.  If both managers are present on the same
+    host, then two separate lines should used, one for SGE and one for SLURM.
+    The type <tt>lsf</tt> refers to IBM's Platform Load Sharing Facility.
+    </dd>
+
+    <dt><i>user</i><tt>@</tt><i>host</i> [<tt>:</tt><i>directory</i>]</dt>
+
+    <dd>The head node host to contact (with <tt>ssh</tt>) for job submission
+    and control.  The optional <i>user</i><tt>@</tt> specifies the login
+    user for the head node; if not specified, the current user name is used.
+    The optional <tt>:</tt><i>directory</i> specifies the path on the head
+    node to use for job data upload directories; if not specified, the
+    login directory is used.  If <i>directory</i> contains <tt>$</tt>
+    environment variable names, these names will be expanded on the
+    head node.  If the path is not absolute, i.e. does <i>NOT</i>
+    start with <tt>&quot;/&quot;</tt> or <tt>&quot;$&quot;</tt> or
+    <tt>&quot;~&quot;</tt>, it will be interpreted as relative to the
+    login directory. If a directory relative to <i>$HOME</i> is required,
+    simply add <i>$HOME</i> to the path.
+    </dd>
+
+    <dt><i>queuename</i></dt>
+
+    <dd>The name of the queue on the head node into which jobs will be
+    submitted.  The <i>queuename</i> <tt>*</tt> denotes the default queue
+    on the head node host.
+    </dd>
+
+    <dt><i>
+	property<br/>
+	property=number<br/>
+	property=[low<tt>,</tt>high<tt>]</tt><br/>
+	property[low<tt>,</tt>high<tt>]</tt>
+    </i></dt>
+    <dd><p>A specification of a resource and optional limits enforced by the
+    queue.  The supported properties are</p>
+    <ol>
+	<li><tt>cpu</tt> &ndash; CPUs on one node</li>
+	<li><tt>cpumem</tt> &ndash; memory (MB) per CPU</li>
+	<li><tt>disk</tt> &ndash; available disk space (MB) per node</li>
+	<li><tt>mem</tt> &ndash; memory per computer node, accepts multipliers
+	    (K, M, G, T, KB, MB, GB, TB)</li>
+	<li><tt>nodes</tt> &ndash; available sizes of node clusters</li>
+	<li><tt>time</tt> &ndash; job execution time (seconds), accepts
+	    multipliers (s, m, h, d).</li>
+    </ol>
+    <p>For example, <tt>mem[0,5MB] time[5h,7d]</tt> specifies that
+    the queue accepts jobs that require a maximum of 5MB of memory and requiring
+    a total time of between 5 hours and 7 days.</p>
+    </dd>
+</dl></div>
+
+
+<a id="runsh"></a>
+<a id="jobdirectory"></a>
+
+<p>A job is a directory <tt>dir</tt> with the following contents:</p>
+<pre><p class="blockquote">dir/
+    run.sh
+    ... files and subdirectories needed for the job ...
+</pre>
+
+<p>The <tt>run.sh</tt> script contains a Unix shell script and performs the
+various tasks required for the job (numbered 1,2,...,N).  The script has the
+following structure:</p>
+
+<pre><p class="blockquote">#/bin/sh
+preamble
+content generated by hpc_Script function
+script to execute task $task_id in {0,1,2,...,N}
+$task_id 0 is the epilogue task to be performed after 1,2,...N</p></pre>
+
+<p>The <tt>run.sh</tt> script is a combination of job-specific code and
+code generated by the <tt>hpc_Script</tt> function, which automates interaction
+with the queueing systems.
+SVL code that generates <tt>run.sh</tt> must supply code that conforms with
+the code generated by <tt>hpc_Script</tt> as well all queueing systems
+supported by <tt>hpc_Script</tt>.
+The <tt>run.sh</tt> is capable of stand-alone execution or execution
+on remote high performance computing nodes and supports the following
+command-line arguments which must appear first in the argument list:</p>
+
+<div class="indent">
+<dl>
+    <dt><tt>-qsys { sh | sge | slurm | lsf }</tt></dt>
+
+    <dd><tt>sh</tt> &ndash; Execute the job using a local shell.</dd>
+
+    <dd><tt>sge</tt> &ndash; Queue the job to the Sun Grid Engine.</dd>
+
+    <dd><tt>slurm</tt> &ndash; Queue the job to the SLURM workload manager.</dd>
+
+    <dd><tt>lsf</tt> &ndash; Queue the job to the LSF workload manager.</dd>
+
+    <dt><tt>-host [user@]hostname[:dir]</tt></dt>
+    <dd>Execute, queue or manipulate the job on the remote host specified by
+    <tt>hostname</tt>; login with the optional <tt>user</tt> and use
+    the optional <tt>dir</tt> as the location for job directories.</dd>
+
+    <dt><tt>-qname queuename</tt></dt>
+    <dd>Submit the job to the specified <tt>queuename</tt> instead of the
+    default queue.</dd>
+
+    <dt><tt>-qargs &quot;options&quot;</tt></dt>
+    <dd>The <tt>options</tt> string will be passed <i>verbatim</i> to the
+    queueing system job submission call. This <b>overrides</b> the default
+    options.</dd>
+
+    <dt><tt>+qargs &quot;options&quot;</tt></dt>
+    <dd>The <tt>options</tt> string will be passed <i>verbatim</i> to the
+    queueing system job submission call. This is <b>added</b> to the default
+    options.</dd>
+
+    <dt><tt>-name jobname</tt></dt>
+    <dd>Override the built-in job name with the given <tt>jobname</tt>.</dd>
+
+    <dt><tt>-status</tt></dt>
+    <dd>Display the status of the job in all active queueing systems.</dd>
+
+    <dt><tt>-submit</tt></dt>
+    <dd>Submit a job. If a remote host is used the it is assumed that the files
+    are already uploaded, unless the <tt>-upload</tt> option is used
+    simultaneously.</dd>
+
+    <dt><tt>-cancel</tt></dt>
+    <dd>Cancel the job, removing it from the queue.</dd>
+
+    <dt><tt>-delete</tt></dt>
+    <dd>Cancel the job and delete all associated files.</dd>
+
+    <dt><tt>-upload</tt></dt>
+    <dd>Upload the job directory to a remote host.  It is an error to
+    use <tt>-upload</tt> without specifying <tt>-host</tt>. Can be used
+    simultaneously with <tt>-submit</tt></dd>
+
+    <dt><tt>-download</tt></dt>
+    <dd>Download the job directory from a remote host to location
+    of the <tt>run.sh</tt> script.
+    It is an error to use <tt>-download</tt> without specifying
+    <tt>-host</tt>.</dd>
+
+    <dt><tt>-h<br/>-help<br/>--help</tt></dt>
+    <dd>Display a summary of the acceptable syntax and options. Also displays
+    the default values of the script parameters.
+    </dd>
+
+    <dt><tt>--</tt></dt>
+    <dd>Stop processing options and pass the remaining command
+    line to the job script for execution.
+</dl>
+</div>
+
+<a id="hpc_Script"></a>
+<hr noshade="noshade" />
+<pre>
+<span class="fcndef">hpc_Script</span> [file, N, res, [I,J], opt]
+</pre>
+
+<p>The <span class="fcn">hpc_Script</span> function writes out Unix Shell
+script code to a given <tt>file</tt> (which can be a token filename or
+an already open file number) to manage the execution of <tt>N</tt> tasks
+of a job.  Tasks are numbered 1, 2, ... <tt>N</tt>.  Task dependencies
+are encoded in <tt>I</tt> and <tt>J</tt>: task
+<span class="nobr"><tt>I(i)</tt></span> cannot start before the completion
+of <span class="nobr">task <tt>J(i)</tt></span>.
+Resource requirements of the tasks are specified in <tt>res</tt>.
+
+<p>The <tt>opt</tt> is a tagged vector of options:</p>
+<dl>
+     <dt><tt>title</tt></dt>
+     <dd>Set the default job name. The job name will be made unique with the
+     pattern MOE(<tt>username</tt>)(<tt>id</tt>)job-name. Where <tt>id</tt> is
+     a generated random string of characters.</dd>
+
+     <dt><tt>qsys</tt></dt>
+     <dd>Set the default job system (sh | slurm | sge | lsf)
+     </dd>
+
+     <dt><tt>qhost</tt></dt>
+     <dd>Set the default [user@]host[:dir]</dd>
+
+     <dt><tt>qname</tt></dt>
+     <dd>Set the default queue name</dd>
+
+     <dt><tt>res</tt></dt>
+     <dd>Set default additional job submission arguments</dd>
+</dl>
+
+<p>Each <tt>res(k)</tt>, k=1, 2, ... <tt>N</tt>, is a string
+specifying the resources required to run task <tt>k</tt>.
+The resources are specified in the
+same format as those in the configuration file, <tt>hpc.cfg</tt>;
+for example:
+</p>
+<pre><p class="blockquote">[ "mem=[1GB,4GB]", "cpu=[1,8]" ]</p></pre>
+<p>specifies a memory resource range of 1-4 GB for task 1, and
+a CPU resource range of 1-8 for task 2.
+</p>
+
+<p>
+The job will be submitted only to a queue whose stated resources
+are adequate for each task in the job, i.e. the resource range
+specified by each task in the job must intersect with the resource
+range specified for the queue in the configuration file.</p>
+
+<p>For example, a queue with memory resource <tt>mem=[0,600]</tt> can
+be used for a job with two tasks specifying <tt>mem=[200,400]</tt> and
+<tt>mem=[500,900]</tt>, but <b>NOT</b> for a job specifying
+<tt>mem=[200,400]</tt> and <tt>mem=[700,900]</tt>, because the second
+tasks would not have adequate resources.</p>
+
+<p>When a task specifying a resource range is submitted to the queue,
+the script will request the resource allocation corresponding to
+the upper limit of the intersection of the two ranges.</p>
+
+<p>For example, when a job with a task specifying between 1GB and 16GB
+of memory, <tt>mem=[1GB,16GB]</tt>, is submitted to a queue with a maximum
+available memory of 4GB, <tt>mem=[0,4GB]</tt>, the actual submission
+will request 4GB for that task.  When a task specifying
+1GB, <tt>mem=1GB</tt>, is submitted, the submission will
+request only 1GB of memory for that task.</p>
+
+<p>The resource specification in the <tt>opt</tt> vector specifies
+additional resources that will be used in <i>all</i> submissions,
+i.e. that will be applied to all tasks.</p>
+
+
+
+<a id="hpc_QueueList"></a>
+<hr noshade="noshade" />
+
+<pre>
+[alias,type,host,queuename,properties] = <span class="fcndef"
+>hpc_QueueList</span> [ ]
+</pre>
+
+<p>The <span class="fcndef">hpc_QueueList</span> functions returns a
+laminated vector of available queues from <tt>$MOE/hpc.cfg</tt>:</p>
+
+<div class="indent">
+  <dl>
+      <dt><tt>alias(i)</tt></dt>
+
+      <dd>The <i>alias</i> token derived from the <tt>hpc.cfg</tt> file for
+      queue <tt>i</tt>. Aliases should be unique
+
+      <dt><tt>type(i)</tt></dt>
+
+      <dd>The <i>type</i> token derived from the
+      <tt>hpc.cfg</tt> file for queue <tt>i</tt>. This contains <tt>sh</tt>,
+      <tt>slurm</tt>, <tt>sge</tt>, etc.</dd>
+
+      <dt><tt>host(i)</tt></dt>
+
+      <dd>The <tt>user@hostname:dir</tt> token verbatim from the
+      <tt>hpc.cfg</tt> file for queue <tt>i</tt>.</dd>
+
+      <dt><tt>queuename(i)</tt></dt>
+
+      <dd>The <i>queuename</i> token verbatim from the
+      <tt>hpc.cfg</tt> file for queue <tt>i</tt>.  A value of <tt>'*'</tt>
+      denotes the default queue of
+      <span class="nobr"><tt>headnode(i)</tt></span>.
+      </dd>
+
+      <dt><tt>property(i)</tt></dt>
+
+      <dd>The <i>property</i> list token derived from the
+      <tt>hpc.cfg</tt> file for queue <tt>i</tt>.  The token will be
+      a formatted concatenation of the property list suitable for display
+      in user interfaces.</dd>
+  </dl>
+</div>
+
+<p>If <span class="fcndef">hpc_QueueList</span> is called as a procedure
+(without assigning its return value) then a formatted list of queues will
+be printed to the SVL Commands window.</p>
+
+<a id="args"></a>
+<hr noshade="noshade" />
+
+<h5>Job Specification</h5>
+
+<p>Function <tt>hpc_JobList</tt> allows an optional <i>host</i> argument.
+Functions <tt>hpc_JobControl</tt>, <tt>hpc_JobStatus</tt>,
+<tt>hpc_JobSubmit</tt> require a compulsory <i>job</i> (or <i>jobdir</i>)
+argument.  These arguments must be of the following format:
+
+<blockquote>
+<table>
+<tr>
+    <td><i>host</i></td><td>:</td>
+    <td>
+	<b>[</b
+	><span style="font-size: .3em;">&nbsp;</span
+	><i>username</i> <b><tt>@</tt
+	><span style="font-size: .5em;">&nbsp;</span
+	>]</b>
+	<i>hostname</i>
+	<b>[<tt
+	><span style="font-size: .1em;">&nbsp;</span
+	>:</tt></b> <i>directory</i><b
+	><span style="font-size: .9em;">&nbsp;</span
+	>]</b>
+    </td>
+
+</tr><tr>
+    <td><i>job</i></td><td>:</td>
+    <td> <i>host</i><tt>/</tt><i>jobname</i>
+    </td>
+
+</tr><tr>
+    <td><i>jobname</i></td><td>:</td>
+    <td><tt>MOE(</tt><i>user</i><tt>)(</tt><i>id_string</i><tt
+    >)</tt><i>label</i>
+    </td>
+
+</tr><tr>
+    <td><i>jobdir</i></td><td>:</td>
+    <td>
+    <b>{</b>&nbsp;
+	<i>job</i>
+    &nbsp;<b>|</b>&nbsp;
+	<i>localpath</i>
+    &nbsp;<b>|</b>&nbsp;
+	<span style="font-size: 0.7em;">&nbsp;</span
+	><b>[</b
+	><span style="font-size: .3em;">&nbsp;</span
+	><i>username</i> <b><tt>@</tt
+	><span style="font-size: .5em;">&nbsp;</span
+	>]</b>
+	<i>hostname</i
+	><span style="font-size: .7em;">&nbsp;</span
+	><tt>:</tt><i
+	><span style="font-size: .8em;">&nbsp;</span
+	>remotepath</i>
+    &nbsp;<b>}</b>
+    </td>
+</tr>
+</table>
+</blockquote>
+
+<ul>
+<li><i>username</i> specifies the login name to be used for given
+  <i>hostname</i>.  If <i>username</i> is not specified, <tt>$USER</tt>
+  (on the calling host) will be used instead.
+</li><li><i>user</i> specifies the MOE user name on the calling host.
+</li><li><i>directory</i> specifies the parent directory of the job directory
+  on the remote host.  If given as relative pathname, it will be interpreted
+  as relative to the login directory on a remote host (or relative to
+  <tt>$HOME</tt> on the local host).  Any environment variables will be
+  expanded on the remote host (not the calling host).
+</li><li><i>jobdir</i> specifies a directory that contains the job runfile,
+  which must be named <tt>run.sh</tt> and must contain shell code generated
+  by <tt>hpc_Script</tt>.
+</li>
+</ul>
+
+If the job specification given to <tt>hpc_JobStatus</tt> or
+<tt>hpc_JobControl</tt> includes the jobname, but does not include the location
+of the job directory, i.e. does not include <tt>'host:'</tt> or
+<tt>'host:dir/'</tt>, the functions will be applied to the matching
+locations from <tt>hpc_QueueList</tt>:
+<ul>
+<li>
+  <tt>'MOE(user)(str)title'</tt> applies to all values of <tt>'host:dir'</tt>
+  returned by <tt>hpc_QueueList</tt>
+</li><li>
+  <tt>'dir/MOE(user)(str)title'</tt> applies to all values of
+  <tt>'host:dir'</tt> returned by <tt>hpc_QueueList</tt> with a matching
+  value of <tt>'dir'</tt>
+</li><li>
+  <tt>'host:dir/MOE(user)(str)title'</tt> applies only to the specified
+  <tt>'host'</tt> and <tt>'dir'</tt>, regardless of the values returned
+  by <tt>hpc_QueueList</tt>
+</li>
+</ul>
+
+<a id="opt"></a>
+<hr noshade="noshade" />
+
+<h5>Options</h5>
+
+<p>The optional argument, <tt>opt</tt>, affects the behavior of
+the <tt>hpc_JobXxx</tt> and <tt>hpc_JobSubmit</tt> functions as follows:
+</p>
+
+<div class="indent"><dl>
+  <dt><tt>opt.timeout</tt></dt>
+  <dd>Stop waiting for the job control shell script to finish
+  after a given #seconds.
+  The default value is 0, which means &quot;no timeout&quot;.
+  If positive, the timeout value will be clamped to range from 3 to 600,
+  i.e. at least 3 seconds and at most 10 minutes.
+  </dd>
+  <dt><tt>opt.hpc_cfg</tt></dt>
+  <dd>Used as an argument to <tt>hpc_QueueList</tt>, if needed.
+  </dd>
+</dl></div>
+
+
+
+<a id="hpc_JobList"></a>
+<hr noshade="noshade" />
+<pre>
+[joblist] = <span class="fcndef"
+	    >hpc_JobList</span> []
+[joblist] = <span class="fcndef"
+	    >hpc_JobList</span> [ ['host', 'host', ...], opt ]
+</pre>
+
+<p>The <span class="fcndef">hpc_JobList</span> function reports the status
+of all jobs (of the current user) on all given hosts.  If the argument
+is empty vector, <tt>[]</tt>, the function returns the status of
+all jobs on all queues returned by
+<a href="../../svl/fcnref/hpcfcn.htm#hpc_QueueList"
+class="svl">hpc_QueueList</a>.
+
+<p>The function returns a laminated tagvector, <tt>rval</tt> with attributes:
+</p>
+<pre>
+    ['qsys','host','jname','mstate','jid','qname','jstate','jdir']
+</pre>
+<p>where:</p>
+
+<div class="indent">
+  <dl>
+      <dt><tt>rval.qsys(i)</tt>
+      </dt>
+      <dd>The <i>type</i> of queueing system:
+	<nobr>
+	<b>{</b> <tt>sh</tt>
+	<b>|</b> <tt>sge</tt>
+	<b>|</b> <tt>slurm</tt>
+	<b>|</b> <tt>lsf</tt>
+	<b>|</b> <tt>ls</tt>
+	<b>}</b>
+	</nobr>.
+
+	Here, &quot;<tt>ls</tt>&quot; is a special case, representing
+	a directory listing, not a running job.
+      </dd>
+
+      <dt><tt>rval.host(i)</tt>
+      </dt>
+      <dd>The &quot;<tt>[<i>user</i>@]<i>hostname</i></tt>&quot;
+      string for remote host specification.  The local host is reported
+      as &quot;<tt>localhost</tt>&quot;
+      </dd>
+
+      <dt><tt>rval.jname(i)</tt>
+      </dt>
+      <dd>The
+        <nobr>&quot;<tt>MOE(<i>user</i>)(<i>id_string</i>)...</tt>&quot;</nobr>
+	string for job specification, where <i>user</i> is the current
+	MOE user, i.e. the value of the <tt>MOE_USER</tt> constant.
+      </dd>
+
+      <dt><tt>rval.mstate(i)</tt>
+      </dt>
+      <dd>The MOE-specific, single-letter current <i>state</i> of the job:
+	<p class="indent">
+	<b><tt>r</tt></b>: running,
+	<b><tt>w</tt></b>: waiting,
+	<b><tt>e</tt></b>: error,
+	<b><tt>f</tt></b>: finished,
+	<b><tt>k</tt></b>: killed,
+	<b><tt>s</tt></b>: suspended,
+	<b><tt>d</tt></b>: deleted,
+	<b><tt>x</tt></b>: other
+	</p>
+      </dd>
+
+      <dt><tt>rval.jid(i)</tt>
+      </dt>
+      <dd>The internal ID of the queued job, specific to the queueing system.
+      </dd>
+
+      <dt><tt>rval.qname(i)</tt>
+      </dt>
+      <dd>The name of the queue to which the job was submitted.
+        In the special case of <tt>qsys='ls'</tt>, this value will contain
+	the directory portion, <tt><i>dir</i></tt>, of the host specification,
+        &quot;<tt>[<i>user</i>@]<i>hostname</i>:[<i>dir</i>]</tt>&quot;,
+	either given as a function argument or found in the configuration
+	file, <tt>'hpc.cfg'</tt>.
+      </dd>
+
+      <dt><tt>rval.jstate(i)</tt>
+      </dt>
+      <dd>The <i>qsys</i>-specific <i>state</i> string of the job. Error and
+	pending states may be followed by a semicolon and further explanation.
+	For example, on SLURM:
+
+	<p class="indent">
+	<b><tt>PD</tt></b>: pending/waiting,
+	<b><tt>CA</tt></b>: canceled, etc.
+	</p>
+	where <b><tt>PD</tt></b> may have form
+	<span class="nobr"><tt>&quot;PD: Dependency&quot;</tt></span>
+	or similar.
+      </dd>
+
+      <dt><tt>rval.jdir(i)</tt>
+      </dt>
+      <dd>The full name of the job work directory on executing host.
+      </dd>
+  </dl>
+</div>
+
+<p>
+The optional second argument,
+<tt><a class="fcnlink" href="#opt">opt</a></tt>,
+affects the function behavior
+(see the <b><a class="fcnlink" href="#opt">Options</a></b> above.)
+</p>
+
+<a id="hpc_JobStatus"></a>
+<hr noshade="noshade" />
+<pre>
+[joblist] = <span class="fcndef"
+	    >hpc_JobStatus</span> 'job'
+[joblist] = <span class="fcndef"
+	    >hpc_JobStatus</span> [ ['job', 'job', ...], opt]<i
+></i></pre>
+
+<p>The <span class="fcndef">hpc_JobStatus</span> function returns the
+status of the specified jobs in the same format as that returned by
+<tt><a href="#hpc_JobList" class="svl">hpc_JobList</a></tt>.
+
+However, the return values are restricted only to jobs specified
+in the argument.
+
+The optional third argument,
+<tt><a class="fcnlink" href="#opt">opt</a></tt>,
+affects the function behavior
+(see the <b><a class="fcnlink" href="#opt">Options</a></b> above.)
+</p>
+
+<a id="hpc_JobControl"></a>
+<hr noshade="noshade" />
+<pre>
+<span class="fcndef"
+    >hpc_JobControl</span> [ 'job', 'command' ]
+<span class="fcndef"
+    >hpc_JobControl</span> [['job', 'job', ...], ['cmd', 'cmd', ...], opt ]<i
+></i></pre>
+
+<p>The <span class="fcndef">hpc_JobControl</span> function is used
+to affect  the status of submitted jobs.  The arguments are a
+laminated so that
+<span class="nobr"><tt>command(i)</tt></span> applies to
+<span class="nobr"><tt>jobname(i)</tt></span>.  Unit extension applies.
+The legal commands are:
+</p>
+
+<div class="indent"><dl>
+  <dt><tt>'cancel'</tt></dt>
+  <dd>Cancel by removing it from the job queue.
+  All files related to the job are retained and the job can be
+  resubmitted.</dd>
+
+  <dt><tt>'delete'</tt></dt>
+  <dd>The job is cancelled (if running) and all files related to the
+  job are deleted from the queueing system.</dd>
+</dl></div>
+
+<p>The return value is an empty token on success and a non-empty error message
+token on failure.  On failure, the second element of the return value is
+the list of lines returned on <i>stderr</i> stream of the job control script.
+The optional third argument,
+<tt><a class="fcnlink" href="#opt">opt</a></tt>,
+affects the function behavior
+(see the <b><a class="fcnlink" href="#opt">Options</a></b> above.)
+</p>
+
+<p><i>Note:</i> On errors, the contents of <i>stderr</i> is often (but
+not always) more verbose but also more informative than the returned
+error message.
+</p>
+
+
+<a id="hpc_JobSubmit"></a>
+<hr noshade="noshade" />
+<pre>
+<span class="fcndef"
+    >hpc_JobSubmit</span> 'dir'
+<span class="fcndef"
+    >hpc_JobSubmit</span> [ 'dir', args, opt ]
+</pre>
+
+<p>The <span class="fcndef">hpc_JobSubmit</span> function submits a given
+job, specified by <tt>'dir'</tt> for an an execution on a queueing system
+using the specified arguments, <tt>args</tt>.
+
+The <tt>args</tt> parameter specifies the command-line arguments given to the
+<tt>run.sh</tt> script, together with the <tt>-submit</tt> command, by the
+    <span class="fcndef">hpc_JobSubmit</span>
+function.</p>
+
+<p>
+<i>Note:</i> The <tt>run.sh</tt> script is generated with the help of the
+    <a href="../fcnref/hpcfcn.htm#hpc_Script" class="svl">hpc_Script</a>
+functions.  Its arguments include</p>
+<div class="indent">
+    <ul>
+    <li><tt>-qsys { sh | sge | slurm | lsf }</tt></li>
+    <li><tt>-qname</tt> <i>quename</i></li>
+    <li><tt>+qargs</tt> <i>string</i></li>
+    <li><tt>-qargs</tt> <i>string</i></li>
+    </ul>
+</div>
+
+<p>The <tt>args</tt> parameter can be given either as a string
+(flat vector or <i>char</i>'s), or a list of tokens.
+If given as a string, it will be used as-is with no extra quotes or escapes
+added.  If given as a list of tokens, each token with be surrounded by
+single quotes and separated from others by space when given to the script.
+Any single <nobr>quote (&nbsp;'&nbsp;)</nobr> present in the token itself
+will be replaced <nobr>with 5 alternating</nobr> single/double
+<nobr>quotes (&nbsp;'&nbsp;"&nbsp;'&nbsp;"&nbsp;'&nbsp;)</nobr>.
+</p>
+
+<p>The optional third argument,
+<tt><a class="fcnlink" href="#opt">opt</a></tt>,
+affects the function behavior
+(see the <b><a class="fcnlink" href="#opt">Options</a></b> above.)
+</p>
+
+
+<h1>See Also</h1>
+
+<p>
+<a href="../../apps/ti.htm">Free Energy Calculations with AMBER TI</a>
+</p>
+
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

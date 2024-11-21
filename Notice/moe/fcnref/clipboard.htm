@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+</html>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Clipboard Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+  <div class="unsupported">
+
+<h1>Unsupported Functions</h1>
+
+<h1>Syntax</h1>
+
+<pre>
+    <a class="fcnlink" href="#ClipboardSetData">ClipboardSetData</a> tag_v
+    char_data = <a class="fcnlink" href=
+"#ClipboardGetData">ClipboardGetData</a> fmt_tok
+
+    <a class="fcnlink" href="#ClipboardSetText">ClipboardSetText</a> str
+    str = <a class="fcnlink" href="#ClipboardGetText">ClipboardGetText</a> []
+
+    fmt_toks = <a class="fcnlink" href="#ClipboardTags">ClipboardTags</a> []
+</pre>
+<a id="ClipboardSetData"></a>
+<h1>Description</h1>
+
+<pre>
+<span class="fcndef">ClipboardSetData</span> tag_v
+</pre>
+
+<p>Puts data of different formats onto the clipboard. Any data previously
+    stored on the clipboard is first cleared. The data is supplied as a tagged
+    vector, where the tags are format tokens specifying the formats of the data
+    items, and the attributes are character (string) data.</p>
+
+<p>Here is an example:</p>
+
+<pre>
+    ClipboardSetData [ smiles: &quot;c1ccccc1C=O&quot;, text:&quot;Hello world!&quot; ]
+</pre>
+<a id="ClipboardGetData"></a>
+<hr noshade="noshade" />
+
+<pre>
+char_data = <span class="fcndef">ClipboardGetData</span> fmt_tok
+</pre>
+
+<p>Returns the data of the specified format from the clipboard.
+    <tt>fmt_tok</tt> is a scalar value and the data is returned as characters.
+    By default, <tt>'text'</tt> is always a valid format even if no
+    text has actually been placed on the clipboard.</p>
+<a id="ClipboardSetText"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">ClipboardSetText</span> str
+</pre>
+
+<p>Puts the text string <tt>str</tt> onto the clipboard. The implied data
+    format is <tt>'text'</tt>.</p>
+<a id="ClipboardGetText"></a>
+<hr noshade="noshade" />
+
+<pre>
+str = <span class="fcndef">ClipboardGetText</span> []
+</pre>
+
+<p>Gets text data from the clipboard; the text data is returned as a
+    string. The implied format is <tt>'text'</tt>.</p>
+<a id="ClipboardTags"></a>
+<hr noshade="noshade" />
+
+<pre>
+fmt_toks = <span class="fcndef">ClipboardTags</span> []
+</pre>
+
+<p>Returns the formats (as tokens) of the data currently stored on the
+    clipboard. By default, <tt>'text'</tt> is always a valid format,
+    even if no text data has been placed on the clipboard.</p>
+  </div>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

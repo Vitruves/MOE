@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <title>Type Conversion Functions</title>
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content=
+  "functions: int, real, char, atof, atoi, string, token" />
+  <meta name="keywords" content="functions: type, storage" />
+  <meta name="keywords" content=
+  "functions: num, tok, tochar, toint, tonum, totok" />
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Type Conversion Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+rval = <a class="fcnlink" href="#atof">atof</a>    &#39;token&#39;
+ival = <a class="fcnlink" href="#atoi">atoi</a>    &#39;token&#39;
+cval = <a class="fcnlink" href="#char">char</a>    v
+ival = <a class="fcnlink" href="#int">int</a>     v
+rval = <a class="fcnlink" href="#real">real</a>    v
+tval = <a class="fcnlink" href="#storage">storage</a> v
+str  = <a class="fcnlink" href="#string">string</a>  &#39;data&#39;
+tval = <a class="fcnlink" href="#token">token</a>   &quot;data&quot;
+tval = <a class="fcnlink" href="#type">type</a>    v
+
+nval = <a class="fcnlink" href="#num">num</a>     v
+tval = <a class="fcnlink" href="#tok">tok</a>     v
+
+cval = <a class="fcnlink" href="#tochar">tochar</a>  v
+ival = <a class="fcnlink" href="#toint">toint</a>   v
+nval = <a class="fcnlink" href="#tonum">tonum</a>   v
+tval = <a class="fcnlink" href="#totok">totok</a>   v
+</pre>
+<a id="atof"></a>
+<h1>Description</h1><!-- DESC -->
+<table class="titlebar">
+<tr>
+  <th>Function</th>
+  <th>Description</th>
+</tr>
+<tr>
+  <td>
+<tt>atof</tt></td>
+  <td>
+    Returns the real number obtained by converting a character-based
+    decimal representation to a floating point representation. The
+    conversion is applied to all values in the argument vector.
+
+<pre class="code">
+svl&gt; atof [&#39;1.2&#39;, &#39;-5.67&#39;, &#39;1e3&#39;]
+[1.2, -5.67, 1000]
+</pre>
+  </td>
+</tr>
+<tr>
+  <td>
+<a id="atoi"></a>
+<tt>atoi</tt></td>
+  <td>
+    Returns the integer obtained by converting a character-based
+    representation to an integer representation. Hexadecimal notation is
+    used when the number starts with a &quot;0x&quot;. The conversion is
+    applied to all values in the argument vector.
+
+<pre class="code">
+svl&gt; atoi [&#39;-5&#39;, &#39;1023&#39;, &#39;0xfff&#39;]
+[-5, 1023, 4095]
+</pre>
+  </td>
+</tr>
+<tr>
+  <td>
+<a id="char"></a>
+<tt>char</tt></td>
+  <td>
+    Convert each number in <tt>v</tt> to a single character. Fractional
+    values are rounded to the nearest integer. The ASCII character set is
+    used.
+
+<pre class="code">
+svl&gt; char [ 64, [78,89] ]
+[ &quot;@&quot;, &quot;NY&quot; ]
+</pre>
+  </td>
+</tr>
+<tr>
+  <td>
+<a id="int"></a>
+<tt>int</tt></td>
+  <td>Convert each number in <tt>v</tt> to an integer
+  representation. Fractional values are rounded to the nearest integer. If
+  the resulting value&#39;s magnitude exceeds, then the internal integer
+  representation the largest or smallest representable integer is returned
+  (as appropriate). The conversion is applied to all values in the argument
+  vector. This function is rarely needed since SVL converts numbers
+  automatically when appropriate.</td>
+</tr>
+<tr>
+  <td>
+<a id="real"></a>
+<tt>real</tt></td>
+  <td>Convert each number in <tt>v</tt> to a floating
+  point representation. The conversion is applied to all values in the
+  argument vector. This function is rarely needed since SVL converts
+  numbers automatically when appropriate.</td>
+</tr>
+<tr>
+  <td>
+<a id="storage"></a>
+<tt>storage</tt></td>
+  <td>Returns for each value in <tt>v</tt> its storage
+  type. The return values are tokens in the set {<tt>&#39;char&#39;</tt>,
+  <tt>&#39;int&#39;</tt>, <tt>&#39;real&#39;</tt>, <tt>&#39;tok&#39;</tt>}
+  for character, integer, floating point or token, respectively.</td>
+</tr>
+<tr>
+  <td>
+<a id="string"></a>
+<tt>string</tt></td>
+  <td>
+    Converts a single argument token to a flat character vector (character
+    for character).
+
+<pre class="code">
+svl&gt; string &#39;a4+5&#39;
+&quot;a4+5&quot;
+</pre>
+  </td>
+</tr>
+<tr>
+  <td>
+<a id="token"></a>
+<tt>token</tt></td>
+      <td>
+        Converts a single argument flat character vector to a token (character
+        for character).
+
+<pre class="code">
+svl&gt; token &quot;a4+5&quot;
+&#39;a4+5&#39;
+</pre>
+  </td>
+</tr>
+<tr>
+  <td>
+<a id="type"></a>
+<tt>type</tt></td>
+  <td>Returns for each value in <tt>v</tt> its data type.
+  The return values are tokens in the set {<tt>&#39;char&#39;</tt>,
+  <tt>&#39;num&#39;</tt>, <tt>&#39;tok&#39;</tt>} for character, numeric or
+  token, respectively.</td>
+</tr>
+<tr>
+  <td>
+<a id="num"></a>
+<tt>num</tt></td>
+  <td>Returns the argument, <tt>v</tt>, if the argument
+  is a numerical vector. Otherwise, the function generates an error.</td>
+</tr>
+<tr>
+  <td>
+<a id="tok"></a>
+<tt>tok</tt></td>
+  <td>Returns the argument, <tt>v</tt>, if the argument
+  is a token vector. Otherwise, the function generates an error.</td>
+</tr>
+<tr>
+  <td>
+<a id="tochar"></a>
+<tt>tochar</tt></td>
+  <td>Converts <tt>v</tt> to type &#39;char&#39;. Numbers
+  0..9 are converted to characters &quot;0..9&quot;. Numbers 10..63 are
+  converted to characters &quot;a..zA..Z_@&quot;. All other numbers are
+  converted to character &quot;?&quot;.</td>
+</tr>
+<tr>
+  <td>
+<a id="tonum"></a>
+<tt>tonum</tt></td>
+  <td>Converts <tt>v</tt> to a numerical vector. Tokens
+  are converted to the number they represent. Tokens that do not represent
+  a valid number are converted to 0. Characters &quot;0..9&quot; are
+  converted to numbers &#39;0..9&#39;. Characters &quot;a..zA..Z_@&quot;
+  are converted to numbers 10..63. All other characters are converted to
+  -1.</td>
+</tr>
+<tr>
+  <td>
+<a id="toint"></a>
+<tt>toint</tt></td>
+  <td>Converts <tt>v</tt> to an integer vector.
+  Fractional numbers are rounded to the nearest integral value.</td>
+</tr>
+<tr>
+  <td>
+<a id="totok"></a>
+<tt>totok</tt></td>
+  <td>Converts <tt>v</tt> to a token vector. Numbers are
+  converted to their printable representations. Each character is converted
+  to one token.</td>
+</tr>
+</table><!-- ENDDESC -->
+
+<h1>See Also</h1>
+
+<p><a class="svl" href="isetc.htm">isdigit</a> <a class="svl" href=
+  "isetc.htm">isalpha</a> <a class="svl" href="freadb.htm">sreadb</a> <a class=
+  "svl" href="freadetc.htm">swrite</a> <a class="svl" href=
+  "freadb.htm">swriteb</a></p>
+
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

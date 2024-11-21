@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="panel: Selection Prompter" />
+  <meta name="keywords" content=
+  "keywords: Atom Selector, Residue Selector, selection language" />
+  <meta name="keywords" content="keywords: selection expression" />
+  <title>Selection Prompter</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Selection Prompter
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+  <ul>
+    <li><a href="#Introduction">Running the Application</a></li>
+    <li>
+      <a href="#SelectionExamples">Selection Examples</a>
+      <ul>
+        <li><a href="#NamedSets">Named Sets</a></li>
+        <li><a href="#Keywords">Selecting by Keywords</a></li>
+        <li><a href="#Extension">Selecting by Extension</a></li>
+        <li><a href="#Patterns">Selecting by Patterns</a></li>
+        <li><a href="#LogicalOperation">Logical Operation</a></li>
+        <li><a href="#Interaction">Interaction</a></li>
+        <li><a href="#Functions">SVL Functions</a></li>
+        <li><a href="#Macros">Selecting by Macros</a></li>
+      </ul>
+    </li>
+  </ul>
+
+<p>The purpose of the Selection Prompter is to select atoms and residues
+  using MOE's <a href="../fcnref/aselect.htm">selection language</a>. With
+  simple expressions, this powerful and intuitive language achieves
+  functionality provided by the <a href="select.htm#AtomSelector">Atom
+  Selector</a> and <a href="select.htm#ResidueSelector">Residue Selector</a>,
+  and additionally provides the ability to perform complex selection operations
+  previously unavailable using those panels.</p>
+
+<p>Examples of selection language expressions and syntax are given <a href=
+  "#SelectionExamples">below</a>.</p>
+<a id="Introduction"></a>
+<h1>Running the Application</h1>
+
+<p>To open the Selection Prompter, choose:</p>
+  <p class="blockquote">
+    <span class="menu">Select | Selector...</span>
+  </p>
+
+<p>from either the MOE Window or the Sequence Editor. Equivalently, the
+  shortcut <tt>Ctrl+L</tt> will also raise the Selection Prompter, provided the
+  MOE Window or Sequence Editor has the focus.</p>
+  <center>
+    <img src="sel_ui/selection_prompter.png" alt="Selection Prompter" />
+
+<p class="caption">Selection Prompter in MOE Window</p><img src=
+    "sel_ui/se_selection_prompter.png" alt="Selection Prompter" />
+
+<p class="caption">Selection Prompter in Sequence Editor</p>
+  </center>
+
+<p>The Selection Prompter in the MOE Window and Sequence Editor are the same
+  application; their appearance differs slightly in each case in that the
+  dimmed text in the empty textfield is context-sensitive, showing examples of
+  atom selection expressions in the MOE Window, and residue selection
+  expressions in the Sequence Editor.</p>
+
+<p>The Selection Prompter selects atoms when operated from within the MOE
+  Window, and residues when within the Sequence Editor. When entering an atom
+  expression in the Sequence Editor, the parent residues of the atoms
+  satisfying the expression will be selected. Similarly, when entering a
+  residue expression in the MOE Window, the child atoms of the residues
+  satisfying the expression will be selected.</p>
+
+<p>The Selection Prompter is composed of the following components:</p>
+  <ul class="spaced">
+    <li>
+      <img src="sel_ui/selection_mode.png" style="vertical-align:middle" />
+      Specify the selection mode. There are two modes of selection:
+      <ul>
+        <li><b>Select.</b> Objects satisfying the selection expression are
+        added to the current selection.</li>
+        <li><b>Deselect.</b> Objects satisfying the selection expression are
+        deselected from the current selection.</li>
+      </ul>
+    </li>
+    <li>
+      <b>Edit Box.</b> Textfield in which selection expressions are entered.
+      The following keystrokes and features are available:
+      <ul>
+        <li><tt>&lt;Enter&gt;</tt>. Perform the selection and close the
+        prompter.</li>
+        <li><tt>&lt;Shift+Enter&gt;</tt>. Perform the selection, leaving the
+        prompter open.</li>
+        <li><tt>&lt;Ctrl+Enter&gt;</tt>. Briefly flash the objects satisfying
+        the selection expression.</li>
+        <li><tt>&lt;ESC&gt;</tt>. Clears the content. If the field is already
+        empty, quits the prompter.</li>
+        <li><tt>&lt;Ctrl+K&gt;</tt>. Toggle between <i>Select</i> and
+        <i>Deselect</i> mode.</li>
+        <li><tt>&lt;Up&gt;</tt>, <tt>&lt;Down&gt;</tt>. Keyboard arrows
+        navigate the expression history.</li>
+        <li><i>Empty text</i>. When the textfield is empty, the grayed text
+        gives examples of selection language expressions. The bubble help,
+        which appears when the mouse is hovered, gives further examples.</li>
+        <li><i>Shortcut</i>. The textfield pulldown provides examples of common
+        expressions.</li>
+        <li><i>Syntax checking</i>. The text color turns red when a syntax
+        error is detected.</li>
+      </ul>
+    </li>
+    <li><img src="sel_ui/flash_button.png" style="vertical-align:middle" />
+    Press to briefly flash the objects satisfying the selection expression. The
+    button will become inactive when the expression is not valid, and its
+    bubble help will show the syntax error. Equivalently, press
+    <tt>&lt;Ctrl+Enter&gt;</tt> in the textfield.</li>
+    <li><img src="sel_ui/ui_button.png" style="vertical-align:middle" /> Opens
+    the <a href="select.htm#AtomSelector">Atom Selector</a> if the prompter is
+    in the MOE Window, otherwise the <a href=
+    "select.htm#ResidueSelector">Residue Selector</a> if in the Sequence
+    Editor.</li>
+    <li><img src="sel_ui/selection_help.png" style="vertical-align:middle" />
+    Opens the current page in a browser.</li>
+  </ul>
+<a id="SelectionExamples"></a>
+<h1>Selection Language Examples</h1>
+
+<p>In the following, examples of syntax for common expressions are given.</p>
+<a id="NamedSets"></a>
+<h2>Named Sets</h2>
+
+<p>Named sets of objects can be assigned and subsequently used in other
+  expressions.</p>
+
+<pre class="code">
+$name                       objects of a set called &quot;name&quot;
+$name = ligand              create a set called &quot;name&quot; of all ligand objects
+</pre>
+<a id="Keywords"></a>
+<h2>Keywords</h2>
+
+<p>Special keywords exist to access atoms and residues with commonly inquired
+  properties.</p>
+
+<pre class="code">
+ligand                      ligand atoms/residues
+asel                        current atom selection
+rsel                        current residue selection
+csel                        current chain selection
+backbone                    backbone atoms/residues
+visible                     visible atoms/residues
+exposed                     surface exposed atoms/residues
+</pre>
+<a id="Extension"></a>
+<h2>Extension</h2>
+
+<p>The extension operation enlarges the selection set.</p>
+
+<pre class="code">
+ligand &gt;&gt; 4.5               ligand and all objects within 5&Aring; of the ligand
+fixed &gt;&gt; bond               fixed atoms and all atoms bonded to them
+sstruct h &gt;&gt; column         helical residues extended to include all residues
+                            belonging to the same columns in the Sequence Editor
+asel &gt;&gt; mol                 currently selected atoms, extended to entire molecule
+</pre>
+<a id="Patterns"></a>
+<h2>Patterns</h2>
+
+<p>Residue sequence patterns, SMARTS strings, and PROSITE patterns are
+  supported.</p>
+
+<pre class="code">
+AlaGlyHis                   three residues whose residue sequence is &quot;AlaGlyHis&quot;
+AGH                         three residues whose residue sequence is &quot;AGH&quot;
+Ala245f                     residue Ala at UID 245, with insertion code 'f'
+Ala4:Gly10                  residues starting at Ala UID 4, to Gly UID 10, inclusive
+&quot;C(=O)C&quot;                    ketone groups, specified by SMARTS string
+prosite &quot;F-[GS]-x(3)&quot;       residues satisfying PROSITE pattern
+</pre>
+<a id="LogicalOperation"></a>
+<h2>Logical Operation</h2>
+
+<p>Logical set combining operations such as <tt>and</tt> (intersection),
+  <tt>or</tt> (union), <tt>-</tt> (difference), and <tt>not</tt> (negation) are
+  supported.</p>
+
+<pre class="code">
+receptor and heavy          all heavy atoms of the receptor
+ligand or solvent           union of all ligand and solvent objects
+backbone - fixed            all unfixed backbone atoms
+not pocket                  no pocket atoms
+</pre>
+<a id="Interaction"></a>
+<h2>Interaction</h2>
+
+<p>Binary operations expressing the relationship between two sets of objects
+  use parenthesized parameter lists. The objects satisfying the expression will
+  all come from the first set in the list.</p>
+
+<pre class="code">
+dist (ligand, receptor) &gt; 5 ligand atoms that are at least 5&Aring; away from
+                            any receptor atom
+hbond (water, sstruct h)    water molecules that are hydrogen-bonded to helices
+clash (ligand, all) &gt; 4     ligand atoms that clash with other atoms, specified
+                            as having contact energy greater than 4 kcal/mol
+</pre>
+<a id="Functions"></a>
+<h2>Functions</h2>
+
+<p>Atom and residue property SVL functions can be invoked.</p>
+
+<pre class="code">
+aName == 'CA'               atoms with atom name 'CA'
+aIon &lt; -1                   atoms with ionization state less than -1
+rAtomCount == 15            residues containing exactly 15 atoms
+cHeader ==  'pdb'           chains with 'pdb' as a header
+</pre>
+<a id="Macros"></a>
+<h2>Macros</h2>
+
+<p>A special shorthand makes it easy to specify objects by name and tag.
+  There are two modes of specification, one the reverse of the other. Fields
+  can be left unspecified. At least one slash '<tt>/</tt>' is
+  required.</p>
+
+<pre class="code">
+/1ATP/E/VAL/CA              shorthand for cTag == '1ATP'
+                                      and cLetter == 'E'
+                                      and rName == 'VAL'
+                                      and aName == 'CA'
+
+ca//E                       shorthand for aName == 'CA'
+                                      and cLetter == 'E'
+</pre>
+<a id="See_Also"></a>
+<h1>See Also</h1>
+
+<p><a href="select.htm">Selection Panels</a><br />
+  <a href="../fcnref/aselect.htm">Selection Expression Language</a><br />
+  </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

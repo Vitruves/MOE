@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: barrier_capacity" />
+  <meta name="keywords" content="functions: barrier_close" />
+  <meta name="keywords" content="functions: barrier_key" />
+  <meta name="keywords" content="functions: barrier_keylist" />
+  <meta name="keywords" content="functions: barrier_name" />
+  <meta name="keywords" content="functions: barrier_open" />
+  <meta name="keywords" content="functions: barrier_rcapacity" />
+  <meta name="keywords" content="functions: barrier_ref" />
+  <meta name="keywords" content="functions: barrier_setcapacity" />
+  <meta name="keywords" content="functions: barrier_taskref" />
+  <meta name="keywords" content="functions: barrier_wait" />
+  <title>SVL Barrier Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    SVL Barrier Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+key = <a class="fcnlink" href="#barrier_open">barrier_open</a> []
+key = <a class="fcnlink" href="#barrier_open">barrier_open</a> key
+key = <a class="fcnlink" href=
+"#barrier_open">barrier_open</a> 'name'
+key = <a class="fcnlink" href=
+"#barrier_open">barrier_open</a> [key_or_name_or_null, capacity]
+
+<a class="fcnlink" href="#barrier_close">barrier_close</a> key
+
+<a class="fcnlink" href="#barrier_wait">barrier_wait</a> key
+
+val = <a class="fcnlink" href=
+"#barrier_rcapacity">barrier_rcapacity</a> key
+val = <a class="fcnlink" href="#barrier_capacity">barrier_capacity</a> key
+<a class="fcnlink" href=
+"#barrier_setcapacity">barrier_setcapacity</a> [key, capacity]
+
+key = <a class="fcnlink" href="#barrier_key">barrier_key</a> key_or_name
+name = <a class="fcnlink" href="#barrier_name">barrier_name</a> key_or_name
+keylist = <a class="fcnlink" href="#barrier_keylist">barrier_keylist</a> []
+
+count = <a class="fcnlink" href="#barrier_ref">barrier_ref</a> key
+count = <a class="fcnlink" href="#barrier_taskref">barrier_taskref</a> key
+</pre>
+
+<h1>Description</h1>
+
+<p>A <i>barrier</i> is a programmatic tool that allows cooperating tasks to
+  wait until all tasks have joined the activity. When a group of tasks needs to
+  wait for each other, each task will block with <tt>barrier_wait</tt> until
+  all tasks in the group are blocked. When the last task in the group calls
+  <tt>barrier_wait</tt>, all tasks are automatically released.</p>
+
+<p>Each barrier object is associated with two numbers:</p>
+<ul>
+  <li>The <i>capacity</i> is the maximum number of tasks calling
+  <tt>barrier_wait</tt> that will be blocked at any given time. The default
+  capacity is&nbsp;0. When the barrier's capacity is&nbsp;0, a task
+  calling <tt>barrier_wait</tt> will not be blocked.</li>
+  <li>The <i>remaining capacity</i> is the number of tasks that must call
+  <tt>barrier_wait</tt> for all currently blocked tasks to be released. The
+  remaining capacity is set to capacity when there are no blocked tasks and
+  is decremented with each <tt>barrier_wait</tt> call. It cannot be set
+  explicitly. Positive values indicate that a task calling
+  <tt>barrier_wait</tt> would be blocked. A value of&nbsp;0 indicates that a
+  task calling <tt>barrier_wait</tt> would unblock all waiting tasks and then
+  continue to execute.</li>
+</ul>
+
+<p>To synchronize the execution of&nbsp;<i>N</i> tasks, the barrier capacity
+  should be set to&nbsp;(<i>N</i>&minus;1). Each task will then call
+  <tt>barrier_wait</tt> to block until all tasks are ready. When
+  the&nbsp;<i>N</i>-th task calls <tt>barrier_wait</tt>,
+  the&nbsp;(<i>N</i>&minus;1) already waiting tasks will be unblocked and
+  all&nbsp;<i>N</i> tasks will continue to execute concurrently.</p>
+  <hr noshade="noshade" />
+
+  <a id="barrier_open"></a>
+<pre>key = <span class="fcndef">barrier_open</span> []
+key = <span class="fcndef">barrier_open</span> 'name'
+key = <span class="fcndef">barrier_open</span> key
+key = <span class="fcndef">barrier_open</span> [key_or_name_or_null, capacity]
+</pre>
+
+<p>Function <tt>barrier_open</tt> with an empty argument creates a new
+  <i>barrier</i> object and returns its key. If the argument is a key or a
+  token name of an existing object, the function duplicates the object and
+  returns the key of the duplicate. If the argument is a token name and no
+  object with such a name exists, the function creates a new object with the
+  given name.</p>
+
+<p>If the second argument is present, then</p>
+
+<pre class="code">
+key = barrier_open [x, capacity]
+</pre>
+
+<p>is equivalent to</p>
+
+<pre class="code">
+barrier_setcapacity [key = barrier_open x, capacity]
+</pre>
+
+<p>The object will remain available to the calling task until the function
+  <tt>barrier_close</tt> is called by the same task. For each call to
+  <tt>barrier_open</tt> there must be a corresponding call to
+  <tt>barrier_close</tt> in the same task.</p>
+
+<p>The maximum capacity and the remaining capacity of a new barrier object
+  are both&nbsp;0.</p>
+<a id="barrier_close"></a>
+<hr noshade="noshade" />
+
+<pre><span class="fcndef">barrier_close</span> key
+</pre>
+
+<p>Function <tt>barrier_close</tt> closes the given barrier object. The
+  argument may be a nested vector. The function ignores keys that refer to
+  non-existing objects.</p>
+<a id="barrier_wait"></a>
+<hr noshade="noshade" />
+
+<pre><span class="fcndef">barrier_wait</span> key
+</pre>
+
+<p>If the remaining capacity of the barrier is positive, the function will
+  decrease the remaining capacity by&nbsp;1 and block the task. If the barrier
+  remaining capacity is zero, the function will release all tasks blocked by
+  the <tt>barrier_wait</tt> call and set the remaining capacity to
+  capacity.</p>
+<a id="barrier_rcapacity"></a>
+<hr noshade="noshade" />
+
+<pre>val = <span class="fcndef">barrier_rcapacity</span> key
+</pre>
+
+<p>Returns the remaining capacity of the given barrier object.</p>
+
+<p>The function can be used to determine whether or not a subsequent call to
+  <tt>barrier_wait</tt> would block the task. If the return value is positive,
+  the task would be blocked. If the return value is&nbsp;0, all a call to
+  <tt>barrier_wait</tt> would unblock all blocked tasks.</p>
+<a id="barrier_capacity"></a>
+<hr noshade="noshade" />
+
+<pre>val = <span class="fcndef">barrier_capacity</span> key
+</pre>
+
+<p>Returns the capacity of the given barrier. The default capacity
+  is&nbsp;0.</p>
+<a id="barrier_setcapacity"></a>
+<hr noshade="noshade" />
+
+<pre><span class="fcndef">barrier_setcapacity</span> [key, val]
+</pre>
+
+<p>Sets the maximum capacity of the given barrier to the given value. The
+  residual capacity is automatically increased or decreased by the same amount.
+  If the residual capacity decreases to a negative value, the function unblocks
+  all waiting tasks and resets the residual capacity to the (full)
+  capacity.</p>
+<a id="barrier_key"></a>
+<hr noshade="noshade" />
+
+<pre>key = <span class="fcndef">barrier_key</span> key
+key = <span class="fcndef">barrier_key</span> 'name'
+</pre>
+
+<p>Returns the key of the given barrier. If the barrier does not exist, the
+  function returns&nbsp;0. The argument may be a nested vector.</p>
+<hr noshade="noshade" />
+
+<a id="barrier_name"></a>
+<pre>name = <span class="fcndef">barrier_name</span> key
+name = <span class="fcndef">barrier_name</span> 'name'
+</pre>
+
+<p>Returns the name of the given barrier. If the barrier does not exist, the
+  function returns <tt>''</tt> (empty token). The argument may be a
+  nested vector.</p>
+  <hr noshade="noshade" />
+
+  <a id="barrier_keylist"></a>
+<pre>keylist = <span class="fcndef">barrier_keylist</span> []
+</pre>
+
+<p>Returns the list of keys of all currently open barrier objects.</p>
+<hr noshade="noshade" />
+
+<a id="barrier_taskref"></a>
+<a id="barrier_ref"></a>
+<pre>
+count = <span class="fcndef">barrier_ref</span> [ key1, key2, ...]
+count = <span class="fcndef">barrier_taskref</span> [ key1, key2, ...]
+</pre>
+
+<p>Each barrier object has associated with it a reference count. When the
+  object is opened or reopened with <tt>barrier_open</tt>, the reference count
+  is increased. When the object is closed with <tt>barrier_close</tt> or when
+  the opening task is destroyed, the reference count is decreased.</p>
+
+<p>For each <tt>key</tt> specified, function <tt>barrier_ref</tt> returns the
+  reference count of the corresponding barrier object or&nbsp;0 if no such
+  object exists. Function <tt>barrier_taskref</tt> returns only the reference
+  count associated with <tt>barrier_open</tt>/<tt>barrier_close</tt> calls
+  executed by the calling task.</p>
+
+<h1>See Also</h1>
+<table class="functionList">
+  <tr>
+    <td><a href="tasksend.htm">task_send</a><br />
+    <a href="tasksend.htm">task_receive</a><br />
+    <a href="tasksend.htm">task_reply</a><br />
+    <br />
+    <a href="sync.htm">sync_open</a><br />
+    <a href="sync.htm">sync_close</a><br />
+    <a href="sync.htm">sync_wait</a><br />
+    <a href="sync.htm">sync_update</a><br />
+    <br />
+    <a href="mutex.htm">mutex_open</a><br />
+    <a href="mutex.htm">mutex_close</a><br />
+    <a href="mutex.htm">mutex_lock</a><br />
+    <a href="mutex.htm">mutex_unlock</a></td>
+  </tr>
+</table>
+
+<p><a href="introcomm.htm">SVL Task Communication Functions</a></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

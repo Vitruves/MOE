@@ -1,0 +1,2198 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../images/ccgicon.png" />
+  <title>MOE Sample Programs</title>
+  <meta name="keywords" content="panel: JDBC Database Viewer" />
+  <meta name="keywords" content="main_keywords: Java Database Connectivity" />
+  <meta name="keywords" content=
+  "main_keywords: SVL_JVM, CLASSPATH, SQL, PostgreSQL, MySQL" />
+  <meta name="keywords" content=
+  "keywords: MDB, password, URL, environment variable" />
+  <meta name="keywords" content=
+  "keywords: third party, import, alias, username, password" />
+  <meta name="keywords" content="keywords: mpu_password, driver" />
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../index.htm"><img src="../images/ccglogo.png" /></a>
+    <a href="../index.htm"><div class="moeversion"></div></a>
+    MOE Sample Programs
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+  <!-- <div id="useMathJax"></div> -->
+
+<p>The MOE package includes a variety of sample programs that not only
+  illustrate the versatility and practicality of MOE's various tools but
+  also the ease with which one can program new applications using the SVL
+  programming language. The SVL files can be found in the directory
+  <tt>$MOE/sample</tt>. For an alphabetical listing of these files, see
+  <a href="#QuickRef">Sample Programs Quick Reference</a>.</p>
+  <ol class="index">
+    <li>Molecular Graphics
+      <ul>
+        <li>
+          <a href="#Scenes">Molecular Scenes Manager (scenes.svl)</a>
+        </li>
+        <li>
+          <a href="#Electro">Electrostatic Surfaces (esurf.svl)</a>
+        </li>
+        <li>
+          <a href="#Gridsurf">Grid Surface Demo (gridex.svl)</a>
+        </li>
+        <li>
+          <a href="#Nabstack">DNA Base Stacking (nabstack.svl)</a>
+        </li>
+        <li>
+          <a href="#Solv">Solvation Free Energy from Surface Area
+          (vajdaweng.svl)</a>
+        </li>
+      </ul>
+    </li>
+    <li>Molecular Databases
+      <ul>
+        <li>
+          <a href="#Pairsim">Typed Pair Distance Similarity (pairsim.svl)</a>
+        </li>
+        <li>
+          <a href="cliprg.htm">Clipping R-Groups (dbvclip.svl)</a>
+        </li>
+        <li>
+          <a href="cdgen.htm">QuaSAR-CombiGen: Enumerative Combinatorial
+          Library Generation (qcdgen.svl)</a>
+        </li>
+        <li>
+          <a href="qcombi.htm">QuaSAR-CombiDesign: Create Diverse Subset
+          (qcombi.svl)</a>
+        </li>
+        <li>
+          <a href="qcrsel.htm">QuaSAR-Reagent: Reagent Activity Analysis
+          (qcrsel.svl)</a>
+        </li>
+        <li>
+          <a href="#WebMake">Output As HTML (webmake.svl)</a>
+        </li>
+        <li>
+          <a href="#JDBCViewer">JDBC Database Viewer (jdbcview.svl)</a>
+        </li>
+      </ul>
+    </li>
+    <li>Quantitative Structure Activity Relationships
+      <ul>
+        <li>
+          <a href="#Kier">Kier Descriptors (q_estate.svl)</a>
+        </li>
+        <li>
+          <a href="#Randic">Randic Descriptor (q_randic.svl)</a>
+        </li>
+        <li>
+          <a href="#MACCS">MACCS Key Count Descriptors (q_maccs.svl)</a>
+        </li>
+      </ul>
+    </li>
+    <li>Molecular Modeling
+      <ul>
+        <li>
+          <a href="#HMC">Hybrid Monte Carlo Simulation (hmc.svl)</a>
+        </li>
+        <li>
+          <a href="#Langevin">Langevin Implicit Euler Dynamics (iedyn.svl)</a>
+        </li>
+        <li>
+          <a href="#Molsup">Molecular Superposition (seal.svl)</a>
+        </li>
+        <li>
+          <a href="#Flexsup">Flexible Molecular Superposition
+          (sealflex.svl)</a>
+        </li>
+        <li>
+          <a href="#NVE">NVE Molecular Dynamics Simulation (verlet.svl)</a>
+        </li>
+        <li>
+          <a href="#dihmplot">Dihedral Energy Plot with Minimization
+          (dihmplot.svl)</a>
+        </li>
+        <li>
+          <a href="#eht_ui">Extended Hueckel Theory Properties (eht_ui.svl)</a>
+        </li>
+        <li>
+          <a href="#rism_hfe">3D-RISM Hydration Free Energy (rism_hfe.svl)</a>
+        </li>
+      </ul>
+    </li>
+    <li>Molecular Dynamics
+      <ul>
+        <li>
+          <a href="#mdtools_qp">Trajectory Quick Play</a>
+        </li>
+        <li>
+          <a href="#mdtools_moevie">Trajectory MOEvie Generation</a>
+        </li>
+        <li>
+          <a href="#mdtools_analysis">Trajectory Analysis Tools</a>
+        </li>
+      </ul>
+    </li>
+    <li>Protein Analysis and Modeling
+      <ul>
+        <li>
+          <a href="#AbModel">Building Custom Antibody Models
+          (ab_custom.svl)</a>
+        </li>
+        <li>
+          <a href="#Alpha">Protein Reconstruction from Alpha Carbon Trace
+          (alphabuild.svl)</a>
+        </li>
+        <li>
+          <a href="#OCCO">OCCO Plot (occo.svl)</a>
+        </li>
+        <li>
+          <a href="#DistPlot">Alpha Carbon Distance Matrix (distplot.svl)</a>
+        </li>
+        <li>
+          <a href="#Jack">Mean Pair Potential Jackknife Test (pairpot.svl)</a>
+        </li>
+        <li>
+          <a href="#ProjTemplates">MOE-Project Templates</a>
+        </li>
+      </ul>
+    </li>
+    <li>Builder SMILES Textfield
+      <ul>
+	<li>
+	  <a href="#BuilderZINC">Perform ZINC15 Database Search from
+	    Builder</a>
+	</li>
+	<li>
+	  <a href="#smitext">Embed Builder SMILES textfield into a Panel</a>
+	</li>
+      </ul>
+    </li>
+    <li>Electron Density
+      <ul>
+        <li>
+          <a href="#edenstext">Embed Electron Density Widgets into a Panel
+	  (edenstext.svl)</a>
+        </li>
+      </ul>
+      <ul>
+        <li>
+          <a href="#edtransform">Rotate and Translate Electron Density Surfaces
+	  (edtransform.svl)</a>
+        </li>
+      </ul>
+    </li>
+    <li>MOEsaic
+      <ul>
+	<li>
+	  <a href="#MOEsaicpic50">Add Activity Field to MOEsaic Dataset</a>
+	</li>
+	<li>
+	  <a href="#MOEsaicSSS">Add Class Labels to MOEsaic Dataset</a>
+	</li>
+	<li>
+	  <a href="#MOEsaicUpdProj">Updatable MOEsaic Custom Project</a>
+	</li>
+      </ul>
+    </li>
+    <li>MOE/cluster (MOE/smp)
+      <ul>
+        <li>
+          <a href="#smics">Parallelized Stochastic Search (smics.svl)</a>
+        </li>
+        <li>
+          <a href="#psearch">Parallelized Homology Search (psearch.svl)</a>
+        </li>
+      </ul>
+    </li>
+    <li>SVL Programming
+      <ul>
+        <li>
+          <a href="#grdemo">2D Graphics Demo (grdemo.svl)</a>
+        </li>
+        <li>
+          <a href="#Gobj">3D Graphics Objects Demo (gobjdemo.svl)</a>
+        </li>
+        <li>
+          <a href="#Gridcode">Grid Code Example (gridcode.svl)</a>
+        </li>
+        <li>
+          <a href="#Window">SVL Window Toolkit Demo (windemo.svl)</a>
+        </li>
+      </ul>
+    </li>
+  </ol><!-- Scenes -->
+  <hr noshade="noshade" />
+
+<h2>
+<a id="Scenes">Molecular Scenes Manager</a></h2>
+  <ul>
+    <li><b>File</b>: <tt>$MOE/sample/scenes.svl</tt></li>
+    <li><b>Description</b>: This sample program implements a Scenes Manager,
+    which enables a user to save complete molecular scenes with all properties,
+    such as molecule representation style, meters, constraints, surfaces, etc.,
+    in a database. The scenes can be commented and a button bar gives quick
+    access to the first 10 scenes in the database.</li>
+    <li><b>Instructions</b>:
+      <ol>
+        <li>Run the file by typing:
+
+<pre class="code oneline">run '$MOE/sample/scenes.svl'</pre>
+
+<p>The Scenes Manager prompter is displayed at the top of the MOE
+          window:</p>
+
+<img src="samples/scenes_prompt.png"
+          alt="Scenes Prompter" class="center" />
+        </li>
+        <li>Choose a new scene database with <b>Set</b> or use the default
+        <tt>scenes.mdb</tt> in the current work directory.</li>
+        <li>New molecular scenes can be added to the database with the
+        <b>Add</b> button.</li>
+        <li>Scenes from the database can be loaded with the numbered
+        <b>Scenes</b> buttons.</li>
+        <li>To remove scenes, add comments or access more than 10 scenes, open
+        the Scenes Manager panel with the <b>Manage</b> button.
+
+<img src="samples/scenes_mgr.png" alt=
+          "Scenes Manager" class="center" />
+        </li>
+      </ol>
+    </li>
+  </ul><!--  esurf.svl  -->
+  <hr noshade="noshade" />
+
+<h2><a id="Electro">Electrostatic Surfaces</a></h2>
+  <ul>
+    <li><b>File</b>: <tt>$MOE/sample/esurf.svl</tt></li>
+    <li><b>Description</b>: Calculates electrostatic potential and plots
+      iso-surfaces of specified levels.
+
+<img src="samples/s_esurf2.png" alt=
+      "Electrostatic Iso-Surface" class="center" />
+    </li>
+    <li><b>Instructions</b>:<br />
+      <ol>
+        <li>Open a molecule file.</li>
+        <li>Before running this sample, make sure partial charges have been
+        computed.</li>
+        <li>The file may be run with
+
+        <pre class="code oneline">run '$MOE/sample/esurf.svl' </pre>
+        A panel titled Electrostatic field Iso-Surface is displayed.
+
+      <img src="samples/s_esurf1.png" alt=
+          "Electrostatic field Iso-Surface Panel" class="center" />
+        </li>
+        <li>The Name is used to identify the surface in the <a href=
+        "../moe/gui/gobjman.htm">Graphics Objects Manager</a>.
+        </li>
+        <li>The Probe Charge value is used to scale the iso-surface.</li>
+        <li>The Levels value is used to specify the levels of iso-surfaces to
+        be drawn. More than one level can be specified at once; separate each
+        value by a space.</li>
+        <li>The Spacing buttons are used to choose line density of the
+        iso-surface mesh.</li>
+        <li>The Use Selected Atoms Only checkbox is used to specify around
+        which atoms the surface will be drawn. If on, only selected atoms will
+        be considered in the surface calculations, otherwise, all atoms will be
+        used.</li>
+        <li>Press <b>OK</b> to draw the surface. Once drawn, the surface can be
+        managed (shown or hidden in the MOE rendering window) or deleted using
+        the <a href="../moe/gui/gobjman.htm">Graphics Objects Manager</a>.
+        </li>
+      </ol>
+
+      <p>For more information, see <a href="../apps/surfmap.htm">Electrostatic
+      Feature Maps</a>. <!--
+
+<p>
+ For more information, see <a
+    href="../moe/molsystems/pboltz.htm">Poisson-Boltzmann Electrostatics</a>.
+    --></p>
+    </li>
+  </ul><!--      gridex.svl -->
+  <hr noshade="noshade" />
+
+<h2><a id="Gridsurf">Grid Surface Demo</a></h2>
+  <ul>
+    <li><b>File</b>: <tt>$MOE/sample/gridex.svl</tt></li>
+    <li><b>Description</b>: Demonstrates the various drawing modes used to
+    render a grid surface.</li>
+    <li><b>Instructions</b>:
+      <ol>
+        <li>Open a molecule file.</li>
+        <li>Type the following command at the SVL Command Line:
+
+      <pre class="code oneline">run '$MOE/sample/gridex.svl' </pre>
+      A panel titled Grid Surfaces Demo is displayed.
+
+      <img src="samples/s_gridex1.png" alt=
+          "Grid code panel" class="center" />
+        </li>
+        <li>Turn on the Apply Changes Immediately toggle box so that values are
+        instantaneously reflected on the surface displayed in the MOE rendering
+        window.</li>
+        <li>The Camnet fill ratio and Tile/loop separation parameters are only
+        available when the appropriate Surface type is in effect.
+
+        <img src="samples/s_gridex2.png" alt=
+          "Grid Surface" class="center" />
+        </li>
+      </ol>
+    </li>
+  </ul>
+  <hr noshade="noshade" />
+
+<h2><a id="Nabstack">DNA Base Stacking</a></h2>
+  <ul>
+    <li><b>File</b>: <tt>$MOE/sample/nabstack.svl</tt></li>
+    <li><b>Description</b>: Displays base-base stacking contacts.
+
+<p><cite>Reference:
+      Gabb, H.A., Sanghani, S.R., Robert, C.H., Prevost, C;
+      Finding and Visualizing Nucleic Acid Base Stacking;
+      <i>Journal of Molecular Graphics 14(1)</i> (February <b>1996</b>)
+      6&ndash;11.</cite></p>
+
+<img src="samples/s_nabstack.png" alt=
+      "DNA Base Stacking" class="center" />
+    </li>
+    <li><b>Instructions</b>:
+      <ol>
+        <li>Open a DNA molecule file from the RCSB database (for example, PDB
+        code 101D).</li>
+        <li>Run the program with:
+
+<pre class="code oneline">run '$MOE/sample/nabstack.svl'</pre>
+        </li>
+        <li>Graphics objects are managed (shown or hidden in the MOE rendering
+        window) or deleted using the <a href="../moe/gui/gobjman.htm">Graphics
+        Objects Manager</a>.
+        </li>
+      </ol>
+    </li>
+  </ul><!-- vadjaweng.svl -->
+  <hr noshade="noshade" />
+
+<h2><a id="Solv">Solvation Free Energy From Surface Area</a></h2>
+  <ul>
+    <li><b>File</b>: <tt>$MOE/sample/vajdaweng.svl</tt></li>
+    <li><b>Description</b>: Prints, at the CLI, an estimate of the transfer free
+      energy based on the area of the water-accessible surface.
+
+<p><cite>Reference:
+      Vajda, S., Weng, Z., DeLisi, C.;
+      Extracting Hydrophobicity Parameters from Solute
+      Partition and Protein Mutation/Unfolding Experiments;
+      <i>Protein Engineering, Design and Selection 8(11)</i>
+      (November <b>1995</b>)
+      1081&ndash;1092; DOI: 10.1093/protein/8.11.1081
+      </cite></p>
+    </li>
+    <li><b>Instructions</b>:
+      <ol>
+        <li>Open a molecule file.</li>
+        <li>In the SVL Commands window, type:
+
+<pre class="code oneline">run '$MOE/sample/vajdaweng.svl'</pre>
+
+<p>The output will appear in the SVL Commands window.</p>
+        </li>
+      </ol>
+    </li>
+  </ul><!-- pairsim.svl -->
+  <hr noshade="noshade" />
+
+<h2><a id="Pairsim">Typed Pair Distance Similarity</a></h2>
+  <ul>
+    <li><b>File</b>: <tt>$MOE/sample/pairsim.svl</tt></li>
+    <li><b>Description</b>: Calculates real-valued fingerprints based on binned,
+      Cartesian atom pair distances for atoms of selected types in a molecule.
+      Output fingerprints have variable length based on the number of distance
+      bins and the number of requested atom types.
+
+<p><cite>Reference: Sheridan, R.P., Miller, M.D., Underwood, D.J.,
+      Kearsley, S.K.;
+      Chemical Similarity Using Geometric Atom Pair Descriptors;
+      <i>J. Chem. Info. Comput. Sci. 36(1)</i> (<b>1996</b>)
+      128&ndash;136; DOI: 10.1021/ci950275b</cite></p>
+    </li>
+    <li><b>Instructions</b>:
+      <ol>
+        <li>Load the fingerprinting module with the following command:
+
+<pre class="code oneline">load '$MOE/sample/pairsim.svl'</pre>
+
+<p>This defines two functions:</p>
+
+<pre class="code oneline">fp2_FingerPrint [atom_keys, type_vector, sel_types]</pre>
+
+<p>which calculates the fingerprint for a single molecule, and</p>
+
+<pre class="code oneline">fp2_Similarity [fprint1, fprint2]</pre>
+
+<p>which yields a similarity between 0 and 1.</p>
+        </li>
+        <li>Create methanol, and generate its fingerprint:
+
+<pre class="code">
+atoms1 = sm_Build 'CO';
+type_vector1 = aElement atoms1;
+fprint1 = fp2_FingerPrint [atoms1, type_vector1, ['C','O','H']];
+</pre>
+        </li>
+        <li>Create ethanol, and generate its fingerprint:
+
+<pre class="code">
+atoms2 = sm_Build 'CCO';
+type_vector2 = aElement atoms2;
+fprint2 = fp2_FingerPrint [atoms2, type_vector2, ['C','O','H']];
+    </pre>
+
+<p>Both fprint1 and fprint2 are vectors of length 189 (21*9),
+          containing the occupancy of each distance bin for each pair: C-C,
+          C-O, etc. The occupancies of the distance bins sum to the number of
+          atom pairs of the specified type.</p>
+        </li>
+        <li>Generate the similarity metric between ethanol and methanol:
+
+<pre class="code oneline">print fp2_Similarity [fprint1, fprint2];</pre>
+
+<p>yielding roughly 0.55.</p>
+        </li>
+        <li>To calculate the fingerprint using all atoms of the molecule:
+
+<pre class="code oneline">print fp2_FingerPrint [atoms2, one atoms2, 1];</pre>
+
+<p>which indicates that all atoms are of type 1, and that all atoms
+          of type 1 should be considered.</p>
+        </li>
+      </ol>
+    </li>
+  </ul><!-- webmake.svl -->
+  <hr noshade="noshade" />
+
+<h2><a id="WebMake"></a>
+Output As HTML</h2>
+  <ul>
+    <li><b>File</b>: <tt>$MOE/sample/webmake.svl</tt></li>
+    <li><b>Description</b>: A program that can output the contents of a MOE
+    database as an HTML page, showing the rows and columns in a table. Molecule
+    fields are shown as 2D diagrams and stored as PNG (Portable Network
+    Graphic) image files.</li>
+    <li><b>Interactive Instructions</b>:
+      <ol>
+        <li>Use the Database Viewer to open a small molecule MOE database of
+        choice.</li>
+        <li>Run the program with:
+
+<pre class="code oneline">run '$MOE/sample/webmake.svl'</pre><img src=
+          "samples/webmake1.png" />
+        </li>
+        <li>If necessary, change the default output directory, HTML filename
+        and title.</li>
+        <li>Adjust the dimensions (in pixels) for the molecular graphics.</li>
+        <li>If the molecule-type fields already have 2D coordinates that are
+        appropriate for diagrammatic display, uncheck the Depict 2D coordinates
+        box. Otherwise the coordinates will be regenerated for aesthetic
+        purposes.</li>
+        <li>To limit the selection of fields or entries, toggle the Selected
+        fields only and Selected entries only checkboxes.</li>
+      </ol>
+    </li>
+    <li><b>Batch Instructions</b>:
+      <ol>
+        <li>Load the program:
+
+<pre class="code oneline">load '$MOE/sample/webmake.svl'</pre>
+        </li>
+        <li>Call the function:
+
+<pre class="code oneline">webmake_BuildFiles [dbfn, opt]</pre>
+
+<p><tt>dbfn</tt> is the MOE database from which the web files will be
+          built. <tt>opt</tt> is a tag vector which contains various
+          parameters, all of which are optional. See the SVL source of
+          <tt>$MOE/sample/webmake.svl</tt> for a detailed description of the
+          options.</p>
+        </li>
+      </ol>
+    </li>
+    <li>
+      <b>Output</b> :
+
+<p>The following fragment is an example of the output, rendered with a
+      browser:</p>
+
+<img src="samples/webmake2.gif" class="center" />
+    </li>
+  </ul><!-- jdbcview.svl -->
+  <hr noshade="noshade" />
+
+<h2>
+<a id="JDBCViewer">JDBC Database Viewer</a></h2>
+  <ul>
+    <li><b>File</b>: <tt>$MOE/sample/jdbcview.svl</tt></li>
+    <li><b>Description</b>:
+
+<p>Displays database information obtained from third party relational
+      database applications such as IBM DB2, Oracle, Microsoft SQL Server,
+      PostgreSQL, MySQL, and SQLite. <b>JDBC</b> is an acronym for <i>Java
+      Database Connectivity</i>, the protocol used to make the connection to
+      the external databases. Tables and fields defined in the databases are
+      displayed and can be imported into MOE database formats using SQL
+      (Standard Query Language) commands. Note that in order to use this
+      application, Java must be installed and the proper <a href=
+      "../install/install.htm#SVL_JVM">environment variables</a> must be
+      set.</p>
+    </li>
+    <li><b>Instructions</b>:
+
+<p>To open the JDBC Database Viewer, run the program with</p>
+
+<pre class="code oneline">run '$MOE/sample/jdbcview.svl'</pre>
+
+<p>The following panel appears:</p>
+      <img src="samples/jdbc_panel.png" class="center" />
+
+<p>The <b>Database Alias</b> menu shows all defined JDBC Database
+      Connection information. If no JDBC connection information has been
+      defined, then the menu will show <nobr><tt>'(no server
+      defined)'</tt></nobr>. The JDBC database connection information can
+      be set either directly in the <tt>.moe-rc</tt> file or by using the
+      <a href="../appendix/settings.htm#JDBC">Configuration Options Panel</a>.
+      If connection data is defined, the drop-down menu will display the
+      <i>alias</i> for each defined connection. Choose the database to be
+      viewed and press <b>Connect</b> to establish the connection.</p>
+
+<p>The JDBC Database Viewer consists of two lists and a textfield for
+      entering SQL commands. SQL commands can be entered directly into the
+      textfield; selecting items in the lists will automatically set the
+      appropriate SQL command.</p>
+
+<p>To view the fields and data types of a particular table, select the
+      table name in the <b>Database Tables</b> list. The fields contained in
+      the selected table are displayed in the <b>Table fields</b> list. The SQL
+      command is automatically updated to reflect the selected table. In the
+      following image, a connection has been made to an Oracle database and is
+      currently displaying the fields from the <tt>LIGAND</tt> table. The SQL
+      command is set to retrieve all fields from this table.</p>
+      <img src="samples/jdbc_tables.png" alt="Connection to Oracle" class="center" />
+
+<p>To create a MOE database, type in the SQL command (or select the
+      desired entries in the lists) and press <b>Save as MDB</b>. A file
+      prompter will ask for the new database file name and the created database
+      will be opened in a MOE Database Viewer.</p>
+    </li>
+  </ul><!-- q_estate.svl -->
+  <hr noshade="noshade" />
+
+<h2><a id="Kier">Kier Descriptors</a></h2>
+  <ul>
+    <li><b>File</b>: <tt>$MOE/sample/q_estate.svl</tt></li>
+    <li><b>Description</b>:
+
+<p>This file contains over 100 new descriptors that all pertain to
+      Kier's electrotopological state indices for atom types.</p>
+
+<p><cite>Reference:
+      Hall, L.H., Kier, L.B.;
+      Electrotopological State Indices for Atom Types: A
+      Novel Combination of Electronic, Topological, and Valence State
+      Information; <i>J. Chem. Inf. Comput. Sci. 35(6)</i>
+      (<b>1995</b>) 1039&ndash;1045;
+      DOI: 10.1021/ci00028a014</cite></p>
+    </li>
+    <li><b>Instructions</b>:
+      <ol>
+        <li>Open a MOE Database.</li>
+        <li>Load the file with:
+
+<pre class="code oneline">load '$MOE/sample/q_estate.svl'</pre>
+        </li>
+        <li>Open the QuaSAR-Descriptor panel (<span class="menu">DBV | Compute
+        | Descriptors | Calculate</span>) from the Database Viewer.</li>
+        <li>The codes of the Kier descriptors all begin with 'kS_*' or
+        'kC_*'.</li>
+      </ol>
+    </li>
+  </ul><!-- q_randic.svl -->
+  <hr noshade="noshade" />
+
+<h2><a id="Randic">Randic Descriptor</a></h2>
+  <ul>
+    <li><b>File</b>: <tt>$MOE/sample/q_randic.svl</tt></li>
+    <li><b>Description</b>: QuaSAR descriptor used to calculate the Randic
+      Molecular Identification Number. This descriptor is based on the weighted
+      paths of the connectivity graph.
+
+<p><cite>Molecular Identification Numbers J. Chem. Inf. Comput. Sci.
+      1984, 24, 164-175.</cite></p>
+    </li>
+    <li><b>Instructions</b>:
+      <ol>
+        <li>Open a MOE Database.</li>
+        <li>Load the file with:
+
+<pre class="code oneline">load '$MOE/sample/q_randic.svl'</pre>
+        </li>
+        <li>Open the QuaSAR-Descriptor panel (<span class="menu">DBV | Compute
+        | Descriptors | Calculate</span>) from the Database Viewer.</li>
+        <li>The Randic descriptor code is <tt>randicMID</tt>.</li>
+      </ol>
+    </li>
+  </ul><!-- q_maccs.svl -->
+  <hr noshade="noshade" />
+
+<h2><a id="MACCS">MACCS Key Count Descriptors</a></h2>
+  <ul>
+    <li><b>File</b>: <tt>$MOE/sample/q_maccs.svl</tt></li>
+    <li><b>Description</b>: Individual MACCS keys can be used as descriptors in
+    QuaSAR model building.</li>
+    <li><b>Instructions</b>:
+      <ol>
+        <li>Open a MOE Database.</li>
+        <li>Load the file with:
+
+<pre class="code oneline">load '$MOE/sample/q_maccs.svl'</pre>
+        </li>
+        <li>Open the QuaSAR-Descriptor panel (<span class="menu">DBV | Compute
+        | Descriptors | Calculate</span>) from the Database Viewer.</li>
+        <li>The MACCS descriptor codes all begin with
+        '<tt>MACCS</tt>'.</li>
+      </ol>
+    </li>
+  </ul><!-- hmc.svl -->
+  <hr noshade="noshade" />
+
+<h2><a id="HMC">Hybrid Monte Carlo Simulation</a></h2>
+  <ul>
+    <li><b>File</b>: <tt>$MOE/sample/hmc.svl</tt></li>
+    <li><b>Description</b>: Implementation of the Hybrid Monte Carlo simulation
+    method.</li>
+    <li><b>Instructions</b>:
+      <ol>
+        <li>
+          <a href="../apps/emin.htm">Minimize the energy</a> of the molecular
+          system under study to an RMS gradient of 0.1 or smaller.
+        </li>
+        <li>Run the file using the following command:
+
+        <pre class="code oneline">run '$MOE/sample/hmc.svl'</pre>
+
+        <p>The following panel appears:</p>
+
+        <img src="samples/hmc.png" class="center" />
+        </li>
+        <li>Once all parameters are chosen, press <b>OK</b> to begin the
+        simulation.</li>
+      </ol>
+    </li>
+  </ul><!-- iedyn.svl -->
+  <hr noshade="noshade" />
+
+<h2><a id="Langevin">Langevin Implicit Euler
+  Dynamics</a></h2>
+  <ul>
+    <li><b>File</b>: <tt>$MOE/sample/iedyn.svl</tt></li>
+    <li><b>Description</b>: This sample implements Langevin Implicit Euler
+      dynamics.
+
+<p><cite>Reference:
+      Derreumaux, P., Schlick, T.; Long Timestep Dynamics of
+      Peptides by the Dynamics Driver Approach;
+      <i>Proteins 21</i> (<b>1995</b>) 282&ndash;302;
+      DOI: 10.1002/prot.340210403</cite></p>
+    </li>
+    <li><b>Instructions</b>:
+      <ol>
+        <li>Load a molecule in MOE.</li>
+        <li>Load the Langevin Dynamics module:
+          <pre class="code oneline">load '$MOE/sample/iedyn.svl' </pre>
+        </li>
+        <li>Start molecule animation by typing the following command:
+        <pre class="code oneline">IE [] </pre>
+        </li>
+        <li>Use the Cancel menu to terminate the function.</li>
+      </ol>
+    </li>
+  </ul><!-- seal.svl -->
+  <hr noshade="noshade" />
+
+<h2><a id="Molsup">Molecular Superposition</a></h2>
+  <ul>
+    <li><b>File</b>: <tt>$MOE/sample/seal.svl</tt></li>
+    <li><b>Description</b>: Performs an alignment of small molecules using
+      geometry and electrostatic contacts. Creates a database of superpositions
+      and their scores.
+
+<p><cite>Reference:
+      Kearsley, S.K., Smith, G.M.;
+      An Alternative Method for the Alignment of Molecular
+      Structures: Maximizing Electrostatic and Steric Overlap;
+      <i>Tetrahedron Computer Methodology 3(6C)</i>
+      (<b>1990</b>) 615&ndash;633;
+      DOI: 10.1016/0898-5529(90)90162-2.</cite></p>
+    </li>
+    <li><b>Instructions</b>:
+      <ol>
+        <li>Load the SEAL module:
+          <pre class="code oneline">load <tt>'$MOE/sample/seal.svl'</tt></pre>
+        </li>
+        <li>Load two molecules into MOE (e.g. <tt>Open
+        '$MOE/sample/seal.moe'</tt>).</li>
+        <li>Type <tt>SEAL []</tt> at the CLI.
+
+        <img src="samples/seal.png" class="center" />
+        </li>
+        <li>Enter the name for the output database.</li>
+        <li>Press <b>OK</b> to start the procedure with all default
+        values.</li>
+      </ol>
+    </li>
+  </ul><!-- sealflex.svl -->
+  <hr noshade="noshade" />
+
+<h2><a id="Flexsup">Flexible Molecular Superposition</a></h2>
+  <ul>
+    <li><b>File</b>: <tt>$MOE/sample/sealflex.svl</tt></li>
+    <li><b>Description</b>: Performs an alignment of small molecules using
+      geometry and electrostatic contacts. Bond angles may change during the
+      calculations. The resulting superposition appears in the MOE rendering
+      window.
+
+<p><cite>Reference:
+      Kearsley, S.K., Smith, G.M.;
+      An Alternative Method for the Alignment of Molecular
+      Structures: Maximizing Electrostatic and Steric Overlap;
+      <i>Tetrahedron Computer Methodology 3(6C)</i>
+      (<b>1990</b>) 615&ndash;633;
+      DOI: 10.1016/0898-5529(90)90162-2.</cite></p>
+    </li>
+    <li><b>Instructions</b>:
+      <ol>
+        <li>Load the SEAL Flex module:
+          <pre class="code oneline">load '$MOE/sample/sealflex.svl'</pre>
+        </li>
+        <li>Load two molecules into MOE (e.g. <tt>Open
+        '$MOE/sample/seal.moe'</tt>).</li>
+        <li>Type <tt>SEALFLEX []</tt> at the CLI.</li>
+      </ol>
+    </li>
+  </ul><!-- verlet.svl -->
+  <hr noshade="noshade" />
+
+<h2><a id="NVE">NVE Molecular Dynamics Simulation</a></h2>
+  <ul>
+    <li><b>File</b>: <tt>$MOE/sample/verlet.svl</tt></li>
+    <li><b>Description</b>: This SVL program loops indefinitely, performing
+      velocity verlet integration steps. At each iteration, the internal atom
+      positions are updated so that the simulation is animated automatically.
+      <!-- <span class='LaTeX'>
+    \begin{equation}
+                \begin{array}{r l}
+    r\left( t + \delta t \right) & =
+          r\left( t \right)
+        + v\left( t \right) \delta t
+        + \delta t^2 a\left( t \right)
+    \\
+    a \left( t + \delta t \right) & = - \nabla U\left( r \left( t + \delta t \right) \right) / m
+    \\
+    v\left( t + \delta t \right) & =
+          v\left( t \right)
+        + \frac{1}{2} \delta t \left[
+            a\left( t \right) + a\left( t + \delta t \right)
+        \right)]
+                \end{array}
+    \end{equation}
+    </span> -->
+      <div class="center">
+        <span class="nobr"><i>r</i>(<i>t</i> + <i>&delta;t</i>) =
+        <i>r</i>(<i>t</i>) + <i>v</i>(<i>t</i>)<i>&delta;t</i> +
+        <i>a</i>(<i>t</i>)<i>&delta;t</i><sup>2</sup></span><br />
+        <span class="nobr"><i>a</i>(<i>t</i> + <i>&delta;t</i>) =
+        -&nabla;<i>U</i>(<i>r</i>(<i>t</i> +
+        <i>&delta;t</i>))/<i>m</i></span><br />
+        <span class="nobr"><i>v</i>(<i>t</i> + <i>&delta;t</i>) =
+        <i>v</i>(<i>t</i>) + 1/2 <i>&delta;t</i> [<i>a</i>(<i>t</i>) +
+        <i>a</i>(<i>t</i> + <i>&delta;t</i>)]</span>
+      </div>
+    </li>
+    <li><b>Instructions</b>:
+      <ol>
+        <li>Load a molecule in MOE.</li>
+        <li>Run the sample using:
+          <pre class="code oneline">run '$MOE/sample/verlet.svl'</pre>
+        </li>
+        <li>Use the Cancel menu to stop the sample execution.</li>
+      </ol>
+    </li>
+  </ul><!-- dihmplot.svl -->
+  <hr noshade="noshade" />
+
+<h2><a id="dihmplot">Dihedral Energy Plot with
+  Minimization</a></h2>
+  <ul>
+    <li><b>File</b>: <tt>$MOE/sample/dihmplot.svl</tt></li>
+    <li><b>Description</b>: Given 4 atoms defining a torsion, this program
+    performs an energy minimization at each dihedral angle increment (using
+    torsion restraints) and produces a plot of the energy at equally spaced
+    angles.</li>
+    <li><b>Instructions</b>:
+      <ol>
+        <li>Before running this program, first select four atoms defining a
+        torsion.</li>
+        <li>Type the following command at the SVL command line:
+
+<pre class="code oneline">run '$MOE/sample/dihmplot.svl'</pre>
+        </li>
+        <li>Once the calculation is complete, a plot panel will appear:
+
+<img src="samples/dihmplot.png" class="center" />
+        </li>
+      </ol>
+    </li>
+  </ul><!-- eht_ui.svl -->
+  <hr noshade="noshade" />
+
+<h2><a id="eht_ui"></a>
+Extended Hueckel Theory Properties</h2>
+  <ul>
+    <li><b>File</b>: <tt>$MOE/sample/eht_ui.svl</tt></li>
+    <li><b>Description</b>: Computes Extended Hueckel properties and displays
+      them in a table and annotates the atoms in MOE with the calculated pi
+      bond orders. The following are the tabulated values:
+      <ul>
+        <li><b>Z</b>. Atomic number.</li>
+        <li><b>h</b>. Hybridization (3=<i>sp</i><sup>3</sup>,
+        2=<i>sp</i><sup>2</sup>, 1=<i>sp</i>).</li>
+        <li><b>q</b>. Total charge.</li>
+        <li><b>sigma</b>. Sigma charge.</li>
+        <li><b>pi</b>. Pi charge.</li>
+        <li><b>iH_q</b>. Charge on implicit hydrogens.</li>
+        <li><b>ema</b>. H-bond acceptor strength.</li>
+        <li><b>emd</b>. H-bond donor strength.</li>
+      </ul>
+    </li>
+    <li><b>Instructions</b>:
+      <ol>
+        <li>Load a molecule into MOE.</li>
+        <li>Type the following command at the SVL command line:
+
+<pre class="code oneline">run '$MOE/sample/eht_ui.svl'</pre>
+        </li>
+        <li>In the Extended Hueckel Theory Properties panel, press
+        <b>Apply</b>.
+
+<img src="samples/eht_ui_panel.png" />
+          <img src="samples/eht_ui_mol.png" class="center" />
+        </li>
+      </ol>
+    </li>
+  </ul><!-- rism_hfe.svl -->
+  <hr noshade="noshade" />
+
+<h2>
+<a id="rism_hfe">3D-RISM Hydration Free Energy
+  (HFE)</a></h2>
+  <ul>
+    <li><b>File</b>: <tt>$MOE/sample/rism_hfe.svl</tt></li>
+    <li><b>Description</b>: Computes 3D-RISM solutions for the set of input
+    atoms, employing a theoretical model fitted on the David Mobley HFE set
+    [Mobley&nbsp;2009], to produce non-polar HFE values.</li>
+    <li><b>Instructions</b>:
+      <ol>
+        <li>Load a molecule into MOE.</li>
+        <li>Assign partial charges (AM1-BCC preferred):
+          <p class="blockquote">
+            <span class="menu">MOE | Compute | Prepare | Partial Charges</span>
+          </p>For the <b>Method</b>, choose <b>AM1-BCC</b>. Press
+          <b>OK</b>.
+        </li>
+        <li>Type the following command at the SVL command line:
+
+<pre class="code oneline">run ['$MOE/sample/rism_hfe.svl', [output_filename, <i>atoms</i>]]</pre>
+where <i><tt>atoms</tt></i> is either <tt>Atoms[]</tt>, if all
+atoms are to be used in the calculation, or <tt>SelectedAtoms[]</tt> if a
+subset of atoms are to be used. In the latter case, first select the atoms then
+issue the command. <tt>output_filename</tt> is the filename prefix used to name
+the output files generated by the calculation.
+        </li>
+        <li>Once the calculation is complete, the computed hydration free
+        energy will be printed to the SVL Commands window.</li>
+      </ol>
+    </li>
+  </ul>
+  <p class="blockquote">
+    [Mobley&nbsp;2009] Mobley, D., Bayly, C., Cooper, M., Shirts, M., and Dill,
+    K.; Small molecule hydration free energies in explicit solvent: An
+    extensive test of fixed-charge atomistic simulations; <i>J. Chem. Theory.
+    Comput. 5(2)</i>, (<b>2009</b>), 350&ndash;358.
+  </p><!-- md_tools.svl -->
+  <hr noshade="noshade" />
+
+<h2><a id="mdtools_qp">Molecular Dynamics Trajectory Quick
+  Play</a></h2>
+  <ul>
+    <li><b>File</b>: <tt>$MOE/sample/md_tools.svl</tt></li>
+    <li><b>Description</b>: Demonstrates the use of MD Framework functions to
+    animate a MD trajectory.</li>
+    <li><b>Pre-Requisites</b>: A molecular dynamics trajectory.</li>
+    <li><b>Instructions</b>:
+      <ol>
+        <li>Type the following commands at the SVL command line:
+
+<pre class="code">
+load '$MOE/sample/md_tools.svl'
+MD_QuickAnimate [ root, opt ]
+</pre>
+    Where <tt>root</tt> is the root of your trajectory name.
+
+<p>The option block is a tagged vector supporting the following
+          tags:</p>
+          <div class="indent">
+            <dl>
+              <dt><tt>interval:</tt> <i>integer</i></dt>
+              <dd>Specifies that every n<sup>th</sup> frame should be
+              displayed. [Default: 1]</dd>
+              <dt><tt>delay:</tt> <i>float</i></dt>
+              <dd>The minimum time in seconds to pause between frames.
+              [Default: 0.01]</dd>
+              <dt><tt>startFrame:</tt> <i>integer</i></dt>
+              <dd>Begin visualization starting with this frame index. [Default:
+              1]</dd>
+              <dt><tt>endFrame:</tt> <i>integer</i></dt>
+              <dd>Terminate animation on specified frame. [Default:
+              INT_MAX]</dd>
+              <dt><tt>reference:</tt> <i>filename</i></dt>
+              <dd>Specify the reference molecule file. This over-rides the
+              auto-detected molecule.</dd>
+              <dt><tt>format:</tt> <i>token</i></dt>
+              <dd>
+                See <a href=
+                "../moe/fcnref/mdxfcn.htm#MD_Open"><tt>MD_Open</tt></a>.
+              </dd>
+              <dt><tt>forceroot:</tt> <i>integer</i></dt>
+              <dd>
+                See <a href=
+                "../moe/fcnref/mdxfcn.htm#MD_Open"><tt>MD_Open</tt></a>.
+              </dd>
+            </dl>
+          </div>
+        </li>
+      </ol>
+    </li>
+  </ul>
+  <hr noshade="noshade" />
+
+<h2><a id="mdtools_moevie">Trajectory MOEvie
+  Generation</a></h2>
+  <ul>
+    <li><b>File</b>: <tt>$MOE/sample/md_tools.svl</tt></li>
+    <li><b>Description</b>: Demonstrates the use of MD Framework functions to
+    directly generate a MOEvie from MD trajectories.</li>
+    <li>
+      <b>Pre-Requisites</b>:
+
+<pre>
+    A molecular dynamics trajectory
+    MEncoder
+    A Media Player
+</pre>
+    </li>
+    <li><b>Instructions</b>:
+      <ol>
+        <li>Ensure that mencoder is properly configured.
+
+<pre class="code">
+GetRC ['mencoder.path']
+SetRC ['mencoder.path', '&lt;path to mencoder&gt;/mencoder']
+</pre>
+        </li>
+        <li>Type the following commands at the SVL command line:
+
+<pre class="code">
+load '$MOE/sample/md_tools.svl'
+MD_GenerateMOEvie [ trajectory, moevie, opt ]
+</pre>
+
+<p>Where <tt>trajectory</tt> is one or more trajectory root(s) and/or
+          trajectory segments.</p>
+
+<p><tt>moevie</tt> is the output moevie name to generate.</p>
+
+<p>The option block is a tagged vector supporting the following
+          tags:</p>
+          <div class="indent">
+            <dl>
+              <dt><tt>reference:</tt> <i>token(s)</i></dt>
+              <dd>Load the indicated file(s) for reference and rendering</dd>
+              <dt><tt>renderFrame:</tt> <i>integer(s)</i></dt>
+              <dd>Frame(s) where the paired reference should be loaded.
+              [Default: startFrame]</dd>
+              <dt><tt>moevieFormat:</tt> <i>token</i></dt>
+              <dd>Format to use for encoding. <tt>'x264',
+              'MJPEG', 'WMV', 'Xvid'</tt> [Default:
+              'x264']</dd>
+              <dt><tt>interval:</tt> <i>integer</i></dt>
+              <dd>Read every nth frame. [Default: 1]</dd>
+              <dt><tt>startFrame:</tt> <i>integer</i></dt>
+              <dd>First frame to render. [Default: 1]</dd>
+              <dt><tt>endFrame:</tt> <i>integer</i></dt>
+              <dd>Last frame to render. [Default: INT_MAX]</dd>
+              <dt><tt>tmp_dir:</tt> <i>token</i></dt>
+              <dd>Path where PNG directory should be generated. [Default:
+              $TMP]</dd>
+              <dt><tt>imageSize:</tt> <i>[integer, integer]</i></dt>
+              <dd>[width, height] image size for rendering. [Default: [640,
+              480]]</dd>
+              <dt><tt>hq:</tt> <i>boolean</i></dt>
+              <dd>High quality ribbon rendering. [Default: 0]</dd>
+              <dt><tt>aa:</tt> <i>boolean</i></dt>
+              <dd>Anti-aliasing. [Default: 1]</dd>
+              <dt><tt>keepImages:</tt> <i>boolean</i></dt>
+              <dd>Keep intermediate png files. [Default: 0]</dd>
+            </dl>
+          </div>
+        </li>
+        <li>On completion, the specified MOEvie may be opened by an external
+        media player.</li>
+      </ol>
+    </li>
+  </ul>
+  <hr noshade="noshade" />
+
+<h2><a id="mdtools_analysis">Molecular Dynamics
+  Trajectory Analysis Tools</a></h2>
+  <ul>
+    <li><b>File</b>: <tt>$MOE/sample/md_tools.svl</tt></li>
+    <li><b>Description</b>: Demonstrates the use of MD Framework functions to
+    animate MD trajectories and simultaneously compute descriptors for each
+    frame. The solvent molecules are ignored for the descriptor
+    calculation.</li>
+    <li>
+      <b>Pre-Requisites</b>:
+
+<pre class="code oneline">A molecular dynamics trajectory.</pre>
+    </li>
+    <li><b>Instructions</b>:
+      <ol>
+        <li>Type the following commands at the SVL command line:
+
+<pre class="code">
+load '$MOE/sample/md_tools.svl'
+MD_DescriptorCalc [ root, descriptorList, opt ]
+</pre>
+    Where <tt>root</tt> is
+the root of your trajectory name. <tt>descriptorList</tt> is any combination of
+appropriate descriptors as listed by <tt>DescriptorList[]</tt>.
+        </li>
+        <li>Once the calculation is complete, a database of the computed
+        descriptors will be created and opened. Note that the descriptors are
+        calculated only for non-solvent chains.</li>
+      </ol>
+    </li>
+  </ul>
+
+  <!-- ab_custom.svl -->
+  <hr noshade="noshade" />
+
+<h2><a id="AbModel">Build Custom Antibody Models</a></h2>
+  <ul>
+    <li><b>File</b>: <tt>$MOE/sample/ab_custom.svl</tt></li>
+    <li><b>Description</b>: Examples of how to call ab_Model to create
+	custom antibody models from arbitrary templates.
+	Examples of building scFv, bispecific, scFv2, and VHH models
+	are provided, using files from $MOE/sample/mol are provided.
+
+	<p><cite>Reference (BITE):
+	    Baeuerle, Patrick A., and Reinhardt, Carsten;
+	    "Bispecific T-cell engaging antibodies for cancer therapy."
+	    <i>Cancer research 69.12</i> <b>(2009)</b> 4941&ndash;4944.
+	    https://doi.org/10.1158/0008-5472.CAN-09-0547
+	</cite></p>
+
+	<p><cite>Reference (DART):
+	    Moore, Paul A., <i>et al.</i>;
+	    "Application of dual affinity retargeting molecules to achieve optimal
+	    redirected T-cell killing of B-cell lymphoma."
+	    <i>Blood 117</i> <b>(2011)</b> 4542&ndash;4551.
+	    https://doi.org/10.1182/blood-2010-09-306449
+	</cite></p>
+
+    </li>
+    <li><b>Instructions</b>:
+	Enter the following command at the SVL Command Line:
+<pre class="code oneline">run '$MOE/sample/ab_custom.svl'</pre>
+    </li>
+  </ul>
+
+  <!-- alphabuild.svl -->
+  <hr noshade="noshade" />
+
+<h2><a id="Alpha">Protein Reconstruction From Alpha-Carbon
+  Traces</a></h2>
+  <ul>
+    <li><b>File</b>: <tt>$MOE/sample/alphabuild.svl</tt></li>
+    <li><b>Description</b>: Routines to build proteins from alpha-carbon traces
+      based on the method developed by P. Correa.
+
+<p><cite>Reference:
+      Correa, P.E.;
+      The building of protein structures from alpha-carbon
+      coordinates; <i>Proteins 7(4)</i>
+      (<b>1989</b>) 366&ndash;377; DOI: 10.1002/prot.340070408.</cite></p>
+    </li>
+    <li><b>Instructions</b>:
+      <ol>
+        <li>Load the protein <tt>$MOE/sample/mol/1crn.pdb</tt> into MOE.</li>
+        <li>Select all alpha-carbons.</li>
+        <li>Invert the selection. The selection set now comprises all atoms
+        that are not alpha-carbons.</li>
+        <li>Delete all selected atoms.</li>
+        <li>Type the following command at the SVL Command Line to reconstruct
+        the protein from its alpha traces:
+
+<pre class="code oneline">run '$MOE/sample/alphabuild.svl'</pre>
+        </li>
+      </ol>
+    </li>
+  </ul>
+
+  <!-- occo.svl -->
+  <hr noshade="noshade" />
+
+<h2><a id="OCCO">OCCO Plot</a></h2>
+  <ul>
+    <li><b>File</b>: <tt>$MOE/sample/occo.svl</tt></li>
+    <li><b>Description</b>: Function <tt>Protein_OCCO_Plot</tt> computes the
+      backbone OCCO dihedral angle and puts it in the ResScalar field of each
+      residue (normalized to +/- 1). This plot can then be viewed in the
+      Sequence Editor.
+
+<p><cite>Reference:
+      Laiter, S., <i>et. al.</i>;
+      Pseudotorsional OCCO backbone angle as a single
+      descriptor of protein secondary structure; <i>Protein
+      Science 4(8)</i> (<b>1995</b>) 1633&ndash;1643;
+      DOI: 10.1002/pro.5560040821.</cite></p>
+    </li>
+    <li><b>Instructions</b>:
+
+<p>Run the program with:</p>
+
+<pre class="code oneline">run '$MOE/sample/occo.svl'</pre>
+
+<p><b>Note:</b> This function assumes that all chains consist of amino
+      acids containing backbone carbonyl C and O atoms named 'C' and
+      'O'.</p>
+    </li>
+  </ul><!-- distplot.svl -->
+  <hr noshade="noshade" />
+
+<h2><a id="DistPlot">Alpha Carbon Distance Plot</a></h2>
+  <ul>
+    <li><b>File</b>: <tt>$MOE/sample/distplot.svl</tt></li>
+    <li><b>Description</b>: Draws a matrix of the distances between alpha
+      carbons in a protein chain.
+
+<img src="samples/distmat.png" alt=
+      "Distance Matrix" class="center" />
+    </li>
+    <li><b>Instructions</b>:
+      <ol>
+        <li>Load a protein into MOE.</li>
+        <li>Type the following command at the SVL Command Line:
+
+<pre class="code oneline">run '$MOE/sample/distplot.svl' </pre>
+        </li>
+        <li>A prompter in the Sequence Editor allows a protein chain to be
+        chosen.</li>
+      </ol>
+    </li>
+  </ul><!-- pairpot.svl -->
+  <hr noshade="noshade" />
+
+<h2><a id="Jack">Mean Pair Potential Jackknife Test</a></h2>
+  <ul>
+    <li><b>File</b>: <tt>$MOE/sample/pairpot.svl</tt></li>
+    <li><b>Description</b>: Implements a method that improves a simple pair
+      potential of mean force in such a way that it recognizes native protein
+      folds with high reliability.
+
+<p><cite>Reference:
+      Bauer, A., Beyer, A.;
+      An Improved Pair Potential to Recognize Native
+      Protein Folds; <i>Proteins 18(3)</i> (<b>1994</b>) 254&ndash;261;
+      DOI: 10.1002/prot.340180306.</cite></p>
+    </li>
+    <li><b>Instructions</b>:
+      <ol>
+        <li>Type the following command at the SVL Command Line:
+
+<pre class="code oneline">run '$MOE/sample/pairpot.svl' </pre>
+
+<p>A panel titled Mean Pair Potential Jackknife Test is
+          displayed.</p>
+
+<img src="samples/s_pairpot.png" alt=
+          "Jackknife Panel" class="center" />
+        </li>
+        <li>The PDB Code List is used to specify the file of PDB entries. All
+        list entries will be used in the jackknife test.</li>
+        <li>The Database File is used to specify the name of the database from
+        which protein chains will be loaded.</li>
+        <li>The smoothing options let you select the smoothing treatment used
+        in the test. You can use none, either or both of these smoothing
+        treatments.</li>
+      </ol>
+    </li>
+  </ul>
+
+  <!-- project_template_config_xxx.xml -->
+  <hr noshade="noshade" />
+
+<h2><a id="ProjTemplates">Templates for MOE Project</a></h2>
+  <ul>
+    <li><b>File</b>:
+      <ul>
+      <li><tt>$MOE/sample/project_template_config_ed.xml</tt>: For
+	a project that includes electron density data</li>
+      <li><tt>$MOE/sample/project_template_config_ligand.xml</tt>: For
+        a project that includes ligand data</li>
+      <li><tt>$MOE/sample/project_template_config_noligand.xml</tt>: For
+	a project that has no include ligand data</li>
+      </ul>
+    <li><b>Description</b>: Template XML files for configuring
+        MOE projects.  These can serve as the basis for a custom
+	project configuration.
+    </li>
+    <li><b>Instructions</b>:
+      <ol>
+      <li>Open the <a href="../proteins/moeproject.htm#CreateConfigFile">Protein
+	Database Update</a> panel by entering at the SVL Command Line:
+<pre class="code oneline">run 'dbupdate.svl' </pre>
+      </li>
+      <li>
+	From the <b>Protein Family</b> menu, choose the project to build,
+	then press <b>Build New</b>.
+      </li>
+      <li>Next to <b>Configuration File</b>, press the
+        <img src="../images/browse_icon.png" class="icon" /> button to
+	open a file browser.  Navigate to <tt>$MOE/sample</tt> and
+	select one of the project template xml files.
+      </li>
+      <li>Press the <img src="../images/edit_icon.png" class="icon" />
+      to open the Configure Project Database MOE/web app.
+      </li>
+      </ol>
+    </li>
+  </ul>
+
+  <!-- builder_zinc15.svl -->
+  <hr noshade="noshade" />
+
+<h2>
+<a id="BuilderZINC">Perform ZINC15 Database Search from Builder</a>
+</h2>
+  <ul>
+    <li><b>File</b>: <tt>$MOE/sample/builder_zinc15.svl</tt>,
+	<tt>$MOE/sample/builder_zinc15.ico</tt></li>
+    <li><b>Description</b>: Example of a Builder hook function to allow
+    performing ZINC15 database searches via the Builder SMILES textfield.
+    <li><b>Instructions</b>:
+      <ol>
+        <li>Copy 
+	    <tt>$MOE/sample/builder_zinc15.svl</tt> to
+	    <tt>$MOE/custom/svl</tt> or to <tt>$HOME/moefiles/svl</tt> if
+	    <tt>$MOE/custom</tt> is not accessible.
+	</li>
+        <li>Copy 
+	    <tt>$MOE/sample/builder_zinc15.ico</tt> to
+	    <tt>$MOE/custom/lib/icon</tt> or to
+	    <tt>$HOME/moefiles/lib/icon</tt> if <tt>$MOE/custom</tt> is
+	    not accessible.
+	</li>
+        <li>Restart the Molecule Builder.</li>
+      </ol>
+    </li>
+  </ul>
+
+  <p>The Builder SMILES textfield will now accept ZINC id search strings,
+  i.e.  <tt>ZINC</tt> followed by a number.</p>
+
+  <img src="samples/builder_zinc.png"
+          alt="Builder SMILES textfield ZINC search" class="center" />
+  
+  <p>The sample also includes a plugin to the
+  <a href="settings.htm">Configuration Options</a> panel, defining a
+  new page for settings related to the ZINC database search.
+  </p>
+
+  <p>The page can be opened using <span class="menu">MOE | Settings
+  <img src="../images/gear_icon.png" class="icon" /></span>.  Choose any
+  of the pages, e.g. <b>Builder</b>.  Once the Configuration Options
+  panel has opened, click on the top menu and select <b>Builder:ZINC15</b>.
+  </p>
+
+  <img src="samples/builder_zinc_configoptions.png"
+          alt="Builder:ZINC15 Configuration Options" class="center" />
+
+  <table class="noborder">
+  <tr>
+    <td><b>Format</b></td>
+    <td>The format in which the server will return the molecular data.
+	Choose MOL if the 3D structure from the server is desired.
+    </td>
+  </tr>
+  <tr>
+    <td><b>Minimize</b></td>
+    <td>If enabled, the molecular structure will be minimized to
+	the specified RMS gradient value once
+	it is created in the MOE system.  Disable to preserve the
+	3D coordinates of the structure as obtained from the
+	server.  Note that if the format is SMILES, the molecule
+	will undergo embedding into 3D even when Minimize is off.
+    </td>
+  </tr>
+  <tr>
+    <td><b>Timeout</b></td>
+    <td>The maximum time to wait for the ZINC server to respond.
+    </td>
+  </tr>
+  </table>
+  <!-- smitext.svl -->
+  <hr noshade="noshade" />
+
+<h2><a id="smitext">Embed Builder SMILES textfield into a Panel</a></h2>
+  <ul>
+    <li><b>File</b>: <tt>$MOE/sample/smitext.svl</tt></li>
+    <li><b>Description</b>: Embeds a SMILES textfield into a 
+	standalone panel, including trigger handling.</li>
+    <li><b>Instructions</b>:
+        Type the following at the SVL Command Line:
+	
+<pre class="code oneline">run '$MOE/sample/smitext.svl' </pre>
+
+	<p>A panel with an embedded Builder-style textfield opens:</p>
+
+	<img src="samples/smitext_panel.png" alt="Panel with embedded
+	    Builder textfield" class="center" />
+
+	<p>This textfield has the same behaviour as that found in the
+	<a href="../moe/molsystems/build.htm#smitext">Builder</a>:
+	either a SMILES string or
+	a search string may be entered.  The graphic on the button may
+	change, depending on the search string.
+	</p>
+	
+	<img src="samples/smitext_chembl.png" alt="ChEMBL search in
+	    panel with embedded Builder textfield" class="center" />
+
+	<p>On pressing either Return or
+	the button, if a search string was entered, the
+	search is performed and, if a match is found, the detected molecule
+	is created in MOE.  Otherwise, if a SMILES string was entered, the
+	corresponding molecule is created.  The shortcut, similarly to the
+	Builder textfield, provides a Copy from MOE functionality, as well
+	as access to a history of recent searches / SMILES strings.
+	</p>
+
+	<p>The code illustrates how to specify the textfield, handle triggers,
+	and retrieve molecular data.
+	</p>
+    </li>
+  </ul>
+  
+  <!-- edenstext.svl -->
+  <hr noshade="noshade" />
+
+<h2><a id="edenstext">Embed Electron Density Widgets into a Panel</a></h2>
+  <ul>
+    <li><b>File</b>: <tt>$MOE/sample/edenstext.svl</tt></li>
+    <li><b>Description</b>: Embeds electron density widgets into a
+	standalone panel, including monitoring and trigger handling.</li>
+    <li><b>Instructions</b>:
+        Type the following at the SVL Command Line:
+	
+<pre class="code oneline">run '$MOE/sample/edenstext.svl' </pre>
+
+	<p>A panel with an embedded electron density textfield
+	and gear button opens:</p>
+
+	<img src="samples/edenstext_panel.png" alt="Panel with embedded
+	    electron density widgets" class="center" />
+
+	<p>The textfield and gear provides functionality similar
+	to that provided in
+	<a href="../apps/surfmap.htm#ElectronDensitySurface">Surfaces and
+	Maps</a>:
+	</p>
+
+	<ul>
+	  <li>The textfield is used to specify an electron density
+	  or structure factor file.  The textfield is paired with a
+	  browse button which opens a file browser for choosing
+	  the file.
+	  </li>
+	  <li>The gear, when pressed, opens an electron density
+	  popup that includes widgets for surface color and material,
+	  render type, sigma level slider, map type and columns,
+	  unit cell, and resolution.
+	  </li>
+	</ul>
+	
+	<p>The code illustrates how to call <tt>edens_PanelAPI</tt>
+	with different actions to obtain the panel widgets, perform
+	monitoring activities, and intercept and handle triggers.
+	</p>
+    </li>
+  </ul>
+  
+  <!-- edtransform.svl -->
+  <hr noshade="noshade" />
+
+<h2><a id="edtransform">Rotate and Translate Electron Density Surface</a></h2>
+  <ul>
+    <li><b>File</b>: <tt>$MOE/sample/edtransform.svl</tt></li>
+    <li><b>Description</b>: Rotates and translates the atoms and
+	electron density surface of the current system.
+    </li>
+    <li><b>Instructions</b>:
+        Type the following at the SVL Command Line:
+	
+<pre class="code oneline">run '$MOE/sample/edtransform.svl' </pre>
+
+	<p>A panel for rotating and translating atoms and their
+	electron density surface opens.  If there is no electron
+	density surface detected in the system, the file
+	<tt>$MOE/sample/mol/1xkk.pdb.gz</tt> and its associated
+	MTZ file <tt>$MOE/sample/mol/1xkk_sigmaa.mtz</tt> will
+	be opened first, in which case the Surfaces and Maps panel
+	will also be raised.</p>
+
+	<img src="samples/edtransform_panel.png" alt="Panel for
+	    rotating and translation atoms and electron density surface"
+	    class="center" />
+
+        The panel provides the following functionality:
+	<ul>
+	  <li><b>Rotate X, Y, Z.</b>
+	  Sliders specifying the amount by which to rotate about a
+	  particular axis, in degrees.
+	  </li>
+	  <li><b>Translate X, Y, Z.</b>
+	  Sliders specifying the amount by which to translate along
+	  a particular axis, in angstroms.
+	  </li>
+	  <li><b>Move to Origin.</b>
+	  When pressed, the atoms will be moved to the origin of the
+	  coordinate system, along with the electron density surface.
+	  This is for illustration purposes: when positioned at the
+	  origin, rotations about specific axes can be easily visualized.
+	  </li>
+	</ul>
+
+	<p>Press <b>Apply</b> to effect the specified rotations/translations.
+	<b>OK</b> will additionally close the panel.
+	</p>
+	
+	<p>The code illustrates how to use the electron density SVL API
+	to perform manipulations of the electron density surface.
+	</p>
+    </li>
+  </ul>
+  
+  <!-- moesaic_prep_pic50.svl -->
+  <hr noshade="noshade" />
+
+<h2><a id="MOEsaicpic50">Add Activity Field to MOEsaic Dataset</a></h2>
+  <ul>
+    <li><b>File</b>: <tt>$MOE/sample/moesaic_prep_pic50.svl</tt></li>
+    <li><b>Description</b>: Example of how to prepare an input dataset for
+	use in MOEsaic by preprocessing to add an activity
+	field of interest.  The output dataset can then be used as
+	the dataset source file for MOEsaic.
+    </li>
+    <li><b>Instructions</b>: From a shell, execute the SVL file through
+	moebatch:
+	<pre>
+
+	moebatch -run '$MOE/sample/moesaic_prep_pic50.svl' \
+	    -i &lt;input_file&gt; -afield <i>fieldname</i> \
+	    [ -o &lt;output_file&gt; ][ -pIC50field <i>fieldname</i> ]</pre>
+
+      <p>where:</p>
+      <ul>
+        <li><tt>-afield</tt>: Specifies the name of the IC50 activity
+	field from which to calculate pIC50.
+	</li>
+	<li><tt>-pIC50field</tt>:  Optionally specifies the name of
+	the field to be added to the
+	dataset (the default is <tt>'pIC50'</tt>).
+	</li>
+      </ul>
+
+      <p>The input dataset must be in CSV format.
+	The full path to the moebatch executable may be required.
+      </p>
+
+      <p>On Windows, the SVL file would be specified as
+	<tt>'%MOE%\sample\moesaic_prep_pic50.svl'</tt>.</p>
+    </li>
+  </ul>
+
+  <!-- moesaic_prep_sss_labels.svl -->
+  <hr noshade="noshade" />
+
+<h2><a id="MOEsaicSSS">Add Class Labels to MOEsaic Dataset</a></h2>
+  <ul>
+    <li><b>File</b>: <tt>$MOE/sample/moesaic_prep_sss_labels.svl</tt></li>
+    <li><b>Description</b>: Example of how to prepare an input dataset for
+	use in MOEsaic by preprocessing to add class labels based on
+	substructure search matches.  The output dataset can then be used as
+	the dataset source file for MOEsaic.
+    </li>
+    <li><b>Instructions</b>: From a shell, execute the SVL file through
+	moebatch:
+    <pre>
+
+    moebatch -run '$MOE/sample/moesaic_prep_sss_labels.svl' \
+	-i &lt;input_file&gt; -structfield <i>fieldname</i> -label &lt;filename&gt; \
+	[ -o &lt;output_file&gt; ][ -labelfield <i>fieldname</i> ] [ -multiple ]</pre>
+
+      <p>where:</p>
+      <ul>
+        <li><tt>-structfield</tt>: Specifies the name of the field
+        containing structure data to be used for substructure matching.
+	</li>
+	<li><tt>-label</tt>: Specifies an SD or CSV file containing the
+	MDL query definitions as well as the labels to apply to matching
+	entries.
+	</li>
+	<li><tt>-labelfield</tt>: Optionally specifies the name
+	of the field to add to the dataset (default is <tt>'SSS Label'</tt>).
+	</li>
+	<li><tt>-multiple</tt>: If present, specifies that each dataset
+	entry is to be matched against all substructure queries, possibly
+	being assigned multiple labels as a consequence; multiple label
+	fields will be created.
+	</li>
+      </ul>
+
+      <p>The input dataset must be in CSV format.
+	The full path to the moebatch executable may be required.
+      </p>
+
+      <p>On Windows, the SVL file would be specified as
+      <tt>'%MOE%\sample\moesaic_prep_sss_labels.svl'</tt>.</p>
+    </li>
+  </ul>
+
+  <!-- moesaic_updprojtemplate.svl -->
+  <hr noshade="noshade" />
+
+<h2><a id="MOEsaicUpdProj">Updatable MOEsaic Custom Project</a></h2>
+  <p>
+  <ul>
+    <li><b>File</b>: <tt>$MOE/sample/moesaic_updprojtemplate.svl</tt></li>
+    <li><b>Description</b>: Example of how to make a custom dataset
+	available from the MOEsaic start page.  The data must be in
+	CSV, SDF, or MDB format, and must be present on the MOE/web
+	server that is serving MOEsaic.
+	MOEsaic 2019.0103 or higher is required.
+    </li>
+    <li><b>Instructions</b>: For detailed instructions on installation
+        and verification, please see the notes at the top of the SVL file.
+    </li>
+  </ul>
+  </p>
+
+  <!-- smics.svl -->
+  <hr noshade="noshade" />
+
+<h2><a id="smics">Parallelized Stochastic Search</a></h2>
+  <ul>
+    <li><b>File</b>: <tt>$MOE/sample/smics.svl</tt></li>
+    <li><b>Description</b>: A MOE/cluster (MOE/smp) multi-processor sample
+    program for stochastic search of small molecules.</li>
+    <li><b>Instructions</b>:
+      <ol>
+        <li>Create a file in your current working directory called
+        <tt>smics.smi</tt> which contains one smiles string per line. A sample
+        <tt>smics.smi</tt> can be found in the <tt>$MOE/sample</tt>
+        directory.</li>
+        <li>In either MOE or MOE/cluster (MOE/smp), run the file as follows:
+
+<pre class="code oneline">run '$MOE/sample/smics.svl'</pre>
+        </li>
+        <li>A MOE Database called <tt>smics.mdb</tt> will be created and opened
+        so that you can see the results of the search as they are found.</li>
+      </ol>
+    </li>
+  </ul><!-- psearch.svl -->
+  <hr noshade="noshade" />
+
+<h2><a id="psearch">Parallelized Homology Search</a></h2>
+  <ul>
+    <li><b>File</b>: <tt>$MOE/sample/psearch.svl</tt></li>
+    <li><b>Description</b>: A MOE/cluster (MOE/smp) multi-processor sample
+    program for homology search of protein sequences. This program takes as
+    input a Fasta file containing a set of query protein sequences. The output
+    is a text file, located in MOE's current directory, containing one line
+    for each hit of a query sequence to a family in MOE's family
+    database.</li>
+    <li><b>Instructions</b>:
+      <ol>
+        <li>Load the SVL file:
+
+<pre class="code oneline">load '$MOE/sample/psearch.svl'</pre>
+        </li>
+        <li>In either MOE or MOE/batch run the function by typing the following
+        at the SVL command line:
+
+<pre class="code oneline">svl&gt; mpu_psearch 'myfile'</pre>
+
+<p>where <tt>myfile</tt> is a Fasta file containing a set of query
+          sequences.</p>
+        </li>
+        <li>Output is written to a file <tt>myfile.log</tt> and errors are
+        printed in the SVL Commands window. A sample of the output file created
+        after running <tt>mpu_psearch</tt> on
+        <tt>'$MOE/sample/mol/p2genes500.fsa'</tt> may look like this:
+
+<pre class="code">
+SSO0044       PDB_1EHK.A   1.47e-032    Skip
+SSO0044       PDB_1AR1.A   2.37e-021    Skip
+SSO0050       PDB_1HZD.A   7.21e-020    Skip
+SSO0050       PDB_1EF8.A   8.81e-020    Skip
+SSO0053       PDB_1F3O.A   2.55e-031    Skip
+SSO0053       PDB_1G29.1   3.36e-022    Skip
+SSO0082       PDB_1B87.A   1.38e-003    8.71
+SSO0082       PDB_1BO4.A   1.93e-002    7.71
+SSO0090       PDB_1EOV.A   1.30e-076    Skip
+SSO0090       PDB_1KRS     6.61e-012    23.16
+SSO0091       PDB_1JJ2.F   5.15e-031    Skip
+SSO0091       PDB_1CK5.B   1.20e-002    10.74
+</pre>
+
+<p>The columns of data show, in this order, the name of the query
+          sequence, the PDB code of the best scoring structure from the family
+          hit, the expectation value, and the Z-score. Note that if the E-value
+          is lower than the default threshold then the Z-score calculation is
+          skipped).</p>
+        </li>
+      </ol>
+
+<p>For detailed information on MOE's Homology Search application
+      please see <a href="../proteins/promodel.htm">Building 3D Protein
+      Models</a>.</p>
+    </li>
+  </ul><!-- grdemo.svl -->
+  <hr noshade="noshade" />
+
+<h2><a id="grdemo">2D Graphics Demo</a></h2>
+  <ul>
+    <li><b>File</b>: <tt>$MOE/sample/grdemo.svl</tt></li>
+    <li><b>Description</b>:
+
+<p>The MOE 2D graphics features allow schematic drawings to be produced
+      from a concise alphabet of graphics primitives. These drawings can be
+      rendered within panels, exported to files, copied to the clipboard, or
+      printed. This sample program contains drawing instructions for several
+      pages which showcase the range and capabilities of the graphics
+      primitives. It also provides a facility for testing the file formats that
+      are available for exporting the 2D graphics objects.</p>
+    </li>
+    <li><b>Instructions</b>:
+      <ol>
+        <li>Type the following command at the SVL Command Line:
+
+<pre class="code oneline">run '$MOE/sample/grdemo.svl' </pre>
+
+<p>The following panel will appear:</p>
+
+<img src="samples/grdemo.png" alt=
+          "2D Graphics Primitives" class="center" />
+        </li>
+        <li>The default graphic, page 1, is shown above. To flip between pages,
+        press the numbers labeled by <b>Graphics</b>.</li>
+        <li>To test the exporting abilities, make sure that the location given
+        in <b>Directory</b> is suitable for writing a number of files, then
+        press the <b>Export</b> button. For each of the pages of graphics, a
+        file will be created for every available output format. Output formats
+        include raster (PNG, JPG, GIF, BMP) and vector (EMF+, SVG, Grob)
+        formats.</li>
+      </ol>
+
+<p>For more information, see <a href="../svl/fcnref/grfcn.htm">Flat
+      Graphics Object Functions</a>.</p>
+    </li>
+  </ul>
+  <hr noshade="noshade" />
+
+<h2><a id="Gobj">3D Graphics Objects Demo</a></h2>
+  <ul>
+    <li><b>File</b>: <tt>$MOE/sample/gobjdemo.svl</tt></li>
+    <li><b>Description</b>: Running this program displays the Graphics Objects
+      Demo panel, which allows you to select a function defining a graphic
+      object and to modify the object's parameters on an interactive basis.
+      The resulting graphic object is displayed in the MOE rendering window.
+
+<p><b>Note:</b> The objects are rendered using green lines and triangles.
+      The direction of the normals is shown by red line segments
+      (optional).</p>
+
+<img src="gobjdemo/wire_spheres.png" alt=
+      "Wireframe Spheres in MOE" class="center" />
+    </li>
+    <li><b>Instructions</b>:
+      <ol>
+        <li>Type the following command at the SVL Command Line:
+
+<pre class="code oneline">run '$MOE/sample/gobjdemo.svl' </pre>
+
+<p>A panel titled Graphics Objects Demo is displayed.</p>
+
+<img src="samples/gobjdemo_panel.png"
+          alt="GOBJ Demo Panel" class="center" />
+        </li>
+        <li>The Object section contains each available graphic object in MOE.
+        Press a button to display the corresponding object in the MOE rendering
+        window.</li>
+        <li>The Show Normals toggle box controls the display of red arrows
+        indicating the graphic object normals.</li>
+        <li>The three wheels in the Center section are used to change the
+        coordinates of the displayed object.</li>
+        <li>The three wheels in the Axis section are used to change the height,
+        declination from Z axis and angle about the Z axis of the currently
+        displayed graphic object.</li>
+        <li>The Radius scale determines the size of the displayed object. To
+        modify this value, enter a number in the text field and press
+        <tt>Enter</tt> or move the scale.</li>
+        <li>The Quality scale controls the visual quality of the surface of the
+        displayed objects.</li>
+        <li>The Replicate scale determines the number of graphic objects to
+        display.</li>
+        <li>The Separation scale controls the amount of space between the
+        replicated graphic objects.</li>
+        <li>The SVL display area shows the SVL code used to create the
+        currently displayed object.</li>
+      </ol>
+    </li>
+  </ul>
+
+<p>Each object is defined by its basic shape and desired appearance (solid,
+  wireframe or polyhedral). Wireframe objects are composed of lines, whereas
+  solid and polyhedral objects are composed of triangles that form polyhedral
+  facets. Solid and polyhedral objects differ in their normals: while normals
+  of a solid object are perpendicular to the analytic surface of the object,
+  normals of a polyhedral object are perpendicular to each individual
+  facet.</p>
+  <table class="titlebar">
+    <tr>
+      <th>Object</th>
+      <th>Solid</th>
+      <th>Wireframe</th>
+      <th>Polyhedral</th>
+    </tr>
+    <tr>
+      <th>cross</th>
+      <td>&nbsp;</td>
+      <td><img src="gobjdemo/cross.gif" /></td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <th>circle</th>
+      <td><img src="gobjdemo/circle.gif" /></td>
+      <td><img src="gobjdemo/wcircle.gif" /></td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <th>box</th>
+      <td><img src="gobjdemo/box.gif" /></td>
+      <td><img src="gobjdemo/wbox.gif" /></td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <th>sphere</th>
+      <td><img src="gobjdemo/sphere.gif" /></td>
+      <td><img src="gobjdemo/wsphere.gif" /></td>
+      <td><img src="gobjdemo/psphere.gif" /></td>
+    </tr>
+    <tr>
+      <th>cylinder</th>
+      <td><img src="gobjdemo/cylinder.gif" /></td>
+      <td><img src="gobjdemo/wcylinder.gif" /></td>
+      <td><img src="gobjdemo/pcylinder.gif" /></td>
+    </tr>
+    <tr>
+      <th>cone</th>
+      <td><img src="gobjdemo/cone.gif" /></td>
+      <td><img src="gobjdemo/wcone.gif" /></td>
+      <td><img src="gobjdemo/pcone.gif" /></td>
+    </tr>
+    <tr>
+      <th>arrow</th>
+      <td><img src="gobjdemo/arrow_solid.png" /></td>
+      <td><img src="gobjdemo/arrow_wireframe.png" /></td>
+      <td><img src="gobjdemo/arrow_polyhedral.png" /></td>
+    </tr>
+    <tr>
+      <th>cap</th>
+      <td><img src="gobjdemo/cap.gif" /></td>
+      <td><img src="gobjdemo/wcap.gif" /></td>
+      <td><img src="gobjdemo/pcap.gif" /></td>
+    </tr>
+  </table><!-- gridcode.svl -->
+  <hr noshade="noshade" />
+
+<h2><a id="Gridcode">Grid Code Example</a></h2>
+  <ul>
+    <li><b>File</b>: <tt>$MOE/sample/gridcode.svl</tt></li>
+    <li><b>Description</b>: Demonstrates how to use grid-related SVL functions.
+
+<img src="samples/s_gridcode2.png" alt=
+      "Gridcode Surface" class="center" />
+    </li>
+    <li><b>Instructions</b>:<br />
+      <br />
+      <ol>
+        <li>Load the aspirin molecule
+        <tt>'$MOE/sample/mol/asa.mol'</tt> into MOE.</li>
+        <li>Type the following command at the SVL Command Line:
+
+<pre class="code oneline">run '$MOE/sample/gridcode.svl' </pre>
+
+<p>A panel titled Grid Surfaces SVL Demo is displayed.</p>
+
+<img src="samples/s_gridcode1.png" alt=
+          "Grid Code Panel" class="center" />
+        </li>
+        <li>Modify the various parameters of the program and press Apply to see
+        the corresponding surface in the MOE rendering window.</li>
+      </ol>
+    </li>
+  </ul><!-- windemo.svl -->
+  <hr noshade="noshade" />
+
+<h2><a id="Window">SVL Window Toolkit Demo</a></h2>
+  <ul>
+    <li><b>File</b>: <tt>$MOE/sample/windemo.svl</tt></li>
+    <li><b>Description</b>:
+
+<p>Displays a panel showing the different widgets available in the
+      <a href="../svl/svlgui/wt_intro.htm">SVL Window Toolkit</a> and their
+      respective attributes. Adjusting the attributes allows you to see how
+      different attribute values affect the widget layout.</p>
+
+<img src="samples/s_windemo.png" class="center" />
+    </li>
+    <li><b>Instructions</b>: Run the sample with
+
+<pre class="code oneline">run '$MOE/sample/windemo.svl'</pre>
+
+<p>and follow the instructions.</p>
+    </li>
+  </ul>
+  <hr noshade="noshade" />
+
+<a id="QuickRef"></a>
+<h1>Sample Programs Quick Reference</h1>
+  <div class="indent">
+    <table class="noborder">
+      <tr>
+        <td>
+          <a href="#Alpha">alphabuild.svl</a>
+        </td>
+        <td>Protein Reconstruction from Alpha Carbon Trace</td>
+      </tr>
+      <tr>
+        <td>
+          <a href="#BuilderZINC">builder_zinc15.svl</a>
+        </td>
+        <td>Perform ZINC15 Database Search from Builder</td>
+      </tr>
+      <tr>
+        <td>
+          <a href="cliprg.htm">dbvclip.svl</a>
+        </td>
+        <td>Clipping R-Groups</td>
+      </tr>
+      <tr>
+        <td>csearch.svl</td>
+        <td>Systematic Conformational Search</td>
+      </tr>
+      <tr>
+        <td>dbimport.svl</td>
+        <td>Legacy tool for importing data into a MOE database</td>
+      </tr>
+      <tr>
+        <td>dgeom.svl</td>
+        <td>Distance Geometry</td>
+      </tr>
+      <tr>
+        <td>
+          <a href="#dihmplot">dihmplot.svl</a>
+        </td>
+        <td>Dihedral Energy Plot with Minimization</td>
+      </tr>
+      <tr>
+        <td>
+          <a href="#DistPlot">distplot.svl</a>
+        </td>
+        <td>Alpha carbon distance matrix plot</td>
+      </tr>
+      <tr>
+        <td>echo.svl</td>
+        <td>Example custom loaded SVL function</td>
+      </tr>
+      <tr>
+        <td>
+          <a href="#eht_ui">eht_ui.svl</a>
+        </td>
+        <td>Extended Hueckel Theory Properties</td>
+      </tr>
+      <tr>
+        <td>
+          <a href="#Electro">esurf.svl</a>
+        </td>
+        <td>Electrostatic Surfaces</td>
+      </tr>
+      <tr>
+        <td>
+          <a href="#Gobj">gobjdemo.svl</a>
+        </td>
+        <td>3D Graphics Objects Demo</td>
+      </tr>
+      <tr>
+        <td>
+          <a href="#Gobj">grdemo.svl</a>
+        </td>
+        <td>2D Graphics Objects Demo</td>
+      </tr>
+      <tr>
+        <td>
+          <a href="#Gridcode">gridcode.svl</a>
+        </td>
+        <td>Grid Code Example</td>
+      </tr>
+      <tr>
+        <td>
+          <a href="#Gridsurf">gridex.svl</a>
+        </td>
+        <td>Grid Surface Demo</td>
+      </tr>
+      <tr>
+        <td>hello_world.svl</td>
+        <td>Example custom run SVL function</td>
+      </tr>
+      <tr>
+        <td>
+          <a href="#HMC">hmc.svl</a>
+        </td>
+        <td>Hybrid Monte Carlo Simulation</td>
+      </tr>
+      <tr>
+        <td>hrot.svl</td>
+        <td>Random Helix Rotation</td>
+      </tr>
+      <tr>
+        <td>
+          <a href="#Langevin">iedyn.svl</a>
+        </td>
+        <td>Langevin Implicit Euler Dynamics</td>
+      </tr>
+      <tr>
+        <td>
+          <a href="#mdtools_qp">mdtools.svl</a>
+        </td>
+        <td>Molecular Dynamics Tools</td>
+      </tr>
+      <tr>
+        <td>
+          <a href="#MOEsaicpic50">moesaic_prep_pic50.svl</a>
+        </td>
+        <td>Add Activity Field to MOEsaic Dataset</td>
+      </tr>
+      <tr>
+        <td>
+          <a href="#MOEsaicSSS">moesaic_prep_sss_label.svl</a>
+        </td>
+        <td>Add Class Labels to MOEsaic Dataset</td>
+      </tr>
+      <tr>
+        <td>
+          <a href="#MOEsaicUpdProj">moesaic_updprojtemplate.svl</a>
+        </td>
+        <td>Updatable MOEsaic Custom Project</td>
+      </tr>
+      <tr>
+        <td>
+          <a href="#Nabstack">nabstack.svl</a>
+        </td>
+        <td>DNA Base Stacking</td>
+      </tr>
+      <tr>
+        <td>
+          <a href="#OCCO">occo.svl</a>
+        </td>
+        <td>OCCO Plot</td>
+      </tr>
+      <tr>
+        <td>open_template.svl</td>
+        <td>Template SVL for adding a new file type to <b>File | Open</b></td>
+      </tr>
+      <tr>
+        <td>
+          <a href="#Jack">pairpot.svl</a>
+        </td>
+        <td>Mean Pair Potential Jackknife Test</td>
+      </tr>
+      <tr>
+        <td>
+          <a href="#Pairsim">pairsim.svl</a>
+        </td>
+        <td>Typed Pair Distance Similarity</td>
+      </tr>
+      <tr>
+      <tr>
+        <td>
+          <a href="#ProjTemplates">project_template_config_ed.xml</a>
+        </td>
+        <td>Template for MOE Project with Electron Density Data</td>
+      </tr>
+      <tr>
+        <td>
+          <a href="#ProjTemplates">project_template_config_ligand.xml</a>
+        </td>
+        <td>Template for MOE Project with Ligand Data</td>
+      </tr>
+      <tr>
+        <td>
+          <a href="#ProjTemplates">project_template_config_noligand.xml</a>
+        </td>
+        <td>Template for MOE Project with No Ligand Data</td>
+      </tr>
+      <tr>
+        <td>
+          <a href="#psearch">psearch.svl</a>
+        </td>
+        <td>Parallelized Homology Search</td>
+      </tr>
+      <tr>
+        <td>
+          <a href="#Kier">q_estate.svl</a>
+        </td>
+        <td>Kier Descriptors</td>
+      </tr>
+      <tr>
+        <td>
+          <a href="#Randic">q_randic.svl</a>
+        </td>
+        <td>Randic Descriptor</td>
+      </tr>
+      <tr>
+        <td>
+          <a href="#MACCS">q_maccs.svl</a>
+        </td>
+        <td>MACCS Key Count Descriptors</td>
+      </tr>
+      <tr>
+        <td>
+          <a href="cdgen.htm">qcdgen.svl</a>
+        </td>
+        <td>QuaSAR-CombiGen: Enumerative Combinatorial Library Generation</td>
+      </tr>
+      <tr>
+        <td>
+          <a href="qcombi.htm">qcombi.svl</a>
+        </td>
+        <td>QuaSAR-CombiDesign: Create Diverse Subset</td>
+      </tr>
+      <tr>
+        <td>
+          <a href="qcrsel.htm">qcrsel.svl</a>
+        </td>
+        <td>QuaSAR-Reagent: Reagent Activity Analysis</td>
+      </tr>
+      <tr>
+        <td>
+          <a href="#rism_hfe">rism_hfe.svl</a>
+        </td>
+        <td>3D-RISM Hydration Free Energy</td>
+      </tr>
+      <tr>
+        <td>
+          <a href="#Molsup">seal.svl</a>
+        </td>
+        <td>Molecular Superposition</td>
+      </tr>
+      <tr>
+        <td>
+          <a href="#Flexsup">sealflex.svl</a>
+        </td>
+        <td>Flexible Molecular Superposition</td>
+      </tr>
+      <tr>
+        <td>
+          <a href="#smics">smics.svl</a>
+        </td>
+        <td>Parallelized Stochastic Search</td>
+      </tr>
+      <tr>
+        <td>
+          <a href="#smitext">smitext.svl</a>
+        </td>
+        <td>Embed Builder SMILES textfield into a Panel</td>
+      </tr>
+      <tr>
+        <td>
+          <a href="#Solv">vajdaweng.svl</a>
+        </td>
+        <td>Solvation Free Energy from Surface Area</td>
+      </tr>
+      <tr>
+        <td>
+          <a href="#NVE">verlet.svl</a>
+        </td>
+        <td>NVE Molecular Dynamics Simulation</td>
+      </tr>
+      <tr>
+        <td>
+          <a href="#WebMake">webmake.svl</a>
+        </td>
+        <td>Output Database as HTML</td>
+      </tr>
+      <tr>
+        <td>
+          <a href="#Window">windemo.svl</a>
+        </td>
+        <td>SVL Window Toolkit Demo</td>
+      </tr>
+    </table>
+  </div><!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../images/ccgicon.png" /> <a href="../index.htm"></a> <a href=
+    "../legal.htm"></a> &copy;<span class="versionyear"></span> <a href="http://www.chemcomp.com"></a>. All
+    rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

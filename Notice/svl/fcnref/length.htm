@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: length, l_length" />
+  <title>Vector Length</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Vector Length
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    n = <a class="fcnlink" href="#length">length</a> v
+    m = <a class="fcnlink" href="#l_length">l_length</a> v
+</pre>
+<a id="length"></a>
+<h1>Description</h1>
+
+<pre>
+n = <span class="fcndef">length</span> v
+</pre>
+
+<p>Returns the number of top-level elements of <tt>v</tt>. Note that:</p>
+
+<pre>
+    v === v [ igen length v ]
+</pre>
+
+<p><tt>length v</tt> is equivalent to <tt>last x_id v</tt>.</p>
+
+<pre>
+    svl&gt; length [ [2,3], [4,5,6], [7,8] ]
+    3
+    svl&gt; length &quot;abc&quot;
+    3
+    svl&gt; length [&quot;abc&quot;, &quot;def&quot;]
+    2
+</pre>
+<a id="l_length"></a>
+<hr noshade="noshade" />
+
+<pre>
+m = <span class="fcndef">l_length</span> v
+</pre>
+
+<p>Returns the <em>laminated length</em> of <tt>v</tt>, defined as the length
+  of <tt>tr v</tt>:</p>
+
+<pre>
+    l_length v === length tr v
+</pre>
+
+<p>For example:</p>
+
+<pre>
+    svl&gt; length [[1,2,3],[4,5,6]]
+    2
+    svl&gt; l_length [[1,2,3],[4,5,6]]
+    3
+    svl&gt; l_length [[1,2,3],[4,5]]
+    <em>error</em>
+</pre>
+
+<h1>See Also</h1>
+
+<p><a class="svl" href="catetc.htm">cat</a> <a class="svl" href=
+  "ctofetc.htm">ctof</a> <a class="svl" href="ctofetc.htm">ctom</a></p>
+
+<p><a class="svl" href="dropetc.htm">first</a> <a class="svl" href=
+  "dropetc.htm">second</a> <a class="svl" href="dropetc.htm">third</a>
+  <a class="svl" href="arithmet.htm">one</a> <a class="svl" href=
+  "arithmet.htm">zero</a></p>
+
+<p><a class="svl" href="igenetc.htm">id</a> <a class="svl" href=
+  "igenetc.htm">m_id</a> <a class="svl" href="igenetc.htm">x_id</a> <a class=
+  "svl" href="igenetc.htm">igen</a> <a class="svl" href="repetc.htm">rep</a>
+  <a class="svl" href="repetc.htm">resize</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

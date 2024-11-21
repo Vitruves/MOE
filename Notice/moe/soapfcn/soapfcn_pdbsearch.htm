@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords: SOAP, moeweb" />
+  <meta name="keywords" content="functions: soap_spec_pro_SearchPDB" />
+  <meta name="keywords" content="functions: soap_pro_SearchPDB" />
+  <title>pro_SearchPDB SOAP Function</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    pro_SearchPDB SOAP Function
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<p>The SOAP PDB search will perform a multi-stage homology search for a given
+  query sequence against a non-redundant database of protein domain structures
+  (on the MOE/web server) that has been pre-clustered into families. Initially
+  a fast scan using the Fasta algorithm is performed. Those families with at
+  least one high-scoring member are then submitted to a more detailed HMMER
+  calculation. Results are in the form of a list of sequence alignments and
+  their corresponding E (from FASTA) and EHMMER values.</p>
+
+<pre>
+    <a class="fcnlink" href="#pro_SearchPDB">pro_SearchPDB</a>
+</pre>
+  <hr noshade="noshade" />
+<a id="pro_SearchPDB"></a>
+<h1>pro_SearchPDB</h1>
+
+<h2>Parameters</h2>
+  <dl>
+    <dt><tt>query:</tt> <i>string</i></dt>
+    <dd>Amino acid sequence specified by string of single letter codes.</dd>
+    <dd><br /></dd>
+    <dt><tt>ktup:</tt> <i>int</i></dt>
+    <dd>Strictly positive integer specifying the tuple size used during the
+    initial fast scan of the database. The maximum value is 3. The default
+    value is 1.</dd>
+    <dd><br /></dd>
+    <dt><tt>E_cutoff:</tt> <i>real</i></dt>
+    <dd>Maximum allowable expectation value for a family to be retained in the
+    family list. The default value is 10.</dd>
+    <dd><br /></dd>
+    <dt><tt>E_cutoff_HMMER:</tt> <i>real</i></dt>
+    <dd>Maximum allowable HMMER E value that must be achieved in order to
+    retain a family in the family list. HMMER uses Hidden Markov Models derived
+    from multiple sequence alignments to identify other members of the family
+    represented by a given multiple alignment. The default is 1e-2.</dd>
+    <dd><br /></dd>
+    <dt><tt>matrix:</tt> <i>'token'</i></dt>
+    <dd>Name of the amino acid scoring matrix that is used in the sequence
+    alignment. The name will be concatenated onto the value of the
+    configuration parameter in the <a href="../../install/moeconfig.htm">MOE
+    configuration resource file</a> (or using the Matrix Path field in the
+    Protein Defaults page of the <a href=
+    "../../appendix/settings.htm">Configuration Options</a> panel) on the
+    MOE/web server to produce a full path specification. The default name is
+    'blosum62'. Note this matrix must refer to a file on the server,
+    not the client machine.</dd>
+    <dd><br /></dd>
+    <dt><tt>gapstart:</tt> <i>real</i></dt>
+    <dd>Penalty for opening a gap in a sequence alignment. The default is
+    -12.</dd>
+    <dd><br /></dd>
+    <dt><tt>gapextend:</tt> <i>real</i></dt>
+    <dd>Penalty for each residue aligned to a gap position in a sequence
+    alignment. The default is -2.</dd>
+    <dd><br /></dd>
+  </dl>
+
+<h2>Return Values</h2>
+  <dl>
+    <dt><tt>E:</tt> <i>realArray</i></dt>
+    <dd>For each family, a vector of real numbers is returned representing the
+    expectation values calculated by the initial fast scan for each sequence in
+    the family. This return value should be split by the 'seg' return
+    value to divide up the value by family.</dd>
+    <dd><br /></dd>
+    <dt><tt>EHMMER:</tt> <i>realArray</i></dt>
+    <dd>For each family, the expectation value for the hit as calculated by
+    HMMER.</dd>
+    <dd><br /></dd>
+    <dt><tt>header:</tt> <i>tokenArray</i></dt>
+    <dd>For each family, a vector of tokens is returned containing text
+    information for each of the sequences in the family. This return value
+    should be split by the 'seg' return value to divide up the value by
+    family.</dd>
+    <dd><br /></dd>
+    <dt><tt>seq:</tt> <i>tokenArray</i></dt>
+    <dd>For each family, a vector of tokens is returned, representing the
+    single-letter codes of the sequences. The sequences are aligned to the
+    query, with gap characters ('.') inserted accordingly. This return
+    value should be split by the 'seg' return value to divide up the
+    value by family.</dd>
+    <dd><br /></dd>
+    <dt><tt>query:</tt> <i>tokenArray</i></dt>
+    <dd>For each family, a token is returned, representing the single-letter
+    codes of the query sequence aligned to the respective family, with gap
+    characters ('.') inserted accordingly.</dd>
+    <dd><br /></dd>
+    <dt><tt>qrange:</tt> <i>tokenArray</i></dt>
+    <dd>Residue range in the query sequence which is aligned to each hit, in
+    the form start:end. The first residue is always numbered one.</dd>
+    <dd><br /></dd>
+    <dt><tt>seg:</tt> <i>intArray</i></dt>
+    <dd>Segmentation vector by which the 'E', 'header' and
+    'seq' return values should be split to divide them up by
+    family.</dd>
+    <dd><br /></dd>
+  </dl><!--
+
+<h1>Description</h1>
+
+<p>
+</p>
+
+<h1>Methodology</h1>
+
+-->
+
+<h1>References</h1>
+  <table class="ref">
+    <tbody>
+      <tr>
+        <td valign="top">[Pearson&nbsp;1996]</td>
+        <td valign="top">Pearson, W.R.; Effective Protein Sequence Comparison;
+        <i>Meth. Enz.</i>; Vol. 266, Doolittle, R.F. (Ed.); Academic Press, San
+        Diego, (1996) 227-258.</td>
+      </tr>
+    </tbody>
+  </table>
+
+<h1>See Also</h1>
+
+<p><a href="../../moeweb_apps/moeweb_intro.htm">MOE/web Applications</a><br />
+  <a href="../../moe/moesoap.htm">MOE/web SOAP Service and Functions</a><br />
+  <a class="svl" href="../../svl/fcnref/soapfcn.htm">SOAP Interface
+  Functions</a><br />
+  <br />
+  <a href="../../proteins/prosearch.htm">Homology Searching</a><br />
+  <a href=
+  "../../proteins/fcnref/pro_srch.htm"><tt>pro_SearchPDB</tt>Function</a>
+  </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

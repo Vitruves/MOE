@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: reverse" />
+  <meta name="keywords" content="functions: shift, shiftl, shiftr" />
+  <title>Shifting Functions: shift, reverse, ...</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Shifting Functions: shift, reverse, ...
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    reversed_v = <a class="fcnlink" href="#reverse">reverse</a> v
+
+    result = <a class="fcnlink" href="#shift">shift</a> [ v, k ]
+    shifted_left = <a class="fcnlink" href="#shiftl">shiftl</a> v
+    shifted_right = <a class="fcnlink" href="#shiftr">shiftr</a> v
+</pre>
+<a id="reverse"></a>
+<h1>Description</h1>
+
+<pre>
+reversed_v = <span class="fcndef">reverse</span> v
+</pre>
+
+<p>Reverses the order of the top level elements of <tt>v</tt>.</p>
+
+<pre>
+    svl&gt; reverse [1,2,3,4,5]
+    [5,4,3,2,1]
+
+    svl&gt; reverse &quot;palindrome&quot;
+    &quot;emordnilap&quot;
+</pre>
+<a id="shiftr"></a>
+<a id="shiftl"></a>
+<a id="shift"></a>
+<hr noshade="noshade" />
+
+<pre>
+result = <span class="fcndef">shift</span> [ v, k ]
+shifted_left = <span class="fcndef">shiftl</span> v
+shifted_right = <span class="fcndef">shiftr</span> v
+</pre>
+
+<p>If <tt>k</tt> is positive, all elements are shifted to the right by
+  <tt>k</tt> positions. The first element is repeated <tt>k</tt> times while
+  the last <tt>k</tt> elements are lost. If <tt>k</tt> is negative, all
+  elements are shifted to the left by <tt>abs k</tt> positions. The last
+  element is repeated <tt>abs k</tt> times while the first <tt>abs k</tt>
+  elements are lost.</p>
+
+<p>Note that:</p>
+
+<pre>
+    shiftr v === shift [v, 1]
+    shiftl v === shift [v, -1]
+</pre>
+
+<p>Examples:</p>
+
+<pre>
+    svl&gt; shift [igen 5, 2]
+    [1,1,1,2,3]
+
+    svl&gt; shift [igen 8, -3]
+    [4,5,6,7,8,8,8,8]
+
+    svl&gt; shiftr [1,2,3,4,5]
+    [1,1,2,3,4]
+
+    svl&gt; shiftl [ 2, 3, [4,5] ]
+    [ 3, [4,5], [4,5] ]
+</pre>
+
+<h1>See Also</h1>
+
+<p><a href="introstruct.htm">Structural Functions</a></p>
+
+<p><a class="svl" href="bitwise.htm">bitshl</a> <a class="svl" href=
+  "bitwise.htm">bitshr</a><br />
+  <a class="svl" href="rotetc.htm">rot</a> <a class="svl" href=
+  "rotetc.htm">rotl</a><br />
+  <a class="svl" href="rotetc.htm">rotr</a> <a class="svl" href=
+  "rotetc.htm">rotlpoke</a> <a class="svl" href="rotetc.htm">rotrpoke</a><br />
+  <a class="svl" href="length.htm">length</a> <a class="svl" href=
+  "sortetc.htm">rank</a> <a class="svl" href="sortetc.htm">sort</a> <a class=
+  "svl" href="igenetc.htm">x_id</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

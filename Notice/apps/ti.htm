@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html>
+
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../images/ccgicon.png" />
+  <title>Free Energy Calculations with Thermodynamic Integration</title>
+  <meta name="keywords" content="panel: AMBER Thermodynamic Integration" />
+  <meta name="keywords" content="panel: AMBER TI Analysis" />
+  <meta name="keywords" content=
+  "main_keywords: Thermodynamic Integration, AMBER, pmemd, Free Energy" />
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../index.htm"><img src="../images/ccglogo.png" /></a>
+    <a href="../index.htm"><div class="moeversion"></div></a>
+    Free Energy Calculations with Thermodynamic Integration
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+  <div class="toc-wrap" id="toc-list">
+<ul class="tight">
+<li><a href="#Theory">Theory and Implementation</a></li>
+<li><a href="#Run">Running a Thermodynamic Integration Simulation</a></li>
+<li><a href="#Analyze">Analyzing Simulation Results</a></li>
+<li><a href="#References">References</a></li>
+</ul>
+</div>
+
+<p>
+The purpose of the Thermodynamic Integration application is to calculate the
+relative free energy of binding between <i>n</i> (small) molecules and a
+receptor.
+Relative free energy calculations such as Thermodynamic Integration (TI)
+and Free Energy Perturbation (FEP) date back to [Kirkwood&nbsp;1935] and
+[Zwanzig&nbsp;1954].  In the case of TI, a coupling parameter
+&lambda;&nbsp;&isin;&nbsp;[0,1] is used to express a free energy difference
+as an integral over &lambda;:
+</p>
+
+<p class="center">
+<img src="ti/tieqn.png" alt="TI Equations">
+</p>
+
+<p>
+In this formulation, <i>G</i>(&lambda;) is assumed to smoothly interpolate
+between two states of interest <i>G</i>(0) and <i>G</i>(1) with associated
+energy function <i>E</i>(&lambda;).  For example, a linear interpolation,
+<i>E</i>(&lambda;) = &lambda; <i>E<sub>1</sub></i>
++ (1&nbsp;&ndash;&nbsp;&lambda;) <i>E</i><sub>0</sub>, would satisfy the
+required assumptions.
+</p>
+
+<p>
+The integration over &lambda; can be estimated by Monte Carlo or Molecular
+Dynamics simulations [Allen&nbsp;1987] as follows
+</p>
+
+<ol>
+<li>
+Select <i>K</i> values {&lambda;<sub>1</sub>,...,&lambda;<sub><i>K</i></sub>}.
+</li>
+<li>
+Perform <i>K</i> simulations to estimate
+<i>v<sub>k</sub></i> =
+  &lt; &part;<i>E</i>(&lambda;)/&part;&lambda;
+  &gt;<sub>&lambda;<sub><i>k</i></sub></sub>.
+</li>
+<li>
+Estimate <i>v</i> by numerical integration on
+{...,(<i>v</i><sub>k</sub>,&lambda;<sub><i>k</i></sub>),...}.
+</li>
+</ol>
+
+<p>
+With the advent of GPU-accelerated Molecular Dynamics simulations, such
+calculations have become practicable for several tens of small molecules.
+In particular, MOE contains an interface to the GPU version of
+AMBER TI along with methodology to automate the setup and analysis of
+AMBER TI simulations.
+</p>
+
+<!-- -------------------------------- THEORY ----------------------------- -->
+
+<a id="Theory">
+<h1>Theory and Implementation</h1>
+</a>
+
+<p>
+<img src="ti/ti_diag.png" alt="TI Diagram" class="floatright" />
+The fundamental approach to calculate the relative binding free energy
+between two molecules is depicted to the right.  The relative free
+energy of binding is
+</p>
+<p class="center">
+&Delta;&Delta;<i>G</i> = <i>b</i> - <i>a</i> = <i>c</i> - <i>d</i>
+</p>
+<p>
+where <i>a</i> and <i>b</i> are the individual binding free energies (which
+can be measured), and <i>c</i> and <i>d</i> are <i>alchemical</i>
+transformations which can only be calculated <i>in silico</i>.
+</p>
+<p>
+If <i>E<sub>0</sub></i> is the energy function for one ligand (and receptor)
+and <i>E<sub>1</sub></i> is that of the other,
+an artificial interpolation
+variable &lambda;&nbsp;&isin;&nbsp;[0,1] can be introduced
+to interpolate between them.
+In practice, a non-linear interpolation scheme [Steinbrecher&nbsp;2011]
+is used (using soft-core potentials).
+Starting with the definition of binding free energies, it can be shown that
+</p>
+
+<img src="ti/ti_integral.png" alt="TI Integral" class="center" />
+
+<p>
+The difference between integrals <i>c</i> and <i>d</i> is the presence
+of the receptor in <i>c</i> and its absence in <i>d</i>.  These integrals
+are calculated numerically using from Fej&eacute;r (Clenshaw-Curtis)
+quadrature [Fej&eacute;r&nbsp;1933] on <i>K</i> points:
+</p>
+
+<p class="center">
+<img src="ti/fejer.png" alt="Fejer Quadrature">
+</p>
+
+<p>
+This quadrature integrates the Chebyshev interpolating polynomial and exhibits
+spectral (exponentially increasing) accuracy; however, a lower limit
+of <i>K</i>&nbsp;&ge;&nbsp;11 is required (in the present context) to have
+near-zero expected error.
+Another advantage of the Fej&eacute;r quadrature is that no
+simulations are conducted at &lambda;&nbsp;&isin;&nbsp;{0,1} which have
+historically presented stability problems.
+</p>
+
+<img class="floatright" src="ti/ti_protocol.png" alt="TI Protocol" />
+<p>
+The numerical integration scheme is used to evaluate both for the bound
+state (<i>c</i>) and for the unbound state (<i>d</i>).  For each of
+<i>c</i> and <i>d</i>:
+</p>
+
+<ol>
+<li>Perform <i>K</i> dynamics simulations using
+{&lambda;<sub>1</sub>,...,&lambda;<sub><i>K</i></sub> } as defined above.
+</li>
+<li>Measure
+<i>f<sub>k</sub></i>
+= &lt;&nbsp;&part;<i>E</i>(&lambda;)/&part;&lambda;&nbsp;&gt;<sub>&lambda;</sub>
+during each simulation.
+</li>
+<li>
+Calculate <i>c</i> (or <i>d</i>) as
+<i>w</i><sub>1</sub> <i>f</i><sub>1</sub> + &hellip;
++ <i>w<sub>K</sub></i> <i>f<sub>K</sub></i>
+as defined above.
+</li>
+</ol>
+
+<p>
+The <i>K</i> simulations (referred to as &lambda;-windows) are each of
+duration <i>q</i> + <i>pM</i> where <i>q</i> is the &lambda;-window
+equilibration time, <i>p</i> is the time period between samples (sufficient
+to approximate independence) and <i>M</i> is the total number of samples.
+Each &lambda;-window simulation is started using the output of a single
+master equilibration (at &lambda;&nbsp;=&nbsp;0.5) of duration
+<i>q</i><sub>0</sub>.
+With the above procedure, we can calculate
+&Delta;&Delta;<i>G<sub>IJ</sub></i> = <i>c</i> - <i>d</i> for the
+transformation of molecules <i>I</i>&nbsp;&rarr;&nbsp;<i>J</i>.
+<br clear="both">
+</p>
+
+<p>
+To calculate the relative free energies of binding for each of <i>n</i>
+ligands <i>L</i><sub>1</sub>,...,<i>L<sub>N</sub></i>, a collection
+of <i>m</i> transformations 
+{..., <i>I<sub>i</sub></i>&nbsp;&rarr;&nbsp;<i>J<sub>i</sub></i>, ...}
+is required.  The transformation must connect all <i>n</i> ligands;
+i.e. the graph
+{..., (<i>I<sub>i</sub></i>,<i>J<sub>i</sub></i>), ...}
+must form a connected graph.
+Let <i>B</i> denote the
+<i>m</i>&nbsp;&times;&nbsp;<i>n</i> edge-node incidence matrix of the graph
+</p>
+
+<p class="center">
+<img src="ti/bmat.png" alt="Edge-node Matrix">
+</p>
+
+<p>The relative free energy of binding &Delta;&Delta;<i>G<sub>i</sub></i>
+for each molecule can be computed from the transformation free energies
+{&Delta;&Delta;<i>G<sub>IJ</sub></i>} by least squares fitting.
+Let <i>B</i>&nbsp;=&nbsp;<i>UDW<sup>T</sup></i> be
+a singular value decomposition of <i>B</i>.  We can then write (in vector
+form)
+</p>
+
+<p class="center">
+&Delta;&Delta;<i>G<sub>I</sub></i> =
+    <i>W</i> <i>D<sup>*</sup></i> <i>U<sup>T</sup></i>
+    &Delta;&Delta;<i>G<sub>IJ</sub></i>
+</p>
+
+<p>
+where
+<i>D<sup>*</sup></i> is the pseudo-inverse of the diagonal matrix
+<i>D</i> (inverted non-zero values).  The resulting 
+&Delta;&Delta;<i>G<sub>I</sub></i> are a least-squares solution that
+guarantee a thermodynamic graph.
+</p>
+
+<p>
+Different graphs will have different effects on the expected
+errors of the entire calculation. It can be shown [Labute&nbsp;2021] that the
+expected mean square error, E[MSE], of the calculated
+{&Delta;&Delta;<i>G<sub>I</sub></i>}, under relatively mild assumptions, is
+proportional to trace <i>D</i><sup>*2</sup>, the sum of the squared diagonal
+elements of <i>D</i><sup>*</sup>.
+The plot below shows relative RMSEs for various graph topologies and sizes
+of graph.
+</p>
+
+<p>
+<img class="center" src="ti/ti_emseplot.png" alt="Graph Topology RMSE Plot" />
+</p>
+
+<p>
+The worst graph topology is the Path (<i>n-1</i> edges) while the best is
+a complete graph (<i>n</i>(<i>n</i>-1)/2 edges).  The optimal tree topology
+is the Star with one central node connected to the remaining nodes; the
+Star will not magnify simulation errors but it cannot reduce them.
+The Ring topology is only error-reducing for a small number of nodes.
+MOE uses the Fan topology with 2<i>n</i>&ndash;3 edges, which provides
+a 2/3 error reduction factor in the expected MSE with only a modest increase
+in number of additional simulation edges.  In addition, the Fan topology
+is within ~5%
+of the optimal topology for graphs with 2<i>n</i>&ndash;3 edges.
+</p>
+
+<p>To generate optimal (E[MSE] reducing) simulation protocols,
+the number, <i>m</i>, of simulation edges (<i>I</i>&nbsp;&rarr;<i>J</i>
+transformations), the particular edges (the graph <i>B</i>), and the
+number, <i>K</i>, of &lambda;-windows given the equilibration and sampling
+parameters <i>q</i><sub>0</sub>, <i>q</i>, <i>p</i>, and <i>M</i>
+under the constraint
+of a specified total amount of simulation work
+<i>w</i> = <i>m</i>(<i>q<sub>0</sub></i> + <i>qK</i> + <i>pMK</i>),
+must all be determined.
+It can be shown [Labute&nbsp;2021] that, approximately,
+</p>
+
+<p class="center">
+<img src="ti/emse.png" alt="Approximate E[MSE]">
+</p>
+
+<p>
+where <i>K</i>&nbsp:&ge;&nbsp;11.  This approximation can be used to
+estimate optimal values of <i>K</i> and <i>m</i> given the equilibration
+costs (<i>w</i>, <i>q<sub>0</sub></i>, <i>q</i>).
+For fixed <i>w</i> and negligible <i>q</i><sub>0</sub> and <i>q</i>,
+increasing <i>K</i> or <i>m</i> (at the expense of additional
+simulation samples) will generally lead to a reduced E[MSE].
+MOE starts with this approximation and conducts a detailed search for
+an optimal graph and <i>K</i>
+rather than a simulation plan based upon chemical topology, maximum
+common substructures or other heuristics based upon the ligands.
+</p>
+
+<!-- --------------------------------- RUN ------------------------------- -->
+
+<a id="Run">
+<h1>Running a Thermodynamic Integration Simulation</h1>
+</a>
+
+<p>To perform an AMBER TI calculation in MOE:</p>
+
+<ol>
+<li>Open a receptor in MOE and build/dock a number of ligands into the
+active site.  For best results, the ligands should have as much atomic
+overlap between themselves as possible. Retain structural solvent and
+delete other solvent
+and counter-ion atoms.
+</li>
+<li>Use
+<span class="menu">MOE | Compute | Simulations | Thermodynamic Integration
+</span> to open the <b>AMBER Thermodynamic Integration</b> panel.
+</li>
+<li>Specify a directory (in the following, <tt>'root'</tt> is used as
+an example) to hold the simulation
+files, configure the calculation, and press <b>OK</b>.
+</li>
+<li>Ensure that the AMBER environment variables are properly configured
+and, in a Unix shell, enter: <tt>sh root/run.sh</tt> to run the simulation.
+</li>
+<li>Upon completion of the simulation, the final results are calculated
+and saved to <tt>root/plan.mdb</tt>.
+</li>
+<li>Open <tt>root/plan.mdb</tt> with <span class="menu">MOE
+| File | Open</span> to view the results.
+</li>
+<li>Use <span class="menu">DBV | Compute | Analysis |
+AMBER TI Analysis</span> to plot the simulation data, re-calculate the ddG, and
+analyze the results.
+</li>
+</ol>
+
+<p>
+Upon invocation of
+<span class="menu">MOE | Compute | Simulations |
+Thermodynamic Integration</span>,
+the following panel will appear, which will automatically calculate
+and display simulation plans as parameters are modified.
+</p>
+
+
+<img src="ti/tipanel.png" alt="AMBER_TI Panel" class="center" />
+<table class="noborder">
+<tr>
+  <td valign="top"><b>Directory</b></td>
+  <td valign="top">The name of a directory that will hold the created
+  simulation files.  The directory will contain a number of files
+  and subdirectories.  Importantly, the file <tt>plan.mdb</tt> will
+  hold the simulation results, and the file <tt>run.sh</tt> will
+  contain the commands to perform the simulation.</td>
+</tr>
+<tr>
+  <td valign="top"><b>Receptor</b></td>
+  <td valign="top">Specifies the atoms of the receptor for which
+	relative binding energies to the ligands will be calculated.
+	Press <b>?</b> to briefly flash the specified receptor
+	atoms in the MOE window.
+  </td>
+</tr>
+<tr>
+  <td valign="top"><b>Ligand</b></td>
+  <td valign="top">Specifies the atoms of the ligands for which
+	relative binding energies to the Receptor will be calculated.
+	At least two separate molecules must be specified.
+	The ligands must be docked in the active site of the Receptor.
+	Inert molecules are ignored.
+	Press <b>?</b> to briefly flash the atoms of the specified ligands
+	in the MOE window.
+  </td>
+</tr>
+<tr>
+  <td valign="top"><b>Forcefield</b></td>
+  <td valign="top">
+    Press to raise the <a href=
+    "../moe/pot.htm#Forcefield">Potential Setup</a> window if the displayed
+    forcefield is not appropriate for the simulation.  Any of the
+    Amber:EHT forcefields is appropriate.  Enable <b>HMR</b> to use
+    Hydrogen Mass Partitioning to distribute 2 atomic mass units from
+    heavy atoms to connected hydrogen atoms to speed up the simulation.
+  </td>
+</tr>
+<tr>
+  <td valign="top"><b>Conditions</b></td>
+  <td valign="top">
+    The Temperature (<b>T</b>) in K, Pressure (<b>P</b>) in kPa, and salt
+    formula (<b>Salt</b>) and concentration (mol/L) for all simulations.
+  </td>
+</tr>
+<tr>
+  <td valign="top"><b>Time&nbsp;/&nbsp;Ligand</b></td>
+  <td valign="top">
+    For each ligand, the nominal simulation time (ns) to be used for each
+    of the bound and unbound states.  The specified value is multiplied
+    by the number of ligands, <i>n</i>, to constrain the total amount
+    of simulation work, <i>w</i>, required for plan optimization
+    (see Theory section above).
+  </td>
+</tr>
+<tr>
+  <td valign="top"><b>Equilibrate&nbsp;q0</b>,&nbsp;<b>q</b></td>
+  <td valign="top">
+    The simulation times (ns) of the master equilibration
+    (<i>q</i><sub>0</sub>) and &lambda;-window equilibration (<i>q</i>),
+    respectively (see Theory section above).
+  </td>
+</tr>
+<tr>
+  <td valign="top"><b>Minimum&nbsp;pM</b>,&nbsp;<b>p</b></td>
+  <td valign="top">
+    The simulation time dedicated to &lambda;-window samples
+    (see Theory section above) is constrained
+    to be at least the value specified by <b>Minimum pM</b>; <b>p</b>
+    specifies the sample period (ns).
+  </td>
+</tr>
+<tr>
+  <td valign="top"><b>Maximum&nbsp;K</b></td>
+  <td valign="top">
+    The simulation plan will be constrained to have at most the
+    specified number of &lambda;-windows, <b>Maximum K</b>; however,
+    <i>K</i>&nbsp;&ge;&nbsp;11 will be enforced (see Theory section),
+    i.e. <b>Maximum K</b> is always &ge;&nbsp;11.
+  </td>
+</tr>
+<tr>
+  <td valign="top"><b>GPU&nbsp;Count</b></td>
+  <td valign="top">
+    The number of parallel GPU processors (one per simulation) allocated
+    to the total collection of simulations.  This value is only used for
+    estimating time and cost.
+  </td>
+</tr>
+<tr>
+  <td valign="top"><b>Cost&nbsp;/&nbsp;hour</b></td>
+  <td valign="top">
+    The cost (dollars) per hour of GPU processing time.  This value is only
+    used for estimating time and cost, displayed to the right.
+  </td>
+</tr>
+<tr>
+  <td valign="top"><b>ns&nbsp;/&nbsp;hour</b></td>
+  <td valign="top">
+    The throughput of each GPU; the specified value represents the number
+    of simulation nanoseconds achievable per real-world hour to simulate
+    a small molecule in
+    a box of water.  This value is only used for estimating real-world
+    time which is displayed to the right.
+  </td>
+</tr>
+
+<tr>
+  <td valign="top"><b>Job Name</b></td>
+  <td valign="top">
+    Specifies a name for the AMBER TI job and folder when
+    transferring the simulation to a workload manager on a cluster.
+  </td>
+</tr>
+<tr>
+  <td valign="top"><b>Keywords</b></td>
+  <td valign="top">
+    Resource keywords specifying minimum requirements for the job.
+    The format is
+    <tt>name</tt>, <tt>name=#</tt> or <tt>name=[min,max]</tt>.
+    Use spaces to separate resource
+    keywords. Possible resource names are <tt>gpu</tt>,
+    <tt>cpu</tt>, <tt>disk</tt>, <tt>time</tt> and <tt>mem</tt>.
+	Resources entered here will be used to filter available queues.
+  </td>
+</tr>
+<tr>
+  <td valign="top"><b>Queue</b></td>
+  <td valign="top">
+    Specifies pre-configured queueing options including queue name, host
+	information and queue resources.
+  </td>
+</tr>
+</table>
+
+<p>Press <b>OK</b> to generate the simulation files in the specified
+directory.</p>
+
+<p><span class="tip">Warning!</span> The simulations can require vast
+amounts of computing resources to complete.  The use of GPUs is almost
+essential, as is possibly a high performance computing facility, or
+the Cloud.</p>
+
+<p>The following files will be created (here <tt>root/</tt> is being
+used as the holding directory):
+</p>
+
+  <center>
+    <table class="titlebar">
+      <tr>
+        <th>Generated&nbsp;Files</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td><tt>root/plan.moe</tt>
+        </td>
+        <td>The receptor and all ligands after initial mean field
+	minimization.</td>
+      </tr>
+      <tr>
+        <td><tt>root/plan.mdb</tt>
+        </td>
+        <td>A database containing an entry for each ligand and each simulation;
+	<tt>plan.mdb</tt> is used and modified by the <tt>AMBER_TI_Analyze</tt>
+	function once all the simulations are complete.</td>
+      </tr>
+      <tr>
+        <td><tt>root/run.sh</tt>
+        </td>
+        <td>
+        The POSIX shell script for running/restarting calculations on
+	Unix/Linux systems; run the script with <tt>sh root/run.sh</tt>.
+	The script will exit when the full simulation protocol is complete.
+	Once the simulations are complete, MOE will be used to run
+	<tt>AMBER_TI_Analyze</tt> to compute
+	the final relative free energies of binding.
+        </td>
+      </tr>
+      <tr>
+        <td><tt>root/mI_mJ/</tt>
+        </td>
+        <td>
+          A directory containing simulation directories and files for
+	  the relative binding energy calculation of molecule <tt>I</tt>
+	  to molecule <tt>J</tt>.
+      </tr>
+      <tr>
+        <td><tt>root/mI_mJ/b*/<br>root/mI_mJ/u*/</tt>
+        </td>
+        <td>
+	  Two sets of simulation directories: one set for the bound state
+	  (<tt>b*</tt>) including the receptor and one set for the unbound
+	  state (<tt>u*</tt>).  The <tt>*</tt> are each 3 decimal digits
+	  000,...,0<i>K</i> where <i>K</i> is the number of simulation
+	  windows (<i>K</i>&ge;11).
+	  </td>
+      </tr>
+    </table>
+  </center>
+
+<p>To run the simulation, first ensure that the required environment variables
+for AMBER have been set, then:</p>
+
+<p class="blockquote"><tt>linux> sh root/run.sh
+</tt></p>
+
+<p>If the simulation is terminated prior to completion, issue the
+command again to restart the simulation from where it left off.
+Once complete, the simulation data is extracted and the relative
+binding energies are calculated.
+</p>
+
+<p>
+<a id="plan_mdb"></a>
+The <tt>root/plan.mdb</tt> database contains information about the ligands
+involved in the simulation as well as the specification of each
+<tt>I</tt> to <tt>J</tt> simulation.  The first <i>n</i> entries are
+the ligands 1,...,<i>n</i> (the <i>molecule entries</i>), and the
+subsequent entries refer to the simulations (the <i>simulation entries</i>).
+Once the simulations are complete, computed binding energies will be
+written to <tt>root/plan.mdb</tt>.
+</p>
+
+  <center>
+    <table class="titlebar">
+      <tr>
+        <th>Field</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+	<td><tt>sim</tt></td>
+	<td>The name of the <tt>mI_mJ</tt> simulation directory (for
+	simulation entries); the field is empty for molecule entries.
+      </tr>
+      <tr>
+	<td><tt>skip</tt></td>
+	<td>If set to 1 the molecule will be excluded from the &Delta;&Delta;G
+	  calculation when using <span class="menu">DBV | Compute | Analysis |
+	  AMBER TI Analysis</span> once the results are imported.
+      </tr>
+      <tr>
+	<td><tt>I<br>J</tt></td>
+	<td>For molecule entries, <tt>I</tt> is the index of the molecule
+	and J is empty.
+	For simulation entries, <tt>I</tt> and <tt>J</tt> contain the
+	molecule indices in the <tt>I</tt> to <tt>J</tt> simulation
+	contained in the directory <tt>mI_mJ</tt>.</td>
+      </tr>
+      <tr>
+	<td><tt>mol_I<br>mol_J</tt></td>
+	<td>For molecule entries, <tt>I</tt> contains the 2D depicted ligand
+	molecule and mol_J is empty.
+	For simulation entries, <tt>mol_I</tt> and <tt>mol_J</tt> contain the
+	2D depicted ligand molecules indexed in <tt>I</tt> and <tt>J</tt>.
+        </td>
+      </tr>
+      <tr>
+	<td><tt>dQ</tt></td>
+	<td>For molecule entries, <tt>dQ</tt> contains the total charge
+	of the molecule.
+	For simulation entries, <tt>dQ</tt> contains the total charge
+	of molecule <tt>J</tt> minus the total charge of molecule <tt>I</tt>.
+	</td>
+      </tr>
+      <tr>
+	<td><tt>dM</tt></td>
+	<td>For molecule entries, <tt>dM</tt> contains protonation state
+	strain energy (kcal/mol) needed to produce 1&nbsp;mol of the
+	state in <tt>mol_I</tt>.
+	For simulation entries, <tt>dM</tt> contains the protonation state
+	strain energy of molecule <tt>J</tt> minus the protonation state
+	strain energy of molecule <tt>I</tt>.
+	</td>
+      </tr>
+      <tr>
+	<td><tt><span class="nobr">dG(mmgb)</span></tt></td>
+	<td>For molecule entries, <tt>dG(mmgb)</tt> contains the binding energy
+	  based on single point molecular mechanics interaction energy.
+	</td>
+      </tr>
+      <tr>
+        <td><tt><span class="nobr">dG(exp)</span></tt></td>
+	<td>For molecule entries, <tt>dG(exp)</tt> allows the definition of
+	  experimental values which are used to shift the computed
+	  <tt>dG</tt> values so that they have the same mean as the
+	  experimental values.
+	</td>
+      </tr>
+      <tr>
+        <td><tt>ddG</tt></td>
+        <td>The relative binding energy.
+	For molecule entries, <tt>ddG</tt> contains the (relative) binding
+	energy (kcal/mol) of each molecule calculated with a least-squares
+	estimate from the <tt>raw_ddG</tt> simulation values.
+	For simulation entries, <tt>ddG</tt> contains the
+	binding energy of molecule <tt>J</tt>
+	minus the binding energy of molecule <tt>I</tt>.</td>
+      </tr>
+      <tr>
+        <td><tt>ddG_err</tt></td>
+        <td>An error estimate of the values in <tt>ddG</tt>.
+	For molecule entries, this is a jackknife (leave-one-out) average
+	estimate of the error.  For simulation entries, this is the
+	difference between the value in <tt>ddG</tt> and <tt>raw_ddG</tt>.
+	</td>
+      </tr>
+      <tr>
+        <td><tt>raw_ddG</tt></td>
+        <td>The relative binding energy (kcal/mol) from the individual
+	simulations.  For molecule entries, <tt>raw_ddG</tt> is empty.
+	For simulation entries, <tt>raw_ddG</tt> contains the
+	relative binding energy calculated directly from the simulation
+	sampling and numerical integration.</td>
+      </tr>
+      <tr>
+        <td><tt>raw_ddG_err</tt></td>
+        <td>An error estimate of the values in <tt>raw_ddG</tt>.
+	For molecule entries, <tt>raw_ddG_err</tt> is empty.
+	For simulation entries, <tt>raw_ddG_err</tt> contains the error
+	due to the averaging of sampled simulation quantities, but does
+	not contain modeling error estimates (e.g. forcefield error,
+	truncated simulation error, etc.)
+	</td>
+      </tr>
+      <tr>
+        <td><tt>raw_data</tt></td>
+        <td>For molecule entries, <tt>raw_data</tt> is empty.
+	For simulation entries, <tt>raw_data</tt> contains data extracted
+	from the various simulation files.</td>
+      </tr>
+    </table>
+  </center>
+
+<!-- -------------------------------- ANALYZE ----------------------------- -->
+
+<a id="Analyze">
+<h1>Analyzing Simulation Results</h1>
+</a>
+
+<p>
+To inspect the results of the TI simulations, use
+<span class="menu">MOE | File | Open</span> to open
+<a href="#plan_mdb"><tt>root/plan.mdb</tt></a>
+in a Database Viewer. The <tt>ddG</tt> and <tt>ddG_err</tt> fields
+(described above) are normally populated.  If they are not, they can be
+recalculated with the
+<span class="menu">AMBER TI Analysis</span>; however, all of the
+simulation files must be present.  If the <tt>raw_data</tt> fields
+are populated then <tt>plan.mdb</tt> can be copied elsewhere and analyzed
+without the need for the (potentially large) simulations files.
+</p>
+
+<p>
+To analyze the AMBER TI simulation results, use
+<span class="menu">DBV | Compute | Analysis | AMBER TI Analysis</span>.
+This opens the <span class="menu">AMBER TI Analysis</span> panel in the
+lower section of the Database Viewer which can plot properties within
+specified simulation windows of the bound or unbound transformations.
+</p>
+
+<p class="center">
+<img src="ti/ti_analysis.png" alt="AMBER TI Analysis Panel" />
+</p>
+
+<table class="noborder">
+<tr>
+  <td valign="top"><b>Simulation</b></td>
+  <td valign="top"> Specifies the transformation
+	(molecule <i>I</i>&nbsp;&rarr;&nbsp;<i>J</i>) simulation to analyze.
+	The options correspond to the values in the <tt>sim</tt> field of
+	the database.
+  </td>
+</tr>
+<tr>
+  <td valign="top"><b>Property</b></td>
+  <td valign="top">Specifies the simulation property to plot:
+  <ul>
+    <li><span class="menu">dV/dL</span> &mdash;
+	the sampled &part;<i>E</i>/&part;&lambda;
+    </li>
+    <li><span class="menu">avg(dV/dL)prefix</span> &mdash;
+	the partial &lt;&nbsp;&part;<i>E</i>/&part;&lambda;&nbsp;&gt;
+	from the start of the data.
+    </li>
+    <li><span class="menu">avg(dV/dL)suffix</span> &mdash;
+	the partial &lt;&nbsp;&part;<i>E</i>/&part;&lambda;&nbsp;&gt;
+	until the end of the data.
+    </li>
+    <li><span class="menu">std(dV/dL)</span> &mdash;
+	The standard deviation of &part;<i>E</i>/&part;&lambda;
+	calculated from the time point until the end of the data.
+    </li>
+    <li><span class="menu">AutoCorrelation</span> &mdash;
+	The autocorrelation of &part;<i>E</i>/&part;&lambda; over
+	the data.
+    </li>
+  </ul>
+  </td>
+</tr>
+<tr>
+  <td valign="top"><b>Bound</b><br /><b>Unbound</b></td>
+  <td valign="top">Provides <i>K</i> checkboxes, where <i>K</i> is the
+	  number of &lambda;-windows performed.  Each checkbox plots the
+	  specified Property within the specified simulation window
+	  of the Bound or Unbound transitions.  The <b>Clear</b>
+	  button clears all checkboxes.
+  </td>
+</tr>
+<tr>
+  <td valign="top"><b>t Range</b></td>
+  <td valign="top">Specifies that only samples with time values between
+	  the lower and upper bounds (ps) will be retained.
+  </td>
+</tr>
+<tr>
+  <td valign="top"><b>Update&nbsp;ddG</b></td>
+  <td valign="top">Press to update the <tt>ddG</tt> values in the database
+  	based on the specified time range (t Range) restriction and/or
+	<tt>dG(exp)</tt> and <tt>skip</tt> values specified in the
+	<tt>plan.mdb</tt>.
+  </td>
+</tr>
+</table>
+
+<p>One important application of the AMBER TI Analysis panel is
+assessment of simulation data quality.  The <b>AutoCorrelation</b>
+property is particularly useful in this regard, as it gives an
+indication of the stability of the calculated averages and of the breadth
+of coverage of the explored space during a given simulation window.
+Regions of auto-correlation plots that exhibit larger-scale structure
+should be eliminated from the analysis, or re-run in the simulation
+window until the average auto-correlation is flat and centered around
+zero.</p>
+
+<p class="center">
+<img src="ti/autocorr.png" alt="Autocorrelation Diagnostic" />
+</p>
+
+<a id="References">
+<h1>References</h1>
+</a>
+
+  <table class="ref">
+    <tr>
+      <td valign="top">[Allen&nbsp;1987]</td>
+      <td valign="top">Allen, M.P., Tildesley, D.J.; <i>Computer Simulation of
+      Liquids</i> (<b>1987</b>) Oxford University Press.</td>
+    </tr>
+    <tr>
+      <td valign="top">[Fej&eacute;r&nbsp;1933]</td>
+      <td valign="top">Fej&eacute;r, L.; On the infinite sequences arising
+	in the theories of harmonic analysis, of interpolation, and of
+	mechanical quadratures;
+	<i>Bull. Amer. Math. Soc. 39</i> (<b>1933</b>) 521&ndash;534.
+    </tr>
+    <tr>
+      <td valign="top">[Kirkwood&nbsp;1935]</td>
+      <td valign="top">Kirkwood, J.G.; Statistical Mechanics of Fluid
+	Mixtures; <i>J. Chem. Phys. 3</i> (<b>1935</b>) 300&ndash;313.</td>
+    </tr>
+    <tr>
+      <td valign="top">[Labute&nbsp;2021]</td>
+      <td>Labute, P., Ebert, M; Optimizing Simulations Protocols for Relative
+	Free Energy Calculations; <i>Free Energy Methods in Drug Discovery:
+	Current State and Future Directions</i> (<b>2021</b>) 227&ndash;245.
+	American Chemical Society.</td>
+    </tr>
+    <tr>
+      <td valign="top">[Salomon-Ferrer&nbsp;2013]</td>
+      <td valign="top">Salomon-Ferrer, R., Gotz, W.W, Poole, D.,
+	Le Grand, S., Walker, R.C.  Case, D.A., Walker, R.C.;
+	Routine Microsecond Molecular Dynamics Simulations with AMBER on
+	GPUs. 2. Explicit Solvent Particle Mesh Ewald;
+	<i>J. Chem. Theory Comput. 10</i> (<b>2013</b>) 3878&ndash;3888.</td>
+    </tr>
+    <tr>
+      <td valign="top">[Steinbrecher&nbsp;2011]</td>
+      <td valign="top">Steinbrecher, T, Joung, S., Case, D.A.;
+	Soft-Core Potentials in Thermodynamic Integration.  Comparing
+	One- and Two-Step Transformations;
+      <i>J. Comput. Chem. 32</i> (<b>2011</b>) 3253&ndash;3263.</td>
+    </tr>
+    <tr>
+      <td valign="top">[Zwanzig&nbsp;1954]</td>
+      <td valign="top">Zwanzig, R.W.; High-Temperature Equation of State
+	by a Perturbation Method. I. Nonpolar Gases;
+	<i>J. Chem. Phys. 22</i> (<b>1954</b>) 1420&ndash;1426.</td>
+    </tr>
+  </table>
+
+<a id="SeeAlso">
+<h1>See Also</h1>
+</a>
+
+<p><a class="svl" href="../moe/fcnref/tifcn.htm#AMBER_TI_Initialize">AMBER_TI
+    Initialize</a><br />
+  <a class="svl" href="../moe/fcnref/tifcn.htm#AMBER_TI_Analyze">AMBER_TI
+    Analyze</a><br />
+  <a class="svl" href="../svl/fcnref/hpcfcn.htm#hpc_Script">hpc_Script</a><br />
+
+  <a href="../mdb/db.htm">Molecular Databases</a><br />
+</p>
+
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../images/ccgicon.png" /> <a href="../index.htm"></a> <a href=
+    "../legal.htm"></a> &copy;<span class="versionyear"></span> <a href="http://www.chemcomp.com"></a>. All
+    rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: db_FieldType, db_NumericFields" />
+  <meta name="keywords" content="functions: db_FirstFieldType" />
+  <meta name="keywords" content="functions: db_Fields" />
+  <meta name="keywords" content=
+  "functions: db_RequireFieldType,db_RequireField" />
+  <meta name="keywords" content="functions: db_EnsureField" />
+  <meta name="keywords" content="functions: db_RenameField" />
+  <title>MOE Database Field Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    MOE Database Field Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    types = <a class="fcnlink" href=
+"#db_FieldType">db_FieldType</a> [ mdb_key, field_tokens ]
+    types = <a class="fcnlink" href=
+"#db_FieldType">db_FieldType</a> [ 'mdb_name', field_tokens ]
+
+    fields = <a class="fcnlink" href=
+"#db_NumericFields">db_NumericFields</a> mdb_key
+    fields = <a class="fcnlink" href=
+"#db_NumericFields">db_NumericFields</a> 'mdb_name'
+
+    field_name = <a class="fcnlink" href=
+"#db_FirstFieldType">db_FirstFieldType</a> [ mdb_key, 'field_type' ]
+    field_name = <a class="fcnlink" href=
+"#db_FirstFieldType">db_FirstFieldType</a> [ 'mdb_name', 'field_type' ]
+
+    [field_names,field_types] = <a class="fcnlink" href=
+"#db_Fields">db_Fields</a> mdb_key
+    [field_names,field_types] = <a class="fcnlink" href=
+"#db_Fields">db_Fields</a> 'mdb_name'
+
+    <a class="fcnlink" href=
+"#db_RequireField">db_RequireField</a> [ mdb_key, 'field_name', 'field_type' ]
+    <a class="fcnlink" href=
+"#db_RequireField">db_RequireField</a> [ 'mdb_name', 'field_name', 'field_type' ]
+
+    field_name = <a class="fcnlink" href=
+"#db_RequireFieldType">db_RequireFieldType</a> [ mdb_key, 'field_type' ]
+    field_name = <a class="fcnlink" href=
+"#db_RequireFieldType">db_RequireFieldType</a> [ 'mdb_name', 'field_type' ]
+
+    <a class="fcnlink" href=
+"#db_EnsureField">db_EnsureField</a> [ mdb_key, 'field_name', 'field_type' ]
+    <a class="fcnlink" href=
+"#db_EnsureField">db_EnsureField</a> [ 'mdb_name', 'field_name', 'field_type' ]
+
+    <a class="fcnlink" href=
+"#db_RenameField">db_RenameField</a> [ mdb_key, 'field_name', 'new_name' ]
+    <a class="fcnlink" href=
+"#db_RenameField">db_RenameField</a> [ 'mdb_name', 'field_name', 'new_name' ]
+</pre>
+
+<h1>Description</h1>
+
+<p>The following functions pertain to fields in a molecular database.
+  Available field types are defined by the constant <a class="svl" href=
+  "moe_const.htm">DB_FIELD_TYPES</a>. See also <a class="svl" href=
+  "db_crfie.htm">db_CreateField</a>.</p>
+
+<p>In all cases, the database can be identified by its key, <tt>mdb_key</tt>
+  (returned by <tt>db_Open</tt>), or its filename, <tt>mdb_name</tt>.</p>
+<a id="db_FieldType"></a>
+<hr noshade="noshade" />
+
+<pre>
+types = <span class="fcndef">db_FieldType</span> [ mdb_key, field_tokens ]
+types = <span class=
+"fcndef">db_FieldType</span> [ 'mdb_name', field_tokens ]
+</pre>
+
+<p>For each field token specified in <tt>field_tokens</tt> return the types
+  of the field in the molecular database.</p>
+<a id="db_NumericFields"></a>
+<hr noshade="noshade" />
+
+<pre>
+fields = <span class="fcndef">db_NumericFields</span> mdb_key
+</pre>
+
+<p>Returns a vector of all numeric fields in the molecular database.</p>
+<a id="db_FirstFieldType"></a>
+<hr noshade="noshade" />
+
+<pre>
+field_name = <span class=
+"fcndef">db_FirstFieldType</span> [ mdb_key, 'field_type' ]
+field_name = <span class=
+"fcndef">db_FirstFieldType</span> [ 'mdb_name', 'field_type' ]
+</pre>
+
+<p>Returns the name (as a token) of the first field of the specified type,
+  <tt>'field_type'</tt>, in the database. <tt>[]</tt> is returned if no
+  field of the specified type exists in the database.</p>
+<a id="db_Fields"></a>
+<hr noshade="noshade" />
+
+<pre>
+[field_names, field_types] = <span class="fcndef">db_Fields</span> mdb_key
+[field_names, field_types] = <span class=
+"fcndef">db_Fields</span> 'mdb_name'
+</pre>
+
+<p>Returns two vectors:</p>
+  <dl>
+    <dt><tt>field_names</tt></dt>
+    <dd>Vector of all field names in the database.</dd>
+    <dt><tt>field_types</tt></dt>
+    <dd>Vector of corresponding field types.</dd>
+  </dl>
+
+<p>For example, the following code fragment opens a MOE database file and
+  prints out the names of all fields of type <tt>'molecule'</tt>:</p>
+
+<pre class="code">
+local mdb_key = db_Open ['md.mdb', 'read'];              // open database
+local [fields, field_types] = db_Fields mdb_key;         // get fields
+local mol_fields = fields | (field_types == 'molecule'); // filter fields
+print mol_fields;
+db_Close mdb_key;
+</pre>
+
+<a id="db_RequireField"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class=
+"fcndef">db_RequireField</span> [ mdb_key, 'field_name', 'field_type' ]
+<span class=
+"fcndef">db_RequireField</span> [ 'mdb_name', 'field_name', 'field_type' ]
+</pre>
+
+<p>Looks for a field named <tt>field_name</tt> of type <tt>field_type</tt> in
+  the database identified by either <tt>mdb_key</tt> or by its filename. If
+  such a field exists, nothing happens; otherwise, the task is killed.</p>
+<a id="db_RequireFieldType"></a>
+<hr noshade="noshade" />
+
+<pre>
+field_name = <span class=
+"fcndef">db_RequireFieldType</span> [ mdb_key, 'field_type' ]
+field_name = <span class=
+"fcndef">db_RequireFieldType</span> [ 'mdb_name', 'field_type' ]
+</pre>
+
+<p>Looks for a field of type <tt>field_type</tt> and returns its name if its
+  exists; otherwise, the task is killed.</p>
+<a id="db_EnsureField"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class=
+"fcndef">db_EnsureField</span> [ mdb_key, 'field_name', 'field_type' ]
+<span class=
+"fcndef">db_EnsureField</span> [ 'mdb_name', 'field_name', 'field_type' ]
+</pre>
+
+<p>Determines whether the database specified by a database key
+  <tt>mdb_key</tt> (returned by <tt>db_Open</tt>) or by filename contains a
+  field of name <tt>field_name</tt> that is of type <tt>field_type</tt>. If a
+  field of this name does not exist, it is created. If a field of this name
+  already exists but is of the wrong type, it is <b>destroyed</b>, and
+  re-created with the specified type.</p>
+
+<pre>
+    svl&gt; db_EnsureField ['data.mdb', 'num', 'int' ]
+</pre>
+
+<p><b>Caution!</b> You might irrevocably lose data using this call.</p>
+<a id="db_RenameField"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class=
+"fcndef">db_RenameField</span> [ mdb_key, 'field_name', 'new_name' ]
+<span class=
+"fcndef">db_RenameField</span> [ 'mdb_name', 'field_name', 'new_name' ]
+</pre>
+
+<p>Renames the current <tt>field_name</tt> to <tt>'new_name'</tt> in
+  the molecular database identified by either <tt>mdb_key</tt> or
+  <tt>'mdb_name'</tt>. The new name must be unique within the database,
+  otherwise an error will result. The new name is written directly to the
+  database file on disk, thus, any subsequent references to the specified field
+  must be made with the new field name.</p>
+
+<h1>See Also</h1>
+
+<p><a href="introdb.htm">Database Functions</a> </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

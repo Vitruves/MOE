@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: indexof, indicesof" />
+  <title>Find Positions Functions: indexof, indicesof</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Find Positions Functions: indexof, indicesof
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    indices = <a class="fcnlink" href="#indexof">indexof</a> [ v, w ]
+    indices = <a class="fcnlink" href="#indicesof">indicesof</a> [ v, w]
+</pre>
+<a id="indexof"></a>
+<h1>Description</h1>
+
+<pre>
+indices = <span class="fcndef">indexof</span> [v, w]
+</pre>
+
+<p>Returns, for each element of <tt>v</tt>, the position of its first
+  occurrence in <tt>w</tt>. If an element of <tt>v</tt> is not in <tt>w</tt>,
+  the return value is <tt>0</tt>.</p>
+
+<pre>
+    svl&gt; indexof [&quot;abc&quot;, &quot;xxcaa&quot;]
+    [4,0,3]
+
+    svl&gt; indexof [ [1,2,3,4,5], [2,2,3,3] ]
+    [0,1,3,0,0]
+
+    svl&gt; indexof [ [2,2,3,3], [1,2,3,4,5] ]
+    [2,2,3,3]
+</pre>
+<a id="indicesof"></a>
+<hr noshade="noshade" />
+
+<pre>
+indices = <span class="fcndef">indicesof</span> [v, w]
+</pre>
+
+<p>Returns, for each element of <tt>v</tt>, the vector of positions of all
+  its occurrences in <tt>w</tt>. If an element of <tt>v</tt> is not in
+  <tt>w</tt>, the return value is the null vector, i.e. <tt>[]</tt>.</p>
+
+<pre>
+    svl&gt; indicesof [&quot;abc&quot;, &quot;xxcaa&quot;]
+    [[4,5], [], 3]
+
+    svl&gt; indicesof [ [1,2,3,4,5], [2,2,3,3] ]
+    [ [], [1,2], [3,4], [], [] ]
+
+    svl&gt; indicesof [ [2,2,3,3], [1,2,3,4,5] ]
+    [2,2,3,3]
+</pre>
+
+<h1>See Also</h1>
+
+<p><a href="introstruct.htm">Structural Functions</a><br /></p>
+
+<p><a class="svl" href="uniqetc.htm">uniq</a> <a class="svl" href=
+  "joinetc.htm">join</a> <a class="svl" href="diffetc.htm">diff</a> <a class=
+  "svl" href="uniqetc.htm">freq</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

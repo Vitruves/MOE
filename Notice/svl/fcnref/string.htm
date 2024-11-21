@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: strpos" />
+  <meta name="keywords" content="functions: fieldsplit" />
+  <meta name="keywords" content="functions: wordsplit" />
+  <meta name="keywords" content="functions: splice" />
+  <title>Miscellaneous String Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Miscellaneous String Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+position_index = <a class="fcnlink" href=
+"#strpos">strpos</a> [substr, superstr]
+field_array = <a class="fcnlink" href=
+"#fieldsplit">fieldsplit</a> [line, separators]
+word_array = <a class="fcnlink" href=
+"#wordsplit">wordsplit</a> [line, whitespace]
+vec = <a class="fcnlink" href="#splice">splice</a> [vec, pos, seg, val]
+</pre>
+<a id="strpos"></a>
+<h1>Description</h1>
+
+<pre>
+position_index = <span class="fcndef">strpos</span> [substr, superstr]
+</pre>
+
+<p>Searches for and returns the position of the beginning of the first
+  occurrence of <tt>substr</tt> within <tt>superstr</tt>. If there are no
+  occurrences, the return value is&nbsp;0. If there are any possible matches,
+  the return value will be a positive scalar integer.</p>
+
+<p>Both parameters <tt>substr</tt> and <tt>superstr</tt> must be flat vectors
+  all of the same type, though they may not necessarily be strings.</p>
+
+<pre class="code">
+svl&gt; strpos [&quot;eggs&quot;, &quot;green eggs &amp; ham&quot;]
+7
+
+svl&gt; strpos [&quot;fish&quot;, &quot;one fish two fish&quot;]
+5
+
+svl&gt; strpos [[], &quot;red fish blue fish&quot;]
+1
+
+svl&gt; strpos [&quot;cat&quot;, &quot;in the hat&quot;]
+0
+
+svl&gt; strpos [[4,5,6], [1,2,3,4,5,6,7,8,9]]
+4
+</pre>
+<a id="fieldsplit"></a>
+<hr noshade="noshade" />
+
+<pre>
+field_array = <span class="fcndef">fieldsplit</span> [line, separators]
+</pre>
+
+<p>Splits the vector <tt>line</tt> by partitions, those being any element
+  which matches one of <tt>separators</tt>. Partitioning is strict; the result
+  will be a vector of length equal to&nbsp;N+1 where&nbsp;N is the number of
+  elements in <tt>line</tt> equal to an element in <tt>separators</tt>.</p>
+
+<pre class="code">
+svl&gt; fieldsplit [&quot;11,12,13&quot;, &quot;,&quot;]
+[ &quot;11&quot;, &quot;12&quot;, &quot;13&quot; ]
+
+svl&gt; fieldsplit [&quot;red,1;green,2;blue,3&quot;, &quot;,;&quot;]
+[ &quot;red&quot;, &quot;1&quot;, &quot;green&quot;, &quot;2&quot;, &quot;blue&quot;, &quot;3&quot; ]
+
+svl&gt; fieldsplit [&quot;:MOE:::&quot;, &quot;:&quot;]
+[ [], &quot;MOE&quot;, [], [], [] ]
+
+svl&gt; fieldsplit [[], &quot;:&quot;]
+[ [] ]
+
+svl&gt; fieldsplit [&quot;ab:cd:ef&quot;, []]
+&quot;ab:cd:ef&quot;
+
+svl&gt; fieldsplit [[], []]
+[]
+
+svl&gt; fieldsplit [[1,2,3,0,4,5,6,0,7,8,9], 0]
+[ [1,2,3], [4,5,6], [7,8,9] ]
+</pre>
+<a id="wordsplit"></a>
+<hr noshade="noshade" />
+
+<pre>
+word_array = <span class="fcndef">wordsplit</span> [line, whitespace]
+</pre>
+
+<p>Splits the vector <tt>line</tt> by elements which are included in
+  <tt>whitespace</tt>. Leading or trailing whitespace does not constitute a
+  partition. Multiple adjacent whitespace characters are classified as a single
+  partition.</p>
+
+<pre class="code">
+svl&gt; wordsplit [&quot;I am the Lorax&quot;, &quot; &quot;]
+[ &quot;I&quot;, &quot;am&quot;, &quot;the&quot;, &quot;Lorax&quot; ]
+
+svl&gt; wordsplit [&quot; the  Lorax  I  am &quot;, &quot; &quot;]
+[ &quot;the&quot;, &quot;Lorax&quot;, &quot;I&quot;, &quot;am&quot; ]
+
+svl&gt; wordsplit [&quot; star-bellied sneetches. &quot;, &quot; -.&quot;]
+[ &quot;star&quot;, &quot;bellied&quot;, &quot;sneetches&quot; ]
+
+svl&gt; wordsplit [[0,0,1,2,3,0,-1,0,4,5,6,0], [0,-1]]
+[ [1,2,3], [4,5,6] ]
+</pre>
+<a id="splice"></a>
+<hr noshade="noshade" />
+
+<pre>
+vec = <span class="fcndef">splice</span> [vec, pos, seg, val]
+</pre>
+
+<p>Modifies the vector <tt>vec</tt> by replacing segments at given positions
+  with new segments. For each <tt>k=1,2...l_length[pos,seg,val]</tt>, the
+  function removes the segment <tt>vec[P]</tt>, where</p>
+
+<pre class="code">
+P = [pos(k), pos(k)+1, ... pos(k)+seg(k)-1]
+</pre>
+
+<p>and replaces it with segment <tt>val(k)</tt>. Overall, the functions
+  removes elements of indices</p>
+
+<pre class="code">
+uniq cat (pos + dec app igen seg)
+</pre>
+
+<p>and replaces them with elements</p>
+
+<pre class="code">
+cat val
+</pre>
+
+<p>If <tt>seg(k)</tt> is zero, the function inserts segment <tt>val(k)</tt>
+  just before the element <tt>vec(pos(k))</tt>. If <tt>seg(k)</tt> is negative,
+  the function removes the segment <tt>vec[P]</tt>,</p>
+
+<pre class="code">
+P = [pos(k)+seg(k), pos(k)+seg(k)+1, ... pos(k)-1]
+</pre>
+
+<p>If the value of <tt>pos(k)</tt> is zero, the new segment is appended at
+  the end of the vector. If the value of <tt>pos(k)</tt> is negative, the
+  position is calculated from the end of the vector, which is equivalent to
+  <tt>pos(length vec - k)</tt>.</p>
+
+<pre class="code">
+svl&gt; splice [&quot;abcde&quot;, 3, 2, [&quot;XYZ&quot;]]
+&quot;abXYZe&quot;
+
+svl&gt; splice [&quot;abcde&quot;, 3, 2, [[]]]
+&quot;abe&quot;
+
+svl&gt; splice [&quot;abcde&quot;, 3, 0, [&quot;XYZ&quot;]]
+&quot;abXYZcde&quot;
+
+svl&gt; splice [&quot;abcde&quot;, 3, -1, [&quot;XYZ&quot;]]
+&quot;aXYZcde&quot;
+
+svl&gt; splice [&quot;abcde&quot;, -2, 0, [&quot;XYZ&quot;]]
+&quot;abcXYZde&quot;
+
+svl&gt; splice [&quot;abcde&quot;, -2, 1, [&quot;XYZ&quot;]]
+&quot;abcXYZe&quot;
+
+svl&gt; splice [&quot;abcdefg&quot;, [3,5], [1,2], [&quot;123&quot;,&quot;456&quot;]]
+&quot;ab123d456g&quot;
+
+svl&gt; splice [&quot;abcdefg&quot;, [3,5], [4,1], [&quot;123&quot;,&quot;456&quot;]]
+&quot;ab123456g&quot;
+
+svl&gt; splice [&quot;abcdefg&quot;, [3,3], 2, [&quot;123&quot;,&quot;456&quot;]]
+&quot;ab123456efg&quot;
+</pre>
+
+<h1>See Also</h1>
+
+<p><a href="introio.htm">I/O functions</a> <a href="types.htm">Type
+  conversion functions</a></p>
+
+<p>
+<a class="svl" href="types.htm">string</a><br />
+<a class="svl" href="types.htm">token</a><br />
+<a class="svl" href="freadb.htm">fwriteb</a><br />
+<a class="svl" href="freadb.htm">sreadb</a><br />
+<a class="svl" href="freadb.htm">swriteb</a>
+</p>
+
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: pack, x_pack, unpack" />
+  <title>Packing Functions: pack, x_pack, unpack</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Packing Functions: pack, x_pack, unpack
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    packed_v = <a class="fcnlink" href="#pack">pack</a> v
+    idx = <a class="fcnlink" href="#x_pack">x_pack</a> v
+    v = <a class="fcnlink" href="#unpack">unpack</a> [ a, b, m ]
+</pre>
+<a id="pack"></a>
+<h1>Description</h1>
+
+<pre>
+packed_v = <span class="fcndef">pack</span> v
+</pre>
+
+<p>Returns <tt>v</tt> with all zero-valued elements removed. <tt>v</tt> must
+  be a flat numerical vector. Observe that:</p>
+
+<pre>
+    pack v === mget [v,v]
+
+    svl&gt; pack [1,0,0,2,0,3]
+    [1,2,3]
+</pre>
+<a id="x_pack"></a>
+<hr noshade="noshade" />
+
+<pre>
+idx = <span class="fcndef">x_pack</span> v
+</pre>
+
+<p>Returns index list <em>idx</em> containing the indices of all non-zero
+  elements of <tt>v</tt>, i.e. such that:</p>
+
+<pre>
+    <span class="nobr"><tt>pack v === v[<em>idx</em>]</tt></span>
+</pre>
+
+<pre>
+    svl&gt; x_pack [1,0,0,2,0,3]
+    [1,4,6]
+</pre>
+<a id="unpack"></a>
+<hr noshade="noshade" />
+
+<pre>
+v = <span class="fcndef">unpack</span> [ a, b, m ]
+</pre>
+
+<p>Merges two vectors according to a mask, i.e.</p>
+
+<pre>
+    pack [a,b,m] | m === a
+    pack [a,b,m] | not m === b
+</pre>
+
+<p>In other words, the 1&#39;s in <tt>m</tt> correspond to values in
+  <tt>a</tt>, and the 0&#39;s correspond to values in <tt>b</tt>.</p>
+
+<p>Mask <tt>m</tt> must be a flat numerical vector. The length of <tt>m</tt>
+  must equal the sum of the lengths of <tt>a</tt> and <tt>b</tt>, i.e.</p>
+
+<pre>
+    length a + length b == length m
+</pre>
+
+<pre>
+    svl&gt; unpack [ &quot;ac&quot;, &quot;BDE&quot;, [1,0,1,0,0] ]
+    &quot;aBcDE&quot;
+</pre>
+
+<h1>See Also</h1>
+
+<p><a href="introstruct.htm">Introduction to Structural Functions</a></p>
+
+<p><a class="svl" href="indexetc.htm">indexof</a><br />
+  <a class="svl" href="select.htm">select</a><br />
+  <a class="svl" href="smearetc.htm">smear</a><br />
+  <a class="svl" href="uniqetc.htm">uniq</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

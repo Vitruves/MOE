@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content=
+  "functions: dbv_Open, dbv_OpenFile, dbv_Close, dbv_KeyList, dbv_Key" />
+  <meta name="keywords" content="obsolete: dbv_ViewKeys" />
+  <title>Database Viewer Open/Close Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Database Viewer Open/Close Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    dbkey  = <a class="fcnlink" href=
+"#dbv_OpenFile">dbv_OpenFile</a> [ 'filename', read_only_flag ]
+    dbkey  = <a class="fcnlink" href=
+"#dbv_Open">dbv_Open</a> [ 'filename', read_only_flag ]
+    dbkeys = <a class="fcnlink" href="#dbv_KeyList">dbv_KeyList</a> []
+    dbkeys  = <a class="fcnlink" href="#dbv_Key">dbv_Key</a> dbkeys
+
+    <a class="fcnlink" href="#dbv_Close">dbv_Close</a> dbkey
+</pre>
+
+<h2 class="obsolete">Obsolete</h2>
+
+<pre>
+dbkeys = <a class="fcnlink" href="#dbv_ViewKeys">dbv_ViewKeys</a> []
+</pre>
+<a id="dbv_ViewKeys"></a>
+<p><tt>dbv_ViewKeys</tt> has been replaced with <tt>dbv_KeyList</tt>.</p>
+
+<h1>Description</h1>
+
+<p>A Database Viewer is a window that gives a view onto a MOE molecular
+  database file. As changes are made to the database, they are displayed in the
+  viewer window. Once opened, a Database Viewer and its key remain valid until
+  the Database Viewer is closed.</p>
+<a id="dbv_OpenFile"></a>
+<hr noshade="noshade" />
+
+<pre>
+dbkey = <span class=
+"fcndef">dbv_OpenFile</span> [ 'filename', read_only_flag ]
+</pre>
+
+<p>Opens a Database Viewer onto the specified database file, and returns a
+  key for use in subsequent Database Viewer calls. If the file does not exist
+  (or is <tt>[]</tt>), an error is generated. If a Database Viewer is already
+  open on the specified database file, the viewer is simply raised to the
+  forefront.</p>
+
+<p>To open the viewer in read-only mode, set <tt>read_only_flag</tt> to 1.
+  Otherwise, if <tt>read_only_flag</tt> is 0 or unspecified, the database is
+  opened according to its current file permissions.</p>
+<a id="dbv_Open"></a>
+<hr noshade="noshade" />
+
+<pre>
+dbkey = <span class=
+"fcndef">dbv_Open</span> [ 'filename', read_only_flag ]
+</pre>
+
+<p><tt>dbv_Open</tt> is nearly identical in behavior to
+  <tt>dbv_OpenFile</tt>. The only difference is that, when the argument is a
+  null vector <tt>[]</tt>, it opens the Open Database Viewer file selection box
+  allowing the user to select the database file to open.</p>
+
+<p>To open the viewer in read-only mode, set <tt>read_only_flag</tt> to 1.
+  Otherwise, if <tt>read_only_flag</tt> is 0 or unspecified, the database is
+  opened according to its current file permissions.</p>
+<a id="dbv_KeyList"></a>
+<hr noshade="noshade" />
+
+<pre>
+dbkeys = <span class="fcndef">dbv_KeyList</span> []
+</pre>
+
+<p>Returns a vector of keys of all currently open Database Viewers.
+  <tt>[]</tt> is returned if no Database Viewers are open.</p>
+<a id="dbv_Key"></a>
+<hr noshade="noshade" />
+
+<pre>
+dbkeys = <span class="fcndef">dbv_Key</span> dbkeys
+</pre>
+
+<p>For each key in <tt>dbkeys</tt> return the key if it corresponds to a
+  valid open database key. Return 0 otherwise.</p>
+<a id="dbv_Close"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">dbv_Close</span> dbkey
+</pre>
+
+<p>Closes the specified Database Viewer. An error occurs if the viewer
+  specified by <tt>dbkey</tt> does not exist.</p>
+
+<h1>See Also</h1>
+
+<p><a href="introdb.htm">Database Functions</a><br /></p>
+
+<p><a class="svl" href="dbvdef.htm">dbv_DefaultEntry</a><br />
+  <a class="svl" href="dbvdef.htm">dbv_DefaultField</a><br />
+  <a class="svl" href="dbvdef.htm">dbv_DefaultView</a></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

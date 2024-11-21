@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: ArgvGet" />
+  <meta name="keywords" content="functions: ArgvPull" />
+  <meta name="keywords" content="functions: ArgvAll" />
+  <meta name="keywords" content="functions: ArgvReset" />
+  <meta name="keywords" content="functions: ArgvExpand" />
+  <title>Command Line Processing Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Command Line Processing Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    aval = <a class="fcnlink" href="#ArgvGet">ArgvGet</a> [aname, acount]
+    aval = <a class="fcnlink" href="#ArgvPull">ArgvPull</a> [aname, acount]
+    arglist = <a class="fcnlink" href="#ArgvAll">ArgvAll</a> []
+
+    <a class="fcnlink" href="#ArgvReset">ArgvReset</a> arglist
+    arglist = <a class="fcnlink" href="#ArgvExpand">ArgvPull</a> arglist
+</pre>
+
+<h1>Description</h1>
+
+<p>The <tt>ArgvXxx</tt> functions are designed for use by SVL batch scripts,
+  such as <tt>sdfilter</tt>, that collect their arguments from the OS command
+  line. Functions <tt>ArgvGet</tt>, <tt>ArgvPull</tt> and <tt>ArgvAll</tt> are
+  meant to be used by batch scripts to examine and extract their command line
+  arguments. Functions <tt>ArgvReset</tt> and <tt>ArgvExpand</tt> are meant to
+  be used only for testing of the batch scripts and their parameters.</p>
+
+<p>The command line parameters may contain a special parameter of form
+  <tt>@filename</tt>, where <tt>filename</tt> is the name of a readable file
+  that contains further command line parameters. Each <tt>@filename</tt>
+  parameter is automatically substituted with the contents of the file
+  <tt>filename</tt>. The substitution is recursive, i.e. if the file contains
+  <tt>@filename</tt> parameters, they will be further substituted. The function
+  detects and reports instances of infinite recursion. The file may contain
+  comment lines that start with the <tt>&quot;#&quot;</tt> character; the
+  comment lines will be ignored. For safety, the file size is limited to 5000
+  lines.</p>
+
+<p>Note: To specify <tt>&quot;@abc&quot;</tt> as the value of a parameter
+  (that should <i>not</i> be substituted), use <tt>&quot;@@abc&quot;</tt>.</p>
+<a id="ArgvGet"></a>
+<a id="ArgvPull"></a>
+<hr noshade="noshade" />
+
+<pre>
+aval = <span class="fcndef">ArgvGet</span> [aname, acount]
+aval = <span class="fcndef">ArgvPull</span> [aname, acount]
+</pre>
+
+<p>Functions <tt>ArgvGet</tt> and <tt>ArgvPull</tt> accept a list of command
+  line switches, <tt>aname</tt>, together with the number of parameters,
+  <tt>acount</tt>, that follow each switch. For each switch <tt>aname(i)</tt>,
+  the functions will collect and return the <tt>acount(i)</tt> parameters that
+  follow <tt>aname(i)</tt>. If the command line contains multiple instances of
+  <tt>aname(i)</tt>, the parameters of all instances are concatenated and
+  returned in one vector.</p>
+
+<p>If the number of parameters, <tt>acount</tt>, is zero, the function
+  returns, instead of an empty vector, the number of occurrences of the given
+  switch, or 0 if the switch is not present among the command line
+  arguments.</p>
+
+<p>Function <tt>ArgvPull</tt> removes, as a side-effect, all switches and
+  parameters it found from the command line: a second call with the same
+  parameters will return null vectors. Function <tt>ArgGet</tt> has no
+  side-effects: a second call with the same parameters returns the same
+  result.</p>
+<a id="ArgvAll"></a>
+<hr noshade="noshade" />
+
+<pre>
+arglist = <span class="fcndef">ArgvAll</span> []
+</pre>
+
+<p>Function <tt>ArgvAll</tt> returns all currently available command line
+  arguments. The purpose of the function is to return, after all possible
+  switches are collected by <tt>ArgvPull</tt>, all the remaining arguments.</p>
+
+<p><b>Example:</b> To collect <tt>&quot;-o outfile&quot;</tt> and
+  <tt>&quot;-q query&quot;</tt> switches and use the remaining arguments as
+  input files:</p>
+
+<pre>
+    [outfile, query] = ArgvPull [['-o', '-q'], [1,1]];
+    infile = ArgvAll[];
+</pre>
+
+<p><b>Note:</b> If there are multiple instances of the same switch (and the
+  switch uses a non-zero number of parameters), functions <tt>ArgvGet</tt> and
+  <tt>ArgvPull</tt> return, in <tt>aval(i)</tt>, a flat vector of concatenated
+  parameters from all instances of the switch. Note that if the switch uses no
+  parameters, the functions return the number of instances of the switch
+  instead. If the batch script needs to select one of multiple instances
+  present, the following formulas can be used:</p>
+
+<p>Assume that in the list of the command line arguments (<tt>arglist</tt>)
+  there are multiple instances of switch <tt>aname(i)</tt>, each with with
+  <tt>acount(i)</tt> parameters, producing the result value, <tt>aval(i)</tt>.
+  Assume:</p>
+
+<pre>    n_one = acount(i);
+    n_all = length aval(i);</pre>
+
+<p>The last instance of the switch may have fewer parameters, if it occurs at
+  the end of the <tt>arglist</tt>. The number of parameters in the last
+  instance is:</p>
+
+<pre>    n_last = n_one - mod [n_all, n_one];</pre>
+
+<p>To keep only the first occurrence of the switch:</p>
+
+<pre>    aval(i) = keep [aval(i), n_one];</pre>
+
+<p>To keep only the last occurrence of the switch (even if it is
+  incomplete):</p>
+
+<pre>    aval(i) = keep [aval(i), -n_last];</pre>
+
+<p>To keep only the last complete occurrence of the switch or nothing, if
+  there is no complete occurrence:</p>
+
+<pre>    aval(i) = keep [drop [aval(i), -n_last], n_one];</pre>
+
+<p>To keep either the last complete occurrence of the switch or, if there is
+  only one occurrence, even an incomplete one:</p>
+
+<pre>    aval(i) = keep [keep [aval(i), -(n_one+n_last)], n_one];</pre>
+
+<p><b>Note:</b> Processing of special cases by <tt>ArgvGet</tt> and
+  <tt>ArgvPull</tt>:</p>
+  <ul>
+    <li>If <tt>aname(i)</tt> is not found, then <tt>aval(i)</tt> is set to
+    <tt>[]</tt>.</li>
+    <li>If <tt>aname(i)</tt> is followed by less than the specified number of
+    parameters (because it is near the end of the list), then the returned
+    valued of <tt>aval(i)</tt> will contain only the parameters found.</li>
+    <li>If <tt>aname(i)</tt> is found at a position of a parameter of some
+    preceding <tt>aname(j)</tt>, then <tt>aname(i)</tt> is considered to be a
+    parameter of <tt>aname(j)</tt> and <tt>aval(i)</tt> is set to
+    <tt>[]</tt>.</li>
+    <li>The list of names, <tt>aname</tt> must not contain duplicates.</li>
+  </ul>
+
+<p>For example, if</p>
+
+<pre>
+    svl&gt; ArgvAll[]
+    ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+</pre>
+
+<p>then</p>
+
+<pre>
+    svl&gt; ArgvGet [['b','c','g','x'], [3,3,3,3]]
+    [['c','d','e'], [], 'h', []]
+</pre>
+<a id="ArgvReset"></a>
+<a id="ArgvExpand"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">ArgvReset</span> arglist
+</pre>
+
+<p>Function <tt>ArgvReset</tt> is used for testing batch scripts. It resets
+  the list of the command line arguments to a given value, without the need to
+  restart MOE.</p>
+
+<pre>
+arglist = <span class="fcndef">ArgvExpand</span> arglist
+</pre>
+
+<p>Function <tt>ArgvExpand</tt> is used for testing <tt>@filename</tt>
+  parameters. It expands and returns the given list of command line arguments
+  by replacing each occurrence of an <tt>@filename</tt> parameter with the
+  contents of that file.</p>
+
+<p><b>Example:</b> To test the code from the example above which collected
+  <tt>&quot;-o outfile&quot;</tt> and <tt>&quot;-q query&quot;</tt> switches
+  and used the remaining arguments as input files:</p>
+
+<pre>
+    svl&gt; ArgvReset ['f1', '-q', 'que1', '-o', 'out1', 'f2', '-q', 'que2']
+
+    svl&gt; ArgvAll[]
+    ['f1', '-q', 'que1', '-o', 'out1', 'f2', '-q', 'que2']
+
+    svl&gt; ArgvPull [['-o', '-q'], [1,1]]
+    ['out1', ['que1', 'que2']]
+
+    svl&gt; ArgvAll[];
+    ['f1', 'f2']
+</pre>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

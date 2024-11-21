@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href=
+  "../../../include/manstyle.css" />
+  <meta name="keywords" content="keywords: Checkbox" />
+  <meta name="keywords" content="functions:" />
+  <meta name="keywords" content="functions: Widget:Checkbox" />
+  <meta name="keywords" content="functions: Checkbox (widget)" />
+  <title>Checkbox Widget</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../../index.htm"><img src="../../../images/ccglogo.png" /></a>
+    <a href="../../../index.htm"><div class="moeversion"></div></a>
+    Checkbox Widget
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Description</h1>
+
+<p>A single toggle button that maintains a boolean state (True/False).</p>
+
+<h2>Attributes</h2>
+
+<p><tt>Checkbox</tt> inherits all <a class="svl" href="wt_core.htm">core</a>
+  attributes and defines the following attributes:</p>
+  <table class="titlebar">
+    <tr>
+      <th>Attribute</th>
+      <th>Description</th>
+      <th>Values</th>
+      <th>Default</th>
+    </tr>
+    <tr>
+      <td><tt>text</tt></td>
+      <td>Checkbox label</td>
+      <td>token</td>
+      <td><tt>[]</tt></td>
+    </tr>
+    <tr>
+      <td><tt>foreground</tt></td>
+      <td>Label text color</td>
+      <td><a class="svl" href=
+      "wt_const.htm">WINDOW_COLORS</a></td>
+      <td><tt>&#39;foreground&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>background</tt></td>
+      <td>Label background color</td>
+      <td><a class="svl" href=
+      "wt_const.htm">WINDOW_COLORS</a></td>
+      <td><tt>&#39;background&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>font</tt></td>
+      <td>Label text font</td>
+      <td><a class="svl" href=
+      "wt_const.htm">WINDOW_FONTS</a></td>
+      <td><tt>&#39;medium&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>alignment</tt></td>
+      <td>Horizontal alignment of text</td>
+      <td><tt>&#39;left&#39;, &#39;center&#39;, &#39;right&#39;</td>
+      <td><tt>&#39;left&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>graphics</tt></td>
+      <td>A graphics object key (see <a href=
+      "../../../svl/fcnref/grfcn.htm#gr_create"><tt>gr_create</tt></a>) or
+      graphics content (see <a href=
+      "../../../svl/fcnref/grfcn.htm#gr_data"><tt>gr_data</tt></a>).</td>
+      <td>Scalar key, or vector content</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td><tt>grPosition</tt></td>
+      <td>Layout of graphic object with respect to text, when
+      both are present</td>
+      <td><tt>
+      &#39;left&#39;, &#39;right&#39;, &#39;above&#39;,</br>
+      &#39;below&#39;, &#39;overlay&#39;</br>
+      &#39;flushLeft&#39;, &#39;flushRight&#39;, </br>
+      &#39;flushAbove&#39;, &#39;flushBelow&#39;
+      </tt></td>
+      <td><tt>&#39;right&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>grScale</tt></td>
+      <td>Scaling policy for the graphic object</td>
+      <td><tt>&#39;none&#39;, &#39;anisotropic&#39;,
+      &#39;isotropic&#39;, &#39;isotropic-shrink&#39;</tt></td>
+      <td><tt>&#39;isotropic&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>checkboxStyle</tt></td>
+      <td>Change the visual style of the checkbox. See
+      <a href=
+      "../../../appendix/samples.htm#Window"><tt>$MOE/sample/windemo.svl</tt></a>
+      for examples.</td>
+      <td>A token matching any of these:</br>
+      <tt>&#39;checkMark&#39;</tt>, <tt>&#39;radioButton&#39;</tt>,
+      <tt>&#39;roundRadioMark&#39;</tt>,
+      <tt>&#39;squareMark&#39;</tt>,
+      <tt>&#39;crossMark&#39;</tt>,
+      <tt>&#39;checkMarkRadioButton&#39;</tt>,
+      <tt>&#39;checkMarkButton&#39;</tt>.</td>
+      <td><tt>&#39;checkMark&#39;</tt></td>
+    </tr>
+  </table>
+
+<h2>Trigger</h2>
+<p>A change in state of the checkbox.</p>
+
+<h2>Data Value</h2>
+<p>1 if set, 0 if unset.</p>
+
+<h1>See Also</h1>
+<p><a href="wt_core.htm">Core Attributes</a><br />
+  <a href="../../../svl/fcnref/grfcn.htm">Flat Graphics Object
+  Functions</a><br />
+  <a href="../wt_intro.htm">SVL Window Toolkit</a><br />
+  <a href="introwt.htm">Window Toolkit Functions</a></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../../images/ccgicon.png" /> <a href="../../../index.htm"></a>
+    <a href="../../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords: SOAP, moeweb" />
+  <meta name="keywords" content="keywords: Gaussian" />
+  <meta name="keywords" content="functions: soap_spec_Gaussian" />
+  <meta name="keywords" content="functions: soap_Gaussian" />
+  <title>Gaussian SOAP Function</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Gaussian SOAP Function
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<p>The SOAP Gaussian function provides a SOAP service that allows MOE/web to
+  run Gaussian calculations.</p>
+
+<pre>
+    <a class="fcnlink" href="#Gaussian">Gaussian</a>
+</pre>
+  <hr noshade="noshade" />
+<a id="Gaussian"></a>
+<h1>Gaussian</h1>
+
+<h2>Parameters</h2>
+  <dl>
+    <dt><tt>mol:</tt> <i>file</i></dt>
+    <dd>The structure to be optimized. This is a file containing a molecule in
+    one of the file formats recognized by MOE. The content type for the file is
+    specified in the <tt>molContent</tt> parameter.</dd>
+    <dd><br /></dd>
+    <dt><tt>molFormat:</tt> <i>string</i> (optional)</dt>
+    <dd>The specific file format used by mol. If omitted, MOE will determine
+    the file format from the input file.</dd>
+    <dd><br /></dd>
+    <dt><tt>fixedAtom:</tt> <i>ArrayOfBoolean</i> (optional)</dt>
+    <dd>The fixed-atom mask: <tt>1</tt> if the corresponding atoms should be
+    fixed, and <tt>0</tt> if it is free to move. If omitted, all atoms will be
+    free to move.</dd>
+    <dd><br /></dd>
+    <dt><tt>cmd:</tt> <i>string</i> (default: <tt>'sp'</tt>)</dt>
+    <dd></dd>
+    <dd>
+      The specific Gaussian calculation to perform:
+      <ul>
+        <li><tt>'sp':</tt> single-point calculation (no
+        optimization).</li>
+        <li><tt>'opt':</tt> optimize the input structure.</li>
+        <li><tt>'freq':</tt> calculate the Hessian matrix and IR
+        frequencies.</li>
+        <li><tt>'opt+freq':</tt> optimize the input structure and
+        calculate the Hessian and IR frequencies with the new coordinates.</li>
+      </ul>
+
+<p>Structures that are not at a minimum for the current method and basis
+      set will have negative IR frequencies (saddle points).</p>
+    </dd>
+    <dd><br /></dd>
+    <dt><tt>basisSet:</tt> <i>string</i> (default:
+    <tt>'STO-3G'</tt>)</dt>
+    <dd>The complete specification of the basis set to use, such as
+    <tt>'6-31G*'</tt>. Any polarization or diffuse functions must be
+    included.</dd>
+    <dd><br /></dd>
+    <dt><tt>method:</tt> <i>string</i> (default: <tt>'HF'</tt>)</dt>
+    <dd>The computational method to use. This must be one of the methods
+    supported by Gaussian: a semi-empirical hamiltonian, Hartree-Fock, a DFT,
+    or post-HF method.</dd>
+    <dd><br /></dd>
+    <dt><tt>charge:</tt> <i>int</i> (optional)</dt>
+    <dd>The total charge on the system. If omitted, it will be determined from
+    the sum of the atomic formal charges of the input molecule.</dd>
+    <dd><br /></dd>
+    <dt><tt>chargeModel:</tt> <i>string</i> (optional)</dt>
+    <dd>
+      Upon completion of the Gaussian calculation, atomic partial charges will
+      be calculated using the specified charge model:
+      <ul>
+        <li><tt>NBO:</tt> natural bond orbitals</li>
+        <li><tt>MK:</tt> Merz-Singh-Kollman scheme</li>
+        <li><tt>ESP:</tt> electrostatic potential</li>
+        <li><tt>MERZKOLLMAN:</tt> Merz-Kollman scheme</li>
+        <li><tt>CHELP:</tt> Chirlian-Francl scheme</li>
+        <li><tt>CHELPG:</tt> Breneman-Wiberg grid scheme</li>
+      </ul>
+
+<p>If omitted, charges derived from Mulliken population analysis are
+      provided.</p>
+    </dd>
+    <dd><br /></dd>
+    <dt><tt>multiplicity:</tt> <i>int</i> (optional)</dt>
+    <dd>The multiplicity of the system, defined as (2n + 1) where n is the
+    number of unpaired electrons. If omitted, this is derived from the sum of
+    atomic ionization states of the input molecule.</dd>
+    <dd><br /></dd>
+    <dt><tt>extraKeywords:</tt> <i>string</i> (optional)</dt>
+    <dd>If provided, these extra keywords are passed along to Gaussian.
+    Keywords should be space-separated.</dd>
+    <dd><br /></dd>
+    <dt><tt>molContent:</tt> <i>string</i> (default: <tt>text</tt>)</dt>
+    <dd>The content type of the file passed as the <tt>mol</tt> parameter.
+    <tt>[text, base64, url]</tt>.</dd>
+    <dd><br /></dd>
+  </dl>
+
+<h2>Return Values</h2>
+  <dl>
+    <dt><tt>energy:</tt> <i>double</i></dt>
+    <dd>The system energy, in kcal/mol.</dd>
+    <dd><br /></dd>
+    <dt><tt>coords:</tt> <i>ArrayOfDouble</i></dt>
+    <dd>The optimized coordinates (in Angstrom).</dd>
+    <dd><br /></dd>
+    <dt><tt>charges:</tt> <i>ArrayOfDouble</i></dt>
+    <dd>The atomic partial charges, as specified by the <tt>chargeModel</tt>
+    input argument.</dd>
+    <dd><br /></dd>
+    <dt><tt>outDir:</tt> <i>anyURI</i></dt>
+    <dd>A URL for a directory containing the output and formatted checkpoint
+    file from the Gaussian calculation. These two files can be parsed to obtain
+    the desired structural or property information.</dd>
+    <dd><br /></dd>
+  </dl>
+
+<h2>Description</h2>
+
+<p>The Gaussian SOAP function provides a SOAP service that allows MOE/web to
+  run Gaussian calculations. A version of Gaussian 09 must be purchased,
+  installed, and made accessible to MOE/web to perform the calculations. The
+  <tt>g09root</tt> variable must be set to the directory containing Gaussian 09
+  in the environment of the account running MOE/web. Gaussian also recommends
+  running their login script that sets the g09 run-time environment (and
+  setting any other site-specific parameters desired) before running MOE/web.
+  Check the Gaussian installation documentation for further information.</p>
+<a id="Refs"></a>
+<h1>References</h1>
+  <ul>
+    <li>Gaussian series of programs (<a href=
+    "http://www.gaussian.com">Gaussian</a>), Gaussian Inc.</li>
+  </ul>
+
+<h1>See Also</h1>
+
+<p><a href="../../moeweb_apps/moeweb_intro.htm">MOE/web Applications</a><br />
+  <a href="../../moe/moesoap.htm">MOE/web SOAP Service and Functions</a><br />
+  <a class="svl" href="../../svl/fcnref/soapfcn.htm">SOAP Interface
+  Functions</a><br />
+  <br />
+  <a href="../../moe/extprog.htm#Gaussian">Running Gaussian with MOE</a><br />
+  </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

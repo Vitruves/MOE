@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: db_Merge" />
+  <title>MOE Database Functions: db_Merge</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    MOE Database Functions: db_Merge
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    <a class="fcnlink" href="#db_Merge">db_Merge</a> []
+
+    stats_vector = <a class="fcnlink" href="#db_Merge">db_Merge</a> [
+        db1     : mdb1,
+        db2     : mdb2,
+        db3     : mdb3,
+        key1    : keydb1,
+        key2    : keydb2,
+        import1 : fields1,
+        import2 : fields2,
+        opt     : option,
+        sel1    : flag1,
+        sel2    : flag2,
+        dbv     : flag3
+    ]
+</pre>
+<a id="db_Merge"></a>
+<h1>Description</h1>
+
+<p>Merges two databases into a single one based on the data they have in
+  common. When invoked with null arguments, <tt><span class=
+  "fcndef">db_Merge</span></tt> displays a graphical interface for specifying
+  the merging parameters. The parameters are given as a tagged vector with the
+  following fields:</p>
+  <dl>
+    <dt><tt>db1:mdb1</tt></dt>
+    <dd>Specifies the first database involved in the merge. <tt>mdb1</tt> is
+    either a database key or a database filename token.</dd>
+    <dt><tt>db2:mdb2</tt></dt>
+    <dd>Specifies the second database involved in the merge. <tt>mdb2</tt> is
+    either a database key or a database filename token.</dd>
+    <dt><tt>db3:mdb3</tt></dt>
+    <dd>Specifies the database which will hold the merged data. If not defined,
+    the <tt>mdb3</tt> value will be equivalent to the <tt>mdb1</tt> value.
+    <tt>mdb3</tt> is either a database key or a database filename token.</dd>
+    <dt><tt>key1:keydb1</tt></dt>
+    <dd>Vector of key field name tokens from the first database. There is no
+    limit to the number of keys that can be defined, however, the order in
+    which they appear is important as it is used to determine the matching key
+    in <tt>keydb2</tt>.</dd>
+    <dt><tt>key2:keydb2</tt></dt>
+    <dd>Vector of key field name tokens in the second database. There is no
+    limit to the number of keys that can be defined, however, the order in
+    which they appear is important as it is used to determine the matching key
+    in <tt>keydb1</tt>.</dd>
+    <dt><tt>import1:fields1</tt></dt>
+    <dd>Vector of field name tokens from the first database describing which
+    fields are to be imported into <tt>db3</tt>. If nothing is specified, all
+    fields in <tt>db1</tt> will be used.</dd>
+    <dt><tt>import2:fields2</tt></dt>
+    <dd>Vector of field name tokens in the second database describing which
+    fields are to be imported into <tt>db3</tt>. If nothing is specified, all
+    fields in <tt>db2</tt> will be used.</dd>
+    <dt><tt>opt:option</tt></dt>
+    <dd>
+      Token specifying which entries will be imported into <tt>db3</tt>.
+      Possible values are:
+      <dl>
+        <dt><tt>'all'</tt></dt>
+        <dd>All entries in <tt>db1</tt> and <tt>db2</tt> will be imported.</dd>
+        <dt><tt>'shared_only'</tt></dt>
+        <dd>Entries with keys found in both <tt>db1</tt> and <tt>db2</tt> will
+        be imported.</dd>
+        <dt><tt>'unshared_only'</tt></dt>
+        <dd>Entries unique to either <tt>db1</tt> or <tt>db2</tt> will be
+        imported.</dd>
+        <dt><tt>'shared_udb1'</tt></dt>
+        <dd>Entries with keys found in both <tt>db1</tt> and <tt>db2</tt> plus
+        unique entries of <tt>db1</tt> will be imported.</dd>
+        <dt><tt>'shared_udb2'</tt></dt>
+        <dd>Entries with keys found in both <tt>db1</tt> and <tt>db2</tt> plus
+        unique entries of <tt>db2</tt> will be imported.</dd>
+        <dt><tt>'unshared_db1'</tt></dt>
+        <dd>Only unique entries of <tt>db1</tt> will be imported.</dd>
+        <dt><tt>'unshared_db2'</tt></dt>
+        <dd>Only unique entries of <tt>db2</tt> will be imported.</dd>
+      </dl>
+    </dd>
+    <dt><tt>sel1:flag1</tt></dt>
+    <dd>Set to 1 if you want to use only selected entries in <tt>db1</tt>, 0
+    otherwise. The default value is 0. This parameter is only meaningful if
+    <tt>db1</tt> is open in a Database Viewer. Note: This option is not
+    available in batch mode.</dd>
+    <dt><tt>sel2:flag2</tt></dt>
+    <dd>Set to 1 if you want to use only selected entries in <tt>db2</tt>, 0
+    otherwise. The default value is 0. This parameter is only meaningful if
+    <tt>db2</tt> is open in a Database Viewer. Note: This option is not
+    available in batch mode.</dd>
+    <dt><tt>dbv:flag3</tt></dt>
+    <dd>Set to 1 if you want to open <tt>db3</tt> in a Database Viewer, 0
+    otherwise. The default value is 0. Note: This option is not available in
+    batch mode.</dd>
+  </dl>
+
+<p>After the merge is completed, the function returns a tagged vector,
+  <tt>stats_vector</tt>, of statistics containing the following data:</p>
+  <dl>
+    <dt><tt>EntriesDB1:num</tt></dt>
+    <dd>Total number of entries in <tt>db1</tt>.</dd>
+    <dt><tt>EntriesDB2:num</tt></dt>
+    <dd>Total number of entries in <tt>db2</tt>.</dd>
+    <dt><tt>UnsharedDB1:num</tt></dt>
+    <dd>Number of entries with unique keys in <tt>db1</tt>.</dd>
+    <dt><tt>UnsharedDB2:num</tt></dt>
+    <dd>Number of entries with unique keys in <tt>db2</tt>.</dd>
+    <dt><tt>DuplicateDB1:num</tt></dt>
+    <dd>Number of entries with duplicate keys in <tt>db1</tt>.</dd>
+    <dt><tt>DuplicateDB2:num</tt></dt>
+    <dd>Number of entries with duplicate keys in <tt>db2</tt>.</dd>
+  </dl>
+
+<p>For example, suppose we have the following two databases:</p>
+  <table class="titlebar width-half">
+    <tr>
+      <th colspan="2">dbfreeze.mdb</th>
+      <th colspan="2">dbboiling.mdb</th>
+    </tr>
+    <tr>
+      <td valign="top">mol</td>
+      <td valign="top">Molecule field</td>
+      <td valign="top">molecule</td>
+      <td valign="top">Molecule field</td>
+    </tr>
+    <tr>
+      <td valign="top">frz_pt</td>
+      <td valign="top">Freezing point</td>
+      <td valign="top">boil_pt</td>
+      <td valign="top">Boiling point</td>
+    </tr>
+    <tr>
+      <td valign="top">mr</td>
+      <td valign="top">Molar refractivity</td>
+      <td valign="top">a_count</td>
+      <td valign="top">Number of atoms</td>
+    </tr>
+  </table>
+
+<p>To create a database named <tt>dbmerge.mdb</tt> combining the freezing and
+  boiling point data of all the compounds, the following command would be
+  issued:</p>
+
+<pre>
+    db_Merge [
+        db1     : 'dbfreeze.mdb',
+        db2     : 'dbboiling.mdb',
+        db3     : 'dbmerge.mdb',
+        key1    : 'mol',
+        key2    : 'molecule',
+        import1 : 'frz_pt',
+        import2 : 'boil_pt',
+        opt     : 'all'
+    ]
+</pre>
+
+<p>If we are also interested in the molar refractivity data, the command
+  would now read:</p>
+
+<pre>
+    db_Merge [
+        db1     : 'dbfreeze.mdb',
+        db2     : 'dbboiling.mdb',
+        db3     : 'dbmerge.mdb',
+        key1    : 'mol',
+        key2    : 'molecule',
+        import1 : ['frz_pt','mr'],
+        import2 : 'boil_pt',
+        opt     : 'all'
+    ]
+</pre>
+
+<p>Instead, if we are only interested in the compounds for which we know both
+  the freezing and boiling points, the command would be:</p>
+
+<pre>
+    db_Merge [
+        db1     : 'dbfreeze.mdb',
+        db2     : 'dbboiling.mdb',
+        db3     : 'dbmerge.mdb',
+        key1    : 'mol',
+        key2    : 'molecule',
+        import1 : 'frz_pt',
+        import2 : 'boil_pt',
+        opt     : 'shared_only'
+    ]
+</pre>
+
+<p>To create a database of compounds for which we know the boiling point but
+  not the freezing point:</p>
+
+<pre>
+    db_Merge [
+        db1     : 'dbfreeze.mdb',
+        db2     : 'dbboiling.mdb',
+        db3     : 'dbmerge.mdb',
+        key1    : 'mol',
+        key2    : 'molecule',
+        import1 : 'frz_pt',
+        import2 : 'boil_pt',
+        opt     : 'unshared_db1'
+    ]
+</pre>
+
+<p>Finally, to completely merge <tt>dbfreeze.mdb</tt> and
+  <tt>dbboiling.mdb</tt>:</p>
+
+<pre>
+    db_Merge [
+        db1     : 'dbfreeze.mdb',
+        db2     : 'dbboiling.mdb',
+        db3     : 'dbmerge.mdb',
+        key1    : 'mol',
+        key2    : 'molecule',
+        opt     : 'all'
+    ]
+</pre>
+
+<h1>See Also</h1>
+
+<p><a href="introdb.htm">Database Functions</a><br />
+  <br />
+  <a class="svl" href="db_ascii.htm">db_ImportASCII</a><br />
+  <a class="svl" href="db_port.htm">db_ImportDB</a></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

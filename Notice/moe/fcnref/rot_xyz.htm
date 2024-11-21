@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content=
+  "functions: rot3d_Rotation, rot3d_XRotation, rot3d_YRotation" />
+  <meta name="keywords" content=
+  "functions: rot3d_ZRotation, rot3d_PlaneRotation" />
+  <title>Rotation Functions: rot3d_Rotation...</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Rotation Functions: rot3d_Rotation...
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    M = <a class="fcnlink" href=
+"#rot3d_Rotation">rot3d_Rotation</a> [angle, axis]
+    M = <a class="fcnlink" href="#rot3d_XRotation">rot3d_XRotation</a> angle
+    M = <a class="fcnlink" href="#rot3d_YRotation">rot3d_YRotation</a> angle
+    M = <a class="fcnlink" href="#rot3d_ZRotation">rot3d_ZRotation</a> angle
+
+    M = <a class="fcnlink" href=
+"#rot3d_PlaneRotation">rot3d_PlaneRotation</a> [angle, u, v]
+</pre>
+<a id="rot3d_Rotation"></a>
+<h1>Description</h1>
+
+<pre>
+M = <span class="fcndef">rot3d_Rotation</span> [angle, axis]
+</pre>
+
+<p>Returns a matrix for performing 3D rotation counterclockwise (right-hand
+  rule) about a given axis (through the origin) by a given angle.
+  <tt>angle</tt> is in radians and must be a scalar. <tt>axis</tt> is a
+  3-vector; the axis is defined by the line through the given 3-vector and the
+  origin. The returned matrix <tt>M</tt> is given as a vector of row-vectors;
+  i.e. the matrix:</p>
+
+<pre>
+      <img src="rot_xyz/matrix.png" />
+</pre>
+
+<p>is returned as:</p>
+
+<pre>
+      [ [a1,a2,a3], [b1,b2,b3], [c1,c2,c3] ]
+</pre>
+
+<p>To perform rotations at arbitrary locations in space, the matrix
+  transformation must be preceded by a displacement to the origin, then
+  followed by a displacement back. If <tt>axis</tt> is given by <img src=
+  "rot_xyz/image70.gif" width="37" height="22" />, first subtract <img src=
+  "rot_xyz/image71.gif" width="13" height="18" /> from the coordinates of every
+  point to be rotated, rotate the points, then add <img src=
+  "rot_xyz/image72.gif" width="13" height="18" /> back.</p>
+<a id="rot3d_XRotation"></a>
+<a id="rot3d_YRotation"></a>
+<a id="rot3d_ZRotation"></a>
+<hr noshade="noshade" />
+
+<pre>
+M = <span class="fcndef">rot3d_XRotation</span> angle
+M = <span class="fcndef">rot3d_YRotation</span> angle
+M = <span class="fcndef">rot3d_ZRotation</span> angle
+</pre>
+
+<p><tt>rot3d_XRotation</tt> returns a matrix for rotating about the
+  <i>x</i>-axis; it is equivalent to:</p>
+
+<pre>
+    rot3d_Rotation [ angle, [1,0,0] ]
+</pre>
+
+<p>Similarly, <tt>rot3d_YRotation</tt> and <tt>rot3d_ZRotation</tt> return
+  matrices for rotation about the <i>y</i>- and <i>z</i>-axes,
+  respectively.</p>
+<a id="rot3d_PlaneRotation"></a>
+<hr noshade="noshade" />
+
+<pre>
+M = <span class="fcndef">rot3d_PlaneRotation</span> [angle, u, v]
+</pre>
+
+<p>Returns a rotation matrix for performing 3D rotation counterclockwise
+  (right-hand rule) about the normal of the plane defined by two in-plane
+  3-vectors <tt>u</tt> and <tt>v</tt>. The normal is constructed from the cross
+  product uxv. <tt>angle</tt> is expected in radians and must be a scalar.</p>
+
+<p>As the rotation is performed at the origin, rotations at a particular
+  point in space must be preceded by a displacement to the origin and followed
+  by another to restore the initial position. The returned matrix <tt>M</tt> is
+  given as a vector of row-vectors.</p>
+
+<h1>See Also</h1>
+  <table class="functionList">
+    <tr>
+      <td><a href="rot_mm.htm">rot3d_mmMul</a><br />
+      <a href="rot_mm.htm">rot3d_mvMul</a><br />
+      <a href="rot_prt.htm">rot3d_Print</a><br />
+      <a href="rot_vang.htm">rot3d_vAngle</a><br />
+      <a href="rot_vang.htm">rot3d_vBisector</a><br />
+      <a href="rot_vcro.htm">rot3d_vCross</a></td>
+      <td><a href="rot_vcro.htm">rot3d_vNorm</a><br />
+      <a href="rot_vcro.htm">rot3d_vNormalize</a><br />
+      <a href="rot_iden.htm">rot3d_Identity</a><br />
+      <a href="rot_cov.htm">rot3d_Covariance</a><br />
+      <a href="rot_cov.htm">rot3d_CovarianceEigenSystem</a></td>
+    </tr>
+  </table><!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

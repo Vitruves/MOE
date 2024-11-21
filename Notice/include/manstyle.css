@@ -1,0 +1,975 @@
+/*
+**	manstyle.css	General MOE manuals CSS style sheet
+**
+**	21-oct-2020 (al) add bit more indent on ul li
+**	15-feb-2020 (al) add .disclaimer, .gpl
+**	02-feb-2019 (al) minor adjustment of header; version year in footer
+**	28-jan-2019 (pp) class for centering spanned table headers cells (th)
+**	04-apr-2018 (ct) remove height on logo in MOE_HEADER (fixes bluriness)
+**	04-jan-2018 (na) update release date to 2018.01
+**	30-nov-2017 (na) tables vertical align fix, centered images
+**	24-nov-2017 (al) merged with moesaic.css
+**	23-nov-2017 (al) added content for version and copyright year
+**	20-nov-2017 (pl) updated header, footer, sizes
+**	03-jul-2016 (al) add some vspace in ol lists
+**	07-aug-2014 (ts) added standard section for headings
+**	26-oct-2012 (al) smallheader (for tutorial list in index.htm)
+**	14-jul-2011 (al) weird fix for monospace handling
+**	28-sep-2009 (al) floatleft
+**	26-aug-2009 (al) titlebar td
+**	14-aug-2009 (al) floatright, caption
+**	27-sep-2008 (al) syntax
+**	12-sep-2008 (al) titlebar
+**	06-jun-2008 (al) created
+**
+** COPYRIGHT (C) 2008-2020 CHEMICAL COMPUTING GROUP ULC ("CCG").
+** ALL RIGHTS RESERVED.
+**/
+
+@import 'reset.css';	/* reset for older browsers */
+
+/* --------------------------- HTML5 Compatibility ---------------------------- */
+
+header, section, footer, aside, nav, main, article, figure {
+    display: block;
+}
+
+/* --------------------------- Standard Sizes ---------------------------- */
+
+body {
+    margin: 0;
+    background-color : #f0f0f0;
+    color	     : #333333;
+    font-size	     : 100%;
+    font-family	     : Helvetica, Arial, sans-serif;
+    text-align: center;
+    line-height	     : 1.25rem;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    color	     : #272727;
+}
+
+h1 { font-size: 1.90rem; margin: 2.00rem 0 1.500rem; line-height: 2.00rem; }
+h2 { font-size: 1.70rem; margin: 2.00rem 0 1.000rem; line-height: 2.00rem; }
+h3 { font-size: 1.50rem; margin: 1.75rem 0 0.875rem; line-height: 1.75rem; }
+h4 { font-size: 1.30rem; margin: 1.50rem 0 0.750rem; line-height: 1.50rem; }
+h5 { font-size: 1.10rem; margin: 1.25rem 0 0.625rem; line-height: 1.25rem; }
+h6 { font-size: 1.00rem; margin: 1.00rem 0 0.500rem; line-height: 1.00rem; }
+
+h6 {
+    text-decoration: underline;
+}
+
+h1.nomargin {
+    margin:0;
+}
+
+
+/* The MOE_HEADER styles assume the following template header
+**
+**	<!-- START MOE_HEADER --><div class="MOE_HEADER">
+**	    <a href="../index.htm"><img src="../images/ccglogo.png" /></a>
+**	    <a href="../index.htm"><div class="moeversion"></div></a>
+**	    Antibody Modeler
+**	</div><!-- END MOE_HEADER -->
+**
+** immediately after the <body><script></noscript> tag. */
+
+.MOE_HEADER {
+    background-color	: #e0e0e0;
+    max-width		: 66rem;
+    line-height		: 1.6rem;
+    min-height    	: 4.0rem;
+    font-size		: 1.9rem;
+    font-weight		: normal;
+    text-align		: left;
+    padding       	: 0.6rem 2rem 0.5rem;
+    border-bottom 	: 1px solid #d0d0d0;
+    margin		: 0;
+}
+.MOE_HEADER img[src$="/ccglogo.png"] {
+    float		: right;
+    /*height		: 3.5rem;*/
+    margin: 0.3rem 0 0 0.5rem;
+}
+.MOE_HEADER > img[src*="toc/"] {	/* for chapter icon */
+    float		: left;
+    height		: 4.0rem;
+    margin-top		: 0.5rem;
+    margin-right	: 1.0rem;
+}
+.MOE_HEADER > .doclink {	/* for MOEsaic pages */
+    float		: right;
+    font-size		: 0.9rem;
+    font-weight		: normal;
+    margin-right	: 1.0rem;
+}
+.MOE_HEADER > a > .moeversion:before {
+    content		: "MOE 2024.06";
+    color		: #808080;
+    font-size		: 40%;
+    font-style		: normal;
+    font-weight		: normal;
+}
+
+/* The MOE_FOOTER styles assume the following template footer
+**
+**	<!-- START MOE_FOOTER --><div class="MOE_FOOTER">
+**	    <img src="../images/ccgicon.png" />
+**	    <span><a href="../index.htm">Table of Contents</a></span>
+**	    <a href="../legal.htm"></a> &copy; <span class="versionyear"></span>
+**	    <a href="http://www.chemcomp.com"></a>.  All rights reserved.
+**	    <br /><a href="mailto:info@chemcomp.com"></a>
+**	</div><!-- END MOE_FOOTER -->
+**
+** immediately before the </body> tag. */
+
+/* The following was removed because index.htm is used in MOEsaic footers.
+**
+**	.MOE_FOOTER a[href$="index.htm"]:before {
+**	    content	: "Table of Contents";
+**	    float	: right;
+**	} */
+
+.MOE_FOOTER {
+    display	: block;
+    width	: 100%;
+    margin-top	: 1.5em;
+    border-top	: 1pt solid #808080;
+    font-size	: 0.8rem;
+    line-height	: 1.0rem;
+    padding-top	: 0.5em;
+    padding-bottom	: 0.5em;
+}
+.MOE_FOOTER > img[src$="ccgicon.png"] {
+    float	: left;
+    width	: 2.0rem;
+    height	: 2.0rem;
+    padding-right: 0.5rem;
+    margin: 0;
+}
+.MOE_FOOTER a[href$="www.chemcomp.com"]:before {
+    content	: "Chemical Computing Group ULC";
+}
+.MOE_FOOTER a[href$="legal.htm"]:before {
+    content	: "Copyright";
+}
+.MOE_FOOTER a[href$="index.htm"]:before {
+    content	: "Table of Contents";
+    float	: right;
+}
+.MOE_FOOTER a[href$=":info@chemcomp.com"]:before {
+    content	: "info@chemcomp.com";
+}
+.MOE_FOOTER > .doclink {	/* for MOEsaic pages */
+    float	: right;
+    font-size	: 0.8rem;
+    font-weight	: normal;
+}
+.MOE_FOOTER > .versionyear:before {
+    content	: "1996-2024";
+}
+
+/* The disclaimer and gpl styles are used to insert standard disclaimer
+** legal text into the legal page.
+** Unfortunately, the strings cannot be formatted to 80 characters. */
+
+.legal_disclaimer:before {
+    content	: "CCG, ITS AFFILIATES AND DISTRIBUTORS DISCLAIM ALL LIABILITIES AND WARRANTIES WITH REGARD TO THE ";
+}
+.legal_disclaimer:after {
+    content	: " SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF CONTINUED AVAILABILITY, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE; THE SAID SOFTWARE IS PROVIDED \"AS-IS\"";
+}
+.legal_gpl:before {
+    content	: "In respect of the GNU General Public License, CCG will provide the source code of the ";
+}
+.legal_gpl:after {
+    content	: " upon request";
+}
+.legal_dynlib:before {
+    content	: "CCG has limited its activities in relation to the ";
+}
+.legal_dynlib:after {
+    content	: " software to providing dynamic libraries for various computer platforms and authoring interoperability software";
+}
+.legal_exe:before {
+    content	: "CCG has limited its activities in relation to the ";
+}
+.legal_exe:after {
+    content	: " software to providing executables for various computer platforms and authoring interoperability software";
+}
+
+/* The ref style handles references in table format (at the end of a page)
+**
+**	<table class="ref">
+**	    <tr>
+**	    <td>Name 1998</td>
+**	    <td>some sort of reference</td>
+**	    </tr>
+**	</table> */
+
+table.ref {
+    table-layout : auto;
+    width : 100%;
+    font-size : 0.9rem;
+}
+
+table.ref td {
+    vertical-align : top;
+    padding : 0 1.0rem 0.3rem 0;
+    border : 0 none inherit;
+}
+
+table.ref td:first-child {
+    white-space : nowrap;
+}
+
+/* The conventions style is used in tutorials for describing menus. */
+
+table.conventions.center {
+    margin: 0 auto;
+}
+
+table.conventions td {
+    vertical-align	: top;
+    padding: 0.2em 0.5em;
+}
+
+table.conventions th {
+    vertical-align	: top;
+    background-color	: #dadada;
+    border	: 1px solid #ffffff;
+    padding: 0.5rem;
+    font-weight: bold;
+}
+
+/* Coloured background for titles in tables. */
+
+table.titlebar {
+    margin: 2rem auto;
+    vertical-align: baseline;
+}
+
+table.titlebar.no-margin {
+    margin: 0 auto;
+}
+
+table.titlebar > tbody > tr > th,
+table.titlebar > tr > th {
+    font-weight: bold;
+    background-color: #d5d5d5;
+    padding: 0.8rem 0.5rem;
+    border: 2px solid #dddddd;
+}
+
+table.titlebar > tbody > tr > td,
+table.titlebar > tr > td {
+    text-align: left;
+    vertical-align: baseline;
+    padding: 0.4rem;
+    border: 2px solid #dddddd;
+    background-color: #ffffff;
+}
+
+table.titlebar th.blue-bg {
+	background-color: #001aba;
+}
+
+table.titlebar th.red-text {
+	color: #a10002;
+}
+
+table.titlebar th.white-text,
+table.titlebar th.blue-bg a.white-text{
+    color: #ffffff;
+}
+
+table.titlebar th.middle[rowspan],
+table.titlebar td.middle {
+    text-align: center;
+    vertical-align: middle;
+}
+
+table.titlebar th.center[colspan],
+table.titlebar td.center {
+    text-align: center;
+    vertical-align: top;
+}
+
+table.titlebar td.right {
+    text-align: right;
+    vertical-align: top;
+}
+
+/* Table with no border for layout */
+
+table.noborder {
+    table-layout : auto;
+    border: 0;
+    margin: 0 auto;
+}
+
+table.noborder > tbody > tr > th,
+table.noborder > tr > th,
+table.noborder > tbody > tr > td,
+table.noborder > tr > td {
+    vertical-align: top;
+    border: 0;
+    text-align: left;
+    padding: 0.5em;
+}
+
+table.noborder > tbody > tr > th,
+table.noborder > tr > th {
+    font-weight: bold;
+}
+
+table.noborder td.right {
+    text-align: right;
+}
+
+table.noborder .center {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+table.noborder td.middle {
+    vertical-align: middle;
+}
+
+table.noborder td.center-image img {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+table.noborder.left {
+    margin: 0;
+}
+
+/* Numbered equation specific table format */
+
+table.equation {
+    table-layout : auto;
+    border: 0;
+    margin: 0;
+    width: 100%;
+}
+
+table.equation td {
+    width: 100%;
+    vertical-align: middle;
+    text-align: center;
+}
+
+table.equation td:first-child  {
+    width: 100%;
+}
+
+/* SVL function list table */
+
+table.functionList {
+    table-layout : auto;
+    border: 0;
+    margin: 0;
+}
+
+table.functionList > tbody > tr > th,
+table.functionList > tr > th,
+table.functionList > tbody > tr > td,
+table.functionList > tr > td {
+    vertical-align: top;
+    border: 0;
+    text-align: left;
+    padding: 0.5em;
+    font-size: 105%;
+    font-family: "Consolas", "Courier New", "Courier",
+    "Lucida Sans Typewriter", "Lucida Typewriter", monospace;
+}
+
+table.functionList > tbody > tr > th,
+table.functionList > tr > th {
+    font-weight: bold;
+    text-align: center;
+    font-size: 105%;
+    font-family: "Consolas", "Courier New", "Courier",
+    "Lucida Sans Typewriter", "Lucida Typewriter", monospace;
+}
+
+/* --------------------------------- Widths --------------------------------- */
+
+.width-auto {    /* in case you need to force auto */
+    width : auto;
+}
+
+.width-quarter {
+    width : 25%;
+}
+
+.width-half {
+    width : 50%;
+}
+
+.width-60 {
+    width : 60%;
+}
+
+.width-75p {
+    width : 75%;
+}
+
+.width-full {
+    width : 100%;
+}
+
+/* -------------------------------- Standard -------------------------------- */
+
+b {					/* got reset by reset.css */
+    font-weight: bold;
+}
+
+i, em {
+    font-style: italic;
+}
+
+sub {					/* got reset by reset.css */
+    vertical-align: sub;
+    font-size: smaller;
+}
+
+sup {					/* got reset by reset.css */
+    vertical-align: super;
+    font-size: smaller;
+}
+
+p {					/* normal text */
+    margin: 0.75rem 0;
+    text-align: justify;
+    text-justify: inter-word;		/* text-justify is not supported in
+					** Chrome, Firefox, or Opera */
+}
+
+ul {
+    list-style: none;
+    margin-left: 1.5rem;
+}
+
+ul > li {
+    margin-top: 0.2rem;
+}
+
+ul .tocSubitems {
+    font-size: 0.9rem;
+    margin-left: 2rem;
+}
+
+ul ul > li {
+    margin-top: 0.1rem;
+}
+
+ul > li:before {
+    content: "\0025cf"; /* black circle */
+    vertical-align: 0.05em;
+    line-height: 1.20em;
+    color: #215968;
+    margin-left: 0em;
+    padding-right: 0.5em;
+}
+
+ul ul > li:before {
+    content: "\0025cb"; /* white circle */
+}
+ul ul ul > li:before {
+    content: "\0025a0"; /* black square */
+    vertical-align: 0.10em;
+    line-height: 1.15em;
+}
+ul ul ul ul > li:before {
+    content: "\0025a1"; /* white square */
+}
+ul ul ul ul ul > li:before {
+    vertical-align: 0.0em;
+    line-height: 1.25em;
+    content: "\002666"; /* black diamond suit */
+}
+ul ul ul ul ul ul > li:before {
+    font-size: 0.90rem; /* % and em don't work in IE<11 */
+    content: "\002662"; /* white diamond suit */
+}
+
+/* Spaced out rows in a list */
+
+ul.spaced {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+ul.spaced li {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+/* Add a little vertical space inside ol lists */
+
+ol {
+    list-style: decimal;
+    margin-left: 2.6rem;
+}
+ol li { padding: 5px 0 0; }
+ol li:first-child { margin-bottom: 0; padding: 0; }
+
+ol.alphaNum {
+    list-style: lower-alpha;
+}
+
+ol.p > li,				/* paragraph lists */
+ul.p > li {
+    margin: 0.2rem 0;
+}
+
+ol.index {
+    font-weight: bold;
+    color: #008080;
+}
+
+ol.index ul {
+    font-weight: normal;
+    color: black;
+}
+
+/* for document title in header */
+
+.title {
+    line-height:0.96em;
+    margin: 10px 0;
+}
+
+
+dl {					/* list title */
+    margin: 0.75rem 0;
+    padding: 0;
+}
+
+dt {					/* list title */
+    margin: 0.75rem 0;
+    padding: 0;
+}
+
+dd {					/* list description */
+    margin: 0.75rem 0 0.75rem 2rem;
+    padding: 0;
+}
+
+table.fcnparam td:first-child { /* TODO: merge with the rest of the fixed font def. */
+    font-family: "Consolas", "Courier New", "Courier",
+    "Lucida Sans Typewriter", "Lucida Typewriter", monospace;
+}
+
+table.fcnparam td {
+    padding: 2px 5px;
+}
+
+/* undo the generic <a> tag settings in ccg_common.css */
+
+a {
+    color : inherit;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+a:visited {
+    color: inherit;
+}
+
+a[href],
+a[href]:link,
+a[href]:visited,
+a[href]:hover,
+a[href]:active {
+    color: #008ac4; /*#008ecc;*/ /*#1e9dd5;*/ /*#3399ff;*/ /*#41b7d8;*/ /*#0000cc;*/
+}
+
+a[href]:link {
+    text-decoration: none;
+}
+a[href]:hover,
+a[href]:active {
+    text-decoration: underline;
+}
+
+/* --------------------------- Miscellaneous ----------------------------- */
+
+/* Uniform non-proportional font definition:
+**  - code, keyboard shortcuts, samples etc.
+**  - links to SVL functions
+**  - function definitions */
+
+.code, pre, kbd, samp, tt,
+a.svl, a.tt, a.fcnlink,
+.fcndef, .obsfcndef
+{
+    font-family: "Consolas", "Courier New", "Courier",
+                 "Lucida Sans Typewriter", "Lucida Typewriter", monospace;
+}
+.code, pre, kbd, samp, tt {
+    font-size	   : 105%;
+}
+.svl, .tt {
+    font-size: 105%;
+}
+
+/* Replacement for deprecated <nobr>. */
+
+.nobr {
+    white-space: nowrap;
+}
+
+/* Code and nobr for command-line args */
+.switch {
+    font-family: "Consolas", "Courier New", "Courier",
+                 "Lucida Sans Typewriter", "Lucida Typewriter", monospace;
+    white-space: nowrap;
+}
+
+.menu {
+    white-space	: nowrap;
+    font-weight	: bold;
+}
+
+pre.code {				/* computer commands or code */
+    white-space	   : pre;
+    text-justify   : none;	/* not supported in Chrome, Firefox, Opera */
+    text-align	   : left;
+    margin         : 1.5rem 2.5rem 2rem;
+    font-size	     : 105%;
+    font-weight    : normal;
+}
+
+pre.code.grey {
+    background-color: #f0f0f0;
+    padding: 0.5rem;
+}
+
+pre.oneline {				/* computer commands or code */
+    margin         : 1rem 2.5rem;
+}
+
+fieldset {
+    padding: 10px;
+    border: 2px groove ;
+}
+
+p.blockquote {				/* replacement for blockquote tag */
+    text-align	   : left;
+    margin-left	   : 2.5rem;
+    margin-right   : 2.5rem;
+}
+
+p.center, h1.center {
+    text-align	   : center;
+}
+
+/* Paragraph: indented, with no extra vertical space above or below,
+**	and paragraph not indented, with no extra vertical space. */
+
+.indent {
+    margin-left		: 2.5em;
+}
+
+p.indent_novspace {
+    text-indent		: 2.5em;
+    margin-bottom	: 0;
+    margin-top		: 0;
+}
+
+p.indent_bottomspace {
+    text-indent: 2.5em;
+    margin-top: 0;
+}
+
+p.none {
+    text-indent: 0;
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+
+	/* vertical space on top, no vertical space on bottom */
+
+p.nonebottom {
+    text-indent: 0;
+    margin-bottom: 0;
+}
+
+.clear-both {
+    clear: both;
+}
+
+/* float left and right of text */
+
+.floatright {
+    float: right;
+    margin: 0 0 1.0rem 1.0rem;
+}
+
+.floatleft {
+    float: left;
+    margin: 0 1.0rem 1.0rem 0;
+}
+
+.floatclear {
+    clear:both;
+}
+
+img.top {
+    vertical-align:  top;
+}
+
+img.center {				/* centered image */
+    display	: block;
+    max-width: 100%;
+    margin: 20px auto;
+}
+img.border {
+    border: 1px solid #505050;
+}
+
+img.nomargin {				/* centered image */
+    display	: block;
+    margin: 0 auto;
+}
+
+.caption {
+    font-size	: 0.9rem;
+    text-align	: center;
+}
+
+img.icon {			/* small in-line icons in text */
+    vertical-align: middle;
+}
+
+/* float left of text with no padding; e.g. for icons. */
+
+.iconleft {
+    float: left;
+}
+
+.toc-wrap {
+    margin-bottom: 3rem;
+}
+
+/* ----------------------------- Colouring ------------------------------- */
+
+/* For colouring Obsolete headings. */
+
+.obsolete {
+    color: #aa0000;
+}
+
+/* For colouring "Tip" */
+
+.tip {
+    color: #aa0000;
+    font-weight: bold;
+}
+
+/* For coloring the NoScript warning text */
+.warning {
+    color: #aa0000;
+    font-weight: bold;
+}
+
+.note {
+    color: #111188; /*#4e4eaa;*/
+    font-weight: bold;
+}
+
+/* For colouring "NEW" in rnotes */
+
+.new {
+    color: #ff0000;
+    font-weight: bold;
+}
+
+.smallheader {
+    color: #00aaaa;
+    font-weight: bold;
+}
+
+.mathvar {
+    font-family: "Book Antiqua", Palatino, "Palatino Linotype", "Palatino LT STD", Georgia, serif;
+    /*font-family: "Times New Roman", Times, Georgia, serif;*/
+    font-style: italic;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+/* -------------------------- Help/Tutorial ---------------------------- */
+
+/* Extra information in a box, dark blue font. */
+
+.extra_info {
+    color: #0b0b60;
+    background-color: #fcfcfc;
+    padding: 1rem;
+    margin: 2.5rem 2.5rem;
+    border: 2px solid #a0a0a0;
+}
+
+/* additional padding */
+
+.noteDiv {
+    padding:10px; 
+    margin:10px;
+    color:#333;
+}
+
+/* For offsetting and colouring examples in manual pages.
+** Font will be dark blue, background light blue, inset from main text. */
+
+div.example {
+    color: rgb(8,8,64);
+    background-color: rgb(230,230,255);
+    padding: 5px 10px;
+    margin: 10px 25px;
+}
+
+div.indent {
+    margin-left: 2rem;
+}
+
+div.center {
+    text-align: center;
+}
+
+div.vmargin {
+  margin: 1rem 0;
+}
+
+div.inline {
+    display: inline-block;
+}
+
+div.alpha {
+  font-weight: bold;
+  margin: 1rem 0;
+  padding: 0.6rem 1.5rem;
+  color: #0055dd;
+  text-align: center;
+}
+
+div.center-page {
+    background-color: #ffffff;
+    text-align: left;
+    max-width: 70rem;
+    min-width: 55rem;
+    width: 100%;
+    margin: 1rem auto;
+    border: 1px solid #d0d0d0;
+}
+
+@media only screen and (max-width: 70rem) {
+    div.center-page {
+    margin: 0;
+    border: 0;
+  }
+}
+
+div.indexletter {
+    background-color: #e0e0e0;
+    margin: 1rem 0;
+    padding: 0.6rem 1.5rem;
+    border: 1px solid #d8d8d8;
+}
+
+div.content {
+    padding: 1rem 3rem;
+}
+
+.vspacer {
+    margin: 2rem 0 1rem 0;
+}
+
+/* For indenting link to extra help; format as a list of class "help",
+** with an item of class "help".  There will be a small icon on the left. */
+
+ul.help {
+    list-style-type: none;
+    padding: 10px;
+    margin: 10px;
+    border: none;
+}
+
+ul li.help {
+    color: rgb(8,8,64);
+    background-image:url(../images/teacher_small_blue.png);
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    padding-left: 25px;
+}
+
+/* For putting a faint blue background on example items in
+** tables of contents at top of manual pages. */
+
+a.example {
+    color: #0b0b60;
+    background-color: rgb(230,230,255);
+    padding: 0 5px;
+}
+
+/* ---------------------------- Functions ----------------------------- */
+
+/* For colouring function and obsolete function name in function syntax. */
+
+.fcndef, .obsfcndef {
+    font-size: 100%;
+    font-weight: normal;
+}
+.fcndef {
+    color: #0055dd;
+}
+.obsfcndef {
+    color: #aa0000;
+}
+
+/* For marking unpported functions, accessed using class="unsupported"
+** e.g. <div class="unsupported"> ... </div>
+** NOTE: this had previously been an id, not a class,
+** but an id must be unique in a doc, so it was changed to a class. */
+
+.unsupported {
+    color: #900B90
+}
+
+/* Link style for Syntax block of function ref */
+
+a.fcnlink {
+    font-weight    : normal;
+    font-size	     : 100%;
+}
+
+/* Link styles for release notes and legal page */
+
+.relnote {
+    font-weight: normal;
+    font-size: 100%;
+}
+a.relnote[href]:link,
+a.relnote[href]:active {
+    color: #0000aa;
+}
+a.relnote[href]:visited {
+    color: #550088;
+}
+a.relnote[href]:hover {
+    color: #ff9933;
+}
+
+.crumb {
+    color: #214367; /*#215968;*/
+    font-weight: normal;
+}

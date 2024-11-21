@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <title>Atom Labels</title>
+  <meta name="keywords" content="panel: Atom Labels" />
+  <meta name="keywords" content="keywords: atom labels, label, labels" />
+  <meta name="keywords" content="keywords: custom label, atom label" />
+  <meta name="keywords" content="keywords: annotation, annotate" />
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Atom Labels
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<div class="toc-wrap" id="toc-list">
+<ul class="tight">
+<img src="label/labelui_labels.png" class="floatright"/>
+<li><a href="#Overview">Overview</a>
+<li><a href="#LabelSelection">Manage Atom Label Selection</a></li>
+<li><a href="#LabelVisibility">Show/Hide Atom Labels</a></li>
+<li><a href="#LabelCreation">Create/Edit Atom Labels</a></li>
+<li><a href="#InsertLabelShortcut">Insert Label Shortcuts</a></li>
+<li><a href="#LabelFormats">Format Label Text</a></li>
+<li><a href="#LabelPosition">Set Atom Label Position</a></li>
+<li><a href="#QuickLabels">Configure Atom Quick Labels</a></li>
+<li><a href="#LabelShortcuts">Atom Label Shortcuts</a></li>
+<li><a href="#LabelSymbols">Atom Labels Symbols</a></li>
+<li><a href="#SVLCommands">SVL Commands</a></li>
+<li><a href="#SeeAlso">See Also</a></li>
+</ul>
+</div>
+
+<a id="Overview">
+<h1>Overview</h1>
+</a>
+
+<div class="floatright">
+<img src="label/labelui.png" class="floatright" />
+</div>
+
+<p>
+The Atom Labels panel allows to create new or change existing atom labels.
+It is opened by choosing <b>MOE | Render | Atom Labels</b>. Alternatively,
+it can be opened from the Atom Render panel (<b>MOE | Render | Atoms</b> or
+<b>MOE | Footer | Atoms</b>) by pressing the
+<img src="label/labelui_popup_ico.png" class="icon"/> button.
+
+<img src="label/labelui_atomstyle_popup.png" class="center"/>
+
+The Atom Labels panel can be attached or detached at the left side
+of the MOE main window with the <b>Attach/Detach</b> button in the panel
+footer.
+</p>
+
+<a id="LabelSelection">
+<h2>Manage Atom Label Selection</h2>
+</a>
+
+<p>
+All functions in the Atom Labels panel operate on the currently selected atoms.
+The number of selected atoms is shown at the top of panel. If no atoms are
+selected this selection count will be shown in red, to remind the user
+that atoms need to be selected for atom label creation or changes.
+</p>
+
+<p>
+Right below the selection count are action buttons to help focus on the
+current selected atoms/labels. One can <b>Center</b> the view on the current
+selected atoms, <b>Isolate</b> them by hiding all unselected atoms, or make
+sure to <b>Show</b> all selected atoms (Labels are only displayed on visible
+atoms).
+</p>
+
+<p>
+<b>Select Root Atoms</b> replaces the current atom selection with one
+selected representative atom per residue. This is useful, if one wants to
+e.g. label residue or chain names on only one atom per residue.
+Pressing the button will choose and select one such representative atom
+(e.g. <tt>CA</tt> for amino acids or <tt>C1'</tt> for nucleic acids) in
+every residue with selected atoms.
+</p>
+
+<p>
+All unique atom labels are shown in the <b>Labels</b> list. The number of
+atoms which share that label is shown in the <b>Atoms</b> column. The
+visibility of the label is displayed as well (<b>S/H</b>: shown/hidden).
+Selecting a label in the list will select all atoms with that label.
+Only one unique label can be selected in the list at a time.
+If atoms with different labels are selected in the MOE Window, the label
+list entry with the most selected atoms will be selected in the list.
+</p>
+
+<p>
+Note that the label list shows the labels without formatting tags.
+Thus, two labels with same text but different formatting will appear
+in the list twice with the same name. The same applies to visibility,
+if the same label is shown on some atoms and hidden on others.
+</p>
+
+<a id="LabelVisibility">
+<h2>Show/Hide Atom Labels</h2>
+</a>
+The labels of selected atoms can be hidden and shown without
+deleting the atom labels themselves using the <b>Show</b> and <b>Hide</b>
+buttons. <b>Show All</b> and <b>Hide All</b> will show/hide the
+labels of all atoms,
+respectively. Atom labels can also be hidden and shown from the Atom Render
+panel in the footer with the
+<img src="label/labelui_hide_ico.png" class="icon" /> and
+<img src="label/labelui_show_ico.png" class="icon" /> buttons.
+<p>
+
+</p>
+
+<a id="LabelCreation">
+<h2>Create/Edit Atom Labels</h2>
+</a>
+
+<p>
+If an existing unique label is selected in the label list, the label text is
+accessible and can be changed in the <b>Edit Label</b> text field. If atoms
+without an atom label are selected, the text field is empty and one can
+start typing a new atom label text. In both cases all changes to the atom
+label text are automatically applied onto all selected atoms.
+The text field allows to create multi-line labels by just adding carriage
+returns as needed.
+</p>
+
+<p>
+If one has atoms selected with one unique label, but also atoms without label,
+the <b>Edit Label</b> text is colored <span style="color:blue">blue</span>,
+to indicate that there are atoms which have not yet this label set.
+Additionally the <b>Apply</b> button is now active, if one presses it,
+the current label text will be set on all selected atoms.
+</p>
+
+<p>
+If atoms with different labels are selected, the majority label text is
+shown in the text field and colored <span style="color:red">red</span>.
+If one presses <b>Apply</b> or changes the label all selected atoms will
+get the new label text assigned, potentially overwriting different
+existing atom labels.
+</p>
+
+<p>
+<span class="tip">Note!</span>
+The label text can be further formatted with the buttons below the edit
+text field. The formatting is done through HTML tags in the label text, which
+also can be entered manually in the text field.
+Due to the use of HTML syntax the two characters "<b><tt>&lt;</tt></b>" and
+"<b><tt>&amp;</tt></b>" are considered special characters and can not be
+used directly in atom label text, to use either of them explicitly,
+one has to specify their HTML equivalents "<b><tt>&amp;lt;</tt></b>"
+and "<b><tt>&amp;amp;</tt></b>".
+They can be entered manually or with the
+<a href="#InsertLabelShortcut">Insert popup panel</a>.
+</p>
+
+<a id="InsertLabelShortcut">
+<h2>Insert Label Shortcuts</h2>
+</a>
+
+<div class="floatright">
+<img src="label/labelui_symbol.png" class="floatright" />
+<img src="label/labelui_insert.png" class="floatright" />
+</div>
+
+<p>
+It is possible to add common atom or residue property values such as
+atom names, element symbols, residue names, etc. into the atom label text.
+This is done with the <b>Insert</b> button, which will open a subpanel
+to choose from the available atom, residue, and chain properties.
+The properties are represented in the label text field as a named
+shortcut enclosed in curly brackets (e.g. <tt>{aName}</tt> for atom names).
+The shortcut is then replaced by the current value of the
+atom, residue, or chain property in the actual
+3D atom label:
+</p>
+
+<p>
+<tt>Name:{aName}</tt> <b> &rarr; </b> Name:HB12
+</p>
+
+<p>
+A complete list of atom label shortcuts is available
+<a href="#LabelShortcuts">below</a>.
+</p>
+
+<p>
+The subpanel list also includes several common text symbols, like the
+<tt>&Aring;ngstr&ouml;m</tt> character (&Aring;), which can also be inserted.
+The list of available symbols can be found <a href="#LabelSymbols">here</a>.
+</p>
+
+<p>
+The shortcut/symbol list can be searched with the <b>Filter</b> text field.
+A selected shortcut or symbol is inserted into the label text at the current
+cursor position with either a double click on the list item or pressing the
+<b>OK/Insert</b> buttons. <b>OK</b> will also close the shortcut list subpanel.
+</p>
+
+<p>
+<span class="tip">Tip!</span>
+The display width and precision of floating point property values, provided
+by shortcuts, can changed by adding <tt>width.precision</tt> specifiers
+preceded by a colon into the shortcut in the label text, e.g.:
+</p>
+
+<p>
+<tt>Charge:{aCharge}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt> <b> &rarr; </b> aCharge:0.342 <br />
+<tt>Charge:{aCharge:5.2f}</tt> <b> &rarr; </b> aCharge: 0.34
+</p>
+
+<p>
+Similar syntax can be used to limit the output length of text properties
+like chain name or header:
+</p>
+
+<p>
+<tt>Chain:{cName}&nbsp;&nbsp;&nbsp;&nbsp;</tt> <b> &rarr; </b> Chain:1ABC.A  <br />
+<tt>Chain:{cName:.3s}</tt> <b> &rarr; </b> Chain:1AB
+</p>
+
+<span class="tip">Note!</span>
+Since the curly brackets are used to delimit shortcut definitions one needs
+to use a double open bracket "<tt>{{</tt>" if one wants to add a literal
+open curly bracket to an atom label.
+
+<a id="LabelFormats">
+<h2>Format Label Text</h2>
+</a>
+
+<p>
+The label text can formatted, showing parts of the text in e.g. bold,
+different colors, or different font styles. To format a part of the text, select
+it in the <b>Edit Label</b> text field and then press the requested font
+style button. If nothing is selected, the format of the whole label
+text is changed. The formatting change is immediately shown on the
+atom label in the 3D main window. The bubblehelp of the text field also
+displays the label text with formatting.
+</p>
+
+<p>
+The formatting is stored in the label text in the form of HTML-like tags
+(e.g. <tt>&lt;b&gt;,&lt;i&gt;,&lt;sub&gt;,</tt>etc.). The formatting tags
+are by default hidden in the edit text field, but can be displayed by
+switching the <b>Show HTML</b> checkbox on. In this mode the HTML formatting
+can be added or changed in the label text directly.
+</p>
+
+<table class="noborder left">
+  <th>Button</th>
+  <th>Description</th>
+  <th>HTML&nbsp;Tag</th>
+  <tr>
+    <td valign="top"><b>B</b></td>
+    <td valign="top">
+	Toggle text bolding. <tt>Shift</tt>-Click to remove text bolding.
+    </td>
+    <td valign="top"><tt>&lt;b&gt;&nbsp;&lt;/b&gt;</tt></td>
+  </tr>
+  <tr>
+    <td valign="top"><i>I</i></td>
+    <td valign="top">
+	Toggle text italicization. <tt>Shift</tt>-Click to remove text
+	italicization.
+    </td>
+    <td valign="top"><tt>&lt;i&gt;&nbsp;&lt;/i&gt;</tt></td>
+  </tr>
+  <tr>
+    <td valign="top">
+	x<sub><span style="font-size:80%">2</span></sub>
+    </td>
+    <td valign="top">
+	Make text into a subscript. <tt>Shift</tt>-Click to
+	undo all subscripting.
+    </td>
+    <td valign="top"><tt>&lt;sub&gt;&nbsp;&lt;/sub&gt;</tt></td>
+  </tr>
+  <tr>
+    <td valign="top">
+	x<sup><span style="font-size:80%">2</span></sup>
+    </td>
+    <td valign="top">
+	Make text into a superscript. <tt>Shift</tt>-Click to undo
+	all superscripting.
+    </td>
+    <td valign="top"><tt>&lt;sup&gt;&nbsp;&lt;/sup&gt;</tt></td>
+  </tr>
+  <tr>
+    <td valign="top">
+	<span style="font-size:120%">A</span><sup>+</sup>
+    </td>
+    <td valign="top">
+	Increase text size. <tt>Shift</tt>-Click for default size.
+    </td>
+    <td valign="top"><tt>&lt;big&gt;&nbsp;&lt;/big&gt;</tt></td>
+  </tr>
+  <tr>
+    <td valign="top">
+	<span style="font-size:80%">A</span><sup> -</sup>
+    </td>
+    <td valign="top">
+	Decrease text size. <tt>Shift</tt>-Click for default size.
+    </td>
+    <td valign="top"><tt>&lt;small&gt;&nbsp;&lt;/small&gt;</tt></td>
+  </tr>
+  <tr>
+
+    <td valign="top"><b>Font</b></td>
+    <td valign="top">
+	Set label text font: <b>Teletype</b> (fixed width),
+	<b>Sans-Serif</b>, <b>Roman</b>, or <b>System</b>. <br />
+	Press <span style="color:red"><b>x</b></span>
+	to use the default label font.
+    </td>
+    <td valign="top">
+	<tt>&lt;tt&gt;&nbsp;&lt;/tt&gt;</tt><br />
+	<tt>&lt;sf&gt;&nbsp;&lt;/sf&gt;</tt><br />
+	<tt>&lt;rm&gt;&nbsp;&lt;/rm&gt;</tt><br />
+	<tt>&lt;sys&gt;&nbsp;&lt;/sys&gt;</tt>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+	<img src="label/labelui_color_ico.png" class="icon"/>
+    </td>
+    <td valign="top">
+	Set text color. The color popup panel allows to set
+	arbitrary color values.<br />
+	Press <span style="color:red"><b>x</b></span>
+	to use the default text color.
+
+	<div class="extra_info">
+	Special atom dependent dynamic colors can be set by manually entering
+	dedicated HTML tags in the edit text field. The label text color
+	will change automatically with the colors of the atoms, residues, etc.
+	<table class="titlebar">
+	    <th>Dynamic Color</th>
+	    <th>HTML Tag</th>
+	    <tr>
+		<td valign="top">Atom</td>
+		<td valign="top"><tt>&lt;#atom&gt;&nbsp;&lt;/#&gt;</tt></td>
+	    </tr>
+	    <tr>
+		<td valign="top">Residue</td>
+		<td valign="top"><tt>&lt;#res&gt;&nbsp;&lt;/#&gt;</tt></td>
+	    </tr>
+	    <tr>
+		<td valign="top">Chain</td>
+		<td valign="top"><tt>&lt;#chain&gt;&nbsp;&lt;/#&gt;</tt></td>
+	    </tr>
+	    <tr>
+		<td valign="top">Chain Tag</td>
+		<td valign="top"><tt>&lt;#tag&gt;&nbsp;&lt;/#&gt;</tt></td>
+	    </tr>
+	</table>
+	</div>
+    </td>
+    <td valign="top">
+	<tt>&lt;#red&gt;&nbsp;&lt;/#&gt;</tt><br />
+	<tt>&lt;#blue&gt;&nbsp;&lt;/#&gt;</tt><br />
+	<tt>&lt;#ff0000&gt;&nbsp;&lt;/#&gt;</tt><br />
+	<tt>&lt;#dfa832&gt;&nbsp;&lt;/#&gt;</tt><br />
+	<tt>&lt;#atom&gt;&nbsp;&lt;/#&gt;</tt>
+    </td>
+  </tr>
+</table>
+
+<p>
+<span class="tip">Note!</span>
+The default global size and color of atom labels is set in the
+<a href="../../appendix/viewsetup.htm#EffectsText">3D Visualization Setup</a>
+panel (<b>MOE | Render | Setup | <span class="nobr">Effects & Text</span></b>)
+and saved as part of visualization themes.
+</p>
+
+<p>
+While editing an atom label, all text and format changes are recorded
+and can be undone/redone with either the provided buttons, or pressing the
+<tt>Ctrl-Z</tt> or <tt>Ctrl-Y</tt> keys in the edit text field. One can also
+remove all formatting from a label text or delete the label text completely:
+</p>
+
+<table class="noborder left">
+  <tr>
+    <td valign="top">
+    <img src="label/labelui_undo_ico.png" class="icon"/>
+    <img src="label/labelui_redo_ico.png" class="icon"/>
+    </td>
+    <td valign="top">
+	Undo/Redo last text/format change.
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+	<b><i>F</i><sub><span style="color:red">x</span></sub></b>
+    </td>
+    <td valign="top">
+	Clear all text formatting. Removes all HTML tags.
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+	<img src="label/labelui_cleartext_ico.png" class="icon"/>
+    </td>
+    <td valign="top">
+	Delete all text and formatting. Clears the edit text field and
+	removes the atom label.
+    </td>
+  </tr>
+</table>
+
+<a id="LabelPosition">
+<h2>Set Atom Label Position</h2>
+</a>
+
+<p>
+Atom labels are positioned/attached by default to the upper right of the
+labelled atom (or centered for atoms in CPK style).
+This default attachment position can be changed.
+It is also possible to freely position atom labels with the mouse.
+Additionally one can emphasize atom labels by putting them into
+a text bubble/balloon attached to the atoms.
+</p>
+
+<table class="noborder left">
+  <th>Button</th>
+  <th>Description</th>
+  <th>HTML&nbsp;Tag</th>
+  <tr>
+    <td valign="top"><b>Fill</b></td>
+    <td valign="top" style="text-align:justify">
+	<img src="label/labelui_labelbg.png" class="floatright" />
+	Put the atom label into a text balloon attached to the atom
+	and set the background color of the text balloon.
+	Press <span style="color:red"><b>x</b></span> to remove the
+	label balloon.
+	<p>
+	<span class="tip"><b>Tip!</b></span> Balloon labels can be
+	picked with the mouse. If such a label is picked, the
+	associated atom will be selected.
+	</p>
+    </td>
+    <td valign="top">
+	<tt>&lt;pos&nbsp;bg=00ff00&gt;&nbsp;&lt;/pos&gt;</tt>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+	<img src="label/labelui_pos_ico.png" class="icon"/>
+    </td>
+    <td valign="top" style="text-align:justify">
+	<img src="label/labelui_pos.png" class="floatleft" />
+	Set a custom atom label attachment position from <tt>top-left</tt>
+	to <tt>bottom-right</tt>.
+	Press <span style="color:red"><b>x</b></span> to clear and use
+	the default label attachment position.
+    </td>
+    <td valign="top">
+	<tt>&lt;pos&nbsp;l=<b>1</b>&gt;&nbsp;&lt;/pos&gt;</tt><br />
+	<p>
+	<span style="font-size:90%">
+	<b>1</b>: top-left, ... <b>9</b>: bottom-right
+	</span>
+	</p>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+	<img src="label/labelui_posxy_ico.png" class="icon"/>
+    </td>
+    <td valign="top" style="text-align:justify">
+	Start and stop manual label positioning.
+	<p>
+	When enabled, one can drag the atom labels of the currently
+	selected atoms with the left mouse button in the MOE main window.
+	The manually set label position is still relative to the
+	atom position. If the atom is moved (e.g. by a minimization
+	calculation), the label will move the exact same distance
+	and direction as the atom.
+	</p>
+    </td>
+    <td valign="top">
+	<tt>&lt;pos&nbsp;x=1&nbsp;y=2.3&gt;&nbsp;&lt;/pos&gt;</tt>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+	<img src="label/labelui_posz_ico.png" class="icon"/>
+    </td>
+    <td valign="top">
+	Set label offset in Z direction to optimize the position
+	of atom labels in front or back of an atom.
+    </td>
+    <td valign="top">
+	<tt>&lt;pos&nbsp;z=0.5&gt;&nbsp;&lt;/pos&gt;</tt>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top"><b><span style="color:red">x</span></b></td>
+    <td valign="top">
+	Reset atom label position to default.
+    </td>
+  </tr>
+</table>
+
+<a id="QuickLabels">
+<h2>Configure Atom Quick Labels</h2>
+</a>
+
+<p>
+The Atom Render panel (<b>MOE | Render | Atoms</b>) provides quick
+access to six standard atom labels: <b>Element</b>, <b>MM</b>,
+<b>Charge</b>, <b>Name</b>, <b>Residue</b>, and <b>Chain</b>.
+
+<img src="label/labelui_atomstyle_quicklabels.png" class="center"/>
+
+With the <b>Manage</b> button in the footer of the Atom Labels panel
+one can add, remove, and customize these <i>Quick Label</i> buttons. It opens
+the <b>Configure Quick Labels</b> panel which allows to define up to
+nine default or customized Quick Label buttons:
+</p>
+
+<div class="floatright">
+<img src="label/labelui_config.png" class="floatright" />
+</div>
+
+<table class="noborder left">
+  <tr>
+    <td valign="top"><b>Button Title</b></td>
+    <td valign="top" style="text-align:justify">
+	Set Quick Label button title.
+	Choose with the down arrow from one of the six default Quick
+	Label button titles (<tt>Element</tt>, <tt>MM</tt>,
+	<tt>Charge</tt>, <tt>Name</tt>, <tt>Residue</tt>,
+	<tt>Chain</tt>) or select to enter a custom button title/action
+	(<tt>Custom</tt>).
+    </td>
+  </tr>
+  <tr>
+    <td valign="top"><b>Label String</b></td>
+    <td valign="top" style="text-align:justify">
+	Enter the HTML formatted atom label string to be
+	assigned to the Quick Label button.
+	Click down arrow to copy the current label text definition
+	from the Atom Labels panel.
+    </td>
+  </tr>
+  <tr>
+    <td valign="top"><b>Residue</b></td>
+    <td valign="top" style="text-align:justify">
+	If enabled, then this label will be applied to only one
+	representative atom per residue when either all residue atoms
+	or no atoms at all are selected. This is useful
+	for per-residue labels, e.g. residue name.
+    </td>
+  </tr>
+  <tr>
+    <td valign="top"><b>OK</b></td>
+    <td valign="top" style="text-align:justify">
+	Save changes and close configuration panel.
+    </td>
+  </tr>
+  <tr>
+    <td valign="top"><b>Default</b></td>
+    <td valign="top" style="text-align:justify">
+	Set all settings to MOE default values.
+    </td>
+  </tr>
+  <tr>
+    <td valign="top"><b>Close</b></td>
+    <td valign="top" style="text-align:justify">
+	Discard changes and close config panel.
+    </td>
+  </tr>
+</table>
+
+<a id="LabelShortcuts">
+<h2>Atom Label Shortcuts</h2>
+</a>
+
+<table class="titlebar" style="text-align:justify">
+  <tr>
+    <th>Shortcut</th>
+    <th>Description</th>
+    <th>Example</th>
+  </tr>
+  <tr>
+    <td>{aElementX}</td>
+    <td style="text-align:justify">
+	Element symbol and formal charge if non-zero.
+    </td>
+    <td>Mg++</td>
+  </tr>
+  <tr>
+    <td>{aName}</td>
+    <td>Atom name.</td>
+    <td>CA</td>
+  </tr>
+  <tr>
+    <td>{rNameX}</td>
+    <td style="text-align:justify">
+	Residue name (three letter code),
+	UID number, and PDB insertion character.
+    </td>
+    <td>Gly10A</td>
+  </tr>
+  <tr>
+    <td>{cNumber}</td>
+    <td>Sequential chain number.</td>
+    <td>1</td>
+  </tr>
+  <tr>
+    <td>{aMMType}</td>
+    <td>Molecule mechanics atom type.</td>
+    <td>CT</td>
+  </tr>
+  <tr>
+    <td>
+	{aCharge}
+	<br /><span style="color:grey">{aCharge:.3f}</span>
+    </td>
+    <td>Atom partial charge.</td>
+    <td>0.123</td>
+  </tr>
+  <tr>
+    <td>
+	{aTempFactor}
+	<br /><span style="color:grey">{aTempFactor:.3f}</span>
+    </td>
+    <td>PDB temperature factor (B-factor).</td>
+    <td>11.22</td>
+  </tr>
+  <tr>
+    <td>{rLetterX}</td>
+    <td style="text-align:justify">
+	Residue single letter code, UID number, and PDB insertion character.
+    </td>
+    <td>G10A</td>
+  </tr>
+  <tr>
+    <td>{rNameSE}</td>
+    <td style="text-align:justify">
+	Residue name or letter, UID number and PDB insertion character.
+	The choice between residue name or letter depends on the
+	current display setting of the Sequence Editor.
+    </td>
+    <td>Gly10A</td>
+  </tr>
+  <tr>
+    <td>{rName2X}</td>
+    <td style="text-align:justify">
+	Residue name, PDB author UID number, and insertion character.
+	The author UID/INS values are set when reading in PDB or
+	CIF files and are meant as storage for the original
+	UID/INS assignments as intended by the author of the
+	PDB file.
+    </td>
+    <td>Gly21B</td>
+  </tr>
+  <tr>
+    <td>{rLetter2X}</td>
+    <td style="text-align:justify">
+	Residue letter, PDB author UID, and insertion character.
+    </td>
+    <td>G21A</td>
+  </tr>
+  <tr>
+    <td>{aChirality}</td>
+    <td style="text-align:justify">
+	RS chirality as defined by the CIP system of rules.
+	If the atom geometry matches a currently set
+	<a href="../molsystems/build.htm#Stereochemistry">RS constraint</a>
+	(SVL function: <a href="../fcnref/atom_p.htm"><tt>aForceRS</tt></a>)
+	the value (<tt>R</tt> or <tt>S</tt>) is colored
+	<span style="color:blue">blue</span>. It is colored
+	<span style="color:red">red</span> if the constraint is
+	violated.
+    </td>
+    <td>(R)</td>
+  </tr>
+  <tr>
+    <td>{aChirality2}</td>
+    <td style="text-align:justify">
+	RS chirality as defined by the CIP system of rules.
+	If the atom geometry violates a currently set RS constraint,
+	the geometric chirality value is displayed followed by
+	a colon and the constraint value (e.g. <tt>R:S</tt>). If no constraint
+	is set, the geometry chirality value is enclosed in parentheses,
+	e.g. <tt>(R)</tt>.
+    </td>
+    <td>R:S</td>
+  </tr>
+  <tr>
+    <td>
+	{aElement}
+    </td>
+    <td style="text-align:justify">
+	Element symbol.
+    </td>
+    <td>Mg</td>
+  </tr>
+  <tr>
+    <td>
+	{aElement2X}
+    </td>
+    <td style="text-align:justify">
+	Element symbol and superscript ionization.
+    </td>
+    <td>Mg<sup>++</sup></td>
+  </tr>
+  <tr>
+    <td>
+	{aIon}
+    </td>
+    <td style="text-align:justify">
+	Atom ionization value.
+    </td>
+    <td>-1</td>
+  </tr>
+  <tr>
+    <td>
+	{aIonX}
+    </td>
+    <td style="text-align:justify">
+	Atom ionization symbol. E.g. for the value -2: "<tt>--</tt>".
+    </td>
+    <td>-</td>
+  </tr>
+  <tr>
+    <td>
+	{aScalar}
+        <br /><span style="color:grey">{aScalar:.3f}</span>
+    </td>
+    <td style="text-align:justify">
+	Atom scalar value. The scalar value is a floating point value
+	between 0 and 1, set with the SVL function
+	<a href="../fcnref/atom_d.htm"><tt>aSetScalar</tt></a>.
+    </td>
+    <td>0.75</td>
+  </tr>
+  <tr>
+    <td>
+	{aScalar%}
+	<br /><span style="color:grey">{aScalar%:.0f}</span>
+    </td>
+     <td style="text-align:justify">
+	Atom scalar value displayed in percent.
+    </td>
+    <td>75%</td>
+  </tr>
+  <tr>
+    <td>
+	{aOccupancy}
+	<br /><span style="color:grey">{aOccupancy:.2f}</span>
+    </td>
+    <td style="text-align:justify">
+	Crystallographic occupancy value as provided in PDB files.
+    </td>
+    <td>1.00</td>
+  </tr>
+  <tr>
+    <td>
+	{aAniso11}
+	<br /><span style="color:grey">{aAniso11:.3f}</span>
+    </td>
+    <td style="text-align:justify">
+	Anisotropic temperature factor U11 as provided in PDB files.
+	Anisotropic temperature values can be set with the SVL function
+	<a href="../fcnref/atom.htm"><tt>aSetAniso</tt></a>.
+    </td>
+    <td>22.11</td>
+  </tr>
+  <tr>
+    <td>
+	{aAniso12}
+	<br /><span style="color:grey">{aAniso12:.3f}</span>
+    </td>
+    <td style="text-align:justify">
+	Anisotropic temperature factor U12 as provided in PDB files.
+    </td>
+    <td>22.11</td>
+  </tr>
+  <tr>
+    <td>
+	{aAniso13}
+	<br /><span style="color:grey">{aAniso13:.3f}</span>
+    </td>
+    <td style="text-align:justify">
+	Anisotropic temperature factor U13 as provided in PDB files.
+    </td>
+    <td>22.11</td>
+  </tr>
+  <tr>
+    <td>
+	{aAniso22}
+	<br /><span style="color:grey">{aAniso22:.3f}</span>
+    </td>
+    <td style="text-align:justify">
+	Anisotropic temperature factor U22 as provided in PDB files.
+    </td>
+    <td>22.11</td>
+  </tr>
+  <tr>
+    <td>
+	{aAniso23}
+	<br /><span style="color:grey">{aAniso23:.3f}</span>
+    </td>
+    <td style="text-align:justify">
+	Anisotropic temperature factor U23 as provided in PDB files.
+    </td>
+    <td>22.11</td>
+  </tr>
+  <tr>
+    <td>
+	{aAniso33}
+	<br /><span style="color:grey">{aAniso33:.3f}</span>
+    </td>
+    <td style="text-align:justify">
+	Anisotropic temperature factor U33 as provided in PDB files.
+    </td>
+    <td>22.11</td>
+  </tr>
+  <tr>
+    <td>{aNumber}</td>
+    <td>Atom index number.</td>
+    <td>17</td>
+  </tr>
+  <tr>
+    <td>{aNumberPerChain}</td>
+    <td>Atom index number per chain.</td>
+    <td>113</td>
+  </tr>
+  <tr>
+    <td>{aNumberPerResidue}</td>
+    <td>Atom index number per residue.</td>
+    <td>3</td>
+  </tr>
+  <tr>
+    <td>{aConstraint}</td>
+    <td style="text-align:justify">
+	Display characters <tt>F</tt>,<tt>I</tt>,<tt>T</tt>,<tt>W</tt>
+	for fixed, inert, tethered, or walled atoms.
+    </td>
+    <td>(FITW)</td>
+  </tr>
+  <tr>
+    <td>{aFixed}</td>
+    <td style="text-align:justify">
+	Display character <tt>F</tt> if the atom is fixed.
+	Fixed atoms cannot be moved (programmatically, e.g. in
+	energy minimization, or manually, e.g. with the mouse),
+	and have their potential energy gradients set to 0.
+    </td>
+    <td>F</td>
+  </tr>
+  <tr>
+    <td>{aInert}</td>
+    <td style="text-align:justify">
+	Display character <tt>I</tt> if the atom is inert.
+	Inert atoms are omitted from potential energy calculations.
+    </td>
+    <td>I</td>
+  </tr>
+  <tr>
+    <td>{aTether}</td>
+    <td style="text-align:justify">
+	Display character <tt>T</tt> if the atom is tethered.
+    </td>
+    <td>T</td>
+  </tr>
+  <tr>
+    <td>{aWall}</td>
+    <td style="text-align:justify">
+	Display character <tt>W</tt> if the atom will be affected by
+	wall restraints.
+    </td>
+    <td>W</td>
+  </tr>
+  <tr>
+    <td>{aState}</td>
+    <td style="text-align:justify">
+	Atom forcefield state tag number. See SVL function
+	<a href="../fcnref/atom_p.htm"><tt>aState</tt></a> for details.
+    </td>
+    <td>1</td>
+  </tr>
+  <tr>
+    <td>
+	{aMass}
+	<br /><span style="color:grey">{aMass:.3f}</span>
+    </td>
+    <td>Atom mass (in AMU).</td>
+    <td>32.06</td>
+  </tr>
+  <tr>
+    <td>
+	{aPos}
+	<br /><span style="color:grey">{aPos:.3f}</span>
+    </td>
+    <td>3D cartesian coordinates of atom.</td>
+    <td>0.123,0.444,0.000</td>
+  </tr>
+  <tr>
+    <td>
+	{aAtomicNumber}
+    </td>
+    <td>Atomic number of atom.</td>
+    <td>6</td>
+  </tr>
+  <tr>
+    <td>
+	{cName}
+	<br /><span style="color:grey">{cName:.20s}</span>
+    </td>
+    <td>Chain name.</td>
+    <td>1ABC.A</td>
+  </tr>
+  <tr>
+    <td>{cLetter}</td>
+    <td>Chain letter.</td>
+    <td>A</td>
+  </tr>
+  <tr>
+    <td>
+	{cTag}
+	<br /><span style="color:grey">{cTag:.20s}</span>
+    </td>
+    <td>Chain tag.</td>
+    <td>1ABC</td>
+  </tr>
+  <tr>
+    <td>
+	{cHeader}
+	<br /><span style="color:grey">{cHeader:.20s}</span>
+    </td>
+    <td style="text-align:justify">
+	Chain header, typically the HEADER line from a PDB file.
+    </td>
+    <td>Header</td>
+  </tr>
+  <tr>
+    <td>
+	{cGroup}
+	<br /><span style="color:grey">{cGroup:.20s}</span>
+    </td>
+    <td>Chain group.</td>
+    <td>Group1</td>
+  </tr>
+  <tr>
+    <td>{rName}</td>
+    <td>Residue name, three letter code.</td>
+    <td>Gly</td>
+  </tr>
+  <tr>
+    <td>{rLetter}</td>
+    <td>Residue single letter code.</td>
+    <td>G</td>
+  </tr>
+  <tr>
+    <td>{rUID}</td>
+    <td>Residue UID number.</td>
+    <td>10</td>
+  </tr>
+  <tr>
+    <td>{rINS}</td>
+    <td>Residue PDB insertion character</td>
+    <td>A</td>
+  </tr>
+  <tr>
+    <td>{rUID2}</td>
+    <td>Residue PDB author UID number.</td>
+    <td>21</td>
+  </tr>
+  <tr>
+    <td>{rINS2}</td>
+    <td>Residue PDB author insertion character.</td>
+    <td>B</td>
+  </tr>
+  <tr>
+    <td>
+	{rScalar1}
+        <br /><span style="color:grey">{rScalar1:.3f}</span>
+    </td>
+    <td style="text-align:justify">
+	Residue scalar value 1. The scalar value is a floating point value
+	set with the SVL function
+	<a href="../fcnref/residue.htm"><tt>aSetScalar</tt></a>.
+    </td>
+    <td>1.401</td>
+  </tr>
+  <tr>
+    <td>
+	{rScalar2}
+        <br /><span style="color:grey">{rScalar2:.3f}</span>
+    </td>
+    <td style="text-align:justify">
+	Residue scalar value 2.
+    </td>
+    <td>2.401</td>
+  </tr>
+  <tr>
+    <td>
+	{rScalar3}
+        <br /><span style="color:grey">{rScalar3:.3f}</span>
+    </td>
+    <td style="text-align:justify">
+	Residue scalar value 3.
+    </td>
+    <td>3.401</td>
+  </tr>
+  <tr>
+    <td>{rPosSE}</td>
+    <td style="text-align:justify">
+	Residue sequence position.
+    </td>
+    <td>11</td>
+  </tr>
+</table>
+
+<a id="LabelSymbols">
+<h2>Atom Label Symbols</h2>
+</a>
+
+<table class="titlebar">
+  <tr>
+    <th>HTML Symbol</th>
+    <th>Description</th>
+    <th>Example</th>
+  </tr>
+  <tr>
+    <td>&amp;alpha;</td>
+    <td>Greek alpha</td>
+    <td class=center><span style="font-size:120%">&alpha;</span></td>
+  </tr>
+  <tr>
+    <td>&amp;beta;</td>
+    <td>Greek beta</td>
+    <td class=center><span style="font-size:120%">&beta;</span></td>
+  </tr>
+  <tr>
+    <td>&amp;gamma;</td>
+    <td>Greek gamma</td>
+    <td class=center><span style="font-size:120%">&gamma;</span></td>
+  </tr>
+  <tr>
+    <td>&amp;delta;</td>
+    <td>Greek delta</td>
+    <td class=center><span style="font-size:120%">&delta;</span></td>
+  </tr>
+  <tr>
+    <td>&amp;epsilon;</td>
+    <td>Greek epsilon</td>
+    <td class=center><span style="font-size:120%">&epsilon;</span></td>
+  </tr>
+  <tr>
+    <td>&amp;pi;</td>
+    <td>Greek pi</td>
+    <td class=center><span style="font-size:120%">&pi;</span></td>
+  </tr>
+  <tr>
+    <td>&amp;Aring;</td>
+    <td>&Aring;ngstr&ouml;m</td>
+    <td class=center><span style="font-size:120%">&Aring;</span></td>
+  </tr>
+  <tr>
+    <td>&amp;amp;</td>
+    <td>Ampersand</td>
+    <td class=center><span style="font-size:120%">&amp;</span></td>
+  </tr>
+  <tr>
+    <td>&amp;copy;</td>
+    <td>Copyright</td>
+    <td class=center><span style="font-size:120%">&copy;</span></td>
+  </tr>
+  <tr>
+    <td>&amp;deg;</td>
+    <td>Degree</td>
+    <td class=center><span style="font-size:120%">&deg;</span></td>
+  </tr>
+  <tr>
+    <td>&amp;divide;</td>
+    <td>Divide</td>
+    <td class=center><span style="font-size:120%">&divide;</span></td>
+  </tr>
+  <tr>
+    <td>&amp;gt;</td>
+    <td>Greater-than</td>
+    <td class=center><span style="font-size:120%">&gt;</span></td>
+  </tr>
+  <tr>
+    <td>&amp;lt;</td>
+    <td>Less-than</td>
+    <td class=center><span style="font-size:120%">&lt;</span></td>
+  </tr>
+  <tr>
+    <td>&amp;mu;</td>
+    <td>Micro</td>
+    <td class=center><span style="font-size:120%">&mu;</span></td>
+  </tr>
+  <tr>
+    <td>&amp;times;</td>
+    <td>Multiplication</td>
+    <td class=center><span style="font-size:120%">&times;</span></td>
+  </tr>
+<!--
+  <tr>
+    <td>&amp;nbsp;</td>
+    <td>Non-breaking space</td>
+    <td class=center><span style="font-size:120%">&nbsp;</span></td>
+  </tr>
+-->
+  <tr>
+    <td>&amp;plusmn;</td>
+    <td>Plus-minus</td>
+    <td class=center><span style="font-size:120%">&plusmn;</span></td>
+  </tr>
+  <tr>
+    <td>&amp;quot;</td>
+    <td>Quotation mark</td>
+    <td class=center><span style="font-size:120%">&quot;</span></td>
+  </tr>
+  <tr>
+    <td>&amp;reg;</td>
+    <td>Registered trademark</td>
+    <td class=center><span style="font-size:120%">&reg;</span></td>
+  </tr>
+</table>
+
+<!-- ============================ SVL COMMANDS =========================== -->
+<a id="SVLCommands"></a>
+<h1>SVL Commands</h1>
+
+<p>
+  <a href="../fcnref/atom_d.htm">Atom Display Functions (aLabel, aSetLabel)
+  </a><br />
+  <a href="../fcnref/atom.htm">Atom Property Functions</a><br />
+  <a href="../fcnref/atom_p.htm">Atom Potential Functions</a><br />
+  <a href="../fcnref/atom_g.htm">Atom Geometry Functions</a><br />
+  <a href="../fcnref/residue.htm">Residue Functions</a><br />
+  <a href="../fcnref/chain.htm">Chain Functions</a><br />
+</p>
+
+<!-- ============================== SEE ALSO ============================= -->
+<a id="SeeAlso">
+<h1>See Also</h1>
+</a>
+
+<p>
+  <a href="../../appendix/viewsetup.htm">3D Visualization Setup</a><br />
+  <a href="mainwin.htm">MOE Window</a><br />
+  <a href="mouse.htm">Using the Mouse</a><br />
+</p>
+
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

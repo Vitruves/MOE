@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="functions: sdsort" />
+  <title>sdsort</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    sdsort
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+<p>
+  <tt>unix&gt; $MOE/bin/sdsort</tt> <b>{</b> <i>option</i> |
+  <i>inputfilename</i> | @<i>filename</i> <b>}</b><br />
+  <tt>unix&gt; $MOE/bin/moebatch -run $MOE/bin/sdsort</tt> <b>{</b>
+  <i>option</i> | <i>inputfilename</i> | @<i>filename</i> <b>}</b><br />
+  <br />
+  <tt>windows&gt; %MOE%\bin\sdsort</tt> <b>{</b> <i>option</i> |
+  <i>inputfilename</i> | @<i>filename</i> <b>}</b><br />
+  <tt>windows&gt; %MOE%\bin\moebatch -run $MOE\bin\sdsort</tt> <b>{</b>
+  <i>option</i> | <i>inputfilename</i> | @<i>filename</i> <b>}</b></p>
+
+<table class="noborder left">
+  <tr>
+    <td><i>option</i></td>
+    <td>&nbsp;:&nbsp;</td>
+    <td><tt>-help</tt></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;:&nbsp;</td>
+    <td><tt>-verbose</tt> | <tt>-quiet</tt></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;:&nbsp;</td>
+    <td><tt>-sdf</tt> | <tt>-smi</tt></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;:&nbsp;</td>
+    <td><tt>-o</tt> <i>outputfilename</i></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;:&nbsp;</td>
+    <td><tt>-f</tt> <i>filterfilename</i></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;:&nbsp;</td>
+    <td><tt>-tmp</tt> <i>directory</i></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;:&nbsp;</td>
+    <td><tt>-sort</tt> | <tt>-merge</tt> | <tt>-check</tt></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;:&nbsp;</td>
+    <td><tt>-unique</tt> | <tt>-nounique</tt></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;:&nbsp;</td>
+    <td><tt>-diff</tt> | <tt>-nodiff</tt></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;:&nbsp;</td>
+    <td><tt>-molcmp</tt> <i>mode</i></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;:&nbsp;</td>
+    <td><tt>-datamerge</tt> <i>mode</i></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;:&nbsp;</td>
+    <td><tt>-partial</tt> | <tt>-full</tt></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;:&nbsp;</td>
+    <td><tt>-key</tt> <i>field</i></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;:&nbsp;</td>
+    <td><tt>-alphabetic</tt> | <tt>-numeric</tt></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;:&nbsp;</td>
+    <td><tt>-increasing</tt> | <tt>-decreasing</tt></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;:&nbsp;</td>
+    <td><tt>-bseq</tt> | <tt>-fseq</tt></td>
+  </tr>
+</table>
+<a id="sdsort"></a>
+<h1>Description</h1>
+
+<p>The <tt>sdsort</tt> program sorts the contents of a catenated sequence of
+  SD (or SMILES) files (possibly removing duplicate records and merging the
+  related data fields) and writes the results to an output file in either
+  format. <tt>sdsort</tt> is an SVL program intended to be run in MOE/batch.
+  The fundamental structure of operation of <tt>sdsort</tt> is:</p>
+
+<ol>
+  <li>Read and concatenate all specified input files.</li>
+  <li>Order the contents of the concatenated files.</li>
+  <li>Write output records (possibly removing duplicates and merging
+  data).</li>
+</ol>
+
+<p>On most POSIX systems, the first syntax can be used: <tt>sdsort</tt> looks
+  like a Unix command. If using an unusual shell, it may be necessary to use
+  the second syntax. On Windows systems, use the third (batch file) or fourth
+  syntax lines (assuming <tt>cmd.exe</tt> is used to process commands).</p>
+
+<p>The <tt>sdsort</tt> program can operate in one of three modes specified
+  with the rightmost of the following options:</p>
+<dl>
+  <dt><tt>-sort</tt></dt>
+  <dd>Sort the concatenated input files. This is the default.</dd>
+  <dt><tt>-merge</tt></dt>
+  <dd>Sort the concatenated input files assuming that each of them has been
+  previously sorted with <tt>sdsort</tt>.</dd>
+  <dt><tt>-check</tt></dt>
+  <dd>Verify that the given files are sorted and print a status for
+  each.</dd>
+</dl>
+
+<p>There are several general options that modify the behavior of
+  <tt>sdsort</tt>:</p>
+
+<dl>
+  <dt><tt>-help</tt></dt>
+  <dd>Prints a syntax summary to <tt>stderr</tt> and then exits.</dd>
+  <dt><tt>-verbose</tt></dt>
+  <dd>Prints progress information to <tt>stderr</tt> during the run.</dd>
+  <dt><tt>-quiet</tt></dt>
+  <dd>Suppresses the printing of progress information to <tt>stderr</tt>.
+  This is the default.</dd>
+  <dt><tt>-sdf</tt></dt>
+  <dd>Specifies that subsequent files in the <tt>sdsort</tt> argument list
+  are SD files. The format of the SD files can be further specified using
+  an option of the form <span class="nobr"><tt>-sdf:<i>fmt</i></tt></span>
+  where <i>fmt</i> is either <tt>V2000</tt> or <tt>V3000</tt>. If
+  <i>fmt</i> is omitted, output files will be written in V2000 format (the
+  default). It is not necessary to specify the format of input SD
+  files.</dd>
+  <dd></dd>
+  <dt><tt>-smi</tt></dt>
+  <dd>Specifies that subsequent files in the <tt>sdsort</tt> argument list
+  are whitespace separated ASCII files. Note that this includes
+  <span class="nobr"><tt>-o</tt></span> and <span class=
+  "nobr"><tt>-f</tt></span> specifications. The files have one SMILES
+  string per line, with each line beginning with the SMILES string;
+  subsequent fields on a given line are considered to be data. The format
+  of the ASCII file can be further specified using an option of the form
+  <span class="nobr"><tt>-smi:</tt><i>f</i></span> where <i>f</i> is a
+  single character: <tt>t</tt> for tab separated, <tt>c</tt> for comma
+  separated, <tt>m</tt> for semicolon separated, and <tt>w</tt> for
+  whitespace separated. Append a <tt>q</tt> to the option string to specify
+  that items are surrounded by double quotes. Append a <tt>p</tt> to the
+  option string to specify that the property names should be written as the
+  first line of the output file. For example, <span class=
+  "nobr"><tt>-smi:tq</tt></span> specifies files in which each line
+  contains tab-separated items with each item enclosed in double
+  quotes.</dd>
+  <dd></dd>
+  <dt><tt>-o</tt> <i>outputfilename</i></dt>
+  <dd>By default, output is written to <tt>stdout</tt>; however, if the
+  <span class="nobr"><tt>-o</tt></span> option is present then output will
+  be written to the given <i>outputfilename</i>.</dd>
+  <dt><tt>-f</tt> <i>filterfilename</i></dt>
+  <dd>Records not written to the output file may (e.g. in the case of
+  duplicates) may be written to an alternate filter file specified by the
+  <i>filterfilename</i> argument of the <span class=
+  "nobr"><tt>-f</tt></span> option. By default no filterfile is generated
+  (which can also be done by using <tt>.</tt> as the
+  <i>filterfilename</i>).</dd>
+  <dt><tt>-tmp</tt> <i>directory</i></dt>
+  <dd><tt>sdsort</tt> generally requires temporary file space to perform
+  sorting. The <span class="nobr"><tt>-tmp</tt></span> specifies which
+  directory to use for temporary files. By default, this is the <a class=
+  "svl" href="moe_const.htm">TMP</a> directory. When sorting large files,
+  it is recommended that <span class="nobr"><tt>-tmp</tt></span> be
+  specified explicitly.</dd>
+  <dt><tt>-unique<br />
+  -nounique</tt></dt>
+  <dd>When <tt>-unique</tt> is specified in <tt>-sort</tt> or <span class=
+  "nobr"><tt>-merge</tt></span> mode, duplicate records will be removed
+  from the output. If present, attachment points are included in duplicate
+  checking. <span class="nobr"><tt>-nounique</tt></span> disables the
+  removal of duplicate records. (This is the default.)</dd>
+  <dt><tt>-diff<br />
+  -nodiff</tt></dt>
+  <dd>When <tt>-diff</tt> is selected in <tt>-sort</tt> or <span class=
+  "nobr"><tt>-merge</tt></span> mode, only records from the first file in
+  the input list will be written to the output and then only if they are
+  unique with respect to the remaining files. Thus, the <span class=
+  "nobr"><tt>-diff</tt></span> option can be used to remove records from
+  the first file that are present in any of the remaining files.
+  <span class="nobr"><tt>-nodiff</tt></span> disables the differences mode
+  enabled by <span class="nobr"><tt>-diff</tt></span>. (This is the
+  default.)</dd>
+  <dt><tt>-molcmp</tt> <i>mode</i></dt>
+  <dd>
+    Specifies how molecules are to be compared. The value of <i>mode</i>
+    can be one of:
+    <ul>
+      <li><tt>zqh</tt> - use the ZQH priority comparison method (the
+      default). This method is insensitive to resonance
+      representations.</li>
+      <li><tt>smiles</tt> - use a unique SMILES string to compare
+      molecules.</li>
+      <li><tt>tautomer</tt> - molecules are considered equal if they share
+      a tautomer, applies <span class="nobr"><tt>-merge</tt></span> and
+      <span class="nobr"><tt>-diff</tt></span> modes. Note however that
+      this option is equivalent to <tt>smiles</tt> for sorting purposes,
+      since it is not possible to sort by tautomers.</li>
+    </ul>
+  </dd>
+  <dt><tt>-datamerge</tt> <i>mode</i></dt>
+  <dd>
+    Specifies how non-molecular field data is to be merged when duplicates
+    are removed. The value of <i>mode</i> can be one of:
+    <ul>
+      <li><tt>none</tt> - the first record is retained as is and subsequent
+      duplicate records are removed. This is the default.</li>
+      <li><tt>first</tt> - data fields of duplicates are merged; however,
+      if there are common fields then the value of the first is retained
+      and the others discarded.</li>
+      <li><tt>append</tt> - the data fields of duplicates are
+      concatenated.</li>
+    </ul>
+  </dd>
+  <dt><tt>-partial</tt><br />
+  <tt>-full</tt></dt>
+  <dd>The default molecule sorting mode (<tt>-partial</tt>) groups
+  molecules by unique blocks according to their sigma skeleton, and only
+  uses the molecular comparison operator (<span class=
+  "nobr"><tt>-molcmp</tt></span>) for actual comparisons (<span class=
+  "nobr"><tt>-merge</tt></span> and <span class=
+  "nobr"><tt>-unique</tt></span>). If <span class=
+  "nobr"><tt>-full</tt></span> is specified, then the sorting operator
+  orders molecules by molecular comparison, after grouping into blocks of
+  sigma skeletons.</dd>
+  <dt><tt>-key</tt> <i>field</i></dt>
+  <dd>Specifies which data field in the SD file will be used to determine
+  the sort order. If <i>field</i> is &quot;.&quot; then the molecule field
+  is used. By default the molecule field is used.</dd>
+  <dt><tt>-alphabetic</tt></dt>
+  <dd>If the <tt>-key</tt> is not the molecule field then the key is
+  interpreted as a character string.</dd>
+  <dt><tt>-numeric</tt></dt>
+  <dd>If the <tt>-key</tt> is not the molecule field then the key is
+  interpreted as a number.</dd>
+  <dt><tt>-increasing<br />
+  -decreasing</tt></dt>
+  <dd><tt>-increasing</tt> specifies the desired ordering to be increasing
+  (the default). <span class="nobr"><tt>-decreasing</tt></span> specifies
+  the desired ordering to be decreasing.</dd>
+  <dt><tt>-bseq</tt></dt>
+  <dd>Adds an additional field to the output: <tt>bseq</tt>, which is the
+  block sequence identifier for sorted entries. Any two molecules which are
+  deemed equivalent by the sorting method will have the same block sequence
+  identifier. This option only adds useful information when used with the
+  <tt>sort</tt> mode.</dd>
+  <dt><tt>-fseq</tt></dt>
+  <dd>Adds an additional field to the filtered output: <tt>fseq</tt>, is a
+  block sequence identifier similar to <tt>bseq</tt>, described above. This
+  option has an additional effect on the <tt>unique</tt> and <tt>diff</tt>
+  modes: when a group of equivalent molecules is filtered, the first
+  instance is written to the filter file as well as the output file.</dd>
+</dl>
+
+<p><b>Argument Processing</b>. The input arguments to <tt>sdsort</tt> are
+  processed in left-to-right order. An argument that starts with a dash
+  <span class="nobr">(&quot;-&quot;)</span> is taken as an option
+  specification. An argument of the form <span class=
+  "nobr">@<i>filename</i></span> specifies that the contents of <i>filename</i>
+  are read and inserted into the argument stream for further argument
+  processing (which is useful to avoid long command lines or to record commonly
+  used arguments and files). Any other argument form is taken to be an input
+  file.<br />
+  <br />
+  <b>Note:</b> the @<i>filename</i> can only appear where an option or filename
+  would normally be processed and cannot be used as the second argument to an
+  option (e.g. <span class="nobr"><tt>-o</tt>&nbsp;@<i>filename</i></span>
+  specifies <span class="nobr">@<i>filename</i></span> as the actual output
+  file).</p>
+
+<p>The input files are processed in left-to-right order. Input files
+  containing &quot;*&quot; or &quot;?&quot; are interpreted as filename
+  patterns and each will be substituted with all filenames that match the given
+  pattern; for example, <tt>*.sdf</tt> will be substituted with all filenames
+  in the current directory that have a <tt>.sdf</tt> suffix. The input file
+  <span class="nobr">&quot;-&quot;</span> is interpreted as <tt>stdin</tt> (for
+  use with pipes). If there are no explicit input files, <tt>stdin</tt> is used
+  as the single input file.</p>
+
+<p><b>Examples</b>. A common use of <tt>sdsort</tt> is to remove duplicate
+  compounds from SD files. The following command can be used to effect this
+  task:</p>
+
+<pre class="code oneline">
+sdsort -unique catalog.sdf -o uniq_catalog.sdf
+</pre>
+
+<p>In the case of several files that routinely get updated, it makes more
+  sense to sort each separately and then merge the results:</p>
+
+<pre class="code oneline">
+sdsort catalog1.sdf -o sorted_catalog1.sdf
+sdsort catalog2.sdf -o sorted_catalog2.sdf
+sdsort -merge catalog1.sdf catalog2.sdf -o uniq_catalog.sdf
+</pre>
+
+<p>Another common use of <tt>sdsort</tt> is to determine new compounds in an
+  update of a catalog. For example, if <tt>update.sdf</tt> is an updated
+  version of <tt>catalog.sdf</tt> then</p>
+
+<pre class="code oneline">
+sdsort -diff update.sdf catalog.sdf -o new.sdf<
+</pre>
+
+<p>will place all of the compounds in <tt>update.sdf</tt> that do not appear
+  in <tt>catalog.sdf</tt> into the file <tt>new.sdf</tt>. As the <span class=
+  "nobr"><tt>-sdf</tt></span> option is omitted, all of the output files will
+  be written as MDL V2000 SD files.</p>
+
+<h1>See Also</h1>
+
+<p><a class="svl" href="sddesc.htm">sddesc</a><br />
+  <a class="svl" href="sdfilter.htm">sdfilter</a><br />
+  <a class="svl" href="sdfrag.htm">sdfrag</a><br />
+  <a class="svl" href="sdstereo.htm">sdstereo</a><br />
+  <a class="svl" href="sdwash.htm">sdwash</a> </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

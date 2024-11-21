@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: GSurface" />
+  <title>Graphic Object Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Graphic Object Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<h2 class="obsolete">Obsolete Syntax</h2>
+
+<pre>
+    <a class="fcnlink" href=
+"#GSurface">GSurface</a> [ obj_key, color, origin, P1, P2, spacing, level ]
+</pre>
+
+<h1>Description</h1>
+<a id="GSurface"></a>
+<h2 class="obsolete">Obsolete Usage</h2>
+
+<p>Writes into the object specified by <tt>obj_key</tt> an iso-surface at the
+  height specified in <tt>level</tt>. The surface is drawn in the color
+  <tt>color</tt>, and is calculated for the volume of space sandwiched between
+  two x-y planes (Plane 1 and Plane 2).</p>
+
+<p><tt>P1</tt> and <tt>P2</tt> are matrices of function values evaluated at
+  the grid points of the x-y planes Plane 1 and Plane 2. <tt>P1</tt> and
+  <tt>P2</tt> are each passed as a vector of rows of values.</p>
+
+<p>For example, if <tt>P1</tt> is the matrix</p>
+
+<pre>
+    a b c d
+    e f g h
+    i j k l
+</pre>
+
+<p>it should be passed as:</p>
+
+<pre>
+    [ [a,b,c,d], [e,f,g,h], [i,j,k,l] ]
+</pre>
+
+<p>The origin of Plane 1 is given by the 3-vector <tt>[x,y,z]</tt>. The
+  separation between Planes 1 and 2 is <tt>spacing</tt>, which is also the grid
+  spacing. Unit extension applies to all arguments.</p>
+
+<p>Color is specified as RGB intensities:</p>
+  <div class="indent">
+
+<p>256<sup>2</sup><i>r</i> + 256<i>g</i> + <i>b</i></p>
+  </div>
+
+<p>i.e. one byte per color.</p>
+
+<p>To calculate the iso-surface of a given level for a particular function,
+  slice the volume of space of interest into <i>x-y</i> oriented slabs. Each
+  pair of <i>x-y</i> slab surfaces correspond to Planes 1 and 2. Calculate the
+  function values in each plane over a grid, and pass them as rows of values to
+  <tt>GSurface</tt>.</p>
+
+<h1>See Also</h1>
+
+<p><a href="gobj.htm">Graphics Object Functions</a>
+  </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

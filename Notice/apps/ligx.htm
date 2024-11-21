@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html>
+
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../images/ccgicon.png" />
+  <title>QuickPrep and MOE Right Hand Side Button Bar</title>
+  <meta name="keywords" content="panel: QuickPrep Settings" />
+  <meta name="keywords" content="panel: QuickPrep" />
+  <meta name="keywords" content="main_keywords: right button bar" />
+  <meta name="keywords" content="keywords: PDB, MOL, MOL2, SiteView" />
+  <meta name="keywords" content=
+  "keywords: ligand properties R-vector, footer" />
+  <meta name="keywords" content="keywords: system manager, duplicate, vac" />
+  <meta name="keywords" content=
+  "keywords: energy minimization, refine, data preparation" />
+  <meta name="keywords" content=
+  "keywords: tether, restraint, constrain, visualization, preferences" />
+  <meta name="keywords" content=
+  "keywords: properties, ligand interactions, active site" />
+  <meta name="keywords" content=
+  "keywords: protonate, protonate3d, water, measure, surface, receptor" />
+  <meta name="keywords" content=
+  "keywords: structure-based drug design, active inert state, visibility" />
+  <meta name="keywords" content="keywords: biologics" />
+  <meta name="keywords" content="keywords: rename, tag group" />
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../index.htm"><img src="../images/ccglogo.png" /></a>
+    <a href="../index.htm"><div class="moeversion"></div></a>
+    QuickPrep and MOE Right Hand Side Button Bar
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<img src="ligx/ligrec1.png" style="float:right" alt=
+  "QuickPrep Receptor" class="center" />
+  <ul>
+    <li>
+      <a href="#Preparation">Data Preparation</a>
+      <ul>
+        <li><a href="#OpenCloseSave">Open, Close and Save Files</a></li>
+        <li><a href="#QuickPrep">QuickPrep &ndash; Prepare Structures for
+        SBDD</a></li>
+        <li><a href="#ChooseLigand">Choose a Particular Ligand</a></li>
+        <li><a href="#QuickPrepBio">QuickPrep &ndash; Prepare Structures for
+        Biologics</a></li>
+        <li><a href="#QuickPrepRun">Running QuickPrep</a></li>
+        <li><a href="#QuickPrepMDB">Running QuickPrep on a Database</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#Visualization">Visualization</a>
+      <ul>
+        <li><a href="#System">The System Manager &ndash; Control Multiple
+        Complexes</a></li>
+        <li><a href="#SiteView">The SiteView Button</a></li>
+        <li><a href="#HideShow">Hide and Show Menus</a></li>
+        <li><a href="#Surface">Surfaces: Receptor &ndash; Ligand &ndash;
+        Interaction (VDW)</a></li>
+        <li><a href="#Measure">Measure Interatomic Distances, Angles and
+        Dihedrals</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#LigandMenu">The Ligand Menu</a>
+      <ul>
+        <li><a href="#Properties">Ligand Properties</a></li>
+        <li><a href="#RVectors">Ligand R-Vectors</a></li>
+        <li><a href="#Torsions">Ligand Torsions</a></li>
+        <li><a href="#Duplicate">Duplicate a Ligand</a></li>
+        <li><a href="#MinimizeV">Minimize in Isolation</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#ModLig">Ligand Modification and Constrained Energy
+      Minimization</a>
+      <ul>
+        <li><a href="#Constrain">Constrain Atomic Movement</a></li>
+        <li><a href="#Build">Edit Ligands in 3D</a></li>
+        <li><a href="#Build2D">Edit Ligands in 2D</a></li>
+        <li><a href="#Minimize">Energy Minimize in the Active Site</a></li>
+      </ul>
+    </li>
+    <li><a href="#Ref">References</a></li>
+    <li><a href="#SeeAlso">See Also</a></li>
+  </ul>
+
+<p>The Right Hand Side (RHS) Button Bar is a collection of procedures and
+  capabilities in MOE for conducting interactive ligand modification and energy
+  minimization in the active site of a flexible receptor. It provides for:</p>
+  <ol>
+    <li>Assigning coordinate restraints on atoms to discourage movement.</li>
+    <li>Drawing molecular surfaces to highlight steric clashes.</li>
+    <li>Interactive modification of ligands and geometry optimization.</li>
+    <li>Estimating binding affinities and ligand properties.</li>
+    <li>Control of multiple receptors and ligands.</li>
+  </ol>
+<a id="ButtonBar"></a>
+<p>Interactive structure-based drug design (SBDD) is generally conducted
+  using the MOE Window, in particular the MOE Button Bar:</p>
+  <table class="noborder">
+    <tr>
+      <td>
+        <table class="titlebar no-margin">
+          <tr>
+            <th class="blue-bg"><a href="../moe/gui/system.htm" class=
+            "white-text">System</a></th>
+            <td>Open the <a href="../moe/gui/system.htm">System Manager</a>, to
+            control the ligands and receptors loaded in MOE.</td>
+          </tr>
+          <tr>
+            <th><a href="../moe/gui/fileopen.htm">Open</a></th>
+            <td>Raise the <a href="../moe/gui/fileopen.htm">Open</a> panel for
+            opening files and loading molecules into MOE.</td>
+          </tr>
+          <tr>
+            <th><a href="#QuickPrep">QuickPrep</a></th>
+            <td>Prepare one or more receptor-ligand complexes for interactive
+            design.</td>
+          </tr>
+          <tr>
+            <th><a href="#Constrain">Constrain</a></th>
+            <td>Add or remove restrictions on motion during geometry
+            optimization.</td>
+          </tr>
+          <tr>
+            <th class="red-text">Close</th>
+            <td>Close the current molecular system (delete all data).</td>
+          </tr>
+          <tr>
+            <th class="blue-bg white-text">Center</th>
+            <td>Center the visible (or selected) molecular data in the 3D
+            rendering area.</td>
+          </tr>
+          <tr>
+            <th><a href="#SiteView">SiteView</a></th>
+            <td>Isolate and render ligand(s) (or selected atoms) in the active
+            site(s).</td>
+          </tr>
+          <tr>
+            <th>Hydrogens</th>
+            <td>Cycle through display of a) no hydrogens, b) polar hydrogens
+            only, c) all hydrogens.</td>
+          </tr>
+          <tr>
+            <th><a href="#HideShow">Hide</a></th>
+            <td>Hide atoms (make invisible).</td>
+          </tr>
+          <tr>
+            <th><a href="#HideShow">Show</a></th>
+            <td>Show atoms (make visible).</td>
+          </tr>
+          <tr>
+            <th><a href="#LigandMenu">Ligand</a></th>
+            <td>Ligand analysis menu.</td>
+          </tr>
+          <tr>
+            <th><a href="#Surface">Surface</a></th>
+            <td>Create ligand and receptor surfaces.</td>
+          </tr>
+          <tr>
+            <th><a href="#Measure">Measure</a></th>
+            <td>Measure distances, angles, dihedrals of atoms.</td>
+          </tr>
+          <tr>
+            <th class="blue-bg"><a href="../moe/molsystems/build.htm" class=
+            "white-text">Builder</a></th>
+            <td>Open the small molecule <a href=
+            "../moe/molsystems/build.htm">Builder</a>.</td>
+          </tr>
+          <tr>
+            <th><a href="../moe/gui/mainwin.htm#2DEditing">Sketch</a></th>
+            <td>Open the selected component in a <a href=
+            "../moe/sketcher.htm">2D sketcher</a>, or sketch new molecule.</td>
+          </tr>
+          <tr>
+            <th><a href="#Minimize">Minimize</a></th>
+            <td>Energy minimize the system and calculate properties.</td>
+          </tr>
+          <tr>
+            <th><a href="../moe/gui/mainwin.htm#Selecting">Select</a></th>
+            <td>Commands to select certain atom sets.</td>
+          </tr>
+          <tr>
+            <th><a href="../moe/gui/mainwin.htm#Extend">Extend</a></th>
+            <td>Commands to grow the atom selection set.</td>
+          </tr>
+          <tr>
+            <th class="red-text">Delete</th>
+            <td>Delete selected atoms.</td>
+          </tr>
+        </table>
+      </td>
+      <td><img src="ligx/moebbar.png" alt="MOE Button Bar" /></td>
+    </tr>
+  </table>
+
+<p>A typical interactive modeling session will involve loading molecular data
+  into MOE, isolating a ligand in an active site, drawing molecular surfaces
+  and repeatedly making modifications to the ligand and optimizing the geometry
+  of the modifications using energy minimization.</p>
+
+<p>The molecular data will typically have atomic coordinate restraints
+  applied to ensure that the receptor or ligand scaffold atoms do not move too
+  much. These restraints are added as part of the QuickPrep preparation
+  procedure. MOE files are capable of saving restraint information and
+  molecular data from a previously prepared MOE session, and so may be used
+  without further preparation.</p>
+
+<p>Ligand properties (such as molecular weight, logP and TPSA) may be
+  displayed and Generalized Born binding affinity estimates can be calculated
+  as part of the energy minimization procedure. Active site analysis
+  applications like Molecular Surfaces, Contact Statistics and Electrostatic
+  Maps may be applied and 2D protein-ligand interaction diagrams can be
+  calculated.</p>
+  <!-- ============================= OPEN CLOSE SAVE ======================== -->
+
+<a id="Preparation"></a>
+<h1>Data Preparation</h1>
+
+<p>MOE has been designed for working with multiple macromolecular receptor
+  and ligand molecules, which must first be loaded into MOE. Typically,
+  receptor-ligand complexes are initially read from PDB format files, prepared
+  for use with the application <a href="#QuickPrep">QuickPrep</a> and stored in
+  a MOE file (to save the preparation results). QuickPrep preparation data
+  consists of restraint tethers on atoms, ligand identification annotations,
+  hydrogen atoms and refined coordinates. Receptors and ligands can be read
+  from different files (e.g. a receptor from a PDB file and a ligand from a 3D
+  MOL file). It is worthwhile to expend some effort in preparing a
+  receptor-ligand complex and saving the results to a MOE file for subsequent
+  use; in this way, a good initial starting point can be used repeatedly
+  without having to prepare the structure each time.</p>
+
+<a id="OpenCloseSave"></a>
+<a id="Open"></a>
+<h2>Open, Close and Save Files</h2>
+
+<div class="floatright"><img src="ligx/fileopen.png" alt="File Open"
+  class="floatright" /></div>
+
+<p>The <span class="menu">MOE | RHS | Open</span> button raises the <a href=
+  "../moe/gui/fileopen.htm">Open</a> panel. Select a file in the list (or
+  change directories prior to selecting a file) and press <b>OK</b>. Typically
+  MOE, PDB, Tripos MOL2 or MDL MOL files are relevant for structure based
+  design. Recent directories are available from the pull-down in the file name
+  text field.</p>
+
+<p><b>Note!</b> The MOE Button Bar is customizable and in some cases the
+  <b>Open</b> button may raise a custom panel different from the default.</p>
+
+<p>The <span class="menu">MOE | RHS | Close</span> button will delete all
+  data in MOE (after a confirmation prompt). Use <a href=
+  "../moe/gui/system.htm"><span class="menu">MOE | RHS | System</span></a> to
+  delete a subset of the system (including related surfaces).</p>
+
+<p><b>Warning!</b> Once cleared, molecular data cannot be recovered (unless
+  it was previously saved to disk).</p>
+<p><a id="Save"></a>
+Use <span class="menu">MOE | File |
+  Save</span> to save the contents of the MOE Window to disk. The data can be
+  saved in one of a number of file formats; however, if the data is not saved
+  to a MOE file then QuickPrep annotations and preparations such as atom
+  position tethers and ligand identifications may be lost. See <a href=
+  "filesave.htm">Saving the System</a> for more information.</p>
+  <!-- ============================= PREPARE ============================== -->
+
+<a id="QuickPrep"></a>
+<a id="Prepare"></a>
+<h2>QuickPrep &ndash; Prepare Structures for SBDD</h2>
+
+<p>
+  <!--In QuickPrep calculations, the receptor atoms far from the ligand are held
+!!fixed (constrained not to move) while receptor atoms near the ligand
+!!(in the active site) are allowed to move but are subject to
+!!<em>tether restraints</em> that discourage gross movement.
+!!The ligand atoms can be configured as either free to move or subject to
+!!similar tethers as the receptor.
+</p>//-->
+   Before performing calculations on receptor-ligand complexes in an
+  interactive structure-based design session, the molecular data must be
+  prepared. If a structure is already prepared then this preparation procedure
+  can be skipped. A prepared structure will have all of its hydrogens present;
+  use <span class="menu">MOE | RHS | Hydrogens</span> to check for the presence
+  of explicit hydrogens. Unprepared files, such as PDB files, may contain
+  missing atoms, alternate geometry or other crystallographic artifacts. See
+  <a href="structprep.htm">Preparing Protein and Protein Complex Data</a> for
+  more details on preparing PDB files and correcting problems (e.g., with
+  ligand topology). With reasonably good quality starting data, the following
+  procedure will be adequate for structure-based design:</p>
+  <ol>
+    <li class="margin"><b>Verify&nbsp;Ligand</b>. Often the ligand topology in
+    PDB files is not correct (due to coordinate errors and the lack of such
+    information in PDB files). Use <a href="../apps/view2d.htm"><span class=
+    "menu">MOE | RHS | Ligand | 2D Molecules</span></a> to calculate 2D
+    depictions of the ligands in MOE. Use <a href="#SiteView"><span class=
+    "menu">SiteView</span></a> to isolate the ligands (stick) and their
+    receptor environments (line) in the MOE Window (Make sure that there are no
+    atoms selected before pressing <b>SiteView</b>.) If bond orders, charges or
+    connectivity of a ligand of interest are not correct then the <a href=
+    "#Build">Builder</a> must be used to make corrections.</li>
+    <li class="margin">
+
+      <a id="ChooseLigand"></a>
+      <b>Choose&nbsp;Ligand</b>.
+
+      QuickPrep can handle multiple ligands; however, many receptor-ligand
+      complex files contain molecules that are not of interest or are copies of
+      a ligand of interest. In such cases, the <b>SiteView</b> command will
+      isolate and display all such molecules. Use <span class="menu">MOE | RHS
+      | Ligand | Choose Ligand</span> to manually select the ligand of
+      interest. To do this, clear the atom selection and select the atoms of
+      the ligand of interest. (<tt>Ctrl</tt>+click will select all of the atoms
+      of a ligand provided that it is contained in a single residue.)
+      Alternatively, the <a href="../moe/gui/system.htm">System Manager</a> can
+      be used to select subsets of the atoms. Then, issue the <b>Choose
+      Ligand</b> command.
+
+      <p><b>Note!</b> Choose Ligand is implemented by setting all other ligands
+      to be considered as Receptor atoms. They will still be part of the system
+      but will be considered as non-ligands by MOE. If multiple complexes are
+      present, then &quot;other ligands&quot; means other ligands in the same
+      tag grouping as defined in the <a href="../moe/gui/system.htm">System
+      Manager</a>.</p>
+    </li>
+    <li class="margin"><b>QuickPrep</b>. Use <span class="menu">MOE | RHS |
+    QuickPrep</span> to raise the QuickPrep preparation application. QuickPrep
+    will delete distant solvent, add hydrogens, install tethers, calculate
+    charges and perform initial refinement of the system (see below). QuickPrep
+    can handle multiple independent complexes; however, it is usually best to
+    prepare each complex separately and save them to separate files.</li>
+  </ol>
+
+<a id="QuickPrepBio"></a>
+<h2>QuickPrep &ndash; Prepare Structures for Biologics</h2>
+
+<p>Preparing initial protein data is a critical step in a biologics workflow.
+  If the structure is already prepared, this preparation procedure can be
+  skipped.</p>
+
+<p>A prepared structure will have completely populated heavy atoms in the
+  regions of interest, and all of its hydrogens present. Unprepared files, such
+  as PDB files, may contain missing atoms, alternate geometry or other
+  crystallographic artifacts. Running QuickPrep assumes reasonably good quality
+  starting data. For structures with more serious problems, or for in-depth
+  analysis, see <a href="structprep.htm">Preparing Protein and Protein Complex
+  Data</a>.</p>
+
+<p>For macromolecular studies, QuickPrep is used to cap termini for large
+  loops and endgaps, or to build small loops. It uses <a href=
+  "protonate3d.htm">Protonate3D</a> for adding and placing hydrogens, and can
+  assign tethers and perform structure refinement.</p>
+
+<a id="QuickPrepRun"></a>
+<h2>Running QuickPrep</h2>
+
+<p>The purpose of <span class="menu">MOE | RHS | QuickPrep</span> is to
+  prepare one or more systems (defined by their tag in the <a href=
+  "../moe/gui/system.htm">System Manager</a>) for structure-based drug design
+  involving energy minimization or biologics studies involving refinement. The
+  following panel will be raised:</p>
+
+
+<img src="ligx/ligx_panel.png" class="center" />
+<table class="noborder">
+  <tr>
+    <td><b>Prepare</b></td>
+    <td>
+      If <span class="nobr"><b>Use Structure Preparation</b></span> is
+      enabled, the <a href="structprep.htm">Structure Preparation</a>
+      application is run with default settings. In this case, when a
+      structure is missing atoms, the Structure Preparation build loop
+      protocol is used to build small loops &mdash; breaks of up to 10
+      residues and terminal outgaps of up to 5 residues. For larger gaps,
+      there are two possible treatments; these options only have effect if
+      Use Structure Preparation is enabled:
+      <ul>
+        <li><b>Preserve Sequence and Neutralize</b>. The endpoints adjoining
+        empty residues are neutralized, and the empty residues are
+        preserved.</li>
+        <li><b>Cap Breaks and Delete</b>. Capping groups are added to
+        endpoints adjoining empty residues, and the empty residues are
+        deleted.</li>
+      </ul>Most macromolecular structure data do not contain hydrogen atoms.
+      Additionally, the ionization state of protein residues is often in
+      question. If <b>Use Protonate3D for Protonation</b> is enabled, the
+      Protonate3D [Labute&nbsp;2009] methodology is used to determine
+      ionization state and add hydrogens. Otherwise, hydrogen atoms are added
+      in extended conformations according to the current atomic ionization
+      states. If <span class="nobr"><b>Allow ASN/GLN/HIS &quot;Flips&quot; in
+      Protonate3D</b></span> is also enabled, then terminal amides,
+      sulfonamide and imidazole groups will be permitted to flip to optimize
+      the hydrogen bond network.
+    </td>
+  </tr>
+  <tr>
+    <td><b>Delete</b></td>
+    <td>Often, receptor-ligand complexes contain many water molecules. Some
+    of these water molecules may be important to maintain receptor structure
+    or to mediate ligand interactions. The remaining water molecules are
+    generally uninteresting and may be deleted. If this option is enabled,
+    water molecules farther than 4.5&nbsp;&Aring; from any receptor or ligand
+    atom will be deleted.</td>
+  </tr>
+  <tr>
+    <td><b>Tether</b></td>
+    <td>
+      Typically, receptor atoms are constrained during geometry optimization
+      so that they do not deviate too much from their initial (experimental)
+      coordinates. QuickPrep will add tether restraints to receptor, ligand,
+      and solvent atoms of the system according to which of the
+      <b>Receptor</b>, <b>Ligand</b>, and <b>Solvent</b> checkboxes have been
+      enabled. If a checkbox is off, no corresponding tethers will be
+      created. If the corresponding <b>Hydrogens</b> checkbox to the right is
+      enabled, then hydrogen atoms will also be tethered, otherwise the
+      hydrogen atoms will not be tethered.
+
+      <p>The <b>Strength</b> and <b>Buffer</b> parameters control the
+      strength and shape of the tether restraint on an atom. The greater the
+      Strength, the less the atom will deviate from its initial coordinates.
+      The Buffer value specifies the extent of the flat bottom of the
+      flat-bottom restraint, described in <a href=
+      "../moe/pot.htm#Restraints">Atom Restraints and Tethers</a>.</p>
+
+      <p>Note that the tethers remain in the system after QuickPrep has been
+      run. They can be viewed in the <a href=
+      "../moe/pot.htm#Restraints">Potential Setup</a> panel Restraints page,
+      and can be cleared using <span class="menu"><a href="#Constrain">MOE |
+      RHS | Constrain | Free</a></span>.</p>
+    </td>
+  </tr>
+  <tr>
+    <td><b>Fix</b></td>
+    <td>Even if tethers are applied to a system, generally atoms far away
+    from the binding site can be held fixed (for efficiency). If enabled, atoms
+    farther than the specified distance will be constrained to be fixed
+    (whether or not they have been assigned tethers). A value of 0 will cause
+    all non-ligand atoms to be fixed.</br>
+    The pulldown option can be used to specify how the binding site is
+    defined.  By default, all <b>Ligands</b> will be used.  Select
+    <b>Dummy&nbsp;Atoms</b> for example to use the results of
+    <a href="sitefind.htm"><b>Site Finder</b></a>, or
+    <b>Selected</b> to use a custom definition.  In all cases, the site
+    definition will be split by Tag and restricted to active atoms.
+    Dummy atoms, if present, are always excluded from refinement.
+    Use the <b>?</b> button to the right to verify the selection &ndash;
+    the atoms will briefly &quot;flash&quot; in the MOE Window.</br>
+    An exception can be made for hydrogens near the binding site:
+    if <b>Hydrogens Close to Binding Site will not be Fixed</b> is enabled,
+    then receptor hydrogen atoms within 4.5&nbsp;&Aring; of the
+    binding site will be free to move.<br />
+    <br />
+    <b>Note!</b> All atoms matching the binding-site selection
+    (e.g. if <b>Ligands</b> is selected and there is more than one ligand)
+    will be treated equally for the purposes of calculating the receptor atoms
+    &quot;far away&quot;.  Use <a href="#ChooseLigand"><b>Choose Ligand</b></a>
+    to focus on a particular ligand of interest
+    (and treat the remaining ligands as the receptor).</td>
+  </tr>
+  <tr>
+    <td><b>Refine</b></td>
+    <td>If enabled, the results of the previous calculations will be
+    subjected to an energy minimization using the current <a href=
+    "../moe/pot.htm">Potential&nbsp;Setup</a>, including the tethers
+    specified in the panel. Energy minimization will be terminated when the
+    root mean square gradient falls below the specified value.
+    If <b>Retain QuickPrep Minimization Restraints</b> is on, the
+    restraints used for energy minimization will remain in place
+    after the calculation has completed.  Otherwise, any restraints
+    that were originally in effect before QuickPrep calculations
+    were applied are restored. If <b>Overwrite Temperature Factor
+    with Displacement</b> is on, the temperature factor value of each
+    atom will be overwritten by the distance it was moved during
+    Quickprep, multiplied be a factor of 30.0.
+    </td>
+  </tr>
+  <tr>
+    <td><b>Save&nbsp;Settings</b><br />
+    <b>Standard&nbsp;Settings</b></td>
+    <td>Before pressing the <b>OK</b> button, the current settings of the
+    QuickPrep panel can be saved for use as default values on future runs of
+    QuickPrep. Press <b>Save&nbsp;as&nbsp;Default</b> to store the values.
+    Press <b>Restore&nbsp;Defaults</b> to restore the values to the previously
+    saved values.  Press <b>Standard&nbsp;Settings</b> to restore the values
+    to &quot;factory defaults&quot;.<br />
+    <br />
+    <b>Note!</b> The values will be retained even if <b>Cancel</b> is
+    pressed. In this way, the <b>QuickPrep</b> button can be used as a kind
+    of configuration panel. The tether values and RMS gradient test are used
+    by <a href="#Minimize"><b>Minimize</b></a> and the <a href=
+    "#Constrain"><b>Constrain</b></a> menu commands.</td>
+  </tr>
+</table>
+
+<p>Press <b>OK</b> to begin the calculation. If there are multiple tag groups
+  in MOE, each will be prepared separately from the others. Once the
+  calculation completes, use <a href="filesave.htm"><span class="menu">MOE |
+  File | Save</span></a> to save the results.</p>
+
+
+<p>In summary, a prepared molecular system will have one or more identified
+  ligands with correct topology, reasonable ionization states and proton
+  coordinates, tether restraints on the heavy atoms of the receptor and no
+  unimportant water molecules. This prepared state configuration is assumed for
+  optimal display by the <a href="#SiteView"><b>SiteView</b></a> rendering
+  command and energy <a href="#Minimize"><b>Minimize</b></a> procedures of
+  QuickPrep as well as other applications in MOE.</p>
+
+<a id="QuickPrepMDB"></a>
+<h2>Running QuickPrep on a Database</h2>
+
+<img src="ligx/quickprep_MDB.png" class="center" />
+<p>It is also possible to launch the QuickPrep panel from a molecular database.
+  In the Database Viewer, press <span class="menu">Compute | Molecule |
+  QuickPrep</span>. The panel will show a few additional options when compared
+  to the original QuickPrep panel:</p>
+
+<table class="noborder">
+  <tr>
+    <td><b>Molecule Field</b></td>
+    <td>Pick the input mol or MOE field.</td>
+  </tr>
+  <tr>
+    <td><b>Selected Entries Only</b></td>
+    <td>If enabled, QuickPrep will process only the entries
+      currently selected in the Database Viewer.</td>
+  </tr>
+  <tr>
+    <td><b>Empty Entries Only</b></td>
+    <td>If enabled, only the entries where the output field is
+      empty will be processed. This is especially useful when resuming an
+      interrupted calculation.</td>
+  </tr>
+  <tr>
+    <td><b>Output Field</b></td>
+    <td>Destination field name in the input database where the
+      prepared models will be saved.
+    </td>
+  </tr>
+  <tr>
+    <td><b>Batch</b></td>
+    <td>
+      Open the <a href="../moe/hpc.htm#BatchPanel">Batch</a> job submit
+      panel, which allows the user to create
+      a batch job that can be run locally outside of MOE,
+      or on a compute cluster via a queueing system such as slurm:
+
+	<p>
+	<img src="ligx/quickprep_batchpanel.png" alt="Batch Panel"
+	class="center" /></p>
+
+      The Batch button is only available when QuickPrep is run on
+      a database of input structures; i.e. it is launched with
+      <span class="menu">DBV | Compute | Molecule | QuickPrep</span>.
+    </td>
+  </tr>
+</table>
+
+  <!-- ============================= VISUALIZATION ========================= -->
+
+<a id="Visualization"></a>
+<h1>Visualization</h1>
+
+<p>The MOE Button Bar provides a number of commands for visualizing the
+  ligand and receptor active site. The visualization commands are designed to
+  analyze active sites, protein-ligand interactions and to provide information
+  about which atoms have tether restraints (normally added in the <a href=
+  "#QuickPrep"><b>QuickPrep</b></a> preparation steps). For this section, we
+  will assume that a prepared receptor-ligand complex is in the MOE Window.
+  Also, a good working knowledge of the operation of the <a href=
+  "../moe/gui/mainwin.htm">MOE Window</a> is assumed. The angle of view and
+  zoom of the MOE Window is controlled with the <a href=
+  "../moe/gui/mouse.htm">mouse</a> (see <a href=
+  "../moe/gui/mainwin.htm">Rotating, Translating and Zooming Atoms</a>). For
+  more information on selecting atoms, see <a href=
+  "../moe/gui/mainwin.htm#UsingMouse">Selecting Atoms Using the Mouse</a>.</p>
+  <div class="floatright"><img src="ligx/sys_popup.png" alt=
+  "System Manager" class="floatright" /></div>
+
+<a id="System"></a>
+<h2>The System Manager &ndash; Control Multiple Complexes</h2>
+
+<p>One of the most important buttons on the MOE Button Bar is the
+  <b>System</b> button: it raises the System Manager which is used for rapid
+  control of:</p>
+  <ul>
+    <li>Visibility of atoms and surfaces.</li>
+    <li>Active, Inert and Selected state of atoms (independent of
+    visibility).</li>
+    <li>Coloring and rendering mode of atoms.</li>
+    <li>Names of chains and chain groupings.</li>
+  </ul>
+
+<p>For detailed information, please refer to the documentation on the
+  <a href="../moe/gui/system.htm">System Manager</a>.</p>
+
+<a id="SiteView"></a>
+<h2>The SiteView Button</h2>
+
+<div class="floatright"><img src="ligx/siteview.jpg" class="floatright" /></div>
+
+<p>The <span class="menu">MOE | RHS | SiteView</span> is a kind of
+  &quot;reset&quot; or &quot;home base&quot; for structure-based drug design.
+  <b>SiteView</b> renders the molecular system according to a convention which
+  is designed to provide feedback regarding which atoms belong to the receptor
+  and which atoms are ligand atoms as well as to focus on the active sites of
+  receptor-ligand complexes. First ensure that no atoms selected. Pressing
+  <b>SiteView</b> will</p>
+  <ol>
+    <li>Isolate the ligand in the active site by hiding distant receptor and
+    solvent atoms. Distant backbone ribbons will be hidden.</li>
+    <li>Render the receptor atoms in line mode and ligands in stick mode.</li>
+    <li>Hide non-polar hydrogens and show polar hydrogens.</li>
+  </ol>
+
+<p>Use the <a href="../moe/gui/system.htm">System Manager</a> to color the
+  receptor carbons differently from the ligand (e.g., dark green). <b>Note!</b>
+  In previous versions of MOE, this color was integrated with the Active Site
+  button. This coloring is not performed by SiteView in order to support
+  multiple receptor-ligand complexes.</p>
+
+<p><b>SiteView</b> will affect all atoms in the system and take all atoms
+  into account. The active site (within a System tag group) is defined by
+  default to be those residues with atoms (Receptor or Solvent) within
+  4.5&nbsp;A of <i>any</i> ligand. <b>Note!</b> This cutoff value is defined in
+  the <b>SiteView Cutoff</b> text field of the <a href=
+  "../appendix/settings.htm#QuickPrep">QuickPrep</a> page of the Configuration
+  Options panel.</p>
+
+<p>When a single ligand is to be modified with the small molecule <a href=
+  "../moe/molsystems/build.htm">Builder</a>, explicit display of the ligand
+  hydrogens is required for substitution. Select the ligand with Ctrl+Left (to
+  select the residue) or by using the <a href="../moe/gui/system.htm">System
+  Manager</a> and then press the <span class="menu">MOE | RHS |
+  Hydrogens</span> to cycle through the hydrogen display until all hydrogens
+  are visible. <b>Note!</b> If there are no explicit hydrogens then the system
+  should be prepared with <a href="#QuickPrep"><span class=
+  "menu">QuickPrep</span></a> button.</p>
+
+<p><b>Warning!</b> If there are selected atoms in the system, then these, and
+  only these, atoms will be considered &quot;ligands&quot;.</p>
+
+<a id="HideShow"></a>
+<h2>Hide and Show Menus</h2>
+
+<p>The <span class="menu">MOE | RHS | Hide</span> and <span class=
+  "menu">Show</span> menus provide visibility control over classes of atoms.
+  Hiding and showing individual molecular subsystems is most easily done using
+  the <a href="../moe/gui/system.htm"><span class="menu">MOE | RHS |
+  System</span></a> Manager; however, in certain circumstances the Button Bar
+  menus are preferable. <b>Note!</b> The commands in the <b>Hide</b> and
+  <b>Show</b> menu apply to the current atom selection set in MOE. If no atoms
+  are selected, then all atoms are affected.</p>
+  <table class="titlebar">
+      <tr>
+        <th>Command</th>
+        <th>Hide or Show</th>
+      </tr>
+      <tr>
+        <td><b>All Atoms</b></td>
+        <td>All atoms in the molecular system.</td>
+      </tr>
+      <tr>
+        <td><b>Selected</b></td>
+        <td>Selected atoms.</td>
+      </tr>
+      <tr>
+        <td><b>Unselected</b></td>
+        <td>Unselected atoms.</td>
+      </tr>
+      <tr>
+        <td><b>More&nbsp;(4.5A)</b></td>
+        <td>Show hidden atoms near the visible or selected set. (Show menu
+        only.)</td>
+      </tr>
+      <tr>
+        <td><b>Hydrogens</b></td>
+        <td>Hydrogen atoms.</td>
+      </tr>
+      <tr>
+        <td style="vertical-align:top"><b>Polar<br />
+        Hydrogens</b></td>
+        <td style="vertical-align:top">Hydrogen atoms not bonded to
+        carbon.</td>
+      </tr>
+      <tr>
+        <td style="vertical-align:top"><b>Non-Polar<br />
+        Hydrogens</b></td>
+        <td style="vertical-align:top">Hydrogen atoms bonded to carbon.</td>
+      </tr>
+      <tr>
+        <td><b>Ligand</b></td>
+        <td>Atoms considered to be a ligand (see <a href=
+        "#ChooseLigand"><span class="menu">Choose Ligand</span></a>)</td>
+      </tr>
+      <tr>
+        <td><b>Pocket</b></td>
+        <td>Receptor atoms in residues with 4.5&nbsp;&Aring; of a ligand.</td>
+      </tr>
+      <tr>
+        <td><b>Receptor</b></td>
+        <td>Non-ligand, non-solvent, non-dummy atoms.</td>
+      </tr>
+      <tr>
+        <td><b>Solvent</b></td>
+        <td>Solvent atoms.</td>
+      </tr>
+      <tr>
+        <td><b>Dummy</b></td>
+        <td>Dummy atoms (LP pseudo-elements with no bonds).</td>
+      </tr>
+      <tr>
+        <td><b>Backbone</b></td>
+        <td>Any atoms with the backbone bit; e.g., (bio)polymer backbones.</td>
+      </tr>
+      <tr>
+        <td><b>Sidechain</b></td>
+        <td>Atoms with the backbone bit clear in residues with at least one
+        backbone atom.</td>
+      </tr>
+    </table>
+
+<a id="Surface"></a>
+<h2>Surfaces: Receptor &ndash; Ligand &ndash; Interaction (VDW)</h2>
+
+<table class="noborder">
+  <tr>
+    <td width="1"><img src="ligx/surf_rec.jpg" /><br />
+    <img src="ligx/surf_lig.jpg" /><br />
+    <img src="ligx/surf_int.jpg" /> <img src="ligx/surf_prot.jpg" /></td>
+    <td>
+      The <span class="menu">MOE | RHS | Surface</span> menu provides
+      commands to create surfaces around receptors and ligands in the system.
+      These &quot;Quick&quot; surfaces are those most useful in
+      structure-based drug design and are created with coloring designed to
+      show the color of atoms in the system:
+      <ul>
+        <li><b>Receptor</b>. Creates a Connolly-type molecular surface using
+        receptor atoms only near any ligand atom in the system. The surface
+        is colored by nearest atom with hydrogen bond information (direction
+        of polar hydrogens and lone pairs) overlaid.</li>
+        <li><b>Ligand</b>. Creates a Connolly-type molecular surface using
+        ligand atoms only. The surface is colored by nearest atom with
+        hydrogen bond information (direction of polar hydrogens and lone
+        pairs) overlaid.</li>
+        <li><b>Interaction (VDW)</b>. Creates an accessible surface (line
+        mode) using receptor atoms only near any ligand atom in the system.
+        This surface shows the onset of van der Waals clash (a 0-potential
+        energy contour of the van der Waals interaction energy with a water
+        molecule probe). The color of the surface is the same as that shown
+        in the <a href="../moe/gui/system.htm">System Manager</a>.</li>
+        <li><b>Protein</b>. Creates a Connolly-type molecular surface using
+        all of the receptor atoms. The surface is colored by nearest atom
+        with hydrogen bond information (direction of polar hydrogens and lone
+        pairs) overlaid.</li>
+        <li><b>Protein Patches</b>. Creates both electrostatic
+        (excess charge) and hydrophobic
+        <a href="surfmap.htm#ProteinPatches">surface patches</a>
+        to show regions of significance with respect to
+        protein-protein interactions.</li>
+      </ul>
+
+      <p>More sophisticated surfaces such as Electrostatic Maps and Contact
+      Statistics can be created with the <a href="surfmap.htm">Surfaces and
+      Maps</a> application, which provides more coloring options and
+      transparency settings. Surfaces and Maps can also be used to change the
+      coloring, transparency and material properties of the surfaces created
+      in the <b>Surface</b> menu. This application can be started with the
+      <b>Surfaces and Maps</b> command in the <b>Surface</b> menu.</p>
+
+      <p><b>Note!</b> Inactive receptors and ligands are ignored and no
+      surface will be created. A receptor or ligand is considered inactive if
+      it has no active atoms (as shown in the <a href=
+      "../moe/gui/system.htm">System Manager</a>).</p>
+
+      <p><b>Note!</b> Each active receptor or ligand is treated separately
+      and a separate surface will be created for each one.</p>
+
+      <p><b>Note!</b> The surfaces do not automatically update if the atomic
+      coordinates change. Issue the command again to update the surface
+      (which will delete the old surface).</p>
+
+      <p>To delete Quick surfaces:</p>
+      <ul>
+        <li>Use the <b>Clear</b> command in the <b>Surface</b> menu.</li>
+        <li>Use <a href="surfmap.htm">Surfaces and Maps</a>.</li>
+        <li>Use the <b>X</b> button in the <a href=
+        "../moe/gui/system.htm">System Manager</a>.</li>
+      </ul>
+    </td>
+  </tr>
+</table>
+
+<a id="Measure"></a>
+<a id="Remove"></a>
+<h2>Measure Interatomic Distances, Angles and Dihedrals</h2>
+
+<p>The MOE Footer can be used to measure distances, angles and dihedrals.
+  When 2, 3 or 4 atoms are selected, the MOE Footer will adapt accordingly and
+  display distance, angle and dihedral measurements (and means to change them).
+  See <a href="../moe/gui/mainwin.htm#Footer">MOE Footer</a> for more
+  information.</p>
+  <div class="floatright"><img src="ligx/mcreate.png" alt=
+  "Create measurement interface" class="floatright" /></div>
+
+<p>The <span class="menu">MOE | RHS | Measure</span> menu and the equivalent
+  <span class="menu">MOE | Edit | Measure</span> menu provides commands to
+  measurement meters that are displayed in the MOE Window and continuously
+  updated as atomic coordinates change. Choose one of</p>
+  <ol>
+    <li><b>Distance</b> to measure and display the distance between 2
+    atoms.</li>
+    <li><b>Angle</b> to measure and display the angle between 3 atoms.</li>
+    <li><b>Dihedral</b> to measure and display the dihedral angle between 4
+    atoms.</li>
+  </ol>
+
+<p>The SVL Commands line in the MOE Window will change into a prompt (see
+  figure) providing for selection of the measurement type (distance, angle or
+  dihedral), then click on either 2, 3, or 4 atoms as required. If you make a
+  mistake in the process, click on the selected atom to deselect it.
+  Alternatively, the current selection can be used to specify a meter. Once
+  created, the meter appears in the MOE Window as a colored line with a
+  measured value. Clicking on the <font color="red">X</font> closes the
+  <b>Measure</b> menu and restores the MOE menu bar.</p>
+
+<p>The last meter created can be removed by pressing <span class=
+  "nobr"><b>Remove Last</b></span> and previously created measurement meters
+  can be removed via the <b>Remove</b> items in the <b>Measure</b> menu. Select
+  the atoms for which meters are to be removed (or the meter lines themselves)
+  then select one of <b>Remove Distances</b>, <b>Remove Angles</b>, <b>Remove
+  Dihedrals</b> or <b>Remove All</b> from the menu. <b>Warning!</b> If no atoms
+  are selected, then all measurement meters of the selected type will be
+  removed from the MOE Window. Meter removals and additions cannot be
+  undone.</p><!-- ============================= LIGAND MENU  =========================== -->
+
+<a id="LigandMenu"></a>
+<h1>The Ligand Menu</h1>
+
+<p>The <span class="menu">MOE | RHS | Ligand</span> menu provides a number of
+  specialized commands for ligand analysis and editing for interactive
+  structure-based drug design.</p>
+
+<table class="noborder">
+  <tr>
+    <td>
+      <table class="titlebar no-margin">
+        <tr>
+          <th><a href="prolig2d.htm">Ligand&nbsp;Interactions</a></th>
+          <td>Create 2D diagrams with the <a href="prolig2d.htm">Ligand
+          Interactions</a> application.</td>
+        </tr>
+        <tr>
+          <th><a href="view2d.htm">2D&nbsp;Molecules</a></th>
+          <td>Depict molecules in 2D with Raise the <a href="view2d.htm">2D
+          Molecules</a> application.</td>
+        </tr>
+        <tr>
+          <th><a href="#ChooseLigand">Choose&nbsp;Ligand</a></th>
+          <td>Focus on a particular selected ligand.</td>
+        </tr>
+        <tr>
+          <th><a href="#Properties">Ligand&nbsp;Properties</a></th>
+          <td>Display calculated properties in the MOE Window.</td>
+        </tr>
+        <tr>
+          <th><a href="#RVectors">Ligand&nbsp;R-Vectors</a></th>
+          <td>Display candidate substitution arrows in the MOE Window.</td>
+        </tr>
+        <tr>
+          <th><a href="#Torsions">Ligand&nbsp;Torsions</a></th>
+          <td>Display torsion quality assessment in the MOE Window.</td>
+        </tr>
+        <tr>
+          <th><a href="#Duplicate">Duplicate</a></th>
+          <td>Duplicate a selected ligand.</td>
+        </tr>
+        <tr>
+          <th><a href="#MinimizeV">Minimize&nbsp;(Vac)</a></th>
+          <td>Duplicate a selected ligand and minimize in isolation.</td>
+        </tr>
+      </table>
+    </td>
+    <td valign="center"><img src="ligx/ligmenu.png" alt=
+    "MOE | RHS | Ligand" /></td>
+  </tr>
+</table>
+
+<a id="Properties"></a>
+<h2>Ligand Properties</h2>
+
+<p>The <span class="menu">MOE | RHS | Ligand | Ligand Properties</span>
+  command toggles the display of calculated ligand properties. Issue the
+  command once to enable the property display and again to disable it.
+  Properties will be automatically calculated if there is a single active
+  ligand in the system. If there is more than one (or none at all) a message
+  will be displayed and the properties will not be calculated. Use <span class=
+  "menu">MOE | RHS | System</span> to activate or de-activate ligands so that
+  there is only one active ligand.</p>
+  <div class="floatright"><img src="ligx/ligprop.png" alt=
+  "QuickPrep Properties" class="floatright" /></div>
+
+<p>The calculated 2D ligand properties are displayed in the top left corner
+  of the MOE Window. Use <span class="nobr"><b>MOE | Render | Setup</b></span>
+  to configure the color of the properties text (if, for example, they cannot
+  be seen on the current background). See <a href=
+  "../appendix/viewsetup.htm">Visualization Setup</a>. The font properties
+  (size, bold, etc.) can be controlled in <span class="nobr"><b>MOE | Render |
+  Draw</b></span>.</p>
+
+<p>The properties divide into two categories: those that depend only on the
+  ligand connectivity and topological state (2D) and those that depend on
+  coordinates and interactions with the receptor (3D). The 2D properties are
+  continuously updated as the ligand is modified with the <a href=
+  "#Build">Builder</a>; the 3D properties are updated after each <a href=
+  "#Minimize">energy minimization</a> using the MOE Button Bar or the
+  Builder.</p>
+
+<p>The calculated 2D properties are <a href="../quasar/descr.htm">MOE
+  Descriptors</a> relevant to structure-based drug design:</p>
+  <ul>
+    <li><tt>toxic</tt> &ndash; An assessment of the toxicity or mutagenicity of
+    the ligand using a rule-based method [Kazius&nbsp;2005].</li>
+    <li><tt>weight</tt> &ndash; The molecular weight calculated with values
+    from the CRC Handbook [CRC&nbsp;1994].</li>
+    <li><tt>TPSA</tt> &ndash; The topological polar surface area
+    [Ertl&nbsp;2000]. Hydrogen bond donor and acceptor counts are to the
+    right.</li>
+    <li>
+      <a href="../quasar/descr.htm#EHT">Hueckel Theory Descriptors</a>
+      [Gerber&nbsp;1998, Wang&nbsp;2007]
+      <ul>
+        <li><tt>logP</tt> &ndash; The log octanol/water partition
+        coefficient.</li>
+        <li><tt>logD</tt> &ndash; The log distribution coefficient at
+        <i>p</i>H=7.</li>
+        <li><tt>logS</tt> &ndash; The log solubility coefficient.</li>
+      </ul>
+    </li>
+  </ul>
+
+<p>Additional 3D properties are calculated after each <a href=
+  "#Minimize"><b>Minimize</b></a>. If the ligand is subsequently modified then
+  these additional properties will no longer be displayed and another energy
+  minimization must be performed so that they can be recalculated. The energy
+  minimization will optimize the potential energy of the receptor-ligand
+  complex. From the resulting coordinates, several properties are
+  calculated:</p>
+  <ul>
+    <li><tt>strain</tt> &ndash; The local strain energy of the ligand
+    conformation. The ligand is subjected to energy minimization, isolated from
+    the rest of the molecular system. The strain energy is the difference
+    between the ligand conformation energy in the bound state and the energy of
+    the isolated local minimum. The value in parentheses to the right is the
+    strain energy divided by the number of heavy atoms in the ligand (the
+    strain efficiency). The <tt>rmsd</tt> at the far right is the superposition
+    distance between the bound conformation and the isolated local minimum
+    conformation.</li>
+    <li><tt>solvation</tt> &ndash; The molecular mechanics generalized Born
+    interaction energy is the non-bonded interaction energy between the
+    receptor and the ligand and comprises van der Waals, Coulomb and
+    generalized Born implicit solvent interaction energies [Labute&nbsp;2008].
+    Ligand and receptor strain energies are not taken into account. The
+    parenthetical value to the right is the interaction energy divided by the
+    number of heavy atoms in the ligand (interaction efficiency). Solvent
+    molecules are ignored in the calculation.</li>
+    <li><tt>affinity</tt> &ndash; The estimated binding affinity is that of the
+    GBVI/WSA&nbsp;dG scoring function, reported in units of kcal/mol. The
+    parenthetical value to the right is the affinity divided by the number of
+    heavy atoms in the ligand (the efficiency). Solvent molecules are ignored
+    in the calculation.</li>
+  </ul>
+
+<p><b>Note!</b> It is possible to customize the Ligand Properties display by
+  using custom SVL functions. In such a case, the number and type of the
+  properties may be different from the description above.</p>
+
+<a id="RVectors"></a>
+<h2>Ligand R-Vectors</h2>
+
+<p>Modifications to ligands such as the addition of functionals may result in
+  poor steric interactions with the receptor. The purpose of the R-Vector
+  display is to provide information about potential steric clash at
+  substitution locations on a ligand.</p>
+  <div class="floatright"><img src="ligx/ligrvec.jpg" alt=
+  "Ligand R-Vectors" class="floatright" /></div>
+
+<p>The <span class="menu">MOE | RHS | Ligand | Ligand R-Vectors</span>
+  command toggles the display of &quot;exit vectors&quot; on active ligand
+  molecules. These graphical arrows are drawn along visible Q&ndash;H bonds
+  when a methyl substitution is likely to be free of steric clash. R-Vectors
+  will only be displayed along <i>visible</i> explicit hydrogens. Select a
+  ligand of interest and use <span class="menu">MOE | RHS | Hydrogens</span>
+  until all hydrogens are visible. For each hydrogen attached to a ligand, a
+  virtual methyl group is positioned along the heavy atom to hydrogen bond with
+  the appropriate bond length. A van der Waals interaction energy is calculated
+  with every active atom in the system (leaving out 1-2, 1-3 and scaling the
+  virtual 1-4 interactions). If the resulting energy is less than
+  2&nbsp;kcal/mol, the hydrogen is deemed to be a candidate attachment point.
+  This energy threshold can be adjusted on the Builder page of the <a href=
+  "../appendix/settings.htm">Configuration Options</a> panel.</p>
+
+<p><b>Note!</b> All active atoms will interact with the virtual methyls, even
+  overlaid ligands. Use the System Manager to activate or deactivate ligands
+  and receptors.</p>
+
+<p>The information displayed by the Ligand R-Vectors is similar to that of
+  the <a href="#Surface">Interaction (VDW) surface</a> and the same parameters
+  are used (van der Waals radii and well depths). However, it is important to
+  keep in mind that a virtual methyl group may clash with the ligand itself
+  (not just the receptor). A clash with the ligand means that some sort of
+  conformational change is required. Thus, the lack of an R-Vector may also
+  mean that some sort of ligand movement (translation, rotation,
+  conformational) is required to accommodate the methyl group.</p>
+
+<a id="Torsions"></a>
+<h2>Ligand Torsions</h2>
+
+<p>Ligand conformations, whether in crystal structures or as a result of
+  modifications, may have torsion angles in poor geometry.  The purpose of
+  the Ligand Torsions display is to provide information about whether
+  the dihedral angle of rotatable bonds are consistent (statistically) with
+  angles observed in small molecule crystal structure data.</p>
+  <div class="floatright"><img src="ligx/ligtor.png" alt=
+  "Ligand Torsions" class="floatright" /></div>
+
+<p>The <span class="menu">MOE | RHS | Ligand | Ligand Torsions</span>
+  command toggles the display of torsion quality cylinders on active ligand
+  molecules. These graphical cylinders drawn along visible rotatable bonds
+  are color coded to indicate quality: green for good, orange for warning
+  and red for bad.</p>
+
+<p>A colored bar at the top of the <span class="nobr">
+  <a href="../moe/gui/mainwin.htm#DihedralProfile">Dihedral Profile</a></span>
+  plot shows the torsion quality when rotating the selected bond. By default,
+  this bar is hidden if Mogul is available.
+  </p>
+
+<p>The underlying software uses the Torsion Library jointly
+  developed by the University of Hamburg, Center for Bioinformatics, Hamburg,
+  Germany and F. Hoffmann-La-Roche Ltd., Basel, Switzerland.
+  The methodology is more fully described in
+  [Sch&auml;rfer&nbsp;2013] [Guba&nbsp;2016] [Penner&nbsp;2022].
+  The torsion library is available in the supplementary information to
+  [Penner&nbsp;2022].</p>
+
+<a id="Duplicate"></a>
+<h2>Duplicate a Ligand</h2>
+
+<p>Use <span class="menu">MOE | RHS | Ligand | Duplicate</span> to create a
+  copy of a ligand. A single connected ligand must be selected in the MOE
+  Window or an error will result. The ligand atoms, residues and chains are
+  duplicated along with membership in any atom sets, restraints, tethers, etc.
+  The chain name of the newly created ligand will have a numeric copy number
+  appended; for example, a copy of <tt>MyLigand</tt> will be given the chain
+  name <tt>MyLigand&nbsp;(2)</tt>. The original ligand will be hidden and
+  de-activated (made inert) and the created copy will have all of its atoms
+  selected.</p>
+
+<a id="MinimizeV"></a>
+<h2>Minimize in Isolation</h2>
+
+<p>Use <span class="menu">MOE | RHS | Ligand | Minimize (Vac)</span> to
+  create a duplicate of a ligand and energy minimize its coordinates in
+  isolation (without any receptor or other atoms). A single connected ligand
+  must be selected in the MOE Window or an error will result. The ligand is
+  duplicated in manner similar to the <b>Duplicate</b> command. The newly
+  created copy is energy minimized and superposed back onto the original. The
+  chain name of the newly created ligand will have <tt>(Vac)</tt> appended; for
+  example, <tt>MyLigand</tt> will become <tt>MyLigand&nbsp;(Vac)</tt>. The
+  newly created minimized copy will be de-activated (made inert).</p>
+
+<p>When the minimization is complete, a message will be displayed at the top
+  left of the MOE Window for ~5 seconds and printed to the SVL Commands window.
+  The message has the form</p>
+
+<pre class="code">
+Minimize (Vac): Estrain: ss.sss kcal/mol (e.eee)  rmsd: d.ddd
+</pre>
+
+<p>where <tt>ss.sss</tt> is the strain energy (energy of original
+  conformation less the energy of the minimized conformation), <tt>e.eee</tt>
+  is the strain efficiency: strain energy divided by the number of heavy atoms,
+  <tt>d.ddd</tt> is the root mean square deviation between the original
+  conformation and the minimized conformation.</p>
+
+
+  <!-- ========================= LIGAND MODIFICATION ======================= -->
+
+<a id="ModLig"></a>
+<h1>Ligand Modification and Constrained Energy Minimization</h1>
+
+<p>The MOE Right Hand Side Button Bar provides a number of commands for
+  performing energy minimization calculations and ligand modifications. It is
+  assumed there is a receptor-ligand complex in the MOE Window that has been
+  prepared with the <a href="#QuickPrep">QuickPrep</a> preparation procedure.
+  Press the <a href="#SiteView"><b>SiteView</b></a> button to isolate the
+  ligand in the active site. The <a href="#Properties"><span class="menu">MOE |
+  RHS | Ligand | Ligand Properties</span></a> command can be used to display
+  and monitor ligand properties in the MOE Window. The protocol for ligand
+  modification is</p>
+
+<ol>
+  <li>Decide which receptor and ligand atoms will be fully flexible.</li>
+  <li>Use the small molecule <a href=
+  "../moe/molsystems/build.htm">Builder</a> to modify the ligand.</li>
+  <li>Use <span class="menu">MOE | RHS | Minimize</span> to perform
+  constrained energy minimization to optimize the receptor-ligand
+  complex.</li>
+</ol>
+
+<p>
+<a id="Constrain"></a>
+The <span class="menu">MOE | RHS |
+  Constrain</span> menu is used to change the constraint status of selected
+  atoms in the MOE Window. An atom can be either <i>tethered</i>, <i>fixed</i>
+  or <i>free</i>. Tethered atoms will be subject to artificial forces during
+  <a href="#Minimize">energy minimization</a> to prevent gross movement; fixed
+  atoms will not move at all; free atoms are not restrained in any manner. The
+  strength and other parameters of the tether restraints are specified in the
+  <a href="#QuickPrep">QuickPrep</a> panel.
+
+<p>The <b>Render</b> command in the <b>Constrain</b> menu can be used to
+  render the tethered and free atoms differently to reflect their state:</p>
+<table class="noborder">
+  <tr>
+    <td>
+      <img src="ligx/line.png" class="icon" alt="line mode atoms" />
+    </td>
+    <td>
+      <img src="ligx/ballstick.png" class="icon" alt="ball and stick atoms" />
+    </td>
+  </tr>
+  <tr>
+    <td><p class="caption">tethered</p></td>
+    <td><p class="caption">free</p></td>
+  </tr>
+</table>
+
+<p>Heavy atoms (non-hydrogen) are rendered in Line mode if they are tethered,
+  or Ball and Stick mode if they are free. Ligand hydrogen atoms are rendered
+  in Line mode if they are tethered and Ball and Stick mode if they are free.
+  Receptor hydrogen atoms are rendered in the same style as the heavy atom to
+  which they are attached. Alternatively one can <b>Constrain | Label</b>
+  the atoms with their constrain status:
+  <tt>(F)</tt>: Fixed, <tt>(T)</tt>: Tethered, <tt>(I)</tt>: Inert.</p>
+
+<p>To <b>remove tether restraints</b> from atoms, <a href=
+  "../moe/gui/mainwin.htm#UsingMouse">select the atoms</a> in the MOE Window
+  and use <span class="nobr"><b>Constrain | Free</b></span> on the button bar.
+  This can be used to allow receptor active site atoms free movement; for
+  example, to allow a fully flexible residue sidechain.</p>
+
+<p>To <b>add tether restraints</b> to atoms, <a href=
+  "../moe/gui/mainwin.htm#UsingMouse">select the atoms</a> in the MOE Window
+  and use <span class="nobr"><b>Constrain | Tether</b></span> on the button
+  bar. Generally, hydrogen atoms need not be tethered, allowing them full
+  flexibility to form hydrogen bonds. It is also good practice to tether a few
+  ligand heavy atoms if certain interactions are to be ensured.</p>
+
+<p>To <b>fix atoms</b> to atoms, <a href=
+  "../moe/gui/mainwin.htm#UsingMouse">select the atoms</a> in the MOE Window
+  and use <span class="nobr"><b>Constrain | Fix</b></span> on the button bar.
+  Use <span class="nobr"><b>Constrain | Unfix</b></span> to remove the fixed
+  status without affecting any assigned tether.</p>
+<a id="Build"></a>
+Use <span class="menu">MOE | RHS |
+  Builder</span> to start the small molecule <a href=
+  "../moe/molsystems/build.htm">Builder</a> which is used to make modifications
+  to the ligand; it can also be used to make minor modifications to the
+  receptor. The <span class="menu">MOE | Footer</span> is selection-sensitive
+  and can also be used to edit bond lengths, angles and dihedrals: select 2, 3
+  or 4 atoms and use the controls provided. Alternatively, the <a href=
+  "../proteins/probuild.htm#RotamerExplorer">Protein Builder/Rotamer
+  Explorer</a> can be used to explore alternative sidechain conformations or
+  make residue mutations. Modifications to ligands are made by selecting atoms
+  in the MOE Window and changing their properties in the Builder. Substitutions
+  are made by selecting hydrogen atoms in the MOE Window and selecting a
+  chemical group in the Builder. See <a href=
+  "../moe/molsystems/build.htm">Building and Editing Molecules</a> for
+  information on how to use the Builder.
+<a id="Build2D"></a>
+Use <span class="menu">MOE | RHS |
+  Sketch</span> to start an <a href="../moe/sketcher.htm">external
+  chemical drawing program</a>. This allows the selected component in the MOE
+  Window to be edited in 2D; the changes can be brought back into MOE once
+  editing is complete. A 2D sketcher is most suitable for small edits to small
+  molecules and is a complementary tool to the 3D small molecule <a href=
+  "../moe/molsystems/build.htm">Builder</a>.
+<a id="Minimize"></a>
+The <span class="menu">MOE | RHS |
+  Minimize</span> button will optimize the coordinates of the molecular data in
+  the MOE Window. The <b>Minimize</b> button in the <a href=
+  "../moe/molsystems/build.htm">Builder</a> is equivalent. Typically, the
+  <span class="menu">MOE | RHS | System</span> Manager is used to activate or
+  de-activate receptors and ligands so that there is only one set of active
+  receptor, ligand and solvent atoms.
+
+<p><img src="ligx/ligrec1.png" style="float:right" alt=
+  "QuickPrep receptor setup" /> The <a href="#QuickPrep">QuickPrep prepare
+  procedure</a> is typically used to set up for the following protocol:</p>
+  <ol>
+    <li class="margin">Receptor and solvent atoms far from the ligand are held
+    fixed (constrained to not move at all). Typically, an atom is held fixed if
+    it is at least 8&nbsp;&Aring; from any ligand atom.</li>
+    <li class="margin">Atoms not held fixed in Step&nbsp;1 will be subject to
+    any restraints that have been set by the prepare procedure or the <a href=
+    "#Constrain"><b>Constrain</b></a> commands. The <span class=
+    "menu">Constrain | Render</span> button can be used to visualize the
+    tethered status of atoms.</li>
+    <li class="margin">A forcefield energy minimization is performed which will
+    stop when the root mean square (RMS) gradient of the potential energy falls
+    below a certain threshold, by default 0.1&nbsp;kcal/mol&Aring;
+    (configurable in the <a href="#QuickPrep"><span class=
+    "href">QuickPrep</span></a> panel). The current <a href=
+    "../moe/pot.htm">Potential&nbsp;Setup</a> determines the forcefield,
+    solvation model and non-bonded interaction cutoff.</li>
+  </ol>
+
+<p>The <b>Cancel</b> menu in the top right corner of the MOE Window can be
+  used to terminate an energy minimization before it has completed.</p>
+
+<p>If the energy minimization calculation terminates normally, and the Ligand
+  Properties are displayed (using the <a href="#Properties"><span class=
+  "menu">MOE | RHS | Ligand | Ligand Properties</span></a> button) then binding
+  affinity estimates are calculated and the display updated. <b>Note!</b> If an
+  energy minimization is performed but the Ligand Properties are not displayed,
+  then enable their display and then press <b>Minimize</b> again.</p>
+  <!-- ============================== REFERENCES ========================== -->
+
+<a id="Ref"></a>
+<h1>References</h1>
+
+<table class="ref">
+<tr>
+  <td>[CRC&nbsp;1994]</td>
+  <td><i>CRC Handbook of Chemistry and Physics</i>; CRC Press (1994).</td>
+</tr>
+<tr>
+  <td>[Ertl&nbsp;2000]</td>
+  <td>Ertl, P., Rohde, B., Selzer, P.; Fast Calculation of Molecular Polar
+  Surface Area as a Sum of Fragment-Based Contributions and Its Application
+  to the Prediction of Drug Transport Properties; <i>J. Med. Chem. 43</i>
+  (<b>2000</b>) 3714&ndash;3717.</td>
+</tr>
+<tr>
+  <td>[Gerber&nbsp;1998]</td>
+  <td>Gerber, P. R.; Charge Distribution From a Simple Molecular Orbital
+  Type Calculation and Non-bonding Interaction Terms in the Force field
+  MAB; <i>J. Comput.-Aid. Mol. Des. 12</i> (<b>1998</b>) 37&ndash;51.</td>
+</tr>
+<tr>
+  <td>[Halgren&nbsp;1996]</td>
+  <td>Halgren, T. A.; The Merck Force field; <i>J. Comp. Chem. 17</i>
+  (<b>1996</b>) 490&ndash;641.</td>
+</tr>
+<tr>
+  <td>[Kazius&nbsp;2005]</td>
+  <td>Kazius, J., McGuire, R., Roberta Bursi, R.; Derivation and Validation
+  of Toxicophores for Mutagenicity Prediction; <i>J.&nbsp;Med. Chem.,
+  48</i> (<b>2005</b>) 312&ndash;320.</td>
+</tr>
+<tr>
+  <td>[Labute&nbsp;2008]</td>
+  <td>Labute, P.; The Generalized Born / Volume Integral (GB/VI) Implicit
+  Solvent Model: Estimation of the Free Energy of Hydration Using London
+  Dispersion Instead of Atomic Surface Area; <i>J. Comp. Chem. 29</i>
+  (<b>2008</b>) 1963&ndash;1968.</td>
+</tr>
+<tr>
+  <td>[Labute&nbsp;2009]</td>
+  <td>Labute, P.; Protonate3D: Assignment of Ionization States and Hydrogen
+  Coordinates to Macromolecular Structures; <i>Proteins 75</i>
+  (<b>2009</b>) 187&ndash;205.</td>
+</tr>
+<tr>
+  <td>[Wang&nbsp;2007]</td>
+  <td>Wang, J., Krudy, G., Hou, T., Zhang, W., Holland, G., Xu, X.;
+  Development of Reliable Aqueous Solubility Models and Their Application
+  in Druglike Analysis; <i>J. Chem. Inf. Model 47</i> (<b>2007</b>)
+  1395&ndash;1404.</td>
+</tr>
+<tr>
+  <td>[Sch&auml;rfer&nbsp;2013]</td>
+  <td>Sch&auml;rfer, C., Schulz-Gasch, T., Ehrlich, H.-C., Guba, W., Rarey, M.,
+  Stahl, M.;
+  Torsion Angle Preferences in Drug-like Chemical Space: A Comprehensive Guide;
+  <i>J. Med. Chem. 56</i> (<b>2013</b>) 2016&ndash;2028.</td>
+</tr>
+<tr>
+  <td>[Guba&nbsp;2016]</td>
+  <td>Guba, W., Meyder, A., Rarey, M., Hert, J.;
+  Torsion Library Reloaded: A New Version of Expert-Derived SMARTS Rules
+  for Assessing Conformations of Small Molecules;
+  <i>J. Chem. Inf. Model 56</i> (<b>2016</b>) 1&ndash;5.</td>
+</tr>
+<tr>
+  <td>[Penner&nbsp;2022]</td>
+  <td>Penner, P., Guba, G., Schmidt, R., Meyder, A., Stahl, M., Rarey, M.;
+  The Torsion Library: Semiautomated Improvement of Torsion Rules with
+  SMARTScompare;
+  <i>J. Chem. Inf. Model 62</i> (<b>2022</b>) 1644&ndash;1653.</td>
+</tr>
+
+</table>
+
+<a id="SeeAlso"></a>
+<h1>See Also</h1>
+
+<p><a href="../moe/gui/mouse.htm">Using the Mouse</a><br />
+  <a href="../moe/hellomoe.htm#GUI_Basics">Graphical User Interface
+  Basics</a><br />
+  <a href="../moe/gui/mainwin.htm">MOE Window</a><br />
+  <a href="../moe/gui/system.htm">System Manager</a><br />
+  <a href="../moe/molsystems/molrep.htm">Representation of Molecular
+  Systems</a><br />
+  <a href="../moe/molsystems/build.htm">Building and Editing
+  Molecules</a><br />
+  <a href="../moe/gui/fileopen.htm">MOE File Open System</a><br />
+  <a href="../moe/pot.htm">Potential Energy Selection and
+  Configuration</a><br />
+  <a href="protonate3d.htm">Protonate3D - Macromolecular Protonation State
+  Assignment</a><br />
+  <a href="../moe/hpc.htm">High-Performance Computing Framework</a>
+</p>
+
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../images/ccgicon.png" /> <a href="../index.htm"></a> <a href=
+    "../legal.htm"></a> &copy;<span class="versionyear"></span> <a href="http://www.chemcomp.com"></a>. All
+    rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

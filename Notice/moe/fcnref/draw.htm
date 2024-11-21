@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: DrawAxes" />
+  <meta name="keywords" content=
+  "functions: DrawConstr, DrawDipole, DrawHBonds, DrawMeters" />
+  <meta name="keywords" content="functions: DrawVDWContacts" />
+  <title>Object Rendering Functions: DrawAxes...</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Object Rendering Functions: DrawAxes...
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    Draw<i>fcn</i> flag
+    old_flag = Draw<i>fcn</i> flag
+    flag = Draw<i>fcn</i> []
+</pre>
+<a id="DrawAxes"></a>
+<h1>Description</h1>
+
+<p>Each of the following functions turns on or off a display attribute of
+  graphics in the MOE rendering window. Drawing is enabled if <tt>flag</tt> is
+  a non-zero value, and disabled if <tt>flag == 0</tt>.</p>
+
+<p>If passed a null argument, functions return the current drawing state: 1
+  if drawing is enabled, 0 if disabled. In the SVL Commands window, <tt>on</tt>
+  is printed if drawing is enabled, <tt>off</tt> if disabled. If <tt>flag</tt>
+  is not <tt>[]</tt>, and the return value is used in an assignment, or forced
+  by the presence of enclosing parentheses, the old value of <tt>flag</tt> is
+  returned. <!-- DESC --></p>
+  <table class="titlebar">
+    <tr>
+      <th>Function</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<tt>DrawAxes</tt></td>
+      <td valign="baseline">
+        Turns on or off the x-y-z coordinate axes.
+
+<pre>
+    DrawAxes flag
+    old_flag = DrawAxes flag
+    flag = DrawAxes []
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="DrawConstr"></a>
+<tt>DrawConstr</tt></td>
+      <td valign="baseline">
+        Turns on or off the display of created restraint meters. (See <a class=
+        "svl" href="restrain.htm">Restraints</a>.)
+
+<pre>
+    DrawConstr flag
+    old_flag = DrawConstr flag
+    flag = DrawConstr []
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="DrawDipole"></a>
+<tt>DrawDipole</tt></td>
+      <td valign="baseline">
+        Turns on or off the dipole moment.
+
+<pre>
+    DrawDipole flag
+    old_flag = DrawDipole flag
+    flag = DrawDipole []
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="DrawHBonds"></a>
+<tt>DrawHBonds</tt></td>
+      <td valign="baseline">
+        Turns on or off the display of hydrogen bonds as dashed lines.
+
+<pre>
+    DrawHBonds flag
+    old_flag = DrawHBonds flag
+    flag = DrawHBonds []
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="DrawMeters"></a>
+<tt>DrawMeters</tt></td>
+      <td valign="baseline">
+        Turns on or off the display of created measurement meters. (See
+        <a class="svl" href="meters.htm">Meters</a>.)
+
+<pre>
+    DrawMeters flag
+    old_flag = DrawMeters flag
+    flag = DrawMeters []
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td valign="baseline">
+<a id="DrawVDWContacts"></a>
+<tt>DrawVDWContacts</tt></td>
+      <td valign="baseline">
+        Turns on or off the display of VDW contacts as yellow dotted lines.
+
+<pre>
+    DrawVDWContacts flag
+    old_flag = DrawVDWContacts flag
+    flag = DrawVDWContacts []
+</pre>
+      </td>
+    </tr>
+  </table><!-- ENDDESC -->
+
+<h1>See Also</h1>
+
+<p><a href="drawse.htm">Sequence Editor Display Functions</a></p>
+
+<p><a class="svl" href="quality.htm">AntiAlias</a><br />
+  <a class="svl" href="quality.htm">PolyhedralAtoms</a><br />
+  <a class="svl" href="quality.htm">PolyhedralBonds</a><br />
+  <a class="svl" href="quality.htm">Stereo</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

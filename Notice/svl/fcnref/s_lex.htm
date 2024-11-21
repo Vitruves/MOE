@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content=
+  "SVL:compiler_options: #svl, #if, #else, #endif, #!" />
+  <meta name="keywords" content=
+  "SVL:syntax: /*&nbsp;...&nbsp;*/, //&nbsp;..., #token, #string" />
+  <meta name="keywords" content="SVL: comments" />
+  <title>SVL Lexical Analysis</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    SVL Lexical Analysis
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+<table class="noborder left">
+  <tr>
+    <td><i>lexeme</i></td>
+    <td>: <b>{</b> <i>comment</i> <b>|</b> <i>number</i> <b>|</b>
+    <i>string</i> <b>|</b> <i>token</i> <b>|</b> <i>identifier</i> <b>|</b>
+    <i>operator</i> <b>|</b> <i>symbol</i> <b>}<sup>1</sup></b></td>
+  </tr>
+  <tr>
+    <td><i>comment</i></td>
+    <td>: <tt>// a one-line comment</tt><br />
+    : <tt>/* ... a multi-line nesting comment */</tt><br />
+    : <tt># one-line compiler control</tt></td>
+  </tr>
+  <tr>
+    <td><i>number</i></td>
+    <td>: <b>{</b> <i>digit</i> <b>}<sup>+</sup></b><br />
+    : <tt>0o</tt> <b>{</b> <tt>0</tt> <b>|</b> <tt>1</tt> <b>|</b> ...
+    <b>|</b> <tt>7</tt> <b>}<sup>+</sup></b><br />
+    : <tt>0x</tt> <b>{</b> <tt>0</tt> <b>|</b> <tt>1</tt> <b>|</b> ...
+    <b>|</b> <tt>9</tt> <b>|</b> <tt>a</tt> <b>|</b> <tt>b</tt> <b>|</b>
+    ... <b>|</b> <tt>f</tt> <b>|</b> <tt>A</tt> <b>|</b> <tt>B</tt>
+    <b>|</b> ... <b>|</b> <tt>F</tt> <b>}<sup>+</sup></b><br />
+    : <tt>0y</tt> <b>{</b> <tt>0</tt> <b>|</b> <tt>1</tt>
+    <b>}<sup>+</sup></b><br />
+    : <b>{</b> <i>digit</i> <b>}<sup>+</sup></b> <tt>.</tt> <b>{</b>
+    <i>digit</i> <b>}<sup>+</sup></b><br />
+    : <b>{</b> <i>digit</i> <b>}<sup>+</sup></b> <b>{</b> <tt>.</tt>
+    <b>{</b> <i>digit</i> <b>}<sup>+</sup></b> <b>}</b> <b>{</b> <tt>e</tt>
+    <b>|</b> <tt>E</tt> <b>}<sup>1</sup></b> <b>{</b> <tt>+</tt> <b>|</b>
+    <tt>-</tt> <b>}</b> <b>{</b> <i>digit</i> <b>}<sup>+</sup></b></td>
+  </tr>
+  <tr>
+    <td><i>digit</i></td>
+    <td>: <b>{</b> <tt>0</tt> <b>|</b> <tt>1</tt> <b>|</b> ... <b>|</b>
+    <tt>9</tt> <b>}<sup>1</sup></b></td>
+  </tr>
+  <tr>
+    <td><i>token</i></td>
+    <td>: <tt>&#39;</tt> <b>{</b> <i>printable_character</i>
+    <b>}<sup>*</sup></b> <tt>&#39;</tt></td>
+  </tr>
+  <tr>
+    <td><i>string</i></td>
+    <td>: <tt>&quot;</tt> <b>{</b> <i>printable_character</i>
+    <b>}<sup>*</sup></b> <tt>&quot;</tt></td>
+  </tr>
+  <tr>
+    <td><i>identifier</i></td>
+    <td>: <i>letter</i> <b>{</b> <i>letter</i> <b>|</b> <i>digit</i>
+    <b>}<sup>*</sup></b></td>
+  </tr>
+  <tr>
+    <td><i>letter</i></td>
+    <td>: <b>{</b> <tt>A</tt> <b>|</b> <tt>B</tt> <b>|</b> ... <b>|</b>
+    <tt>Z</tt> <b>|</b> <tt>a</tt> <b>|</b> <tt>b</tt> <b>|</b> ...
+    <b>|</b> <tt>z</tt> <b>|</b> <tt>_</tt> <b>}<sup>1</sup></b></td>
+  </tr>
+  <tr>
+    <td><i>operator</i></td>
+    <td>: <b>{</b> <tt>+</tt> <b>|</b> <tt>-</tt> <b>|</b> <tt>*</tt>
+    <b>|</b> <tt>/</tt> <b>|</b> <tt>&lt;</tt> <b>|</b> <tt>&gt;</tt>
+    <b>|</b> <tt>&lt;=</tt> <b>|</b> <tt>&gt;=</tt> <b>|</b>
+    <tt>&lt;&gt;</tt> <b>|</b> <tt>=</tt> <b>|</b> <tt>==</tt> <b>|</b>
+    <tt>===</tt> <b>|</b> <tt>|</tt> <b>|</b> <tt>||</tt> <b>|</b>
+    <tt>#</tt> <b>}<sup>1</sup></b></td>
+  </tr>
+  <tr>
+    <td><i>symbol</i></td>
+    <td>: <b>{</b> <tt>[</tt> <b>|</b> <tt>]</tt> <b>|</b> <tt>(</tt>
+    <b>|</b> <tt>)</tt> <b>|</b> <tt>,</tt> <b>|</b> <tt>;</tt> <b>|</b>
+    <tt>:</tt> <b>|</b> <tt>/*</tt> <b>|</b> <tt>*/</tt> <b>|</b>
+    <tt>//</tt> <b>}<sup>1</sup></b></td>
+  </tr>
+</table>
+
+<h1>Description</h1>
+
+<p>Lexical analysis is the process of translating a sequence of characters
+  (the input source code) into the units of syntax of the SVL language called
+  <i>lexemes</i>. The SVL language is expressed as a sequence of lexemes. There
+  are several types of lexeme: <i>identifier</i>, <i>number</i>, <i>string</i>,
+  <i>token</i>, <i>operator</i> and <i>comment</i>. In general, white space is
+  ignored and not required except to separate lexemes that, if juxtaposed,
+  would be treated as a single lexeme. At a given point in the input character
+  stream, the next lexeme is taken to be the longest prefix that constitutes a
+  legal lexeme.</p>
+
+<p>The following notation is used to describe SVL syntax and syntactic
+  categories. The name of a category is printed in italics, e.g. <i>lvalue</i>.
+  SVL keywords and symbols are printed in teletype, e.g. <tt>loop</tt> or
+  <tt>[]</tt>. Each category is defined as a list of syntactic patterns
+  composed of SVL keywords or symbols and of names of other categories (like
+  BNF notation); for example, <i>lvalue</i> : <i>identifier</i> <tt>[</tt>
+  <i>expression</i> <tt>]</tt> means &quot;an lvalue can be an identifier
+  followed by a bracketed expression&quot;. Bold braces are used to apply a
+  special rule to the part of the pattern inside the braces:</p>
+
+<ul>
+  <li><b>{</b>...<b>}</b> specifies an optional pattern, e.g. <span class=
+  "nobr"><b>{</b><em>for</em><b>}</b> <tt>loop</tt></span></li>
+  <li><b>{</b>...<b>}<sup>*</sup></b> specifies a sequence of zero or more
+  repetitions, e.g. <span class=
+  "nobr"><b>{</b><em>while</em><b>}<sup>*</sup></b> <tt>loop</tt></span></li>
+  <li><b>{</b>...<b>}<sup>+</sup></b> specifies a sequence of one or more
+  repetitions, e.g. <span class=
+  "nobr"><b>{</b><em>digit</em><b>}<sup>*</sup></b></span></li>
+  <li><b>{</b>...<b>|</b>...<b>}</b> and
+  <b>{</b>...<b>|</b>...<b>}<sup>1</sup></b> specify (optional and
+  compulsory) alternative patterns, e.g. <span class=
+  "nobr"><b>{</b><tt>local</tt> <b>|</b> <tt>global</tt><b>}</b>
+  <tt>function</tt></span></li>
+</ul>
+
+<p><b>Comments and White Space</b>. Blanks, tabs, newlines, form-feeds and
+  comments are considered to be white space. There are two forms of comment.
+  The characters <tt>/*</tt> introduce a comment that must end with
+  <tt>*/</tt>. Such a comment nests; i.e. a comment delimited by <tt>/*</tt>
+  <tt>*/</tt> may be found within another similarly delimited comment. The
+  other form is introduced with the characters <tt>//</tt>, and ends at the end
+  of line. Characters in <tt>//</tt> comments, including the combination
+  <tt>*/</tt>, are ignored. Input lines that start with a <tt>#</tt> are
+  compiler control lines and are not considered part of the SVL language proper
+  and can be considered to be white space.</p>
+
+<p class="blockquote">
+  <tt>// this is a comment that ends at the end of line</tt><br />
+  &nbsp;<br />
+  <tt>/* this comment is split<br />
+  ** across multiple lines<br />
+  ** and can be /* nested */ and<br />
+  ** ends with */</tt><br />
+  &nbsp;<br />
+  <tt>#set title &#39;Molecule Title&#39; &nbsp;&nbsp; // compiler control
+  line</tt>
+</p>
+
+<p><b>Numbers</b>. A <i>number</i> is a sequence of digits and special
+  characters that starts with a digit. There are multiple formats available:
+  Decimal integers consist of a sequence of decimal digits (<tt>0-9</tt>).
+  Hexadecimal integers consist of the prefix <tt>0x</tt> followed by a sequence
+  of base-16 hexadecimal digits <tt>0-9</tt> and letters <tt>a-f</tt> or
+  <tt>A-F</tt>. Octal integers consist of the prefix <tt>0o</tt> followed by a
+  sequence of base-8 digits <tt>0-7</tt>. Binary integers consist of the prefix
+  <tt>0y</tt> followed by a sequence of base-2 digits <tt>0-1</tt>. Decimal
+  reals consist of a decimal integer literal followed by either or both of a
+  fractional value (the decimal point &#39;<tt>.</tt>&#39; followed by a
+  sequence of decimal digits) or decimal shift (an <tt>E</tt> or <tt>e</tt>
+  followed by a signed integer).</p>
+
+<pre class="code">
+1420                 // decimal integer
+2.5                  // decimal real
+1.39456e-10          // decimal real
+1e6                  // decimal real
+0xBEEF22             // hexadecimal integer
+0o155                // octal integer
+0y1101001010111      // binary integer
+</pre>
+
+<p><b>Strings and Tokens</b>. A <i>string</i> literal is a sequence of
+  characters surrounded by double quotes. A <i>token</i> literal is a sequence
+  of characters surrounded by single quotes. String and token literals cannot
+  straddle line boundaries. However, it is possible to use several lines to
+  define a single string or token: two string/token literals that are separated
+  only by white space (including any line breaks) will be automatically
+  concatenated to form a single string/token. Within a string or token the
+  backslash character <tt>\</tt> is interpreted in a special way. It is used as
+  a prefix to specify special characters. A double backslash <tt>\\</tt>
+  specifies the backslash character itself. A line feed, or newline, is
+  specified with <tt>\n</tt>. A horizontal tab is specified with <tt>\t</tt>. A
+  single quote is specified with <tt>\&#39;</tt> and a double quote is
+  specified with <tt>\&quot;</tt>. Other ASCII characters can be specified
+  numerically either a) in octal by using the sequence <tt>\</tt><i>ddd</i>
+  where <i>ddd</i> is an octal number; or b) in hexadecimal by using the
+  sequence <tt>\x</tt><i>dd</i> where <i>dd</i> is a hexadecimal number; or c)
+  in binary by using the sequence <tt>\y</tt><i>dddddddd</i> where
+  <i>dddddddd</i> is a binary number.</p>
+
+<pre class="code">
+&quot;this is a string&quot;
+&#39;this is a token&#39;
+&quot;this is a string with a newline (\n) in it&quot;
+&#39;this is a token with a \&#39; character in it&#39;
+&quot;this is a string with an ASCII rub (\177) in octal&quot;
+</pre>
+
+<p><b>Identifiers and Keywords</b>. <i>Identifiers</i> are used to name
+  functions, variables and constants. An identifier is a sequence of letters
+  and digits. The first character must be a letter. The underscore character
+  <tt>_</tt> is considered to be a letter. An identifier should not be longer
+  than 78 characters. Identifiers are case-sensitive. The following identifiers
+  are <i>reserved words</i> or <i>keywords</i>, and cannot be used to name
+  definable objects (variables, functions, etc.):</p>
+
+<pre class="code">
+and      app         apt     break    const   continue   else
+elseif   endfunction endif   endloop  for     function   global
+goto     if          in      let      local   loop       or
+print    return      static  then     until   var        while
+</pre>
+
+<p><b>Operators and Symbols</b>. Operators and symbols are single or multiple
+  special characters that have special meaning to the SVL compiler. Some are
+  shorthand notations for frequently called functions. Other are used as
+  punctuation. The following symbols are used in SVL:</p>
+
+<pre class="code">
++         -         *         /         //        /*        */
+&lt;         &gt;         &lt;&gt;        &lt;=        &gt;=        ==        ===
+=         |         ||        [         ]         (         )
+,         ;         :         .         #
+</pre>
+
+<p><b>Compiler Directives</b>. Compiler directives are special instructions
+  directed to the compiler. All compiler directives must begin with the
+  <tt>#</tt> symbol at the beginning of the line, column 1. The name itself,
+  however, may be indented. For example,</p>
+
+<pre class="code">
+#if
+#   if
+</pre>
+
+<p>are both valid formats, assuming the <tt>#</tt> is in column 1. The
+  following directives are recognized by the compiler:</p>
+  <div class="indent">
+    <dl>
+      <dt><tt>#svl</tt></dt>
+      <dd>The compiler directive <tt>#svl</tt> is normally placed in the first
+      line of an SVL file. Any characters typed in after the <tt>svl</tt> but
+      on the same line are ignored by the compiler. This compiler directive is
+      used by the file open system to interpret SVL files quickly.</dd>
+      <dt><tt>#!</tt></dt>
+      <dd>The <tt>#!</tt> compiler directive is ignored. On UNIX machines this
+      compiler directive is used to start batch jobs.</dd>
+      <dt><tt>#if</tt> <i>n</i></dt>
+      <dd>The <tt>#if</tt> directive is used exclude certain portions of an SVL
+      file from compilation. If <i>n</i> (which must be a numeric constant) is
+      non-zero then all statements between the <tt>#if</tt> and the subsequent
+      <tt>#else</tt>, <tt>#elseif</tt> or <tt>#endif</tt> directive are
+      included and, thereafter, all code up to the associated <tt>#endif</tt>
+      is excluded.</dd>
+      <dt><tt>#elseif</tt> <i>m</i></dt>
+      <dd>The <tt>#elseif</tt> directive must appear after an <tt>#if</tt> or
+      <tt>#elseif</tt> directive. If previous <i>n</i> and <i>m</i> values have
+      evaluated to zero and if <i>m</i> is nonzero then all statements between
+      the <tt>#elseif</tt> and the subsequent <tt>#else</tt>, <tt>#elseif</tt>
+      or <tt>#endif</tt> directive are included and, thereafter, all code up to
+      the associated <tt>#endif</tt> is excluded.</dd>
+      <dt><tt>#else</tt></dt>
+      <dd>The <tt>#else</tt> directive is used to specify a default case if all
+      previous <tt>#if</tt> and <tt>#elseif</tt> directives evaluated to zero.
+      In this case the code enclosed between the <tt>#else</tt> directive and
+      the <tt>#endif</tt> is included.</dd>
+      <dt><tt>#endif</tt></dt>
+      <dd>The <tt>#endif</tt> directive is used for terminating the
+      <tt>#if</tt> and is required (to mark then end of the entire
+      directive).</dd>
+      <dt><tt>#token<br />
+      #string<br />
+      #</tt></dt>
+      <dd>
+        SVL provides a special syntax for easier definition of long, multi-line
+        strings and tokens. All lines between the compiler directives
+        <tt>#string</tt> (<tt>#token</tt>) and <tt>#</tt> are interpreted as
+        the contents of a string (token) literal.
+
+<p>Several rules apply when using the <tt>#string</tt> and
+        <tt>#token</tt> directives. The contents of the initial
+        <tt>#string</tt> (or <tt>#token</tt>) line is ignored. The contents of
+        the terminating <tt>#</tt> line is <b>not</b> ignored; everything after
+        the <tt>#</tt> character is interpreted as SVL code.</p>
+
+<p>There is an implicit new-line <tt>(&#39;\n&#39;)</tt> terminator at
+        the end of each line between the initial <tt>#string</tt> (or
+        <tt>#token</tt>) and the final <tt>#</tt>, except for lines that end
+        with the backslash character <tt>(\)</tt>.</p>
+
+<p>White-space (space and tab characters), between the <tt>#</tt> and
+        the identifier <tt>string</tt> (or <tt>token</tt>) is allowed. If this
+        is done then the compiler will ignore white space at the beginning of
+        each line of the string or token <b>up to the column in which the first
+        character of the identifier (<tt>string</tt> or <tt>token</tt>)
+        lies</b>.</p>
+
+<p>For example, if a string is introduced with
+        &quot;<tt>#&nbsp;&nbsp;&nbsp;string</tt>&quot;, then the compiler will
+        ignore up to three white spaces at the start of each line, as the word
+        &quot;<tt>string</tt>&quot; starts in the fourth column. If a
+        subsequent line begins with more than three white spaces, the balance
+        of white space would become part of the string. A tab character
+        (&#39;<tt>\t</tt>&#39;) is considered to be white space, advancing to
+        the nearest greater multiple of 8.</p>
+
+<p>Examples:</p>
+<table class="titlebar">
+  <tr>
+    <th>SVL Expression</th>
+    <th>Equivalent Expression</th>
+  </tr>
+  <tr>
+    <td>
+
+<pre class="code">
+const STR =
+#   string
+    Line 1,
+    and line 2
+#   ;
+</pre>
+    </td>
+    <td>
+
+<pre class="code">
+const STR = &quot;Line 1,\nand line 2\n&quot;;
+</pre>
+    </td>
+  </tr>
+  <tr>
+    <td>
+
+<pre class="code">
+const TOK =
+#   token
+        Part 1, \
+    and part 2.\
+#;
+</pre>
+    </td>
+    <td>
+
+<pre class="code">
+const TOK = &#39;Part 1, and part 2.&#39;;
+</pre>
+    </td>
+  </tr>
+  <tr>
+    <td>
+
+<pre class="code">
+print swrite [ fmt,
+#   token
+    x,
+    y.
+#   ,
+#   token
+    a,
+    b.
+#   ];
+</pre>
+    </td>
+    <td>
+
+<pre class="code">
+print swrite [fmt, &#39;x,\ny.\n&#39;, &#39;a,\nb.\n&#39;];
+</pre>
+    </td>
+  </tr>
+</table>
+</dd>
+</dl>
+</div>
+
+<h1>See Also</h1>
+
+<p><a href="s_expr.htm">SVL Expressions</a><br />
+  <a href="s_stmt.htm">SVL Statements</a><br />
+  <a href="s_decl.htm">SVL Declarations</a><br />
+  <a href="symbol.htm">Symbol Table Functions</a> </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

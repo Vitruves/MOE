@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="panel: Builder" />
+  <title>Building and Editing Molecules</title>
+  <meta name="keywords" content="keywords: build, hintlp, stereochemistry" />
+  <meta name="keywords" content=
+  "keywords: chiral constraint, ionization, bond, unbond, tautomer" />
+  <meta name="keywords" content=
+  "keywords: minimize, functional group, ring, fuse" />
+  <meta name="keywords" content=
+  "keywords: smiles, atom name, element, sym, coordination" />
+  <meta name="keywords" content=
+  "keywords: Du, dummy, lone pair pseudo-element, periodic table" />
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Building and Editing Molecules
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+  <ul>
+    <li><a href="#CreateNewMolecule">Create New Molecule</a></li>
+    <li><a href="#AddGroup">Add Functional Group</a></li>
+    <li><a href="#ChangeElement">Change Element</a></li>
+    <li><a href="#ChangeAtomName">Change Atom Name</a></li>
+    <li><a href="#ChangeIon">Change Ionization</a></li>
+    <li><a href="#ChangeBond">Bond, Unbond and Bond Order</a></li>
+    <li><a href="#FuseRings">Fuse Rings</a></li>
+    <li><a href="#Delete">Delete</a></li>
+    <li><a href="#Stereochemistry">Stereochemistry</a></li>
+    <li><a href="#ChangeTautomer">Change Tautomer</a></li>
+    <li><a href="#EnergyMinimize">Energy Minimize</a></li>
+    <li><a href="#CombiBuild">Combinatorial Fragments</a></li>
+  </ul>
+
+<p>The Builder is used to build or edit organic molecules, primarily in 3D.
+  Typical uses of the builder include correcting molecules read in from files
+  and building molecules for further calculations such as conformational
+  analysis, QSAR, docking and combinatorial library design. Although MOE
+  provides a variety of tools for building and editing molecules (such as the
+  <a href="../../proteins/probuild.htm">Protein Builder</a>, <a href=
+  "../../apps/carbo.htm">Carbohydrate Builder</a>, or Copy and Paste from 2D
+  Sketchers like ChemDraw, IsisDraw, SymyxDraw), this chapter concerns itself
+  with the Builder, which can be run using
+  <b>MOE&nbsp;|&nbsp;Edit&nbsp;|&nbsp;Build&nbsp;|&nbsp;Molecule</b> or the
+  <b>Builder</b> button in the right button bar of the MOE Window.</p>
+
+<p>Molecules are built or edited primarily by substituting atoms (typically
+  hydrogens). The Builder operates on atoms selected in the MOE Window; i.e.,
+  select atoms <i>first</i> then operate on them with buttons in the Builder.
+  The functionality available in the Builder depends on which atoms are
+  selected. Some of the button labels turn blue to highlight the properties of
+  the selected atoms, such as element, ionization, chirality, etc.</p>
+  <div class="floatright"><img src="build/builder.png" alt=
+  "Builder Panel" class="floatright" /></div>
+  <table class="titlebar">
+    <tr>
+      <th>Action</th>
+      <th>How to do it with the Builder</th>
+    </tr>
+    <tr>
+      <td valign="top">Build a new molecule.</td>
+      <td valign="top">
+        <ul>
+          <li>Make sure no atoms are selected.</li>
+          <li>Press one of the element or fragment buttons, or enter a <a href=
+          "smiles.htm">SMILES string</a>.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">Add a functional group.</td>
+      <td valign="top">
+        <ul>
+          <li>Select one or more terminal atoms (e.g. hydrogens) to be replaced
+          by a functional group then press an element or fragment button.</li>
+          <li>Use the <b>Add H</b> button to add hydrogens to
+          hydrogen-suppressed structures.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">Change a bond order.</td>
+      <td valign="top">
+        <ul>
+          <li>Select the two atoms on either side of a bond (or select the bond
+          midpoint).</li>
+          <li>Press one of the bond order buttons (single, double or
+          triple).</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">Add a coordination bond.</td>
+      <td valign="top">
+        <ul>
+          <li>Select one or more atoms with available lone pairs and press one
+          of the element symbols like <b>=O</b> or <b>=S</b>. These buttons can
+          also create double bonded substituents if valence permits.</li>
+          <li>Note that coordination bonds are represented in charge separated
+          form in MOE.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">Fuse a ring.</td>
+      <td valign="top">
+        <ul>
+          <li>Select the two bonded atoms in a ring (or select the bond
+          midpoint).</li>
+          <li>Press one of the ring buttons.</li>
+        </ul>
+      </td>
+    </tr>
+  </table>
+
+<p>For all operations, the number of hydrogens on the atoms being operated
+  upon is automatically adjusted to satisfy valence requirements.</p>
+
+<p>Further editing of atoms and atomic geometry is provided in the MOE Window
+  <a href="../gui/mainwin.htm#Footer">footer</a> which adapts to the current
+  selection state.</p>
+
+<p><b>Note!</b> The Builder can be customized by using <span class="menu">MOE
+  | <img src="build/gear_wheel.png" style="vertical-align:middle" /> |
+  Builder</span>. Some of the Builder controls (Atom name, Hybridization and
+  SMILES) will only appear in the Builder panel if they have been enabled.</p>
+
+<p>The Builder is written entirely in SVL and is thus customizable. The
+  Builder source code can be found in: <span class=
+  "nobr"><tt>$MOE/svl/run/builder.svl</tt>.</span></p>
+<a id="CreateNewMolecule"></a>
+<h1>Create New Molecule</h1>
+
+<p>To create a new molecule, ensure that there are no selected atoms in the
+  MOE Window (e.g. <span class="menu">MOE | Select | Clear</span>); then, in
+  the Builder:</p>
+  <table class="noborder">
+    <tr>
+      <td align="center"><img src="build/elements.png" alt="Elements" /></td>
+      <td valign="top">Press an element symbol to create a new molecule
+      containing the selected element with hydrogens attached to fill valence.
+      Use <b>More</b> to access the full periodic table. Use the pseudo-element
+      Du to create a dummy atom.</td>
+    </tr>
+    <tr>
+      <td align="center"><img src="build/ring.png" alt="Rings" /></td>
+      <td valign="top">Press a ring symbol to create a new molecule consisting
+      of the selected ring. The ring will consist of all carbons with attached
+      hydrogens. Rings not shown, or fused rings, can be built by selecting the
+      closest displayed ring and then changing bond orders, elements or fusing
+      more rings using the other Builder operations.</td>
+    </tr>
+    <tr>
+      <td align="center"><img src="build/common.png" alt="Common" /></td>
+      <td valign="top">Press a group symbol to create a new molecule consisting
+      of the selected functional group. Hydrogens will be added to fill
+      valence. To build groups not shown, select the closest group and change
+      the elements and bond orders using the other Builder operations. For
+      example, to build thioamide, select an amide group <b>-CON</b> and change
+      the O to an S.</td>
+    </tr>
+    <tr>
+      <td valign="top" align="center">
+      <a id="smitext"></a>
+      <img src="build/smiles.png" alt= "SMILES" /></td>
+      <td valign="top">Enter (or paste) a valid <a href="smiles.htm">SMILES
+      string</a> into the textfield, then press the happy face button. This
+      button will be grayed (unhappy) when the SMILES string is not valid. The
+      given SMILES string will be converted to 3D and hydrogens will be added
+      to fill valence. The most recently used strings are kept in the textfield
+      pulldown. The contents of this pulldown are remembered and automatically
+      loaded when the Builder is raised. The first item in the list is <b>Copy
+      from MOE</b> which enters a SMILES string derived from the current atom
+      selection in MOE. The 3D coordinates are stored along with the SMILES
+      string and will be reproduced.</td>
+    </tr>
+    <tr>
+      <td valign="top" align="center">
+      <img src="build/builder_name_search.png"
+      alt="Name or CAS search" /><br />
+      <img src="build/builder_chembl_search.png" alt="ChEMBL search" /></td>
+      <td valign="top">Enter (or paste) a compound name or CAS (Chemical
+      Abstracts Search) number, prefixed by a question mark, i.e.
+      <span class="svl">?name</span> or <span class="svl">?nnnn</span>,
+      to perform registry lookup through a new plugin
+      architecture that allows for repurposing the SMILES text field. Access to
+      PubChem and eMolecules online sites is currently supported.
+      Support for ChEMBL online access is also now provided;
+      enter <span class="svl">chembl<i>id</i></span> (no spaces)
+      as the search string.
+      In all cases, if found, the molecule is loaded into MOE.
+    </tr>
+  </table>
+
+<p>New molecules will be created at the view point in the MOE Window. For
+  example, if there is a molecule centered in the view, hold down
+  <tt>Shift</tt> and drag the middle mouse button to move the view to an
+  unoccupied area of space before building the new molecule. Hydrogens will be
+  added to fill valence, and one hydrogen will be selected to serve as a
+  subsequent substitution point.
+<a id="AddGroup"></a>
+</p>
+
+<h1>Add Functional Group</h1>
+
+<p>The primary means of constructing molecules is by substitution of terminal
+  atoms, typically hydrogens. Use the <b>Add&nbsp;H</b> button to add hydrogens
+  to hydrogen suppressed structures. Heavy atoms (non-H, non-LP) with one heavy
+  neighbor are also considered terminal atoms for substitution purposes. One or
+  more terminal atoms can be selected and each will be substituted with other
+  groups:</p>
+  <table class="noborder">
+    <tr>
+      <td align="center"><img src="build/elements.png" alt="Elements" /></td>
+      <td valign="top">Each selected atom will be replaced with the chosen
+      element. Use <b>More</b> to access the full periodic table. The Du
+      pseudo-element is treated in a special way: if there is one atom selected
+      then it will be replaced with the LP pseudo-element; if more than one
+      atom is selected then a dummy atom will be created at the centroid of the
+      selected atoms.</td>
+    </tr>
+    <tr>
+      <td align="center"><img src="build/ring.png" alt="Rings" /></td>
+      <td valign="top">Each selected atom will be replaced with the chosen ring
+      structure (all carbons); for example, pressing the benzene ring will
+      create a phenyl substituent. If a selected heavy atom is in a ring and
+      has two heavy neighbors then a spiro ring will be created. Rings not in
+      the list can be created by selecting the closest ring and then changing
+      bonds or elements with the Builder. Alternatively, SMILES can be input
+      (see below).</td>
+    </tr>
+    <tr>
+      <td align="center"><img src="build/common.png" alt="Common" /></td>
+      <td valign="top">Each selected atom will be replaced with the chosen
+      functional group; for example, to add a carboxylic acid group, select a
+      hydrogen and press the <b>-CO2</b> button. To substitute groups not
+      shown, choose the closest group and change the elements and bond orders
+      using the other Builder operations. For example, to add thioamide, chose
+      the amide group <b>-CON</b> and change the O to an S.</td>
+    </tr>
+    <tr>
+      <td valign="top" align="center"><img src="build/coord.png" alt=
+      "Coordination Atom" /></td>
+      <td valign="top">To add coordinated atoms (e.g. in sulfones, sulfoxides,
+      ylides), select the heavy atoms onto which coordination atoms are to be
+      added; then press one of <b>=O</b>, <b>=S</b>, <b>=N</b> or <b>=C</b>.
+      Note that even though <b>=O</b> is pressed, the resulting molecule will
+      be created in charge-separated form; e.g. S=O will be represented as
+      [S+][O-] in MOE. These buttons may also be used to create double bonded
+      substituents; for example, if a methyl carbon is selected, pressing
+      <b>=O</b> will result in an aldehyde.</td>
+    </tr>
+    <tr>
+      <td valign="top" align="center"><img src="build/smiles.png" alt=
+      "SMILES" /></td>
+      <td valign="top">Each selected atom will be replaced with the functional
+      group encoded by the given valid <a href="smiles.htm">SMILES string</a>
+      when the happy face is pressed. This button will be grayed (unhappy) when
+      the SMILES string is not valid. The given SMILES string will be converted
+      to 3D and hydrogens will be added to fill valence. The root atom of the
+      group is assumed to be the first heavy atom of the SMILES string. The
+      most recently used strings are kept in the textfield pulldown. The
+      contents of this pulldown are remembered and automatically loaded when
+      the Builder is raised. The first item in the list is <b>Copy from MOE</b>
+      which enters a SMILES string derived from the current atom selection in
+      MOE. The 3D coordinates are stored along with the SMILES string and will
+      be reproduced.</td>
+    </tr>
+  </table>
+<a id="ChangeElement"></a>
+<h1>Change Element</h1>
+  <div class="floatleft"><img src="build/elements.png" alt="Elements" class="floatleft" /></div>
+
+<p>To change the element symbol of existing atoms, select the atoms in the
+  MOE Window and press an element button in the Builder. Hydrogens will be
+  adjusted to satisfy valence requirements. If the chosen element is
+  over-ligated then the ionization will be adjusted; e.g. a quaternary carbon
+  replaced by a nitrogen will become N+ and replacing a benzene carbon with
+  oxygen will result in O+.</p>
+
+<p>Bond orders will be preserved for organic elements but changing an atom to
+  a metal will result in all single bonds (possibly affecting neighboring
+  atoms).</p>
+
+<p>Use <b>More</b> for access to the full periodic table. The Du
+  pseudo-element is treated in a special way: if there is one atom selected
+  then it will be replaced with the LP pseudo-element; if more than one atom is
+  selected then a dummy atom will be created at the centroid of the selected
+  atoms.</p>
+<a id="ChangeAtomName"></a>
+<h1>Change Atom Name</h1>
+  <div class="floatleft"><img src="build/aname.png" alt="Atom Name" class="floatleft" /></div>
+
+<p>To change the name of an atom (not its symbol), select the atoms in the
+  MOE Window, then enter the atom name in the textfield and press Enter. The
+  Name pulldown contains attachment point names A0-A9 for use in <a href=
+  "../../apps/combitools.htm#RunCombi">combinatorial library generation</a>.
+  Atom names are limited to four characters; blanks will be automatically
+  stripped. The <b>Sym</b> button replaces each selected atom's name with
+  its element symbol (the default). The <b>Index</b> button replaces each
+  atom's name with its index in its residue.</p>
+
+<p>Atom names can be displayed or hidden by turning on or off labels with
+  <span class="menu">MOE | Render | Atoms</span>. If one atom is selected, then
+  its name is displayed in the MOE Window footer.</p>
+
+<p><b>Note!</b> The Atom Name textfield will only appear in the Builder if it
+  is enabled in <span class="menu">MOE | <img src="build/gear_wheel.png" style=
+  "vertical-align:middle" /> | Builder</span>.
+<a id="ChangeIon"></a>
+</p>
+
+<h1>Change Ionization</h1>
+  <div class="floatleft"><img src="build/ion.png" alt="Ionization" class="floatleft" /></div>
+
+<p>To change the ionization state of atoms, select them in the MOE Window and
+  press one of the formal charge buttons in the Builder. Changing the
+  ionization of a hydrogen atom will change the ionization of the attached
+  heavy atom; for example, if the H in COOH is selected and <b>-1</b> is
+  pressed then carboxylate will result: CO[O-]. The Builder will clamp
+  ionizations to enforce reasonable values; for example, it is not possible to
+  neutralize a quaternary nitrogen, nor is it possible ionize an atom below its
+  valence electron count.
+<a id="ChangeBond"></a>
+</p>
+
+<h1>Bond, Unbond and Bond Order</h1>
+  <div class="floatleft"><img src="build/bond.png" alt="Ionization" class="floatleft" /></div>
+
+<p>To create a new bond, select two atoms that are not bonded and then press
+  the Single, Double or Triple bond buttons in the Builder. These buttons may
+  be grayed out if valence does not permit a particular bond order. If
+  disconnected fragments comprising separate residues are joined together, the
+  atoms may be combined into one residue provided no receptor residues are
+  involved.</p>
+
+<p>To disconnect atoms, select them in the MOE Window and then press the
+  Unbond button (the button with the red X). If more than one atom is selected,
+  then all bonds between selected atoms will be deleted. Hydrogens will be
+  adjusted to fill valence. If the deletion of a bond results in disconnected
+  fragments, new residues will be created to avoid having disconnected
+  fragments in a single residue.</p>
+
+<p>To change a bond order, select the two atoms on either side of the bond
+  (or click in the middle of the bond itself) and press the Single, Double or
+  Triple bond buttons in the Builder. Double bonds creating allenes are
+  permitted only if exactly two atoms are selected. Note that the ionization
+  state of the atoms may change as a result of the bond order change.</p>
+
+<p>If more than two atoms are selected then the Single bond button will
+  change all bonds connecting selected atoms to single bonds. If more than two
+  atoms are selected then the Double and Triple bond buttons will create the
+  largest number of double or triple bonds along the bonds connecting the
+  selected atoms (allenes will not be created in such cases). For example,
+  selecting all of the carbons in cyclohexane and pressing the Double bond
+  button will result in benzene.
+<a id="FuseRings"></a>
+</p>
+
+<h1>Fuse Rings</h1>
+  <table class="noborder">
+    <tr>
+      <td valign="top"><img src="build/ring.png" alt="Ring Buttons" /></td>
+      <td valign="top">To add a fused ring, select two bonded atoms in a ring
+      and press one of the ring buttons in the Builder. If three atoms are
+      selected then the fused ring will contain the selected atoms; similarly
+      for four selected atoms. Selecting two heavy atoms and two hydrogens is a
+      good way of controlling the resulting stereochemistry when fusing
+      saturated rings. Spiro rings can be created by selecting a single atom in
+      a ring (with a maximum of two heavy neighbors) then pressing one of the
+      ring buttons.</td>
+    </tr>
+  </table>
+<a id="Delete"></a>
+<h1>Delete</h1>
+
+<p>The <b>Delete</b> button deletes the selected atoms (and attached
+  hydrogens) and all bonds connecting them to other atoms. Ionization may be
+  adjusted for the remaining atoms previously connected to the deletion set
+  (e.g. when deleting an oxygen in a sulfone). Residues and chains that are
+  emptied after the operation are also deleted. In simple cases, if the
+  deletion results in a disconnected residue then the residue is split into
+  multiple residues, one for each connected component.</p>
+<a id="Stereochemistry"></a>
+<h1>Stereochemistry</h1>
+  <table class="noborder">
+    <tr>
+      <td valign="top"><img src="build/stereo_s.png" alt="Ionization" /></td>
+      <td valign="top">
+        Press <b>R</b> (or <b>S</b>) to set the geometric chirality and
+        chirality constraint of the selected stereocenters to R (or <b>S</b>).
+        If a chiral center is selected in the MOE Window, the Builder
+        stereochemistry buttons will reflect its state.
+        <ul>
+          <li><font color="#00C000">Green</font> means the selected atoms have
+          the indicated 3D stereo configuration but are unconstrained
+          (racemic).</li>
+          <li><font color="#0000C0">Blue</font> means the selected atoms have
+          the indicated 3D stereo configuration and are constrained.</li>
+          <li><font color="#C00000">Red</font> means the selected atoms are
+          constrained to the indicated configuration but the current 3D
+          coordinates disagree with the constraint.</li>
+        </ul>
+
+<p>Press <b>G</b> to set the chirality constraint to the current 3D
+        geometry. Press <b>X</b> to remove a chirality constraint. Press
+        <b>i</b> to invert the chiral constraint and 3D geometry of a stereo
+        center. Note that fixed atoms may prevent the inversion.</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><img src="build/stereo_e.png" alt="Ionization" /></td>
+      <td valign="top">
+        Press <b>E</b> (or <b>Z</b>) to set the dihedral and stereo bond
+        constraint of the selected stereo bonds to E (or <b>Z</b>). If a stereo
+        bond is selected in the MOE Window, the Builder stereochemistry buttons
+        will reflect its state.
+        <ul>
+          <li><font color="#00C000">Green</font> means the selected bonds have
+          the indicated 3D stereo configuration but are unconstrained
+          (racemic).</li>
+          <li><font color="#0000C0">Blue</font> means the selected bonds have
+          the indicated 3D stereo configuration and are constrained.</li>
+          <li><font color="#C00000">Red</font> means the selected bonds are
+          constrained to the indicated configuration but the current 3D
+          coordinates disagree with the constraint.</li>
+        </ul>
+
+<p>Press <b>G</b> to set the stereo bond constraint to the current 3D
+        geometry. Press <b>X</b> to remove a stereo constraint. Press <b>i</b>
+        to invert the stereo constraint and 3D geometry of a stereo bond. Note
+        that fixed atoms may prevent the inversion.</p>
+      </td>
+    </tr>
+  </table>
+
+
+
+
+<a id="ChangeTautomer"></a>
+<h1>Change Tautomer</h1>
+  <table class="noborder">
+    <tr>
+      <td valign="top"><img src="build/tautomer.png" alt="Tautomer" /></td>
+      <td valign="top">
+        The <b>Tautomer</b> button becomes active when there are alternative
+        tautomers for the selected atoms and nearby connected atoms. For
+        example, selecting the central carbon in NC=N structures such as
+        imidazole will generate tautomers for the imidazole ring. (The
+        <b>Tautomer</b> button will not be active if the selected atoms are
+        disconnected or too numerous.)
+
+<p>Press the <b>Tautomer</b> button to raise a collection of tautomeric
+        states. The list will be truncated to the first few tautomers; select
+        fewer atoms to reduce the size of the list. The first tautomer in the
+        list is always the current tautomer. If one of these displayed
+        tautomers is pressed then the atoms in the MOE Window will be changed
+        to the chosen tautomer.</p>
+      </td>
+    </tr>
+  </table>
+<a id="EnergyMinimize"></a>
+<h1>Energy Minimize</h1>
+
+<p>The <b>Minimize</b> button performs energy minimization of the current
+  molecular system in MOE and is equivalent to pressing the <a href=
+  "../../apps/ligx.htm#Minimize"><b>Minimize</b></a> button on the MOE Button
+  Bar. If <a href="../../apps/ligx.htm#Properties">Ligand Properties</a> are
+  enabled then these properties will be updated upon completion of the energy
+  minimization.
+<a id="CombiBuild"></a>
+</p>
+
+<h1>Combinatorial Builder</h1>
+  <div class="floatleft"><img src="build/fragments1.png" alt=
+  "Combinatorial Builder Panel" class="floatleft" /></div>
+
+<p>The <b>Fragments</b> button becomes active when one or two terminal atoms
+  or free rotors are selected. It treats the selected atoms (and associated
+  hydrogens) as attachment points, and combinatorially generates energetically
+  allowed alternatives from a small library of monodentate, chemically-relevant
+  R-groups. The <a href="../../apps/frag_combi.htm#TorsDriver"><b>Torsion
+  Driver</b></a> is used to generate R-group energies and orientations.</p>
+
+<p>Press the <b>Fragments</b> button to generate a set of structures, each
+  with one or more rotamers. By default, structures are ordered by decreasing
+  efficiency (R-group energy divided by the number of R-group heavy atoms,
+  minimum 1) and rotamers are ordered by increasing conformational energy
+  penalty. As they are calculated from energies, efficiencies can often be
+  negative. The list contains the names of the R-groups used to create each
+  structure. Upon completion, the selected atoms are replaced by the
+  highest-efficiency structure; selecting a different list entry loads its
+  lowest-energy rotamer into the builder. Pressing the <font color=
+  "red"><b>X</b></font> button reverts to the original structure and atom
+  selection.</p>
+
+<p>The up and down arrow buttons can also be used to browse the structure
+  list. Shift+Up selects the first structure and Shift+Down selects the last.
+  The left and right arrow buttons are used to browse the rotamers for each
+  structure. Shift+Left selects the lowest-energy and Shift+Right selects the
+  highest energy rotamer. The rotamer energy, efficiency and count are provided
+  in the GUI. The structures cannot be reviewed when atoms are selected, and
+  the list is cleared when external changes are made to the system.</p>
+
+<p>The <b>Sort</b> button below the list reorders the list based on R-group
+  energy, efficiency or by either R-group if two are present. The
+  <b>Save&nbsp;MDB</b> button above the list
+  writes the generated structures to a user-specified database. The
+  <b>Keep</b> button duplicates the current structure in MOE (core +
+  fragments), naming it and making it invisible and inert.  The
+  <b>R-Groups</b>
+  button opens the <b>Fragments R-groups</b> sub-panel and provides an
+  alternate means to visualize and pick structures and
+  rotamers. Clicking on any structure in the <b>Fragments R-Groups</b> panel
+  loads its lowest-energy rotamer. Clicking successively on the same structure 
+  loads successively higher-energy alternatives.
+  The arrow keys at the bottom of the <b>Fragments R-groups</b> panel
+  are used to navigate to the next or previous pages, or the first
+  and last pages.</p>
+
+<p>The database created by <b>Save&nbsp;MDB</b> contains a number of
+fields:</p>
+
+<table class="titlebar">
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+<tr>
+<td valign="top"><b>mol</b></td>
+<td valign="top">A molecule field containing the structures generated
+by the Fragment Builder.
+</td></tr>
+<tr>
+<td valign="top"><b>mseq</b></td>
+<td valign="top">The molecular sequence number, starting at 1 and
+incrementing with every new molecule. Rotamers share mseq values.
+</td></tr>
+<tr>
+<td valign="top"><b>Efrag</b></td>
+<td valign="top">The sum of the energy terms of the fragment(s).
+</td></tr>
+<tr>
+<td valign="top"><b>frag ef</b></td>
+<td valign="top">The fragment efficiency, based on the number of heavy
+atoms in the fragment(s) involved.
+</td></tr>
+<tr>
+<td valign="top"><b>nHeavy(frag)</b></td>
+<td valign="top">The number of heavy atoms in the connected fragment(s).
+</td></tr>
+<tr>
+<td valign="top"><b>MW(frag)</b></td>
+<td valign="top">The molecular weight of the connected fragment(s).
+</td></tr>
+<tr>
+<td valign="top"><b>frag1</b></td>
+<td valign="top">The fragment connected to the first attachment point.
+</td></tr>
+<tr>
+<td valign="top"><b>fnum1</b></td>
+<td valign="top">The entry number of the fragment connected to the first
+attachment point.
+</td></tr>
+<tr>
+<td valign="top"><b>fragname1</b></td>
+<td valign="top">The molecular name of the first connected fragment.
+</td></tr>
+<tr>
+<td valign="top"><b>Efp1</b></td>
+<td valign="top">The interaction energy of the specific rotamer of the
+first connected fragment with the proximate pocket atoms.
+</td></tr>
+<td valign="top"><b>Efc1</b></td>
+<td valign="top">The interaction energy of the specific rotamer of the
+first connected fragment with the core atoms.
+</td></tr>
+<td valign="top"><b>Hrotor1</b></td>
+<td valign="top">
+The <a href="../../apps/frag_combi.htm#freeRotor">free rotor</a> energy ranking.
+</td></tr>
+</table>
+
+When two fragments are added, additional entries are written:
+
+<table class="titlebar">
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+<tr>
+<td valign="top"><b>Efrag1</b></td>
+<td valign="top">The sum of the energy terms of the first fragment.
+</td></tr>
+<tr>
+<td valign="top"><b>nHeavy1</b></td>
+<td valign="top">The number of heavy atoms in the first fragment.
+</td></tr>
+<tr>
+<td valign="top"><b>MW1</b></td>
+<td valign="top">The molecular weight of the first fragment.
+</td></tr>
+<tr>
+<td valign="top"><b>frag2</b></td>
+<td valign="top">The fragment connected to the second attachment point.
+</td></tr>
+<tr>
+<td valign="top"><b>fnum2</b></td>
+<td valign="top">The entry number of the fragment connected to the
+second attachment point.
+</td></tr>
+<tr>
+<td valign="top"><b>fragname2</b></td>
+<td valign="top">The molecular name of the second connected fragment.
+</td></tr>
+<tr>
+<td valign="top"><b>Efp2</b></td>
+<td valign="top">The interaction energy of the specific rotamer of the
+second connected fragment with the proximate pocket atoms.
+</td></tr>
+<tr>
+<td valign="top"><b>Efc2</b></td>
+<td valign="top">The interaction energy of the specific rotamer of the
+second connected fragment with the core atoms.
+</td></tr>
+<tr>
+<td valign="top"><b>Hrotor2</b></td>
+<td valign="top">
+The <a href="../../apps/frag_combi.htm#freeRotor">free rotor</a> energy ranking.
+</td></tr>
+<tr>
+<td valign="top"><b>Efrag2</b></td>
+<td valign="top">The sum of the energy terms of the second fragment.
+</td></tr>
+<tr>
+<td valign="top"><b>nHeavy2</b></td>
+<td valign="top">The number of heavy atoms in the second fragment.
+</td></tr>
+<tr>
+<td valign="top"><b>MW2</b></td>
+<td valign="top">The molecular weight of the second fragment.
+</td></tr>
+<tr>
+<td valign="top"><b>E12</b></td>
+<td valign="top">The interaction energy between the two connected fragments.
+</td></tr>
+</table>
+
+<h1>See Also</h1>
+
+<p><a href="../../tutorials/builder_tut.htm">Molecule Builder
+  Tutorial</a></p>
+
+<p><a href="../gui/mainwin.htm">MOE Window</a><br />
+  <a href="../gui/atommgr.htm">Atom Manager</a><br />
+  <a href="../../appendix/settings.htm#Builder">Builder Configuration</a><br />
+  <a href="smiles.htm">Molecule Input Language (SMILES)</a></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

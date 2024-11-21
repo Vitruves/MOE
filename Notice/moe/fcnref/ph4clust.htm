@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="functions: ph4_ClusterMDB" />
+  <title>ph4_ClusterMDB</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    ph4_ClusterMDB
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+<a class="fcnlink" href="#ph4_ClusterMDB">ph4_ClusterMDB</a>
+[
+    'src_database',
+    'fp_code',
+    'fp_sim',
+    options
+]
+</pre>
+
+<p>where <tt>options</tt> are:</p>
+
+<pre class="code">
+[
+    esel    : flag
+    overlap : number
+    cfield  : 'field_name'
+    sim     : number
+    mfield  : 'field_name'
+    matfile : 'filename'
+]
+</pre>
+
+<h1>
+<a id="ph4_ClusterMDB">Description</a></h1>
+
+<p>Assigns cluster codes to a database using fingerprint similarity and
+  Jarvis Patrick clustering. This function takes the following parameters as
+  input:</p>
+  <dl>
+    <dt><tt>'src_database'</tt></dt>
+    <dd>Token indicating the filename of the database.</dd>
+    <dt><tt>'fp_code'</tt></dt>
+    <dd>Token indicating the fingerprint code to use in the calculation. The
+    codes of the available fingerprinting methods are the first element of the
+    return value of <a class="svl" href=
+    "ph4_flst.htm">ph4_FingerprintList</a>.</dd>
+    <dt><tt>'fp_sim'</tt></dt>
+    <dd>Token indicating the similarity metric. The metrics available are the
+    fourth element of the return value of <a class="svl" href=
+    "ph4_flst.htm">ph4_FingerprintList</a>.</dd>
+    <dt><tt>options</tt></dt>
+    <dd>
+      <p>Vector of attribute-value colon-separated pairs:</p>
+      <dl>
+        <dt><tt>esel:flag</tt></dt>
+        <dd>If <tt>flag</tt> is true (one), the calculation will be restricted
+        to selected entries in the source database (provided that the source
+        database is opened in the Database Viewer). If no molecular database
+        viewer is opened on the source database or <tt>flag</tt> is false
+        (zero), then this option is ignored and all entries are used in the
+        calculation. The default is 0.</dd>
+        <dt><tt>overlap:number</tt></dt>
+        <dd>Percentage overlap which is used to determine whether two molecules
+        belong in the same cluster. Used to compare neighbor lists of
+        molecules. Default is 0.85.</dd>
+        <dt><tt>cfield:'field_name'</tt></dt>
+        <dd>Token indicating the name of the cluster field into which the
+        cluster codes will be written. The default is
+        <tt>'$CLUSTER'</tt>.</dd>
+        <dt><tt>sim:number</tt></dt>
+        <dd>Percentage similarity which is used to determine whether two
+        molecules are similar. Used to compare fingerprints. Default is
+        0.85.</dd>
+        <dt><tt>mfield:'field_name'</tt></dt>
+        <dd>Token indicating the name of molecule field to use.</dd>
+        <dt><tt>matfile:'filename'</tt></dt>
+        <dd>Token indicating the matrix filename. If this is specified, the
+        similarity matrix will be written to <tt>'filename'</tt>;
+        otherwise, it will not be written.</dd>
+      </dl>
+    </dd>
+  </dl>
+
+<h1>See Also</h1>
+
+<p><a href="../../mdb/ph4clust.htm">Fingerprint Cluster Panel</a><br />
+  <a href="introph4.htm">Fingerprint Functions</a></p>
+
+<p><a class="svl" href="vclustfcn.htm">db_ValueCluster</a><br />
+  <a class="svl" href="ph4_flst.htm">ph4_FingerprintList</a><br />
+  <a class="svl" href=
+  "../../quasar/fcnref/cluster.htm">QuaSAR-ClusterMDB</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+<a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

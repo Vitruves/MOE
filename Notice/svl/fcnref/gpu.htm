@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content=
+  "functions: gpu, cuda, opencl, gpgpu, nvidia, graphics, card" />
+  <meta name="keywords" content="functions: gpu_HasDevice" />
+  <meta name="keywords" content="functions: gpu_Devices" />
+  <meta name="keywords" content="functions: _gpu_Devices" />
+  <meta name="keywords" content="functions: gpu_DefaultDevice" />
+  <meta name="keywords" content="functions: _gpu_DefaultDevice" />
+  <meta name="keywords" content="functions: gpu_GetDriver" />
+  <meta name="keywords" content="functions: gpu_GetDeviceInfo" />
+  <meta name="keywords" content="functions: gpu_CreateContext" />
+  <meta name="keywords" content="functions: gpu_ReleaseContext" />
+  <meta name="keywords" content="functions: gpu_CreatePipe" />
+  <meta name="keywords" content="functions: gpu_ReleasePipe" />
+  <meta name="keywords" content="functions: gpu_CheckCompiler" />
+  <meta name="keywords" content="functions: gpu_CreateProgram" />
+  <meta name="keywords" content="functions: gpu_ReleaseProgram" />
+  <meta name="keywords" content="functions: gpu_BuildProgram" />
+  <meta name="keywords" content="functions: gpu_GetBuildLog" />
+  <meta name="keywords" content="functions: gpu_GetProgramBinary" />
+  <meta name="keywords" content="functions: gpu_GetKernelInfo" />
+  <meta name="keywords" content="functions: gpu_GetKernelOccupancy" />
+  <meta name="keywords" content="functions: gpu_CreateBuffer" />
+  <meta name="keywords" content="functions: gpu_ReleaseBuffer" />
+  <meta name="keywords" content="functions: gpu_WriteBuffer" />
+  <meta name="keywords" content="functions: gpu_ReadBuffer" />
+  <meta name="keywords" content="functions: gpu_CopyBuffer" />
+  <meta name="keywords" content="functions: _gpu_CreateBufferFromSymbol" />  
+  <meta name="keywords" content="functions: _gpu_CreateCachecBuffer" />
+  <meta name="keywords" content="functions: _gpu_ReleaseCachedBuffer" />
+  <meta name="keywords" content="functions: _gpu_SetCachedBuffer" />
+  <meta name="keywords" content="functions: _gpu_ReadCachedBuffer" />
+  <meta name="keywords" content="functions: _gpu_WriteCachedBuffer" />
+  <meta name="keywords" content="functions: _gpu_GetCachedBuffer" />
+  <meta name="keywords" content="functions: gpu_RunProgram" />
+  <meta name="keywords" content="functions: gpu_WaitForPipe" />
+  <meta name="keywords" content="functions: gpu_Key" />
+
+  <title>Unified GPU Functions: gpu_Devices...</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Unified GPU Functions: gpu_Devices...
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<h4>Device Management</h4>
+
+<pre class="code">
+flag        = <a class="fcnlink" href="#gpu_HasDevice"
+              > gpu_HasDevice</a> driver_tok
+device_keys = <a class="fcnlink" href="#gpu_Devices"
+              > gpu_Devices</a> []
+device_keys = <a class="fcnlink" href="#_gpu_Devices"
+              >_gpu_Devices</a> []
+device_key  = <a class="fcnlink" href="#gpu_DefaultDevice"
+              > gpu_DefaultDevice</a> [driver_tok, mpu_utilization]
+device_key  = <a class="fcnlink" href="#_gpu_DefaultDevice"
+              >_gpu_DefaultDevice</a> [driver_tok, mpu_utilization]
+
+driver_tok  = <a class="fcnlink" href="#gpu_GetDriver"
+              > gpu_GetDriver</a> device_key
+
+device_info = <a class="fcnlink" href="#gpu_GetDeviceInfo"
+              > gpu_GetDeviceInfo</a> device_key
+</pre>
+
+<h4>GPU Compute Context</h4>
+
+<pre class="code">
+context_key = <a class="fcnlink" href="#gpu_CreateContext"
+              >gpu_CreateContext</a>  device_key
+              <a class="fcnlink" href="#gpu_ReleaseContext"
+              >gpu_ReleaseContext</a> context_key
+</pre>
+
+
+<h4>Compute Pipe</h4>
+
+<pre class="code">
+pipe_key    = <a class="fcnlink" href="#gpu_CreatePipe"
+              >gpu_CreatePipe</a>   context_key
+              <a class="fcnlink" href="#gpu_ReleasePipe"
+              >gpu_ReleasePipe</a>  pipe_key
+              <a class="fcnlink" href="#gpu_WaitForPipe"
+              >gpu_WaitForPipe</a>  pipe_key
+              <a class="fcnlink" href="#gpu_WaitForPipe"
+              >gpu_WaitForPipe</a> [pipe_key, action_id]
+</pre>
+
+
+<h4>Kernel Program</h4>
+
+<pre class="code">
+              <a class="fcnlink" href="#gpu_CheckCompiler"
+              >gpu_CheckCompiler</a> device_key
+
+program_key = <a class="fcnlink" href="#gpu_CreateProgram"
+              >gpu_CreateProgram</a>   [context_key, "source", type]
+              <a class="fcnlink" href="#gpu_ReleaseProgram"
+              >gpu_ReleaseProgram</a>   program_key
+              <a class="fcnlink" href="#gpu_BuildProgram"
+              >gpu_BuildProgram</a>    [program_key, ['-opt1', '-opt2', ...]]
+log_text    = <a class="fcnlink" href="#gpu_GetBuildLog"
+              >gpu_GetBuildLog</a>      program_key
+binary      = <a class="fcnlink" href="#gpu_GetProgramBinary"
+              >gpu_GetProgramBinary</a> program_key
+kernel_info = <a class="fcnlink" href="#gpu_GetKernelInfo"
+              >gpu_GetKernelInfo</a>   [program_key, 'function_name']
+occupancy   = <a class="fcnlink" href="#gpu_GetKernelOccupancy"
+              >gpu_GetKernelOccupancy</a> [
+                  program_key, 'function_name',
+                  block_size, dyn_shared_mem_size
+              ]
+</pre>
+
+<h4>Memory Buffers</h4>
+
+<pre class="code">
+buffer_key  = <a class="fcnlink" href="#gpu_CreateBuffer"
+              >gpu_CreateBuffer</a> [context_key, size, type]
+              <a class="fcnlink" href="#gpu_ReleaseBuffer"
+              >gpu_ReleaseBuffer</a> buffer_key
+action_id   = <a class="fcnlink" href="#gpu_WriteBuffer"
+              >gpu_WriteBuffer</a>  [buffer_key, pipe_key, data, type, sync]
+data        = <a class="fcnlink" href="#gpu_ReadBuffer"
+              >gpu_ReadBuffer</a>   [buffer_key, pipe_key, size, type, sync]
+action_id   = <a class="fcnlink" href="#gpu_CopyBuffer"
+              >gpu_CopyBuffer</a
+              >   [buffer_dst_key, buffer_src_key, pipe_key, size, sync]
+
+[buffer_key, size] = <a class="fcnlink" href="#_gpu_CreateBufferFromSymbol"
+              >_gpu_CreateBufferFromSymbol</a
+              > [program_key, 'symbol_name']
+</pre>
+        
+<h4>Host Cached Memory Buffers</h4>
+
+<pre class="code">
+buffer_key  = <a class="fcnlink" href="#_gpu_CreateCachedBuffer"
+              >_gpu_CreateCachedBuffer</a> [context_key, size, 'type']
+              <a class="fcnlink" href="#gpu_ReleaseBuffer"
+              > gpu_ReleaseBuffer</a>       buffer_key
+              <a class="fcnlink" href="#_gpu_SetCachedBuffer"
+              >_gpu_SetCachedBuffer</a>    [buffer_key, data, 'type']
+action_id   = <a class="fcnlink" href="#_gpu_WriteCachedBuffer"
+              >_gpu_WriteCachedBuffer</a>  [buffer_key, pipe_key, sync]
+action_id   = <a class="fcnlink" href="#_gpu_ReadCachedBuffer"
+              >_gpu_ReadCachedBuffer</a>   [buffer_key, pipe_key, sync]
+data        = <a class="fcnlink" href="#_gpu_GetCachedBuffer"
+              >_gpu_GetCachedBuffer</a>    [buffer_key, size, 'type']
+</pre>
+
+<h4>Kernel Program Execution</h4>
+
+<pre class="code">
+action_id   = <a class="fcnlink" href="#gpu_RunProgram"
+              >gpu_RunProgram</a> [
+                    program_key, pipe_key, 'function_name',
+                    function_args, grid_dim, block_dim, shared_mem_size,
+                    sync
+              ]
+</pre>
+
+<h4>Miscellaneous</h4>
+
+<pre class="code">
+key         = <a class="fcnlink" href="#gpu_Key"
+              >gpu_Key</a> key
+</pre>
+
+
+<h1>Description</h1>
+
+<p>
+CUDA&reg; and OpenCL&trade; make it possible to run massively parallel tasks
+and algorithms very efficiently on Graphic Processing Units (GPU). This
+SVL GPU API provides a unified interface to integrate CUDA&reg;
+and OpenCL&trade; kernel source code into SVL programs. It allows to
+send SVL vector data to the GPU and use it for the computation.
+Note: An installed CUDA Software Development Kit (SDK) is required.
+</p>
+
+<p>
+The general workflow is as follows:
+</p>
+<ol>
+<li>Select GPU device.</li>
+<li>Create context to manage GPU resources.</li>
+<li>Create pipe to serialize computation and memory transfers.</li>
+<li>Build and load CUDA&reg; and OpenCL&trade; kernel source code.</li>
+<li>Create memory buffers on GPU.</li>
+<li>Send vector data to memory buffers.</li>
+<li>Run kernel program with data on GPU.</li>
+<li>Wait for computation to finish.</li>
+<li>Retrieve result data from memory buffers.</li>
+<li>Release GPU resources.</li>
+</ol>
+
+<a id="gpu_HasDevice"></a>
+<h3>Device Management</h3>
+
+<pre>
+flag = <span class="fcndef">gpu_HasDevice</span> []
+flag = <span class="fcndef">gpu_HasDevice</span> driver_tok
+</pre>
+
+<p>Returns 1, if a GPU computing device is available. If the driver_tok
+is specified (either <tt>'cuda'</tt> or <tt>'opencl'</tt>) the availability
+of such a device is returned. 0 is returned if no GPU computing device (of
+specified driver type) is available.</p>
+
+<a id="gpu_Devices"></a>
+<hr noshade="noshade" />
+
+<pre>
+device_keys = <span class="fcndef">gpu_Devices</span> []
+</pre>
+
+<p>Returns vector of keys of available GPU computing devices,
+CUDA&reg; + OpenCl&trade;.
+If CUDA&reg; or OpenCL&trade; is not supported or can not be initalized an
+error is generated.</p>
+
+<a id="_gpu_Devices"></a>
+<hr noshade="noshade" />
+
+<pre>
+device_keys = <span class="fcndef">_gpu_Devices</span> []
+</pre>
+
+<p>Returns vector of keys of available GPU computing devices,
+CUDA&reg; + OpenCl&trade;.
+If CUDA&reg; or OpenCL&trade; is not supported or can not be initalized
+<tt>[]</tt>
+is returned. The function is equivalent to <tt>gpu_Devices</tt> but does
+not raise an error if no devices are available.</p>
+
+<a id="gpu_DefaultDevice"></a>
+<hr noshade="noshade" />
+
+<pre>
+device_key = <span class="fcndef">gpu_DefaultDevice</span> []
+device_key = <span class="fcndef">gpu_DefaultDevice</span> driver_tok
+device_key = <span class="fcndef">gpu_DefaultDevice</span> [driver_tok, mpu_utilization]
+</pre>
+
+<p>Returns key of the default GPU compute device, if <tt>driver_tok</tt> is
+specified (either <tt>'cuda'</tt> or <tt>'opencl'</tt>) the default device
+for that driver is returned. The option <tt>mpu_utilization</tt> parameter
+specifies the number of mpu workers (by default 4). which can share
+one GPU device if MOE is started with the <tt>-mpu n</tt> switch.
+If CUDA&reg; or OpenCL&trade; is not supported or can not be initalized
+an error is raised.</p>
+
+<a id="_gpu_DefaultDevice"></a>
+<hr noshade="noshade" />
+
+<pre>
+device_key = <span class="fcndef">_gpu_DefaultDevice</span> []
+device_key = <span class="fcndef">_gpu_DefaultDevice</span> driver_tok
+device_key = <span class="fcndef">_gpu_DefaultDevice</span> [driver_tok, mpu_utilization]
+</pre>
+
+<p>Returns key of the default GPU compute device, if <tt>driver_tok</tt> is
+specified (either <tt>'cuda'</tt> or <tt>'opencl'</tt>) the default device
+for that driver is returned. The option <tt>mpu_utilization</tt> parameter
+specifies the number of mpu workers (by default 4). which can share
+one GPU device if MOE is started with the <tt>-mpu n</tt> switch.
+If CUDA&reg; or OpenCL&trade;
+is not supported or can not be initalized the value <tt>0</tt> is returned.
+The function is equivalent to <tt>gpu_DefaultDevice</tt> but does
+not raise an error if no devices are available.</p>
+
+<a id="gpu_GetDriver"></a>
+<hr noshade="noshade" />
+
+<pre>
+driver_tok = <span class="fcndef">gpu_GetDriver</span> device_key
+</pre>
+
+<p>Returns driver type of specified device keys as token: <tt>'cuda'</tt> or
+<tt>'opencl'</tt>. The function allows abitrary nested input.</p>
+
+<a id="gpu_GetDeviceInfo"></a>
+<hr noshade="noshade" />
+
+<pre>
+device_info = <span class="fcndef">gpu_GetDeviceInfo</span> device_key
+</pre>
+
+<p>Return device information for the specified device as tagged vector.
+The device info contains the name of device, properties, capabilities, etc.
+It is specific to the driver type (<tt>cuda</tt> or <tt>opencl</tt>)
+of the device.</p>
+
+<hr noshade="noshade" />
+
+<a id="gpu_CreateContext"></a>
+<h3>GPU Context</h3>
+
+<pre>
+context_key = <span class="fcndef">gpu_CreateContext</span> device_key
+</pre>
+
+<p>Creates a GPU computing context for the specified device and returns
+the context key for use by all subsequent GPU computing task.
+To release all GPU resources of the context use <tt>gpu_ReleaseContext</tt>.
+The lifetime of the context is also tied to the current task. If the
+task dies, the context and all its child resource are destroyed
+automatically.</p>
+
+<a id="gpu_ReleaseContext"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">gpu_ReleaseContext</span> context_key
+</pre>
+
+<p>Releases GPU compute context and all its associated resources
+(pipes, programs, buffers).</p>
+
+<hr noshade="noshade" />
+
+<a id="gpu_CreatePipe"></a>
+<h3>Compute Pipe</h3>
+
+<pre>
+pipe_key = <span class="fcndef">gpu_CreatePipe</span> device_key
+</pre>
+
+<p>Creates a compute pipe for the specified context and returns its key. 
+The pipe is used to control and serialize GPU compute task, all actions
+issued to a pipe are processed in order. It is used to upload data
+to the graphics card, launch the compute kernel and retrieve the
+results. While actions in one pipe are executed in order, multiple
+pipes can operate in parallel on different data. Also SVL commands
+can be executed while GPU compute actions in a pipe are processed.
+A pipe is the equivalent to the CUDA&reg; <tt>stream</tt> and
+OpenCL&trade; <tt>queue</tt> object.
+After use, a pipe needs to be released with <tt>gpu_ReleasePipe</tt>,
+or it is released automatically if its GPU context is destroyed.</p>
+
+<a id="gpu_ReleasePipe"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">gpu_ReleasePipe</span> pipe_key
+</pre>
+
+<p>Release GPU compute pipe and its associated resources.</p>
+
+<a id="gpu_WaitForPipe"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">gpu_WaitPipe</span>  pipe_key
+<span class="fcndef">gpu_WaitPipe</span> [pipe_key, action_id]
+</pre>
+
+<p>Wait until the computation or memory transfer in a GPU pipe are
+finished. While the current task is waiting on the GPU computing device
+SVL in other task can be executed. If an <tt>action_id</tt> is specified,
+the task will wait on that specific action (kernel computation,
+memory transfer) to finish, otherwise it will wait on all queued
+actions in the pipe.
+This can also be used to synchronize actions in a multi pipe gpu
+compute job.</p>
+
+<a id="gpu_CheckCompiler"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">gpu_CheckCompiler</span> device_key
+</pre>
+
+<p>Checks if the CUDA&reg; or OpenCL&trade; kernel compiler is available for
+the specified device. Raises an error if the compiler is not
+available. In such a case only precompiled kernels can
+be loaded and executed.</p>
+
+<hr noshade="noshade" />
+
+<a id="gpu_CreateProgram"></a>
+<h3>Kernel Program</h3>
+
+<pre>
+program_key = <span class="fcndef">gpu_CreateProgram</span
+> [context_key, "source", type]
+</pre>
+
+<p>Creates a GPU compute program from a <tt>source</tt> code string. Returns a
+program_key to reference the program in further GPU calls.
+The token <tt>type</tt> specifies the type of the source code and must
+be correct or an error will be raised when trying to build it with
+<tt>gpu_BuildProgram</tt>.
+The source program needs to be built and loaded before use with the function
+<tt>gpu_BuildProgram</tt>.
+To release the the program resource use <tt>gpu_ReleaseProgram</tt>.</p>
+
+<p>
+The following source <tt>type</tt> formats are supported:
+<ul>
+<li> <tt>'cuda'</tt> - CUDA&reg; C</li>
+<li> <tt>'ptx'</tt> - CUDA&reg; ptx assembler</li>
+<li> <tt>'cubin'</tt> - CUDA&reg; binary</li>
+<li> <tt>'opencl'</tt> - OpenCL&trade; C</li>
+<li> <tt>'oclbin'</tt> - OpenCL&trade; binary</li>
+</ul>
+</p>
+
+<a id="gpu_ReleaseProgram"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">gpu_ReleaseProgram</span> program_key
+</pre>
+
+<p>Release GPU compute program and its associated resources.</p>
+
+<a id="gpu_BuildProgram"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">gpu_BuildProgram</span
+> [program_key, ['-opt1', '-opt2', ...]]
+</pre>
+
+<p>Builds the kernel source of the specified program into
+functional GPU kernel(s) and loads it onto the device for use
+by <tt>gpu_RunProgram</tt>.
+If the compilation fails, an error is raised. Optional compile options
+can be specified as a vector of tokens.</p>
+<p>The compilation log can be retrieved with <tt>gpu_GetBuildLog</tt> and the
+binary with <tt>gpu_GetProgramBinary</tt>.</p>
+
+<a id="gpu_GetBuildLog"></a>
+<hr noshade="noshade" />
+
+<pre>
+log_text = <span class="fcndef">gpu_GetBuildLog</span> program_key
+</pre>
+
+<p>Returns GPU program build log as string. The build log contains errors
+and warnings of the program compilation by <tt>gpu_BuildProgram</tt>.
+</p>
+
+<a id="gpu_GetProgramBinary"></a>
+<hr noshade="noshade" />
+
+<pre>
+binary = <span class="fcndef">gpu_GetProgramBinary</span> program_key
+</pre>
+
+<p>Returns GPU program binary representation as char vector, which can be
+a readable assembler text or binary code depending on the GPU device and
+driver. The binary can be stored and reused on the same hardware to
+speed up the program creation by bypassing the compilation step.
+A binary still has to be "built" with <tt>gpu_BuildProgram</tt> to load it
+onto the device to be ready for use.</p>
+
+<a id="gpu_GetKernelInfo"></a>
+<hr noshade="noshade" />
+
+<pre>
+kernel_info = <span class="fcndef">gpu_GetKernelInfo</span
+> [program_key, 'function_name']
+</pre>
+
+<p>Returns kernel information for the specified program and kernel
+function name as tagged vector.</p>
+
+<a id="gpu_GetKernelOccupancy"></a>
+<hr noshade="noshade" />
+
+<pre>
+occupancy = <span class="fcndef">gpu_GetKernelOccupancy</span
+> [program_key, 'function_name', block_size, dyn_shared_mem_size]
+</pre>
+
+<p>Returns kernel occupancy for the specified program and kernel
+function name and kernel parameter values.</p>
+<p> Note! This function is CUDA&reg; specific and will return
+an error when executed in an OpenCL&trade; context.</p>
+
+<hr noshade="noshade" />
+
+<a id="gpu_CreateBuffer"></a>
+<h3>Memory Buffers</h3>
+
+<pre>
+buffer_key = <span class="fcndef">gpu_CreateBuffer</span
+> [context_key, size]
+buffer_key = <span class="fcndef">gpu_CreateBuffer</span
+> [context_key, size, 'data_type']
+</pre>
+
+<p>Creates a memory buffer on the GPU compute device and returns its
+buffer key. The memory buffer can be read and written by a gpu
+compute kernel. To transfer data to and from the GPU device use
+the functions <tt>gpu_Read/WriteBuffer</tt>.</p>
+<p>A buffer is tied to the GPU compute context. When creating a buffer
+one has to specify the size either in bytes or the size of an array
+of a specific <tt>data_type</tt>. Supported variable data types as
+input/output for kernel functions are <tt>'char'</tt>, <tt>'int'</tt>,
+<tt>'float'</tt>, and <tt>'double'</tt>.</p>
+<p>The GPU memory buffer is released with the function
+<tt>gpu_ReleaseBuffer</tt>.</p>
+
+<a id="gpu_ReleaseBuffer"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">gpu_ReleaseBuffer</span> buffer_key
+</pre>
+
+<p>
+Release GPU device memory buffer and its associated resources.
+</p>
+
+<a id="gpu_WriteBuffer"></a>
+<hr noshade="noshade" />
+
+<pre>
+action_id = <span class="fcndef">gpu_WriteBuffer</span
+> [buffer_key, pipe_key, data]
+action_id = <span class="fcndef">gpu_WriteBuffer</span
+> [buffer_key, pipe_key, data, 'type']
+action_id = <span class="fcndef">gpu_WriteBuffer</span
+> [buffer_key, pipe_key, data, 'type', sync]
+</pre>
+
+<p>
+Writes <tt>data</tt> into the specified memory buffer on the GPU device.
+The transfer is done using the specified pipe.</p>
+<p>The data is either specified as suitable formatted <tt>char</tt>
+array representing the byte pattern expected by the GPU kernel function
+or given as flat numerical vector and converted on the fly to the specified
+data <tt>type</tt> (<tt>'char'</tt>, <tt>'int'</tt>, <tt>'float'</tt>,
+<tt>'double'</tt>).</p>
+<p>By default the function will block (<tt>sync == 2</tt>) until
+the data transfer to the GPU device is complete, but it can also be
+executed asynchronously, i.e. the function returns right away and
+the data transfer is done in the background while other SVL calls
+can be executed. If an SVL task needs to wait until completion
+of the transfer, it can be suspended with the function <tt>gpu_WaitForPipe</tt>.
+The function <tt>gpu_WriteBuffer</tt> returns the pipe <tt>action_id</tt>
+which can be used to specifically wait for completion of that buffer transfer.
+</p>
+
+ <table class="noborder left">
+ <tr>
+   <td valign="baseline"><tt>data</tt></td>
+   <td>SVL vector data to be transferred to the GPU device memory buffer.</td>
+ </tr>
+ <tr>
+   <td valign="baseline"><tt>type</tt></td>
+   <td>
+   Data type of kernel function: <tt>'char'</tt>, <tt>'int'</tt>,
+   <tt>'float'</tt> or <tt>'double'</tt></td>
+ </tr>
+ <tr>
+   <td valign="baseline"><tt>sync</tt></td>
+   <td>
+    Wait behavior of write operation:
+    <ul>
+     <li>0: Asynchronous transfer</li>
+     <li>1: SVL task wait</li>
+     <li>2: Block</li>
+    </ul>
+   Blocking is faster than SVL task wait (which has a slight overhead,
+   polling for the status of the memory transfer), but while the function
+   is blocked no other SVL task can be executed.
+   </td>
+ </tr>
+ </table>
+
+<a id="gpu_ReadBuffer"></a>
+<hr noshade="noshade" />
+
+<pre>
+data = <span class="fcndef">gpu_ReadBuffer</span
+> [buffer_key, pipe_key]
+data = <span class="fcndef">gpu_ReadBuffer</span
+> [buffer_key, pipe_key, size, 'type']
+data = <span class="fcndef">gpu_ReadBuffer</span
+> [buffer_key, pipe_key, size, 'type', sync]
+</pre>
+
+<p>Reads data from the specified memory buffer on the GPU device.
+The transfer is done using the specified pipe. 
+The data returned is converted from the specified kernel data <tt>type</tt>
+(<tt>'char'</tt>, <tt>'int'</tt>, <tt>'float'</tt>, <tt>'double'</tt>)
+and returned as either <tt>char</tt>, <tt>int</tt> or <tt>real</tt>
+SVL vector.</p>
+<p>By default the function will block (<tt>sync == 2</tt>) until the data
+transfer to the GPU device is complete, but it can also be executed
+asynchronously, so that other SVL tasks can execute functions while
+the current task waits for the transfer to complete.</p>
+
+ <table class="noborder left">
+ <tr>
+   <td valign="baseline"><tt>size</tt></td>
+   <td>Size of <tt>data</tt> to be returned,
+   if 0, the complete buffer is returned.</td>
+ </tr>
+ <tr>
+   <td valign="baseline"><tt>type</tt></td>
+   <td>
+   Data type of kernel function: <tt>'char'</tt>, <tt>'int'</tt>,
+   <tt>'float'</tt> or <tt>'double'</tt></td>
+ </tr>
+ <tr>
+   <td valign="baseline"><tt>sync</tt></td>
+   <td>
+    Wait behavior of read operation:
+    <ul>
+     <li>0+1: SVL task wait (no asynchronous read possible)</li>
+     <li>2: Block</li>
+    </ul>
+   Blocking is faster than SVL task wait (which has a slight overhead,
+   polling for the status of the memory transfer), but while the function
+   is blocked no other SVL task can be executed.
+   </td>
+ </tr>
+ </table>
+
+<a id="gpu_CopyBuffer"></a>
+<hr noshade="noshade" />
+
+<pre>
+action_id = <span class="fcndef">gpu_CopyBuffer</span
+> [buffer_dst_key, buffer_src_key, pipe_key]
+action_id = <span class="fcndef">gpu_CopyBuffer</span
+> [buffer_dst_key, buffer_src_key, pipe_key, size]
+action_id = <span class="fcndef">gpu_CopyBuffer</span
+> [buffer_dst_key, buffer_src_key, pipe_key, size, sync]
+</pre>
+
+<p>
+Copies data between two specified memory buffers on the GPU device.
+The transfer is done using the specified pipe. The operation is
+executed directly on the GPU device and hence much faster than
+consecutive calls of <tt>gpu_ReadBuffer</tt> and <tt>gpu_WriteBuffer</tt></p>
+<p>By default the function will block (<tt>sync == 2</tt>) until the data
+transfer on the GPU device is complete, but it can also be
+executed asynchronously, i.e. the function returns right away and
+the data transfer is done in the background while other SVL calls
+can be executed. If an SVL task needs to wait until completion
+of the transfer it can be suspended with the function <tt>gpu_WaitForPipe</tt>.
+The function <tt>gpu_CopyBuffer</tt> returns the pipe <tt>action_id</tt> which
+can be used to specifically wait for completion at that buffer transfer.
+</p>
+
+ <table class="noborder left">
+ <tr>
+   <td valign="baseline"><tt>size</tt></td>
+   <td>Size in bytes of data to be copied, if 0, the complete buffer 
+   is copied. The copied data must fit into the destination buffer.</td>
+ </tr>
+ <tr>
+   <td valign="baseline"><tt>sync</tt></td>
+   <td>
+    Wait behavior of copy operation:
+    <ul>
+     <li>0: Asynchronous transfer</li>
+     <li>1: SVL task wait</li>
+     <li>2: Block</li>
+    </ul>
+   Blocking is faster than SVL task wait (which has a slight overhead,
+   polling for the status of the memory transfer), but while the function
+   is blocked no other SVL task can be executed.
+   </td>
+ </tr>
+ </table>
+
+<a id="_gpu_CreateBufferFromSymbol"></a>
+<hr noshade="noshade" />
+
+<pre>
+[buffer_key, size] = <span class="fcndef">_gpu_CreateBufferFromSymbol</span
+> [program_key, 'symbol_name']
+</pre>
+
+<p>Creates a memory buffer from a CUDA&reg; kernel symbol in the specified
+program. This is used to write e.g. to a constant in CUDA&reg; kernel code.
+OpenCL&trade; does not have the same concept, and so always a buffer key
+of <tt>0</tt> and buffer_size of <tt>0</tt> is returned. To transfer data
+to and from the GPU device use the function <tt>gpu_Read/WriteBuffer</tt>.</p>
+<p>Note, the returned buffer size is in bytes.</p>
+
+<hr noshade="noshade" />
+
+<a id="_gpu_CreateCachedBuffer"></a>
+<h3>Host Cached Memory Buffers</h3>
+
+<pre>
+buffer_key = <span class="fcndef">_gpu_CreateCachedBuffer</span
+> [context_key, size]
+buffer_key = <span class="fcndef">_gpu_CreateCachedBuffer</span
+> [context_key, size, 'data_type']
+</pre>
+
+<p><p>Creates a memory buffer on the GPU compute device as well as
+a cache buffer on the host and returns its
+buffer key. The cache buffer uses page-locked host memory for
+fast/asynchronous memory transfers. This is only necessary if one wants
+to interleave memory transfer operations with kernel launches, i.e. when
+memory transfer to the GPU is the bottleneck and one wants to "hide" its cost
+by executing a kernel which uses different memory buffers while the transfer
+is done.</p>
+<p>The memory buffer can be read and written by a gpu
+compute kernel. To transfer data to and from the GPU device use
+the functions <tt>_gpu_Set/Write/Read/GetCachedBuffer</tt>.</p>
+<p>A buffer is tied to the GPU compute context. When creating a buffer
+one has to specify the size either in bytes or the size of an array
+of a specific <tt>data_type</tt>. Supported variable data types as
+input/output for kernel functions are <tt>'char'</tt>, <tt>'int'</tt>,
+<tt>'float'</tt>, and <tt>'double'</tt>.</p>
+<p>The GPU memory buffer and its host cache are released with
+the function <tt>gpu_ReleaseBuffer</tt>.</p>
+
+<a id="_gpu_SetCachedBuffer"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">_gpu_SetCachedBuffer</span
+> [buffer_key, data]
+<span class="fcndef">_gpu_SetCachedBuffer</span
+> [buffer_key, data, 'type']
+</pre>
+
+<p> Writes <tt>data</tt> into the host buffer cache of the specified memory
+buffer. This does not transfer the data to the GPU computing device.
+The transfer to the graphics card is done with the additional call
+<tt>_gpu_WriteCachedBuffer</tt>.</p>
+</p>The data is either specified as suitable formatted <tt>char</tt> array
+representing the byte pattern expected by the GPU kernel function
+or given as flat numerical vector and converted on the fly to the
+specified data <t>type</tt> (<tt>'char'</tt>, <tt>'int'</tt>,
+<tt>'float'</tt>, <tt>'double'</tt>).</p>
+
+<a id="_gpu_WriteCachedBuffer"></a>
+<hr noshade="noshade" />
+
+<pre>
+action_id = <span class="fcndef">_gpu_WriteCachedBuffer</span
+> [buffer_key, pipe_key]
+action_id = <span class="fcndef">_gpu_WriteCachedBuffer</span
+> [buffer_key, pipe_key, sync]
+</pre>
+
+<p>Writes data from the host memory cache into the specified memory
+buffer on the GPU device. The transfer is done using the specified
+pipe.</p>
+</p>By default the function will block (<tt>sync == 2</tt>) until the
+data transfer to the GPU device is complete, but can also be
+executed asynchronously, i.e. the function returns right away and
+the data transfer is done in the background while other SVL calls
+can be executed. If an SVL task needs to wait until completion
+of the transfer it can be suspended with the function <tt>gpu_WaitForPipe</tt>.
+The function <tt>_gpu_WriteCachedBuffer</tt> returns the pipe
+<tt>action_id</tt> which can be used to specifically wait for
+completion of that buffer transfer</p>
+
+ <table class="noborder left">
+ <tr>
+   <td valign="baseline"><tt>sync</tt></td>
+   <td>
+    Wait behavior of write operation:
+    <ul>
+     <li>0: Asynchronous transfer</li>
+     <li>1: SVL task wait</li>
+     <li>2: Block</li>
+    </ul>
+   Blocking is faster than SVL task wait (which has a slight overhead,
+   polling for the status of the memory transfer), but while the function
+   is blocked no other SVL task can be executed.
+   </td>
+ </tr>
+ </table>
+
+<a id="_gpu_ReadCachedBuffer"></a>
+<hr noshade="noshade" />
+
+<pre>
+action_id = <span class="fcndef">_gpu_ReadCachedBuffer</span
+> [buffer_key, pipe_key]
+action_id = <span class="fcndef">_gpu_ReadCachedBuffer</span
+> [buffer_key, pipe_key, 'type']
+</pre>
+
+<p>Read/transfer data from the specified memory buffer on the GPU device
+to its host memory cache (from which it can be retrieved afterwards
+using the function <tt>_gpu_GetCachedBuffer</tt>).
+The transfer is done using the specified pipe. 
+By default the function will block (<tt>sync == 2</tt>) until the data
+transfer from the GPU device is complete, but can also be executed
+asynchronously, so that other SVL tasks can execute functions while
+the current task waits for the transfer to complete.
+The function <tt>_gpu_ReadCachedBuffer</tt> returns the pipe <tt>action_id</tt>
+which can be used to specifically wait for completion of that buffer
+transfer.</p>
+
+ <table class="noborder left">
+ <tr>
+   <td valign="baseline"><tt>sync</tt></td>
+   <td>
+    Wait behavior of read operation:
+    <ul>
+     <li>0: Asynchronous transfer</li>
+     <li>1: SVL task wait</li>
+     <li>2: Block</li>
+    </ul>
+   Blocking is faster than SVL task wait (which has a slight overhead,
+   polling for the status of the memory transfer), but while the function
+   is blocked no other SVL task can be executed.
+   </td>
+ </tr>
+ </table>
+
+<a id="_gpu_GetCachedBuffer"></a>
+<hr noshade="noshade" />
+
+<pre>
+data = <span class="fcndef">_gpu_GetCachedBuffer</span
+> [buffer_key]
+data = <span class="fcndef">_gpu_GetCachedBuffer</span
+> [buffer_key, size]
+data = <span class="fcndef">_gpu_GetCachedBuffer</span
+> [buffer_key, size, 'type']
+</pre>
+
+<p>
+Reads data from the host buffer cache of the specified memory buffer.
+This does not transfer the data from the GPU computing device.
+The transfer from the graphics card is done with the additional call
+<tt>_gpu_ReadCachedBuffer</tt>.
+The parameter <tt>size</tt> specifies how much data is returned;
+if 0, the complete buffer is returned.
+The returned data is converted from the specified kernel data <tt>type</tt>
+(<tt>'char'</tt>, <tt>'int'</tt>, <tt>'float'</tt>, <tt>'double'</tt>) and
+returned as either <tt>char</tt>, <tt>int</tt> or <tt>real</tt> SVL vector.
+</p>
+
+<hr noshade="noshade" />
+
+<a id="gpu_RunProgram"></a>
+<h3>Kernel Program Execution</h3>
+
+<pre>
+action_id = <span class="fcndef">gpu_RunProgram</span> [
+    program_key, pipe_key, 'function_name',
+    function_args, grid_dim, block_dim, shared_mem_size,
+    sync
+]
+</pre>
+
+<p>Runs a GPU compute kernel with the given <tt>'function_name'</tt> from the
+specified program in the specified pipe.</p>
+By default the function will block (<tt>sync == 2</tt>) until the computation
+is finished, but can also be executed asynchronously, i.e. the function
+returns right away and the computation is done in the background while
+other SVL calls can be executed (including other memory transfers
+or kernel computations). If an SVL task needs to wait until completion
+of the computation it can be suspended with the function
+<tt>gpu_WaitForPipe</tt>.
+The function gpu_RunProgram returns the pipe action_id which
+can be used to specifically wait for completion at that computation.</p>
+</p>The dimensions of the computations (i.e. the kernel thread organization)
+is specified with the parameters <tt>grid_dim</tt> and <tt>block_dim</tt>.
+Up to three dimensions can be specified. The block size specifies the size and
+dimensions of the thread block (threads in a block can access fast shared
+memory if necessary). The grid sizes define the number of blocks in all
+dimensions, i.e. to run a kernel parallel on 1024 input values and with
+16 threads per block, one would e.g. use grid_dim = [64, 1, 1] and
+block_dim = [16, 1, 1]; or grid_dim = [8, 8, 1] and block_dim = [4, 4, 1].</p>
+<p>If the CUDA&reg; kernel code uses shared memory, the parameter
+<tt>shared_mem_size</tt>
+is used to define its size in bytes (CUDA&reg; kernels only,
+ignored by OpenCL&trade;).</p>
+<p>Kernel function arguments are defined in the vector
+<tt>function_args: [kernel_arg1, kernel_arg2,...]</tt>;
+kernel_arg1 is either the <tt>buffer_key</tt> or the
+byte array of a constant value (as <tt>char</tt> array). Use the function
+<tt>swriteb</tt> for conversion: E.g.
+<tt>functions_args = [buffer_key1, buffer_key2, swriteb ['float', 1.457]]</tt>.
+</p>
+
+ <table class="noborder left">
+ <tr>
+   <td valign="baseline"><tt>sync</tt></td>
+   <td>
+    Wait behavior of function call:
+    <ul>
+     <li>0: Asynchronous execution</li>
+     <li>1: SVL task wait</li>
+     <li>2: Block</li>
+    </ul>
+   Blocking is faster than SVL task wait (which has a slight overhead,
+   polling for the status of the memory transfer), but while the function
+   is blocked no other SVL task can be executed.
+   </td>
+ </tr>
+ </table>
+
+<hr noshade="noshade" />
+
+<a id="gpu_Key"></a>
+<h3>Miscellaneous</h3>
+
+<pre>
+key = <span class="fcndef">gpu_Key</span> key
+</pre>
+
+<p>Validates the given single key and returns it verbatim, if it is a valid
+device, context, pipe, program, or buffer key. Otherwise it returns 0.</p>
+
+<a id="Example"></a>
+<h3>Example</h3>
+
+<p>
+SVL Cuda&reg; Example to multiply a vector with the factor 2.5 using the GPU:
+</p>
+
+<pre>
+    const source =
+    #string
+	extern "C" __global__ void Mult(float *a, float f)
+	{ a[blockIdx.x * blockDim.x + threadIdx.x] *= f; }
+    #   ;
+
+    local device  = gpu_DefaultDevice [];
+    local context = gpu_CreateContext device;
+    local pipe    = gpu_CreatePipe context;
+
+    local prog = gpu_CreateProgram [context, source, 'cuda'];
+    gpu_BuildProgram prog;
+
+    local data = igen 1024;
+    local buffer = gpu_CreateBuffer [context, 1024, 'float'];
+    local a1 = gpu_WriteBuffer [buffer, pipe, data, 'float', 0];
+
+    local args = [buffer, swriteb ['float', 2.5]];
+    local a2 = gpu_RunProgram [prog, pipe, 'Mult', args, [64,1,1], [16,1,1], 0, 0];
+    gpu_WaitForPipe pipe;
+
+    local result = gpu_ReadBuffer [buffer, pipe, 0, 'float', 2];
+
+    gpu_ReleaseContext context;
+
+    print result;
+</pre>
+
+<h1>See Also</h1>
+
+<p><a href="../../install/install.htm#GPUInfo">GPU Info</a></p>
+
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

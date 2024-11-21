@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: db_Environment" />
+  <meta name="keywords" content="functions: db_GetEnv" />
+  <meta name="keywords" content="functions: db_SetEnv" />
+  <meta name="keywords" content="functions: db_FieldEnvironment" />
+  <meta name="keywords" content="functions: db_GetFieldEnv" />
+  <meta name="keywords" content="functions: db_SetFieldEnv" />
+  <meta name="keywords" content="functions: db_DisplayAttributes" />
+  <meta name="keywords" content="functions: db_Info" />
+  <meta name="keywords" content="functions: db_Readable, db_Writeable" />
+  <title>MOE Database Functions: db_Environment...</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    MOE Database Functions: db_Environment...
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    env = <a class="fcnlink" href="#db_Environment">db_Environment</a> mdb_key
+    env = <a class="fcnlink" href=
+"#db_Environment">db_Environment</a> 'filename'
+
+    value_token = <a class="fcnlink" href=
+"#db_GetEnv">db_GetEnv</a> [ mdb_key, 'name' ]
+    value_token = <a class="fcnlink" href=
+"#db_GetEnv">db_GetEnv</a> [ 'filename', 'name' ]
+
+    <a class="fcnlink" href=
+"#db_SetEnv">db_SetEnv</a> [ mdb_key, 'name', 'value' ]
+    <a class="fcnlink" href=
+"#db_SetEnv">db_SetEnv</a> [ 'filename', 'name', 'value' ]
+
+    env = <a class="fcnlink" href=
+"#db_FieldEnvironment">db_FieldEnvironment</a> [ mdb_key, 'fieldname']
+    env = <a class="fcnlink" href=
+"#db_FieldEnvironment">db_FieldEnvironment</a> [ 'filename' , 'fieldname']
+
+    value_token = <a class="fcnlink" href=
+"#db_GetFieldEnv">db_GetFieldEnv</a> [ mdb_key, 'fieldname', 'name' ]
+    value_token = <a class="fcnlink" href=
+"#db_GetFieldEnv">db_GetFieldEnv</a> [ 'filename', 'fieldname', 'name' ]
+
+    <a class="fcnlink" href=
+"#db_SetFieldEnv">db_SetFieldEnv</a> [ mdb_key, 'fieldname', 'name', 'value' ]
+    <a class="fcnlink" href=
+"#db_SetFieldEnv">db_SetFieldEnv</a> [ 'filename', 'fieldname', 'name', 'value' ]
+
+    old_value = <a class="fcnlink" href="#db_DisplayAttributes"
+>db_DisplayAttributes</a
+> [ mdb, ['field1','field2',...], 'attr', [value1,value2,...] ]
+    old_value = <a class="fcnlink" href="#db_DisplayAttributes"
+>db_DisplayAttributes</a> [ mdb, [], 'attr', new_value] ]
+
+    old_value = <a class="fcnlink" href="#dbv_DisplayAttributes2"
+>dbv_DisplayAttributes</a
+> [ mdb, [], 'attr'] ]
+    old_value = <a class="fcnlink" href="#dbv_DisplayAttributes2"
+>dbv_DisplayAttributes</a
+> [ mdb, [], 'attr', new_value] ]
+
+    <a class="fcnlink" href="#db_Info">db_Info</a> []
+
+    <a class="fcnlink" href="#db_Info">db_Info</a> 'mdb_name'
+    <a class="fcnlink" href="#db_Info">db_Info</a>  mdb_key
+
+    [environment, fields, types, nentries] = <a class="fcnlink" href=
+"#db_Info">db_Info</a> mdb_key
+    [environment, fields, types, nentries] = <a class="fcnlink" href=
+"#db_Info">db_Info</a> 'mdb_name'
+
+    flag = <a class="fcnlink" href="#db_Readable">db_Readable</a> mdb_key
+    flag = <a class="fcnlink" href=
+"#db_Readable">db_Readable</a> 'filename'
+
+    flag = <a class="fcnlink" href="#db_Writeable">db_Writeable</a> mdb_key
+    flag = <a class="fcnlink" href=
+"#db_Writeable">db_Writeable</a> 'filename'
+
+</pre>
+<a id="db_Environment"></a>
+<h1>Description</h1>
+
+<pre>
+env = <span class="fcndef">db_Environment</span> mdb_key
+env = <span class="fcndef">db_Environment</span> 'filename'
+</pre>
+
+<p>Returns the environment of a molecular database (specified by
+  <tt>mdb_key</tt> or <tt>filename</tt>) in the form of a tagged vector. Each
+  vector entry is a token tagged by an environment variable name.</p>
+<a id="db_GetEnv"></a>
+<hr noshade="noshade" />
+
+<pre>
+value_token = <span class="fcndef">db_GetEnv</span> [ mdb_key, 'name' ]
+value_token = <span class=
+"fcndef">db_GetEnv</span> [ 'filename', 'name' ]
+</pre>
+
+<p>Returns the value (a token) of the environment variable specified by
+  <tt>name</tt> that is stored in the database identified by <tt>mdb_key</tt>
+  or <tt>filename</tt>. Variables that have not been defined return
+  <tt>''</tt> (the null token) as a value.</p>
+<a id="db_SetEnv"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class=
+"fcndef">db_SetEnv</span> [ mdb_key, 'name', 'value' ]
+<span class=
+"fcndef">db_SetEnv</span> [ 'filename', 'name', 'value' ]
+</pre>
+
+<p>Assigns <tt>value</tt>, a token, to the environment variable <tt>name</tt>
+  stored in the molecular database specified by <tt>mdb_key</tt> or
+  <tt>filename</tt>.</p>
+
+<p>The following function illustrates how to set database environment values
+  and then print them out:</p>
+
+<pre>
+    global function env_example filename
+        local mdb_key = db_Open [filename,'read'];
+
+        db_SetEnv [ mdb_key, 'var1', 'val1' ];
+        db_SetEnv [ mdb_key, 'var2', 'val2' ];
+
+        print db_GetEnv [ mdb_key, 'var1' ];
+        print db_Environment mdb_key;
+    endfunction
+</pre>
+
+<p>If database <tt>md.mdb</tt> has just two environment variables set
+  (<tt>var1</tt> and <tt>var2</tt>), then the following output is produced when
+  <tt>env_example</tt> is run:</p>
+
+<pre>
+    svl&gt; env_example 'md.mdb'
+    'val1'
+    [ var1:'val1', var2:'val2' ]
+</pre>
+<a id="db_Info"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">db_Info</span> []
+<span class="fcndef">db_Info</span> 'mdb_name'
+<span class="fcndef">db_Info</span> mdb_key
+[environment, fields, types, nentries] = <span class=
+"fcndef">db_Info</span> mdb_key
+[environment, fields, types, nentries] = <span class=
+"fcndef">db_Info</span> 'mdb_name'
+</pre>
+
+<p>Returns environment information (set using <tt>db_SetEnv</tt>) as well as
+  the name and type of every field in the molecular database identified by
+  either its <tt>mdb_key</tt> (returned by <a class="svl" href=
+  "db_opcl.htm">db_Open</a>) or its filename.</p>
+  <dl>
+    <dt><tt>environment</tt></dt>
+    <dd>Tagged vector of attribute value pairs.</dd>
+    <dt><tt>fields</tt></dt>
+    <dd>Vector of tokens containing the database field names.</dd>
+    <dt><tt>types</tt></dt>
+    <dd>Vector of the same length as <tt>fields</tt> containing the field types
+    (one of <a href="moe_const.htm">DB_FIELD_TYPES</a>).</dd>
+    <dt><tt>nentries</tt></dt>
+    <dd>Number of entries in the database.</dd>
+  </dl>
+
+<p>If the return value of <tt>db_Info</tt> is not assigned to a variable, the
+  information is printed in the SVL Commands window. If a null parameter is
+  given, then if the command is issued from the CLI in a Database Viewer, the
+  information for that database is given. Otherwise, the user will be prompted
+  for a database.</p>
+
+<p>For example:</p>
+
+<pre>
+    svl&gt; db_Info 'pdb_srch.mdb'
+    Environment:
+        date=Wed Apr  1 16:21:16 1998
+    fields:
+    (molecule  ) mol
+    (float     ) Z
+    (float     ) ID
+    (char      ) code
+    (char      ) header
+    (int       ) res
+    (char      ) date
+</pre>
+<a id="db_FieldEnvironment"></a>
+<hr noshade="noshade" />
+
+<pre>
+env = <span class=
+"fcndef">db_FieldEnvironment</span> [ mdb_key, 'fieldname']
+env = <span class=
+"fcndef">db_FieldEnvironment</span> [ 'filename', 'fieldname']
+</pre>
+
+<p>Returns the <em>field specific</em> environment of the field
+  <tt>'fieldname'</tt> in a molecular database (specified by
+  <tt>mdb_key</tt> or <tt>filename</tt>) in the form of a tagged vector. Each
+  vector entry is a token tagged by an environment variable name for the given
+  field only.</p>
+<a id="db_GetFieldEnv"></a>
+<hr noshade="noshade" />
+
+<pre>
+value_token = <span class=
+"fcndef">db_GetFieldEnv</span> [ mdb_key, 'fieldname', 'name' ]
+value_token = <span class=
+"fcndef">db_GetFieldEnv</span> [ 'filename', 'fieldname', 'name' ]
+</pre>
+
+<p>Returns the value (a token) of the <em>field specific</em> environment
+  variable specified by <tt>name</tt> that is stored in the field
+  <tt>'fieldname'</tt> in the database identified by <tt>mdb_key</tt>
+  or <tt>filename</tt>. Variables that have not been defined return
+  <tt>''</tt> (the null token) as a value.</p>
+<a id="db_SetFieldEnv"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class=
+"fcndef">db_SetFieldEnv</span> [ mdb_key, 'fieldname', 'name', 'value' ]
+<span class=
+"fcndef">db_SetFieldEnv</span> [ 'filename', 'fieldname', 'name', 'value' ]
+</pre>
+
+<p>Assigns <tt>value</tt>, a token, to the <em>field specific</em>
+  environment variable <tt>name</tt> stored in the field
+  <tt>'fieldname'</tt> in the molecular database specified by
+  <tt>mdb_key</tt> or <tt>filename</tt>.</p>
+
+<p>The following function illustrates how to set field specific database
+  environment values and then print them out:</p>
+
+<pre>
+    global function env_Field_example [filename, fieldname]
+        local mdb_key = db_Open [filename, 'read'];
+
+        db_SetFieldEnv [ mdb_key, fieldname, 'fvar1', 'fval1' ];
+        db_SetFieldEnv [ mdb_key, fieldname, 'fvar2', 'fval2' ];
+
+        print db_GetFieldEnv [ mdb_key, fieldname, 'fvar1' ];
+        print db_FieldEnvironment [mdb_key, fieldname];
+    endfunction
+</pre>
+
+<p>If database <tt>md.mdb</tt> has just two environment variables set
+  (<tt>fvar1</tt> and <tt>fvar2</tt>) for the field <tt>'mol'</tt>,
+  then the following output is produced when <tt>env_example</tt> is run:</p>
+
+<pre>
+    svl&gt; env_Field_example ['md.mdb', 'mol']
+    'fval1'
+    [ fvar1:'fval1', fvar2:'fval2' ]
+</pre>
+
+<a id="db_DisplayAttributes"></a>
+<hr noshade="noshade" />
+<pre>
+old_value = <span class="fcndef">db_DisplayAttributes</span
+> [ mdb, ['field1','field2',...], 'attr'] ]
+old_value = <span class="fcndef">db_DisplayAttributes</span
+> [ mdb, ['field1','field2',...], 'attr', [value1,value2,...]] ]
+</pre>
+
+<p>Returns and optionally sets Database Viewer display field attributes
+  which are stored in the database environment.
+  The database <tt>mdb</tt> is specified by  either a
+  database key or the database filename. The second argument
+  is a vector of <tt>fields</tt> for which the attribute value
+  should be returned or set.
+  See the list of available attribute tokens <tt>attr</tt> below.
+  Only one attribute can be queried or set at a time.
+  The value is set if the vector of <tt>values</tt> is specified
+  (i.e. not <tt>[]</tt>). The number of values must match the
+  number of specified fields. A single value gets unit extended to
+  the number of fields. The old values are always returned.</p>
+
+<p>The following attributes apply to all field types, unless otherwise
+  mentioned. When setting the value, it will also be saved in the database
+  environment, except for the attributes <tt><b>hidden</b></tt> and
+  <tt><b>selection</b></tt> which are not persistent.</p>
+
+<table class="noborder">
+ <tr>
+  <td><tt><b>'hidden'</tt></td>
+  <td>Controls the hidden state of the field
+  (<tt>1</tt> = hidden, <tt>0</tt> = visible).
+  Hiding a selected field deselects it.
+  This will only set or get a value other than <tt>0</tt>
+  if the database is currently open in the Database Viewer.</td>
+ </tr>
+
+ <tr>
+  <td><tt><b>'selection'</b></tt></td>
+  <td>Controls the selection state of the field 
+  (<tt>1</tt> = selected, <tt>0</tt> = unselected).
+  The selection state value is ignored for hidden fields
+  as hidden fields cannot be selected.
+  This will only set or get a value other than <tt>0</tt>
+  if the database is currently open in the Database Viewer.</td>
+ </tr>
+
+ <tr>
+  <td><tt><b>'width'</b></tt></td>
+  <td>Controls the display width (measured in characters) of the field.
+  The width of each field can be set individually.</td>
+ </tr>
+
+ <tr>
+  <td><tt><b>'wrap'</b></tt></td>
+  <td>
+  Controls the line-wrapping state of the field. Both character
+  and numeric fields can be displayed wrapped. For numeric fields,
+  wrapping only applies if there are multiple values (a vector),
+  in which case the values are displayed one per line. When the
+  state is set to <tt>0</tt>, all cells display their contents on a single
+  line.</td>
+ </tr>
+
+ <tr>
+  <td><tt><b>'precision'</b></tt></td>
+  <td>Controls the display precision of a numeric field.
+  Precision is specified as a single integer: A positive value denotes
+  decimal notation with the value representing the number of digits
+  to display after the decimal; a negative value denotes scientific
+  notation with the absolute value indicating the number of
+  significant figures to display.</td>
+ </tr>
+
+
+ <tr>
+  <td><tt><b>'bubblehelp'</b></tt></td>
+  <td>Bubble help text token which is shown when the mouse hovers over the
+    field name in the database viewer.
+  </td>
+ </tr>
+
+ <tr>
+  <td><tt><b>'plot'</b></tt></td>
+  <td>Determines if the numeric field will be plotted in the
+    <a href="../../mdb/dbplot.htm">Data Plot</a>, when the plot is opened
+    without a field selection.</td>
+ </tr>
+</table>
+
+<br />
+<p>The following attributes apply only to molecule fields
+  (types <tt>molecule</tt> and <tt>moe</tt>). The attribute values will
+  be saved in the database and hence are persistent.</p>
+
+<table class="noborder">
+ <tr>
+  <td><tt><b>'molmode'</b></tt></td>
+  <td>Controls how molecules will be displayed:
+    <ul>
+     <li><b><tt>'3d'</tt></b>. Display molecules as line drawings in 3D.</li>
+     <li><b><tt>'2d'</tt></b>. Create and display 2D depictions of
+     molecules.</li>
+     <li><b><tt>'carbo'</tt></b>. Create and show the <i>Symbol Nomenclature for
+     Glycans (SNFG)</i> representation for carbohydrates.</li>
+     <li><b><tt>'seq'</tt></b>. Show FASTA formatted sequence string.</li>
+    </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <td><tt><b>'fallback'</b></tt></td>
+  <td>Controls the fallback policy of the <b><tt>molmode</tt></b> display mode
+  for molecules. If enabled and <b><tt>molmode</tt></b> is set to
+  <tt>2d</tt> but the molecule can not be depicted (e.g. a large
+  protein without ligand) the protein will be displayed in <tt>3d</tt> mode
+  instead.
+  The same applies to the <tt>carbo</tt> mode which will fallback to
+  <tt>2d</tt> if no carbohydrate molecule is present, and then to
+  <tt>3d</tt> if no small molecule can be depicted.
+  If fallback is disabled and no depictable carbohydrate or ligand is present,
+  a warning text to this effect will be shown in the cell.
+  </td>
+ </tr>
+
+ <tr>
+  <td><tt><b>'molname'</b></tt></td>
+  <td>If enabled, the molecule names are always shown at the bottom of the
+  molecule cells.</td>
+ </tr>
+
+ <tr>
+  <td><tt><b>'trace'</b></tt></td>
+  <td>Controls drawing of the alpha-carbon protein or DNA/RNA backbone trace.
+  When the trace is on, the display of atoms, bonds, and element names
+  is disabled. The setting has no effect on non-proteins and non-DNA/RNA.
+  <p>This attribute only affects molecule fields displayed in
+  <tt>3d</tt> mode.</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td><tt><b>'multiple_bonds'</b></tt></td>
+  <td>If disabled, all bonds are rendered as single lines.
+  <p>This attribute only affects molecule fields displayed in
+  <tt>3d</tt> mode.</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td><tt><b>'element_colors'</b></tt></td>
+  <td>When enabled, hetero atoms are colored by element.
+  <p>This attribute only affects molecule fields displayed in
+  <tt>3d</tt> mode.</p>
+  </td>
+ <tr>
+
+ <tr>
+  <td><tt><b>'elements'</tt></b></td>
+  <td> When enabled, element names are displayed  in a given molecule
+  drawing only when the drawing is sufficiently large for the element
+  names to be rendered clearly. When the drawing is too small,
+  element names are hidden, regardless of the state.
+  <p>This attribute only affects molecule fields displayed in
+  <tt>3d</tt> mode.</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td><tt><b>'variable_font'</b></tt></td>
+  <td>If enabled, the font of the element labels is scaled in relation to the
+  molecule size, otherwise the label font size is the same for all molecules
+  regardless of their size.
+  <p>This attribute only affects molecule fields displayed in
+  <tt>3d</tt> mode.</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td><tt><b>'unified_view'</b></tt></td>
+  <td>When enabled, all molecules in the same database field are displayed using
+  the same view matrix. The result is that when one molecule is rotated
+  and/or zoomed, all other molecules in the field move in unison with it.
+  When unified viewing is disabled, each molecule's view can be individually
+  manipulated.
+  <p>This attribute only affects molecule fields displayed in
+  <tt>3d</tt> mode.</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td><tt><b>'hydrogens'</b></tt></td>
+  <td>If enabled, all hydrogen atoms present in the molecule are drawn.</td>
+ </tr>
+
+ <tr>
+  <td><tt><b>'polar'</b></tt></td>
+  <td>If enabled, only polar hydrogens are drawn. The <tt>hydrogens</tt>
+  attribute must be enabled for this attribute to have an effect.
+  <p>In <tt>2d</tt> display mode polar and chiral hydrogens are always shown
+  in the depiction.</p> 
+  </td>
+ </tr>
+
+ <tr>
+  <td><tt><b>'chirality'</b></tt></td>
+  <td>If enabled, mark chiral atoms (R/S) and bonds (E/Z) with
+  wedges and labels. Green labels mark chiral atoms/bonds without
+  chiral constraints, blue labels signify chiral constraints which
+  match the geometry and red if the chiral constraints are violated
+  or set on atoms which are not chiral.
+  <p>This attribute only affects molecule fields displayed in
+  <tt>2d</tt> mode.</p>
+  </td>
+ </tr>
+</table>
+
+
+<a id="dbv_DisplayAttributes2"></a>
+<hr noshade="noshade" />
+<pre>
+old_value = <span class="fcndef">dbv_DisplayAttributes</span
+> [ mdb, [], 'attr'] ]
+old_value = <span class="fcndef">dbv_DisplayAttributes</span
+> [ mdb, [], 'attr', new_value] ]
+</pre>
+
+<p>If no field parameter is specified (i.e. <tt>[]</tt>) the current
+  default attribute value of the database is returned or set.
+  This is the value which will be used for a field for which that
+  attribute has not been specifically set, e.g. a field which is newly created.
+  The attribute value is saved in the database.
+  Only the molecule field attributes (see list above) can be specified
+  in this mode.</p>
+
+
+<a id="db_Readable"></a>
+<a id="db_Writeable"></a>
+<hr noshade="noshade" />
+
+<pre>
+read_flag = <span class="fcndef">db_Readable</span> 'filename'
+read_flag = <span class="fcndef">db_Readable</span> mdb_key
+
+write_flag = <span class="fcndef">db_Writeable</span> 'filename'
+write_flag = <span class="fcndef">db_Writeable</span> mdb_key
+</pre>
+
+<p><tt>db_Readable</tt> returns 1 if the database file is available for
+  reading, and 0 otherwise. Similarly, <tt>db_Writeable</tt> returns 1 if the
+  database file is available for writing, and 0 otherwise. A file may be
+  unavailable because it has already been opened for reading or writing, in
+  which case the file is locked, or because its file permissions are preventing
+  access.</p>
+
+<h1>See Also</h1>
+
+<p><a href="introdb.htm">Database Functions</a></p>
+
+<p><a class="svl" href="db_ftype.htm">db_Fields</a><br />
+  <a class="svl" href="moe_const.htm">DB_FIELD_TYPES</a><br />
+  <a class="svl" href="db_opcl.htm">db_Filename</a><br />
+  <a class="svl" href="db_opcl.htm">db_Open</a><br />
+  <a class="svl" href="dbvmattr.htm">dbv_DisplayAttributes</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href=
+  "../../../include/manstyle.css" />
+  <meta name="keywords" content="keywords: RangeSlider, range, slider" />
+  <meta name="keywords" content="functions: Widget:RangeSlider" />
+  <meta name="keywords" content="functions: RangeSlider (widget)" />
+  <title>Range Slider Widget</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../../index.htm"><img src="../../../images/ccglogo.png" /></a>
+    <a href="../../../index.htm"><div class="moeversion"></div></a>
+    RangeSlider Widget
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Description</h1>
+
+<p>Double Slider for entering numeric range data. Two slider thumbs represent
+  a value range with a high and low value. Each slider thumb can be moved
+  separately. By dragging the connector between the two slider thumbs, both
+  are moved in sync. The precision of the numeric value
+  is determined by <tt>incr</tt> in the <tt>range</tt> attribute.
+  <tt>RangeSlider</tt> is similar to <tt>Slider</tt> except that it represents
+  a value range instead of a single value.</p>
+
+<h2>Attributes</h2>
+
+<p><tt>RangeSlider</tt> inherits all <a class="svl" href="wt_core.htm">core</a>
+  attributes and defines the following attributes:</p>
+  <table class="titlebar">
+    <tr>
+      <th valign="baseline">Attribute</th>
+      <th valign="baseline">Description</th>
+      <th valign="baseline">Values</th>
+      <th valign="baseline">Default</th>
+    </tr>
+    <tr>
+      <td valign="baseline"><tt>width</tt></td>
+      <td valign="baseline">Size of the range slider in character widths</td>
+      <td valign="baseline">1 to 255</td>
+      <td valign="baseline">10</td>
+    </tr>
+    <tr>
+      <td valign="baseline"><tt>vertical</tt></td>
+      <td valign="baseline">Orientation of slider</td>
+      <td valign="baseline">1 = vertical<br />
+      0 = horizontal</td>
+      <td valign="baseline">0</td>
+    </tr>
+    <tr>
+      <td valign="baseline"><tt>range</tt></td>
+      <td valign="baseline">
+        Data increment and range multipliers: <tt>[minfac,maxfac,incr]</tt>
+        <p>The actual data range is given by
+        <tt>[minfac*incr,maxfac*incr]</tt>; the end values are included in the
+        range</p>
+      </td>
+      <td valign="baseline">
+<pre>
+[
+ minfac,
+ maxfac,
+ increment
+]
+</pre>
+      </td>
+      <td valign="baseline">
+
+<pre>
+[
+ INT_MIN,
+ INT_MAX,
+ 1
+]</pre>
+      </td>
+    </tr>
+    <tr>
+      <td valign="baseline"><tt>sliderValue</tt></td>
+      <td valign="baseline">
+      Show the current slider low and high values below the slider thumbs.
+      A mouse click on the value opens a popup in which one can
+      change the slider value.
+      </td>
+      <td valign="baseline">
+      <tt>1</tt>&nbsp;(True), <tt>0</tt>&nbsp;(False)</td>
+      <td valign="baseline"><tt>0</td>
+    </tr>
+    <tr>
+      <td><tt>enableWheel</tt></td>
+      <td>Enable scrolling with the mouse wheel</td>
+      <td>1 (True)</br>0 (False)</td>
+      <td><tt>1</tt></td>
+    </tr>
+  </table>
+
+<h2>Trigger</h2>
+
+<p>Any mouse drag or button press in the slider which causes the sliders
+  values to change.</p>
+
+<h2>Data Value</h2>
+
+<p>The two numbers corresponding to the current two slider positions
+(low/high).</p>
+
+<h1>See Also</h1>
+
+<p><a href="wt_core.htm">Core Attributes</a><br />
+  <a href="../wt_intro.htm">SVL Window Toolkit</a><br />
+  <a href="introwt.htm">Window Toolkit Functions</a><br /></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../../images/ccgicon.png" /> <a href="../../../index.htm"></a>
+    <a href="../../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

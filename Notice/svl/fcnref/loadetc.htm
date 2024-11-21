@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: load, unload" />
+  <title>Module Loading: load, unload</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Module Loading: load, unload
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    <a class="fcnlink" href="#load">load</a> &#39;filename&#39;
+    <a class="fcnlink" href="#load">load</a> [&quot;source_string&quot;]
+
+    <a class="fcnlink" href="#unload">unload</a> &#39;module_title&#39;
+    <a class="fcnlink" href="#unload">unload</a> &#39;module_filename&#39;
+    <a class="fcnlink" href="#unload">unload</a> module_key
+</pre>
+<a id="load"></a>
+<h1>Description</h1>
+
+<pre>
+<span class="fcndef">load</span> &#39;filename&#39;
+<span class="fcndef">load</span> [&quot;source_string&quot;]
+</pre>
+
+<p>Loads (or installs) the module contained in the SVL file as expressed by
+  the <tt>&#39;filename&#39;</tt> token or the
+  <tt>&quot;source_string&quot;</tt> statements. No tasks are initiated. After
+  a module is loaded, the global functions defined within it become executable
+  from the command line and by other modules.</p>
+
+<p>If there is a function in the new module of the same name as a function
+  from a currently loaded module, an error is generated and the new module is
+  not loaded. This rule does not apply when re-loading a module, i.e. when the
+  module has the same filename or title as an already loaded module. In this
+  case, the entire module is replaced by the newer version.</p>
+<a id="unload"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">unload</span> &#39;module_title&#39;
+<span class="fcndef">unload</span> &#39;module_filename&#39;
+<span class="fcndef">unload</span> module_key
+</pre>
+
+<p>Removes the module specified by its title <tt>&#39;module_title</tt>&#39;,
+  full pathname <tt>&#39;module_filename&#39;</tt> or key
+  <tt>module_key</tt>.</p>
+
+<p>If a module does not have its title set explicitly using the <tt>#set
+  title</tt> environment variable, its title is implicitly set to the name of
+  the file (no path included).</p>
+
+<p>The key of the module is returned by <a class="svl" href=
+  "symbol.htm">mod_key</a> and <a class="svl" href="symbol.htm">modules</a>.
+  Note that <tt>module_key</tt> changes every time the module is reloaded.</p>
+
+<h1>See Also</h1>
+
+<p><a class="svl" href="runetc.htm">eval</a> <a class="svl" href=
+  "symbol.htm">mod_find</a> <a class="svl" href="symbol.htm">modenv</a>
+  <a class="svl" href="runetc.htm">run</a> <a class="svl" href=
+  "runetc.htm">script</a> <a class="svl" href="symbol.htm">#set</a> <a class=
+  "svl" href="symbol.htm">sym_find_f</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

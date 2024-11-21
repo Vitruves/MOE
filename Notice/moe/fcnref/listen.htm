@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="functions: listen_port" />
+  <meta name="keywords" content=
+  "keywords: http, server, port, listener, socket, authentication, tcp" />
+  <title>Port Listening Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Port Listening Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    oldport = <a class="fcnlink" href="#listen_port">listen_port</a> port
+</pre>
+
+<h1>Description</h1>
+
+<p>This function is used to start a listener socket on the specified TCP port
+  and wait for incoming remote HTTP connections. HTTP requests can be made to
+  call predefined functions remotely, described in more detail in the section
+  on the <a href="../../install/web_inst.htm#Slisten">MOE Socket
+  Listener</a>.</p>
+
+<p><span class="tip">WARNING:</span> This feature allows any user on the
+  network to send commands to another user's machine, with no
+  authentication required. For this reason, use this feature only on a trusted
+  network!</p>
+<a id="listen_port"></a>
+<hr noshade="noshade" />
+  <!-- LISTEN_PORT -->
+
+<pre>
+oldport = <span class="fcndef">listen_port</span> port
+</pre>
+
+<p>This function attempts to open a listening socket on the specified TCP
+  port. Valid values of port are positive integers, zero, or null.</p>
+
+<p>If <tt>port</tt> is a positive integer, the listener will begin to listen
+  to the specified port. If the listener was already listening to another port,
+  it will switch from that port to the specified one. If an error occurs trying
+  to listen to the specified port, the previous state of the listener is
+  preserved; i.e. the listener continues to listen to the previous port. If
+  <tt>port</tt> is zero, listening is shut down completely. If <tt>port</tt> is
+  null, the function does nothing. In all cases, the value of the port
+  previously being listened to (prior to calling the function) is returned.</p>
+
+<h1>See Also</h1>
+
+<p><a href="../../install/web_inst.htm#Slisten">MOE Socket Listener</a></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

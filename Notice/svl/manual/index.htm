@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <title>SVL Manual</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    SVL Manual
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Table of Contents</h1>
+  <ul>
+    <li><a href="intro.htm">Introduction</a></li>
+    <li><a href="svlfund.htm">Fundamental SVL Concepts</a></li>
+    <li><a href="data.htm">SVL Expressions</a></li>
+    <li><a href="control.htm">Control Flow</a></li>
+    <li><a href="funcs.htm">Functions, Programs and Scoping Rules</a></li>
+    <li><a href="io.htm">Input and Output</a></li>
+    <li><a href="matrices.htm">Matrix Manipulations</a></li>
+    <li><a href="gridman.htm">Multidimensional Grids and Isosurfaces</a></li>
+    <li><a href="adv.htm">Advanced SVL Topics</a></li>
+  </ul>
+
+<p>For a hands-on introduction to SVL, see the <a href=
+  "../../tutorials/svltour.htm">SVL Tutorial</a>.</p>
+
+<h1>
+<a id="Purpose_and_Scope_of_this_Document">Purpose and Scope of this
+  Manual</a></h1>
+
+<p>This document has been written both as a user's guide and as a
+  reference. Its purpose is to introduce the Scientific Vector Language (SVL)
+  to new users, to act as a tutorial for intermediate-level users, and to serve
+  as a reference for experienced SVL programmers.</p>
+
+<p>This document is intended to give a comprehensive overview of the basic
+  SVL package. The basic SVL package may be run on its own, but it is very
+  likely that you will be executing SVL commands from within
+  application-specific software in which SVL has been embedded. In this case,
+  the application-specific software may have a library of user-callable SVL
+  routines. These routines are beyond the scope of this manual, and for more
+  information on them, please refer to their accompanying documentation.</p>
+
+<p>A good grasp of vector concepts and a good SVL programming style can be
+  achieved only through coding experience. Our aim has been to give users a
+  sufficient understanding of the principles of vector programming and of SVL
+  to be able to write their own code.</p>
+
+<p>Although vector programming is a natural, efficient means for treating
+  data, most people are familiar only with the scalar programming approach. We
+  expect that many users embarking on this manual will have had little or no
+  prior experience with vector languages, so we will begin with a proper
+  introduction to vector concepts. It is our hope that users will come to see
+  the vector as a natural unit for data manipulation.</p>
+
+<h1><a id="Notational_Conventions">Notational Conventions</a></h1>
+<table class="titlebar">
+  <tr>
+    <th>Style/Label</th>
+    <th>Indication</th>
+  </tr>
+  <tr>
+    <td><tt>typewriter</tt></td>
+    <td>SVL input and output</td>
+  </tr>
+  <tr>
+    <td><tt>svl&gt;</tt></td>
+    <td>type what follows at the SVL command line</td>
+  </tr>
+  <tr>
+    <td><tt>&lt;Ctrl&gt;</tt>-key</td>
+    <td>hold down <i>Control</i> and press <i>key</i></td>
+  </tr>
+  <tr>
+    <td><tt>&lt;Alt&gt;</tt>-key</td>
+    <td>hold down <i>Alt</i> and press <i>key</i></td>
+  </tr>
+  <tr>
+    <td><tt>&lt;Return&gt;</tt></td>
+    <td>press the <i>Return</i> key</td>
+  </tr>
+  <tr>
+    <td><tt>&lt;Del&gt;</tt></td>
+    <td>press the <i>Delete</i> key</td>
+  </tr>
+  <tr>
+    <td>Up, Down, Left, Right</td>
+    <td>arrow keys</td>
+  </tr>
+  <tr>
+    <td>PageUp, PageDown</td>
+    <td><i>Page-Up</i> and <i>Page-Down</i> keys</td>
+  </tr>
+  <tr>
+    <td>Home, End</td>
+    <td><i>Home</i> and <i>End</i> keys</td>
+  </tr>
+</table>
+
+<p>In examples, <tt>typewriter</tt> style is used to indicate SVL input and
+  output. The SVL prompt <tt>svl&gt;</tt> signals that what immediately follows
+  is what the user should type at the keyboard at the SVL command line. Do not
+  type the letters <tt>svl&gt;</tt> as part of the command. The result, as
+  returned by SVL in interactive mode, is displayed in <tt>typewriter</tt> font
+  without a prompt. When you are starting out, be sure to type exactly what is
+  given; in particular, be scrupulous about reproducing brackets and uppercase
+  letters.</p>
+
+<p>Next: <a href="intro.htm">Introduction</a></p>
+
+<p><a href="../../fcnindex.htm">Function Index</a></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+<a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

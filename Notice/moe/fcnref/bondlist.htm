@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: BondList" />
+  <meta name="keywords" content="functions: BondListExclusive" />
+  <meta name="keywords" content="functions: BondGraph" />
+  <meta name="keywords" content="functions: SmallestRings" />
+  <meta name="keywords" content="functions: ConnectingAtoms" />
+  <title>Atom Functions: BondList, BondListExclusive, BondGraph, SmallestRings,
+  ConnectingAtoms</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Atom Functions: BondList, BondListExclusive,
+    BondGraph, SmallestRings, ConnectingAtoms
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    [A_keys, B_keys] = <a class="fcnlink" href=
+"#BondList">BondList</a> atom_keys
+    [A_keys, B_keys] = <a class="fcnlink" href=
+"#BondListExclusive">BondListExclusive</a> atom_keys
+    nbrlist = <a class="fcnlink" href="#BondGraph">BondGraph</a> atom_keys
+    rlist = <a class="fcnlink" href=
+"#SmallestRings">SmallestRings</a> atom_keys
+    atom_keys = <a class="fcnlink" href=
+"#ConnectingAtoms">ConnectingAtoms</a> atom_keys
+</pre>
+<a id="BondList"></a>
+<h1>Description</h1>
+
+<pre>
+[A_keys, B_keys] = <span class="fcndef">BondList</span> atom_keys
+</pre>
+
+<p>Returns all bonds in which the atoms in <tt>atom_keys</tt> participate.
+  Each bond is specified by the atoms it connects: each atom in <tt>A_keys</tt>
+  is bonded to the corresponding atom in <tt>B_keys</tt>. <tt>A_keys</tt>
+  contains only the keys from <tt>atom_keys</tt> that are bonded to other
+  atoms. If an atom has two bonds emanating from it, it will appear twice in
+  <tt>A_keys</tt>. <tt>A_keys</tt> and <tt>B_keys</tt> are both flat
+  vectors.</p>
+<a id="BondListExclusive"></a>
+<hr noshade="noshade" />
+
+<pre>
+[A_keys, B_keys] = <span class="fcndef">BondListExclusive</span> atom_keys
+</pre>
+
+<p>Returns all bonds between the atoms in <tt>atom_keys</tt> only. Both ends
+  of the bond must be in <tt>atom_keys</tt> for the bond to be reported.</p>
+<a id="BondGraph"></a>
+<hr noshade="noshade" />
+
+<pre>
+nbrlist = <span class="fcndef">BondGraph</span> atom_keys
+</pre>
+
+<p>Returns the neighbor list representation of the molecular graph of given
+  atoms. For each input atom, the function returns the indices of all input
+  atoms that are bonded to that atom. Bonds outside the set of input atoms are
+  ignored.</p>
+<a id="SmallestRings"></a>
+<hr noshade="noshade" />
+
+<pre>
+rlist = <span class="fcndef">SmallestRings</span> atom_keys
+</pre>
+
+<p>Returns the list of all smallest rings in the molecular graph of given
+  atoms. A <i>smallest</i> ring must contain a bond such that the ring is one
+  of at most two smallest rings containing that bond.</p>
+<a id="ConnectingAtoms"></a>
+<hr noshade="noshade" />
+
+<pre>
+atom_keys = <span class="fcndef">ConnectingAtoms</span> atom_keys
+</pre>
+
+<p>Given a set of atoms, the function returns the <i>connecting</i> atoms.
+Those atoms are defined as the union of sets A, B, C and D as
+described here:</p>
+  <ul>
+    <li><b>A:</b> Atoms of the input set.</li>
+    <li><b>B:</b> Atoms on a shortest path between any two input atoms (from
+    set A).</li>
+    <li><b>C:</b> Atoms on a (smallest) ring that contain at least two atoms
+    from set B.</li>
+    <li><b>D:</b> Atoms connected to atoms of set B or C by a double bond or a
+    coordination bond (but not a ring bond).</li>
+  </ul>
+
+<h1>See Also</h1>
+
+<p><a href="atom.htm">Atom Functions</a><br />
+  <a href="bond.htm">Bond Functions</a><br />
+  <a href="../../svl/fcnref/graphlib.htm">Graph Functions</a>
+  </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

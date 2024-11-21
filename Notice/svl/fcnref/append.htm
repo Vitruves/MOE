@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: append,prepend" />
+  <title>Reshaping Functions: append, prepend</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Reshaping Functions: append, prepend
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+result = <a class="fcnlink" href="#append">append</a> [v, w]
+result = <a class="fcnlink" href="#prepend">prepend</a> [v, w]
+</pre>
+<a id="append"></a>
+<a id="prepend"></a>
+<h1>Description</h1>
+
+<p><tt>append</tt> inserts <tt>w</tt> at the end of <tt>v</tt>, and
+  <tt>prepend</tt> inserts it at the front of <tt>v</tt>. The length of
+  <tt>v</tt> and the level of nesting of <tt>w</tt> are thus increased.</p>
+
+<pre class="code">
+svl&gt; append [ [1,2], 3 ]
+[1,2,3]
+svl&gt; append [ [1,2,3,4], [1,2] ]
+[ 1, 2, 3, 4, [1,2] ]
+</pre>
+
+<pre class="code">
+svl&gt; prepend [1,2]
+[2,1]
+svl&gt; prepend [ [1,2,3,4], [1,2] ]
+[ [1,2], 1, 2, 3, 4 ]
+</pre>
+
+<h1>See Also</h1>
+
+<p><a class="svl" href="catetc.htm">cat</a> <a class="svl" href=
+  "tokcat.htm">tok_cat</a> <a class="svl" href="lhs.htm">lhs</a> <a class="svl"
+  href="repetc.htm">rep</a> <a class="svl" href="repetc.htm">resize</a>
+  <a class="svl" href="catetc.htm">split</a> <a class="svl" href=
+  "catetc.htm">nest</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

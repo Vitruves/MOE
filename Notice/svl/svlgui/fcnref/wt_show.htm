@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href=
+  "../../../include/manstyle.css" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: WindowShow, WindowShowState" />
+  <meta name="keywords" content=
+  "functions: WindowName, WindowKey, WindowNameList, WindowKeyList" />
+  <meta name="keywords" content="functions: WindowZoom" />
+  <meta name="keywords" content="unsupported: WindowMenuPopup, WindowLocation" />
+  <meta name="keywords" content="unsupported: MonitorZoom, __Monitors" />
+  <title>Window Functions: WindowShow</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../../index.htm"><img src="../../../images/ccglogo.png" /></a>
+    <a href="../../../index.htm"><div class="moeversion"></div></a>
+    Window Functions: WindowShow
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+key   = <a class="fcnlink" href="#WindowShow">WindowShow</a> [ window, show ]
+state = <a class="fcnlink" href="#WindowShowState">WindowShowState</a> window
+
+names = <a class="fcnlink" href="#WindowName">WindowName</a> keys
+keys  = <a class="fcnlink" href="#WindowKey">WindowKey</a> keys_or_names
+
+names = <a class="fcnlink" href="#WindowNameList">WindowNameList</a> []
+keys  = <a class="fcnlink" href="#WindowKeyList">WindowKeyList</a> []
+
+old_zoom = <a class="fcnlink" href="#WindowZoom">WindowZoom</a> [wkey, zoom]
+</pre>
+
+
+<a id="WindowShow"></a>
+<h1>Description</h1>
+
+<pre>
+key = <span class="fcndef">WindowShow</span> [ window, show ]
+</pre>
+
+<p>Returns the key of the specified window and optionally shows/hides it. If
+  <tt>show</tt> is true (non-zero), the window is raised, otherwise the window
+  is unmapped. If the given window does not exist then a key of 0 is
+  returned.</p>
+
+<p><tt>window</tt> can be either the window key (returned by
+  <tt>WindowCreate</tt>) or the name of the window as set by the
+  <tt>windowName</tt> attribute.</p>
+
+<a id="WindowShowState"></a>
+<hr noshade="noshade" />
+<pre>
+state = <span class="fcndef">WindowShowState</span> window
+</pre>
+
+<p>Returns 1 if the specified window exists and is currently shown, 2 if the
+  window exists but is iconified, and 0 otherwise.</p>
+
+<p><tt>window</tt> can be either the window key (returned by
+  <tt>WindowCreate</tt>) or the name of the window as set by the
+  <tt>windowName</tt> attribute.</p>
+  
+<a id="WindowName"></a>
+<hr noshade="noshade" />
+
+<pre>
+names = <span class="fcndef">WindowName</span> keys
+</pre>
+
+<p>For each key in <tt>keys</tt>, <tt>WindowName</tt> returns the name of the
+  window as set by the <tt>windowName</tt> attribute. If a window with the
+  specified key does not exist then a null token is returned as the name.</p>
+<a id="WindowKey"></a>
+<hr noshade="noshade" />
+
+<pre>
+keys = <span class="fcndef">WindowKey</span> keys_or_names
+</pre>
+
+<p>For each <tt>key</tt> or <tt>name</tt> specified, <tt>WindowKey</tt>
+  either returns the key of the specified window or 0 if no such window can be
+  found.</p>
+<a id="WindowNameList"></a>
+<hr noshade="noshade" />
+
+<pre>
+names = <span class="fcndef">WindowNameList</span> []
+</pre>
+
+<p>Returns a vector of tokens with the names of all currently created windows
+  which have a name defined with the <tt>windowName</tt> attribute.</p>
+<a id="WindowKeyList"></a>
+<hr noshade="noshade" />
+
+<pre>
+keys = <span class="fcndef">WindowKeyList</span> []
+</pre>
+
+<p>Returns a vector of keys of all currently created windows created by
+  <tt>WindowCreate</tt>.</p>
+
+<a id="WindowZoom"></a>
+<hr noshade="noshade" />
+
+<pre>
+old_zoom = <span class="fcndef">WindowZoom</span> [key, zoom]
+zoom     = <span class="fcndef">WindowZoom</span> key
+</pre>
+
+<p>Get and set the user interface zoom factor of individual windows
+specified by their <tt>key</tt>. The <tt>zoom</tt> factor is given as
+a real number (1.0 == 100%). The previous zoom factor is returned.
+If no zoom factor is specified the current zoom of the window is returned.
+If the special <tt>zoom</tt> value of <tt>-1</tt> is specified, the zoom is
+reset to the zoom factor of the monitor on which it resides. If the special
+<tt>key</tt> value of <tt>-1</tt> is used all windows are set to the
+specified zoom factor. E.g. <tt>WindowZoom [-1,-1]</tt> will reset all
+windows to their monitor default.
+</p>
+
+
+<h1>See Also</h1>
+
+<p><a href="wt_core.htm">Core Attributes</a><br />
+  <a href="../wt_intro.htm">SVL Window Toolkit</a><br />
+  <a href="introwt.htm">Window Toolkit Functions</a><br /></p>
+<table class="functionList">
+  <tr>
+    <td><a href=
+    "wt_create.htm">WindowCreate</a><br />
+    <a href="wt_create.htm">WindowDestroy</a><br />
+    <a href="wt_data.htm">WindowGetData</a><br />
+    <a href="wt_create.htm">WindowPrompt</a></td>
+    <td><a href=
+    "wt_data.htm">WindowSetData</a><br />
+    <a href="wt_attr.htm">WindowSetAttr</a><br />
+    <a href="wt_data.htm">WindowValues</a><br />
+    <a href="wt_wait.htm">WindowWait</a></td>
+  </tr>
+</table><!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../../images/ccgicon.png" /> <a href="../../../index.htm"></a>
+    <a href="../../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

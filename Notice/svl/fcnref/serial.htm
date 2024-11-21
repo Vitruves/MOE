@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: serial" />
+  <title>Serial Numbers</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Serial Numbers
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    key = <a class="fcnlink" href="#serial">serial</a> n
+</pre>
+
+<h1>Description</h1>
+<a id="serial"></a>
+<!--
+
+<p><hr noshade="noshade" /> -->
+
+<pre>
+key = <span class="fcndef">serial</span> n
+</pre>
+
+<p>Returns a unique serial number (numeric key). Each number is a positive
+  integer with its lowest <i>n</i> bits set to 0, where 0 &le; <i>n</i> &le;
+  20. The returned serial number is guaranteed to be unique for the lifetime of
+  MOE across all hosts and all values of <i>n</i>. Within the same value of
+  <i>n</i>, the returned serial numbers will also be ascending.</p>
+
+<p>The result of the function is intended to be used as access handles to
+  user data. The lowest <i>n</i> may be used to store additional,
+  application-specific information, such as data type or hash code.</p>
+
+<p>The function accepts (and returns) a vector argument of any shape.</p>
+
+<p><i>Note:</i> Since the number of bits available to store unique serial
+  numbers is limited, the function is intended to generate only a moderate
+  total amount of serial numbers. For large <i>n</i>, the rate of generating
+  new serial numbers may become limited. It is recommended not to exceed the
+  average rate of <i>k</i> new serial numbers per second, where <i>k</i> =
+  <tt>bitshl [1,</tt> 20 - <i>n</i> <tt>]</tt>.</p>
+
+
+<h1>See Also</h1>
+
+<p><a class="svl" href="randetc.htm">rand</a> </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

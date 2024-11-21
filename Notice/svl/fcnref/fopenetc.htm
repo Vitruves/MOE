@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: fopen" />
+  <meta name="keywords" content="functions: fopenr" />
+  <meta name="keywords" content="functions: fopenc" />
+  <meta name="keywords" content="functions: fopenw" />
+  <meta name="keywords" content="functions: fopenx" />
+  <meta name="keywords" content="functions: fopent" />
+  <meta name="keywords" content="functions: fopenct" />
+  <meta name="keywords" content="functions: fopenrz" />
+  <meta name="keywords" content="functions: fopenwz" />
+  <meta name="keywords" content="functions: fopentemp" />
+  <meta name="keywords" content="functions: fnametemp" />
+  <meta name="keywords" content="functions: _fopen" />
+  <meta name="keywords" content="functions: _fopenr" />
+  <meta name="keywords" content="functions: _fopenc" />
+  <meta name="keywords" content="functions: _fopenw" />
+  <meta name="keywords" content="functions: _fopenx" />
+  <meta name="keywords" content="functions: _fopent" />
+  <meta name="keywords" content="functions: _fopenct" />
+  <meta name="keywords" content="functions: _fopenrz" />
+  <meta name="keywords" content="functions: _fopenwz" />
+  <meta name="keywords" content="functions: _fopentemp" />
+  <meta name="keywords" content="functions: _fnametemp" />
+  <meta name="keywords" content="functions: fclose" />
+  <meta name="keywords" content="functions: fflush" />
+  <meta name="keywords" content="functions: fdelmark" />
+  <meta name="keywords" content="functions: fsetdelmark" />
+  <title>File Open Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    File Open Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+fnum = <a class="fcnlink" href="#fopen">fopen</a> &#39;filename&#39;
+fnum = <a class="fcnlink" href="#fopen">fopen</a> fnum
+fnum = <a class="fcnlink" href="#_fopen">_fopen</a> &#39;filename&#39;
+fnum = <a class="fcnlink" href="#_fopen">_fopen</a> fnum
+
+fnum = <a class="fcnlink" href="#fopenr">fopenr</a> &#39;filename&#39;
+fnum = <a class="fcnlink" href="#fopenr">fopenr</a> fnum
+fnum = <a class="fcnlink" href="#_fopenr">_fopenr</a> &#39;filename&#39;
+fnum = <a class="fcnlink" href="#_fopenr">_fopenr</a> fnum
+
+fnum = <a class="fcnlink" href="#fopenrz">fopenrz</a> &#39;filename&#39;
+fnum = <a class="fcnlink" href="#fopenrz">fopenrz</a> fnum
+fnum = <a class="fcnlink" href="#_fopenrz">_fopenrz</a> &#39;filename&#39;
+fnum = <a class="fcnlink" href="#_fopenrz">_fopenrz</a> fnum
+
+fnum = <a class="fcnlink" href="#fopenw">fopenw</a> &#39;filename&#39;
+fnum = <a class="fcnlink" href="#fopenw">fopenw</a> fnum
+fnum = <a class="fcnlink" href="#_fopenw">_fopenw</a> &#39;filename&#39;
+fnum = <a class="fcnlink" href="#_fopenw">_fopenw</a> fnum
+
+fnum = <a class="fcnlink" href="#fopenwz">fopenwz</a> &#39;filename&#39;
+fnum = <a class="fcnlink" href="#fopenwz">fopenwz</a> fnum
+fnum = <a class="fcnlink" href="#_fopenwz">_fopenwz</a> &#39;filename&#39;
+fnum = <a class="fcnlink" href="#_fopenwz">_fopenwz</a> fnum
+
+fnum = <a class="fcnlink" href="#fopenx">fopenx</a> &#39;filename&#39;
+fnum = <a class="fcnlink" href="#fopenx">fopenx</a> fnum
+fnum = <a class="fcnlink" href="#_fopenx">_fopenx</a> &#39;filename&#39;
+fnum = <a class="fcnlink" href="#_fopenx">_fopenx</a> fnum
+
+fnum = <a class="fcnlink" href="#fopenc">fopenc</a> &#39;filename&#39;
+fnum = <a class="fcnlink" href="#fopenc">fopenc</a> fnum
+fnum = <a class="fcnlink" href="#_fopenc">_fopenc</a> &#39;filename&#39;
+fnum = <a class="fcnlink" href="#_fopenc">_fopenc</a> fnum
+
+fnum = <a class="fcnlink" href="#fopenct">fopenct</a> &#39;filename&#39;
+fnum = <a class="fcnlink" href="#fopenct">fopenct</a> fnum
+fnum = <a class="fcnlink" href="#_fopenct">_fopenct</a> &#39;filename&#39;
+fnum = <a class="fcnlink" href="#_fopenct">_fopenct</a> fnum
+
+fnum = <a class="fcnlink" href="#fopent">fopent</a> &#39;filename&#39;
+fnum = <a class="fcnlink" href="#fopent">fopent</a> fnum
+fnum = <a class="fcnlink" href="#_fopent">_fopent</a> &#39;filename&#39;
+fnum = <a class="fcnlink" href="#_fopent">_fopent</a> fnum
+
+fnum = <a class="fcnlink" href="#fopentemp">fopentemp</a> []
+fnum = <a class="fcnlink" href=
+"#fopentemp">fopentemp</a> &#39;pathprefix&#39;
+fnum = <a class="fcnlink" href="#_fopentemp">_fopentemp</a> []
+fnum = <a class="fcnlink" href=
+"#_fopentemp">_fopentemp</a> &#39;pathprefix&#39;
+
+filename = <a class="fcnlink" href="#fnametemp">fnametemp</a> []
+filename = <a class="fcnlink" href=
+"#fnametemp">fnametemp</a> &#39;pathprefix&#39;
+filename = <a class="fcnlink" href="#_fnametemp">_fnametemp</a> []
+filename = <a class="fcnlink" href=
+"#_fnametemp">_fnametemp</a> &#39;pathprefix&#39;
+
+<a class="fcnlink" href="#fclose">fclose</a> fnum
+
+<a class="fcnlink" href="#fflush">fflush</a> file_handle
+
+flag = <a class="fcnlink" href="#fdelmark">fdelmark</a> file_handle
+<a class="fcnlink" href="#fsetdelmark">fsetdelmark</a> [file_handle, flag]
+</pre>
+<a id="fopen"></a>
+<a id="_fopen"></a>
+<h1>Description</h1>
+
+<pre>
+fnum = <span class="fcndef">fopen</span> &#39;filename&#39;
+fnum = <span class="fcndef">fopen</span> fnum
+fnum = _fopen &#39;filename&#39;
+fnum = _fopen fnum
+</pre>
+
+<p>Functions <tt>fopen*</tt> open a file and return a file handle, which is
+  used in subsequent file I/O operations as the file identifier. Except for
+  function <tt><span class="fcndef">fopentemp</span></tt>, all <tt>fopen*</tt>
+  functions expect either a filename or a file handle of an already opened file
+  as their argument. The name of the file, <tt>&#39;filename&#39;</tt>, must be
+  a token. The file handle, <tt>fnum</tt>, is a number.</p>
+
+<p>Given a filename, the functions examine whether the file already exists
+  and is writeable, and offer different behavior depending on those properties.
+  When the requested file fails to open, the <tt>fopen*</tt> functions exit
+  with an error. However, when their names are prefixed with an underscore, the
+  functions will not exit, returning 0 instead. Any code that uses underscored
+  functions must detect and process their possible failures explicitly.</p>
+
+<p>Each file handle returned by an <tt>fopen*</tt> function must be closed,
+  in the same SVL task, by function <tt><span class=
+  "fcndef">fclose</span></tt>. When passed a file handle, the functions
+  increase the &quot;reference count&quot; (a record of the number of times the
+  file has been opened) of the file, ensuring that the file remains open for
+  the accessing task until a corresponding <tt><span class=
+  "fcndef">fclose</span></tt> has been called.</p><!-- DESC -->
+<table class="noborder">
+  <tr>
+    <td><tt><span class="fcndef">fopen</span></tt></td>
+    <td>Opens an existing file for reading and writing. If
+    the file is does not exist or is not writeable, the function exits with
+    an error.</td>
+  </tr>
+  <tr>
+    <td>
+<a id="fopenr"></a>
+<tt><span class=
+    "fcndef">fopenr</span></tt></td>
+    <td>Opens an existing file for reading only. If the
+    file is does not exist, the function exits with an error.</td>
+  </tr>
+  <tr>
+    <td>
+<a id="fopenrz"></a>
+<tt><span class=
+    "fcndef">fopenrz</span></tt></td>
+    <td>Opens an existing file for reading only. If the
+    file is does not exist, the function exits with an error. If the file is
+    gzipped, reading from the returned handle will return the decompressed
+    contents of the file, and any references to size in bytes, such as with
+    <tt>fseek</tt>, will refer to the uncompressed size. Files which are not
+    gzipped will be opened just as if <tt>fopenr</tt> had been used.</td>
+  </tr>
+  <tr>
+    <td>
+<a id="fopenw"></a>
+<tt><span class=
+    "fcndef">fopenw</span></tt></td>
+    <td>Opens a file for reading and writing. If the file
+    does not exist, the function creates it. If the file exists and is
+    writeable, the function truncates its contents. If the file is not
+    writeable, the function exits with an error.</td>
+  </tr>
+  <tr>
+    <td>
+<a id="fopenwz"></a>
+<tt><span class=
+    "fcndef">fopenwz</span></tt></td>
+    <td>Opens a file for writing only. If the file does not
+    exist, the function creates it. If the file exists and is writeable, the
+    function truncates its contents. If the file is not writeable, the
+    function exits with an error. All data written out to the returned handle
+    will be compressed with the gzip <i>deflate</i> algorithm. Note that
+    explicitly flushing the stream (with <tt>fflush</tt>) will force
+    realignment on a byte boundary and completion of the current deflate
+    block. This may degrade compression so avoid flushing unless absolutely
+    necessary. Seeking is forbidden on handles opened with
+    <tt>fopenwz</tt>.</td>
+  </tr>
+  <tr>
+    <td>
+<a id="fopenx"></a>
+<tt><span class=
+    "fcndef">fopenx</span></tt></td>
+    <td>Opens a file for reading and writing. If the file
+    does not exist, the function creates it. If the file exists and is
+    writeable, the function opens it without truncating it. If the file is
+    not writeable, the function exits with an error.</td>
+  </tr>
+  <tr>
+    <td>
+<a id="fopenc"></a>
+<tt><span class=
+    "fcndef">fopenc</span></tt></td>
+    <td>Opens a new file for reading and writing. If the
+    file does not exist, the function creates it. If the file exists, the
+    function exits with an error.</td>
+  </tr>
+  <tr>
+    <td>
+<a id="fopenct"></a>
+<tt><span class=
+    "fcndef">fopenct</span></tt></td>
+    <td>Opens a temporary new file for reading and writing.
+    If the file does not exist, the function creates it. If the file exists,
+    the function exits with an error. When the file handle is closed, the
+    file deletion marker (&quot;<a href="#delmark">delmark</a>&quot;) is set,
+    and the file is automatically deleted when the file&#39;s &quot;reference
+    count&quot; falls to zero.</td>
+  </tr>
+  <tr>
+    <td>
+<a id="fopent"></a>
+<tt><span class=
+    "fcndef">fopent</span></tt></td>
+    <td>Opens a temporary file for reading and writing. If
+    the file does not exist, the function creates it. If the file exists and
+    is writeable, the function opens it without truncating it. If the file is
+    not writeable, the function exits with an error. When the file handle is
+    closed, the file deletion marker (&quot;<a href=
+    "#delmark">delmark</a>&quot;) is set, and the file automatically deleted
+    when the file&#39;s &quot;reference count&quot; falls to zero.</td>
+  </tr>
+  <tr>
+    <td>
+<a id="_fopenr"></a>
+<a id="_fopenrz"></a>
+<a id="_fopenc"></a>
+<a id="_fopenw"></a>
+<a id="_fopenwz"></a>
+<a id="_fopenx"></a>
+<a id="_fopent"></a>
+<a id="_fopenct"></a>
+<tt><span class=
+    "fcndef">_fopen</span></tt><br />
+    <tt><span class="fcndef">_fopenr</span></tt><br />
+    <tt><span class="fcndef">_fopenrz</span></tt><br />
+    <tt><span class="fcndef">_fopenw</span></tt><br />
+    <tt><span class="fcndef">_fopenwz</span></tt><br />
+    <tt><span class="fcndef">_fopenx</span></tt><br />
+    <tt><span class="fcndef">_fopenc</span></tt><br />
+    <tt><span class="fcndef">_fopenct</span></tt><br />
+    <tt><span class="fcndef">_fopent</span></tt></td>
+    <td>Identical to the above functions except when the
+    file fails to open: instead of exiting with an error, the underscore
+    functions return 0. Any code that uses underscore functions must detect
+    and process their possible failures explicitly.</td>
+  </tr>
+</table><!-- ENDDESC -->
+  <!--
+
+<pre>
+filenum = <span class="fcndef">fopen</span>  'filename'
+filenum = <span class="fcndef">fopenr</span> 'filename'
+filenum = <span class="fcndef">fopenw</span> 'filename'
+filenum = <span class="fcndef">fopenx</span> 'filename'
+filenum = <span class="fcndef">fopenc</span> 'filename'
+filenum = <span class="fcndef">fopenct</span> 'filename'
+filenum = <span class="fcndef">fopent</span> 'filename'
+</pre>
+
+<p>
+Open a file and return a file handle.  The file handle <tt>filenum</tt> is
+used in subsequent file I/O as the file identifier.  The name of the file is
+supplied as a token.
+
+<p>
+<tt>fopenr</tt> opens a file for reading only.  <tt>fopen</tt> and
+<tt>fopenw</tt> both open a file for both reading and writing, however,
+<tt>fopen</tt> assumes that the file already exists (it is an error if it does
+not), whereas <tt>fopenw</tt> will either create it if it does not, or will
+overwrite it if it does.
+
+<p>
+<b>Caution!</b> <tt>fopenw</tt> will destroy all original contents of
+an already-existent file.
+
+<p>
+<tt>fopent</tt> opens a temporary file for writing.  A file with the given
+<tt>filename</tt> will be opened for reading and writing and will exist as long
+as the file is being referenced.  The file is removed from disk when it is
+closed.
+
+-->
+
+<p>Explicit reading from and writing to standard devices is accomplished
+  using the special standard file identifiers <tt>&#39;*cli*&#39;</tt>,
+  <tt>&#39;*stdin*&#39;</tt>, <tt>&#39;*stdout*&#39;</tt>, and
+  <tt>&#39;*stderr*&#39;</tt>. These devices do not have to be opened
+  explicitly. Their handles are predefined constants: <tt>CLI</tt>,
+  <tt>STDIN</tt>, <tt>STDOUT</tt>, <tt>STDERR</tt>. The <tt>STDIN</tt> must be
+  opened with <tt>fopenr</tt>. The <tt>CLI</tt>, <tt>STDOUT</tt> and
+  <tt>STDERR</tt> must be opened with <tt>fopenw</tt>. <tt>fopenrz</tt> and
+  <tt>fopenwz</tt> may only be used on real files and should not be used with
+  standard devices.</p>
+
+<p><b>Example:</b> The following function will read and return (up to) 10
+  lines of the file indicated by the function argument. If the argument is a
+  filename, the function will open the file and read the first 10 lines. If the
+  argument is a file handle of an open file, the function will read the next 10
+  lines.</p>
+
+<pre class="code">
+local function read_ten_lines file
+    local s, i, lines = [];
+
+    local fnum = fopenr file
+    for i = 1, 10
+    while length (s = freadb [fnum, &#39;line&#39;, 1]) loop
+        lines(i) = cat s;
+    endloop
+    fclose fnum;
+
+    return lines;
+endfunction
+</pre>
+
+<p><b>Note:</b> File handles opened with <tt>fopenr(z)</tt> are read-only and
+  cannot be reopened for writing with <tt>fopen</tt> or other <tt>fopen*</tt>
+  functions.</p>
+
+<p><b>Warning:</b> Often, function <tt>task_call</tt> is used to guard
+  against possible errors. However, the following code will <i>not</i>
+  work:</p>
+
+<pre class="code">
+[fnum, tcode] = task_call [&#39;fopen&#39;, filename, [errmsg:&#39;ignore&#39;]];
+if tcode == &#39;&#39; then
+    ... use fnum ...
+else
+    ... there was an error ...
+endif
+</pre>
+
+<p>This is because file handles <i>must</i> be opened by the SVL task that
+  use them. In the code above, a new, separate task is created to call function
+  <tt>fopen</tt>. When the call is complete, that task terminates, and the file
+  that was opened is automatically closed. If the calling task tries to use the
+  returned file handle, it will discover that the file handle is no longer
+  valid and exit with an error. To check for errors, the following code should
+  be used instead:</p>
+
+<pre class="code">
+fnum = _fopen filename;
+if not fnum then
+    ... there was an error ...
+endif
+</pre>
+<a id="_fopentemp"></a>
+<a id="fopentemp"></a>
+<hr noshade="noshade" />
+
+<pre>
+filenum = <span class="fcndef">fopentemp</span> []
+filenum = <span class="fcndef">fopentemp</span> &#39;pathprefix&#39;
+filenum = <span class="fcndef">_fopentemp</span> []
+filenum = <span class="fcndef">_fopentemp</span> &#39;pathprefix&#39;
+</pre>
+
+<p>Open a file for writing and return a temporary file handle. The file
+  handle <tt>filenum</tt> is used in subsequent file I/O as the file
+  identifier.</p>
+
+<p>The temporary file will be automatically named by the system and will be
+  opened in the <tt>TMP</tt> directory if no argument is provided. If a
+  <tt>pathprefix</tt> token is provided then it will be used as a prefix for
+  the temporary filename and automatically extended with a suffix to ensure a
+  unique filename. When the file is closed and no longer referenced the file
+  and its contents will be removed from the system.</p>
+
+<p>The underscored version of the function will not exit with an error when
+  the given path prefix is not accessible or the temporary file fails to
+  create. Instead, the function will return 0.</p>
+
+<p>The &#39;pathprefix&#39; argument may contain a <tt>*</tt> (star)
+  wildcard. If the wildcard is present in the function argument, the temporary
+  filename is not automatically extended with a suffix. Instead, the function
+  creates a unique name for the temporary file by replacing the wildcard with a
+  string of random digits.</p>
+
+<p>There may be only one wildcard character in the prefix. The wildcard must
+  not be in the &quot;directory&quot; portion of the prefix, i.e. it must not
+  be followed by any <tt>/</tt> characters.</p>
+
+<p><b>Example:</b> The following are valid prefixes:</p>
+
+<pre class="code">
+fopentemp &#39;&#39;
+fopentemp &#39;/home/joe/job3&#39;
+fopentemp &#39;/home/joe/job3_*.png&#39;
+</pre>
+
+<p>The following are invalid prefixes:</p>
+
+<pre class="code">
+fopentemp &#39;/home/joe/job*/data&#39;
+fopentemp &#39;/home/joe/job*_data*.png&#39;
+</pre>
+
+<p><b>Note:</b> The difference between <tt>fopent</tt> and <tt>fopentemp</tt>
+  is that <tt>fopentemp</tt> always creates a new filename, while
+  <tt>fopent</tt> does not. The function <tt>fopent</tt> accepts a filename or
+  a file handle as its argument. The function <tt>fopentemp</tt> accepts
+  neither; instead, it accepts only an optional path <i>prefix</i> which
+  restricts the form of the filename that the function may create. Function
+  <tt>fopent</tt> will open and delete existing files (or may fail on read-only
+  files). Function <tt>fopentemp</tt> will not open or delete existing
+  files.</p>
+<a id="_fnametemp"></a>
+<a id="fnametemp"></a>
+<hr noshade="noshade" />
+
+<pre>
+filename = <span class="fcndef">fnametemp</span> []
+filename = <span class="fcndef">fnametemp</span> &#39;pathprefix&#39;
+filename = <span class="fcndef">_fnametemp</span> []
+filename = <span class="fcndef">_fnametemp</span> &#39;pathprefix&#39;
+</pre>
+
+<p>Return the name of the file that would be generated by function
+  <tt>fopentemp</tt> (or <tt>_fopentemp</tt>). The functions ensure that the
+  returned filename does not refer to an existing file and that a file of that
+  name can be opened for writing. (Note, however, that while reliable in
+  practice, this behavior cannot be absolutely guaranteed in all
+  situations.)</p>
+
+<p>The underscored version of the function will not exit with an error when
+  the given path prefix is not accessible or when the temporary file fails to
+  create. Instead, the function will return <tt>&#39;&#39;</tt>.</p>
+<a id="fclose"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">fclose</span> filenum
+</pre>
+
+<p>Close a file. <tt>filenum</tt> is the file handle returned by any of the
+  file open functions. The function accepts (and ignores) invalid file
+  handles.</p>
+<a id="fflush"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">fflush</span> file_handle
+</pre>
+
+<p>Immediately flushes the buffer of the file specified by
+  <tt>file_handle</tt>. The buffer of a file is flushed automatically when it
+  accumulates enough data, or when the file is closed. Note that if
+  <tt>file_handle</tt> was opened with <tt>fopenwz</tt>, flushing will force
+  realignment on a byte boundary and completion of the current deflate block.
+  This may degrade compression so avoid flushing gzip streams unless absolutely
+  necessary.</p>
+<a id="delmark"></a>
+<a id="fsetdelmark"></a>
+<a id="fdelmark"></a>
+<hr noshade="noshade" />
+
+<pre>
+flag = <span class="fcndef">fdelmark</span> file_handle
+<span class="fcndef">fsetdelmark</span> [file_handle, flag]
+</pre>
+
+<p>Each open file may be marked for automatic deletion after its handle is
+  closed. Function <tt>fdelmark</tt> returns 1 if the file has been marked for
+  deletion and 0 otherwise. Function <tt>fsetdelmark</tt> sets the deletion
+  marker for a given file. By default, file handles opened with
+  <tt>fopent</tt>, <tt>fopenct</tt> and <tt>fopentemp</tt> are marked for
+  deletion, while file handles opened with the remaining <tt>fopen*</tt>
+  functions are not.</p>
+
+<h1>See Also</h1>
+<table class="functionList">
+  <tr>
+    <td colspan="2"><a href="constants.htm">SVL Built-In
+    Constants</a><br /></td>
+  </tr>
+  <tr>
+    <td><a href="flistetc.htm">fdelete</a><br />
+    <a href="flistetc.htm">flist</a><br />
+    <a href="freadetc.htm">fread</a><br />
+    <a href="freadb.htm">freadb</a><br />
+    <a href="flistetc.htm">fseek</a></td>
+    <td><a href="flistetc.htm">fsize</a><br />
+    <a href="flistetc.htm">ftell</a><br />
+    <a href="flistetc.htm">ftype</a><br />
+    <a href="freadetc.htm">fwrite</a><br />
+    <a href="freadb.htm">fwriteb</a></td>
+  </tr>
+</table><!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

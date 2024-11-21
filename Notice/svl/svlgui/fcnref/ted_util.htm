@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href=
+  "../../../include/manstyle.css" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: ted_Find,ted_LineNo2Pos" />
+  <meta name="keywords" content=
+  "functions: ted_Undo,ted_Redo, ted_Cut, ted_Copy, ted_Paste" />
+  <meta name="keywords" content="functions: ted_Highlight,ted_CursorPos" />
+  <meta name="keywords" content="functions: ted_GetData,ted_SetData" />
+  <title>Text Editor Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../../index.htm"><img src="../../../images/ccglogo.png" /></a>
+    <a href="../../../index.htm"><div class="moeversion"></div></a>
+    Text Editor Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    [pos, len] = <a class="fcnlink" href=
+"#ted_Find">ted_Find</a> [ editor_key, &#39;token&#39;, start_pos ]
+    pos = <a class="fcnlink" href=
+"#ted_LineNo2Pos">ted_LineNo2Pos</a> [ editor_key, line_number ]
+
+    old_range = <a class="fcnlink" href=
+"#ted_Highlight">ted_Highlight</a> [ editor_key, new_range ]
+    old_pos = <a class="fcnlink" href=
+"#ted_CursorPos">ted_CursorPos</a> [ editor_key, new_pos ]
+
+    <a class="fcnlink" href="#ted_Cut">ted_Cut</a> editor_key
+    <a class="fcnlink" href="#ted_Copy">ted_Copy</a> editor_key
+    <a class="fcnlink" href="#ted_Paste">ted_Paste</a> editor_key
+
+    <a class="fcnlink" href="#ted_Undo">ted_Undo</a> editor_key
+    <a class="fcnlink" href="#ted_Redo">ted_Redo</a> editor_key
+
+    <a class="fcnlink" href=
+"#ted_SetData">ted_SetData</a> [ editor_key, &quot;data&quot;, range ]
+    &quot;data&quot; = <a class="fcnlink" href=
+"#ted_GetData">ted_GetData</a> [ editor_key, range ]
+</pre>
+
+<h1>Description</h1>
+
+<p>The following functions consider text located in a text editor as one long
+  string of characters.</p>
+
+<p>Ranges are specified as <tt>[pos,length]</tt> where <tt>pos</tt> is the
+  zero-based character position in the editor, and <tt>length</tt> is the
+  length of the segment in characters.</p>
+<a id="ted_Find"></a>
+<hr noshade="noshade" />
+
+<pre>
+[pos, len] = <span class=
+"fcndef">ted_Find</span> [ editor_key, &#39;token&#39;, start_pos ]
+</pre>
+
+<p>Finds the specified search string in the text editor starting from
+  character position <tt>start_pos</tt>. The position and length of the found
+  text is returned. <tt>[0,0]</tt> is returned if the string is not found. The
+  search does not wrap to the beginning of the string.</p>
+<a id="ted_LineNo2Pos"></a>
+<hr noshade="noshade" />
+
+<pre>
+pos = <span class="fcndef">ted_LineNo2Pos</span> [ editor_key, line_number ]
+</pre>
+
+<p>Returns the position, in the entire text, of the first character of the
+  line number specified in the text editor. Out-of-range line numbers are
+  clamped. Line numbers start at one.</p>
+<a id="ted_Highlight"></a>
+<hr noshade="noshade" />
+
+<pre>
+old_range = <span class="fcndef">ted_Highlight</span> [ editor_key, new_range ]
+</pre>
+
+<p>Returns and optionally sets the editor&#39;s highlighted text. The old
+  highlighted range is always returned. The highlighted text is not set if
+  <tt>new_range</tt> is []. The cursor position is tied to the top left edge of
+  any highlighted text. Thus, setting the highlight implicitly moves the
+  cursor. Setting the highlighted text always scrolls the editor window to
+  include the cursor.</p>
+<a id="ted_CursorPos"></a>
+<hr noshade="noshade" />
+
+<pre>old_pos = <span class=
+  "fcndef">ted_CursorPos</span> [ editor_key, new_pos ]
+</pre>
+
+<p>Returns and optionally sets the cursor position of the editor specified.
+  The old cursor position is always returned. The cursor position is not set if
+  <tt>new_pos</tt> is []. Cursor positions start at zero. Setting the cursor
+  position always scrolls the editor window to include the cursor.</p>
+<a id="ted_Cut"></a>
+<hr noshade="noshade" />
+
+<pre><span class="fcndef">ted_Cut</span> editor_key
+</pre>
+
+<p>Copies the contents of the editor&#39;s highlighted text onto the
+  clipboard, and deletes it from the editor.</p>
+<a id="ted_Copy"></a>
+<hr noshade="noshade" />
+
+<pre><span class="fcndef">ted_Copy</span> editor_key
+</pre>
+
+<p>Copies the contents of the editor&#39;s highlighted text onto the
+  clipboard. The editor&#39;s contents remains unchanged.</p>
+<a id="ted_Paste"></a>
+<hr noshade="noshade" />
+
+<pre><span class="fcndef">ted_Paste</span> editor_key
+</pre>
+
+<p>Replaces the editor&#39;s highlighted text with the text contained in the
+  clipboard.</p>
+<a id="ted_Undo"></a>
+<hr noshade="noshade" />
+
+<pre><span class="fcndef">ted_Undo</span> editor_key
+</pre>
+
+<p>Undo the most recent change to the editor&#39;s buffer. Changes may be
+  undone up until the last save. The editor is capable of undoing multiple
+  changes.</p>
+<a id="ted_Redo"></a>
+<hr noshade="noshade" />
+
+<pre><span class="fcndef">ted_Redo</span> editor_key
+</pre>
+
+<p>Redo the most recently undone change to the editor&#39;s buffer.</p>
+<a id="ted_SetData"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">ted_SetData</span> [ editor_key, &quot;data&quot;, range ]
+</pre>
+
+<p>Replaces text in the SVL Text Editor at a specified position and of a
+  specified length. Setting the data always scrolls the editor window to
+  display the cursor.</p>
+  <dl>
+    <dt><tt>editor_key</tt></dt>
+    <dd>Key of the text editor file.</dd>
+    <dt><tt>&quot;data&quot;</tt></dt>
+    <dd>Text to be added to the Text Editor.</dd>
+    <dt><tt>range</tt></dt>
+    <dd>Position and length of the text to be replaced. If range is omitted,
+    the entire contents of the editor is replaced.</dd>
+  </dl>
+<a id="ted_GetData"></a>
+<hr noshade="noshade" />
+
+<pre>
+&quot;data&quot; = <span class=
+"fcndef">ted_GetData</span> [ editor_key, range ]
+</pre>
+
+<p>Returns the text at the specified position and length.</p>
+  <dl>
+    <dd></dd>
+    <dt><tt>editor_key</tt></dt>
+    <dd>Key of text editor file.</dd>
+    <dt><tt>range</tt></dt>
+    <dd>Position and length of the text to return. If no range is given, the
+    entire contents of the editor is returned.</dd>
+  </dl><!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../../images/ccgicon.png" /> <a href="../../../index.htm"></a>
+    <a href="../../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: db_ExportASCII" />
+  <meta name="keywords" content="functions: db_ImportASCII" />
+  <title>Import/Export ASCII Databases Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Import/Export ASCII Databases Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    <a class="fcnlink" href="#db_ImportASCII">db_ImportASCII</a> [
+        ascii_file  : 'filename',
+        db_file     : 'database_filename',
+        delimiter   : 'delimiter_token',
+        quotes      : flag,
+        names       : name_tokens,
+        types       : type_tokens,
+        skip        : flags,
+        titles      : flag,
+        do_emin     : mode,
+        append      : flag
+    ]
+
+    <a class="fcnlink" href="#db_ExportASCII">db_ExportASCII</a> [
+        'mdb_file',
+        'ascii_file',
+        field_names,
+        entry_keys,
+        options
+    ]
+
+    where options is:
+
+    [
+        delimiter  : 'delimiter_token',
+        quotes     : flag,
+        titles     : flag
+    ]
+</pre>
+<a id="db_ImportASCII"></a>
+<h1>Description</h1>
+
+<p><tt><span class="fcndef">db_ImportASCII</span></tt> imports an ASCII file
+  into a MOE molecular database. The arguments to the function are
+  attribute-value colon-separated pairs:</p>
+  <dl>
+    <dt><tt>ascii_file:'filename'</tt></dt>
+    <dd>Name of the ASCII file to import, specified as a token.</dd>
+    <dt><tt>db_file:'database_filename'</tt></dt>
+    <dd>Name of the database to import to, specified as a token.</dd>
+    <dt><tt>delimiter:'delimiter_token'</tt></dt>
+    <dd>Character used to delimit columns in the ASCII file. If no delimiter
+    character is specified then whitespace is assumed to delimit the
+    columns.</dd>
+    <dt><tt>quotes:flag</tt></dt>
+    <dd>If non-zero, entries in the ASCII file are expected to be encapsulated
+    in quotation marks (&quot;). If zero, entries are treated as though not
+    delimited by extra quotation marks. The default is 1.</dd>
+    <dt><tt>names:name_tokens</tt></dt>
+    <dd>The names of the fields to create, specified as a vector of field name
+    tokens. The field names must always be specified, otherwise the field data
+    is not imported.</dd>
+    <dt><tt>types:type_tokens</tt></dt>
+    <dd>The type of each field to create in the database, specified as a vector
+    of field types. Valid types are given in <a href=
+    "moe_const.htm">DB_FIELD_TYPES</a>. The <tt>type_tokens</tt> vector must
+    unit-extend to the length of <tt>name_tokens</tt>.</dd>
+    <dt><tt>skip:flags</tt></dt>
+    <dd>Vector of flags specifying whether to import or to skip each field: a
+    non-zero value means the field will <i>not</i> be imported (i.e. skip this
+    field), 0 means it will be imported. This vector must unit extend to the
+    length of <tt>name_tokens</tt>. The default is 0.</dd>
+    <dt><tt>titles:flag</tt></dt>
+    <dd>If non-zero, the first line of the file is not read in as data. If
+    zero, the first line of the file is treated as data. The default is 1.</dd>
+    <dt><tt>do_emin:mode</tt></dt>
+    <dd>If -1, no coordinates are generated before being saved to the
+    destination database file. If 0, 2D depiction coordinates are used and no
+    minimization will be done. If 1, coordinates are generated via 3D embedding
+    and minimization. The default is 0. <!--
+<dd>If non-zero, molecules will be minimized before being saved to the
+destination database file.  If zero, no minimization will be done. The default
+is 0.
+!!--></dd>
+    <dt><tt>append:flag</tt></dt>
+    <dd>If non-zero, the imported data will be appended to the database. If
+    zero, the database is overwritten with the new data. The default is 0.</dd>
+  </dl>
+<a id="db_ExportASCII"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class=
+"fcndef">db_ExportASCII</span> ['mdb_file', 'ascii_file', field_names, entry_keys, options]
+</pre>
+
+<p>Exports a MOE molecular database file to an ASCII database file. Only the
+  specified fields and entries are exported.</p>
+  <dl>
+    <dt><tt>'mdb_file'</tt></dt>
+    <dd>Name of the MOE molecular database file, specified as a token, to be
+    exported to the ASCII format.</dd>
+    <dt><tt>'ascii_file'</tt></dt>
+    <dd>Name of the comma-delimited ASCII database file to write, specified as
+    a token.</dd>
+    <dt><tt>field_names</tt></dt>
+    <dd>The names of the fields to export, specified as a vector of field name
+    tokens. Molecule fields are exported as unique SMILES strings.</dd>
+    <dt><tt>entry_keys</tt></dt>
+    <dd>Vector of entry keys specifying which entries to export. Numeric
+    entries containing multiple values will be exported as a whitespace
+    separated data vector.</dd>
+    <dt><tt>options</tt></dt>
+    <dd>
+      Output options are specified as a tagged vector:
+      <dl>
+        <dt><tt>delimiter</tt></dt>
+        <dd>Character used to delimit fields.</dd>
+        <dt><tt>quotes</tt></dt>
+        <dd>Set to 1 to encapsulate entries in double quotes (else 0).</dd>
+        <dt><tt>titles</tt></dt>
+        <dd>Set to 1 to store field names in first line of file (else 0).</dd>
+      </dl>
+    </dd>
+  </dl>
+
+<p>For example, the following <tt>options</tt> vector specifies
+  comma-delimited, quoted fields, with the first line of the file representing
+  field titles:</p>
+
+<pre class="code">
+[delimiter:',', quotes:1, titles:1];
+</pre>
+
+<h1>See Also</h1>
+
+<p><a href="introdb.htm">Database Functions</a></p>
+
+<table class="functionList">
+  <tr>
+    <td><a href="db_port.htm">db_ImportDB</a></td>
+    <td><a href="db_port.htm">db_ExportDB</a></td>
+  </tr>
+  <tr>
+    <td><a href="db_sd.htm">db_ImportSD</a></td>
+    <td><a href="db_sd.htm">db_ExportSD</a></td>
+  </tr>
+  <tr>
+    <td><a href="db_mol2.htm">db_ImportMOL2</a></td>
+    <td><a href="db_mol2.htm">db_ExportTriposMOL2</a></td>
+  </tr>
+  <tr>
+    <td><a href="macromodel.htm">macromodel_ImportMDB</a></td>
+    <td><a href="macromodel.htm">macromodel_ExportMDB</a></td>
+  </tr>
+</table>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div>
+  <!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

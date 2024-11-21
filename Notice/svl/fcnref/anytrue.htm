@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content=
+  "functions: anytrue, alltrue, anyfalse, allfalse" />
+  <title>SVL Functions: anytrue, alltrue, anyfalse, allfalse</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    SVL Functions: anytrue, alltrue, anyfalse,
+    allfalse
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+<a class="fcnlink" href="#anytrue">anytrue</a> v
+<a class="fcnlink" href="#anytrue">alltrue</a> v
+<a class="fcnlink" href="#anytrue">anyfalse</a> v
+<a class="fcnlink" href="#anytrue">allfalse</a> v
+</pre>
+
+
+<a id="anytrue"></a>
+<h1>Description</h1>
+
+<p>These functions search the set of (arbitrarily nested) scalars that are
+  contained in the vector <tt>v</tt> and return either 0 or 1, depending on the
+  presence of scalar values <tt>0</tt> (zero), <tt>''</tt> (empty
+  token), or other than <tt>0</tt> or <tt>''</tt>.</p>
+<table class="noborder left">
+  <tr>
+    <td><tt><span class="fcndef">anytrue</span></tt></td>
+    <td>returns 1 if and only if vector <tt>v</tt> contains at
+    least one (arbitrarily nested) scalar other than <tt>0</tt> or
+    <tt>''</tt>.</td>
+  </tr>
+  <tr>
+    <td><tt><span class="fcndef">alltrue</span></tt></td>
+    <td>returns 1 if and only if vector <tt>v</tt> does not
+    contain any scalar of value <tt>0</tt> or <tt>''</tt>.</td>
+  </tr>
+  <tr>
+    <td><tt><span class="fcndef">anyfalse</span></tt></td>
+    <td>returns 1 if and only if vector <tt>v</tt> contains at
+    least one scalar of value either <tt>0</tt> or <tt>''</tt>.</td>
+  </tr>
+  <tr>
+    <td><tt><span class="fcndef">allfalse</span></tt></td>
+    <td>returns 1 if and only if vector <tt>v</tt> does not
+    contain any scalar of value other than <tt>0</tt> or
+    <tt>''</tt>.</td>
+  </tr>
+</table>
+
+<p>Example:</p>
+
+<pre class="code">
+svl&gt; v = 0
+svl&gt; [anytrue v, alltrue v, anyfalse v, allfalse v]
+[0,0,1,1]
+
+svl&gt; v = []
+svl&gt; [anytrue v, alltrue v, anyfalse v, allfalse v]
+[0,1,0,1]
+
+svl&gt; v = [[0,1], 'a']
+svl&gt; [anytrue v, alltrue v, anyfalse v, allfalse v]
+[1,0,1,0]
+
+svl&gt; v = 5
+svl&gt; [anytrue v, alltrue v, anyfalse v, allfalse v]
+[1,1,0,0]
+</pre>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

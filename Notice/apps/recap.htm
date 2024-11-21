@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../images/ccgicon.png" />
+  <title>RECAP Analysis and Synthesis</title>
+  <meta name="keywords" content="panel: RECAP Analysis" />
+  <meta name="keywords" content="panel: RECAP Synthesis" />
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../index.htm"><img src="../images/ccglogo.png" /></a>
+    <a href="../index.htm"><div class="moeversion"></div></a>
+    RECAP Analysis and Synthesis
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+  <ul>
+    <li>
+      <a href="#Method">Methodology</a>
+    </li>
+    <li>
+      <a href="#RunAnalysis">Running RECAP Analysis</a>
+    </li>
+    <li>
+      <a href="#RunSynthesis">Running RECAP Synthesis</a>
+    </li>
+    <li>
+      <a class="example" href="#Example">Example</a>
+    </li>
+    <li>
+      <a href="#Ref">References</a>
+    </li>
+    <li>
+      <a href="#SeeAlso">See Also</a>
+    </li>
+  </ul>
+
+<p>This document describes two applications: <b>RECAP Analysis</b> and
+  <b>RECAP Synthesis</b>. The purpose of RECAP Analysis is to fragment every
+  molecule in a database according to simple retrosynthetic analysis rules and
+  collect statistics on the resulting fragments. The RECAP Synthesis
+  application can then be used to randomly recombine the RECAP Analysis
+  fragments in an effort to generate synthetically reasonable novel chemical
+  structures. Optional property filters and screening predictive models (such
+  as QSAR/QSPR models, fingerprint similarity models or pharmacophore models)
+  can be applied to the synthesis output. Thus, the two applications can be
+  used as part of a <i>de novo</i> discovery methodology.
+  <!-- ============================= METHODOLOGY -=========================== --></p>
+<a id="Method"></a>
+<h1>Methodology</h1>
+
+<p><b>RECAP Analysis</b>. RECAP Analysis fragments a molecule by breaking
+  certain bonds that are estimated to be those that can be reformed by common
+  reliable chemistry. The methodology is similar to that of [Lewell&nbsp;1998]
+  and [Schneider&nbsp;2006]. Each resulting fragment is assigned a unique
+  extended SMILES [Weininger&nbsp;1988] name that retains the chemical context
+  of the broken bond. By applying this fragmentation methodology to a
+  collection of compounds, statistics on individual fragments can be gathered
+  and the fragments subsequently recombined in the RECAP Synthesis procedure to
+  generate novel chemical structures.</p>
+
+<p>As an example, consider the case of ether chemistry. If an ether -O-CH2-
+  bond is broken then both atoms involved in the bond will be tagged with an
+  &quot;ether&quot; label to record the fact that an ether bond was broken. In
+  the extended SMILES string that contains the name, the oxygen atom will be
+  named as <tt>[OH;ether]</tt> and the carbon atom will named as
+  <tt>[CH3;ether]</tt>. Thus a molecule such as</p>
+
+<p class="center">C-C-C-O-C-C</p>
+
+<p>will result in three RECAP fragment names <tt>[OH2;ether]</tt>,
+  <tt>[CH3;ether]C</tt>, and <tt>[CH3;ether]CC</tt> since both ether oxygen
+  bonds will be broken. The extended SMILES notation consists of atoms of the
+  form <tt>[X;class]</tt> where &quot;class&quot; is the chemical class
+  associated with the broken bond and <tt>X</tt> is a SMILES atom
+  specification.</p>
+
+<p>The following table lists the chemical bonds that the analysis method
+  identifies for fragmentation. Each bond breaking pattern is listed with a
+  depiction of the groups, conditions on substituents and extended SMILES atom
+  names for the atoms involved in the bond that is broken (depicted in
+  boldface). In all cases, no bond will be broken if it is part of a small or
+  common sized ring (3 through 8).</p>
+  <center>
+    <table class="titlebar">
+      <tr>
+        <th>Chemical Group</th>
+        <th>Bond</th>
+        <th>Conditions</th>
+        <th>Extended SMILES</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td class="center"><img src="recap/f_so2amide.gif" class="icon" /></td>
+        <td><b>S-N</b></td>
+        <td>R<sub>1</sub> = {C}<br />
+        R<sub>2</sub>, R<sub>3</sub> = {C,H} not both H</td>
+        <td><tt>[S;so2amide](=O)(=O)(R1)<br />
+        [N;so2amide](R2)(R3)</tt></td>
+        <td>sulfonamide</td>
+      </tr>
+      <tr>
+        <td class="center"><img src="recap/f_urea.gif" class="icon" /></td>
+        <td><b>C-N</b></td>
+        <td>R<sub>1</sub>, R<sub>2</sub> = {C,H} not both H<br />
+        R<sub>3</sub>, R<sub>4</sub> = {C,H} not both H</td>
+        <td><tt>[N;urea](R1)(R2)<br />
+        [N;urea](R3)(R4)<br />
+        [C;urea]=O</tt></td>
+        <td>urea</td>
+      </tr>
+      <tr>
+        <td class="center"><img src="recap/f_thiourea.gif" class="icon" /></td>
+        <td><b>C-N</b></td>
+        <td>R<sub>1</sub>, R<sub>2</sub> = {C,H} not both H<br />
+        R<sub>3</sub>, R<sub>4</sub> = {C,H} not both H</td>
+        <td><tt>[N;thiourea](R1)(R2)<br />
+        [N;thiourea](R3)(R4)<br />
+        [C;thiourea]=S</tt></td>
+        <td>thiourea</td>
+      </tr>
+      <tr>
+        <td class="center"><img src="recap/f_lactam.gif" class="icon" /></td>
+        <td><b>C-N</b></td>
+        <td>R<sub>1..3</sub> : not all H<br />
+        a,b : any element, any bond<br />
+        5, 6 or 7 membered rings only</td>
+        <td><tt>[N;lactam]1C(=O)C[a][b]C1<br />
+        [C;lactam](R1)(R2)(R3)</tt></td>
+        <td>lactam</td>
+      </tr>
+      <tr>
+        <td class="center"><img src="recap/f_amide.gif" class="icon" /></td>
+        <td><b>C-N</b></td>
+        <td>R<sub>1</sub> : {C}<br />
+        R<sub>2</sub>, R<sub>3</sub> : {C,H} not both H</td>
+        <td><tt>[N;amide](R2)(R3)<br />
+        [C;amide](=O)(R1)</tt></td>
+        <td>amide</td>
+      </tr>
+      <tr>
+        <td class="center"><img src="recap/f_thioamide.gif" class="icon" /></td>
+        <td><b>C-N</b></td>
+        <td>R<sub>1</sub> : {C}<br />
+        R<sub>2</sub>, R<sub>3</sub> : {C,H} not both H</td>
+        <td><tt>[N;thioamide](R2)(R3)<br />
+        [C;thioamide](=S)(R1)</tt></td>
+        <td>thioamide</td>
+      </tr>
+      <tr>
+        <td class="center"><img src="recap/f_ester.gif" class="icon" /></td>
+        <td><b>C-O</b></td>
+        <td>R<sub>1</sub> : {C}<br />
+        R<sub>2</sub> : {C}</td>
+        <td><tt>[O;ester](R2)<br />
+        [C;ester](=O)(R1)<br />
+        [C;ester](=S)(R1)</tt></td>
+        <td>ester</td>
+      </tr>
+      <tr>
+        <td class="center"><img src="recap/f_thioester.gif" class="icon" /></td>
+        <td><b>C-S</b></td>
+        <td>R<sub>1</sub> : {C}<br />
+        R<sub>2</sub> : {C}</td>
+        <td><tt>[S;thioester](R2)<br />
+        [C;thioester](=O)(R1)<br />
+        [C;thioester](=S)(R1)</tt></td>
+        <td>thioester</td>
+      </tr>
+      <tr>
+        <td class="center"><img src="recap/f_NaroC.gif" class="icon" /></td>
+        <td><b>C-N</b></td>
+        <td>R<sub>1..3</sub> : not all H<br />
+        a,b,c,d : any aromatic<br />
+        <b>N</b> : aromatic in 5,6,7 ring</td>
+        <td><tt>[n;NaroC]1[a][b][c][d]1<br />
+        [C;NaroC](R1)(R2)(R3)</tt></td>
+        <td>pyrrole N - alkane C</td>
+      </tr>
+      <tr>
+        <td class="center"><img src="recap/f_biphenyl.gif" class="icon" /></td>
+        <td><b>C-C</b></td>
+        <td>het atoms in rings OK<br />
+        any size aromatic rings</td>
+        <td><tt>[c;biphenyl]1ccccc1</tt></td>
+        <td>biphenyl</td>
+      </tr>
+      <tr>
+        <td class="center"><img src="recap/f_ether.gif" class="icon" /></td>
+        <td><b>C-O</b></td>
+        <td>R<sub>1</sub>, R<sub>2</sub> : {C<sub>aromatic</sub>,
+        C<sub>alkane</sub>}<br />
+        R<sub>1</sub>, R<sub>2</sub> : not both aromatic</td>
+        <td><tt>[O;ether]...<br />
+        [C;ether]...</tt></td>
+        <td>ether</td>
+      </tr>
+      <tr>
+        <td class="center"><img src="recap/f_thioether.gif" class="icon" /></td>
+        <td><b>C-S</b></td>
+        <td>R<sub>1</sub>, R<sub>2</sub> : {C<sub>aromatic</sub>,
+        C<sub>alkane</sub>}<br />
+        R<sub>1</sub>, R<sub>2</sub> : not both aromatic</td>
+        <td><tt>[O;thioether]...<br />
+        [C;thioether]...</tt></td>
+        <td>thioether</td>
+      </tr>
+      <tr>
+        <td class="center"><img src="recap/f_quatN.gif" class="icon" /></td>
+        <td><b>C-N</b></td>
+        <td>R<sub>1</sub> : {C<sub>aromatic</sub>, C<sub>alkane</sub>, H}<br />
+        R<sub>1..3</sub> : {C<sub>alkane</sub>}</td>
+        <td><tt>[N+;quatN]...<br />
+        [C;quatN]...</tt></td>
+        <td>quaternary N</td>
+      </tr>
+      <tr>
+        <td class="center"><img src="recap/f_amine.gif" class="icon" /></td>
+        <td><b>C-N</b></td>
+        <td>R<sub>1..3</sub> : {C<sub>aromatic</sub>, C<sub>alkane</sub>}<br />
+        R<sub>1..3</sub> : not all aromatic<br />
+        <b>N</b> not NH<sub>2</sub></td>
+        <td><tt>[N;amine]...<br />
+        [C;amine]...</tt></td>
+        <td>amine</td>
+      </tr>
+      <tr>
+        <td class="center"><img src="recap/f_disulfide.gif" class="icon" /></td>
+        <td><b>S-S</b></td>
+        <td>R<sub>1</sub>, R<sub>2</sub> : {C}</td>
+        <td><tt>[S;disulfide](R1)<br />
+        [S;disulfide](R2)</tt></td>
+        <td>disulfide</td>
+      </tr>
+      <tr>
+        <td class="center"><img src="recap/f_olefin.gif" class="icon" /></td>
+        <td><b>C=C</b></td>
+        <td>R<sub>1..4</sub> : {C,H}<br />
+        R<sub>1..2</sub> : not both H<br />
+        R<sub>3..4</sub> : not both H</td>
+        <td><tt>[C;olefin](R1)(R2)<br />
+        [C;olefin](R3)(R4)</tt></td>
+        <td>olefin</td>
+      </tr>
+    </table>
+  </center>
+
+<p>Chemical bonds are assigned in the order they appear in the table,
+  beginning at the top; for example, urea takes precedence over amide.
+  Generally, terminal methyl groups are not generated; e.g. -OMe groups are not
+  fragmented.</p>
+
+<p><b>RECAP Synthesis</b>. The RECAP Synthesis application recombines
+  fragments generated by the RECAP Analysis procedure to produce novel
+  compounds that satisfy one or more conditions. The input to RECAP Synthesis
+  is one or more databases produced by RECAP Analysis. Each database must
+  have</p>
+  <ol>
+    <li>A character field called &quot;name&quot; containing the extended
+    SMILES name of the RECAP fragments.</li>
+    <li>Optionally, a numeric field containing non-negative values to be used
+    as a sampling weight for each fragment.</li>
+  </ol>
+
+<p>Although RECAP Analysis produces a molecule field, it is not required by
+  RECAP Synthesis; only the name field is strictly required. RECAP Synthesis
+  will generate molecules consisting of random combinations of the input
+  fragments such that the collection of output fragments will have a mean heavy
+  atom count of <i>Q</i><sub>mean</sub> and standard deviation of the heavy
+  atom count of <i>Q</i><sub>dev</sub>. The following algorithm is used to
+  generate random molecules:</p>
+  <p class="blockquote">
+    <b>Molecule Generation Algorithm</b>. Input: A collection of RECAP Analysis
+    databases such that each database <i>i</i> contains extended SMILES
+    fragments {<i>f<sub>ij</sub></i>} with an associated database weight
+    {<i>W<sub>i</sub></i>}, an associated fragment weight
+    {<i>w<sub>ij</sub></i>}; the desired values of <i>Q</i><sub>mean</sub> and
+    <i>Q</i><sub>dev</sub>. Output: a molecule with heavy atom count
+    <i>Q</i><sub>mean</sub> on average (with standard deviation
+    <i>Q</i><sub>dev</sub>).</p>
+    <ol>
+      <li>[Choose Root] Choose a random database <i>R</i> sampled from a
+      distribution proportional to {<i>W<sub>i</sub></i>}. From database
+      <i>R</i> select a random fragment <i>f<sub>Rr</sub></i> from a
+      distribution proportional to {<i>w<sub>Rj</sub></i>}. Set
+      <i>M</i><sub>0</sub> to the chosen fragment <i>f<sub>Rr</sub></i>. Set
+      <i>k</i> (the iteration counter) to 0.</li>
+      <li>[Select Substitution Point] Select a random atom from molecule
+      <i>M<sub>k</sub></i> that is a substitution point; i.e. an atom with
+      extended SMILES notation of &quot;[el;class]&quot;); if no such atom can
+      be found then go to step 5.</li>
+      <li>[Select Substituent Fragment] Choose a random database <i>S</i>
+      sampled from a distribution proportional to {<i>W<sub>i</sub></i>}. From
+      database <i>S</i> select a random fragment <i>f<sub>Ss</sub></i> with the
+      same chemical class as the chosen substitution point from a distribution
+      proportional to {<i>w<sub>Sj</sub></i>}.</li>
+      <li>[Bond Fragments] Bond the selected substitution point with a randomly
+      selected matching atom in the <i>f<sub>Ss</sub></i> with the appropriate
+      bond order. Increment <i>k</i> and set <i>M<sub>k</sub></i> to the newly
+      constructed molecule. If the number of heavy atoms in
+      <i>M<sub>k</sub></i> is less than 10 times <i>Q</i><sub>dev</sub> then
+      return to step 2.</li>
+      <li>[Cap Groups] If there are any substitution points in any of the
+      generated molecules {<i>M</i><sub>0</sub>, <i>M</i><sub>1</sub>, ... }
+      that would lead to reactive groups (such as aldehydes) then add small
+      terminal groups as caps to each such point.</li>
+      <li>[Select Molecule] Let <i>Q<sub>i</sub></i> be the heavy atom count of
+      <i>M<sub>i</sub></i>; set <img src="recap/gammadist.gif" /> where
+      &Gamma;(&alpha;) represents the Gamma function evaluated at &alpha;,
+      where &Gamma;(&alpha;)=(&alpha;-1)!. Select molecule <i>n</i> from a
+      distribution proportional to {<i>p<sub>i</sub></i>} and output
+      <i>M<sub>n</sub></i>.</li>
+    </ol>
+
+<p>The reason that a sequence of molecules is generated prior to selecting
+  one of the sequence members at random is to bias the output collection of
+  molecules to have the specified average heavy atom count and specified
+  standard deviation on the heavy atom count. The foregoing algorithm is used
+  repeatedly in the main RECAP Synthesis methodology. This methodology proceeds
+  as follows:</p>
+  <ol>
+    <li>Use the Generate algorithm to randomly generate a molecule.</li>
+    <li>If the generated molecule passes Reactive/Leadlike/Druglike or other
+    property tests then (optionally) protonate bases and deprotonate acids and
+    screen against a predictive model.</li>
+    <li>If the results of the screen are reasonable (i.e. satisfy a threshold)
+    then output the molecule.</li>
+  </ol>
+
+<p>RECAP Synthesis repeats the above procedure until a pre-determined output
+  limit is reached or a pre-determined number of attempts have been made.
+  <!-- ============================ RUNNING ================================ !--></p>
+<a id="RunAnalysis"></a>
+<h1>Running RECAP Analysis</h1>
+
+<p>To start the RECAP Analysis application, use <nobr><b>MOE | File |
+  Open</b></nobr> to open a database containing molecular structures and
+  optional numeric activity data. Use <nobr><b>DBV | File | Import</b></nobr>
+  functionality to concatenate multiple databases prior to subjecting them to
+  RECAP Analysis. Then select <b><nobr>DBV | Compute | RECAP |
+  Analysis</nobr></b>. RECAP Analysis can also be run from the Fragments menu:
+  <span class="menu">MOE | Compute | Fragments | RECAP Analysis</span></p>
+
+<img src="recap/an_panel.png" class="center" />
+  <table class="noborder">
+    <tr>
+      <td><b>Input&nbsp;Database</b></td>
+      <td>The Input Database contains the molecular structures to analyze and
+      the first molecule field in that database will be used as input to RECAP
+      Analysis. Only connection table information will be used. If <b>Selected
+      Entries Only</b> is on and the Input Database is open in a Database
+      Viewer then RECAP Analysis will ignore entries not selected in the
+      viewer.</td>
+    </tr>
+    <tr>
+      <td><b>Activity&nbsp;field</b></td>
+      <td>The Activity field, operator and threshold value determine whether
+      the input compounds are treated as active or inactive. Select &quot;(All
+      Active)&quot; to treat all molecules as active; select &quot;(All
+      Inactive)&quot; to treat all molecules as inactive; otherwise, select one
+      of the numeric fields in the database as the activity field. In the
+      latter case, the values in the database will be compared to the threshold
+      value (specified to the right of the Activity field) using the selected
+      operator. For example, if the selected activity field contains binary
+      data, 1 for active and 0 for inactive, select the &quot;&gt;&quot;
+      operator and use a threshold value of 0.5 - molecules will be active if
+      their database value is greater than 0.5 and inactive otherwise.</td>
+    </tr>
+    <tr>
+      <td><b>Output&nbsp;Database</b></td>
+      <td>The Output Database is the molecular database file that will be
+      created to contain the output analysis. RECAP Fragment structures,
+      SMILES-type [Weininger&nbsp;1988] names and frequency counts will be
+      written to the database. If <b>Open in Database Viewer</b> is on then a
+      Molecular Database Viewer will be opened on the Output Database.</td>
+    </tr>
+  </table>
+
+<p>After filling the Input and Output Database fields, press <b>OK</b> to
+  begin the calculation. The processing will take some time depending on the
+  size of the input database. It is a good idea to use <nobr><b>MOE | File |
+  Close</b></nobr> prior to the calculation (for speed). Commonly, hundreds of
+  structures are processed per second. Periodically, the Output Database will
+  be updated to contain the results of the calculation.</p>
+
+<p>The Output Database, upon completion of the analysis, will contain the
+  following fields:</p>
+  <table class="titlebar">
+    <tr>
+      <th>field</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td><b>mol</b></td>
+      <td>A molecule field containing a 2D depiction [Clark&nbsp;2006] of each
+      RECAP fragment discovered in the analysis.</td>
+    </tr>
+    <tr>
+      <td><b>name</b></td>
+      <td>A character field containing the extended SMILES name of each RECAP
+      fragment discovered in the analysis. For example, a methoxy fragment that
+      was part of an ether group would have the name <tt>[OH;ether]C</tt>.</td>
+    </tr>
+    <tr>
+      <td><b>apo</b></td>
+      <td>The number of attachment points in each RECAP fragment.</td>
+    </tr>
+    <tr>
+      <td><b>freq</b></td>
+      <td>The frequency of occurrence of each RECAP fragment.</td>
+    </tr>
+    <tr>
+      <td><b>freq0<br />
+      freq1</b></td>
+      <td>If activity information was specified then these fields will hold the
+      frequency of occurrence of each RECAP fragment in inactives
+      (<b>freq0</b>) and actives (<b>freq1</b>). The frequency field
+      <b>freq</b> is the sum of <b>freq0</b> and <b>freq1</b>.</td>
+    </tr>
+    <tr>
+      <td><b>freqA</b></td>
+      <td>If activity information was specified then <b>freqA</b> will contain
+      an activity adjusted frequency value. This value is proportional to the
+      joint likelihood <tt>Pr(active,fragment)</tt> which is calculated as
+      <nobr><tt>Frequency(fragment) * Pr(active | fragment)</tt></nobr>.</td>
+    </tr>
+  </table>
+
+<p>The Output Database may be analyzed using any of the other analysis tools
+  of MOE. For example, <nobr><b>DBV | Compute | Sort [freq]</b></nobr> (with
+  descending option) can be used to determine the most popular fragments.
+  Additionally, <nobr><b>DBV | Edit | Select...</b></nobr> can be used to
+  select particular fragments related to a specific chemistry. For example,
+  searching the <b>name</b> field for <tt>&quot;;ether]&quot;</tt> will select
+  all fragments that came from breaking an ether bond.</p>
+<a id="RunSynthesis"></a>
+<h1>Running RECAP Synthesis</h1>
+
+<p>After RECAP Analysis has been performed, the results of the analysis
+  databases may be used as input to the RECAP Synthesis application. To start
+  RECAP Synthesis, select <nobr><b>DBV | Compute | RECAP | Synthesis</b></nobr>
+  in the Database Viewer of an output database of RECAP Analysis. RECAP
+  Analysis can also be run from the Fragments menu: <span class="menu">MOE |
+  Compute | Fragments | RECAP Synthesis</span></p>
+
+<img src="recap/syn_panel.png" class="center" />
+
+  <table class="noborder">
+    <tr>
+      <td><b>Output&nbsp;Database</b></td>
+      <td>Synthesized molecules will be written to the specified Output
+      Database. A 2D depiction and calculated properties will be written for
+      each synthesized molecule (that passes the optional filters). If <b>Open
+      in Database Viewer</b> is on then a Molecular Database Viewer will be
+      opened on the Output Database. If <b>Wash Output Molecules</b> is on,
+      acids will be deprotonated and bases will be protonated in molecules
+      written to the Output Database.</td>
+    </tr>
+    <tr>
+      <td><b>Descriptor Filter</b></td>
+      <td>
+        If specified, this defines the criteria that generated molecules must
+        satisfy. Molecules whose properties fall outside the specified range(s)
+        will be omitted. Any MOE 2D QuaSAR descriptor can be specified, and the
+        condition to be satisfied can be a range of values, a boolean value,
+        numeric comparisons, etc. evaluated on descriptors or SMARTS patterns.
+        Descriptor Filters can include files, specified as
+        <tt>@<i>filename</i></tt>. If the filename contains spaces or other
+        non-alphanumeric characters, it must be enclosed in double quotes.
+        Files can be nested. The current Filter can be written to a file by
+        pressing <b>Save...</b> and providing a filename. Examples include:
+        <table class="titlebar">
+          <tr>
+            <th>Expression</th>
+            <th>Meaning</th>
+          </tr>
+          <tr>
+            <td><tt>Weight[100,500] SlogP&lt;5</tt></td>
+            <td>Molecular weight &ge; 100 and &le; 500 and SlogP &lt; 5</td>
+          </tr>
+          <tr>
+            <td><tt>!reactive 'b_1rotN'&lt;4</tt></td>
+            <td>Not reactive and less than 4 rotatable single bonds<br />
+            (<b>Note:</b> Descriptor codes containing digits must be
+            quoted.)</td>
+          </tr>
+          <tr>
+            <td><tt>&quot;[NX3](=[OX1])[OX1]&quot;&lt;=2 not
+            &quot;[#M]&quot;</tt></td>
+            <td>Two or fewer nitro/nitrate groups and not metal atom</td>
+          </tr>
+          <tr>
+            <td><tt>@filter.txt TPSA&gt;80</tt></td>
+            <td>Use the contents of <tt>filter.txt</tt> and TPSA &gt; 80</td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td><b>Model&nbsp;File</b></td>
+      <td>Output molecules may optionally be subjected to additional filtering
+      with a QSAR <tt>.fit</tt> file, a Model Composer <tt>.mom</tt> file, a
+      Fingerprint Model <tt>.fpt</tt> file or a Pharmacophore Query
+      <tt>.ph4</tt> file. Specify the name of an existing file. The model will
+      be applied to the synthesized molecules and if they satisfy the given
+      threshold condition (specified in the fields below) they will be written
+      to the Output Database. If no Model File is specified then no additional
+      filtering will be performed.</td>
+    </tr>
+    <tr>
+      <td><b>Stop&nbsp;After</b></td>
+      <td>The RECAP Synthesis application will terminate when the given number
+      of molecules (<b>Molecules</b>) have been written to the Output Database;
+      the application will also terminate after the specified synthesis attempt
+      limit (<b>Attempts</b>) has been reached (no matter how many molecules
+      have been written to the Output Database). Usually, the first number will
+      control termination of the application; however, if the Model File is
+      such that few molecules satisfy the threshold then the second number will
+      terminate the application.</td>
+    </tr>
+    <tr>
+      <td><b>Heavy&nbsp;Atoms</b></td>
+      <td>The heavy atom (non-hydrogen) count of synthesized molecules will
+      have a distribution with given <b>Average</b> and given <b>Standard
+      Deviation</b>. Lead-like molecules typically have 25 heavy atoms on
+      average while drug-like molecules will have 30 heavy atoms on average.
+      The Average quantity should be adjusted to agree with the Descriptor
+      Filter setting.</td>
+    </tr>
+    <tr>
+      <td><b>RECAP&nbsp;Database&nbsp;1<br />
+      RECAP&nbsp;Database&nbsp;2</b></td>
+      <td>
+        Output molecules are synthesized by recombining fragments specified in
+        the RECAP Database 1 and RECAP Database 2. These databases must have
+        been previously generated with the RECAP Analysis application. Either
+        (but not both) of the files can be left empty (unspecified). The
+        <tt>$MOE/opt/recaplib.mdb</tt> default molecular database is the output
+        of a RECAP Analysis on a collection of ~750,000 diverse lead/drug-like
+        chemical structures from various vendor catalogs and medicinal
+        chemistry journals.
+
+<p>The <b>Weight</b> specification (for each database) is used to bias
+        the random generation of synthesized molecules. A numeric field in each
+        database may optionally be used as a weight field. RECAP fragments in
+        that database will be sampled according to the non-negative values of
+        the weight field. Additionally, the <b>Database</b> weight can be
+        specified to bias the fragment database selection. Normally fragments
+        are selected from each specified input database equally; by specifying
+        different values a bias may be introduced. For example, if Database 1
+        has a weight of 1 and Database 2 has a weight of 2 then fragments will
+        be selected from Database 2 twice as often as from Database 1.</p>
+
+<p>Check the <b>Always Choose Root from Database 1</b> option to ensure
+        that the root is always chosen from the first database, regardless of
+        weighting values.</p>
+      </td>
+    </tr>
+  </table>
+
+<p>Press the <b>OK</b> button to begin the synthesis and filtering of
+  molecules. Progress will be written to the SVL Commands window during the
+  calculation. The Output Database will contain the synthesized molecules along
+  with several calculated properties:</p>
+  <table class="titlebar">
+      <tr>
+        <th><b>field</b></th>
+        <th><b>Description</b></th>
+      </tr>
+      <tr>
+        <td><b>mol</b></td>
+        <td>A molecule field containing a 2D depiction of each synthesized
+        molecule that satisfies the filters and model threshold.</td>
+      </tr>
+      <tr>
+        <td><b>opr_leadlike</b></td>
+        <td>A flag that is 1 if the molecule is lead-like according to the
+        Oprea test.</td>
+      </tr>
+      <tr>
+        <td><b>opr_druglike</b></td>
+        <td>A flag that is 1 if the molecule is drug-like according to the
+        Lipinski test.</td>
+      </tr>
+      <tr>
+        <td><b>rings</b></td>
+        <td>The number of rings in the molecule. <!--<tr>
+<td><b>don+acc</b>
+<td>The number of hydrogen bond donors and acceptors in the molecule.--></td>
+      </tr>
+      <tr>
+        <td><b>Weight</b></td>
+        <td>The molecular weight of the molecule.</td>
+      </tr>
+      <tr>
+        <td><b>logS</b></td>
+        <td>An estimate of the aqueous solubility of the molecule
+        [Hou&nbsp;2004].</td>
+      </tr>
+      <tr>
+        <td><b>SlogP</b></td>
+        <td>An estimate of the octanol/water partition coefficient of the
+        molecule [Wildman&nbsp;1999].</td>
+      </tr>
+      <tr>
+        <td><b>reactive</b></td>
+        <td>A flag that is 1 if the molecule contains a common reactive
+        group.</td>
+      </tr>
+      <tr>
+        <td><b>model</b></td>
+        <td>The value of the predictive model specified in the Model
+        field.</td>
+      </tr>
+    </table>
+  <!-- =============================== EXAMPLE ============================= -->
+<a id="Example"></a>
+<div class="example">
+
+<h1>Example</h1>
+
+<p>In this section we will present an example of how one can use RECAP
+    Synthesis to generate novel chemical structures that are likely to be
+    lead-like and non-reactive and to cross the blood brain barrier. The first
+    step is to create a QSPR model to predict whether a compound will cross the
+    blood brain barrier.</p>
+    <ol start="1">
+      <li>Use <nobr><b>MOE | File | Open</b></nobr> to open the database
+      <tt>$MOE/sample/mol/blood_brain.mdb</tt>.</li>
+      <li>Use <nobr><b>DBV | File | Save As</b></nobr> and save this database
+      as <tt>logbb.mdb</tt>.</li>
+      <li>Use <nobr><b>DBV | Compute | Descriptors | Calculate...</b></nobr> in
+      the <tt>logbb.mdb</tt> database. Select all 10 of the <tt>SlogP_VSA*</tt>
+      descriptors and click <b>OK</b>.</li>
+      <li>Use <nobr><b>DBV | Compute | Model | QSAR</b></nobr> to calculate a
+      PLS model of logBB as a function of the <tt>SlogP_VSA</tt> descriptors.
+      Select the <tt>SlogP_VSA</tt> descriptors and click <b>Fit</b> to
+      calculate the model. Click <b>Save</b> and save the model as the file
+      <tt>logbb.fit</tt> and <b>Close</b> to close the panel.</li>
+    </ol>
+
+<p>The next step is to use RECAP Synthesis to generate novel molecules that
+    satisfy the condition that logBB &lt; -1:</p>
+    <ol start="5">
+      <li>Select <nobr><b>DBV | Compute | RECAP | Synthesis</b></nobr> in the
+      <tt>logbb.mdb</tt> database. Ensure that:
+      <img src="recap/recap_synth.png" class="center"/>
+        <ol type="i">
+          <li><b>Wash Output Molecules</b> is on</li>
+          <li><b>Descriptor Filter</b> is set to <tt>leadlike
+          !reactive</tt></li>
+          <li><b>Model File</b> is set to <tt>logbb.fit</tt></li>
+          <li><b>Prediction Value</b> comparison set to <tt>&lt; -1</tt></li>
+          <li><b>RECAP Database 1</b> specifies the default
+          <tt>$MOE/opt/recaplib.mdb</tt><br />
+          and that,</li>
+          <li><b>Weight Fragment</b> is set to <tt>freq</tt></li>
+        </ol>
+      </li>
+    </ol>
+
+<p>Ensure that <b>Open in Database Viewer</b> is on and press <b>OK</b> to
+    begin the calculation. Momentarily, a Database Viewer will be opened and
+    molecules will be written to the newly opened database. The synthesized
+    molecules and their properties will be written to the output database. The
+    <b>model</b> field will contain the predicted logBB value from the
+    <tt>logbb.fit</tt> saved model.</p>
+  </div>
+<a id="Ref"></a>
+<h1>References</h1>
+  <table class="ref">
+    <tr>
+      <td>[Clark&nbsp;2006]</td>
+      <td>Clark, A., Labute, P., Santavy, M.; 2D Structure Depiction; <i>J.
+      Chem. Inf. Model. 46</i> (<b>2006</b>) 1107-1123</td>
+    </tr>
+    <tr>
+      <td>[Lewell&nbsp;1998]</td>
+      <td>Lewell, X.Q., Judd, D.B., Watson, S.P., Hann, M.M.; RECAP -
+      Retrosynthetic Combinatorial Analysis Procedure: A Powerful New Technique
+      for Identifying Privileged Molecular Fragments with Useful Applications
+      in Combinatorial Chemistry <i>J. Chem. Inf. Comput. Sci. 38</i>
+      (<b>1998</b>) 511-522</td>
+    </tr>
+    <tr>
+      <td>[Schneider&nbsp;2006]</td>
+      <td>Schneider, G., Fechner, U.; Flux (1): A Virtual Synthesis Scheme for
+      Fragment-Based de Novo Design <i>J. Chem. Inf. Model</i> (<b>2006</b>)
+      699-707.</td>
+    </tr>
+    <tr>
+      <td>[Lipinski&nbsp;1997]</td>
+      <td>Lipinski, C.A., Lombardo, F., Dominy, B.W. Feeney, P.J.; Experimental
+      and Computational Approaches to Estimate Solubility and Permeability in
+      Drug Discovery and Development Settings; <i>Adv. Drug Deliv. Rev. 23</i>
+      (<b>1997</b>) 3-25.</td>
+    </tr>
+    <tr>
+      <td>[Hou&nbsp;2004]</td>
+      <td>Hou, T.J., Xia, K., Zhang, W., Xu, X.J.; ADME Evaluation in Drug
+      Discovery. 4. Prediction of Aqueous Solubility Based on Atom Contribution
+      Approach; <i>J. Chem. Inf. Comput. Sci. 44</i> (<b>2004</b>) 266-275</td>
+    </tr>
+    <tr>
+      <td>[Oprea&nbsp;2000]</td>
+      <td>Oprea,T.I.; Property Distribution of Drug-Related Chemical Databases;
+      <i>J. Comp. Aid. Mol. Des. 14</i> (<b>2000</b>) 251-264</td>
+    </tr>
+    <tr>
+      <td>[Weininger&nbsp;1988]</td>
+      <td>Weininger, D.; SMILES 1. Introduction and Encoding Rules; <i>J. Chem.
+      Inf. Comput. 28</i> (<b>1988</b>) 31-36</td>
+    </tr>
+    <tr>
+      <td>[Wildman&nbsp;1999]</td>
+      <td>Wildman, S.A., Crippen, G.M.; Prediction of Physiochemical Parameters
+      by Atomic Contributions; <i>J. Chem. Inf. Comput. Sci. 39</i>
+      (<b>1999</b>) 868-873</td>
+    </tr>
+  </table>
+<a id="SeeAlso"></a>
+<h1>See Also</h1>
+
+<p><a href="../quasar/modcomp.htm">Creating and Evaluating Models</a><br />
+  <a href="../quasar/model.htm">QuaSAR-Model</a><br />
+  <a href="../mdb/fpmodel.htm">Fingerprint Model</a><br />
+  <a href="../apps/ph4_guide.htm">Introduction to Pharmacophores in MOE</a></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../images/ccgicon.png" /> <a href="../index.htm"></a> <a href=
+    "../legal.htm"></a> &copy;<span class="versionyear"></span> <a href="http://www.chemcomp.com"></a>. All
+    rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

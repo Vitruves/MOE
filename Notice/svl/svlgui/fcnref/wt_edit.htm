@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href=
+  "../../../include/manstyle.css" />
+  <meta name="keywords" content="keywords: Edit" />
+  <meta name="keywords" content="functions: Widget:Edit" />
+  <meta name="keywords" content="functions: Edit (widget)" />
+  <title>Edit Widget</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../../index.htm"><img src="../../../images/ccglogo.png" /></a>
+    <a href="../../../index.htm"><div class="moeversion"></div></a>
+    Edit Widget
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Description</h1>
+
+<p>The <tt>Edit</tt> widget is a scrollable multi-line text editor.</p>
+
+<h3>Attributes</h3>
+
+<p><tt>Edit</tt> inherits all <a class="svl" href="wt_core.htm">core</a>
+  attributes and defines the following attributes:</p>
+  <table class="titlebar">
+    <tr>
+      <th width="10%" valign="top">Attribute</th>
+      <th width="50%" valign="top">Description</th>
+      <th width="25%" valign="top">Values</th>
+      <th width="10%" valign="top">Default</th>
+    </tr>
+    <tr>
+      <td valign="baseline"><tt>len</tt></td>
+      <td valign="baseline">Number of lines displayed</td>
+      <td valign="baseline">1 to 255</td>
+      <td valign="baseline">25</td>
+    </tr>
+    <tr>
+      <td valign="baseline"><tt>width</tt></td>
+      <td valign="baseline">Number of characters displayed per line</td>
+      <td valign="baseline">1 to 255</td>
+      <td valign="baseline">80</td>
+    </tr>
+    <tr>
+      <td><tt>type</tt></td>
+      <td>Edit return value data type
+      </td>
+      <td><tt>'char','modint'</tt></td>
+      <td><tt>'char'</tt></td>
+    </tr>
+    <tr>
+      <td><tt>cursorPos</tt></td>
+      <td>Text cursor position and text selection as vector of two integer
+      numbers. The first number is the cursor position and the second the
+      length of the selection starting at the cursor position; negative
+      for a selection to the left, or positive to the right.
+      </td>
+      <td>[number, number]</td>
+      <td><tt>[0,0]</tt></td>
+    </tr>
+  </table>
+
+<h3>Trigger</h3>
+
+<p>None, if the data type is <tt>char</tt>.<br />
+If the data type is <tt>modint</tt>, the widget will trigger when the editor
+text, text selection or cursor position changes. </p>
+
+<h3>Data Value</h3>
+
+<p>If the data type is <tt>char</tt> the editor&#39;s text is
+returned as a token.<br />
+If the data type is <tt>modint</tt> a vector with the
+editor&#39;s text, the cursor position and selection is returned:
+</p>
+
+<pre>
+   text                            // type = 'char'
+   [text, cursor_pos, sel_len]     // type = 'modint'
+</pre>
+
+<h1>See Also</h1>
+
+<p><a href="wt_core.htm">Core Attributes</a><br />
+  <a href="../wt_intro.htm">SVL Window Toolkit</a><br />
+  <a href="introwt.htm">Window Toolkit Functions</a><br />
+  <br />
+  <a class="svl" href="wt_text.htm"><tt>Text</tt> widget</a></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../../images/ccgicon.png" /> <a href="../../../index.htm"></a>
+    <a href="../../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

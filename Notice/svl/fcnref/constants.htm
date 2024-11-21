@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <title>SVL Built-In Constants</title>
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content=
+  "functions: EPS_M, INT_MAX, INT_MIN, INT_BITS, REAL_DIGITS" />
+  <meta name="keywords" content=
+  "functions: REAL_IEEE, REAL_INF, Inf, NaN, REAL_MAX, REAL_MAXEXP" />
+  <meta name="keywords" content="functions: PI, ARGC, ARGV" />
+  <meta name="keywords" content="functions: CLI, STDERR, STDIN, STDOUT" />
+  <meta name="keywords" content=
+  "functions: REAL_NAN, REAL_MIN, REAL_MINEXP, REAL_BITS" />
+  <meta name="keywords" content="SVL:Constants: SVL Constants" />
+  <meta name="keywords" content=
+  "SVL:Constants: '*cli*', '*stderr*', '*stdin*', '*stdout*'" />
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    SVL Built-In Constants
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Description</h1>
+
+<p>SVL includes a set of predefined constants. Most of these constants give
+  the numerical limits of the machine on which the software is running.</p>
+<table class="titlebar width-75p">
+  <tr>
+    <th width="20%">Name</th>
+    <th width="80%">Description</th>
+  </tr>
+  <tr>
+    <td><tt>EPS_M</tt></td>
+    <td>Machine epsilon; floating-point precision</td>
+  </tr>
+  <tr>
+    <td><tt>INT_MAX</tt></td>
+    <td>Maximum positive integer</td>
+  </tr>
+  <tr>
+    <td><tt>INT_MIN</tt></td>
+    <td>Maximum negative integer</td>
+  </tr>
+  <tr>
+    <td><tt>INT_BITS</tt></td>
+    <td>Number of bits (including sign bit) in an integer</td>
+  </tr>
+  <tr>
+    <td><a class="svl" href="svlmpu.htm">MPU_HOSTCOUNT</a><br />
+    <a class="svl" href="svlmpu.htm">MPU_PORTCOUNT</a><br />
+    <a class="svl" href="svlmpu.htm">MPU_THISHOST</a><br />
+    <a class="svl" href="svlmpu.htm">MPU_HOSTNAMES</a><br />
+    <a class="svl" href="svlmpu.htm">MPU_DIGITBITS</a><br />
+    <a class="svl" href="svlmpu.htm">MPU_DIGITCOUNT</a><br />
+    <a class="svl" href="svlmpu.htm">MPU_NEIGHBORS</a></td>
+    <td>Constants associated with the distributed computing
+    environment.</td>
+  </tr>
+  <tr>
+    <td><tt>REAL_BITS</tt></td>
+    <td>Number of bits in the mantissa of a floating-point
+    number</td>
+  </tr>
+  <tr>
+    <td><tt>REAL_DIGITS</tt></td>
+    <td>Number of significant digits in a floating-point
+    number</td>
+  </tr>
+  <tr>
+    <td><tt>REAL_IEEE</tt></td>
+    <td>1 if IEEE standard used, 0 otherwise</td>
+  </tr>
+  <tr>
+    <td><tt>REAL_INF</tt></td>
+    <td>Positive infinity (1/0)</td>
+  </tr>
+  <tr>
+    <td><tt>Inf</tt></td>
+    <td>Positive infinity (1/0)</td>
+  </tr>
+  <tr>
+    <td><tt>REAL_MAX</tt></td>
+    <td>Maximum positive floating-point number</td>
+  </tr>
+  <tr>
+    <td><tt>REAL_MAXEXP</tt></td>
+    <td>Maximum exponent for positive numbers in
+    e-notation</td>
+  </tr>
+  <tr>
+    <td><tt>REAL_NAN</tt></td>
+    <td>Not a number (0/0)</td>
+  </tr>
+  <tr>
+    <td><tt>NaN</tt></td>
+    <td>Not a number (0/0)</td>
+  </tr>
+  <tr>
+    <td><tt>REAL_MIN</tt></td>
+    <td>Minimum full-precision positive floating-point number;
+    under IEEE standard, smaller positive numbers can be created, but at
+    the expense of precision</td>
+  </tr>
+  <tr>
+    <td><tt>REAL_MINEXP</tt></td>
+    <td>Minimum exponent for normalized positive numbers in
+    e-notation; under IEEE standard, the exponent may be further reduced,
+    but at the expense of precision</td>
+  </tr>
+  <tr>
+    <td><tt>PI</tt></td>
+    <td>pi (3.14159...)</td>
+  </tr>
+</table>
+
+<p>In addition, there are the following predefined values:</p>
+<table class="titlebar width-75p">
+  <tr>
+    <th width="20%">Name</th>
+    <th width="80%">Description</th>
+  </tr>
+  <tr>
+    <td><tt>ARGC</tt></td>
+    <td>Number of command line arguments used to
+    start the application</td>
+  </tr>
+  <tr>
+    <td><tt>ARGV</tt></td>
+    <td>Token vector of command line arguments, of length
+    ARGC</td>
+  </tr>
+  <tr>
+    <td><tt>CLI</tt></td>
+    <td>File handle of the command line interface</td>
+  </tr>
+  <tr>
+    <td><tt>'*cli*'</tt></td>
+    <td>Filename of the command line interface</td>
+  </tr>
+  <tr>
+    <td><tt>STDERR</tt></td>
+    <td>File handle of the standard error device</td>
+  </tr>
+  <tr>
+    <td><tt>'*stderr*'</tt></td>
+    <td>Filename of the standard error device</td>
+  </tr>
+  <tr>
+    <td><tt>STDIN</tt></td>
+    <td>File handle of the standard input device</td>
+  </tr>
+  <tr>
+    <td><tt>'*stdin*'</tt></td>
+    <td>Filename of the standard input device</td>
+  </tr>
+  <tr>
+    <td><tt>STDOUT</tt></td>
+    <td>File handle of the standard output device</td>
+  </tr>
+  <tr>
+    <td><tt>'*stdout*'</tt></td>
+    <td>Filename of the standard output device</td>
+  </tr>
+</table>
+
+<p>Note that the <tt>CLI</tt>, <tt>STDERR</tt>, and <tt>STDOUT</tt> are for
+  output only.</p>
+
+<h1>See Also</h1>
+
+<p><a class="svl" href="symbol.htm">consts</a> <a class="svl" href=
+  "symbol.htm">functions</a><br />
+  <a class="svl" href="arithmet.htm">finite</a> <a class="svl" href=
+  "arithmet.htm">infinite</a> <a class="svl" href=
+  "arithmet.htm">isnan</a><br />
+  <a class="svl" href="symbol.htm">sym_find_c</a> </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

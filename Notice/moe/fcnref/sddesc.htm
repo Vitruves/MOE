@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <title>sddesc</title>
+  <meta name="keywords" content="functions: sddesc" />
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    sddesc
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<p><tt>unix&gt; $MOE/bin/sddesc</tt> <b>{</b> <i>option</i> |
+  <i>inputfilename</i> | @<i>filename</i> <b>}</b><br />
+  <tt>unix&gt; $MOE/bin/moebatch -run $MOE/bin/sddesc</tt> <b>{</b>
+  <i>option</i> | <i>inputfilename</i> | @<i>filename</i> <b>}</b><br /></p>
+
+<p><tt>windows&gt; %MOE%\bin\sddesc</tt> <b>{</b> <i>option</i> |
+  <i>inputfilename</i> | @<i>filename</i> <b>}</b><br />
+  <tt>windows&gt; %MOE%\bin\moebatch -run $MOE\bin\sddesc</tt> <b>{</b>
+  <i>option</i> | <i>inputfilename</i> | @<i>filename</i> <b>}</b></p>
+
+<table class="noborder left">
+  <tr>
+    <td><i>option</i></td>
+    <td>&nbsp;:&nbsp;</td>
+    <td><tt>-help</tt></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;:&nbsp;</td>
+    <td><tt>-verbose</tt> | <tt>-quiet</tt></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;:&nbsp;</td>
+    <td><tt>-sdf</tt> | <tt>-smi</tt></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;:&nbsp;</td>
+    <td><tt>-o</tt> <i>outputfilename</i>
+    <!-- | <tt>-f</tt> <i>filterfilename</i> --></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;:&nbsp;</td>
+    <td><tt>-calc</tt> <i>descriptors</i></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;:&nbsp;</td>
+    <td><tt>-nocalc</tt> <i>descriptors</i></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;:&nbsp;</td>
+    <td><tt>-class</tt> <i>descriptorclass</i></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;:&nbsp;</td>
+    <td><tt>-forcefield</tt> <i>filename</i></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;:&nbsp;</td>
+    <td><tt>-keepfield</tt> <i>fieldname</i></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;:&nbsp;</td>
+    <td><tt>-records</tt> <i>range</i></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><i>range</i></td>
+    <td>&nbsp;:&nbsp;</td>
+    <td><i>num</i> | <i>num</i><tt>+</tt> | <i>num</i><tt>-</tt> |
+    <i>n</i><tt>,</tt><i>m</i></td>
+  </tr>
+</table>
+<a id="sddesc"></a>
+<h1>Description</h1>
+
+<p>The <tt>sddesc</tt> program calculates molecular descriptors for each
+  molecule in an input collection of SD (or SMILES) files and writes the
+  results to an output file in either format. <tt>sddesc</tt> is an SVL program
+  intended to be run in MOE/batch. The fundamental structure of operation of
+  <tt>sddesc</tt> is:</p>
+  <ol>
+    <li>Read and concatenate all specified input files.</li>
+    <li>Calculate desired molecular descriptors.</li>
+    <li>Write records augmented with calculated descriptors to the output.</li>
+  </ol>
+
+<p>On most POSIX systems, the first syntax can be used: <tt>sddesc</tt> looks
+  like a Unix command. If using an unusual shell, it may be necessary to use
+  the second syntax. On Windows systems, use the third (batch file) or fourth
+  syntax lines (assuming <tt>cmd.exe</tt> is used to process commands).</p>
+
+<p>There are several general options that modify the behavior of
+  <tt>sddesc</tt>:</p>
+
+<dl>
+  <dt><tt>-help</tt></dt>
+  <dd>Prints a syntax summary to <tt>stderr</tt> and then exits.</dd>
+  <dt><tt>-verbose</tt></dt>
+  <dd>Prints progress information to <tt>stderr</tt> during the run.</dd>
+  <dt><tt>-quiet</tt></dt>
+  <dd>Suppresses the printing of progress information to <tt>stderr</tt>.
+  This is the default.</dd>
+  <dt><tt>-sdf</tt></dt>
+  <dd>Specifies that subsequent files in the <tt>sddesc</tt> argument list
+  are SD files. The format of the SD files can be further specified using
+  an option of the form <span class="nobr"><tt>-sdf:<i>fmt</i></tt></span>
+  where <i>fmt</i> is either <tt>V2000</tt> or <tt>V3000</tt>. If
+  <i>fmt</i> is omitted, output files will be written in V2000 format (the
+  default). It is not necessary to specify the format of input SD
+  files.</dd>
+  <dd></dd>
+  <dt><tt>-smi</tt></dt>
+  <dd>Specifies that subsequent files in the <tt>sddesc</tt> argument list
+  are whitespace separated ASCII files. Note that this includes both input
+  and output files. The files have one SMILES string per line, with each
+  line beginning with the SMILES string; subsequent fields on a given line
+  are considered to be data. The format of the ASCII file can be further
+  specified using an option of the form <span class=
+  "nobr"><tt>-smi:</tt><i>f</i></span> where <i>f</i> is a single
+  character: <tt>t</tt> for tab separated, <tt>c</tt> for comma separated,
+  <tt>m</tt> for semicolon separated, and <tt>w</tt> for whitespace
+  separated. Append a <tt>q</tt> to the option string to specify that items
+  are surrounded by double quotes. Append a <tt>p</tt> to the option string
+  to specify that the property names should be written as the first line of
+  the output file. For example, <span class="nobr"><tt>-smi:tq</tt></span>
+  specifies files in which each line contains tab-separated items with each
+  item enclosed in double quotes.</dd>
+  <dd></dd>
+  <dt><tt>-o</tt> <i>outputfilename</i></dt>
+  <dd>Sends the output to the specified file; by default, <tt>sddesc</tt>
+  writes its output to <tt>stdout</tt>. If the given <i>outputfilename</i>
+  is &quot;.&quot; output is suppressed.</dd>
+  <dt><tt>-calc</tt> <i>descriptors</i></dt>
+  <dd>Calculates the specified (comma separated) descriptors. Wildcards may
+  be used.</dd>
+  <dt><tt>-nocalc</tt> <i>descriptors</i></dt>
+  <dd>Suppresses calculation of the specified (comma separated)
+  descriptors. Wildcards may be used.</dd>
+  <dt><tt>-class</tt> <i>descriptorclass</i></dt>
+  <dd>Calculates all descriptors in the specified class (e.g.
+  &quot;2D&quot;). Wildcards may <b>not</b> be used.</dd>
+  <dt><tt>-forcefield</tt> <i>filename</i></dt>
+  <dd>Uses the given file for forcefield parameters when calculating
+  descriptors that require energy evaluations.</dd>
+  <dt><tt>-keepfield</tt> <i>fields</i></dt>
+  <dd>Specifies the data field or fields (comma separated) that will be
+  retained when writing SMILES files. By default all such fields are
+  deleted.</dd>
+  <dt><tt>-records</tt> <i>range</i></dt>
+  <dd>
+    Processes only those records in the concatenated input files whose
+    positions fall in the specified range. The <i>range</i> argument can
+    have one of the following forms:
+    <dl>
+      <dt><i>num</i></dt>
+      <dd>Specifies that a value must be equal to <i>num</i>.</dd>
+      <dt><i>num</i>-</dt>
+      <dd>Specifies that a value must be less than or equal to
+      <i>num</i>.</dd>
+      <dt><i>num</i>+</dt>
+      <dd>Specifies that a value must be greater than or equal to
+      <i>num</i>.</dd>
+      <dt><i>n</i>,<i>m</i></dt>
+      <dd>Specifies that a value must be greater than or equal to
+      <i>n</i> and less than or equal to <i>m</i>.</dd>
+    </dl>
+  </dd>
+</dl>
+
+<p><b>Argument Processing</b>. The input arguments to <tt>sddesc</tt> are
+  processed in left-to-right order. An argument that starts with a dash
+  <span class="nobr">(&quot;-&quot;)</span> is taken as an option
+  specification. An argument of the form <span class=
+  "nobr">@<i>filename</i></span> specifies that the contents of <i>filename</i>
+  are read and inserted into the argument stream for further argument
+  processing (which is useful to avoid long command lines or to record commonly
+  used arguments and files). Any other argument form is taken to be an input
+  file.<br />
+  <br />
+  <b>Note:</b> the @<i>filename</i> can only appear where an option or filename
+  would normally be processed and cannot be used as the second argument to an
+  option (e.g. <span class="nobr"><tt>-o</tt>&nbsp;@<i>filename</i></span>
+  specifies <span class="nobr">@<i>filename</i></span> as the actual output
+  file).</p>
+
+<p>The input files are processed in left-to-right order. Input files
+  containing &quot;*&quot; or &quot;?&quot; are interpreted as filename
+  patterns and each will be substituted with all filenames that match the given
+  pattern; for example, <tt>*.sdf</tt> will be substituted with all filenames
+  in the current directory that have a <tt>.sdf</tt> suffix. The input file
+  <span class="nobr">&quot;-&quot;</span> is interpreted as <tt>stdin</tt> (for
+  use with pipes). If there are no explicit input files, <tt>stdin</tt> is used
+  as the single input file.</p>
+
+<p><b>Example</b>. To calculate all of the VSA descriptors and the
+  topological polar surface area for each entry in a given SD file and output
+  to an SD file one may use the following command</p>
+
+<pre class="code oneline">sddesc -calc &quot;*_VSA*&quot; -calc TPSA catalog.sdf -o catalogdesc.sdf</pre>
+
+<p>As the <tt>-sdf</tt> option is omitted, <tt>catalogdesc.sdf</tt> will be
+  written as an MDL V2000 SD file.</p>
+
+<h1>See Also</h1>
+
+<p><a class="svl" href="sdfilter.htm">sdfilter</a><br />
+  <a class="svl" href="sdfrag.htm">sdfrag</a><br />
+  <a class="svl" href="sdsort.htm">sdsort</a><br />
+  <a class="svl" href="sdstereo.htm">sdstereo</a><br />
+  <a class="svl" href="sdwash.htm">sdwash</a></p>
+
+<p><a href="../../quasar/descr.htm">QuaSAR-Descriptor : List of
+  Descriptors</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

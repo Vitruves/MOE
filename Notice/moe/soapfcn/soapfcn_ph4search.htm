@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords: SOAP, moeweb" />
+  <meta name="keywords" content="keywords: pharmacophore" />
+  <meta name="keywords" content="functions: soap_spec_Ph4Search" />
+  <meta name="keywords" content="functions: soap_Ph4Search" />
+  <title>Ph4Search SOAP Function</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Ph4Search SOAP Function
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<p>The SOAP pharmacophore search will perform a pharmacophore query on a
+  database (or set of databases) located on the server, returning the result as
+  a MOE database (.mdb) file located on the server.</p>
+
+<pre>
+    <a class="fcnlink" href="#Ph4Search">Ph4Search</a>
+</pre>
+  <hr noshade="noshade" />
+<a id="Ph4Search"></a>
+<h1>Ph4Search</h1>
+
+<h2>Parameters</h2>
+  <dl>
+    <dt><tt>src:</tt> <i>string</i></dt>
+    <dd>
+      The source data, which must be located on the server and be in one of the
+      following formats:
+      <ul>
+        <li>A name of a file or directory located in
+        <tt>/moeweb/data/perm/shared/lib/db/ph4</tt> with no prefix, e.g.
+        <tt>'MyData.mdb'</tt>.</li>
+        <li>A pattern or a range of a files or directories, e.g.
+        <tt>'MyData*.mdb'</tt> or
+        <tt>'MyData_#1:5.mdb'</tt>.</li>
+        <li>A semicolon-separated list of items (files, directories, patterns,
+        ranges), e.g. <tt>'MyDir1;MyDir2;MyDir3'</tt>.</li>
+      </ul>
+    </dd>
+    <dd><br /></dd>
+    <dt><tt>query:</tt> <i>string</i></dt>
+    <dd>The contents of a <tt>.ph4</tt> query file to be used to search the
+    given source database.</dd>
+    <dd><br /></dd>
+    <dt><tt>outMode:</tt> <i>string</i> (optional; default: empty string)</dt>
+    <dd>
+      The output mode specifies how the conformations of each hit molecule are
+      reported to the output database. The value must one of:
+      <tt>''</tt>, <tt>'RMSD'</tt>, <tt>'Filter'</tt>,
+      or <tt>'None'</tt>:
+      <ul>
+        <li><tt>''</tt>: Don't sort the hits.<br />
+        Output the hits in the order of the searched conformations.</li>
+        <li><tt>'RMSD'</tt>: Sort the hits by RMSD.<br />
+        Sort the hits by the RMSD of the matched query features to the hit
+        annotation points.<br />
+        <i>Note:</i> In the <tt>'RMSD'</tt> mode, <i>all</i> alignments
+        of all conformations will be searched, even if the number of output
+        hits is limited by <tt>maxMolHits</tt> or <tt>maxConfHits</tt>.</li>
+        <li><tt>'Filter'</tt>: Filter the source database.<br />
+        Use the pharmacophore query as a filter on the source database(s). The
+        hit entries of hit molecules will be copied as-is to the output.</li>
+        <li><tt>'None'</tt>: No output file returned.<br />
+        Don't return an output file; return only the number of hit
+        molecules.</li>
+      </ul>
+    </dd>
+    <dd><br /></dd>
+    <dt><tt>descriptorFilter:</tt> <i>string</i> (optional; default: empty
+    string)</dt>
+    <dd></dd>
+    <dd>Search only those molecules that match the given QSAR descriptor
+    expression, e.g. <tt>'Weight&nbsp;&gt;&nbsp;500'</tt></dd>
+    <dd><br /></dd>
+    <dt><tt>absPos:</tt> <i>boolean</i> (optional; default:
+    <tt>false</tt>)</dt>
+    <dd>If absPos is <tt>true</tt>, the search will not rotate or translate the
+    conformers to match the query.</dd>
+    <dd><br /></dd>
+    <dt><tt>maxMolHits:</tt> <i>int</i> (optional; default: <tt>0</tt>)</dt>
+    <dd>The maximum number of hits reported for one molecule. Different hits
+    correspond to conformations and different alignments of those
+    conformations. The value <tt>0</tt> means &quot;report all&quot;. The value
+    <tt>1</tt> means &quot;report only the first hit found&quot; when
+    <tt>outMode:''</tt>, and &quot;report only the best hit found&quot;
+    when <tt>outMode:'RMSD'</tt>.<br />
+    <i>Note:</i> <tt>maxMolHits</tt> is ignored when
+    <tt>outMode:'Filter'</tt>.</dd>
+    <dd><br /></dd>
+    <dt><tt>maxConfHits:</tt> <i>int</i> (optional; default: <tt>0</tt>)</dt>
+    <dd>The maximum number of hits reported for one conformation. Different
+    hits correspond to different alignments of the same conformation. The value
+    <tt>0</tt> means &quot;report all&quot;. The value <tt>1</tt> means
+    &quot;report only the first hit found&quot; when
+    <tt>outMode:''</tt>, and &quot;report only the best hit found&quot;
+    when <tt>outMode:'RMSD'</tt>.<br />
+    <i>Note:</i> <tt>maxConfHits</tt> is ignored when
+    <tt>outMode:'Filter'</tt>.</dd>
+    <dd>
+      <br />
+    </dd>
+  </dl>
+
+<h2>Return Values</h2>
+  <dl>
+    <dt><tt>url:</tt> <i>anyURI</i></dt>
+    <dd>The URL of the result mdb database, located on the server. The caller
+    is responsible for downloading the result, if needed.</dd>
+    <dd><br /></dd>
+    <dt><tt>molHits:</tt> <i>int</i></dt>
+    <dd>The number of molecules that match the query.</dd>
+    <dd>
+      <br />
+    </dd>
+  </dl><!--
+
+<h1>Description</h1>
+
+<p>
+</p>
+
+<h1>Methodology</h1>
+
+-->
+
+<h1>See Also</h1>
+
+<p><a href="../../moeweb_apps/moeweb_intro.htm">MOE/web Applications</a><br />
+  <a href="../../moe/moesoap.htm">MOE/web SOAP Service and Functions</a><br />
+  <a class="svl" href="../../svl/fcnref/soapfcn.htm">SOAP Interface
+  Functions</a><br />
+  <br />
+  <a href=
+  "https://www.chemcomp.com/moe/help/2018/CCG_Tutorials/(Tutorial)_MOE_Pharmacophore_Query_Editing_and_Searching.svlx">
+  Pharmacophore Query Editing and Searching Tutorial</a><br />
+  <a href="../../apps/ph4_guide.htm">Introduction to Pharmacophores in
+  MOE</a><br />
+  <a href="../../moe/fcnref/ph4srch.htm"><tt>ph4_Search</tt> Function</a>
+  </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

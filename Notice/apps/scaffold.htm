@@ -1,0 +1,1528 @@
+<!DOCTYPE html>
+<html>
+
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../images/ccgicon.png" />
+  <title>Scaffold Replacement</title>
+  <meta name="keywords" content="panel: Scaffold Replacement" />
+  <meta name="keywords" content="keywords: batch file" />
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../index.htm"><img src="../images/ccglogo.png" /></a>
+    <a href="../index.htm"><div class="moeversion"></div></a>
+    Scaffold Replacement
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+  <ul>
+    <li><a href="#Method">Methodology</a></li>
+    <li><a href="#RunScaffold">Running Scaffold Replacement</a></li>
+    <li>
+      <a class="example" href="#Examples">Examples</a>
+      <ul>
+        <li><a class="example" href="#SelectScaffold">Replace Scaffold (Select
+        Scaffold)</a></li>
+        <li><a class="example" href="#SelectRAtoms">Replace Scaffold (Select R
+        Atoms)</a></li>
+        <li><a class="example" href="#LinkFragments">Link Multiple
+        Fragments</a></li>
+        <li><a class="example" href="#AddGroup">Add Group to Ligand</a></li>
+        <li><a class="example" href="#LabeledLinkers">Labeled Linkers</a></li>
+        <li><a class="example" href="#SimpleLinkers">Simplified
+        Linkers</a></li>
+        <li><a class="example" href="#TopoUnique">Topologically Unique Answers</a></li>
+        <li><a class="example" href="#webScaffold">Using MOE/web</a></li>
+      </ul>
+    </li>
+    <li><a href="#Ref">References</a></li>
+    <li><a href="#seeAlso">See Also</a></li>
+  </ul>
+
+<p>Scaffold Replacement (or scaffold hopping) is an approach used to discover
+  new chemical classes by replacing a portion of a known compound (the
+  scaffold), while preserving the remaining chemical groups. This application
+  is built upon MOE's pharmacophore modeling tools. It generates novel
+  structures from all or part of a ligand (possibly bound to a receptor). Three
+  types of operations are supported:</p>
+  <ol>
+    <li>Scaffold Replacement: replace a portion of the ligand with a
+    linker.</li>
+    <li>Link Multiple Fragments: connect separate fragments with a linker.</li>
+    <li>Add Group to Ligand: extend the ligand with a linker.</li>
+  </ol>
+
+<p>The user indicates the atoms or bonds to be replaced or extended, and can
+  specify QuaSAR Descriptor, Model file and/or pharmacophore query filters to
+  limit the results. For example, a pharmacophore query can be used to enforce
+  specific interactions (or restrictions) on the generated structures when
+  growing in a receptor pocket. Scaffold Replacement can be used as part of a
+  ligand-based or structure-based discovery methodology.
+  <!-- ============================= METHODOLOGY -=========================== --></p>
+<a id="Method"></a>
+<h1>Methodology</h1>
+
+<p>The Scaffold Replacement application performs a series of operations on
+  behalf of the user, as indicated in the following flowchart. Each will be
+  described in detail in following sections.</p>
+
+<img src="scaffold/srflow.jpg" alt="Scaffold Replacement Flowchart" class="center" />
+
+<h2>Generate Queries</h2>
+
+<p>The starting point for the Scaffold Replacement application is a ligand or
+  multiple aligned fragments. The user specifies an operation, and then selects
+  the appropriate atoms or bonds required to define the search. The application
+  then automatically generates the query or queries needed to perform the
+  calculation. If a receptor is present, the pocket atoms are used to constrain
+  the search.</p>
+  <div class="floatright"><img src="scaffold/srcaveat.png" alt=
+  "Caveat Exit Vector Example" class="floatright" /></div>
+
+<p><b>Replace Scaffold</b> allows the user to replace a portion of the
+  ligand. Following Lauri and Bartlett's work with CAVEAT
+  [Lauri&nbsp;1994], bonds are selected that link the scaffold and R-groups:
+  these define 3D <i>exit vectors</i>, which must be satisfied by any candidate
+  linker found by database search. The atoms being replaced and the R-groups
+  that remain can be specified in one of two ways, using:</p>
+  <ul>
+    <li><span class="nobr"><b>Replace Scaffold (Select Scaffold)</b></span>.
+    The user selects the atoms to be replaced.</li>
+    <li><span class="nobr"><b>Replace Scaffold (Select R Atoms)</b></span>. The
+    user selects the first atom of every R-group that remains.</li>
+  </ul>
+
+<p>In both of these operations, the atoms to be replaced and the bonds to be
+  used as connection points are highlighted.</p>
+
+<p>Using <span class="nobr"><b>Replace Scaffold (Select Scaffold)</b></span>,
+  and selecting the atoms indicated below in red results in two connection
+  points (indicated by arrows). The R-groups are indicated in black:</p>
+
+<img src="scaffold/srmeth1.png" class="center" alt=
+  "Select Scaffold Example" /><br />
+  <p class="caption">Figure 1: Select red atoms for Replace Scaffold (Select Scaffold).<br />
+  Select blue-boxed atoms for Replace Scaffold (Select R Atoms).</p>
+
+<p>A single query is generated that places <a href=
+  "ph4_annot.htm#AnnotLink"><span class="nobr"><b>Link2 | Link3</b></span></a>
+  features on the bridgehead R-group atoms (blue squares). <a href=
+  "ph4_annot.htm#AnnotLink"><b>Link</b></a> features are generated 1.5&Aring;
+  distant (green circles). Each pair is constrained as &quot;same atom&quot; to
+  indicate that a bond can be formed. An <a href=
+  "ph4_query.htm#Volumes">Excluded Volume</a> is created to restrict the
+  search, drawn from all ligand atoms with a topological distance of two or
+  more bonds from a connection point. If a receptor is present, an Excluded
+  Volume is created from all proximate receptor atoms &ndash; providing a shape
+  guide for candidate linkers.</p>
+
+<p>Connections can be <i>essential</i> or <i>optional</i>. Essential
+  connections (marked in green) must be present in all generated queries.
+  Optional connections (marked in yellow) are defined by picking hydrogen
+  atoms, which serve to orient the connection. Picking their connected heavy
+  atom converts them to essential. Optional connections cause additional
+  queries to be generated, involving essential and combinations of optional
+  connections. The above example can be modified by including an optional
+  connection:</p>
+
+<img src="scaffold/srmeth2.png" alt=
+  "Select Scaffold Optional Connection Example" class="center" />
+
+<p>Now, two queries are generated: one involving the two essential
+  connections, and one involving all three connections.</p>
+
+<p>Using <span class="nobr"><b>Replace Scaffold (Select R Atoms)</b></span>,
+  and selecting the atoms in the blue squares in Figure 1 to define the
+  R-groups, results in the same calculation as above. This operation allows the
+  user to define a range of contiguous bonds in which a connection can occur.
+  Picking the sulfur atom as well</p>
+
+<img src="scaffold/srmeth3.png" alt=
+  "Select R Atoms Bond Sequence Example" class="center" />
+
+<p>generates two queries: one involving the N-C and S-C bonds and one
+  involving the N-C and N-S bonds.</p>
+
+<p><b>Link Multiple Fragments</b> allows the user to connect two or more
+  independent fragments. Connections are indicated by picking hydrogen atoms,
+  and there must be at least one connection specified for each fragment. The
+  following example,</p>
+
+<img src="scaffold/srmeth4.png" alt="Link Two Fragments Example" class="center" />
+
+<p>has seven hydrogen atoms selected as connection points. The one on the
+  left is considered essential as it is the only connection specified for that
+  fragment. The six on the right are optional, although at least one of them
+  must be present in every generated query. This example generates 56 queries,
+  all involving the left-hand C-H and some combination of right-hand C-H's:
+  6 with a single right-hand C-H, 15 with two right-hand C-H's, 20 with
+  three right-hand C-H's and 15 with four right-hand C-H's (the maximum
+  number of optional connection points is 4). If, for example, one set of
+  right-hand C-H optional connections is replaced with a single essential
+  connection (see below), the number of queries is reduced to 8: one with no
+  optional connections, 3 with one, 3 with two and 1 with three.
+  <!--This example generates six queries
+with two connectors, involving the left-hand C-H and a single right-hand C-H
+connection point and nine queries with three connectors, involving the
+left-hand C-H and a C-H connection from each right-hand carbon atom (15 total).
+If, for example, one set of right-hand C-H optional connections is replaced
+with a single essential connection (see below), the number of queries is
+reduced to three: one for each optional C-H connection point.--></p>
+
+<p><b>Add Group to Ligand</b> allows the user to extend a ligand at one or
+  more sites. Connections are indicated by picking hydrogen atoms (and heavy
+  atoms, to specify essential connections). In the following example,</p>
+
+<img src="scaffold/srmeth5.png" alt="Add Group to Ligand Example" class="center" />
+
+<p>there is one essential connection (green arrow) and two optional
+  connections (yellow arrows). Four queries are generated: the essential
+  connection, that plus one of the optional connections and all three
+  connections.</p>
+
+<p>For all operations, the local environment of the bonds used as connections
+  can influence the <b>Link</b>, <b>Link2</b> and/or <b>Link3</b> features in
+  the generated queries. The following table indicates the SMARTS extensions
+  made to specific features to restrict the search:</p>
+  <center>
+    <table class="titlebar">
+      <tr>
+        <th>Local Environment</th>
+        <th>Link Feature</th>
+        <th>Link2|Link3 Feature</th>
+      </tr>
+      <tr>
+        <td>Aromatic bond</td>
+        <td><tt>Link&&quot;[i]&quot;</tt></td>
+        <td><tt>Link2</tt></td>
+      </tr>
+      <tr>
+        <td>Double bond</td>
+        <td><tt>Link&&quot;[CX4H2,NX3H2!i]&quot;</tt></td>
+        <td><tt>Link2</tt></td>
+      </tr>
+      <tr>
+        <td>&pi;-atom/sulfonamide</td>
+        <td><tt>Link</tt></td>
+        <td><tt>Link3|Link2&&quot;[*!$([CX4H2])]&quot;</tt></td>
+      </tr>
+      <tr>
+        <td>No extra hydrogens</td>
+        <td><tt>Link</tt></td>
+        <td><tt>Link3</tt></td>
+      </tr>
+      <tr>
+        <td>General case</td>
+        <td><tt>Link</tt></td>
+        <td><tt>Link2|Link3</tt></td>
+      </tr>
+    </table>
+  </center>
+
+<p>This approach tries to be as general as possible while avoiding queries
+  that cannot yield useful results. Using both <b>Link2</b> and <b>Link3</b>
+  features allows the geometry of the search hit to determine whether a single
+  or double bond should connect the linker and R-group atoms. These SMARTS
+  extensions enable generated queries to perform ring fusion. Given the
+  following structure and connections:</p>
+
+<img src="scaffold/srmeth6.png" alt="Ring Fusion Example" class="center" />
+
+<p>the generated query will look for <b>Link</b> features that are involved
+  in a &pi;-system. This search generates molecules such as</p>
+
+<img src="scaffold/srfuse1.png" alt="Fused Ring Structure" class="center" />
+
+<p>in which the pyridyl group has been transformed into a benzisoxazole
+  group.</p>
+
+<p>Multi-centered queries can be generated when a scaffold atom being
+  replaced is connected to more than one R-group. In the following example,</p>
+
+<img src="scaffold/srmeth7.png" alt="Three-Center Query Example" class="center" />
+
+<p>a query is generated with a single <b>Link</b> feature, two <span class=
+  "nobr"><b>Link2 | Link3</b></span> features and a constraint requiring all
+  three to be satisfied by the same atom. <!--The reverse situation cannot be
+satisfied, as two or more <b>Link</b> features cannot connect to the
+same <b>Link2</b> or <b>Link3</b> feature.--> This search creates molecules
+such as</p>
+  <table class="noborder">
+    <tr>
+      <td><img src="scaffold/srfuse2.png" alt="Spiro Example" class="center"/></td>
+      <td><img src="scaffold/srfuse3.png" alt="Double-Bond Example"  class="center"/></td>
+    </tr>
+    <tr>
+      <td><p class="caption">spiro</p></td>
+      <td><p class="caption">double bond</p></td>
+    </tr>
+  </table>
+
+<p>As you can see, both spiro ring formation and double bond connection are
+  possible with this kind of query.</p>
+
+<p>The pharmacophore query filter (if present) is checked to determine
+  whether any of its features or volumes can be used while generating queries.
+  Features that are not proximate to R-group atoms or generated <b>Link</b>
+  features are candidates. Because specific annotations might not appear until
+  the linker and R-group(s) are connected, heavy-atom-features (by default) are
+  included as <b>AtomQ</b> features &ndash; this is a precondition that must be
+  satisfied. Constraints from the pharmacophore filter are added if they
+  involve <i>only</i> the included features. Excluded or <a href=
+  "ph4_query.htm#Volumes"><span class="nobr"><b>Exterior Volumes</b></span></a>
+  from the pharmacophore filter are included to help tailor the generated
+  queries.</p>
+
+<h2>3D Search</h2>
+
+<p>Once the queries are generated, Scaffold Replacement proceeds to <a href=
+  "ph4_search.htm">search</a> each input linker using each generated query.
+  Linker databases must contain one or more conformations of each structure.
+  Multiple databases can be used as input to Scaffold Replacement. Users can
+  easily create custom linker libraries from in-house collections or vendor
+  compound libraries using MOE's SD tools such as <a href=
+  "../moe/fcnref/sdfrag.htm">sdfrag</a>. If desired, linkers can be restricted
+  by fingerprint-based similarity to the scaffold(s) being replaced or by
+  various atom or bond labeling.</p>
+
+<p>If a Descriptor Filter containing molecular weight, SlogP
+  [Wildman&nbsp;1999] and/or TPSA [Ertl&nbsp;2000] is used, an estimate is made
+  for each set of linker and R-group(s) to determine whether the search can
+  yield structures that could satisfy the filter, or whether it can be
+  skipped.</p>
+
+<h2>Construct Molecule</h2>
+
+<p>Each hit from the pharmacophore search (Linker/R-group(s) combination) is
+  checked to determine whether reasonable structures can be constructed. This
+  is a multi-step process:</p>
+  <ol>
+    <li>
+      The atoms corresponding to the user's connections are joined. Their
+    bond order is determined by the specific query features and atom valences:
+    double bonds for atom/feature pairs involving <b>Link2</b> annotations and
+    with at least one additional hydrogen atom, otherwise single bonds.
+  </li>
+    <li>
+      Orbital geometries are set for each atom, hydrogens are added to the
+    new molecule and the resulting geometry used to set chiral constraints for
+    appropriate atoms.
+  </li>
+    <li>
+      Atoms involved in double-bond connections are checked for planarity.
+    Structures failing this test are discarded. Atoms involved in single-bond
+    connections are checked for <i>appropriate</i> planarity. Structures with
+    inappropriate geometry (such as non-tetrahedral <i>sp3</i>-carbons) are
+    discarded.
+  </li>
+    <li>
+      Soft clash energies are generated for the linker/R-group atoms (and the
+    ligand/protein pocket atoms if present). This sums the repulsive
+    contribution for each atom pair using an 800R3 potential:
+    <!-- LATEX scaffold/math_800R3potential \[
+E_{ij} = 800\sqrt{\epsilon_{i}\epsilon_{j}}\left[1-\frac{r_{ij}}{R_{i}+R_{j}}\right]^{3}
+\] ENDLATEX -->
+       <img src="scaffold/math_800R3potential.png" alt=
+      "Soft Clash Potential" class="center"/>
+
+    where &epsilon;<sub><i>i</i></sub> and &epsilon;<sub><i>j</i></sub>
+    are the van der Waals well-depths (in kcal/mol), <i>r<sub>ij</sub></i> is
+    the interatomic distance and R<sub><i>i</i></sub> and
+    R<sub><i>j</i></sub> are the van der Waals radii. The parameters are
+    modified OPLS-AA van der Waals parameters tuned to reproduce the free
+    energy of solvation of a collection of small molecules. Structures
+    failing the clash test are discarded.
+    </li>
+  </ol>
+
+<p>Hits resulting from two-feature queries (such as those from a
+  single-connection search) are underdetermined. In these cases, a <a href=
+  "frag_combi.htm#TorsDriver">Torsion Driver</a> is used to generate a series
+  of conformers. Each of these are checked for planarity and clash energies
+  determined; those that fail either test are discarded. If desired, output
+  structures will contain <i>simplified linkers</i>, comprising the shortest
+  path connecting the linker atoms (and any features from the PH4 filter query)
+  that satisfy the generated queries along with any rings, multiple and/or
+  ionic bonds involving these atoms.</p>
+
+<h2>Filters</h2>
+
+<p>Constructed molecules can be filtered in three ways. First, a <a href=
+  "../quasar/fcnref/descrfcn.htm#DescriptorExprSyntax">Descriptor Filter</a>
+  can be specified, and the calculated MOE <a href=
+  "../quasar/descr.htm">Descriptors</a> must satisfy the range/boolean values
+  specified. Second, a <a href="../quasar/modcomp.htm#Composer">Model file</a>
+  can be provided, and each new molecule must satisfy the specified criterion.
+  Finally, as with Recore [Maass&nbsp;2007], an additional pharmacophore query
+  can be provided, which the absolute positions of each new molecule must
+  satisfy. Structures failing any of these filters are discarded, and all
+  properties calculated during filtering are written to the output
+  database.</p>
+
+<h2>Synthetic Score</h2>
+
+<p>A <a href="../moe/fcnref/rsynthfcn.htm">Synthetic Feasibility Score</a> is
+  calculated for every new molecule that has passed the specified filters. This
+  is a score in the range of 0 to 1 with 1 meaning fully synthesizable and 0
+  meaning not feasible. This can also be used as a term in the Descriptor
+  Filter via the <tt>rsynth</tt> descriptor.</p>
+
+<h2>Refine + Score</h2>
+
+<p>If a receptor is present, <a href="docking.htm#Example_PostDocking">Forcefield
+  Refinement</a> can be used to relax each new molecule in the pocket.
+  Sidechains can be treated flexibly (with or without a tether), but backbone
+  atoms are always held fixed. This generates an energy score using the
+  <a href="../moe/pot.htm#Equation">Generalized Born solvation model
+  (GB/VI)</a> [Labute&nbsp;2008]. This value, along with the protein
+  coordinates if the sidechains were not fixed, is written to the output
+  database. Molecules can be scored using one of the methods in MOE's
+  <a href="docking.htm#Computational_Background">Docking</a> application. If the
+  <tt>London&nbsp;dG</tt> score is calculated, the ligand efficiency (estimated
+  pKi divided by the number of heavy atoms) is also written to the output
+  database.</p>
+
+<p>If no Receptor is present, tethered minimization (using the current
+  forcefield) can be used to generate relaxed structures with as little global
+  change in R-group alignment or orientation as possible. A variable, parabolic
+  force constant is applied to each heavy atom:</p>
+
+<img src="scaffold/srrelax.jpg" alt="Tethered Minimization Example" class="center" />
+
+<p>where <i>r</i> is the minimum distance to a centroid of a connection
+  point. This allows the portion of each new structure derived from the linker
+  to relax relatively freely while preserving R-group geometries.</p>
+
+<p>If a pharmacophore query filter is used, minimization or refinement will
+  use forcefield restraints between the features in the query and the
+  pharmacophore annotations in the molecule. Such restraints will only be
+  applied if the pharmacophore query uses the <a href="ph4_annot.htm">Unified
+  Annotation Scheme</a>.
+  <!-- ============================ RUNNING ================================ !--></p>
+<a id="RunScaffold"></a>
+<h1>Running Scaffold Replacement</h1>
+
+<p>To start the Scaffold Replacement application, load a ligand (and
+  associated receptor structure if available) into the main MOE window and
+  select <span class="menu">MOE | Compute | Fragments | Scaffold
+  Replacement...</span> to start the application:</p>
+
+<img src="scaffold/srpanel3.png" alt="Scaffold Replacement Panel" class="center" />
+  <table class="noborder">
+    <tr>
+      <td valign="top"><b>Ligand</b></td>
+      <td valign="top">The atoms that define the ligand used by Scaffold
+      Replacement. All structural modifications will be made to this structure.
+      Press the <b>?</b> button to the right to briefly highlight (in the MOE
+      window) the specified atoms.</td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Receptor</b></td>
+      <td valign="top">The atoms that define the protein used by Scaffold
+      Replacement. Press the <b>?</b> button to the right to briefly highlight
+      (in the MOE window) the specified atoms. This atom collection can also be
+      manually specified by selecting objects in the Sequence Editor and
+      choosing the appropriate atom set.</td>
+    </tr>
+    <tr>
+      <td valign="top"><p><b>Operation</b></p></td>
+      <td valign="top">
+      <p>Specifies the method used to generate structures, using Scaffold
+        Replacement, MedChem Transformations, BREED or Combinatorial Builder.
+        Choose one of the following to run the Scaffold Replacement
+        application: <b>Replace Scaffold (Select Scaffold)</b> replaces the
+        selected subset of the ligand. <b>Replace Scaffold (Select R Atoms)</b>
+        replaces the contiguous atoms between the selected R-groups. <b>Link
+        Multiple Fragments</b> connects two or more fragments (at least one
+        attachment point on each fragment must be selected). <b>Add Group to
+        Ligand</b> extends the ligand at the specified site(s).</p>
+
+<p>The meaning of atom selection for each operation is provided. If
+        <b>Selected H's mark optional R-group cyclization points</b> is
+        checked, the selected atom(s) define additional connection points.
+        Selecting hydrogens specify optional connections (yellow), while
+        selecting hydrogens and their associated heavy atoms specify essential
+        connections (green). Hydrogens on atoms entirely connected to scaffold
+        atoms are considered part of the scaffold and ignored.</p>
+
+<p>For <b>Replace Scaffold</b>, the scaffold atoms replaced are
+        highlighted by a semi-transparent, close-contact molecular surface.
+        This is colored green if the scaffold atom selection makes sense for
+        the current operation, or colored red otherwise. For all operations,
+        the GUI reports the number of leaving heavy atoms, exit vectors,
+        connectors and essential connectors (colored green). Invalid selections
+        (colored red) provide a warning.</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Linker Database</b></td>
+      <td valign="top">Specifies the name of the input database(s) containing
+      linker fragments. Each linker is searched using the generated queries to
+      create new structures. The location of the linker database(s) determine
+      whether Scaffold Replacement will be run locally or via
+      <a href="../install/web_inst.htm">MOE/web</a>:
+      press <img src="ph4_search/icon_browse.png" class="icon">
+      to specify a local file or
+      <img src="ph4_search/icon_web.png" class="icon">
+      to specify a file on the MOE/web server.</td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Linker Similarity</b></td>
+      <td valign="top">If selected, a fingerprint is calculated for the
+      scaffold(s) being replaced and every linker using the specified method.
+      Those that fail to satisfy the given threshold condition will be omitted.
+      The fingerprint method can be changed by pressing <b>Choose...</b> and
+      selecting a method and possibly a similarity metric from the Fingerprint
+      Chooser.</td>
+    </tr>
+    <tr>
+      <td valign="top"><img src="scaffold/icon_config.png" alt="Configure"
+      class="icon" />
+	  <b>Configure</b></td>
+      <td valign="top">
+        This button brings up a sub-panel, allowing the user to change some of
+        the more technical parameters for Scaffold Replacement: <img src=
+        "scaffold/scaffold_settings.png" alt="Settings Panel" class="center" />
+        <table class="noborder">
+          <tr>
+            <td valign="top"><b>Link Feature Radius</b></td>
+            <td valign="top">Sets the feature radius (in &Aring;) used when
+            creating Link, Link2 or Link3 features during query
+            generation.</td>
+          </tr>
+          <tr>
+            <td valign="top"><b>Take&nbsp;Features from PH4 Filter</b></td>
+            <td valign="top">Specifies how candidate features from the PH4
+            filter query should be incorporated in the generated queries.
+            <b>None</b> ignores the features in the filter. <b>Atom-Centric
+            (AtomQ)</b> creates <b>AtomQ</b> features with the location and
+            size of heavy-atom-based filter features. <b>Atom-Centric</b> uses
+            the heavy-atom-based features verbatim. <b>All</b> uses all of the
+            features in the filter verbatim. Note that searches will fail if
+            the included features are created when the linker and R-groups
+            combine rather than being present in the linker.</td>
+          </tr>
+          <tr>
+            <td valign="top"><b>Intra-Ligand Clash Energy</b></td>
+            <td valign="top">Sets the intra-ligand soft clash energy threshold
+            (in kcal/mol/ligand atom). This calculation is done over the linker
+            or added group atoms.</td>
+          </tr>
+          <tr>
+            <td valign="top"><b>Protein-Ligand Clash Energy</b></td>
+            <td valign="top">Sets the protein-ligand soft clash energy
+            threshold (in kcal/mol/ligand atom). This calculation is done over
+            the linker or added group atoms.</td>
+          </tr>
+          <tr>
+            <td valign="top"><b>Duplicate Window</b></td>
+            <td valign="top">Sets the threshold (RMSD value) below which new
+            structures will be considered duplicates of those generated
+            previously.</td>
+          </tr>
+          <tr>
+            <td valign="top"><b>R-group Atom Tether</b></td>
+            <td valign="top">If specified, a fixed-value tether is used for
+            refinement and minimization rather than the parabolic tether
+            described previously.</td>
+          </tr>
+          <tr>
+            <td valign="top"><b>Simplify Linkers</b></td>
+            <td valign="top">
+              If on, a <i>simplified linker</i> will be used when constructing
+              new molecules. These contain the shortest path connecting the
+              linker atoms (and any features from the PH4 filter query) that
+              satisfy the generated queries along with any rings, multiple
+              and/or ionic bonds involving these atoms. If no PH4 filter is
+              used, this will be the Link Features connecting the R-groups and
+              linkers.
+
+<p><b>NOTE:</b> If the PH4 filter contains non-atom annotations,
+              the configuration option <b>Take Features from PH4 Filter</b>
+              should be set to <b>All</b>. Care should be taken using this
+              option when features result from the linker/R-group
+              connection(s), as they might not appear in the individual
+              linkers.</p>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top"><b>Labeled Linkers</b></td>
+            <td valign="top">If on, connections involving linker atoms that do
+            not have an attachment point <span class="nobr">(<b>A0</b>, ...,
+            <b>A9</b>)</span> will be rejected; the associated molecules will
+            be discarded.</td>
+          </tr>
+          <tr>
+            <td valign="top"><b>RECAP Filtering</b></td>
+            <td valign="top">If on, connections that do not recreate the RECAP
+            atom labeling of the corresponding bonds of the input structure are
+            discarded.</td>
+          </tr>
+	</td></tr>
+        <tr>
+          <td valign="top"><b>Topologically Unique</b></td>
+          <td valign="top">
+          If on, only hits that are topologically unique will be kept.  This
+          results in the first occurrence of each unique 2D structure being
+          written to the output database.</td>
+        </tr>
+  <tr>
+    <td valign="top"><b>Dominant Protomer</b></td>
+    <td valign="top">
+      If on, the generated structure will be replaced with its dominant
+      protomer upon creation, using the method specified in the option
+      menu: 2D for ligand topology, 3D for ligand coordinates, and pocket
+      for ligand and pocket coordinates.
+    </td>
+  </tr>
+	<tr>
+	  <td valign="top"><b>Use Torsion Driver</b></td>
+	  <td valign="top">If on, the Torsion Driver will be used to explore
+	  single-bond connections during the search (such as those from
+	  <span class="nobr"><b>Add Group to Ligand</b></span>).
+	</td></tr>
+	<tr>
+	  <td valign="top"><b>Create Double Bonds</b></td>
+	  <td valign="top">If on, both single and double bonds will be
+	  created when making connections between the core and linkers or
+	  R-groups if the geometry and molecular topology permits it.
+	</td></tr>
+	<tr>
+	  <td valign="top"><b>Maintain Score</b></td>
+	  <td valign="top">If on, only hits that result in better
+	    ligand/receptor scores will be retained.  Choose <b>Original</b>
+	    to output all structures with scores lower than that of the
+	    original complex.  Choose <b>Maximum</b> to output only
+	    structures whose score is better than that of all structures
+	    already output.  Note: if <a href="#Scoring">Scoring</a> is
+	    <b>None</b>, this option has no effect.
+	</td></tr>
+        </table>
+
+<p>When the <b>Operation</b> is <b>Add Group to Ligand</b>, additional
+        parameters can be changed:</p><img class="center" src=
+        "scaffold/scaffold_settings2.png" alt="Settings Panel AddGroup" />
+        <table class="noborder">
+          <tr>
+            <td valign="top"><b>Clash Grid Energy Threshold</b></td>
+            <td valign="top">The maximum soft clash energy (in kcal) used by
+            the Torsion Driver when determining accessible regions of
+            space.</td>
+          </tr>
+          <tr>
+            <td valign="top"><b>Torsion Driver Stepsize</b></td>
+            <td valign="top">The stepsize (in degrees) used by the Torsion
+            Driver when generating rotamers of individual bonds.</td>
+          </tr>
+          <tr>
+            <td valign="top"><b>Rotamer Energy Threshold</b></td>
+            <td valign="top">The energy threshold (in kcal) used by the Torsion
+            Driver when discarding higher-energy rotamers. This is calculated
+            using the current forcefield.</td>
+          </tr>
+          <tr>
+            <td valign="top"><b>Rotamer Duplicate Window</b></td>
+            <td valign="top">The threshold (in degrees) used by the Torsion
+            Driver when determining duplicate rotamers. The lowest-energy
+            structure within the duplicate window is used.</td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Descriptor Filter</b></td>
+      <td valign="top">
+        If specified, this defines the criteria that generated molecules must
+        satisfy. Molecules whose properties fall outside the specified range(s)
+        will be omitted. Any MOE QuaSAR descriptor can be specified, and the
+        condition to be satisfied can be a range of values, a boolean value,
+        numeric comparisons, etc. evaluated on descriptors or SMARTS patterns.
+        Descriptor Filters can include files, specified as
+        <tt>@<i>filename</i></tt>. If the filename contains spaces or other
+        non-alphanumeric characters, it must be enclosed in double quotes.
+        Files can be nested. The current Filter can be written to a file by
+        pressing <b>Save...</b> and providing a filename. Examples include:
+        <table class="titlebar">
+          <tr>
+            <th>Expression</th>
+            <th>Meaning</th>
+          </tr>
+          <tr>
+            <td><tt>Weight[100,500] SlogP&lt;5</tt></td>
+            <td>Molecular weight &ge; 100 and &le; 500 and SlogP &lt; 5</td>
+          </tr>
+          <tr>
+            <td><tt>!reactive 'b_1rotN'&lt;4</tt></td>
+            <td>Not reactive and less than 4 rotatable single bonds<br />
+            (<b>Note:</b> Descriptor codes containing digits must be
+            quoted.)</td>
+          </tr>
+          <tr>
+            <td><tt>&quot;[NX3](=[OX1])[OX1]&quot;&lt;=2 not
+            &quot;[#M]&quot;</tt></td>
+            <td>Two or fewer nitro/nitrate groups and not metal atom</td>
+          </tr>
+          <tr>
+            <td><tt>@filter.txt TPSA&gt;80</tt></td>
+            <td>Use the contents of <tt>filter.txt</tt> and TPSA &gt; 80</td>
+          </tr>
+        </table>
+        If a Descriptor Filter is specified, the color of the <b>Check
+        Filters</b> button indicates whether the input ligand passes (black) or
+        fails (red). Clicking the button displays in the MOE window the
+        Descriptor values and indicates whether the ligand passes the Model or
+        Pharmacophore filters.
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Model file</b></td>
+      <td valign="top">Output molecules may optionally be filtered with a QSAR
+      <tt>.fit</tt> file, a Model Composer <tt>.mom</tt> file, a Fingerprint
+      Model <tt>.fpt</tt> file or a Pharmacophore Query <tt>.ph4</tt> file.
+      Specify the name of an existing file, or click on <b>Browse...</b> to
+      select a file. Generated molecules that fail to satisfy the given
+      threshold condition (specified in the fields below) will be omitted.</td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Pharmacophore</b></td>
+      <td valign="top">If specified, the pharmacophore query to be used as a
+      filter. Specify the name of an existing file or open the <a href=
+      "ph4_query.htm">Pharmacophore Query Editor</a> by pressing
+      <b>Editor...</b> to create or edit a query. Molecules whose absolute
+      coordinates fail to satisfy the pharmacophore filter will be
+      omitted.</td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Output Database</b></td>
+      <td valign="top">
+        The Output Database contains the structures created by Scaffold
+        Replacement, along with various calculated properties. If <b>Open
+        Database Viewer</b> is on then a molecular Database Viewer will be
+        opened with the output database. If <b>Minimize generated
+        structures</b> is on and a Receptor is present, <b>Forcefield
+	Refinement</b> will be used. Use the
+	<img src="scaffold/icon_config.png" alt="Configure" class="icon"
+	/> button to
+        modify the parameters, or to enable sidechain flexibility.
+
+<p>If no Receptor is present, tethered minimization (using the current
+        forcefield) with a variable force constant will be used to generate
+        relaxed structures with as little global change in R-group geometry as
+        possible. A parabolic force constant, <span class="nobr"><i>k</i> =
+        <i>5r <sup style="font-size:70%">2</sup></i></span>, is applied to each
+        R-group atom, where <i>r</i> is the minimum distance to a connection
+        point. If a Pharmacophore Filter is present, its features will be used
+        as constraints in both refinement and minimization.</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><a id="Scoring"><b>Scoring</b></a></td>
+      <td valign="top">Specifies which
+      <a href="docking.htm#Computational_Background">scoring methodology</a>
+      to use for ranking the structures created by Scaffold
+      Replacement. Use the <img src="scaffold/icon_config.png" alt="Configure"
+      class="icon" />
+      button to the right to configure
+      the parameters of the selected method (if appropriate).</td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Isolate</b></td>
+      <td valign="top">Press the <b>Isolate</b> button to render the molecular
+      system near the Ligand atom set and hide the remaining atoms of the
+      system.</td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Batch</b></td>
+      <td valign="top">This button brings up the
+	<a href="../moe/hpc.htm#BatchPanel">Batch</a> job submit
+	panel, which allows the user to create
+        a batch job that can be run locally outside of MOE,
+        or on a compute cluster via a queueing system such as slurm:
+
+	<img src="scaffold/batchpanel.png" alt="Batch Panel" class="center" />
+
+	The default job directory name will reflect the output database.</td>
+
+    </tr>
+    <tr>
+      <td valign="top"><b>Load</b></td>
+      <td valign="top">Pressing the <b>Load</b> button allows the user to
+      open a batch job directory and load its information:
+
+      <img src="scaffold/loadbatch.png" alt="Load Batch" class="center" />
+
+      This loads the starting structure into the MOE system, resets the
+      selection state and restores the panel settings.</td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Close</b></td>
+      <td valign="top">Press the <b>Close</b> button to exit the Scaffold
+      Replacement application. This does not terminate the current search.</td>
+    </tr>
+  </table>
+
+<p>After filling in the appropriate entries, press <b>Search</b> to start the
+  calculation. Progress information is provided in the SVL Commands window,
+  along with the bottom of the panel (if open). Pressing <b>Stop Search</b>
+  while the calculation is running terminates the search. If the Scaffold
+  Replacement application has been closed, the current search can be terminated
+  via <span class="menu">MOE | Cancel</span>, by selecting <span class=
+  "nobr"><b><i>Operation</i> Search</b></span>, where <i>Operation</i> is one
+  of the Operations described above.
+  Upon completion, the output database will contain the following
+  fields:</p>
+  <table class="titlebar">
+      <tr>
+        <th>Field</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td valign="top"><b>mol</b></td>
+        <td valign="top">A molecule field containing the structures generated
+        by Scaffold Replacement.</td>
+      </tr>
+      <tr>
+        <td valign="top"><b>RMSD</b></td>
+        <td valign="top">The root mean square distance between the features and
+        their matching ligand annotation points from the query used to place
+        the new linker. This query includes Link, Link2 and Link3 features
+        defining the connection(s) and can include features from the
+        pharmacophore filter (if present).</td>
+      </tr>
+      <tr>
+        <td valign="top"><b>mseq</b></td>
+        <td valign="top">The molecular sequence number, starting at 1 and
+        incrementing with every new molecule. Conformers share mseq
+        values.</td>
+      </tr>
+      <tr>
+        <td valign="top"><b>AcidBase</b></td>
+        <td valign="top">The strong acid/strong base warning flag, set to 1
+        when acidic or basic atoms are present (those whose protonation state
+        would be changed when washed).</td>
+      </tr>
+      <tr>
+        <td valign="top"><b>rsynth</b></td>
+        <td valign="top">The synthetic feasibility score, which is the fraction
+        of the atoms of each new structure that ultimately appear in a
+        retrosynthetic fragment found in the starting materials database. A
+        value of one indicates that the molecule is very likely
+        synthesizable.</td>
+      </tr>
+      <tr>
+        <td valign="top"><b>Rgroup-atoms</b></td>
+        <td valign="top">The names of the R-group atoms for each connection.
+        These are concatenated into a single token, with a numeric suffix added
+        (as necessary) to create unique names.
+        <!-- Double-clicking on the entries of this column reveals the
+generated query that led to the new molecule. --></td>
+      </tr>
+      <tr>
+        <td valign="top"><b>linker</b></td>
+        <td valign="top">A molecule field containing the linker used in
+        creating the new structure.</td>
+      </tr>
+      <tr>
+        <td valign="top"><b>PH4 RMSD</b></td>
+        <td valign="top">The RMS deviation of the fit of the output molecule to
+        the pharmacophore filter (if present).</td>
+      </tr>
+      <tr>
+        <td valign="top"><b>scaffold similarity</b></td>
+        <td valign="top">If <b>Linker Similarity</b> is selected, this column
+        contains the similarity between the linker and the original
+        scaffold.</td>
+      </tr>
+      <tr>
+        <td valign="top"><b>Rrmsd</b></td>
+        <td valign="top">The RMS deviation of the heavy atoms of the R-group(s)
+        before and after minimization (if performed).</td>
+      </tr>
+      <tr>
+        <td valign="top"><b>MM/GBVI</b></td>
+        <td valign="top">If <b>Forcefield Refinement</b> is performed, this is
+        a measure of the non-bonded interaction between the receptor and
+        ligand. It is the sum of van der Waals, Coulomb and generalized Born
+        implicit solvent interaction energies. If <b>Use GB/VI</b> is
+        deselected, the protein/ligand energy using the current forcefield is
+        reported as <b>E_refine</b></td>
+      </tr>
+      <tr>
+        <td valign="top"><b>receptor</b></td>
+        <td valign="top">If <b>Forcefield Refinement</b> is performed with
+        sidechain flexibility, this contains the revised coordinates of the
+        receptor.</td>
+      </tr>
+      <tr>
+        <td valign="top"><b><i>score</i></b></td>
+        <td valign="top">If Scoring is used, this field contains the specific
+        score value <b>ASE</b>, <b>Affinity dG</b>, <b>Alpha HB</b>,
+        <b>GBVI/WSA dG</b> or <b>London dG</b>. If <b>London dG</b> scoring is
+        used, the <b>Ligand Efficiency</b> is calculated for the output
+        structures as well.</td>
+      </tr>
+    </table>
+
+<p>If Descriptor or Model filtering is used, additional columns are created
+  in the output database to receive the various calculated properties. This
+  database can be analyzed using any of the other analysis tools in MOE.
+  <!-- =============================== EXAMPLE ============================= --></p>
+<a id="Examples"></a>
+<h1>Examples</h1>
+
+<p>In this section we will present a number of example calculations using the
+  Scaffold Replacement applications. A small linker database will be used,
+  along with the PDB structure 1IOE.</p>
+  <div class="example">
+
+<h2>Prepare Input</h2>
+    <ol start="1">
+      <li>
+        <p><i>Prepare the protein/ligand pair.</i></p>
+        <p>First, clear the system:</p>
+
+<p class="indent_novspace"><span class="menu">RHS |
+        Close</span></p>
+        <p>Open the PDB file:</p>
+
+<p class="indent_novspace"><span class="menu">RHS | Open</span></p>
+	<p>In the Open panel, select <span class=
+        "nobr"><tt>$MOE/sample/mol/1ioe.pdb</tt></span> and press
+        <b>OK</b>.</p>
+        <p>Prepare the structure:</p>
+
+<p class="indent_novspace"><span class="menu">MOE| Compute | Prepare |
+        QuickPrep</span></p>
+	<p>Take the default options and press <b>OK</b>.
+        This will take a few minutes to complete.</p>
+        <p>Hide the Receptor, ribbons and hydrogen atoms:</p>
+
+<p class="indent_novspace"><span class="menu">RHS | Hide |
+        Receptor</span></p>
+
+<p class="indent_novspace"><span class="menu">MOE | Footer | Ribbon |
+        Style | <img src="scaffold/icon_noribbon.png" alt="ribbon style" class=
+        "icon" /></span></p>
+
+<p class="indent_novspace"><span class="menu">RHS |
+        Hydrogens</span></p>
+        <p>Save it to disk:</p>
+
+<p class="indent_novspace"><span class="menu">MOE | File |
+        Save</span></p>
+	<p>In the Save panel, enter <span class=
+        "nobr"><tt>SRtest.moe</tt></span> and press <b>Save</b>. This will be
+        used throughout the sample calculations.</p>
+      </li>
+      <li>
+        <p><i>Create the pharmacophore query filter.</i></p>
+        <p>Open the Pharmacophore Query Editor:</p>
+
+<p class="indent_novspace"><span class="menu">MOE | File | New |
+        Pharmacophore Query...</span></p>
+        <p>Create an Acceptor feature by selecting
+	the oxygen atom in the <tt>C-O-C</tt>
+        substituent, then press <b>Feature</b>.
+        Enter <tt>1.5</tt> in the <b>R</b> field and hit return
+        to set the value.
+	Press <b>Save</b> and in the Save panel enter
+        <span class="nobr"><tt>SRtest.ph4</tt></span> and press
+        <b>OK</b> to save it to disk.
+	Press <b>Close</b> to close the Pharmacophore Query Editor.</p></li>
+      <li>
+        <p><i>Start Scaffold Replacement.</i></p>
+
+<p class="indent_novspace"><span class="menu">MOE | Compute | Fragments
+        | Scaffold Replacement...</span></p>
+	<p>Ensure that the Receptor set is set
+        to Receptor Atoms and the Ligand set is set to Ligand Atoms.
+        <b>Operation</b> will be set accordingly in each of the examples below.
+	</p>
+      </li>
+    </ol>
+  </div>
+  <div class="example">
+<a id="SelectScaffold"></a>
+<h2>Replace Scaffold (Select Scaffold)</h2>
+    <ol start="1">
+      <li>
+        <div class="floatright"><img src="scaffold/srpix1.png" alt=
+        "Select Scaffold Atom Selection" class="floatright" /></div>
+	<p><i>Define the scaffold.</i></p>
+        <p>Select the three-ring central portion (with substituents), bounded by
+        the nitrogen atoms N27 and N18. The atoms being replaced are
+        highlighted in green, and arrows indicate the two connection points. As
+        the connections are essential, their arrows are green.</p>
+      </li>
+      <li><p><i>Increasing the filtering.</i></p>
+      <p>Change the <b>Descriptor Filter</b> to <tt>Weight&lt;500</tt>
+      <tt>SlogP[-2,3]</tt> <tt>TPSA[40,140]</tt>. This narrows the acceptable
+      range for SlogP and thus reduces the number of output structures.</p>
+      </li>
+    </ol>
+
+<p>There are 18 leaving (heavy) atoms, 2 exit vectors and no additional
+    connectors. As everything is colored green, it is OK to proceed. Press
+    <b>Search</b> to start the Scaffold Replacement calculation. By default,
+    this will run the calculation locally. The output
+    molecules have molecular weights less than 500, logP's in the range of
+    -2 to 3 and TPSA in the range of 40 to 140. The <span class="nobr"><b>SVL
+    Commands</b></span> window contains details of the various stages of the
+    calculation.<br clear="both" /></p>
+
+<p>The SD file that will be used in the Labeled Linkers example can be
+    created here:</p>
+    <ol start="1">
+      <li>
+        <p><i>Open the output database.</i></p>
+
+<p class="indent_novspace"><span class="menu">RHS | Open</span></p>
+	<p>Select <tt>scaffrepl.mdb</tt> and press <b>OK</b></p>
+      </li>
+      <li>
+        <p><i>Create the output SD File.</i></p>
+        <p>Select the first 500 entries and
+        save them to disk:</p>
+
+<p class="indent_novspace"><span class="menu">DBV | File | Save
+        As...</span></p>
+	<p>In the Database Save As panel, change <b>Output</b> to
+        <tt>SD File</tt>, enter
+        <tt>scaffold.sdf</tt> as the output filename,
+	check the <tt>Selected Entries Only</tt> checkbox and press
+        <b>OK</b>.</p>
+      </li>
+    </ol>This takes a few seconds to complete. This file will be used in the
+    Labeled Linker example below.
+  </div>
+  <div class="example">
+<a id="SelectRAtoms"></a>
+<h2>Replace Scaffold (Select R Atoms)</h2>
+    <div class="floatright"><img src="scaffold/srpix2.png" alt=
+    "Select R Atoms Atom Selection" class="floatright" /></div>
+    <ol start="1">
+      <li><p>Clear the current atom selection. If set, clear the
+      <b>Pharmacophore</b> field.</p></li>
+      <li><p>Change <b>Operation</b> to <span class="nobr"><b>Replace Scaffold
+      (Select R Atoms)</b></span>.</p></li>
+      <li><p><i>Select the R-group atoms and bond range.</i></p>
+      <p>Select the sulfur atom (S12), the bridgehead nitrogen (connected to
+      pyridine, N27) and the carbon atom (C28) and its two neighbors (C29, C31)
+      in the pyridine ring. The atoms being replaced and the possible
+      connection points for the adjacent bonds are highlighted in green. Two
+      queries will be generated: one cleaving the N-C bond and one
+      simultaneously cleaving the two (ring) C-C bonds. Note that in this
+      example there are only five selected atoms.</p></li>
+      <li>
+        <p>Change the descriptor filter to <tt>Weight&lt;500</tt>
+          <tt>TPSA[40,140]</tt> <tt>!reactive</tt> to increase the number of
+          answers. </p>
+        </li>
+      <li><p>Turn on <span class="nobr"><b>Open Database Viewer</b></span>. The
+      generated structures will appear as the calculation proceeds.<br clear=
+      "both" /></p></li>
+    </ol>
+
+<p>There are 19 leaving (heavy) atoms, 3 exit vectors and no additional
+    connectors. This kind of search allows the user to specify a range of bonds
+    in which a cut can occur. Press <b>Search</b> to start the Scaffold
+    Replacement calculation. You can examine the output, <span class=
+    "nobr"><tt>scaffrepl.mdb</tt></span>, in the Database Viewer. If you select
+    the <span class="nobr"><b>Rgroup-atoms</b></span> column and sort it into
+    descending order with <span class="menu">DBV | Compute | Sort</span>, you
+    can see that a few results replaced the two ring-bonds while the remainder
+    replaced the C-N (non-ring) bond (which were found in the first example as
+    well).</p>
+
+<p>The pharmacophore query created above can be used as a filter during the
+    calculations. Enter <span class="nobr"><tt>SRtest.ph4</tt></span> in the
+    <b>Pharmacophore</b> field or press <b>Browse...</b> and select the file.
+    Press <b>Search</b> to restart the calculation. A subset of the previous
+    results is created: those with an Acceptor atom within the 1.5&Aring; query
+    feature.</p>
+  </div>
+  <div class="example">
+<a id="LinkFragments"></a>
+<h2>Link Multiple Fragments</h2>
+    <ol start="1">
+      <li>
+        <div class="floatright"><img src="scaffold/srpix3.png" alt=
+        "Link Multiple Fragments Atom Selection" class="floatright" /></div>
+	<p>Clear the current
+        selection. Close the <b>Database Viewer</b> for <span class=
+        "nobr"><tt>scaffrepl.mdb.</tt></span></p>
+      </li>
+      <li><p><i>Create a two-fragment ligand.</i></p>
+      <p>Select the two-ring portion with substituents, leaving the spiro carbon
+      atoms. Delete these atoms with <span class="menu">RHS |
+      Delete</span>.</p></li>
+      <li><p>Change <b>Operation</b> to <span class="nobr"><b>Link Multiple
+      Fragments</b></span>.</p></li>
+      <li><p><i>Select the fragment connectors.</i></p>
+      <p>Select the hydrogen on the sulfur atom (S12), and the two hydrogens on
+      the (former) spiro carbon atom (C33). These were added when the atoms
+      were deleted in (2). The S-H bond is essential (in green), while the two
+      C-H bonds are optional (in yellow).
+      <!--Two queries will be generated, one
+cleaving each of the C-H bonds (both cleaving the S-H bond). --> Three queries
+will be generated, one cleaving both C-H bonds and two cleaving a single C-H
+bond (all cleaving the S-H bond).<br clear="both" /></p></li>
+    </ol>
+
+<p>There are two fragments and three connectors, none of which are
+    <i>marked</i> essential. The S-H bond is <i>considered</i> essential as it
+    is the only bond selected for that fragment.
+    <!--Because the two C-H bonds share the same atom,
+queries involving both bonds cannot be satisfied.--> Press <b>Search</b> to
+start the Scaffold Replacement calculation.</p>
+  </div>
+  <div class="example">
+<a id="AddGroup"></a>
+<h2>Add Group to Ligand</h2>
+    <ol start="1">
+      <li>
+        <div class="floatright"><img src="scaffold/srpix4.png" alt=
+        "Add Group to Ligand Atom Selection" class="floatright" /></div>
+	<p><i>Prepare the ligand:</i></p>
+        <p>Clear the system:</p>
+
+<p class="indent_novspace"><span class="menu">MOE | File |
+        Close</span></p>
+        <p>Load the example molecule:</p>
+
+<p class="indent_novspace"><span class="menu">MOE | File |
+        Open</span></p>
+	<p>In the Open panel, select <span class=
+        "nobr"><tt>SRtest.moe</tt> and press <b>OK</b></span>.</p>
+        <p>Make the hydrogens visible:</p>
+
+<p class="indent_novspace"><span class="menu">RHS |
+        Hydrogens</span></p>
+      </li>
+      <li><p>Change <b>Operation</b> to <span class="nobr"><b>Add Group to
+      Ligand</b></span>.</p></li>
+      <li><p><i>Select the connection points.</i></p>
+      <p>Select the three hydrogens as depicted
+      to the right (H201, H222 and H223) in the picture. This
+      makes three optional connection points (in yellow). Select the carbon atom
+      connected to H201 (C20), making this connection essential (in green).
+      </p></li>
+      <li>
+      <p>Change the <b>Descriptor Filter</b> to <tt>Weight[600,640]</tt>
+        <tt>"[#7]"=5</tt>.  This will generate answers in the specified weight
+        range containing 5 nitrogens.
+      <br clear="both" /></p>
+    </li>
+    </ol>
+
+<p>There are three connectors, one of which is essential.  Queries will be
+    generated that link at the essential only or with links to one or both
+    of the optional connections.
+    Press <b>Search</b> to start the Scaffold Replacement calculation, and you
+    can stop the calculation after it generates 100-200 structures.  This
+    will take a few minutes.
+    You can examine the output in the <b>Database Viewer</b>, which reveals
+    that while most queries involve the essential connection there are a few
+    that involve the optional connections.  This example also
+    demonstrates how the <b>Descriptor Filter</b> can be used to control output.
+  </p>
+  </div>
+  <div class="example">
+<a id="LabeledLinkers"></a>
+<h2>Labeled Linkers</h2>
+    <ol start="1">
+      <li>
+	<p><i>Create a sample input file.</i></p>
+	<p>Open the blood-brain sample database:</p>
+	<p class="indent_novspace"><span class="menu">MOE | File |
+	    Open</span></p>
+	<p>In the Open panel, select <tt>$MOE/sample/mol/blood_brain.mdb</tt>
+	    and press <b>OK</b>.</p>
+
+	<p>Save as an SD file:</p>
+	<p class="indent_novspace"><span class="menu">DBV | File |
+	    Save As</span></p>
+	<p>In the Database Save As panel, change <b>Output</b> to
+	<span class="nobr"><b>SD File (.sdf)</b></span>, enter
+	<tt>blood_brain.sdf</tt>
+	as the output filename, and press <b>OK</b>.  This file will be used as
+	input below.</p>
+
+      </li>
+      <li>
+        <i>Prepare the linker library.</i><br />
+        <p>Open a shell window, and ensure the MOE environment variable is set
+        correctly.</p>
+        <p>Run <a href="../moe/fcnref/sdfrag.htm">sdfrag</a> to fragment the
+        molecules. Under Linux or OSX:</p>
+
+<pre class="code">
+% $MOE/bin/sdfrag -unique -ringblock -recap -schuffenhauer -ringatoms \
+-label -verbose -o scafffrag.sdf blood_brain.sdf
+</pre>
+
+<p class="indent_novspace"></p>or under Windows:<br />
+
+<pre class="code">
+$&gt; %MOE%\bin\sdfrag -unique -ringblock -recap -schuffenhauer -ringatoms ^
+-label -verbose -o scafffrag.sdf blood_brain.sdf
+</pre>
+
+<p>If desired, paths can be specified for the input or output file to use
+files in different directories.
+Conformations must be generated for each resulting fragment. This is
+        done with the <a href="confgui.htm">Conformation Import</a>
+        application:</p>
+
+<p class="indent_novspace"><span class="menu">MOE | Compute |
+        Conformations | Import...</span></p>
+
+<p>This brings up the following panel:</p><img src=
+        "scaffold/conf_import.png" alt="Conformation Import" class="center" />
+	<p>Change
+        <b>Output Database</b> to <tt>scaffconf.mdb</tt>.<br />
+	Press <img src="scaffold/icon_add.png" alt="Add" class="icon" /> (add),
+	select <tt>scafffrag.sdf</tt> and press
+        <b>OK.</b><br />
+        Press <b>Clear</b> to clear the <b>Input Filters.</b><br />
+        Press <b>OK</b> to start the calculation.<br />
+        Press <b>OK</b> to Clear Molecular Data if asked.<br />
+        Conformation Import may take a few minutes to complete. You can close
+        the output database when Conformation Import completes.</p>
+      </li>
+      <li><p><i>Pack the conformer database.</i></p>
+      <p>In the SVL Commands window type:</p>
+      <tt>db_ConfPack ['scaffconf.mdb',
+      'scaffconfpack.mdb']</tt><br />
+      <p>Applications like Scaffold Replacement or Pharmacophore Search run more
+      efficiently when packed databases are used. Such databases have all of
+      the conformers of a given molecule packed into a field of a single
+      database entry.</p></li>
+      <li>
+        <p><i>Load the protein/ligand pair</i>.</p>
+        <div class="floatright"><img src="scaffold/srpix1.png" alt=
+        "Select Scaffold Atom Selection" class="floatright" /></div>
+	<p>First clear the system:</p>
+
+<p class="indent_novspace"><span class="menu">RHS |
+        Close</span></p>
+        <p>Open the MOE file:</p>
+
+<p class="indent_novspace"><span class="menu">RHS | Open</span></p>
+	<p>In
+        the Open panel, select <span class="nobr"><tt>SRtest.moe</tt></span>
+        and press <b>OK</b>.</p>
+      </li>
+      <li>
+        <p><i>Start Scaffold Replacement.</i></p>
+
+<p class="indent_novspace"><span class="menu">MOE | Compute | Fragments
+        | Scaffold Replacement...</span></p>
+	<p>Ensure that the Receptor set is set
+        to Receptor Atoms, the Ligand set is set to Ligand Atoms and the
+        Operation is set to <span class="nobr"><b>Replace Scaffold (Select
+        Scaffold)</b></span>. Clear any pharmacophore filter, if present.</p>
+      </li>
+      <li><p><i>Define the scaffold.</i></p>
+      <p>Select the three-ring central portion (with substituents),
+      bounded by the
+      nitrogen atoms N27 and N18. The atoms being replaced are highlighted in
+      green, and arrows indicate the two connection points. As the connections
+      are essential, their arrows are green.</p></li>
+
+      <li><p><i>Change the linker database</i></p>
+        <p>Press <img src="ph4_search/icon_browse.png" class="icon">
+         to specify the Linker Database.<br />
+      Select the current database and click <b>Remove</b>.<br />
+      Select <tt>scaffconfpack.mdb</tt> and click <b>OK</b>.</p></li>
+      <li><p><i>Specify labeled linkers</i></p>
+      <p>Press <img src="scaffold/icon_config.png" alt="Configure" class="icon"
+      /> at the right
+      of the <b>Operation</b> selector to bring up the parameter sub-panel
+      for the current operation.<br />
+      Select <b>Labeled Linkers</b> and press <b>OK</b>.</p></li>
+      <li><p>Change the <b>Descriptor Filter</b> to <tt>Weight&lt;500</tt>
+      <tt>SlogP[-4,8]</tt> <tt>TPSA[40,140]</tt>.</p></li>
+    </ol>
+
+<p>There are 18 leaving (heavy) atoms, 2 exit vectors and no additional
+    connectors. As everything is colored green, it is OK to proceed. Press
+    <b>Search</b> to start the Scaffold Replacement calculation. The output
+    molecules have molecular weights less than 500, logP's in the range of
+    -4 to 8 and TPSA in the range of 40 to 140. The <span class="nobr"><b>SVL
+    Commands</b></span> window contains details of the various stages of the
+    calculation. Due to the labeled-linker restriction, only a handful of
+    structures are created. Running the calculation without Labeled Linkers
+    yields roughly 150 structures.</p>
+
+<p>The output structures can be examined in the <b>Database Viewer</b>. The
+    attachment points are shown in the <b>linker</b> output field;
+    scaffold/R-group connections are restricted to the attached atoms. Similar
+    reductions can also be obtained by selecting <b>RECAP Filtering</b> rather
+    than <b>Labeled Linkers</b> in the
+    <img src="scaffold/icon_config.png" alt="Configure" class="icon" />
+    (configure) panel.</p>
+  </div>
+  <div class="example">
+<a id="SimpleLinkers"></a>
+<h2>Simplified Linkers</h2>
+  <ol start="1">
+    <li>
+      <p><i>Load the protein/ligand pair</i>.</p>
+      <div class="floatright"><img src="scaffold/smallring.png" alt=
+      "Select Scaffold Atom Selection" class="floatright" /></div>
+      <p>First, clear the system:</p>
+
+<p class="indent_novspace"><span class="menu">RHS |
+      Close</span></p>
+      <p>Open the MOE file:</p>
+
+<p class="indent_novspace"><span class="menu">RHS | Open</span></p>
+      <p>In the
+      Open panel, select <span class="nobr"><tt>SRtest.moe</tt></span>.</p>
+    </li>
+    <li>
+      <p><i>Start Scaffold Replacement.</i></p>
+
+<p class="indent_novspace"><span class="menu">MOE | Compute | Fragments |
+      Scaffold Replacement...</span></p>
+      <p>Ensure that the Receptor set is set to
+      Receptor Atoms, the Ligand set is set to Ligand Atoms, the Operation is
+      set to <span class="nobr"><b>Replace Scaffold (Select
+      Scaffold)</b></span> and the Linker Database is set to <span class=
+      "nobr"><tt>$MOE/opt/linker.mdb.</tt></span></p>
+    </li>
+    <li><p><i>Define the scaffold.</i></p>
+    <p>Select the 6-membered ring (of the fused-ring core) connected to
+    pyridine.
+    The atoms being replaced are highlighted in green, and arrows indicate the
+    three connection points. As the connections are essential, their arrows are
+    green.</p></li>
+    <li><p><i>Specify simplified linkers</i></p>
+    <p>Press <img src="scaffold/icon_config.png" alt="Configure" class="icon" />
+    to the right
+    of the <b>Operation</b> selector to bring up the parameter sub-panel for the
+    current operation.<br />
+    Deselect <b>Labeled Linkers</b> if selected, select
+    <b>Simplify Linkers</b> and press <b>OK</b>.</li>
+    <li>Change the <b>Descriptor Filter</b> to <tt>Weight&lt;575</tt>
+    <tt>SlogP[-4,3]</tt> <tt>TPSA[40,140]</tt>.</p></li>
+  </ol>
+
+<p>There are 6 leaving (heavy) atoms, 3 exit vectors and no additional
+  connectors. As everything is colored green, it is OK to proceed. Press
+  <b>Search</b> to start the Scaffold Replacement calculation. The output
+  molecules have molecular weights less than 650, logP's in the range of -4
+  to 3 and TPSA in the range of 40 to 140. The <span class="nobr"><b>SVL
+  Commands</b></span> window contains details of the various stages of the
+  calculation. Roughly 450 structures are written to the output database.
+  Simplifying linkers increases the range of answers that can be obtained from
+  a single linker library, as unneeded features of individual linkers are
+  discarded upon constructing each solution.</p>
+
+<p>The example below shows the effect of simplifying linkers. The structure
+  on the right is the linker and the structure on the left is the output
+  molecule. The groups indicated in red are removed: they are not on the
+  shortest path between link atoms and they are not required to maintain the
+  simplified linker's geometry.</p><img src="scaffold/combinedsimple.jpg"
+  alt="Labeled/Unlabeled Linkers" class="center" /></div>
+<div class="example">
+    <a name="TopoUnique"></a>
+    <h3>Topologically Unique Answers</h3>
+    <ol start="1">
+    <li><p><i>Load the protein/ligand pair</i>.</p>
+    <div class="floatright">
+    <img src="scaffold/smallring.png" alt="Select Scaffold Atom Selection" />
+    </div>
+    <p>First, clear the system:</p>
+    <p class="indent_novspace">
+    <span class="menu">RHS | Close</span></p>
+    <p>Open the MOE file:</p>
+    <p class="indent_novspace">
+    <span class="menu">RHS | Open</span></p>
+    <p>In the Open panel, select
+    <span class="nobr"><tt>SRtest.moe</tt></span>.</p>
+    <li><p><i>Start Scaffold Replacement.</i></p>
+    <p class="indent_novspace">
+    <span class="menu">MOE | Compute | Fragments | Scaffold Replacement...
+    </span></p>
+    <p>Ensure that the Receptor set is set to Receptor Atoms, the Ligand set is
+    set to Ligand Atoms, the Operation is set to
+    <span class="nobr"><b>Replace Scaffold (Select Scaffold)</b></span> and
+    the Linker Database is set to <span class="nobr"><tt>
+    $MOE/opt/linker.mdb.</tt></span></p>
+    <p>
+    <li>
+    <p><i>Define the scaffold.</i></p>
+    <p>Select the 6-membered ring (of the fused-ring core) connected to
+    pyridine.
+    The atoms being replaced are highlighted in green, and arrows indicate the
+    three connection points.  As the connections are essential, their arrows
+    are green.</p>
+    <li>
+    <p><i>Specify topologically unique answers</i></p>
+    <p>Press <img src="scaffold/icon_config.png" alt="Configure" class="icon" />
+    to the right
+    of the <b>Operation</b> selector to bring up the parameter sub-panel for the
+    current operation.<br />
+    Deselect <b>Simplify Linkers</b> if selected, select
+    <b>Topologically Unique</b> and press <b>OK</b>.</p>
+    <li><p>Change the <b>Descriptor Filter</b> to <tt>Weight&lt;575</tt>
+    <tt>SlogP[-4,3]</tt> <tt>TPSA[40,140].</tt></p>
+    </ol>
+    <p>
+    There are 6 leaving (heavy) atoms, 3 exit vectors and no additional
+    connectors.  As everything is colored green, it is OK to proceed.
+    Press <b>Search</b> to start the Scaffold Replacement calculation.
+    The output molecules have molecular weights less than 575,
+    logP's in the range of -4 to 3 and TPSA in the range of 40 to 140.  The
+    <span class="nobr"><b>SVL Commands</b></span> window contains details of the
+    various stages of the calculation.  Roughly 650 structures are written to
+    the output database, half of the number generated in the first worked
+    example (the extra being additional conformers).
+    </p>
+    </div>
+
+    <div class="example">
+
+    <a name="webScaffold"></a>
+    <h3>Using MOE/web</h3>
+
+    <ol start="1">
+    <li><p><i>Set up MOE/web</i>.</p>
+    <div class="floatright">
+    <img src="scaffold/srpix1.png" alt="Select Scaffold Atom Selection" />
+    </div>
+
+    <p><a href="../install/web_inst.htm#StartA">Start MOE/web</a> if it is not
+    already running.<br />
+    <a href="../appendix/settings.htm#MOEWeb">Configure MOE/web</a> so it can
+    be used by MOE.</p>
+
+    <li><p><i>Load the protein/ligand pair</i>.</p>
+    <p>First, clear the system:</p>
+    <p class="indent_novspace">
+    <span class="menu">RHS | Close</span></p>
+    <p>Open the MOE file:</p>
+    <p class="indent_novspace">
+    <span class="menu">RHS | Open</span></p>
+    <p>In the Open panel, select
+    <span class="nobr"><tt>SRtest.moe.</tt></span></p>
+    <li><p><i>Start Scaffold Replacement.</i></p>
+    <p class="indent_novspace">
+    <span class="menu">MOE | Compute | Fragments | Scaffold Replacement...
+    </span></p>
+    <li><p><i>Change the linker database</i></p>
+    <p>Press <img src="ph4_search/icon_web.png" class="icon">
+    to specify the Linker Database.
+    Select <tt>$MOE/opt/linker.mdb</tt> and click <b>OK</b>.
+    Note that the Linker Database is prefixed with <tt>web:</tt> to indicate
+    that MOE/web will be used.</p>
+    <li><p><i>Define the scaffold.</i></p>
+    <p>Select the three-ring central portion (with substituents), bounded by
+    the nitrogen atoms N27 and N18.  The atoms being replaced are highlighted
+    in green, and arrows indicate the two connection points.  As the
+    connections are essential, their arrows are green.</p>
+    <li><p><i>Increasing the filtering.</i></p>
+    <p>Change the <b>Descriptor Filter</b> to <tt>Weight&lt;500</tt>
+    <tt>SlogP[-2,3]</tt> <tt>TPSA[40,140]</tt>.  This narrows the acceptable
+    range for SlogP and thus reduces the number of output structures.
+    <br clear="both" /></p>
+
+    </ol>
+    <p>
+    There are 18 leaving (heavy) atoms, 2 exit vectors and no additional
+    connectors.  As everything is colored green, it is OK to proceed.
+    Press <b>Search</b> to start the Scaffold Replacement calculation.
+    By default, this will run the calculation locally.
+    The output molecules have molecular weights less than 500, logP's in the
+    range of -2 to 3 and TPSA in the range of 40 to 140.  The
+    <span class="nobr"><b>SVL Commands</b></span> window contains details of the
+    various stages of the calculation.  MOE/web will also log communications
+    with the client as the calculation proceeds.
+
+
+    </div>
+  <!-- ============================= REFERENCES ============================ -->
+
+<a id="Ref"></a>
+<h1>References</h1>
+  <table class="ref">
+    <tr>
+      <td valign="top">[Ertl&nbsp;2000]</td>
+      <td valign="top">Ertl, P., Rohde, B., Selzer, P.; Fast Calculation of
+      Molecular Polar Surface Area as a Sum of Fragment-Based Contributions and
+      Its Application to the Prediction of Drug Transport Properties; <i>J.
+      Med. Chem. 43</i> (<b>2000</b>) 3714&ndash;3717</td>
+    </tr>
+    <tr>
+      <td valign="top">[Labute&nbsp;2008]</td>
+      <td valign="top">Labute, P.; The Generalized Born/Volume Integral
+      Implicit Solvent Model: Estimation of the Free Energy of Hydration Using
+      London Dispersion Instead of Atomic Surface Area; <i>J. Comput. Chem.
+      29</i> (<b>2008</b>) 1693&ndash;1698</td>
+    </tr>
+    <tr>
+      <td valign="top">[Lauri&nbsp;1994]</td>
+      <td valign="top">Lauri, G., Bartlett, P. A.; CAVEAT: A Program to
+      Facilitate the Design of Organic Molecules; <i>J. Comp. Aid. Mol. Des.
+      8</i> (<b>1994</b>) 51&ndash;66</td>
+    </tr>
+    <tr>
+      <td valign="top">[Maass&nbsp;2007]</td>
+      <td valign="top">Maass, P., Schulz-Gasch, T., Stahl, M., Rarey, M.;
+      Recore: A Fast and Versatile Method for Scaffold Hopping Based on Small
+      Molecule Crystal Structure Conformations; <i>J. Chem. Inf. Model. 47</i>
+      (<b>2007</b>) 390&ndash;399</td>
+    </tr>
+    <tr>
+      <td valign="top">[Wildman&nbsp;1999]</td>
+      <td valign="top">Wildman, S.A., Crippen, G.M.; Prediction of
+      Physicochemical Parameters by Atomic Contributions; <i>J. Chem. Inf.
+      Comput. Sci. 39</i> (<b>1999</b>) 868&ndash;873</td>
+    </tr>
+  </table>
+
+<a id="seeAlso">
+<h1>See Also</h1>
+</a>
+
+<p><a href=
+  "https://www.chemcomp.com/moe/help/2018/CCG_Tutorials/(Tutorial)_MOE_Scaffold_Replacement.svlx">
+  Scaffold Replacement Tutorial</a><br />
+  <a href=
+  "https://www.chemcomp.com/moe/help/2018/CCG_Tutorials/(Tutorial)_MOE_SD_Pipelining_Tools.svlx">
+  SD Pipelining Tools Tutorial</a></p>
+
+<p>
+  <a href="../quasar/fcnref/descrfcn.htm">QuaSAR-Descriptor Functions</a><br />
+  <a href="../quasar/descr.htm">QuaSAR-Descriptor</a><br />
+  <a href="ph4_guide.htm">Introduction to Pharmacophores in MOE</a><br />
+  <a href="../moe/hpc.htm">High-Performance Computing Framework</a><br />
+  <a href="../install/web_inst.htm">Installing and Running MOE/web</a><br />
+  <a href="../appendix/settings.htm#MOEWeb">Web Settings</a><br />
+</p>
+
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../images/ccgicon.png" /> <a href="../index.htm"></a> <a href=
+    "../legal.htm"></a> &copy;<span class="versionyear"></span> <a href="http://www.chemcomp.com"></a>. All
+    rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: icolor, AdjustColor" />
+  <title>icolor, AdjustColor</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    icolor, AdjustColor
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    val     = <a class="fcnlink" href=
+"#icolor">icolor</a> &#39;<i>colorname</i>&#39;
+
+    new_val = <a class="fcnlink" href=
+"#AdjustColor">AdjustColor</a> [val, amount]
+</pre>
+
+<h1>Description</h1>
+<a id="icolor">
+<pre>val = <span class="fcndef">icolor</span> '<i>colorname</i>'</pre>
+</a>
+<p>Returns the RGB encoded value corresponding to the named color, given as a
+  token. The recognized colors are given in <a class="svl" href=
+  "../svlgui/fcnref/wt_plot.htm">PLOT_COLORS</a>. The function unit extends,
+  i.e. it can be given a vector of tokens.</p>
+
+<hr noshade="noshade" />
+
+<a id="AdjustColor">
+<pre>new_val = <span class="fcndef">AdjustColor</span> [val, amount]</pre>
+</a>
+
+<p>Adjusts the color of an RGB encoded value and returns the new color
+(also RGB encoded). The adjustment is done in the CIE Lab color space.
+The argument <tt>amount</tt> is a value approximately in the range
+of -100 (dark) to 100 (bright).</p>
+
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

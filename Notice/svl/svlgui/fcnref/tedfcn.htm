@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href=
+  "../../../include/manstyle.css" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content=
+  "functions: edit, ted_SetFilename, ted_DataModified, ted_Font" />
+  <meta name="keywords" content=
+  "functions: ted_ReadOnly, ted_Environment, ted_IsFilename" />
+  <meta name="keywords" content=
+  "functions: ted_Filename, ted_SetEnvironment" />
+  <meta name="keywords" content=
+  "functions: ted_Open, ted_Close, ted_Show, ted_Default" />
+  <meta name="keywords" content=
+  "functions: ted_Create, ted_Destroy, ted_Key, ted_KeyList" />
+  <title>Text Editor Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../../index.htm"><img src="../../../images/ccglogo.png" /></a>
+    <a href="../../../index.htm"><div class="moeversion"></div></a>
+    Text Editor Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    <a class="fcnlink" href="#edit">edit</a> &#39;filename&#39;
+
+    filename = <a class="fcnlink" href=
+"#ted_Filename">ted_Filename</a> editor_key
+    <a class="fcnlink" href=
+"#ted_SetFilename">ted_SetFilename</a> [ editor_key, &#39;filename&#39; ]
+    boolean = <a class="fcnlink" href=
+"#ted_IsFilename">ted_IsFilename</a> [ editor_key, &#39;filename&#39; ]
+
+    old_state = <a class="fcnlink" href=
+"#ted_DataModified">ted_DataModified</a> [editor_key, new_state ]
+    old_state = <a class="fcnlink" href=
+"#ted_ReadOnly">ted_ReadOnly</a> [ editor_key, new_state ]
+
+    old_value = <a class="fcnlink" href=
+"#ted_Environment">ted_Environment</a> [ key, &#39;name&#39;, new_value ]
+    <a class="fcnlink" href=
+"#ted_SetEnvironment">ted_SetEnvironment</a> [ key, &#39;name&#39;, value ]
+
+    &#39;old_font&#39; = <a class="fcnlink" href=
+"#ted_Font">ted_Font</a> [ editor_key, &#39;new_font&#39; ]
+
+    editor_key = <a class="fcnlink" href="#ted_Create">ted_Create</a> []
+    <a class="fcnlink" href="#ted_Destroy">ted_Destroy</a> editor_key
+    editor_keys = <a class="fcnlink" href="#ted_Key">ted_Key</a> editor_keys
+    open_editor_keys = <a class="fcnlink" href=
+"#ted_KeyList">ted_KeyList</a> []
+
+    editor_key = <a class="fcnlink" href=
+"#ted_Open">ted_Open</a> &#39;filename&#39;
+    editor_key = <a class="fcnlink" href="#ted_Default">ted_Default</a> []
+    <a class="fcnlink" href="#ted_Close">ted_Close</a> editor_key
+    <a class="fcnlink" href="#ted_Show">ted_Show</a> editor_key
+</pre>
+<a id="edit"></a>
+<h1>Description</h1>
+
+<pre>
+<span class="fcndef">edit</span> &#39;filename&#39;
+</pre>
+
+<p>Opens the specified file in an SVL Text Editor. If another editor is
+  currently viewing the file, that editor is raised. If <tt>filename</tt> is
+  <tt>[]</tt>, a file prompter opens for selecting the file(s) to edit.</p>
+<a id="ted_Filename"></a>
+<hr noshade="noshade" />
+
+<pre>
+filename = <span class="fcndef">ted_Filename</span> editor_key
+</pre>
+
+<p>Returns the filename of the editor specified. The filename is returned as
+  a token. [ ] is returned if the editor&#39;s filename is unspecified.</p>
+<a id="ted_SetFilename"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">ted_SetFilename</span> [ editor_key, &#39;filename&#39; ]
+</pre>
+
+<p>Sets the filename of the editor specified. Setting the filename to [ ]
+  sets the editor&#39;s filename to unspecified.</p>
+<a id="ted_IsFilename"></a>
+<hr noshade="noshade" />
+
+<pre>
+boolean = <span class=
+"fcndef">ted_IsFilename</span> [ editor_key, &#39;filename&#39; ]
+</pre>
+
+<p>Returns 1 if the filename specified refers to the same file as the
+  filename stored in the editor, 0 otherwise. This function is used to
+  determine if an editor is already open on a given file.</p>
+<a id="ted_DataModified"></a>
+<hr noshade="noshade" />
+
+<pre>
+old_state = <span class=
+"fcndef">ted_DataModified</span> [ editor_key, new_state ]
+</pre>
+
+<p>Returns and optionally sets the modified state of the editor specified.
+  The data modified state is 1 if unsaved buffers exist, 0 otherwise. The old
+  state is always returned. The state is not set if <tt>new_state</tt> is [
+  ].</p>
+<a id="ted_ReadOnly"></a>
+<hr noshade="noshade" />
+
+<pre>
+old_state = <span class="fcndef">ted_ReadOnly</span> [ editor_key, new_state ]
+</pre>
+
+<p>Returns and optionally sets the read-only state of the editor specified.
+  The state is 1 if the editor is read-only, 0 otherwise. The old state is
+  always returned. The state is not set if <tt>new_state</tt> is [ ].</p>
+<a id="ted_Environment"></a>
+<hr noshade="noshade" />
+
+<pre>
+old_value = <span class=
+"fcndef">ted_Environment</span> [ key, &#39;name&#39;, new_value ]
+</pre>
+
+<p>Returns and optionally sets editor environment variables. The old value is
+  always returned. The value is not set if <tt>new_value</tt> is [ ].
+  Environment variable names must be tokens, while their values may be of any
+  type. The editor environment is owned by the editor window, and is destroyed
+  when the editor window is destroyed.</p>
+<a id="ted_SetEnvironment"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">ted_SetEnvironment</span> [ key, &#39;name&#39;, value ]
+</pre>
+
+<p>Sets editor environment variables. Environment variable names must be
+  tokens, while their values may be of any type. The editor environment is
+  owned by the editor window, and is destroyed when the editor window is
+  destroyed.</p>
+<a id="ted_Font"></a>
+<hr noshade="noshade" />
+
+<pre>
+&#39;old_font&#39; = <span class=
+"fcndef">ted_Font</span> [ editor_key, &#39;new_font&#39; ]
+</pre>
+
+<p>Returns and optionally sets the font used in the editor. The old font is
+  always returned. The font is not set if <tt>new_font</tt> is [ ]. The font
+  may be any of the following: &#39;small&#39;, &#39;medium&#39;,
+  &#39;large&#39;.</p>
+<a id="ted_Create"></a>
+<hr noshade="noshade" />
+
+<pre>
+editor_key = <span class="fcndef">ted_Create</span> []
+</pre>
+
+<p>Creates a new text editor window and displays it. A key for use in
+  subsequent <tt>ted_</tt> calls is returned. The editor is not destroyed
+  automatically when the task dies.</p>
+<a id="ted_Destroy"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">ted_Destroy</span> editor_key
+</pre>
+
+<p>Destroys the editor specified without prompting for confirmation.</p>
+<a id="ted_KeyList"></a>
+<hr noshade="noshade" />
+
+<pre>
+open_editor_keys = <span class="fcndef">ted_KeyList</span> []
+</pre>
+
+<p>Returns a vector of keys of all currently open text editors.</p>
+<a id="ted_Key"></a>
+<hr noshade="noshade" />
+
+<pre>
+editor_keys = <span class="fcndef">ted_Key</span> editor_keys
+</pre>
+
+<p>For each key in <tt>editor_keys</tt> return the key if it corresponds to a
+  valid open Text Editor key. Return 0 otherwise.</p>
+<a id="ted_Open"></a>
+<hr noshade="noshade" />
+
+<pre>
+editor_key = <span class="fcndef">ted_Open</span> &#39;filename&#39;
+</pre>
+
+<p>Displays an SVL Text Editor containing the contents of the specified
+  filename. If another editor is currently viewing the file, that editor is
+  raised, and its key is returned. If <tt>filename</tt> is [], an empty editor
+  is created, and the new editor key is returned.</p>
+<a id="ted_Default"></a>
+<hr noshade="noshade" />
+
+<pre>
+editor_key = <span class="fcndef">ted_Default</span> []
+</pre>
+
+<p>Returns the key of the text editor which launched the task of the calling
+  function. An editor key is returned if the user launched the task from an
+  editor&#39;s menu bar, popups or command line.</p>
+<a id="ted_Close"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">ted_Close</span> editor_key
+</pre>
+
+<p>Prompts the user to save the file if unsaved buffers exist, and destroys
+  the editor if the user confirms the operation.</p>
+<a id="ted_Show"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">ted_Show</span> editor_key
+</pre>
+
+<p>Raises the editor window given by <tt>editor_key</tt>.</p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../../images/ccgicon.png" /> <a href="../../../index.htm"></a>
+    <a href="../../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

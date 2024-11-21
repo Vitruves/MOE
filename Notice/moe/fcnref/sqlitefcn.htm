@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="functions: sqlite_open" />
+  <meta name="keywords" content="functions: _sqlite_open" />
+  <meta name="keywords" content="functions: sqlite_close" />
+  <meta name="keywords" content="functions: sqlite_filename" />
+  <meta name="keywords" content="functions: sqlite_info" />
+  <meta name="keywords" content="functions: sqlite_header" />
+  <meta name="keywords" content="functions: sqlite_stmt_create" />
+  <meta name="keywords" content="functions: sqlite_stmt_destroy" />
+  <meta name="keywords" content="functions: sqlite_next" />
+  <meta name="keywords" content="functions: sqlite_execute" />
+  <meta name="keywords" content="functions: sqlite_bind" />
+  <meta name="keywords" content="functions: sqlite_bind_index" />
+  <meta name="keywords" content="functions: sqlite_bind_parameter_count" />
+  <meta name="keywords" content="functions: sqlite_bind_parameter_index" />
+  <meta name="keywords" content="functions: sqlite_bind_parameter_name" />
+  <meta name="keywords" content="functions: sqlite_stmt_reset" />
+  <meta name="keywords" content="functions: sqlite_bind_clear" />
+  <meta name="keywords" content="functions: sqlite_read" />
+  <meta name="keywords" content="functions: sqlite_read_fields" />
+  <meta name="keywords" content="functions: sqlite_read_column" />
+  <meta name="keywords" content="functions: sqlite_tables" />
+  <meta name="keywords" content="functions: sqlite_fields" />
+  <meta name="keywords" content="functions: sqlite_dbkeylist" />
+  <meta name="keywords" content="functions: sqlite_dbkey" />
+  <meta name="keywords" content="functions: sqlite_stmtkey" />
+  <meta name="keywords" content="functions: sqlite_blobkey" />
+  <meta name="keywords" content="functions: sqlite_blob_open" />
+  <meta name="keywords" content="functions: sqlite_blob_close" />
+  <meta name="keywords" content="functions: sqlite_empty_blob" />
+  <meta name="keywords" content="functions: sqlite_blob_seek" />
+  <meta name="keywords" content="functions: sqlite_blob_read" />
+  <meta name="keywords" content="functions: sqlite_blob_write" />
+  <meta name="keywords" content="functions: sqlite_blob_length" />
+  <title>SQLite3 Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    SQLite3 Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    dbkey = <a class="fcnlink" href=
+"#sqlite_open">sqlite_open</a> ['filename', 'mode']
+    dbkey = <a class="fcnlink" href="#sqlite_open">sqlite_open</a> dbkey
+    dbkey = <a class="fcnlink" href=
+"#sqlite_open">_sqlite_open</a> ['filename', 'mode']
+    dbkey = <a class="fcnlink" href="#sqlite_open">_sqlite_open</a> dbkey
+
+    <a class="fcnlink" href="#sqlite_close">sqlite_close</a> dbkeys
+
+    'filenames' = <a class="fcnlink" href=
+"#sqlite_filename">sqlite_filename</a> dbkeys
+
+    dbinfo = <a class="fcnlink" href=
+"#sqlite_info">sqlite_info</a> 'filename'
+    dbinfo = <a class="fcnlink" href="#sqlite_info">sqlite_info</a> dbkey
+
+    dbinfo = <a class="fcnlink" href=
+"#sqlite_header">sqlite_header</a> 'filename'
+    dbinfo = <a class="fcnlink" href="#sqlite_header">sqlite_header</a> dbkey
+
+    stmtkey = <a class="fcnlink" href=
+"#sqlite_stmt_create">sqlite_stmt_create</a> [dbkey, &quot;SQL&quot;, bindvals]
+
+    <a class="fcnlink" href=
+"#sqlite_stmt_destroy">sqlite_stmt_destroy</a> stmtkeys
+
+    <a class="fcnlink" href=
+"#sqlite_bind">sqlite_bind_index</a> [stmtkey, idx, value]
+    <a class="fcnlink" href="#sqlite_bind">sqlite_bind</a> [stmtkey, bindvals]
+    n = <a class="fcnlink" href=
+"#sqlite_bind">sqlite_bind_parameter_count</a> stmtkey
+    idx = <a class="fcnlink" href=
+"#sqlite_bind">sqlite_bind_parameter_index</a> [stmtkey, 'parameter']
+    'name' = <a class="fcnlink" href=
+"#sqlite_bind">sqlite_bind_parameter_name</a> [stmtkey, idx]
+
+    stmtkey = <a class="fcnlink" href="#sqlite_next">sqlite_next</a> stmtkey
+    data = <a class="fcnlink" href=
+"#sqlite_execute">sqlite_execute</a> [stmtkey, &quot;SQL&quot;]
+    <a class="fcnlink" href="#sqlite_stmt_reset">sqlite_stmt_reset</a> stmtkey
+    <a class="fcnlink" href="#sqlite_stmt_reset">sqlite_bind_clear</a> stmtkey
+
+    data = <a class="fcnlink" href=
+"#sqlite_read_fields">sqlite_read_fields</a> [stmtkey, ['field1', 'field2', ...]]
+    coldata = <a class="fcnlink" href=
+"#sqlite_read_column">sqlite_read_column</a> [dbkey, 'table', 'field', ['sortfield1', 'sortfield2', ...]]
+    data = <a class="fcnlink" href="#sqlite_read">sqlite_read</a> stmtkey
+
+<!--
+    rowid = <a class="fcnlink" href="#sqlite_write">sqlite_write</a> [dbkey, 'table', rowid, data]
+-->
+
+    ['table1', 'table2', ...] = <a class="fcnlink" href=
+"#sqlite_tables">sqlite_tables</a> 'filename'
+    ['table1', 'table2', ...] = <a class="fcnlink" href=
+"#sqlite_tables">sqlite_tables</a> dbkey
+    fielddata = <a class="fcnlink" href=
+"#sqlite_fields">sqlite_fields</a> ['filename', 'table']
+    fielddata = <a class="fcnlink" href=
+"#sqlite_fields">sqlite_fields</a> [dbkey, 'table']
+
+    dbkeys = <a class="fcnlink" href=
+"#sqlite_dbkeylist">sqlite_dbkeylist</a> []
+
+    dbkeys = <a class="fcnlink" href="#sqlite_dbkey">sqlite_dbkey</a> dbkeys
+    stmtkeys = <a class="fcnlink" href=
+"#sqlite_dbkey">sqlite_stmtkey</a> stmtkeys
+    blobkeys = <a class="fcnlink" href=
+"#sqlite_dbkey">sqlite_blobkey</a> blobkeys
+
+    blobkey = <a class="fcnlink" href=
+"#sqlite_blob_open">sqlite_blob_open</a> [stmtkey, 'field', 'mode']
+    <a class="fcnlink" href="#sqlite_blob_close">sqlite_blob_close</a> blobkeys
+    empty_blob = <a class="fcnlink" href=
+"#sqlite_empty_blob">sqlite_empty_blob</a> n
+    <a class="fcnlink" href=
+"#sqlite_blob_seek">sqlite_blob_seek</a> [blobkey, offset]
+    data = <a class="fcnlink" href=
+"#sqlite_blob_read">sqlite_blob_read</a> [blobkey, nbytes]
+    <a class="fcnlink" href=
+"#sqlite_blob_write">sqlite_blob_write</a> [blobkey, data]
+    length = <a class="fcnlink" href=
+"#sqlite_blob_length">sqlite_blob_length</a> blobkey
+</pre>
+
+<h1>Description</h1>
+<a id="sqlite_open"></a>
+<hr noshade="noshade" />
+
+<pre>dbkey = <span class=
+  "fcndef">sqlite_open</span> ['filename', 'mode']
+dbkey = <span class="fcnlink">sqlite_open</span> dbkey
+dbkey = <span class=
+"fcnlink">_sqlite_open</span> ['filename', 'mode']
+dbkey = <span class="fcnlink">_sqlite_open</span> dbkey</pre>
+
+<p>Opens an SQLite database file for reading and/or writing and returns a
+  key. A given database may be opened by multiple processes safely as long as
+  the database file resides on a local (i.e. non-network) drive - SQLite
+  handles the file locking. Note that <tt>sqlite_close</tt> must be called as
+  many times as <tt>sqlite_open</tt> or <tt>_sqlite_open</tt>. These functions
+  exit with an error if the file cannot be opened for any reason, unless the
+  <tt>_sqlite_open</tt> function is used in which case zero is returned upon
+  error. These functions expect either a filename or a database key from a
+  previously opened file as their first argument. The name of the file,
+  <tt>'filename'</tt>, must be a token. If a database key
+  <tt>dbkey</tt> is given, it is a number, and the <tt>mode</tt> will remain as
+  when it was originally opened. The <tt>mode</tt> indicates what action will
+  be take, and may have one of the following values:</p>
+  <dl>
+    <dt><tt>'read'</tt></dt>
+    <dd>Opens the database in read-only mode, i.e. writing is disallowed (the
+    default if the file is not writeable). If the database does not already
+    exist it is an error.</dd>
+    <dt><tt>'read-write'</tt></dt>
+    <dd>Opens the database for both reading and writing (the default unless the
+    file is not writeable). If the database does not already exist it is an
+    error; if it is read-only, it is opened for reading only.</dd>
+    <dt><tt>'create'</tt></dt>
+    <dd>The database is opened for reading and writing, and if a database of
+    that name does not currently exist it will be created.</dd>
+  </dl><!--
+
+<p>
+If <tt>filename</tt> is the special word <tt>:memory:</tt>, a private,
+temporary in-memory database is created, and will vanish when the key is
+closed.  If <tt>filename</tt> is empty token ('') then a private, temporary
+on-disk database is created, which is automatically deleted as soon as the
+key is closed.
+</p>
+-->
+<a id="sqlite_close"></a>
+<hr noshade="noshade" />
+
+<pre><span class="fcndef">sqlite_close</span> dbkeys</pre>
+
+<p>Closes an SQLite database key or keys and the associated files and
+  resources.</p>
+<a id="sqlite_filename"></a>
+<hr noshade="noshade" />
+
+<pre>'filenames' = <span class=
+  "fcndef">sqlite_filename</span> dbkeys</pre>
+
+<p>Returns a list of tokens giving the filename(s) related to each SQLite
+  database key provided as arguments. <tt>dbkeys</tt> must be valid, opened
+  database keys. Invalid keys will return null ([]).</p>
+<a id="sqlite_info"></a>
+<hr noshade="noshade" />
+
+<pre>dbinfo = <span class="fcndef">sqlite_info</span> 'filename'
+dbinfo = <span class="fcndef">sqlite_info</span> dbkey</pre>
+
+<p>Returns key information about the specified SQLite database identified
+  either by its <tt>dbkey</tt> (returned by <tt>sqlite_open</tt>) or its
+  filename. The information is returned as a tagged vector of values, either
+  numbers or tokens, as returned by the various SQLite PRAGMA statements. The
+  tags match exactly the corresponding names of the PRAGMAs as given in the
+  <a href="http://www.sqlite.org/pragma.html" target="_blank">SQLite
+  documentation</a>, and may change from time to time. Deprecated or otherwise
+  irrelevant PRAGMAs are omitted. Values that can be changed may be modified by
+  simply calling the appropriate SQL PRAGMA command with the new settings. Tags
+  include:</p>
+  <dl>
+    <dt><tt>'application_id'</tt></dt>
+    <dd>A 32-bit integer defined by the application which created the
+    database.</dd>
+    <dt><tt>'auto_vacuum'</tt></dt>
+    <dd>A value of 0 or 'none' means auto-vacuum is disabled. 1 or
+    'full' means freelist pages are moved to the end of the database
+    file and the file truncated to remove the freelist pages after every
+    commit. 2 or 'incremental' means the required information is stored
+    in the file but vacuuming does not occur with every commit, it must be
+    manually initiated with the PRAGMA 'incremental_vacuum'.</dd>
+    <dt><tt>'automatic_index'</tt></dt>
+    <dd>If non-zero, automatic indexing is enabled.</dd>
+    <dt><tt>'busy_timeout'</tt></dt>
+    <dd>Timeout, in ms for a busy return value from a <tt>sqlite_next</tt>
+    call, if the database is locked by another process for example.</dd>
+    <dt><tt>'cache_size'</tt></dt>
+    <dd>Cache size, in pages, used by SQLite.</dd>
+    <dt><tt>'cache_spill'</tt></dt>
+    <dd>Boolean setting - when non-zero, dirty cache pages are spilled to the
+    database in the middle of a transaction.</dd>
+    <dt><tt>'checkpoint_fullfsync'</tt></dt>
+    <dd>If non-zero, the F_FULLSYNC syncing method is used during checkpoint
+    operations. Only macOS supports this option.</dd>
+    <dt><tt>'collation_list'</tt></dt>
+    <dd>Gives a list of collating sequences defined on the current
+    database.</dd>
+    <dt><tt>'compile_options'</tt></dt>
+    <dd>Compile-time options used when building the SQLite version in use.</dd>
+    <dt><tt>'encoding'</tt></dt>
+    <dd>Text encoding used by the database. Normally this should be
+    'UTF-8'.</dd>
+    <dt><tt>'foreign_key_check'</tt></dt>
+    <dd>Returns any foreign key constraints violations in the database. The
+    first column is the name of the table that contains the REFERENCES clause.
+    The second column is the rowid of the row that contains the invalid
+    REFERENCES clause. The third column is the name of the table that is
+    referred to. The fourth column is the index of the specific foreign key
+    constraint that failed.</dd>
+    <dt><tt>'foreign_keys'</tt></dt>
+    <dd>If non-zero, foreign key constraints will be enforced.</dd>
+    <dt><tt>'freelist_count'</tt></dt>
+    <dd>The number of unused pages in the database file.</dd>
+    <dt><tt>'fullfsync'</tt></dt>
+    <dd>If non-zero, the F_FULLSYNC syncing method is used. Only macOS
+    supports this option.</dd>
+    <dt><tt>'ignore_check_constraints'</tt></dt>
+    <dd>If non-zero, CHECK constraints will not be enforced.</dd>
+    <dt><tt>'integrity_check'</tt></dt>
+    <dd>Does a check over the entire database. If all is good, 'ok'
+    will be given here, otherwise a lost of errors will be provided.</dd>
+    <dt><tt>'journal_mode'</tt></dt>
+    <dd>One of 'delete', 'truncate', 'persist',
+    'memory', 'wal', 'off'. The default,
+    'delete', means the rollback journal is deleted after each
+    transaction. 'truncate' means the rollback journal is truncated to
+    zero bytes rather than deleting it, which may be faster. 'persist'
+    prevents the rollback journal from being deleted after each transaction -
+    only the header is overwritten with zeroes to invalidate it.
+    'memory' means the journal is stored in volatile RAM, which is
+    faster but increases the chance of corruption in the event of a crash or
+    power failure, for example. 'wal' (write-ahead log) is an
+    alternative to a rollback journal to implement transactions, and requires
+    SQLite 3.7.0 or newer to use. 'off' means no rollback is supported,
+    and any crash or power failure will likely result in database
+    corruption.</dd>
+    <dt><tt>'journal_size_limit'</tt></dt>
+    <dd>Used to limit the size of rollback journal or WAL files after
+    transactions or checkpoints. The maximum size is given in byte, or if
+    negative (the default) then there is no limit.</dd>
+    <dt><tt>'legacy_file_format'</tt></dt>
+    <dd>If non-zero, new databases are created in a format readable and
+    writable by SQLite 3.0.0 and newer. Otherwise at least version 3.3.0 will
+    be required.</dd>
+    <dt><tt>'locking_mode'</tt></dt>
+    <dd>One of 'normal' (the default) or 'exclusive'. In
+    'normal' mode, a connection unlocks the database file after each
+    read or write transaction. In 'exclusive' mode, the connection
+    never releases file locks (until the connection is close, that is).</dd>
+    <dt><tt>'max_page_count'</tt></dt>
+    <dd>Maximum number of pages in the database file.</dd>
+    <dt><tt>'mmap_size'</tt></dt>
+    <dd>Maximum number of bytes set aside for memory-mapped I/O on a database.
+    If zero then memory-mapped I/O is disabled and if negative then the
+    compile-time default is used.</dd>
+    <dt><tt>'page_count'</tt></dt>
+    <dd>Total number of pages in the database file.</dd>
+    <dt><tt>'page_size'</tt></dt>
+    <dd>Page size, in bytes. It must be a power of two no smaller than 512 and
+    no larger than 65536.</dd>
+    <dt><tt>'query_only'</tt></dt>
+    <dd>If non-zero, all write operations to the database are disabled.</dd>
+    <dt><tt>'quick_check'</tt></dt>
+    <dd>Performs a more abbreviated integrity check, like
+    <tt>integrity_check</tt>, and returns 'ok' if the test succeeds and
+    errors otherwise.</dd>
+    <dt><tt>'read_uncommitted'</tt></dt>
+    <dd>The default isolation level for SQLite is serializable. If non-zero,
+    read uncommitted isolation is enabled.</dd>
+    <dt><tt>'recursive_triggers'</tt></dt>
+    <dd>Requires SQLite 3.6.18 or newer. If non-zero, recursive triggers are
+    supported.</dd>
+    <dt><tt>'reverse_unordered_selects'</tt></dt>
+    <dd>If non-zero, results from SELECT statements without an ORDER BY clause
+    will return results in the reverse order of what they would normally. This
+    is mainly useful for debugging to ensure no false assumptions on result
+    order have been made.</dd>
+    <dt><tt>'schema_version'</tt></dt>
+    <dd>A 32-bit integer maintained internally by SQLite, which is incremented
+    every time the database schema is modified (by creating or dropping a table
+    or index). This can be used to detect changes to the database structure
+    from an external application as well.</dd>
+    <dt><tt>'secure_delete'</tt></dt>
+    <dd>When non-zero, and DELETEd entries are overwritten with zeros.</dd>
+    <dt><tt>'soft_heap_limit'</tt></dt>
+    <dd>Returns the soft limit on the amount of heap memory SQLite may use. If
+    zero then the limit is disabled.</dd>
+    <dt><tt>'synchronous'</tt></dt>
+    <dd>When 2 or 'full' (the default), the database engine will use
+    the xSync method of the VFS to ensure all content is written to disk before
+    continuing. It is very safe, but slower. 1 or 'normal' means the
+    engine will still sync at critical moments but less often than
+    'full' mode. This means there is a very small chance that a power
+    failure at the wrong time could corrupt the database. If 0 or
+    'off', SQLite continues with no syncing as soon as data is passed
+    to the operating system. A power failure could in this case cause database
+    corruption, however, operations may be up to 50 times faster.</dd>
+    <dt><tt>'temp_store'</tt></dt>
+    <dd>Determines storage of temporary tables and indices. 0 or
+    'default' means they are stored according to the compile-time macro
+    SQLITE_TEMP_STORE. 2 or 'memory' means they are kept in RAM. 1 or
+    'file' means they are stored in a file on disk.</dd>
+    <dt><tt>'threads'</tt></dt>
+    <dd>Maximum number of additional threads that can be launched to assist
+    with a query. The default is zero.</dd>
+    <dt><tt>'user_version'</tt></dt>
+    <dd>A 32-bit integer which may be used and modified as desired by the
+    application.</dd>
+    <dt><tt>'wal_autocheckpoint'</tt></dt>
+    <dd>The write-ahead log auto-checkpoint interval, in pages. A checkpoint
+    will be run when in 'wal' journal mode every time this number of
+    pages is exceeded. A value of zero or negative turns off this feature.</dd>
+  </dl>
+<a id="sqlite_header"></a>
+<hr noshade="noshade" />
+
+<pre>dbinfo = <span class="fcndef">sqlite_header</span> 'filename'
+dbinfo = <span class="fcndef">sqlite_header</span> dbkey</pre>
+
+<p>Returns key information about the specified SQLite database identified
+  either by its <tt>dbkey</tt> (returned by <tt>sqlite_open</tt>) or its
+  filename, from the header of the file. The information is returned as a
+  tagged vector of values, either numbers or tokens, as follows:</p>
+  <dl>
+    <dt><tt>'sqlite_version'</tt></dt>
+    <dd>The version number of SQLite as a token. This comes from the library
+    currently being used by MOE, and is NOT a property of the database
+    file.</dd>
+    <dt><tt>'page_size'</tt></dt>
+    <dd>The page size used in the database, in bytes. This must be a power of
+    two between 512 and 65536.</dd>
+    <dt><tt>'write_version'</tt></dt>
+    <dd>File format write version is 'legacy' for rollback journaling
+    modes and 'WAL' for Write-Ahead Logging (WAL) journaling
+    mode.</dd>
+    <dt><tt>'read_version'</tt></dt>
+    <dd>File format read version is 'legacy' for rollback journaling
+    modes and 'WAL' for Write-Ahead Logging (WAL) journaling
+    mode.</dd>
+    <dt><tt>'file_change_counter'</tt></dt>
+    <dd>This counter is incremented whenever the database file is unlocked
+    after some modification. When multiple processes are accessing the same
+    database file, they can detect changes from other processes by monitoring
+    this value. The database page cache should be flushed when another process
+    has modified the database, since the cache would be stale. In WAL mode the
+    wal-index is used to detect changes, so this change counter may not be
+    incremented for transactions in WAL mode.</dd>
+    <dt><tt>'database_size'</tt></dt>
+    <dd>Size of the database in pages. If this value is zero or if the
+    <tt>file_change_counter</tt> setting does not match the
+    <tt>version_valid_for</tt> setting, it should be ignored and the database
+    size determined by the actual file size of the database file.</dd>
+    <dt><tt>'freelist_firstpg'</tt></dt>
+    <dd>Unused pages in a database are stored in a 'freelist'. This
+    gives the first page of the freelist, or zero if the freelist is
+    empty.</dd>
+    <dt><tt>'freelist_pages'</tt></dt>
+    <dd>Unused pages in a database are stored in a 'freelist'. This
+    gives the total number of pages in the freelist.</dd>
+    <dt><tt>'schema_cookie'</tt></dt>
+    <dd>This counter is incremented whenever the database schema changes. For
+    example, adding or deleting a table, or adding or deleting a column to an
+    existing table. Whenever the schema changes, all prepared statements
+    (statement keys) become invalidated. When executing a prepared statement
+    (with <tt>sql_next</tt> for example), SQLite automatically checks to see if
+    the <tt>schema_cookie</tt> has changed since the statement key was created,
+    and re-creates it if necessary.</dd>
+    <dt><tt>'schema_format'</tt></dt>
+    <dd>
+      Refers to the compatibility level of the schema and SQL formatting with
+      earlier versions of SQLite.
+      <ul>
+        <li>Format 1 is understood by SQLite 3.0.0 and newer.</li>
+        <li>Format 2 was added in version 3.1.3 in 2005 and supports the ALTER
+        TABLE ... ADD COLUMN functionality.</li>
+        <li>Format 3 was added in version 3.1.4 in 2005 and allows extra
+        columns added by ALTER TABLE ... ADD COLUMN to have non-NULL default
+        values.</li>
+        <li>Format 4 was added in version 3.3.0 in 2006 and respects DESC on
+        index declarations.</li>
+      </ul>New databases use format 4 by default.
+    </dd>
+    <dt><tt>'default_cache_size'</tt></dt>
+    <dd>Suggested database cache size in pages. As the name implies, SQLite may
+    or may not actually honor this value, at its discretion.</dd>
+    <dt><tt>'largest_rootpage_pgnumber'</tt></dt>
+    <dd>If zero, then pointer-map (ptrmap) pages are omitted from the database
+    file and <tt>auto_vacuum</tt> and <tt>incremental_vacuum</tt> are not
+    supported (i.e. 'false'). Otherwise this gives the page number of
+    the largest root page in the database, and <tt>incremental_vacuum</tt> (see
+    below) will be 'true' for incremental_vacuum mode, or
+    'false' for auto_vacuum mode.</dd>
+    <dt><tt>'text_encoding'</tt></dt>
+    <dd>One of 'UTF-8', 'UTF-16le' (UTF-16 little endian) or
+    'UTF-16be' (UTF-16 big endian). This determines the encoding used
+    for all text strings in the database.</dd>
+    <dt><tt>'user_version'</tt></dt>
+    <dd>An arbitrary 32-bit integer set by the user or whatever application
+    created the database, intended to store some sort of version number. It can
+    be set with the 'PRAGMA user_version' SQL statement.</dd>
+    <dt><tt>'incremental_vacuum'</tt></dt>
+    <dd>If <tt>largest_rootpage_pgnumber</tt> (see above) is zero, this setting
+    must be 'false'. Otherwise, a value of 'true' indicates
+    incremental_vacuum mode, while 'false' means auto_vacuum mode.</dd>
+    <dt><tt>'application_id'</tt></dt>
+    <dd>A 32-bit integer set by the application which created the database
+    file, intended to uniquely identify that program. It can be set with the
+    'PRAGMA application_id' SQL statement.</dd>
+    <dt><tt>'version_valid_for'</tt></dt>
+    <dd>The value of the <tt>file_change_counter</tt> (see above) when the
+    <tt>version_header</tt> value was stored. This indicates which transaction
+    the version number is valid for.</dd>
+    <dt><tt>'version_header'</tt></dt>
+    <dd>The SQLite version of the library that most recently modified the
+    database file.</dd>
+  </dl>
+
+<p>See the <a href="http://www.sqlite.org/fileformat2.html" target=
+  "_blank">SQLite documentation</a> for more details on the various header
+  sections and their meanings.</p>
+<a id="sqlite_stmt_create"></a>
+<hr noshade="noshade" />
+
+<pre>stmtkey = <span class=
+  "fcndef">sqlite_stmt_create</span> [dbkey, &quot;SQL&quot;, bindvals]</pre>
+
+<p>Takes a key to an open SQLite database and an SQL statement, and compiles
+  it to byte code so that it is ready for execution. A statement key is
+  returned, which must be freed with <tt>sqlite_stmt_destroy</tt> when it is no
+  longer needed. It is important to note that this does not evaluate the SQL or
+  modify the database in any way. The SQL may be UTF-8 encoded if necessary.
+  The third argument is optional and if provided, should be a tagged vector of
+  values to bind to the SQL. This is provided as a convenience only, and is
+  identical to calling <tt>sql_bind [stmtkey, bindvals]</tt> immediately after
+  <tt>sqlite_stmt_create</tt>.</p>
+<a id="sqlite_stmt_destroy"></a>
+<hr noshade="noshade" />
+
+<pre><span class="fcndef">sqlite_stmt_destroy</span> stmtkeys</pre>
+
+<p>Frees the memory and associated resources used by one or more statement
+  key(s), once they are no longer needed. Any keys which have already been
+  freed or are invalid will simply be ignored.</p>
+<a id="sqlite_bind"></a>
+<hr noshade="noshade" />
+
+<pre><span class="fcndef">sqlite_bind_index</span> [stmtkey, idx, value]
+<span class="fcndef">sqlite_bind</span> [stmtkey, bindvals]
+n = <span class="fcndef">sqlite_bind_parameter_count</span> stmtkey
+idx = <span class=
+"fcndef">sqlite_bind_parameter_index</span> [stmtkey, 'parameter']
+'name' = <span class=
+"fcndef">sqlite_bind_parameter_name</span> [stmtkey, idx]
+</pre>
+
+<p>It is often desirable to put placeholders, called <i>bind parameters</i>,
+  in SQL statements, for efficiency and security. This allows the same SQL
+  statement to be executed many times with different parameter values, and also
+  makes it much easier to work with BLOBs or large strings within an SQL
+  statement. The value of <i>bind parameters</i> can be modified without
+  recreating the statement key, avoiding the most time-consuming step of
+  processing an SQL command. For a detailed discussion of binding values, see
+  the <a href="http://www.sqlite.org/c3ref/bind_blob.html" target=
+  "_blank">SQLite documentation</a>.</p>
+
+<p>To bind a parameter to the prepared statement referred to by
+  <tt>stmtkey</tt>, give the numerical index <tt>idx</tt> of the parameter to
+  be bound (the leftmost SQL parameter has an index of 1) and the value to
+  bind, to <tt>sqlite_bind_index</tt>. Multiple indices and values may be given
+  in laminated form. Alternatively the parameters may be given to
+  <tt>sqlite_bind</tt> as a tagged vector of <tt>bindvals</tt>, with the tags
+  being the names of the parameters and the values being the corresponding
+  parameter values to bind. For both functions, the parameter values should be
+  scalars or flat character vectors, and the correct data type will be
+  automatically detected and utilized. The exception to this is with BLOBs,
+  where a vector of the form <tt>[c, N]</tt> may optionally be provided and is
+  interpreted as <tt>rep [c, N]</tt>. This is mainly useful when <tt>c</tt> is
+  <tt>char 0</tt>, which fills the blob with zeroes in a memory efficient way.
+  The BLOB data can then be written later on in small chunks, using the blob
+  writing functions, thus avoiding loading the entire BLOB into memory at
+  once.</p>
+
+<p>There are also some utility functions provided to aid with the binding
+  process. <tt>sqlite_bind_parameter_count</tt> will returns the number of bind
+  parameters associated with the given statement key (actually the largest
+  index, as in some cases some indices may be omitted).
+  <tt>sqlite_bind_parameter_index</tt> can be used to determine the index of a
+  named parameter, which can then be used with <tt>sqlite_bind</tt>. Zero is
+  returned if it is not found. Do not including the leading :, @ or $
+  character. <tt>sqlite_bind_parameter_name</tt> will return the name of the
+  parameter with the given index, as a token. The leading :, @ or $ is
+  omitted.</p>
+<a id="sqlite_next"></a>
+<hr noshade="noshade" />
+
+<pre>stmtkey = <span class="fcndef">sqlite_next</span> stmtkey</pre>
+
+<p>Once an SQL statement has been compiled using <tt>sqlite_create_stmt</tt>,
+  and any parameters bound with <tt>sqlite_bind</tt>, it is ready to be
+  executed with this command. It is only by calling this function that the SQL
+  statement is actually carried out, and changes made to the database (with the
+  exception of certain PRAGMA statements, which may take effect without calling
+  this function). If the SQL statement does not return any data, such as an
+  INSERT statement, then zero will always be returned, unless there is an error
+  which will produce a beep. If data is returned, such as with a SELECT
+  statement, the first call will position the row pointer to the first row of
+  results, and the statement key will be returned. Subsequent calls to
+  <tt>sqlite_next</tt> will then advance the row pointer to the next result
+  set, and so on, until the final result set after which zero will be returned,
+  to indicate that all results have been processed. At this point the statement
+  should either be destroyed (<tt>sqlite_stmt_destroy</tt>) or reset
+  (<tt>sqlite_stmt_reset</tt>) so that it can be executed again, possibly with
+  different bound parameters.</p>
+<a id="sqlite_execute"></a>
+<hr noshade="noshade" />
+
+<pre><span class=
+  "fcndef">sqlite_execute</span> [stmtkey, &quot;SQL&quot;]</pre>
+
+<p>Equivalent to creating a statement with the provided SQL, executing it
+  with <tt>sqlite_next</tt>, and then destroying the statement. Use this as a
+  shortcut to execute SQL commands. It returns the result in the same form as
+  <tt>sqlite_read</tt>.</p>
+<a id="sqlite_stmt_reset"></a>
+<hr noshade="noshade" />
+
+<pre><span class="fcndef">sqlite_stmt_reset</span> stmtkey
+<span class="fcndef">sqlite_bind_clear</span> stmtkey</pre>
+
+<p><tt>sqlite_stmt_reset</tt> resets the row pointer associated with a given
+  statement key, so that the next call to <tt>sqlite_next</tt> will execute the
+  query again from the beginning. Note that any bound parameters will remain
+  bound even after a reset. Use <tt>sqlite_bind_clear</tt> to set all bound
+  parameter values back to NULL. Alternatively, new parameters may be bound to
+  replace the existing ones immediately after the reset. Be careful when doing
+  so however, as any parameters not re-bound the second time will still retain
+  their values from the initial bind.</p>
+<a id="sqlite_read_fields"></a>
+<hr noshade="noshade" />
+
+<pre>data = <span class=
+  "fcndef">sqlite_read_fields</span> [stmtkey, ['field1', 'field2', ...]]</pre>
+
+<p>After SQL has been executed and a result set returned, this function can
+  be used to pull data from the current result pointed to by the row pointer
+  associated with the given statement key. The fields specified from the
+  current result will be returned as a vector of values, in the same order as
+  given. BLOBs and TEXT will be returned as strings, while INTEGERs and FLOATs
+  will be returned as numbers. If a requested field does not exist, or the
+  statement key is not currently pointing to a result set, it is considered an
+  error. Note it is usually better and more efficient to read the entire result
+  row with <tt>sqlite_read</tt>, unless there are a very large number of
+  fields, or some fields containing large BLOBs, and only a few are needed.
+  Note that due to SVL limitations, BLOBs larger than the maximum vector size
+  cannot be read this way. Use the <tt>sqlite_blob_read</tt> function
+  instead.</p>
+<a id="sqlite_read_column"></a>
+<hr noshade="noshade" />
+
+<pre>coldata = <span class=
+  "fcndef">sqlite_read_column</span> [dbkey, 'table', 'field', ['sortfield1', 'sortfield2', ...]]</pre>
+
+<p>A shortcut to read a return the contents of a single field of a table. If
+  one or more <tt>sortfield</tt>s are given, the contents will be returned
+  sorted by those fields. That is, first the rows are sorted by the first
+  sortfield, then any ties are broken by the second sortfield, and so on. If no
+  sortfields are given, the order is arbitrary.</p>
+<a id="sqlite_read"></a>
+<hr noshade="noshade" />
+
+<pre>data = <span class="fcndef">sqlite_read</span> stmtkey</pre>
+
+<p>After SQL has been executed and a result set returned, this function can
+  be used to pull data from the current result pointed to by the row pointer
+  associated with the given statement key. BLOBs and TEXT will be returned as
+  strings, while INTEGERs and FLOATs will be returned as numbers. The return
+  value will be a tagged vector with the fieldnames as the tags, and the field
+  values as the values. Note that due to SVL limitations, BLOBs larger than the
+  maximum vector size cannot be read this way. Use the
+  <tt>sqlite_blob_read</tt> function instead.</p><!--
+
+<p>
+<a id="sqlite_write"></a>
+</p>
+
+<p><hr noshade="noshade" />
+
+<pre>rowid = <span class="fcndef">sqlite_write</span> [dbkey, 'table', rowid, data]</pre>
+</p>
+
+<p>
+A convenience function to write or update data in a database.  The dbkey
+from a previously opened database, and table name to be updated must be give.
+<tt>data</tt> should be a tagged vector of values to be written, in the same
+form as that provided to <tt>sqlite_bind</tt>.  If <tt>rowid</tt> is zero,
+a new row is inserted into the table as if an SQL INSERT statement was executed.
+the return value in this case is the rowid of the newly inserted row, or
+zero if the table does not have a <i>ROWID</i> field.  When inserting a row,
+a value must be given to all fields which no not have default values.  If
+<tt>rowid</tt> is non-zero, then the given row in the table will be modified
+with the new values in <tt>data</tt> just as if an SQL UPDATE statement had
+been called.  Only the fields corresponding to tags in <tt>data</tt> will be
+modified, and the same rowid will be returned.  If the table lacks a
+<i>ROWID</i> field, updates will not be possible using this function.
+</p>
+-->
+  <!--
+
+<p>
+<a id="sqlite_insertid"></a>
+</p>
+
+<p><hr noshade="noshade" />
+
+<pre>rowid = <span class="fcndef">sqlite_insertid</span> dbkey</pre>
+</p>
+
+<p>
+Returns the ROWID integer assigned to the last row INSERTed by an SQL
+statement into any table associated with the given database key.  This
+can be used to then SELECT that new row later on, for example.  The ROWID
+is a special 64-bit integer column on all tables that, unless explicitly
+turned off, is incremented for each new row and uniquely identifies each
+row within a given table.  Note that in multi-user environments the value
+returned by this function is unreliable, since another user may have inserted
+a row into a table of the database between this call, and the INSERT call
+of interest, in which case the returned rowid would not be the one expected
+or desired.  To avoid such issues, locking through a mutex, for example,
+needs to be done to ensure that the INSERT and call to this function are
+a single atomic operation.
+</p>
+-->
+
+<a id="sqlite_tables"></a>
+<hr noshade="noshade" />
+
+<pre>['table1', 'table2', ...] = <span class=
+  "fcndef">sqlite_tables</span> 'filename'
+['table1', 'table2', ...] = <span class=
+"fcndef">sqlite_tables</span> dbkey</pre>
+
+<p>Takes an SQLite database filename, or key from a previously opened
+  database, and returns a list of all the tables as tokens.</p>
+<a id="sqlite_fields"></a>
+<hr noshade="noshade" />
+
+<pre>fielddata = <span class=
+  "fcndef">sqlite_fields</span> ['filename', 'table']
+fielddata = <span class=
+"fcndef">sqlite_fields</span> [dbkey, 'table']</pre>
+
+<p>Returns information about the fields in a given table of the given
+  database file name or previously opened database key. The table name must be
+  known in advance, for example from calling <tt>sqlite_tables</tt>. The
+  information on the fields is returns as a laminated vector with the following
+  pieces of information:</p>
+  <dl>
+    <dt><tt>field id</tt></dt>
+    <dd>A unique integer identifying the field. The first field is zero.</dd>
+    <dt><tt>'field name'</tt></dt>
+    <dd>The name of the field as a token.</dd>
+    <dt><tt>'field type'</tt></dt>
+    <dd>The type of the field as a token, such as 'integer',
+    'float', 'text', etc.</dd>
+    <dt><tt>can be null?</tt></dt>
+    <dd>Non-zero if the field can contain null values.</dd>
+    <dt><tt>'default value'</tt></dt>
+    <dd>The default value of the field, or null if there is no default.</dd>
+    <dt><tt>field number of primary key</tt></dt>
+    <dd>The index of the field in the primary key, or zero if the field is not
+    part of the primary key.</dd>
+  </dl>
+<a id="sqlite_dbkeylist"></a>
+<hr noshade="noshade" />
+
+<pre>dbkeys = <span class="fcndef">sqlite_dbkeylist</span> []</pre>
+
+<p>Returns a list of all currently open SQLite database keys.</p>
+<a id="sqlite_dbkey"></a>
+<hr noshade="noshade" />
+
+<pre>dbkeys = <span class="fcndef">sqlite_dbkey</span> dbkeys
+stmtkeys = <span class="fcndef">sqlite_stmtkey</span> stmtkeys
+blobkeys = <span class="fcndef">sqlite_blobkey</span> blobkeys</pre>
+
+<p>These functions take one or more keys of the appropriate type - database
+  keys, statement keys, or blob keys - and return the list of valid ones,
+  replacing any that are no longer valid with zeroes.</p>
+<a id="sqlite_blob_open"></a>
+<hr noshade="noshade" />
+
+<pre>blobkey = <span class=
+  "fcndef">sqlite_blob_open</span> [stmtkey, 'field', 'mode']</pre>
+
+<p>Opens the Binary Large OBject (BLOB) in the given field of the result row
+  pointed to by the provided statement key for reading and/or writing.
+  <tt>mode</tt> must be either <tt>read</tt> (the default) or
+  <tt>read-write</tt>. It is an error to call this function if the statement
+  key is not pointing to a result row (i.e. by a previous call to
+  <tt>sqlite_next</tt> which did not return zero). Further, to use this
+  function, the SQL SELECT which creates the statement key must include the
+  special column <i>ROWID</i>, and <b>need not</b> include the BLOB field to be
+  opened. The call will fail if the <i>ROWID</i> column does not appear in the
+  result row pointed to by the statement key.</p>
+<a id="sqlite_blob_close"></a>
+<hr noshade="noshade" />
+
+<pre><span class="fcndef">sqlite_blob_close</span> blobkeys</pre>
+
+<p>Frees the memory and associated resources used by one or more blob key(s),
+  once they are no longer needed. Any keys which have already been freed or are
+  invalid will simply be ignored.</p>
+<a id="sqlite_empty_blob"></a>
+<hr noshade="noshade" />
+
+<pre>empty_blob = <span class="fcndef">sqlite_empty_blob</span> n</pre>
+
+<p>This function is for convenience only, and returns a vector which can be
+  passed as the value of an <tt>sqlite_bind</tt> parameter to create an empty
+  (zero-filled) blob of size <tt>n</tt> bytes.</p>
+<a id="sqlite_blob_seek"></a>
+<hr noshade="noshade" />
+
+<pre><span class="fcndef">sqlite_blob_seek</span> [blobkey, offset]</pre>
+
+<p>Moves the read/write pointer within the given previously opened blob to
+  the offset specified (in bytes from the start of the blob). The next read or
+  write command will start from this position. No checking is done to ensure
+  one cannot seek beyond the start or end of the blob.</p>
+<a id="sqlite_blob_read"></a>
+<hr noshade="noshade" />
+
+<pre>data = <span class=
+  "fcndef">sqlite_blob_read</span> [blobkey, nbytes]</pre>
+
+<p>Reads and returns <tt>nbytes</tt> bytes from the current position in the
+  provided blob, and advances the read/write pointer by that many bytes. If
+  <tt>sqlite_blob_seek</tt> has never been called on the BLOB, reading starts
+  at the beginning of the BLOB. It is an error to read past the end, or before
+  the beginning, of a BLOB.</p>
+<a id="sqlite_blob_write"></a>
+<hr noshade="noshade" />
+
+<pre><span class="fcndef">sqlite_blob_write</span> [blobkey, data]</pre>
+
+<p>Writes the given <tt>data</tt>, which should be provided as a flat
+  character vector, to the specified blob starting at the current read/write
+  pointer position. The pointer is then advanced to the end of the data just
+  written. If <tt>sqlite_blob_seek</tt> has never been called on the BLOB,
+  writing starts at the beginning of the BLOB. <b>The size of the BLOB cannot
+  be modified with this function.</b> It can only be used to overwrite bytes
+  already occupied by the BLOB. The most common use case should be to first
+  create the BLOB as zero-filled but of the correct length using the
+  <tt>sqlite_bind</tt> command for example during INSERT of a new row. Then
+  SELECT the <i>ROWID</i> (and possibly other columns) of the newly inserted
+  row, and open the BLOB with <tt>sqlite_blob_open</tt> and overwrite the
+  zeroes with the real BLOB data. This allows the BLOB data to be written a few
+  thousand characters at a time, avoiding the requirement to have the whole
+  BLOB loaded in memory at any one time.</p>
+<a id="sqlite_blob_length"></a>
+<hr noshade="noshade" />
+
+<pre>length = <span class="fcndef">sqlite_blob_length</span> blobkey</pre>
+
+<p>Returns the length of the given BLOB. Note that once created, the length
+  of a BLOB cannot be changed. It can only be changed to a new size through the
+  use of an SQL UPDATE command or similar, or by deleting and reinserting the
+  entire row.</p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

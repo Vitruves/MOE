@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: argument" />
+  <title>Function Argument</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Function Argument
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+<a class="fcnlink" href="#argument">argument</a> []
+argval = <a class="fcnlink" href="#argument">argument</a> v
+</pre>
+<a id="argument"></a>
+<h1>Description</h1>
+
+<p>When passed null, returns the argument vector of the current function.
+  When passed a flat numeric vector <tt>v</tt>, returns</p>
+
+<pre class="code">
+peek [ <span class="fcndef">argument</span>[], v ]
+</pre>
+
+<p><tt>argument</tt> is useful for accessing arguments to <a class="svl"
+  href="runetc.htm">script</a> files, and for processing optional
+  arguments.</p>
+
+<p>Here is an example of how to extract optional arguments passed to a
+  function:</p>
+
+<pre class="code">
+function f [a,b,c]
+    local optargs = drop [argument[], 3]; // drop a, b, c
+
+    ...
+
+endfunction
+</pre>
+
+<h3>Advanced Topic</h3>
+
+<p>The argument of the boot function is the task argument. Thus:</p>
+
+<pre class="code">
+svl&gt; task_eval [ 'argument[1,2]', [ [10,20], 30 ] ]
+[20, '']
+</pre>
+
+<h1>See Also</h1>
+
+<p><a class="svl" href="calletc.htm">call</a> <a class="svl" href=
+  "runetc.htm">eval</a> <a class="svl" href="symbol.htm">modenv</a> <a class=
+  "svl" href="runetc.htm">run</a> <a class="svl" href="runetc.htm">script</a>
+  <a class="svl" href="tskcall.htm">task_eval</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

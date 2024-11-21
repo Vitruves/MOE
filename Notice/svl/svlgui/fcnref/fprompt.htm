@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href=
+  "../../../include/manstyle.css" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: FilePrompt" />
+  <title>FilePrompt</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../../index.htm"><img src="../../../images/ccglogo.png" /></a>
+    <a href="../../../index.htm"><div class="moeversion"></div></a>
+    FilePrompt
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    filename = <a class="fcnlink" href="#FilePrompt">FilePrompt</a> [
+        title : 'title',
+        mode  : 'mode',
+        path  : 'directory',
+        filter: pattern_list,
+        name  : 'filename',
+        multi : flag,
+        list  : ['file','file', ...],
+        recentDirs: ['dir','dir', ...],
+        allowEmptyList : flag,
+        allowDuplicates: flag,
+        autoExtension: 'ext'
+    ]
+</pre>
+
+<h2 class="obsolete">Obsolete Syntax</h2>
+
+<pre>
+    'filename' = <a class="fcnlink" href=
+"#FilePrompt">FilePrompt</a> ['title', 'mode', 'directory/pattern']
+</pre>
+<a id="FilePrompt"></a>
+<h1>Description</h1>
+
+<p>Raises a file selection box (FSB) and returns the full path names of the
+  selected files as tokens. Null is returned if the Cancel button is pressed.
+  All parameters are optional.</p>
+  <dl>
+    <dt><tt>title: 'title'</tt></dt>
+    <dd>Title of the file selection box, specified as a token. If the title is
+    not specified, a default title is used.</dd>
+    <dt><tt>mode: 'mode'</tt></dt>
+    <dd>
+      File validation mode, specified as a token:
+      <ul>
+        <li><tt>'open'</tt> or <tt>[]</tt>. The file name must refer to
+        an existing file.</li>
+        <li><tt>'saveAs'</tt>. Patterns and directory names will not be
+        permitted. If the file are already exists, the user is prompted for
+        overwrite confirmation</li>
+        <li><tt>'file'</tt>. Patterns and directory names will not be
+        permitted. The file may already exist and no overwrite confirmation is
+        given.</li>
+        <li><tt>'dir'</tt>. The file name must refer to an existing
+        directory.</li>
+        <li><tt>'none'</tt>. No validation of the file name will be
+        performed.</li>
+      </ul>The default value is <tt>'open'</tt>.
+    </dd>
+    <dt><tt>path: 'directory'</tt></dt>
+    <dd>Path of the directory containing the file to be selected, specified as
+    a token. If the path is not specified, or specified as an empty token
+    (<tt>''</tt>), then the current directory is used.</dd>
+    <dt><tt>filter: pattern_list</tt></dt>
+    <dd>List of filename patterns, specified as tokens, e.g.
+    <tt>'*.svl'</tt>. The file selection box will show only files
+    matching the patterns. If no pattern is given or if the empty token
+    is specified, all files will be shown.</dd>
+    <dt><tt>name: 'filename'</tt></dt>
+    <dd>Filename that is to be displayed in the text area of the file selection
+    box upon opening the panel. If the filename is not specified, the text area
+    will display the filter.</dd>
+    <dt><tt>recentDirs: ['dir', 'dir', ...]</tt></dt>
+    <dd>List of directories that will be appended to the pop-up list of recent
+    directories displayed by the file selection box.</dd>
+    <dt><tt>multi: flag</tt></dt>
+    <dd>
+      Flag indicating whether the user is able to select multiple items,
+      specified as a number:
+      <ul>
+        <li><tt>0</tt> or <tt>[]</tt>: The function returns the file selected
+        by the user in the file selection box. Only one file can be
+        returned.</li>
+        <li><tt>1</tt>: The window shows an additional file list. The files
+        selected by the user in the file selection box will be added to the
+        file list and the function will return the contents of the file
+        list.</li>
+        <li><tt>2</tt>: The window shows an additional file list, which can be
+        enabled or disabled by the user. If the file list is enabled, the files
+        selected by the user in the file selection box will be added to the
+        file list and the function will return the contents of the file list.
+        The file list starts disabled.</li>
+      </ul>The default value is 0.
+    </dd>
+    <dt><tt>list: ['file', 'file', ...]</tt></dt>
+    <dd>List of files that will be displayed in the file list.</dd>
+    <dt><tt>allowEmptyList: flag</tt></dt>
+    <dd>If <tt>flag</tt> is non-zero, an empty file list is allowed. If the
+    parameter is not specified or is set to 0, then the function will not allow
+    an empty file list to be returned.</dd>
+    <dt><tt>allowDuplicates: flag</tt></dt>
+    <dd>If <tt>flag</tt> is non-zero, then duplicate file names will be allowed
+    without any warning. If the parameter is not specified or is 0, then the
+    user will be warned if a filename that is to be added to the list is
+    already present in the list. The user has a choice to accept or to reject
+    the duplicate filename.</dd>
+    <dt><tt>autoExtension: 'ext'</tt></dt>
+    <dd>Specify file extension which will be automatically added, if no
+    extension is entered in the FilePrompt text field. This option has
+    only an effect if <tt>mode</tt> is either <tt>'file'</tt> or
+    <tt>'saveAs'</tt>.</dd>
+  </dl>
+
+<h1>Examples</h1>
+
+<p>Display FSB with the default title, in 'open' mode, in the current
+  working directory:</p>
+
+<pre>
+    svl&gt; FilePrompt []
+</pre>
+
+<p>Display FSB with the multi-file selection mode with the display restricted
+  only to MDB files:</p>
+
+<pre>
+    svl&gt; FilePrompt [multi:1, filter:'*.mdb']
+</pre>
+
+<h1>See Also</h1>
+
+<p><a class="svl" href="wt_fsb.htm">FSB</a><br />
+  <a class="svl" href="wt_create.htm">WindowPrompt</a></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../../images/ccgicon.png" /> <a href="../../../index.htm"></a>
+    <a href="../../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

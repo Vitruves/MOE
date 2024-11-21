@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="functions: db_ValueCluster" />
+  <title>db_ValueCluster</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    db_ValueCluster
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    <a class="fcnlink" href="#db_ValueCluster">db_ValueCluster</a> [
+        src_mdb,
+        ['field_names'],
+        options
+    ]
+
+    where options is:
+
+    [
+        esel          : flag,
+        write_cluster : flag,
+        cfield        : 'field_name',
+        write_weight  : flag,
+        cwfield       : 'field_name'
+    ]
+</pre>
+<a id="db_ValueCluster"></a>
+<h1>Description</h1>
+
+<p>Assigns cluster codes to a collection of fields based on the values in the
+  specified fields. (See <a href="../../mdb/valclust.htm">Value Cluster
+  Panel</a> for more information on cluster codes.) This function takes the
+  following parameters as input:</p>
+  <dl>
+    <dt><tt>src_mdb</tt></dt>
+    <dd>Filename or database key of the database to cluster.</dd>
+    <dt><tt>['field_names']</tt></dt>
+    <dd>Vector of field name tokens specifying the fields to be used in the
+    cluster analysis.</dd>
+    <dt><tt>options</tt></dt>
+    <dd>
+      Vector of attribute-value colon-separated pairs. Supported options are:
+      <dl>
+        <dt><tt>esel:flag</tt></dt>
+        <dd>If <tt>flag</tt> is non-zero, the calculation will be restricted to
+        selected entries in the source database (provided that the source
+        database is open in a Database Viewer). If the database is not open in
+        a Database Viewer or <tt>flag</tt> is zero, then this option is ignored
+        and all entries are used in the calculation. The default is 0.</dd>
+        <dt><tt>write_cluster:flag</tt></dt>
+        <dd>If <tt>flag</tt> is non-zero, then a new field of type integer
+        (named based on <tt>cfield</tt>) will be created in the database and
+        each entry's cluster code written to it. If <tt>flag</tt> is zero,
+        then this output is suppressed. The default is 1.</dd>
+        <dt><tt>cfield:'field_name'</tt></dt>
+        <dd>Name of the field (a token) into which the cluster codes will be
+        written. The default is <tt>'$CLUSTER'</tt>.</dd>
+        <dt><tt>write_weight:flag</tt></dt>
+        <dd>If <tt>flag</tt> is non-zero, then a new field (named based on
+        <tt>cwfield</tt>) will be created in the database and the row weights
+        written to it. If <tt>flag</tt> is zero, then this output is
+        suppressed. The default is 0.</dd>
+        <dt><tt>cwfield:'field_name'</tt></dt>
+        <dd>Name of the field into which the cluster weights will be written.
+        The default is <tt>'$WEIGHT'</tt>.</dd>
+      </dl>
+    </dd>
+  </dl>
+
+<h1>See Also</h1>
+
+<p><a href="../../mdb/valclust.htm">Value Cluster Panel</a></p>
+
+<p><a class="svl" href="ph4clust.htm">ph4_ClusterMDB</a><br />
+  <a class="svl" href=
+  "../../quasar/fcnref/cluster.htm">QuaSAR-ClusterMDB</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

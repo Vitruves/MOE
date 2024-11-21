@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords: utf8, utf-8, unicode" />
+  <meta name="keywords" content="keywords: multi-language" />
+  <meta name="keywords" content="functions: utf8_length" />
+  <meta name="keywords" content="functions: utf8_keep" />
+  <meta name="keywords" content="functions: utf8_drop" />
+  <meta name="keywords" content="functions: utf8_ctype" />
+  <meta name="keywords" content="functions: utf8_split" />
+  <meta name="keywords" content="functions: utf8_strip" />
+  <meta name="keywords" content="functions: utf8_trim" />
+  <meta name="keywords" content="functions: isutf8" />
+  <title>Multi-Language UTF-8 Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Multi-Language UTF-8 Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+v      = <a class="fcnlink" href="#utf8_length">utf8_length</a> 'token'
+
+token  = <a class="fcnlink" href="#utf8_drop">utf8_drop</a> [ 'token', n ]
+token  = <a class="fcnlink" href="#utf8_keep">utf8_keep</a> [ 'token', n ]
+token  = <a class="fcnlink" href="#utf8_trim">utf8_trim</a> [ 'token', n ]
+
+token  = <a class="fcnlink" href="#utf8_split">utf8_split</a> [ 'token',  seg ]
+string = <a class="fcnlink" href="#utf8_split">utf8_split</a> [ 'string', seg ]
+
+types  = <a class="fcnlink" href="#utf8_ctype">utf8_ctype</a> 'token'
+types  = <a class="fcnlink" href="#utf8_ctype">utf8_ctype</a> "string"
+
+token  = <a class="fcnlink" href="#utf8_strip"
+      >utf8_strip</a> [ 'token', "replace-char", retainWS ]
+
+flags  = <a class="fcnlink" href="#isutf8">isutf8</a> "string"
+</pre>
+
+<p>Traditionally, text is encoded in computer applications using the ASCII
+standard code.  This encodes the English alphabet letters, digits, punctuation
+marks, and a few common symbols each into a single byte; i.e. each character is
+represented by an individual byte value.  For many languages, however,
+this encoding scheme is not workable as a single byte cannot be used to
+represent the possibly vast array of letters,
+glyphs, symbols. The common standard to encode multilingual text is UTF-8
+(Unicode Transformation Format &ndash; 8-bit),
+which uses multiple (1-4) bytes to encode each <i>glyph</i>
+(letter, digit, or symbol). For example:</p>
+
+<table class="titlebar">
+  <tr>
+    <th>Glyph</th>
+    <th>UTF-8 Encoding In Hexadecimal Code</th>
+  </tr>
+  <tr>
+    <td>A</td>
+    <td>0x41</td>
+  </tr>
+  <tr>
+    <td>&Omega;</td>
+    <td>0xCE 0xA9</td>
+  </tr>
+  <tr>
+    <td>&#12353;</td>
+    <td>0xE3 0x81 0x81</td>
+  </tr>
+</table>
+
+<p>Each UTF-8 multi-byte sequence is defined by one lead byte and 1-3
+  continuation bytes.  This has implications when
+  truncating multilingual UTF-8 text: truncation must occur only at
+  glyph boundaries, otherwise
+  the byte sequence could no longer be correctly interpreted and displayed.
+  Special functions are therefore needed to detect and truncate
+  multi-language text correctly.</p>
+
+<p><b>Note:</b> The ASCII code is a subset of UTF-8 encoding.
+  English UTF-8 text encoding is identical to English ASCII text encoding,
+  and consequently does not need any special handling.</p>
+
+<a id="utf8_length"></a>
+<hr noshade="noshade" />
+<h1>Description</h1>
+
+<pre>
+v = <span class="fcndef">utf8_length</span> 'token'
+</pre>
+
+<p>Returns the number of glyphs in <tt>token</tt>.</p>
+
+<pre class="code">
+svl&gt; utf8_length 'abc'
+3
+
+svl&gt; utf8_length '&alpha;&beta;&gamma;'
+3
+</pre>
+
+<p>The function accepts arbitrarily nested vectors.</p>
+
+<p>Note the difference between <tt>utf8_length</tt> and
+ <tt>tok_length</tt> when passed non-English UTF-8 encoded strings:
+ <tt>utf8_length</tt> returns the number of visible glyphs in the token,
+ whereas <tt>tok_length</tt> returns actual number of bytes.
+ </p>
+
+<pre class="code">
+svl&gt; tok_length '&alpha;&beta;&gamma;'    // UTF-8 encoding: '\xce\xb1\xce\xb2\xce\xb3'
+6
+</pre>
+
+
+<a id="utf8_drop"></a>
+<hr noshade="noshade" />
+
+<pre>
+tok = <span class="fcndef">utf8_drop</span> [ 'token', n]
+</pre>
+
+<p>If <tt>n</tt> is a positive number, <tt>utf8_drop</tt> drops the first
+  <tt>n</tt> glyphs of <tt>token</tt>, and returns what remains.
+  Otherwise, if <tt>n</tt> is negative, <tt>utf8_drop</tt> drops the last
+  <tt>n</tt> glyphs.</p>
+
+<pre class="code">
+svl&gt; a = '&alpha;&beta;&gamma;&delta;&epsilon;'
+svl&gt; utf8_drop [a, 3]
+'\xce\xb4\xce\xb5'          // UTF-8 encoding of '&delta;&epsilon;'
+
+svl&gt; write utf8_drop [a, 3] // use write to output multi-language glyphs
+'&delta;&epsilon;'
+
+svl&gt; write utf8_drop [a, -3]
+'&alpha;&beta;'
+</pre>
+<p>The function accepts arbitrarily nested vectors.</p>
+
+<a id="utf8_keep"></a>
+<hr noshade="noshade" />
+
+<pre>
+tok = <span class="fcndef">utf8_keep</span> [ 'token', n]
+</pre>
+
+<p>If <tt>n</tt> is a positive number, <tt>utf8_keep</tt> returns the first
+  <tt>n</tt> glyphs of <tt>token</tt>. Otherwise, if <tt>n</tt> is
+  negative, <tt>utf8_keep</tt> returns the last <tt>n</tt> glyphs of
+  <tt>token</tt>.</p>
+  
+<pre class="code">
+svl&gt; a = '&alpha;&beta;&gamma;&delta;&epsilon;'
+svl&gt; utf8_keep [a, 3]
+'\xce\xb1\xce\xb2\xce\xb3'  // UTF-8 encoding of '&alpha;&beta;&gamma;'
+
+svl&gt; write utf8_keep [a, 3] // use write to output multi-language glyphs
+'&alpha;&beta;&gamma;'
+
+svl&gt; write utf8_keep [a, -3]
+'&gamma;&delta;&epsilon;'
+</pre>
+<p>The function accepts arbitrarily nested vectors.</p>
+
+<a id="utf8_trim"></a>
+<hr noshade="noshade" />
+
+<pre>
+tok = <span class="fcndef">utf8_trim</span> [ 'token', n]
+</pre>
+
+<p>Trims <tt>token</tt> to the specified number of glyphs and
+appends <tt>'...'</tt> if the token was truncated. The number <tt>n</tt>
+includes the length of the appended <tt>'...'</tt>. If the number <tt>n</tt> is
+negative, the trimming is done from the start of <tt>token</tt>.</p>
+
+<pre class="code">
+svl&gt; write utf8_trim ['&alpha;a&beta;b&gamma;c&delta;d&epsilon;e', 6]
+'&alpha;a&beta;...'
+
+svl&gt; write utf8_keep ['&alpha;a&beta;b&gamma;c&delta;d&epsilon;e', -6]
+'...d&epsilon;e'
+</pre>
+<p>The function accepts arbitrarily nested vectors.</p>
+
+<a id="utf8_split"></a>
+<hr noshade="noshade" />
+
+<pre>
+token  = <span class="fcndef">utf8_split</span> [ 'token',  seg ]
+string = <span class="fcndef">utf8_split</span> [ 'string', seg ]
+</pre>
+
+<p>Splits <tt>token</tt> or <tt>string</tt> into glyph segments of the
+specified length <tt>seg</tt>. The argument <tt>seg</tt> can be
+a segment vector (see function
+<a class="fcnlink" href="catetc.htm#split"><tt>split</tt></a>
+for details). The segmentation vector is repeated when it does not
+cover the whole string/token.</p>
+
+<pre class="code">
+svl&gt; t = '&alpha;&beta;&gamma;&alpha;&beta;&gamma;&alpha;&beta;'
+svl&gt; t2 = utf8_split [t, [3,2,3]]
+svl&gt; print t2
+['\xce\xb1\xce\xb2\xce\xb3','\xce\xb1\xce\xb2','\xce\xb3\xce\xb1\xce\xb2']
+
+svl&gt; apt write ['{}\n', t2];
+'&alpha;&beta;&gamma;'
+'&alpha;&beta;'
+'&gamma;&alpha;&beta;'
+</pre>
+
+<a id="utf8_ctype"></a>
+<hr noshade="noshade" />
+
+<pre>
+types = <span class="fcndef">utf8_ctype</span> 'token'
+types = <span class="fcndef">utf8_ctype</span> "string"
+</pre>
+
+<p>Returns for <tt>token</tt> or <tt>string</tt> an array containing
+for each byte of the UTF-8 encoding the UTF-8 character type.
+The type is the length of the UTF-8 multi-byte sequence.
+For ASCII characters, 1 is returned, while for the lead byte of
+a UTF-8 multi-byte sequence, 2, 3, or 4 is returned depending on the
+length of the sequence. The UTF-8 continuation bytes get assigned a 0.
+The array values can be used to split a string into its UTF-8 byte
+sequences for each glyph.</p>
+
+<pre class="code">
+svl&gt; utf8_ctype 'ab&alpha;&beta;'
+[1,1,2,0,2,0]
+</pre>
+
+<p>The function accepts arbitrarily nested vectors.</p>
+
+<a id="utf8_strip"></a>
+<hr noshade="noshade" />
+
+<pre>
+tok = <span class="fcndef"
+      >utf8_strip</span> [ 'token', "replace-char", retainWS ]
+</pre>
+
+<p>Converts <tt>token</tt> into a plain printable ASCII-only token
+ by stripping away all tabs and newline characters
+ (unless the parameter <tt>retainWS</tt> is set),
+ all non-printable characters, and all non-ASCII characters
+ (multilingual characters, e.g. Greek symbols).
+ This is useful when writing file formats that only
+ support ASCII characters. Optionally, a replacement ASCII character can be
+ specified to replace all UTF-8 glyphs. Note that only UTF-8 glyphs are
+ replaced, not other non-printable characters such as control characters.<p>
+ 
+<p><tt>retainWS</tt> controls the handling of tab and newline characters:</p>
+<ul>
+  <li><tt>0</tt> - All tab and newline characters are stripped.</li>
+  <li><tt>1</tt> - All tab and newline characters are replaced with a space.</li>
+  <li><tt>2</tt> - All whitespace will be retained unaltered.</li>
+  </tr>
+</ul>
+
+<pre class="code">
+svl&gt; utf8_strip 'ab&alpha;&beta;'
+'ab'
+
+svl&gt; utf8_strip ['ab&alpha;&beta;', "?"]
+'ab??'
+</pre>
+
+
+<a id="isutf8"></a>
+<hr noshade="noshade" />
+
+<pre>
+flags = <span class="fcndef">isutf8</span> "string"
+</pre>
+
+<p>Returns a mask indicating which bytes in the input represent non-ASCII
+ characters (i.e. UTF-8 multi-byte encoded characters).
+ UTF-8 lead or continuation bytes return a 1, ASCII characters, 0.</p>
+
+
+<pre class="code">
+svl&gt; isutf8 "ab&alpha;&beta;"
+[0,0,1,1,1,1]
+</pre>
+
+<h1>See Also</h1>
+<p><a href="tokcat.htm">Token Functions</a></p>
+
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+
+
+</body>
+</html>
+

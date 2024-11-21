@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="functions: r64_encode" />
+  <meta name="keywords" content="functions: r64_encodeln" />
+  <meta name="keywords" content="functions: r64_encodeln_ieee4l" />
+  <meta name="keywords" content="functions: r64_decode" />
+  <meta name="keywords" content="functions: r64_decodeln" />
+  <meta name="keywords" content="functions: r64_decodeln_ieee4l" />
+  <title>Radix-64 Encoding Utilities</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Radix-64 Encoding Utilities
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    string = <a class="fcnlink" href="#r64_encode">r64_encode</a> byte_arr
+    lines = <a class="fcnlink" href="#r64_encodeln">r64_encodeln</a> byte_arr
+    lines = <a class="fcnlink" href=
+"#r64_encodeln_ieee4l">r64_encodeln_ieee4l</a> num_arr
+
+    byte_arr = <a class="fcnlink" href="#r64_decode">r64_decode</a> string
+    byte_arr = <a class="fcnlink" href="#r64_decodeln">r64_decodeln</a> lines
+    num_arr = <a class="fcnlink" href=
+"#r64_decodeln_ieee4l">r64_decodeln_ieee4l</a> lines
+</pre>
+
+<h1>Description</h1>
+
+<p><i>Radix-64</i> is a method of translating a stream of 8-bit bytes to a
+  stream of radix-64 digits (i.e. 6-bit bytes) represented by printable ASCII
+  characters from the set&nbsp;&quot;<tt>A-Za-z0-9+/</tt>&quot;. Each group of
+  three 8-bit bytes is translated to a group of four radix-64 digits. The last,
+  possibly incomplete group of digits is padded with the
+  character&nbsp;&quot;<tt>=</tt>&quot; to the width of&nbsp;4 characters.</p>
+
+<p><b>Note:</b> The radix-64 format is fixed and will not change from version
+  to version. Unlike the output of <tt>mpu_charencode</tt>, the output of
+  <tt>r64_encode</tt> is meant to be stored in files and will be readable in
+  the future.</p>
+<a id="r64_decode"></a>
+<a id="r64_encode"></a>
+<hr noshade="noshade" />
+
+<pre>
+string = <span class="fcndef">r64_encode</span> byte_arr
+byte_arr = <span class="fcndef">r64_decode</span> string
+</pre>
+
+<p>Function <tt>r64_encode</tt> translates a flat vector of 8-byte characters
+  to a flat vector of printable radix-64 characters. Function
+  <tt>r64_decode</tt> translates a flat vector of printable radix-64 characters
+  to a flat vector of 8-byte characters. For example:</p>
+
+<pre>
+    svl&gt; r64_encode char igen 10
+    &quot;AQIDBAUGBwgJCg==&quot;
+
+    svl&gt; r64_decode &quot;AQIDBAUGBwgJCg==&quot;
+    [1,2,3,4,5,6,7,8,9,10]
+</pre>
+<a id="r64_decodeln"></a>
+<a id="r64_encodeln"></a>
+<hr noshade="noshade" />
+
+<pre>
+lines = <span class="fcndef">r64_encodeln</span> byte_arr
+byte_arr = <span class="fcndef">r64_decodeln</span> lines
+</pre>
+
+<p>Function <tt>r64_encodeln</tt> translates a flat vector of 8-byte
+  characters to a nested vector of &quot;lines&quot; of printable radix-64
+  characters. Function <tt>r64_decodeln</tt> translates a nested vector of
+  &quot;lines&quot; of printable radix-64 characters to a flat vector of 8-byte
+  characters. The two functions can be defined as:</p>
+
+<pre>
+    function r64_encodeln x = split [r64_encode x, 76];
+    function r64_decodeln x = r64_decode cat x;
+</pre>
+
+<p>For example:</p>
+
+<pre>
+    svl&gt; s = r64_encodeln char igen 100; app length s
+    [76, 60]
+
+    svl&gt; int r64_decodeln s === igen 100
+    1
+</pre>
+<a id="r64_decodeln_ieee4l"></a>
+<a id="r64_encodeln_ieee4l"></a>
+<hr noshade="noshade" />
+
+<pre>
+lines = <span class="fcndef">r64_encodeln_ieee4l</span> num_arr
+num_arr = <span class="fcndef">r64_decodeln_ieee4l</span> lines
+</pre>
+
+<p>Function <tt>r64_encodeln_ieee4l</tt> translates a flat vector of numbers
+  to a nested vector of &quot;lines&quot; of printable radix-64 characters.
+  Function <tt>r64_decodeln_ieee4l</tt> translates a nested vector of
+  &quot;lines&quot; of printable radix-64 characters to a flat vector of
+  numbers. The two functions can be defined as:</p>
+
+<pre>
+    function r64_encodeln_ieee4l x =
+        r64_encodeln swriteb [&#39;IEEE4l&#39;, x];
+
+    function r64_decodeln_ieee4l x =
+        swriteb [r64_decodeln x, &#39;IEEE4l&#39;, INT_MAX];
+</pre>
+
+<p>For example:</p>
+
+<pre>
+    svl&gt; r64_encodeln_ieee4l [1.1,2.2,3.3]
+    [ &quot;zcyMP83MDEAzM1NA&quot; ]
+
+    svl&gt; r64_decodeln_ieee4l [ &quot;zcyMP83MDEAzM1NA&quot; ]
+    [1.1,2.2,3.3]
+</pre>
+
+<h1>See Also</h1>
+  <table class="noborder left">
+    <tr>
+      <td valign="top"><a class="svl" href="freadb.htm">sreadb</a><br />
+      <a class="svl" href="freadb.htm">swriteb</a></td>
+    </tr>
+    <tr>
+      <td valign="top"><a class="svl" href="catetc.htm">cat</a><br />
+      <a class="svl" href="catetc.htm">split</a></td>
+    </tr>
+    <tr>
+      <td valign="top"><a class="svl" href=
+      "svlmpu.htm">mpu_charencode</a><br />
+      <a class="svl" href="svlmpu.htm">mpu_chardecode</a></td>
+    </tr>
+  </table><!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

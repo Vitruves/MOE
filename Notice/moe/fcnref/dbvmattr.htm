@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content=
+  "functions: dbv_DisplayAttributes" />
+  <meta name="keywords" content=
+  "obsolete: dbv_MolElements, dbv_MolMultipleBonds, dbv_MolHydrogens" />
+  <meta name="keywords" content=
+  "obsolete: dbv_MolProteinTrace, dbv_MolUnifiedView, dbv_MolVariableFont" />
+  <meta name="keywords" content=
+  "obsolete: dbv_MolElementColor, dbv_MolName" />
+ <title>Database Viewer Field Display: dbv_DisplayAttributes</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Database Viewer Field Display:
+    dbv_DisplayAttributes
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+    old_value = <a class="fcnlink" href="#dbv_DisplayAttributes"
+>dbv_DisplayAttributes</a
+> [ mdb, ['field1','field2',...], 'attr', [value1,value2,...] ]
+
+    old_value = <a class="fcnlink" href="#dbv_DisplayAttributes2"
+>dbv_DisplayAttributes</a> [ mdb, [], 'attr', new_value] ]
+</pre>
+
+<h2 class="obsolete">Obsolete</h2>
+
+<pre class="code">
+old_state = <a class="fcnlink" href=
+"#dbv_MolElements">dbv_MolElements</a>      [ mdb, new_state ]
+old_state = <a class="fcnlink" href=
+"#dbv_MolElementColor">dbv_MolElementColor</a>  [ mdb, new_state ]
+old_state = <a class="fcnlink" href=
+"#dbv_MolHydrogens">dbv_MolHydrogens</a>     [ mdb, new_state ]
+old_state = <a class="fcnlink" href=
+"#dbv_MolMultipleBonds">dbv_MolMultipleBonds</a> [ mdb, new_state ]
+old_state = <a class="fcnlink" href=
+"#dbv_MolProteinTrace">dbv_MolProteinTrace</a>  [ mdb, new_state ]
+old_state = <a class="fcnlink" href=
+"#dbv_MolUnifiedView">dbv_MolUnifiedView</a>   [ mdb, new_state ]
+old_state = <a class="fcnlink" href=
+"#dbv_MolVariableFont">dbv_MolVariableFont</a>  [ mdb, new_state ]
+old_state = <a class="fcnlink" href=
+"#dbv_MolName">dbv_MolName</a>          [ mdb, new_state ]
+</pre>
+
+<h1>Description</h1>
+
+<a id="dbv_DisplayAttributes"></a>
+<pre>
+old_value = <span class="fcndef">dbv_DisplayAttributes</span
+> [ mdb, ['field1','field2',...], 'attr'] ]
+old_value = <span class="fcndef">dbv_DisplayAttributes</span
+> [ mdb, ['field1','field2',...], 'attr', [value1,value2,...]] ]
+</pre>
+
+<p>Returns and optionally sets Database Viewer display field attributes.
+  The open database viewer <tt>mdb</tt> is specified by  either a
+  database key or the database filename. The second argument
+  is a vector of <tt>fields</tt> for which the attribute value
+  should be returned or set.
+  See the list of available attribute tokens <tt>attr</tt> below.
+  Only one attribute can be queried or set at a time.
+  The value is set if the vector of <tt>values</tt> is specified
+  (i.e. not <tt>[]</tt>). The number of values must match the
+  number of specified fields. A single value gets unit extended to
+  the number of fields. The old values are always returned.</p>
+
+<br />
+<p>The following attributes apply to all field types, unless otherwise
+  mentioned. When setting the value, it will also be saved in the database
+  environment, except for the attributes <tt><b>hidden</b></tt> and
+  <tt><b>selection</b></tt> which are not persistent.</p>
+
+<table class="noborder">
+ <tr>
+  <td><tt><b>'hidden'</tt></td>
+  <td>Controls the hidden state of the field
+  (<tt>1</tt> = hidden, <tt>0</tt> = visible).
+  Hiding a selected field deselects it.</td>
+ </tr>
+
+ <tr>
+  <td><tt><b>'selection'</b></tt></td>
+  <td>Controls the selection state of the field 
+  (<tt>1</tt> = selected, <tt>0</tt> = unselected).
+  The selection state value is ignored for hidden fields
+  as hidden fields cannot be selected.</td>
+ </tr>
+
+ <tr>
+  <td><tt><b>'width'</b></tt></td>
+  <td>Controls the display width (measured in characters) of the field.
+  The width of each field can be set individually.</td>
+ </tr>
+
+ <tr>
+  <td><tt><b>'wrap'</b></tt></td>
+  <td>
+  Controls the line-wrapping state of the field. Both character
+  and numeric fields can be displayed wrapped. For numeric fields,
+  wrapping only applies if there are multiple values (a vector),
+  in which case the values are displayed one per line. When the
+  state is set to <tt>0</tt>, all cells display their contents on a single
+  line.</td>
+ </tr>
+
+ <tr>
+  <td><tt><b>'precision'</b></tt></td>
+  <td>Controls the display precision of a numeric field.
+  Precision is specified as a single integer: A positive value denotes
+  decimal notation with the value representing the number of digits
+  to display after the decimal; a negative value denotes scientific
+  notation with the absolute value indicating the number of
+  significant figures to display.</td>
+ </tr>
+
+
+ <tr>
+  <td><tt><b>'bubblehelp'</b></tt></td>
+  <td>Bubble help text token which is shown when the mouse hovers over the
+    field name in the database viewer.
+  </td>
+ </tr>
+
+ <tr>
+  <td><tt><b>'plot'</b></tt></td>
+  <td>Determines if the numeric field will be plotted in the
+    <a href="../../mdb/dbplot.htm">Data Plot</a>, when the plot is opened
+    without a field selection.</td>
+ </tr>
+</table>
+
+<br />
+<p>The following attributes apply only to molecule fields
+  (types <tt>molecule</tt> and <tt>moe</tt>). The attribute values will
+  be saved in the database and hence are persistent.</p>
+
+<table class="noborder">
+ <tr>
+  <td><tt><b>'molmode'</b></tt></td>
+  <td>Controls how molecules will be displayed:
+    <ul>
+     <li><b><tt>'3d'</tt></b>. Display molecules as line drawings in 3D.</li>
+     <li><b><tt>'2d'</tt></b>. Create and display 2D depictions of
+     molecules.</li>
+     <li><b><tt>'carbo'</tt></b>. Create and show the <i>Symbol Nomenclature for
+     Glycans (SNFG)</i> representation for carbohydrates.</li>
+     <li><b><tt>'seq'</tt></b>. Show FASTA formatted sequence string.</li>
+    </ul>
+  </td>
+ </tr>
+
+ <tr>
+  <td><tt><b>'fallback'</b></tt></td>
+  <td>Controls the fallback policy of the <b><tt>molmode</tt></b> display mode
+  for molecules. If enabled and <b><tt>molmode</tt></b> is set to
+  <tt>2d</tt> but the molecule can not be depicted (e.g. a large
+  protein without ligand) the protein will be displayed in <tt>3d</tt> mode
+  instead.
+  The same applies to the <tt>carbo</tt> mode which will fallback to
+  <tt>2d</tt> if no carbohydrate molecule is present, and then to
+  <tt>3d</tt> if no small molecule can be depicted.
+  If fallback is disabled and no depictable carbohydrate or ligand is present,
+  a warning text to this effect will be shown in the cell.
+  </td>
+ </tr>
+
+ <tr>
+  <td><tt><b>'molname'</b></tt></td>
+  <td>If enabled, the molecule names are always shown at the bottom of the
+  molecule cells.</td>
+ </tr>
+
+ <tr>
+  <td><tt><b>'trace'</b></tt></td>
+  <td>Controls drawing of the alpha-carbon protein or DNA/RNA backbone trace.
+  When the trace is on, the display of atoms, bonds, and element names
+  is disabled. The setting has no effect on non-proteins and non-DNA/RNA.
+  <p>This attribute only affects molecule fields displayed in
+  <tt>3d</tt> mode.</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td><tt><b>'multiple_bonds'</b></tt></td>
+  <td>If disabled, all bonds are rendered as single lines.
+  <p>This attribute only affects molecule fields displayed in
+  <tt>3d</tt> mode.</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td><tt><b>'element_colors'</b></tt></td>
+  <td>When enabled, hetero atoms are colored by element.
+  <p>This attribute only affects molecule fields displayed in
+  <tt>3d</tt> mode.</p>
+  </td>
+ <tr>
+
+ <tr>
+  <td><tt><b>'elements'</tt></b></td>
+  <td> When enabled, element names are displayed  in a given molecule
+  drawing only when the drawing is sufficiently large for the element
+  names to be rendered clearly. When the drawing is too small,
+  element names are hidden, regardless of the state.
+  <p>This attribute only affects molecule fields displayed in
+  <tt>3d</tt> mode.</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td><tt><b>'variable_font'</b></tt></td>
+  <td>If enabled, the font of the element labels is scaled in relation to the
+  molecule size, otherwise the label font size is the same for all molecules
+  regardless of their size.
+  <p>This attribute only affects molecule fields displayed in
+  <tt>3d</tt> mode.</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td><tt><b>'unified_view'</b></tt></td>
+  <td>When enabled, all molecules in the same database field are displayed using
+  the same view matrix. The result is that when one molecule is rotated
+  and/or zoomed, all other molecules in the field move in unison with it.
+  When unified viewing is disabled, each molecule's view can be individually
+  manipulated.
+  <p>This attribute only affects molecule fields displayed in
+  <tt>3d</tt> mode.</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td><tt><b>'hydrogens'</b></tt></td>
+  <td>If enabled, all hydrogen atoms present in the molecule are drawn.</td>
+ </tr>
+
+ <tr>
+  <td><tt><b>'polar'</b></tt></td>
+  <td>If enabled, only polar hydrogens are drawn. The <tt>hydrogens</tt>
+  attribute must be enabled for this attribute to have an effect.
+  <p>In <tt>2d</tt> display mode polar and chiral hydrogens are always shown
+  in the depiction.</p> 
+  </td>
+ </tr>
+
+ <tr>
+  <td><tt><b>'chirality'</b></tt></td>
+  <td>If enabled, mark chiral atoms (R/S) and bonds (E/Z) with
+  wedges and labels. Green labels mark chiral atoms/bonds without
+  chiral constraints, blue labels signify chiral constraints which
+  match the geometry and red if the chiral constraints are violated
+  or set on atoms which are not chiral.
+  <p>This attribute only affects molecule fields displayed in
+  <tt>2d</tt> mode.</p>
+  </td>
+ </tr>
+</table>
+
+<p>The function <span class="fcndef">dbv_DisplayAttributes</span> is part
+  of the Database Viewer functionality and can only be used on databases
+  which are currently open in a Database Viewer. To (pre)set field
+  attributes on databases which are not currently open in a Database
+  Viewer window use the function
+  <a class="svl" href="db_envir.htm">db_DisplayAttributes</a>.
+</p>
+
+<a id="dbv_DisplayAttributes2"></a>
+<hr noshade="noshade" />
+<pre>
+old_value = <span class="fcndef">dbv_DisplayAttributes</span
+> [ mdb, [], 'attr'] ]
+old_value = <span class="fcndef">dbv_DisplayAttributes</span
+> [ mdb, [], 'attr', new_value] ]
+</pre>
+
+<p>If no field parameter is specified (i.e. <tt>[]</tt>) the current
+  default attribute value of the database is returned or set.
+  This is the value which will be used for a field for which that
+  attribute has not been specifically set, e.g. a field which is newly created.
+  The attribute value is saved in the database.
+  Only the molecule field attributes (see list above) can be specified
+  in this mode.</p>
+
+<a id="dbv_MolElements"></a>
+<hr noshade="noshade" />
+<h4 class="obsolete">Obsolete Syntax</h4>
+
+<p>
+The following functions are superseded by the function
+<a href="#dbv_DisplayAttributes"><tt>dbv_DisplayAttributes</tt></a>.
+</p>
+
+<pre>
+old_state = <span class="fcndef">dbv_MolElements</span> [ mdb, new_state ]
+</pre>
+
+<p>Controls element name drawing. When enabled, element names are displayed
+  in a given molecule drawing only when the drawing is sufficiently large for
+  the element names to be rendered clearly. When the drawing is too small,
+  element names are hidden, regardless of the state.</p>
+<a id="dbv_MolElementColor"></a>
+<hr noshade="noshade" />
+
+<pre>
+old_state = <span class="fcndef">dbv_MolElementColor</span> [ mdb, new_state ]
+</pre>
+
+<p>Controls element coloring. When enabled, hetero atoms are colored
+  by element.</p>
+<a id="dbv_MolHydrogens"></a>
+<hr noshade="noshade" />
+
+<pre>
+old_state = <span class="fcndef">dbv_MolHydrogens</span> [ mdb, new_state ]
+</pre>
+
+<p>Controls drawing of hydrogen atoms. When disabled, hydrogen atoms are
+  hidden.</p>
+<a id="dbv_MolMultipleBonds"></a>
+<hr noshade="noshade" />
+
+<pre>
+old_state = <span class="fcndef">dbv_MolMultipleBonds</span> [ mdb, new_state ]
+</pre>
+
+<p>Controls drawing of multiple bonds. When disabled, all bonds are rendered
+  as single lines. Note that calculation of bond orders can be a lengthy
+  process on large databases.</p>
+<a id="dbv_MolProteinTrace"></a>
+<hr noshade="noshade" />
+
+<pre>
+old_state = <span class="fcndef">dbv_MolProteinTrace</span> [ mdb, new_state ]
+</pre>
+
+<p>Controls drawing of the alpha-carbon protein trace. When the trace is on,
+  the display of atoms, bonds, and element names is disabled. The setting has
+  no effect on non-proteins.</p>
+<a id="dbv_MolUnifiedView"></a>
+<hr noshade="noshade" />
+
+<pre>
+old_state = <span class="fcndef">dbv_MolUnifiedView</span> [ mdb, new_state ]
+</pre>
+
+<p>When enabled, all molecules in the same database field are displayed using
+  the same view matrix. The result is that when one molecule is rotated
+  and/or zoomed, all other molecules in the field move in unison with it.
+  When unified viewing is disabled, each molecule's view can be individually
+  manipulated. Unified viewing is useful, for instance, for examining a
+  database containing conformations of the same molecule, such as those output
+  from a dynamics run.</p>
+<a id="dbv_MolVariableFont"></a>
+<hr noshade="noshade" />
+
+<pre>
+old_state = <span class="fcndef">dbv_MolVariableFont</span> [ mdb, new_state ]
+</pre>
+
+<p>If enabled, the font of the element labels is scaled in relation to the
+  molecule size, otherwise the label font size is the same for all molecules
+  regardless of their size.</p>
+<a id="dbv_MolName"></a>
+<hr noshade="noshade" />
+
+<pre>
+old_state = <span class="fcndef">dbv_MolName</span> [ mdb, new_state ]
+</pre>
+
+<p>If enabled, the molecule names are always shown at the bottom of the
+  molecule cells.
+</p>
+
+<h1>See Also</h1>
+
+<p>
+<a href="introdb.htm">Database Functions</a><br />
+<a href="dbvfield.htm">Database Field Attributes</a><br />
+<a class="svl" href="db_envir.htm">db_DisplayAttributes</a></p>
+</p>
+
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

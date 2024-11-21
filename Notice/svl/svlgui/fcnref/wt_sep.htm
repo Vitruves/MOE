@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href=
+  "../../../include/manstyle.css" />
+  <meta name="keywords" content="keywords: Separator" />
+  <meta name="keywords" content="functions:" />
+  <meta name="keywords" content="functions: Widget:Separator" />
+  <meta name="keywords" content="functions: Separator (widget)" />
+  <title>Separator Widget</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../../index.htm"><img src="../../../images/ccglogo.png" /></a>
+    <a href="../../../index.htm"><div class="moeversion"></div></a>
+    Separator Widget
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Description</h1>
+
+<p>An object that draws a line to separate other objects visually. By default
+  the line spans its parent lengthwise if the parent is a <tt>Vbox</tt>, or
+  widthwise, if its parent is an <tt>Hbox</tt>. The default for a parent
+  <tt>Mbox</tt> is a horizontally-oriented line. In all cases, either
+  orientation may be explicitly specified.</p>
+
+<p>If the <tt>flushLeft</tt> and/or <tt>flushTop</tt> attributes are not set,
+  separators are subject to alignment points, and may not span the full width
+  or height of their parents.</p>
+
+<h2>Attributes</h2>
+
+<p><tt>Separator</tt> inherits all <a class="svl" href="wt_core.htm">core</a>
+  attributes and defines the following attributes:</p>
+  <table class="titlebar">
+    <tr>
+      <th width="10%" valign="baseline">Attribute</th>
+      <th width="50%" valign="baseline">Description</th>
+      <th width="25%" valign="baseline">Values</th>
+      <th width="10%" valign="baseline">Default</th>
+    </tr>
+    <tr>
+      <td valign="baseline"><tt>vertical</tt></td>
+      <td valign="baseline">Orientation</td>
+      <td valign="baseline">1 = vertical<br />
+      0 = horizontal</td>
+      <td valign="baseline">see below</td>
+    </tr>
+  </table>
+
+<h3>Notes</h3>
+
+<p>The <tt>shadow</tt> attribute defaults to
+  <tt>&#39;etched-in&#39;</tt>.</p>
+
+<p>The orientation defaults to vertical if the separator is a child of an
+  <tt>Hbox</tt> manager, horizontal otherwise.</p>
+
+<h2>Trigger</h2>
+
+<p>None.</p>
+
+<h2>Data Value</h2>
+
+<p>None.</p>
+
+<h1>See Also</h1>
+
+<p><a href="../wt_intro.htm">SVL Window Toolkit</a><br />
+  <a href="wt_core.htm">Core Attributes</a><br />
+  <a href="introwt.htm">Window Toolkit Functions</a><br /></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../../images/ccgicon.png" /> <a href="../../../index.htm"></a>
+    <a href="../../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

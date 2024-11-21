@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../images/ccgicon.png" />
+  <meta name="keywords" content="panel: Protomers" />
+  <title>Protomer and Tautomer Viewer</title>
+  <meta name="keywords" content="keywords:" />
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../index.htm"><img src="../images/ccglogo.png" /></a>
+    <a href="../index.htm"><div class="moeversion"></div></a>
+    Protomer and Tautomer Viewer
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+  <ul>
+    <!-- !!!
+  <li><a href="#Depiction">Structure Depiction</a></li>
+  <li><a href="#Display">Display Options</a><li>
+  <li><a href="#Acquire">Acquiring Molecules</a></li>
+  <li><a href="#Manage">Managing Molecules</a></li>
+  <li><a href="#Output">Output Graphics</a></li>
+-->
+  </ul>
+
+<p>The <b>Protomers</b> panel is an interactive means for viewing protonation
+  states of small molecules, possibly in a 3D context. When the panel opens, a
+  reference molecule is obtained from the contents of the MOE Window, and its
+  tautomers/protomers are enumerated and displayed in the panel. To open the
+  panel, use <nobr><b>MOE | Compute | Prepare | Protomers.</b></nobr>.</p>
+
+<p><b>Note:</b> If multiple ligands are <a href="ligx.htm#System">active</a>
+  or if the ligand exceeds 100 heavy atoms, the Protomers panel will be empty
+  when it opens. If more than one ligand is active, either activate only one
+  (using <span class="menu">MOE | RHS | <a href=
+  "ligx.htm#System">System</a></span>) and then select <b>Apply</b> or choose a
+  different set of source atoms. If the ligand comprises more than 100 heavy
+  atoms, you can select <b>Apply</b> in the <b>Protomers</b> panel and select
+  Yes when asked to continue to allow for larger ligands.</p>
+
+<p>Note: The <a href="../moe/molsystems/build.htm">Builder</a> can also be
+  used to view and change the tautomeric state of a molecule.</p>
+
+<img src="protoview/protomers_panel.png" class="center" />
+
+<p>The tautomer and protomer enumeration algorithm is implemented by the
+  function <tt>ctab_ProtomerList</tt>, documented in the <a href=
+  "../mdb/wash.htm">Database Wash</a> manual, and also used by the
+  <tt>sdwash</tt> command line tool. Tautomers of a molecule are formed by
+  migration of hydrogen atoms and bond orders to form isomeric species, while
+  protomers are formed by addition or removal of acidic protons.</p>
+
+<p>The panel consists of several parts:</p>
+  <ul>
+    <li>Enumeration controls (top), which specify the source of the reference
+    structure, and how to generate and rank the tautomers/protomers</li>
+    <li>The tautomers and protomers (middle), which take up most of the
+    panel</li>
+    <li>Display options and navigation controls (bottom)</li>
+  </ul>
+
+<p>The panel controls are described as follows:</p>
+  <table class="noborder">
+    <tr>
+      <td valign="top"><b>Source</b></td>
+      <td>
+        The atoms used to compose the reference molecule may be selected. The
+        default value, <b>Ligand&nbsp;Atoms</b>, excludes atoms which are
+        classified as receptor or solvent. Other options include: Selected
+        Atoms, Selected Residues, Selected Chains and Ligand tags. All options
+        in the source menu except <b>Ligand Atoms</b> ignore the <a href=
+        "ligx.htm#System">active state</a> of the molecule.
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><b>3D Receptor</b></td>
+      <td>
+        By default, the classification of tautomers is &quot;2D&quot;, which
+        means that the labeled chemical graphs are the only distinguishing
+        features of the enumerated protomers. The enumerated list is ranked
+        predicted concentration (e.g. ketones tend to be favored over enols,
+        aromatic rings are preferred, etc.). Redundant chemical graphs are
+        removed, i.e. if two molecular species have the same canonical SMILES
+        identifier, only one is retained.
+
+<p>If <b>3D Receptor</b> is enabled, then the original coordinates are
+        included in the calculation of the rank ordering of the enumerated
+        species &ndash; the actual bond distances are compared to the expected
+        bond distances for single, double or aromatic bonds, and the planarity
+        of <i>sp<sup>2</sup></i> and <i>sp<sup>3</sup></i> centers is taken
+        into account.</p>
+
+<p>By default <b>Receptor</b> the value is <tt>None</tt>, which
+        produces no additional effect. If it is changed to non-blank value,
+        such as <tt>Receptor Atoms</tt>, the effects of a receptor such as the
+        host protein are taken into account when rank-ordering the enumerated
+        species. Protomers which are well placed to participate in a
+        significant hydrogen bonding interaction with the receptor are
+        prioritized and appear near the beginning of the list.</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Tautomers Protomers</b></td>
+      <td>
+        The enumerated species are displayed in the main part of the panel as
+        a matrix of buttons. The button which corresponds to the reference
+        molecule from which the protomers were enumerated is labelled with
+        an asterisk (<b>*</b>) in the lower right corner. The current
+        protonation state of molecule in the MOE window is drawn with a
+        highlighted background. The molecules are drawn in the buttons so that
+        the heavy atoms are depicted in the same way in each case, but the bond
+        orders and hydrogen counts differ. The atoms which are involved in any
+        kind of change anywhere in the series are drawn in blue, while those
+        which are not affected by any changes are drawn in black.
+
+       <p>Clicking on any of the buttons will offer to copy the modified
+        protomer to the MOE Window. When possible, this will use the original
+        atoms, and only modify the charge and bond order of the heavy atoms,
+        and adjust the explicit hydrogen atoms accordingly.
+        The button background highlight will be changed to the now
+        current protonation state.
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Score</b></td>
+      <td>Select the score to show in the lower left corner of
+      the protomer display:
+      <ul>
+      <li><b>%C</b>. Percent concentration of protonation state.</li>
+      <li><b>Estrain</b>. Protonation state strain energy (kcal/mol).</li>
+      <li><b>None</b>. Do not show score value.</li>
+      </ul>
+    </tr>
+    <tr>
+      <td valign="top"><b>Page&nbsp;Size</b></td>
+      <td>The number of protomers displayed on a page may be controlled by
+      selecting one of the dimensions, which include 2x1, 4x2, 6x3 and 8x4. For
+      the more densely packed page sizes, it may be necessary to adjust the
+      size of the panel in order to see the molecules.</td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Auto</b></td>
+      <td>If on, Page Size will automatically be adjusted to best fit the
+      total number of tautomers or protomers.</td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Navigation</b></td>
+      <td>If there are more protomers than will fit on a single page, then the
+      navigation buttons become available for skipping through pages. Arrows
+      for first, previous, next and last will be active when they apply.
+      Alternatively, a page number may be entered in the text box, and pressing
+      <tt>ENTER</tt> will jump to that page. The total number of tautomers or
+      protomers is displayed to the right.</td>
+    </tr>
+  </table>
+
+<p>For the enumeration controls (source, mode, receptor), it is necessary to
+  press the <b>Apply</b> button in order to apply the changes. The enumeration
+  process is typically instantaneous for molecules with only several tautomers
+  or protomers, but since the number of distinct structures grows exponentially
+  with the number of tautomer/protomer sites, the calculation can take several
+  seconds for more complicated reference molecules.</p>
+
+<h1>See Also</h1>
+
+<p><a class="svl" href=
+  "../moe/fcnref/protomer.htm">ctab_EnumerateProtomers</a><br />
+  <a class="svl" href="../moe/fcnref/sdwash.htm">sdwash</a><br />
+  <a href="../mdb/wash.htm">Database Wash</a></p>
+
+<p><a href="../moe/molsystems/build.htm">Builder</a></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../images/ccgicon.png" /> <a href="../index.htm"></a> <a href=
+    "../legal.htm"></a> &copy;<span class="versionyear"></span> <a href="http://www.chemcomp.com"></a>. All
+    rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

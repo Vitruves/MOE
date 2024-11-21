@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: dna_Create, dna_Builder" />
+  <meta name="keywords" content="obsolete: DNA_Create, DNA_Builder" />
+  <title>dna_Create</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    dna_Create
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<pre class="code">
+chain_keys = <a class="fcnlink" href=
+"#dna_Create">dna_Create</a> [ residue_names, options ]
+
+<a class="fcnlink" href="#dna_Builder">dna_Builder</a> []
+</pre>
+
+<h1 class="obsolete">Obsolete</h1>
+<a id="DNA_Create_Obsolete"></a>
+
+<pre class="code">
+chain_keys = <a class="fcnlink" href=
+"#DNA_Create_Obsolete">DNA_Create</a> [ &quot;nucleosides&quot;, 'conformation' ]
+
+<a class="fcnlink" href="#/DNA_Builder">DNA_Builder</a> []
+</pre>
+
+<p><b>Note:</b> These functions are now only available in
+<tt>$MOE/sample/obsolete/dnabld.svl</tt>.</p>
+
+<h1>Description</h1>
+<a id="dna_Create"></a>
+<pre>chain_keys = <span class=
+  "fcndef">dna_Create</span>[ residue_names, opt ]
+
+options = [
+    conformation : structure_token
+]
+</pre>
+
+<p>Creates a double-stranded DNA/RNA molecule in a specified conformation and
+  returns the keys of the two newly created chains. The nucleoside composition
+  of the first chain will be as specified by <tt>dna_Create</tt> while the
+  second chain will be the complement chain as dictated by Watson-Crick
+  base-pairing rules. In the Sequence Editor, both the sequence of the main
+  chain and the sequence of the Watson-Crick base-pairing complement chain are
+  written in the 5' to 3' direction.</p>
+<dl>
+<dt><tt>residue_names</tt></dt>
+<dd>
+  Vector of nucleic-acid tokens specifying the nucleoside composition:
+  <table class="titlebar">
+    <tr>
+      <th>Code</th>
+      <th>Nucleic Acid</th>
+    </tr>
+    <tr>
+      <td><tt>A</tt></td>
+      <td>r-Adenosine</td>
+    </tr>
+    <tr>
+      <td><tt>C</tt></td>
+      <td>r-Cytidine</td>
+    </tr>
+    <tr>
+      <td><tt>G</tt></td>
+      <td>r-Guanosine</td>
+    </tr>
+    <tr>
+      <td><tt>U</tt></td>
+      <td>r-Uracil</td>
+    </tr>
+    <tr>
+      <td><tt>DA</tt></td>
+      <td>d-Adenosine</td>
+    </tr>
+    <tr>
+      <td><tt>DC</tt></td>
+      <td>d-Cytidine</td>
+    </tr>
+    <tr>
+      <td><tt>DG</tt></td>
+      <td>d-Guanosine</td>
+    </tr>
+    <tr>
+      <td><tt>DT</tt></td>
+      <td>Thymidine</td>
+    </tr>
+  </table>
+</dd>
+<dt>The <tt>options</tt> parameter is given as a list of attribute-value
+  pairs:</dt>
+<dd>
+  <tt>conformation</tt>: One of the standard DNA conformations
+  expressed as a token (case sensitive):
+  <ul>
+    <li><tt>'A'</tt></li>
+    <li><tt>'B'</tt></li>
+    <li><tt>'C'</tt></li>
+    <li><tt>'Z'</tt></li>
+    <li><tt>'A*'</tt></li>
+    <li><tt>'B*'</tt></li>
+    <li><tt>'C*'</tt></li>
+  </ul>
+
+    <p>The default is <tt>'B'</tt>.</p>
+    <p>A, B, and C-Helix conformations
+    are available in two different variants. The first variant
+    with parameters provided by the
+    <a href="http://w3dna.rutgers.edu/">w3DNA server</a>
+    [Zheng 2009] [LU 2003]. The other form uses the published parameters
+    from Arnott [Arnott 1972] [Arnott 1975], these variants are labelled
+    <tt>A*,B*,C*</tt>.
+    </p>
+  </dd>
+</dl>
+
+<p>For example, the following function:</p>
+
+<pre class="code">
+svl&gt; <span class=
+"fcndef">dna_Create</span> [ ['DG','DT','DA'], [conformation: 'A'] ]
+</pre>
+
+<p>returns the keys of both chains. The Sequence Editor will show the DNA
+  sequence <tt>dG,dT,dA</tt> as well as the complement sequence
+  <tt>dT,dA,dC</tt>.</p>
+
+<a id="dna_Builder"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">dna_Builder</span> []
+</pre>
+
+<p>Opens the
+  <a href="../../proteins/dnabuild.htm">DNA/RNA Builder</a> panel,
+  which allows building single and double-stranded DNA/RNA molecules.</p>
+
+
+<hr noshade="noshade" />
+<h3 class="obsolete">Obsolete Functions</h3>
+<pre>chain_keys = <span class=
+  "obsfcndef">DNA_Create</span>[ &quot;nucleosides&quot;, 'conformation' ]</pre>
+
+<p>Creates a double-stranded DNA molecule in the specified conformation and
+  returns the keys of the two newly created chains. The nucleoside composition
+  of the first chain will be as specified by <tt>DNA_Create</tt> while the
+  second chain will be the complement chain as dictated by Watson-Crick
+  base-pairing rules. In the Sequence Editor, both the sequence of the main
+  chain and the sequence of the Watson-Crick base-pairing complement chain are
+  written in the 5' to 3' direction.</p>
+<dl>
+<dt><tt>nucleosides</tt></dt>
+<dd>
+  String of one-letter codes specifying the nucleoside composition:
+  <table class="titlebar">
+    <tr>
+      <th>1-Letter Code</th>
+      <th>Nucleic Acid</th>
+    </tr>
+    <tr>
+      <td><tt>A</tt></td>
+      <td>Adenosine</td>
+    </tr>
+    <tr>
+      <td><tt>C</tt></td>
+      <td>Cytidine</td>
+    </tr>
+    <tr>
+      <td><tt>G</tt></td>
+      <td>Guanosine</td>
+    </tr>
+    <tr>
+      <td><tt>T</tt></td>
+      <td>Thymidine</td>
+    </tr>
+  </table>
+
+  <p>One-letter codes are not case sensitive.</p>
+</dd>
+<dt><tt>conformation</tt></dt>
+<dd>
+  One of the standard DNA conformations [Arnott 1972] [Arnott 1975]
+  expressed as a token (case sensitive):
+  <ul>
+    <li><tt>'A'</tt></li>
+    <li><tt>'B'</tt></li>
+    <li><tt>'C'</tt></li>
+  </ul>
+
+    <p>The default is <tt>'B'</tt>.</p>
+  </dd>
+</dl>
+
+<p>For example, the following function:</p>
+
+<pre class="code">
+svl&gt; <span class=
+"fcndef">DNA_Create</span> [ &quot;GTA&quot;, 'A' ]
+</pre>
+
+<p>returns the keys of both chains.The Sequence Editor will show the DNA
+  sequence <tt>dG,dT,dA</tt> as well as the complement sequence
+  <tt>dT,dA,dC</tt>.</p>
+
+<a id="/DNA_Builder"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="obsfcndef">DNA_Builder</span> []
+</pre>
+
+<p>Opens the old DNA Builder panel, which allows building double-stranded DNA
+  molecules using the function <span class="fcndef">DNA_Create</span>.</p>
+
+<h1>References</h1>
+<table class="ref">
+
+<tr>
+<td>
+[Zheng&nbsp;2009]
+</td>
+<td>
+Zheng G., Lu X-J. and Olson W.K.;
+Web 3DNA--a web server for the analysis, reconstruction, and visualization
+of three-dimensional nucleic-acid structures;
+<i>Nucleic Acids Research 37(Web Server issue)</i> (<b>2009</b>),
+W240&ndash;W246.
+</td>
+</tr>
+
+<tr>
+<td>
+[Lu&nbsp;2003]
+</td>
+<td>
+Lu X-J. and Olson W.K.;
+3DNA: a software package for the analysis, rebuilding and visualization
+of three-dimensional nucleic acid structures;
+<i>Nucleic Acids Research 31</i> (<b>2003</b>),
+5108&ndash;5121.
+</td>
+</tr>
+
+<tr>
+<td>
+[Arnott&nbsp;1972]
+</td>
+<td>
+Arnott S. and Hukins D.W.;
+Optimised parameters for A-DNA and B-DNA;
+<i>Biochem. Biophys. Res. Commun. 47</i> (<b>1972</b>),
+1504&ndash;1509.
+</td>
+</tr>
+
+<tr>
+<td>
+[Arnott&nbsp;1975]
+</td>
+<td>
+Arnott S. and Selsing E.;
+The conformation of C-DNA;
+<i>Journal of Molecular Biology 98</i> (<b>1975</b>),
+265&ndash;266;.
+</td>
+</tr>
+</table>
+<h1>See Also</h1>
+
+<p><a href="../../proteins/dnabuild.htm">DNA/RNA Builder</a></p>
+
+<p><a class="svl" href=
+  "../../proteins/fcnref/pro_resa.htm">pro_Builder</a></p>
+
+<p><a class="svl" href=
+  "../../proteins/fcnref/pro_seq.htm">pro_SeqCreate</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

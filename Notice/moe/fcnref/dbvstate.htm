@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content=
+  "functions: dbv_State, dbv_SelectedEntriesState" />
+  <meta name="keywords" content=
+  "functions: dbv_SelectedFieldsState, dbv_VisibleEntriesState" />
+  <meta name="keywords" content="functions: dbv_VisibleFieldsState" />
+  <title>MOE Database Viewer State Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    MOE Database Viewer State Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    stamp = <a class="fcnlink" href=
+"#dbv_SelectedEntriesState">dbv_SelectedEntriesState</a> dbv
+    stamp = <a class="fcnlink" href=
+"#dbv_VisibleEntriesState">dbv_VisibleEntriesState</a> dbv
+    stamp = <a class="fcnlink" href=
+"#dbv_SelectedFieldsState">dbv_SelectedFieldsState</a> dbv
+    stamp = <a class="fcnlink" href=
+"#dbv_VisibleFieldsState">dbv_VisibleFieldsState</a> dbv
+    stamp = <a class="fcnlink" href="#dbv_State">dbv_State</a> dbv
+</pre>
+
+<h1>Description</h1>
+
+<p>Functions allowing the caller to determine whether a change has occurred
+  in the Database Viewer. The <b>stamp</b> returned is a numeric value. If this
+  value has changed since the previous call to the <i>State</i> function then a
+  change has occurred and an update may be required. Changes which can be
+  monitored through these functions are the selection and visibility status of
+  the entries and fields.</p>
+
+<p><tt>dbv</tt> specifies the Database Viewer and may be either a key or a
+  filename.</p>
+<a id="dbv_SelectedEntriesState"></a>
+<hr noshade="noshade" />
+
+<pre>
+stamp = <span class="fcndef">dbv_SelectedEntriesState</span> dbv
+</pre>
+
+<p>Returns a <i>stamp</i> used to monitor the selection state of the
+  specified Database Viewer entries. Any change in the selection of entries in
+  the Database Viewer will change the value of the stamp.</p>
+
+<p><b>Note</b>: hiding a selected entry deselects it and therefore causes the
+  selected entries state to change.</p>
+<a id="dbv_VisibleEntriesState"></a>
+<hr noshade="noshade" />
+
+<pre>
+stamp = <span class="fcndef">dbv_VisibleEntriesState</span> dbv
+</pre>
+
+<p>Returns a stamp used to monitor the visibility state of the specified
+  Database Viewer entries. Any change in the visibility of entries in the
+  Database Viewer will change the value of the stamp.</p>
+<a id="dbv_SelectedFieldsState"></a>
+<hr noshade="noshade" />
+
+<pre>
+stamp = <span class="fcndef">dbv_SelectedFieldsState</span> dbv
+</pre>
+
+<p>Returns a stamp used to monitor the selection state of the specified
+  Database Viewer fields. Any change in the selection of fields in the Database
+  Viewer will change the value of the stamp.</p>
+
+<p><b>Note</b>: hiding a selected field deselects it and therefore causes the
+  selected fields state to change.</p>
+<a id="dbv_VisibleFieldsState"></a>
+<hr noshade="noshade" />
+
+<pre>
+stamp = <span class="fcndef">dbv_VisibleFieldsState</span> dbv
+</pre>
+
+<p>Returns a stamp used to monitor the visibility state of the specified
+  Database Viewer fields. Any change in the visibility of fields in the
+  Database Viewer will change the value of the stamp.</p>
+<a id="dbv_State"></a>
+<hr noshade="noshade" />
+
+<pre>
+stamp = <span class="fcndef">dbv_State</span> dbv
+</pre>
+
+<p>Returns a stamp used to monitor the visibility and selection state of both
+  the entries and fields of the specified Database Viewer. The <i>stamp</i>
+  will change for any visibility or selection changes made in the Database
+  Viewer.</p>
+
+<h1>See Also</h1>
+
+<p><a href="introdb.htm">Database Functions</a></p>
+
+<p><a class="svl" href="dbstate.htm">db_State</a></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

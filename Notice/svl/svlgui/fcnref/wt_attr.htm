@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href=
+  "../../../include/manstyle.css" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: WindowSetAttr" />
+  <title>Window Functions: WindowSetAttr</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../../index.htm"><img src="../../../images/ccglogo.png" /></a>
+    <a href="../../../index.htm"><div class="moeversion"></div></a>
+    Window Functions: WindowSetAttr
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+WindowSetAttr [ wkey, attribute_value_pairs ]
+</pre>
+<a id="WindowSetAttr"></a>
+<h1>Description</h1>
+
+<p>Sets widget attributes of the window specified after the window has been
+  created. The window must have already been created. The attributes are passed
+  as vectors of attribute-value pairs, tagged by widget name.</p>
+
+<p>Here is an example of usage:</p>
+
+<pre class="code">
+function main[]
+    local wkey = WindowCreate [
+        title : &#39;Test Window&#39;,
+        Text : [
+            name : &#39;textfield&#39;,
+            title : &#39;Enter a number:&#39;
+        ],
+        Radio : [
+            name : &#39;button&#39;,
+            title : &#39;Radio:&#39;,
+            text : [&#39;A&#39;,&#39;B&#39;,&#39;C&#39;,&#39;D&#39;,&#39;E&#39;,&#39;F&#39;,&#39;G&#39;]
+        ]
+    ];
+
+    <span class="fcndef">WindowSetAttr</span> [ wkey, [
+        textfield : [
+            len : 20,
+            onTrigger : &#39;return&#39;
+        ],
+        button : [
+            columns : 3
+        ]
+    ]];
+    ...
+endfunction
+</pre>
+
+<h1>See Also</h1>
+
+<p><a href="../wt_intro.htm">SVL Window Toolkit</a><br />
+  <a href="wt_core.htm">Core Attributes</a><br />
+  <a href="introwt.htm">Window Toolkit Functions</a></p>
+  <table class="functionList">
+    <tr>
+      <td><a href="wt_wait.htm">WindowWait</a><br />
+      <a href="wt_create.htm">WindowCreate</a><br />
+      <a href="wt_create.htm">WindowPrompt</a><br />
+      <a href="wt_create.htm">WindowDestroy</a></td>
+      <td><a href="wt_data.htm">WindowValues</a><br />
+      <a href="wt_show.htm">WindowShow</a><br />
+      <a href="wt_data.htm">WindowGetData</a><br />
+      <a href="wt_data.htm">WindowSetData</a></td>
+    </tr>
+  </table><!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../../images/ccgicon.png" /> <a href="../../../index.htm"></a>
+    <a href="../../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

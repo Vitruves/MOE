@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../images/ccgicon.png" />
+  <title>Preparing a Small Molecule</title>
+  <meta name="keywords" content="main_keywords:" />
+  <meta name="keywords" content="keywords: small molecule preparation" />
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../index.htm"><img src="../images/ccglogo.png" /></a>
+    <a href="../index.htm"><div class="moeversion"></div></a>
+    Preparing a Small Molecule
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<p>Many MOE applications such as conformational searching, docking, and
+  molecular dynamics require as input an energetically minimized 3D structure
+  of a small molecule, with partial charges set. For structures destined for
+  simulations, fixed atoms, positional tethers, and geometric constraints may
+  also be applied. This chapter covers the creation and preparation of
+  minimized small molecules for applications that require 3D structures as
+  input.</p>
+
+<p>Preparation of a 3D small molecule structure is primarily a manual process
+  that proceeds as follows:</p>
+  <ol>
+    <li>Small molecule data is either read in from an external source, pasted
+    from the clipboard or built from scratch in MOE.</li>
+    <li>The molecule is inspected in 2D and 3D; if necessary, bonding pattern
+    errors are corrected with the Builder.</li>
+    <li>The protonation and tautomeric states are chosen.</li>
+    <li>If necessary, stereochemistry is modified and stereochemical restraints
+    are set.</li>
+    <li>Partial charges are calculated and applied to the molecule.</li>
+    <li>Any desired geometric restraints (distances, angles, dihedrals) and
+    positional tethers are created.</li>
+    <li>Energy minimization with a suitable forcefield is then performed.</li>
+  </ol>
+
+<p>The result of the above procedure is a prepared and minimized 3D small
+  molecule structure. Depending on the subsequent analysis, this structure may
+  be solvated with explicit waters or subjected to a conformational search. The
+  3D structure can also be copied into a MOE database when creating small
+  molecule datasets. <!--
+Note however that restraints, tethers
+and fixed atom states are NOT stored in a MOE database; only the 3D structure
+along with partial charges is retained.
+!--></p>
+
+<p>The following sections cover the acquisition and creation of small
+  molecule data, and its subsequent preparation for input into various
+  applications.</p>
+  <ul>
+    <li>
+      <a href="#Acquiring_the_Data">Acquiring the Data</a>
+      <ul>
+        <li><a href="#Reading_Small_Molecules_from_a_File">Reading Small
+        Molecules from a File</a></li>
+        <li><a href="#Reading_Small_Molecules_from_a_Database">Reading Small
+        Molecules from a Database</a></li>
+        <li><a href="#Pasting_Small_Molecules_from_the_Clipboard">Pasting Small
+        Molecules from the Clipboard</a></li>
+        <li><a class="example" href=
+        "#Example:_Pasting_a_Small_Molecule_from_Clipboard">Example: Pasting a
+        Small Molecule from Clipboard</a></li>
+        <li><a href="#Creating_Small_Molecules_from_Scratch_in_MOE">Creating
+        Small Molecules from Scratch in MOE</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#Inspecting_Small_Molecule_Data">Inspecting Small Molecule
+      Data</a>
+      <ul>
+        <li><a href="#Viewing_in_2D">Viewing in 2D</a></li>
+        <li><a href="#Viewing_in_3D">Viewing in 3D</a></li>
+        <li><a href="#Setting_Molecule_Names">Setting Molecule Names</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#Protonation">Adjusting Protonation and Tautomeric States</a>
+      <ul>
+        <li><a class="example" href=
+        "#Example:_Using_Protomers_Panel_to_Edit_Ionization_and_Tautomer_State">
+        Example: Using Protomers Panel to Edit Ionization and Tautomer
+        State</a></li>
+      </ul>
+    </li>
+    <li><a href="#Stereochemistry">Stereochemistry</a></li>
+    <li>
+      <a href="#Constraints">Setting Geometric Constraints</a>
+      <ul>
+        <li><a href="#Fixing_Atoms">Fixing Atoms</a></li>
+        <li><a href="#Tethering_Atoms">Tethering Atoms</a></li>
+        <li><a href="#Geometric_Restraints">Geometric Restraints</a></li>
+        <li><a class="example" href="#Example_BQ123">Example: Apply Restraints
+        to BQ123</a></li>
+        <li><a href="#Wall_Restraints">Wall Restraints</a></li>
+      </ul>
+    </li>
+    <li><a href="#Partial_Charges">Calculating Partial Charges</a></li>
+    <li><a href="#Optimization">Geometry Optimization</a></li>
+    <li><a href="#Solvation">Solvation</a></li>
+    <li><a href="#ConformationalSearch">Conformational Search</a></li>
+    <li><a href="#See_Also">See Also</a></li>
+  </ul>
+<a id="Acquiring_the_Data"></a>
+<h1>Acquiring the Data</h1>
+
+<p>Small molecule data can be either read in from a database, a source
+  molecule file, pasted from the clipboard or created from scratch using the
+  <a href="molsystems/build.htm">Builder</a>. Data acquired from any source can
+  be edited with the Builder if necessary.
+<a id="Reading_Small_Molecules_from_a_File"></a>
+</p>
+
+<h2>Reading Small Molecules from a File</h2>
+
+<p>MOE recognizes a variety of input file formats, including Tripos MOL2,
+  PDB, MDL MOL, and Schr&ouml;dinger Maestro formats, as well as the native
+  <a href="fcnref/moefmt.htm">MOE</a> format. Individual files can be opened
+  using</p>
+
+<p class="blockquote"><span class="menu">MOE | File | <a href=
+  "gui/fileopen.htm">Open</a></span></p>
+
+<p>Use the Open panel to navigate the directories and locate the file to
+  open. Selecting the file in the Open panel list will display the valid
+  operations to perform on the file (e.g. open structure in MOE Window, import
+  into a database, etc.). For small molecule files, the default operation is to
+  load the structure in MOE. Double-click on the file to perform the default
+  operation.</p>
+<a id="Reading_Small_Molecules_from_a_Database"></a>
+<h2>Reading Small Molecules from a Database</h2>
+
+<p>Molecular databases can be imported into (and exported from) MOE's
+  native database format (MDB) using the <a href="../mdb/dbio.htm">Database
+  Import</a> panel. Opening a non-MDB database file with the Open panel</p>
+
+<p class="blockquote"><span class="menu">MOE | File | <a href=
+  "gui/fileopen.htm">Open</a></span></p>
+
+<p>automatically raises the Database Import panel. This panel can also be
+  opened explicitly from a <a href="../mdb/db.htm">Database Viewer</a> with the
+  command</p>
+
+<p class="blockquote"><span class="menu">DBV | File | Import</span></p>
+
+<p>Files of different formats, including SD, Tripos MOL2 and ASCII files of
+  SMILES strings, can be imported. Once imported into a Database Viewer,
+  molecules can be loaded into MOE using</p>
+
+<p class="blockquote"><span class="menu">DBV | Molecule Popup | <a href=
+  "../mdb/dbedit.htm#CopyToMOE">Send to MOE</a></span></p>
+
+<p>Note: Molecules in a database can be <a href=
+  "../mdb/db.htm#SpecifyingMolecularData">viewed</a> and <a href=
+  "#Optimization">minimized</a> directly in the database without loading them
+  into MOE.</p>
+<a id="Pasting_Small_Molecules_from_the_Clipboard"></a>
+<h2>Pasting Small Molecules from the Clipboard</h2>
+
+<p>Clipboard data can be loaded into MOE using:</p>
+
+<p class="blockquote"><span class="menu">MOE | Edit | <a href=
+  "gui/mainwin.htm#Copy">Paste</a></span></p>
+
+<p>Molecular data from sketchers such as ISIS/Draw or ChemDraw can be pasted
+  directly into MOE. SMILES strings copied from text files can also be pasted
+  directly into the MOE window, where they are automatically converted to 3D
+  structures.</p>
+
+<p><span class="tip">Tip</span> You can also use</p>
+
+<p class="blockquote"><span class="menu">MOE | RHS | <a href=
+  "extprog.htm#2DSketchers">Sketch</a></span></p>
+
+<p>Draw a molecule and close the sketcher. The molecule will be imported
+  directly into MOE.
+<a id="Example:_Pasting_a_Small_Molecule_from_Clipboard"></a>
+</p>
+
+<h2>Example: Pasting a Small Molecule from Clipboard</h2>
+  <div class="example">
+
+<p>Small molecule data can be pasted into MOE from drawing programs such as
+    ChemDraw and ISIS/Draw. In this example, a small molecule will be pasted in
+    from a drawing program.</p>
+    <ol>
+      <li>
+        <i>Close the current MOE system using the command</i>
+
+<p class="blockquote"><span class="menu">MOE | File |
+        Close</span></p><br />
+      </li>
+      <li>
+        <i>Use a drawing program such as ChemDraw or Isis/Draw to draw the
+        structure shown below:</i>
+        <div style="text-align: center; margin: 10px;"><img src=
+        "mol_prep/small_molecule1.png" style="vertical-align: middle;" alt=
+        "small_molecule1" /></div>
+
+<p>In the drawing program, copy the structure to the clipboard.</p>
+      </li>
+      <li>
+        <i>Paste the small molecule into MOE.</i>
+
+<p>Use the command</p>
+
+<p class="blockquote"><span class="menu">MOE | Edit | Paste</span></p>
+
+<p>to paste the small molecule from the clipboard into MOE. The
+        structure should appear in the MOE window as shown.</p>
+        <div style="text-align: center; margin: 10px;"><img src=
+        "mol_prep/small_molecule2.png" style="vertical-align: middle;" alt=
+        "small_molecule2" /></div>
+      </li>
+      <li>
+        <i>Add hydrogens to the molecule.</i>
+
+<p>Use the command</p>
+
+<p class="blockquote"><span class="menu">MOE | Edit | Build | Hydrogens
+        | Add Hydrogens</span></p>
+
+<p>to add explicit hydrogens to the structure. The final structure
+        should appear as shown:</p>
+        <div style="text-align: center; margin: 10px;"><img src=
+        "mol_prep/small_molecule3.png" alt="small_molecule3" /></div>
+      </li>
+    </ol>
+  </div>
+<a id="Creating_Small_Molecules_from_Scratch_in_MOE"></a>
+<h2>Creating Small Molecules from Scratch in MOE</h2>
+
+<p>Molecules can be built from scratch in MOE using the <a href=
+  "molsystems/build.htm">Builder</a>. In addition to building the structure,
+  the Builder can be used to set ionization states, stereochemistry
+  constraints, adjust hydrogen counts, manually set tautomeric states and to
+  perform an energy minimization.</p>
+  <ul class="help">
+    <li class="help">For a detailed example on how to build a molecule, please
+    see the <a href="../tutorials/builder_tut.htm">Building Molecules</a>
+    tutorial.</li>
+  </ul>
+<a id="Inspecting_Small_Molecule_Data"></a>
+<h1>Inspecting Small Molecule Data</h1>
+
+<p>Molecular structures built from scratch will typically have no bonding
+  errors, but structures loaded from external sources such as PDB files can
+  have errors associated with bonding patterns, ionization states and preferred
+  tautomers. Thus, structures should be inspected and edited if necessary. In
+  MOE, molecules can be inspected in both 2D and 3D, which aids greatly in
+  identifying bonding pattern, ionization state and tautomer errors, as well as
+  any other points of interest. Errors in molecular structure are typically
+  corrected using the <a href="molsystems/build.htm">Builder</a>.</p>
+
+<p class="blockquote"><span class="menu">MOE | RHS | Builder</span></p>
+
+<p>which can be used to make manual corrections to ionization state,
+  chirality, tautomeric state, atom name, and bond order.
+<a id="Viewing_in_2D"></a>
+</p>
+
+<h2>Viewing in 2D</h2>
+
+<p>The chemical composition of a small molecule is easily verified from a 2D
+  depiction:</p>
+
+<p class="blockquote"><span class="menu">MOE | Compute | <a href=
+  "../apps/view2d.htm">2D Molecules</a></span></p>
+
+<img src="mol_prep/view2d_panel.png" alt=
+  "2D Molecules panel" class="center" />
+
+<p>This panel has additional capabilities of group alignment or alignment
+  according to designated common scaffolds. Molecules in a database can also be
+  viewed in 2D using the <a href="../mdb/dbbrowse.htm">Database Browser</a>
+  with <b>Subject</b> set to <span class="menu">mol (2D)</span> and <b>Layout
+  Coordinates</b> turned on.</p>
+<a id="Viewing_in_3D"></a>
+<h2>Viewing in 3D</h2>
+
+<p>In 3D, if there are multiple molecules in the window (e.g. the target is
+  also present) the ligand can be isolated in the MOE Window with the <a href=
+  "../apps/ligx.htm#System">System Manager</a>, which can be used to quickly
+  turn on and off the visibility of different components of a molecular system.
+  The molecule can be centered in the MOE Window with</p>
+
+<p class="blockquote"><span class="menu">MOE | RHS | Center</span></p>
+
+<p>To view the ligand within the binding pocket of the target, use:</p>
+
+<p class="blockquote"><span class="menu">MOE | RHS | <a href=
+  "../apps/ligx.htm#ButtonBar">SiteView</a></span></p>
+  <ul class="help">
+    <li class="help">For more on rendering molecules, please see to <a href=
+    "gui/mainwin.htm#Rendering">Rendering Molecular Objects</a>.</li>
+  </ul>
+<a id="Setting_Molecule_Names"></a>
+<h2>Setting Molecule Names</h2>
+
+<p>The small molecule name is displayed in the <a href=
+  "../apps/ligx.htm#System">System Manager</a>, where it can also be edited. In
+  a Database Viewer, the molecule names are displayed when the <a href=
+  "../mdb/db.htm#SpecifyingMolecularData">molecule field</a> is minimized in
+  size to 1 character high. The molecule names can be extracted to a separate
+  field using</p>
+
+<p class="blockquote"><span class="menu">DBV | Compute | Molecule | <a href=
+  "../mdb/dbedit.htm#MoleculeNames">Molecule Name</a></span></p>
+
+<img src="mol_prep/molecule_name.png" alt=
+  "Molecule Name panel" class="center" />
+
+<p>This panel can also be used to rename molecules by setting
+  <b>Operation</b> to <b>Store in Molecule</b>.</p>
+<a id="Protonation"></a>
+<h1>Adjusting Protonation and Tautomeric States</h1>
+
+<p>The <b>Protomers</b> panel is used to enumerate and display different
+  possible tautomeric and ionization states of a molecule in the MOE window.
+  The command</p>
+
+<p class="blockquote"><span class="menu">MOE | Compute | Prepare | <a href=
+  "../apps/protoview.htm">Protomers</a></span></p>
+
+<p>opens the <b>Protomers</b> panel. The user can select the appropriate
+  structure to replace the structure currently in the system. The <a href=
+  "molsystems/build.htm">Builder</a> can also be used to set ionization states,
+  to choose a tautomer, and to adjust the number of hydrogens.
+<a id="Example:_Using_Protomers_Panel_to_Edit_Ionization_and_Tautomer_State"></a>
+</p>
+
+<h2>Example: Using the Protomers Panel to Edit Ionization and Tautomer
+  State</h2>
+  <div class="example">
+
+<p>In this example the <b>Protomers</b> panel will be used to select the
+    tautomer and ionization state of a small molecule.</p>
+    <ol>
+      <li>
+        <i>Close the current MOE system.</i>
+
+<p class="blockquote"><span class="menu">MOE | RHS | Close</span></p>
+      </li>
+      <li>
+        <i>Use the <b>Builder</b> or cut-and-paste the structure below into the
+        MOE Window.</i>
+        <div style="text-align: center; margin: 10px;"><img src=
+        "mol_prep/small_molecule1.png" style="vertical-align: middle;" /></div>
+      </li>
+      <li>
+        <i>Open the <b>Protomers</b> panel.</i>
+
+<p class="blockquote"><span class="menu">MOE | Compute | Prepare |
+        Protomers</span></p>
+
+<p>The <b>Protomers</b> panel will open and by default will display the
+        ionization states and tautomers which can be populated for the current
+        molecule at the given pH value, sorted in order of decreasing
+        population.</p>
+        <div style="text-align: center; margin: 10px;"><img src=
+        "mol_prep/protomers1.png" style="vertical-align: middle;" /></div>
+
+<p>Press <b>Apply</b> to recalculate the states using different values
+        for the pH value or 3-d environment.</p>
+      </li>
+      <li>
+        <i>Choose a new protomer.</i>
+
+<p>To replace the structure in MOE with one of the protomers in the
+        <b>Protomers</b> panel, left-click on the desired protomer (in this
+        case the first choice which is predicted to be the most likely). Press
+        <b>Yes</b> to replace the current MOE structure with the new
+        protomer.</p>
+      </li>
+    </ol>
+  </div>
+<a id="Stereochemistry"></a>
+<h1>Stereochemistry</h1>
+
+<p>Tetrahedral or double-bond stereochemistry can be enforced using either
+  the <a href="molsystems/build.htm#Stereochemistry">Builder</a></p>
+
+<img src="mol_prep/builder_stereo_buttons.png" alt=
+  "Builder Stereochemistry Buttons" class="center" />
+
+<p>or the <span class="menu">MOE | Edit | Build | <a href=
+  "gui/mainwin.htm#Chirality">Chirality</a></span> menu commands:</p>
+
+<img src="mol_prep/edit_chirality_menu.png" alt=
+  "MOE | Edit | Build | Chirality" class="center" />
+
+<p>The atom or atoms in question must first be <a href=
+  "gui/mainwin.htm#Selecting">selected</a>.</p>
+
+<p>The Builder and menu commands both apply <i>topological</i> restraints.
+  These restraints do not have an immediate effect on the current geometry,
+  however when geometry optimization through <a href=
+  "../apps/emin.htm">molecular mechanics</a> (energy minimization) is
+  performed, the current geometry will be made to conform to the restraint.</p>
+
+<p>Note: <span class="menu">MOE | Edit | Build | Chirality | Geometry</span>
+  will set a stereochemical restraint that matches the current geometry.</p>
+
+<p>When atoms are selected, the Builder will display both the stereochemical
+  restraint and whether the current geometry conforms to it. If there is no
+  restraint, the geometrical configuration is indicated by one of the
+  stereochemistry buttons being labeled in green. Otherwise, if there is a
+  restraint, the appropriate button is labeled in blue if the geometry matches
+  the restraint, and red if not. In the latter case, pressing the button will
+  flip the current geometry, making it conform.</p>
+
+<p>Note: If minimization is to be done, chirality constraints can be set
+  directly in the <a href="../apps/emin.htm">Energy Minimize</a> panel.</p>
+<a id="Constraints"></a>
+<h1>Setting Geometric Constraints</h1>
+
+<p>To preserve desired conformational aspects of a molecule during
+  minimization, constraints such as <i>fixing</i> atoms, positional
+  <i>tethers</i>, geometric <i>restraints</i> (distances, bond angles and
+  dihedrals) and <i>wall potentials</i> can be used to maintain the relative
+  positioning of specific atoms and the absolute position of the whole
+  structure.
+<a id="Fixing_Atoms"></a>
+</p>
+
+<h2>Fixing Atoms</h2>
+
+<p>To completely eliminate motion, atoms can be <i>fixed</i> in space, which
+  means the atoms will not move at all. Atoms are fixed by first selecting the
+  atoms to be fixed, followed by issuing the command:</p>
+
+<p class="blockquote"><span class="menu">MOE | Edit | Potential |
+  Fix</span></p>
+
+<p>or alternatively, <i>via</i> the right-hand side panel:</p>
+
+<p class="blockquote"><span class="menu">MOE | RHS | Constrain |
+  Fix</span></p>
+
+<p>Fixed atoms will not move, even if the user tries to move them manually.
+  Fixed atoms must be unfixed before the can be moved. To unfix atoms that are
+  fixed, first select the atoms to unfix and issue the command:</p>
+
+<p class="blockquote"><span class="menu">MOE | Edit | Potential |
+  Unfix</span></p>
+
+<p>or alternatively, <i>via</i> the right-hand side panel:</p>
+
+<p class="blockquote"><span class="menu">MOE | RHS | Constrain |
+  Unfix</span></p>
+
+<p>To unfix all fixed atoms, first select all the fixed atoms with the
+  command</p>
+
+<p class="blockquote"><span class="menu">MOE | Select | Potential |
+  Fixed</span></p>
+
+<p>followed by the unfix command</p>
+
+<p class="blockquote"><span class="menu">MOE | Edit | Potential |
+  Unfix</span></p>
+<a id="Tethering_Atoms"></a>
+<h2>Tethering Atoms</h2>
+
+<p>Tethers are forces applied to an atom that tie it to its initial position.
+  This is useful when the user does not wish to completely restrict motion by
+  fixing atoms, but still wishes to constrain atoms to their initial positions
+  to ensure that the structure does not stray too far from its immediate
+  locale. To tether atoms, first select the atoms to be tethered and issue the
+  command:</p>
+
+<p class="blockquote"><span class="menu">MOE | RHS | Constrain |
+  Tether</span></p>
+
+<p>By default, the tether settings are taken from the <a href=
+  "../apps/ligx.htm">QuickPrep</a> panel:</p>
+
+<img src="mol_prep/ligx_panel.png" alt="QuickPrep" class="center" />
+
+<p>Since small molecules are typically detected as ligands, the tether
+  strength and buffer are taken from the <b>Ligand</b> option in the QuickPrep
+  panel. To modify the default tether parameters, open the <b>QuickPrep</b>
+  panel (<span class="menu">MOE | RHS | QuickPrep</span>) and set the
+  (<b>Tether | Ligand</b>) options to the desired values. Press <b>Save
+  Settings</b> in the QuickPrep panel after modifying any values in order to
+  put the settings into effect. (Note that energy minimization can be done
+  directly from the <b>QuickPrep</b> panel by pressing <b>OK</b> when the
+  <b>Refine</b> option is on.)</p>
+
+<p>Once tethers have been set, they are listed with their properties on the
+  Restraints page of the <a href="pot.htm#Restraints">Potential Setup</a>
+  panel. The tether weights and buffers can be edited from this page.</p>
+
+<p>Atom tethers can be set in the <a href="../apps/emin.htm">Energy
+  Minimize</a> panel directly before minimization. When tethers are applied
+  from this panel, the same tether weight is used for all tethered atoms.</p>
+<a id="Geometric_Restraints"></a>
+<h2>Geometric Restraints</h2>
+
+<p>Restraints can be created on a group of atoms to maintain the relative
+  geometry between them. MOE supports distance, bond angle and dihedral angle
+  restraints. The</p>
+
+<p class="blockquote"><span class="menu">MOE | Edit | Potential | <a href=
+  "../moe/pot.htm#Restraints">Restrain</a></span></p>
+
+<p>prompt can set restraints on the distance between two atoms, the angle as
+  defined by three atoms, or the dihedral angle as specified by four atoms
+  (press <tt>&lt;Esc&gt;</tt> to Cancel).</p>
+  <div style="text-align:center;"><img src="mol_prep/restraint_prompt.png" alt=
+  "Restraint Prompt" /></div>
+
+<p>A list of all the restraints in the system is available on the Restraints
+  page of the <a href="pot.htm#Restraints">Potential Setup</a> panel. The
+  properties of restraints can also be edited on this page.</p>
+<a id="Example_BQ123"></a>
+<h2>Example: Applying Restraints to BQ123</h2>
+  <div class="example">
+    <div class="floatright"><img src="mol_prep/BQ123.png" alt="BQ-123" class="floatright" /></div>
+
+<p>BQ-123, a potent selective ET<sub>A</sub> receptor antagonist used in
+    the study of endothelin receptor function, is a cyclic pentapeptide:
+    D-tryptamine-D-aspartic acid-L-proline-D-valine-L-leucine. NMR data reveals
+    an inverse &gamma;-turn at Pro and a Leu-Trp interaction. Restraints can be
+    set to ensure these interactions in MM simulations.</p>
+    <ol>
+      <li>
+        <i>Load the molecule into MOE.</i><br />
+
+<p class="blockquote"><span class="menu">MOE | File | Open |
+        <tt>$MOE/sample/mol/BQ123.moe.gz</tt></span></p>
+      </li>
+      <li>
+        <i>Set a distance restraint to preserve the OA-HA
+        interaction.</i><br />
+        Open the <a href="../moe/pot.htm#Restraints">Restrain</a> prompt:
+
+<p class="blockquote"><span class="menu">MOE | Edit | Potential |
+        Restrain</span></p>
+
+<p>With the prompt in <b>distance</b> mode, select the OA and HA atoms.
+        Set the distance range and tether weight:</p>
+
+<p class="blockquote"><span class="menu">Bounds | L: 2 and U: 3</span><br />
+        <span class="menu">Weight: 10</span></p>
+
+<p>Press <b>Apply</b>. The restraint will be displayed in the MOE
+        Window as a red line.</p>
+      </li>
+      <li>
+        <div class="floatright"><img src="mol_prep/BQ123_constraints.png" alt=
+        "BQ-123" class="floatright" /></div><i>Set a distance restraint to preserve the OB-HB
+        interaction.</i><br />
+        Select the OB and HB atoms, and set the same <b>Bounds</b> and
+        <b>Weight</b> values as for OA-HA. Press &lt;Esc&gt; to exit the
+        prompt.
+      </li>
+      <li>
+        <i>Set the forcefield.</i><br />
+        Since BQ-123 is a peptide, the AMBER10:EHT forcefield is appropriate.
+        Press the <a href="gui/mainwin.htm#Forcefield">Forcefield</a> button in
+        the <a href="gui/mainwin.htm#Footer">Footer</a> of the MOE Window to
+        verify the following settings and change if necessary:
+
+<p class="blockquote"><span class="menu">Load | AMBER10:EHT</span></p>
+
+<p class="blockquote"><span class="menu">Solvation |
+        Born</span></p>Apply the current forcefield charges to the structure by
+        pressing <b>Fix Charges</b>. Press <b>Close</b>.
+      </li>
+    </ol>
+
+<p>At this point the molecule is ready for further analysis, in simulations
+    such as MM minimization, <a href="../apps/docking.htm">docking</a> or
+    <a href="../apps/confsrch.htm#LowModeMD">conformational search</a>. The
+    restraints set here will be respected by all applications that employ an MM
+    minimization step.</p>
+  </div>
+<a id="Wall_Restraints"></a>
+<h2>Wall Restraints</h2>
+
+<p>Using a <i>Wall Potential</i> restricts the entire molecule to a
+  particular region of space. The <span class="menu">MOE | Edit | Potential |
+  <a href="../moe/pot.htm#Wall">Wall</a></span> command marks the selected
+  atoms as &quot;walled&quot;; these atoms will be restrained if Wall
+  restraints are enabled in the system. <b>Note:</b> Wall restraints must be
+  explicitly enabled from the <b>Wall</b> page of the <a href=
+  "../moe/pot.htm#Wall">Potential Setup</a> panel. The specification of the
+  walled region is also made on this page.
+<a id="Partial_Charges"></a>
+</p>
+
+<h1>Calculating Partial Charges</h1>
+
+<p>Partial charges are required for forcefield-type calculations (e.g.
+  minimization or molecular dynamics). The charges are typically calculated
+  using the current forcefield, but other methods can be specified. The
+  <a href="pot.htm#Charge">Partial Charges</a> panel</p>
+
+<p class="blockquote"><span class="menu">MOE | Compute | Prepare | Partial
+  Charges</span></p>
+
+<img src="mol_prep/pcharge.png" alt=
+  "Partial Charges panel" class="center" />
+
+<p>can also be used to adjust hydrogens and lone pairs as necessary.</p>
+
+<p>For molecules in a database, the <a href=
+  "../mdb/db.htm#PartialCharges">Database Partial Charges</a> panel can be
+  used:</p>
+
+<p class="blockquote"><span class="menu">DBV | Compute | Molecule | Partial
+  Charges</span></p>
+
+<img src="mol_prep/charges.png" alt=
+  "Database Partial Charges panel" class="center" />
+
+<p>Once again, hydrogens and lone pairs can be adjusted. If minimization is
+  to be done, partial charges can be calculated directly in the <a href=
+  "../apps/emin.htm">Energy Minimize</a> panel.</p>
+<a id="Optimization"></a>
+<h1>Geometry Optimization</h1>
+
+<p>Once the molecular structure is correct, it is usually desirable to
+  optimize the geometry. For optimizing small molecules, an appropriate
+  forcefield, such as AMBER10:EHT, should be used. This can be specified using
+  the <a href="../moe/pot.htm">Potential Setup</a> panel, which can opened
+  with</p>
+
+<p class="blockquote"><span class="menu">MOE | Footer | Forcefield</span></p>
+
+<p>The forcefield must be set prior to minimization.</p>
+
+<p>Once the molecule is prepared and the forcefield has been set, the
+  <a href="../apps/emin.htm">Energy Minimize</a> panel is used to perform a
+  molecular mechanics minimization to find a local minimum-energy
+  conformation.</p>
+
+<p class="blockquote"><span class="menu">MOE | Compute | Energy
+  Minimize</span></p>
+
+<img src="mol_prep/ff_page.png" alt=
+  "Energy Minimize panel" class="center" />
+
+<p>In the <b>Energy Minimize</b> panel, options exist to set forcefield
+  partial charges, adjust hydrogens and lone pairs, and set chiral constraints
+  and atom tethers prior to minimization. The ligand can be minimized on its
+  own by making it the only active molecule in the system; this can be done in
+  the <a href="../apps/ligx.htm#System">System Manager</a>. Alternatively,
+  select the ligand</p>
+
+<p class="blockquote"><span class="menu">MOE | RHS | Select |
+  Ligand</span></p>
+
+<p>and choose <span class="menu">Selected Atoms Only</span> in the Energy
+  Minimize panel before running the calculation to minimize only the selected
+  atoms.</p>
+
+<p>To minimize all the molecules in a database, the <a href=
+  "../apps/emin.htm#DBMin">Database Minimize</a> panel can be used:</p>
+
+<p class="blockquote"><span class="menu">DBV | Compute | Molecule | Energy
+  Minimize</span></p>
+
+<img src="mol_prep/ff_page2.png" alt=
+  "Database Minimize panel" class="center" />
+
+<p>When minimizing a database of compounds, the minimization is performed
+  using the forcefield settings in the MOE window. These should be set
+  appropriately using the <a href="../moe/pot.htm">Potential Setup</a>
+  panel. If MOE is running
+  in <a href="../install/smp_inst.htm">MPU mode</a>, the calculations are
+  automatically distributed to each node of the cluster.
+</p>
+<a id="Solvation"></a>
+<h1>Solvation</h1>
+
+<p>It is sometimes necessary, e.g. in <a href="../apps/md.htm">molecular
+  dynamics</a> simulations, to solvate the system with explicit solvent
+  molecules. The <a href="../apps/solvate.htm">Solvate</a> panel is used to add
+  explicit solvent to the system:</p>
+
+<p class="blockquote"><span class="menu">MOE | Edit | Solvate</span></p>
+
+<img class="center" src="mol_prep/solvate_panel.png" alt=
+  "Solvate panel" />
+
+<p>Different solvents can be added, in different shapes, including the region
+  specified by <a href="../moe/pot.htm#Wall">Wall restraints</a>.</p>
+<a id="ConformationalSearch"></a>
+<h1>Conformational Search</h1>
+
+<p>For certain kinds of analysis, e.g. <a href=
+  "../apps/ph4_search.htm">pharmacophore search</a>, a database of ligand
+  conformers is required. MOE provides several conformational search
+  generators, available from the <a href="../apps/confsrch.htm">Conformational
+  Search</a> panel.</p>
+
+<img src="mol_prep/csearch.png" alt=
+  "Conformational Search panel" class="center" />
+
+<p>In most cases, LowModeMD search is the method of choice.</p>
+<a id="See_Also"></a>
+<h1>See Also</h1>
+
+<p>
+  <a href="prep3ddb.htm">Preparing a Conformation Database</a><br />
+  <a href="moldb_prep.htm">Preparing a Small Molecule Dataset</a><br />
+  <a href="../apps/structprep.htm">Preparing Protein or Protein-Ligand
+  Complex</a>.<br />
+  <a href="../install/smp_inst.htm">MOE/cluster (MOE/smp)</a>
+  </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../images/ccgicon.png" /> <a href="../index.htm"></a> <a href=
+    "../legal.htm"></a> &copy;<span class="versionyear"></span> <a href="http://www.chemcomp.com"></a>. All
+    rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

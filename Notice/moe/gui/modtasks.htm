@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions:" />
+  <meta name="keywords" content="panel: Load Module" />
+  <meta name="keywords" content="panel: SVL Modules and Tasks" />
+  <meta name="keywords" content="panel: SVL Crash History" />
+  <title>Modules and Tasks</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Modules and Tasks
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+  <ul>
+    <li>
+      <a href="#SVLModulesTasks">SVL Modules &amp; Tasks</a>
+      <ul>
+        <li><a href="#Modules">Modules</a></li>
+        <li><a href="#Tasks">Tasks</a></li>
+      </ul>
+    </li>
+    <li><a href="#SVLCrashHistory">SVL Crash History</a></li>
+    <li><a href="#SVL">SVL Commands</a></li>
+  </ul>
+<a id="SVL_Modules_&_Tasks"></a>
+<h1>
+<a id="SVLModulesTasks">SVL Modules &
+  Tasks</a></h1>
+
+<p>The SVL Modules &amp; Tasks panel helps you keep track of which modules
+  are loaded and which tasks are running at any given time in MOE. To open this
+  panel, push the <b>SVL</b> button in the upper right corner of the MOE Window
+  while you hold the <b><tt>Ctrl</tt></b> key.</p>
+
+<p><span class="tip">Tip!</span> This invocation can be done at any time,
+  even when the system is suspended by an SVL task, making it possible to
+  cancel, for instance, a task whose resource needs are slowing down the
+  graphical user interface.</p>
+
+<p>The module and task managers are different pages that share the Modules
+  &amp; Tasks panel. Buttons at the top of the panel toggle between the two.
+  The Modules page lists loaded modules; the Tasks page lists tasks that are
+  currently in progress.</p>
+
+<h2><a id="Modules">Modules</a></h2>
+
+<p>Modules are SVL functions that are grouped in files and loaded into SVL as
+  units. Loaded SVL modules appear in the Modules page of the SVL Modules &amp;
+  Tasks panel, where they can be unloaded, reloaded, and edited.</p>
+
+<img src="modtasks/modpage.png" alt=
+  "Modules Page in the SVL Modules & Tasks Panel" class="center" />
+
+<p>Modules are listed according to class. Select a class in the Class option
+  menu. When All is selected, all modules in the system are listed. A module
+  can be put into a <em>class</em> by using the <tt>#set class</tt> directive.
+  For information on how to include these in an SVL program please see <a href=
+  "../../svl/manual/funcs.htm#Modules">Modules</a>.</p>
+
+<p>Modules are selected by clicking on them with the mouse. When a module is
+  selected, its path and filename appear in the File field, below the list
+  area.</p>
+  <table class="noborder">
+    <tr>
+      <td valign="top"><b>Load</b></td>
+      <td valign="top">
+        Opens the Load Module panel. This file selection box allows you to
+        specify the SVL file to load in the system. If the module is already
+        loaded, MOE will replace it.
+
+<img src="modtasks/load.png" alt=
+        "Load Module Panel" class="center" />
+
+<p>The executable code of a loaded file is kept in memory until the
+        file is unloaded.</p>
+
+<p><b>Note:</b> SVL modules may also be loaded or run from the MOE Open
+        system. To do this choose <b><span class="nobr">MOE | File |
+        Open</span></b>, select the SVL file you wish to load and select the
+        desired <b>Action</b> option.</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Unload</b></td>
+      <td valign="top">Unloads the selected module. If you mistakenly unload a
+      MOE core module such as Sequence Editor Support, restart MOE. All modules
+      are automatically loaded into the system at startup.</td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Reload</b></td>
+      <td valign="top">Reloads the selected module.</td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Edit</b></td>
+      <td valign="top">Displays the contents of the selected module in a
+      <a href="ted.htm">Text Editor</a>. This allows you to edit the SVL
+      contents of the file, save the modifications, and reload the module.</td>
+    </tr>
+  </table>
+
+<h2><a id="Tasks">Tasks</a></h2>
+
+<p>Running a function or issuing a command at the CLI initiates an SVL task.
+  MOE is a multi-tasking application, and many tasks can be underway
+  concurrently. The Tasks page of the SVL Modules &amp; Tasks panel shows the
+  currently active tasks. Tasks are selected by clicking on them with the
+  mouse. Tasks can be canceled from within this panel.</p>
+
+<img src="modtasks/tasks.png" alt=
+  "Tasks Page in the SVL Modules & Tasks Panel" class="center" />
+
+<p>The status of the selected task is shown in the Status field below the
+  list area.</p>
+  <table class="noborder">
+    <tr>
+      <td valign="top"><b>Destroy</b></td>
+      <td valign="top">Destroys the selected task. Deleting <tt>no name</tt>
+      tasks should be avoided as these untitled tasks are &quot;owned&quot; by
+      named tasks.</td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Destroy All</b></td>
+      <td valign="top">Destroys all tasks. This option should be used with
+      care.</td>
+    </tr>
+  </table>
+
+<p>Tasks can be also terminated using the Cancel menu or by pressing
+  <tt>Esc</tt> if the task is a prompter.</p>
+
+<a id="SVL_Crash_History"></a>
+<a id="SVLCrashHistory"></a>
+
+<h1>SVL Crash History</h1>
+
+<div class="floatright"><img src="modtasks/error.png" class="floatright" />
+</div>
+
+<p>When a task terminates with an error, you can use the SVL Crash History
+  panel to pinpoint where and in which function it failed. The Crash History
+  displays the line at which execution stopped as well as the function calling
+  sequence (function stack trace).</p>
+
+<p>Press the <b>SVL</b> button in the upper right corner of the MOE Window
+  while you hold the <b><tt>Shift</tt></b> key to open the SVL Crash History
+  panel. The panel can also be opened from the warning dialog, which gets
+  shown when an SVL task terminates with an error, by pressing the
+  <b>More</b> button.
+
+  <br />
+  <br />
+</p>
+
+<img src="modtasks/crash.png" alt=
+  "SVL Crash History Panel" class="center" />
+
+<p>The <b>Task</b> line at the top of the panel displays the name of the task
+  that caused the error. Beneath it, the <b>Error</b> line shows the error
+  message.</p>
+
+<p>The bottom list displays the function calling sequence that produced the
+  error. Each line displays the function name, the line at which execution
+  stopped, and the name of the file in which the function is defined. When
+  selected, the corresponding file is displayed in the area above, with the
+  appropriate line highlighted. If a line belongs to a recursively invoked
+  function, its recursion level is also given.</p>
+  <table class="noborder">
+    <tr>
+      <td valign="top"><b>Edit</b></td>
+      <td valign="top">Loads the contents of the selected file in an SVL Text
+      Editor window.</td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Up</b></td>
+      <td valign="top">Moves selection up the calling sequence of the files
+      listed in the bottom list.</td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Down</b></td>
+      <td valign="top">Moves selection down the calling sequence of the files
+      listed in the bottom list.</td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Report</b></td>
+      <td valign="top">
+      <div class="floatright"><img src="modtasks/issue_report.png"
+      class="floatright" /></div>
+      Opens the <b>Issue Report</b> panel which allows to <b>Save</b> the
+      crash history and additional information in a text file.
+      The additional information, which can included in the report,
+      is the graphics card information as provided by
+      <a href="../../appendix/viewsetup.htm#GraphicsCardInformation">
+      <span class="nobr"><b>MOE | Help | OpenGL Info</b></span></a>
+      and extended details about the operating system setup (on Unix only).
+      <p>
+      The report is opened in a text editor, where one can add additional
+      details, such as steps to reproduce the issue or other pertinent
+      information.
+      </td>
+    </tr>
+  </table>
+<a id="SVL_Commands"></a>
+<a id="SVL"></a>
+<h1>SVL Commands</h1>
+
+<p><a class="svl" href="../../svl/fcnref/loadetc.htm">load</a><br />
+  <a class="svl" href="../../svl/fcnref/runetc.htm">run</a>
+<a id="See_Also"></a>
+</p>
+
+<h1>See Also</h1>
+
+<p><a href="mainwin.htm#Cancel">Using the Cancel Menu</a><br />
+  <a href="svlcommands.htm">SVL Commands window</a>
+
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

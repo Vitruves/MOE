@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../images/ccgicon.png" />
+  <title>Capture</title>
+  <meta name="keywords" content="panel: Capture" />
+  <meta name="keywords" content="main_keywords: RIPS" />
+  <meta name="keywords" content="keywords: scoring, smp, CoMFA" />
+  <meta name="keywords" content="keywords: conformation, activity" />
+  <meta name="keywords" content=
+  "keywords: Gaussian, density, properties, pharmacophore" />
+  <meta name="keywords" content=
+  "keywords: rigid template, partial charges, forcefield" />
+  <meta name="keywords" content=
+  "keywords: stochastic conformational search, unified scheme" />
+  <meta name="keywords" content="keywords: chiral, RMSD, minimize, Bayes" />
+  <meta name="keywords" content=
+  "keywords: forcefield, multiple, refine, iteration, failure, limit" />
+  <meta name="keywords" content=
+  "keywords: gradient test, invert unconstrained" />
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../index.htm"><img src="../images/ccglogo.png" /></a>
+    <a href="../index.htm"><div class="moeversion"></div></a>
+    Capture
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+  <!-- <div id="useMathJax"></div> -->
+  <ul>
+    <li>
+      <a href="#Overview">Overview</a>
+    </li>
+    <li>
+      <a href="#Creation">Adding a Capture</a>
+    </li>
+    <li>
+      <a href="#Footer">Capture Footer and Panel</a>
+    </li>
+    <li>
+      <a href="#Update">Capture Modification</a>
+    </li>
+    <li>
+      <a href="#Settings">Capture Settings</a>
+    </li>
+  </ul>
+
+<a id="Overview">
+  <h1>Overview</h1>
+</a>
+
+<p>The <b>Capture</b> application provides ways to easily keep track of
+  different system states. Typical uses of Capture include journaling
+  work, recording thoughts and annotations, storing manually modified
+  ligands with associated scores and remarks, and navigating to
+  different saved views of interest in a system.  In this context, a
+  <i>capture</i> is an association of a complete system state, a title,
+  a set of comments, ligand properties, and a screenshot of the MOE
+  window, with optionally the system view setup. These captures are
+  stored in user-created <b>Capture</b> files, which are specialized
+  MOE databases and have <tt>.mdb</tt> as their file extension.
+
+</p>
+
+<div class="floatleft">
+  <img src="capture/menu.png" alt="Capture Menu" class="floatcenter" />
+  <p class="caption"><b>Capture</b> menu</p>
+</div>
+
+<p>The <b>Capture</b> menu is reachable with <span class= "menu">MOE |
+  RHS | Capture</span>.  The same menu is available from
+  <span class="menu">MOE | File | Capture</span>; in the remainder of
+  this document, all menu references will be to <span class="menu">MOE |
+  RHS | Capture</span>, with the understanding that they can be
+  equivalently found under the <span class="menu">MOE | File | Capture</span>
+  menu.  Through this menu, new captures can be added,
+  Capture files can be opened and closed, and, if a
+  Capture file is currently open, a list of the captures
+  contained in the file can be accessed.
+  </p>
+
+<div class="floatright">
+  <img src="capture/open.png" alt="Open panel" class="center" />
+  <p class="caption">Open Capture File</p>
+  <img src="capture/list.png" alt="List Menu" class="center" />
+  <p class="caption">List of captures</p>
+</div>
+  
+<p>To start using the <b>Capture</b> application, a Capture file must
+  first be opened through <span class="menu">MOE | RHS | Capture |
+  Open</span>.  This brings up the <b>Open Capture File</b> panel. To
+  open an existing Capture file, select <b>Open</b>, then either
+  use the browse button <img src="capture/button_browse.png"
+  style="vertical-align:middle" /> to navigate to the file or enter its
+  path in the text field, then press OK.  Alternatively, double-click in
+  the list of recently-used Capture files as displayed in the
+  <b>Recent</b> list; the file will open directly.
+</p>
+  
+<p>To create and open a new Capture file, press <b>Create</b>,
+  then either use the browse button <img src="capture/button_browse.png"
+  style="vertical-align:middle" /> to navigate to the directory in which
+  to save the file, then enter the name of the file, or enter the full
+  path and name of the new file in the text field. Once the name has
+  been specified, press OK.  The file suffix <tt>(.mdb)</tt> is
+  automatically added if omitted.  If no path is given, the file will be
+  created in the current working directory. If the file name corresponds
+  to an existing file, that file will be overwritten.  Once a
+  Capture file is opened, it will remain open until it is closed
+  by using the <span class="menu">Close </span> menu option or by
+  closing the MOE session.
+
+</p>
+  
+<p>New captures can be <a href="#Creation">added</a> to a
+  Capture file using <span class="menu">MOE | RHS | Capture |
+  Add</span>.  The captures saved in the currently-open Capture file can
+  be accessed from a popup list panel raised by
+  <span class="menu">MOE | RHS |
+  Capture | List</span>; note that this menu item is available only when
+  a Capture file is currently open.
+
+</p>
+
+<p>The scrollable and sortable list of captures displays titles and
+  creation dates, along with ligand properties, if any. Clicking on an
+  entry will close the current system and load into MOE the system saved
+  in that entry.
+</p>
+  
+<p><span class="warning">Warning!</span> Loading a capture will close
+  the current MOE system without putting up a confirmation dialog.
+</p>
+
+<p>If the current Capture file contains five or more
+  captures, a search bar will appear, providing the ability to filter
+  the list using search patterns.
+</p>
+
+<p>The index number displayed in the first column
+  of the list corresponds to the position of that capture's entry in the
+  Capture file.
+  When a capture is loaded, its entry index is displayed in a message
+  in the upper-right corner of
+  the MOE Window.  The index is also displayed
+  in the title bar of the <a href="#Update">Edit</a> panel to help
+  identify which entry is being edited.
+  In the Capture <a href="#Footer">footer</a>,
+  the indices are used to number the browsing buttons.
+</p>
+
+<p>More features such as capture navigation, reordering, and update are
+  available in the <b>Capture</b> <a href="#Footer">footer</a>
+  and <a href="#Footer">panel</a>.
+</p>
+
+<a id="Creation">
+  <h1>Adding a Capture</h1>
+</a>
+
+<p>The <b>Add</b> panel is used to capture the current MOE system.  It is
+  opened with <span class="menu">MOE | RHS | Capture | Add</span>.
+  A visual snapshot of the system to be saved is displayed.  If
+  <span class="menu">MOE | RHS | Ligand |
+  <a href="./ligx.htm#Properties">Ligand Properties</a></span> is
+  currently enabled, ligand properties will be included in the
+  display. The <b>Title</b>, <b>Comment</b> and <b>Save</b> options can be
+  set as desired.  Pressing <b>OK</b> will add a new capture to the
+  current Capture file.
+</p>
+
+<div class="floatright"><img src="capture/add_panel.png" alt=
+  "New Capture Panel" class="floatright" /></div>
+
+<p>The cursor position can be switched between the <b>Title</b> and
+  <b>Comment</b> text fields by pressing Tab on the keyboard.
+  A pulldown list located in
+  the rightmost position of the <b>Title</b> text field contains title
+  suggestions based on the names of the chains in the system and
+  previous captures.  Pressing <b>OK</b> with empty <b>Title</b> and
+  <b>Comment</b> text fields will create a capture with the default
+  title that consists of the names of the active chains; by default
+  the comment is left empty.
+  Note: use Shift-Tab in the Comment field to add a tab in the
+  text.
+</p>
+
+<p>The <b>Save</b> options are preserved from session to session.
+</p>
+
+<table class="noborder">
+  <tr>
+    <td><b>Active Tags</b></td>
+    <td>If on, only the tags with active atoms will be saved in
+    the new capture, otherwise all chains will be saved.</td>
+  </tr>
+  <tr>
+    <td><b>Surfaces</b></td>
+    <td>If on, surfaces will be saved in the new capture, otherwise
+    surfaces will not be saved.</td>
+  </tr>
+  <tr>
+    <td><b>Ligand Only</b></td>
+    <td>If on, only the active ligand will be saved in the new capture,
+    otherwise the whole system will be saved (in accordance with
+    the <b>Active Tags</b> setting).</td>
+  </tr>
+  <tr>
+    <td><b>Theme</b></td>
+
+    <td>If on, the current <a href= "../appendix/viewsetup.htm">View
+      Setup</a> will be saved as part of the new capture.  Note that if
+      <b>Theme</b> is disabled, when the capture is subsequently loaded,
+      whatever theme is in use at that time will continue to be in
+      effect, regardless of what theme is displayed in the bubble help
+      thumbnail in the list of captures or in the Add or Edit panels.
+
+    </td>
+  </tr>
+</table>
+
+<a id="Footer">
+  <h1>Capture Footer and Panel</h1>
+</a>
+
+<p><b>Capture</b> can be launched as an attached or detached panel
+  from the list of captures (<span class="menu">MOE | RHS | Capture
+  | List</span>, only available when a Capture file has been opened).
+  In attached mode, Capture opens in the MOE Footer, otherwise it
+  can be opened as a detached
+  panel.  Pressing the top right button in the list popup displayed by
+  the menu option <span class="menu">List...</span> will bring up the
+  <b>Capture</b> footer or detached window, depending on which preferred
+  location is chosen in the <a href="#Settings">Capture Settings</a>.
+  The attach button <img src="capture/sys_attach.png"
+  style="vertical-align:middle" /> opens the footer mode and the detach
+  button <img src="capture/sys_detach.png" style="vertical-align:middle"
+  /> opens the detached window. The default mode is attached at the
+  bottom of the MOE window.
+</p>
+
+<img src="capture/footer.png" class="center" />
+<p class="caption"><b>Capture</b> footer</p>
+
+<div class="floatright"><img src="capture/footer_popup.png" alt=
+  "Capture Panel" class="center" />
+  <p class="caption"><b>Capture</b> Footer List Panel</p>
+</div>
+
+<p>The <b>Capture</b> footer is meant to provide easy access
+  while being unobtrusive, making it suitable for presentations
+  and working with multiple simultaneous panels. It allows one to:
+</p>
+
+
+  <ul>
+    <li>
+      Preview and load any capture from the current Capture file
+      using the numbered list, along with navigation
+      <img src="capture/button_nav_1.png" style="vertical-align:middle" />
+      <img src="capture/button_nav_2.png" style="vertical-align:middle" />
+      buttons.
+    </li>
+    <li>
+      Browse, search, and manage the list of captures with the footer list panel
+      opened by the <b>List</b> button.
+    </li>
+    <li>
+      Open the <b>Add</b> panel to add a new capture with the <b>Add</b>
+      <img src="capture/button_add.png" style="vertical-align:middle" /> button.
+    </li>
+    <li>
+      Open the <b>Edit</b> panel to edit the currently selected capture with the
+      <b>Edit</b>
+      <img src="capture/button_edit.png" style="vertical-align:middle" /> button.
+    </li>
+  </ul>
+
+<p>
+  The index numbers in the numbered list of the captures correspond
+  to the positions of the entries in the Capture file.
+  Hovering the mouse over a numbered
+  button will display a preview of the capture with its title.
+  Pressing a numbered button or the navigation buttons will close
+  the current system and load
+  the corresponding capture, highlighting it in the list.
+</p>
+
+<p>
+  The footer list popup is similar to that opened by
+  <span class="menu">MOE | RHS | Capture | List</span>,
+  but has more features.
+  The name of the current Capture file is displayed at the top
+  of the popup and can be changed by selecting <b>Open</b>
+  in the menu
+  <img src="capture/button_file.png" style="vertical-align:middle" />.
+  This menu also provides an <b>Open DBV</b> option for opening
+  the Capture file in a Database Viewer.
+</p>
+
+<p>
+  The capture list displays the capture indices, titles, and creation
+  dates, plus ligand properties if any. It is scrollable and sortable.
+  Clicking on an entry will close the current
+  system and load the system saved in that entry. 
+</p>
+
+<p><span class="warning">Warning!</span> Loading a capture will close
+  the current MOE system without putting up a confirmation dialog.
+</p>
+
+<p>Typing in the search bar will dynamically search the
+  text of all titles, comments, and properties shown in the list
+  for matches to the search pattern as it is being entered.
+  This filtering is case insensitive.
+</p>
+
+<p>
+  The footer list panel also contains additional controls. 
+  Similarly to those in the footer itself, the Add
+  <img src="capture/button_add.png" style="vertical-align:middle" />
+  and Edit
+  <img src="capture/button_edit.png" style="vertical-align:middle" />
+  buttons will open their respective panels.
+  The move up 
+  <img src="capture/button_up.png" style="vertical-align:middle" />
+  and move down
+  <img src="capture/button_down.png" style="vertical-align:middle" />
+  buttons can be used to change the position of the selected
+  capture in the list. Doing so will change the position of the capture's
+  entry in the Capture file. Note: changing position is only available
+  when the capture list is sorted by index and unfiltered.
+  Pressing the delete
+  <img src="capture/button_delete.png" style="vertical-align:middle" />
+  button will remove the selected capture from the Capture file.
+</p>
+
+<p><span class="warning">Warning!</span> Deleting a capture from
+  the Capture file cannot be undone.
+</p>
+
+<p>Pressing the detach button <img src="capture/sys_detach.png"
+  style="vertical-align:middle" /> in the footer will close the footer
+  and open the detached <b>Capture</b> window.  This window is identical
+  in function to the footer popup, but additionally displays the title and
+  complete comment of the selected capture.
+</p>
+
+  <div class="center"><img src="capture/panel.png" alt=
+    "Capture Panel" class="center" />
+    <p class="caption">Detached <b>Capture</b> panel</p>
+  </div>
+
+<a id="Update">
+  <h1>Capture Modification</h1>
+</a>
+<div class="floatright">
+  <img src="capture/edit_panel.png" alt="Edit Panel" class="floatcenter" />
+</div>
+
+<p>Saved captures can be updated using the Edit panel. This panel
+  allows one to modify the title and comment, and to optionally
+  replace the complete system of a previously saved capture.
+</p>
+
+<p>The system saved in the current capture and the current MOE system are
+  displayed side-by-side in the panel. Selecting
+  <b>Keep Saved System</b> will leave the system saved in the capture
+  unmodified,
+  while selecting <b>Overwrite With Current System</b> will overwrite the
+  saved system with the current system in MOE.
+</p>
+
+<p>The other options of the Edit panel are the same as in the
+  <a href="#Creation">Add</a> panel.
+  The <b>Title</b> and <b>Comment</b> text fields contain the title and
+  comments saved in the selected capture and can be edited. As in the
+  <b>Add</b> panel, the cursor position can be switched between the text
+  fields by pressing Tab.  A pulldown list located in the rightmost
+  position of the Title text field contains title suggestions.
+  Note that the <b>Save</b> options are only available
+  when <b>Overwrite With Current System</b> is selected,
+</p>
+
+<p>
+  Pressing <b>OK</b> will update the capture.
+  <span class="warning">Warning!</span> This operation
+  cannot be undone.
+</p>
+
+<a id="Settings">
+  <h1>Capture Settings</h1>
+</a>
+
+<div class="floatright"><img src="capture/settings.png" alt=
+  "Capture Settings" class="floatright" /></div>
+
+<p> The gear button
+  <img src="capture/button_settings.png" style="vertical-align:middle" /> 
+  opens a panel to configure the default settings for <b>Capture</b>.</p>
+
+<table class="noborder">
+  <tr>
+    <td><b>Open Mode</b></td>
+    <td>Choose the default mode for <b>Capture</b> when the <b>Capture</b>
+      panel is launched from the list of captures opened using
+      <span class="menu">MOE | RHS | Capture | List</span>.
+      <ul>
+        <li><i>Detached</i>. <b>Capture</b> will open in a separate window.
+	   In the list of captures, the launch button will appear as  
+	   <img src="capture/sys_detach.png" style="vertical-align:middle" />.
+	</li>
+	<li><i>Attached</i>. <b>Capture</b> will open in the MOE Footer.
+	   In the list of captures, the launch button will appear as  
+	   <img src="capture/sys_attach.png" style="vertical-align:middle" />.
+	</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td><b>Transitions</b></td>
+    <td>Enable animated transitions between captures and set the
+      transition duration, in seconds.</td>
+  </tr>
+  <tr>
+    <td><b>Bubble Help</b></td>
+    <td>Enable a picture of the system or the capture's comment to be shown
+      when the mouse is hovered over a capture in the list.</td>
+  </tr>
+  <tr>
+    <td><span class="nobr"><b>Close Capture File</b></span></td>
+    <td>If on, closing the system will also close the current Capture file.
+    </td>
+  </tr>
+</table>
+
+
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../images/ccgicon.png" /> <a href="../index.htm"></a>
+<a href=
+    "../legal.htm"></a> &copy;<span class="versionyear"></span> <a href="http://www.chemcomp.com"></a>. All
+    rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

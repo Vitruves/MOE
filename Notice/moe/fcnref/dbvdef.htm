@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content=
+  "functions: dbv_DefaultView, dbv_DefaultField, dbv_DefaultEntry" />
+  <title>Database Viewer Defaults: dbv_DefaultView, ...</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Database Viewer Defaults: dbv_DefaultView,
+    ...
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+dbkey = <a class="fcnlink" href="#dbv_DefaultView">dbv_DefaultView</a> []
+entry_key = <a class="fcnlink" href=
+"#dbv_DefaultEntry">dbv_DefaultEntry</a> []
+'field' = <a class="fcnlink" href=
+"#dbv_DefaultField">dbv_DefaultField</a> []
+</pre>
+
+<h1>Description</h1>
+
+<p>These functions are used to determine from which Database Viewer window,
+  entry, or field the current task was launched. For example, Database Viewer
+  menu commands can use <tt>dbv_DefaultView</tt> to determine on which Database
+  Viewer window to operate. Similarly, popup menu commands are able to
+  determine in which cell/field/entry of a Database Viewer they were
+  invoked.</p>
+<a id="dbv_DefaultView"></a>
+<hr noshade="noshade" />
+
+<pre>
+dbkey = <span class="fcndef">dbv_DefaultView</span> []
+</pre>
+
+<p>Returns the key of the Database Viewer which launched the task of the
+  calling function. If the function was not invoked from within a Database
+  Viewer (i.e. it was not invoked from the Database Viewer command line, menu
+  bar or popup menu, nor by double-clicking in a cell),
+  <tt>dbv_DefaultView</tt> will raise a Select Database Viewer prompt. If no
+  Database Viewers are open, it will raise the Open Database Viewer file
+  selection box.</p>
+<a id="dbv_DefaultEntry"></a>
+<hr noshade="noshade" />
+
+<pre>
+entry_key = <span class="fcndef">dbv_DefaultEntry</span> []
+</pre>
+
+<p>Returns the key of the Database Viewer entry from which the task was
+  launched. If the task was not launched from within a Database Viewer entry
+  (i.e. it was not launched by selecting an item from an entry index popup menu
+  or cell popup menu, nor by double-clicking in a cell), <tt>[]</tt> is
+  returned.</p>
+<a id="dbv_DefaultField"></a>
+<hr noshade="noshade" />
+
+<pre>
+'field' = <span class="fcndef">dbv_DefaultField</span> []
+</pre>
+
+<p>Returns the name of the Database Viewer field from which the task was
+  launched. If the task was not launched from within a Database Viewer field
+  (i.e. it was not launched by selecting an item from a field title popup menu
+  or cell popup menu, nor by double-clicking in a cell), <tt>[]</tt> is
+  returned.</p>
+
+<h1>See Also</h1>
+
+<p><a href="introdb.htm">Database Functions</a> </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

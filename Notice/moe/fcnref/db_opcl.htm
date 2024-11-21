@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content=
+  "functions: db_Open, db_Close, db_Filename, db_Flush" />
+  <meta name="keywords" content="functions: db_Key, db_KeyList" />
+  <title>MOE Database Functions: db_Open...</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    MOE Database Functions: db_Open...
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    mdb_key = <a class="fcnlink" href=
+"#db_Open">db_Open</a> [ 'filename','mode' ]
+    mdb_key = <a class="fcnlink" href=
+"#db_Open">db_Open</a> [ mdb_key,'mode' ]
+    filenames = <a class="fcnlink" href="#db_Open">db_Open</a> []
+    <a class="fcnlink" href="#db_Open">db_Open</a> []
+
+    dbkeys = <a class="fcnlink" href="#db_KeyList">db_KeyList</a> []
+    dbkey = <a class="fcnlink" href="#db_Key">db_Key</a> dbkey
+
+    <a class="fcnlink" href="#db_Close">db_Close</a> mdb_key
+
+    filename_tokens = <a class="fcnlink" href=
+"#db_Filename">db_Filename</a> mdb_keys
+
+    <a class="fcnlink" href="#db_Flush">db_Flush</a> mdb_key
+</pre>
+<a id="db_Open"></a>
+<h1>Description</h1>
+
+<pre>
+mdb_key = <span class=
+"fcndef">db_Open</span> [ 'filename','mode' ]
+mdb_key = <span class="fcndef">db_Open</span> [ mdb_key,'mode' ]
+</pre>
+
+<p>Opens or creates a molecular database.</p>
+
+<p>When passed two parameters, one of which is the <tt>mode</tt>,
+  <tt>db_Open</tt> returns the key of the database specified by
+  <tt>mdb_key</tt> (integer used to refer to the database in all subsequent
+  operations). A given database may be opened by different processes, and may
+  be opened more than once before being closed. An existing database can be
+  reopened for shared I/O by supplying its database key <tt>mdb_key</tt> to
+  <tt>db_Open</tt>. Note that <tt>db_Close</tt> must be called as many times as
+  <tt>db_Open</tt>.</p>
+
+<p>The <tt>mode</tt> token indicates what action is to be taken:</p>
+  <dl>
+    <dt><tt>'read'</tt></dt>
+    <dd>Opens the database in read-only mode, i.e. writing is disallowed (the
+    default if the file is not writeable).</dd>
+    <dt><tt>'read-write'</tt></dt>
+    <dd>Opens the database for both reading and writing (the default unless the
+    file is not writeable).</dd>
+    <dt><tt>'create'</tt></dt>
+    <dd>Creates a new database, destroying any previously existing database of
+    that name. However, if a database of that name currently exists and is
+    open, the create operation will fail.</dd>
+  </dl>
+  <hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">db_Open</span> []
+filenames = <span class="fcndef">db_Open</span> []
+</pre>
+
+<p>When no arguments are passed to <tt>db_Open</tt>, and its return value is
+  assigned to a variable, the names of all open database files are returned as
+  a vector of tokens. If no assignment is made and no parameters passed, the
+  function prints a list of database keys and associated filenames for all open
+  databases.</p>
+<a id="db_KeyList"></a>
+<hr noshade="noshade" />
+
+<pre>
+dbkeys = <span class="fcndef">db_KeyList</span> []
+</pre>
+
+<p>Returns a vector of keys of all currently open databases. [] is returned
+  if no databases are open.</p>
+<a id="db_Key"></a>
+<hr noshade="noshade" />
+
+<pre>
+dbkeys = <span class="fcndef">db_Key</span> dbkeys
+</pre>
+
+<p>For each key in dbkeys return the key if it corresponds to a valid open
+  database key. Return 0 otherwise.</p>
+<a id="db_Close"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">db_Close</span> mdb_key
+</pre>
+
+<p>Closes a database opened with <tt>db_Open</tt>. <tt>mdb_key</tt> is the
+  key of the database to close.</p>
+
+<p>At the SVL command line, each line entered is a separate task. Operations
+  on a database must therefore all be specified on the same line otherwise the
+  database will be closed before the operations are completed.</p>
+
+<p><b>Note:</b> <tt>db_Close</tt> must be called as many times as
+  <tt>db_Open</tt>.</p>
+<a id="db_Filename"></a>
+<hr noshade="noshade" />
+
+<pre>
+filename_tokens = <span class="fcndef">db_Filename</span> mdb_keys
+</pre>
+
+<p>For each <tt>key</tt> in <tt>mdb_keys</tt> return the database filename.
+  <tt>key</tt> must refer to a valid open database.</p>
+<a id="db_Flush"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">db_Flush</span> mdb_key
+</pre>
+
+<p>Writes to disk any buffered data related to the database specified by
+  <tt>mdb_key</tt>.</p>
+
+<h1>See Also</h1>
+
+<p><a href="introdb.htm">Database Functions</a> </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

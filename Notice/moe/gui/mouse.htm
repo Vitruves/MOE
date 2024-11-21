@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <title>Using the Mouse</title>
+  <meta name="keywords" content="main_keywords: popup, Alt" />
+  <meta name="keywords" content=
+  "keywords: mouse rotate dihedral, select, pan, zoom, scroll, wheel" />
+  <meta name="keywords" content=
+  "keywords: residue, chain, sequence editor, database viewer" />
+  <meta name="keywords" content=
+  "keywords: spacemouse, space mouse, spacenavigator, space navigator" />
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Using the Mouse
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+  <ul>
+    <li><a href="#Using23Mouse">Using a One, Two or Three-Button Mouse</a></li>
+    <li><a href="#Using1Mouse">macOS Mouse Configuration</a></li>
+    <li><a href="#MousePopupButton">Popup Menus: The Mouse Popup
+    Button</a></li>
+    <li><a href="#AltKey">What if I don't have an Alt key?</a></li>
+    <li>
+      <a href="#MOE">Using the Mouse in the MOE Window</a>
+      <ul>
+        <li><a href="#SelectingAtoms">Selecting Atoms</a></li>
+        <li><a href="#SelectingRibbons">Selecting Ribbons</a></li>
+        <li><a href="#RotatingAtoms">Panning, Rotating and Zooming
+        Atoms</a></li>
+        <li><a href="#Wheel">Using the Scroll Wheel</a></li>
+        <li><a href="#EditingAtoms">Editing Atoms</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#SE">Using the Mouse in the Sequence Editor</a>
+      <ul>
+        <li><a href="#SelectingChains">Selecting Chains</a></li>
+        <li><a href="#SelectingResidues">Selecting Residues</a></li>
+        <li><a href="#MovingResidues">Moving Residues</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#DB">Using the Mouse in the Database Viewer</a>
+      <ul>
+        <li><a href="#SelectingDB">Selecting Entries and fields</a></li>
+        <li><a href="#RotatingDB">Rotating and Zooming 3D Molecules</a></li>
+        <li><a href="#TranslatingDB">Translating and Zooming 2D Depictions</a></li>
+        <li><a href="#EditingDB">Editing and Copying Data</a></li>
+        <li><a href="#Move_Entries_Fields">Moving Single Entries and
+        fields</a></li>
+      </ul>
+    </li>
+    <li><a href="#MouseConfiguration">Mouse Configuration Panel</a></li>
+    <li><a href="#MouseReference">Mouse Reference Panel</a></li>
+    <li><a href="#Trackball">MOE Footer and Trackball</a></li>
+    <li><a href="#SpaceNavigator">SpaceNavigator&reg;</a></li>
+    <li><a href="#See_Also">See Also</a></li>
+  </ul>
+<a id="Using_a_One_Two_or_Three-Button_Mouse"></a>
+<h2>
+<a id="Using23Mouse">Using a One, Two or Three-Button
+  Mouse</a></h2>
+
+<p>In MOE, both the keyboard and mouse may be used to perform operations such
+  as selecting atoms and choosing menu commands. However, the mouse is
+  necessary to perform actions such as rotating the molecular system in the MOE
+  rendering area.</p>
+
+<p>The type of mouse used may vary with operating system or preference. For
+  consistency the MOE documentation assumes a right-handed three-button mouse.
+  Consequently, when employing a mouse with one or two buttons, it is important
+  to understand the mouse-button equivalencies MOE employs.</p>
+
+<p>Note that a scroll wheel often also operates as a clickable middle
+  button.</p>
+
+<p>The following table indicates MOE mouse-button equivalencies:</p>
+<table class="titlebar">
+  <tr>
+	<th valign="top">3-Button Mouse</th>
+	<th valign="top">2-Button Mouse</th>
+  </tr>
+  <tr>
+	<td>Left button</td>
+	<td>Left button</td>
+  </tr>
+  <tr>
+	<td>Middle button</td>
+	<td>Right button</td>
+  </tr>
+  <tr>
+	<td>Right button</td>
+	<td>Press and release the <tt>Alt</tt> key</td>
+  </tr>
+</table>
+
+<p><b>Note!</b> MOE automatically detects if a 2- or 3-button mouse is
+  available. If this check fails, or one wants to force the 2-button mouse
+  mode, the detection can be overridden in the <a href=
+  "#MouseConfiguration">Mouse Configuration</a> panel.</p>
+
+<p>In MOE, <span class="menu">MOE | Help | Mouse</span> opens the <a href=
+  "#MouseReference">Mouse Reference</a> panel, which is a quick reference for
+  mouse operation in the main MOE windows.</p>
+
+<a id="Mac_OS_X_Mouse_Configuration"></a>
+<h2>
+<a id="Using1Mouse">macOS Mouse
+  Configuration</a></h2>
+
+<p>macOS supports mice with two or three buttons. The default mouse
+  configuration is X11 three-button mouse emulation. Emulation should be
+  disabled when using an actual three button mouse as this may render some
+  command combinations unavailable (see: <b>X11 | Preferences | Input</b>).</p>
+
+<p>Mouse settings can be modified for use with an actual three-button mouse
+  in <b>System Preferences | Keyboard&nbsp;&amp;&nbsp;Mouse | Mouse</b>.
+  Recommended settings are the primary button on the left side of the mouse,
+  the secondary button on the right side and the middle button, or scroll
+  wheel, as button 3.</p>
+
+<p>With a one-button mouse one can use the trackball in the footer of the
+  <a href="mainwin.htm#Footer">MOE Window</a> to rotate, translate, and zoom
+  the molecular system.</p>
+
+<a id="Popup_Menus:_The_Mouse_Popup_Button"></a>
+<h2>
+<a id="MousePopupButton">Popup Menus: The Mouse
+  Popup Button</a></h2>
+
+<p>Popup menus are used in many MOE windows such as the Sequence Editor,
+  Database Viewer and Text Editor. To display a popup menu, position the cursor
+  over a specific object or area in the given window (e.g. a residue in the
+  Sequence Editor or the text area in a Text Editor) and press and release the
+  <em>mouse popup button</em>. The mouse popup button is dependent on the type
+  of mouse being used:</p>
+  <center>
+    <table class="titlebar">
+      <tr>
+        <th valign="top">3-Button Mouse</th>
+        <th valign="top">2-Button Mouse</th>
+      </tr>
+      <tr>
+        <td>Right mouse button</td>
+        <td><tt>Alt</tt> key</td>
+      </tr>
+    </table>
+  </center>
+
+<p>The <tt>Alt</tt> key will display the popup menus regardless of the mouse
+  type; i.e. it works even with a 3-button mouse. The popup menu disappears
+  when the mouse is clicked elsewhere in the window or <tt>Esc</tt> is pressed.
+  Popups are described in the chapters dedicated to each of the MOE windows.
+  <a id="What_if_I_don't_have_an_Alt_key?"></a>
+</p>
+
+<h2>
+<a id="AltKey">What if I don't have an Alt
+  key?</a></h2>
+
+<p>Certain operations in MOE require pressing the <tt>Alt</tt> key, which is
+  commonly used in conjunction with the mouse. On macOS, the <tt>Alt</tt>
+  and <tt>Option</tt> keys are synonymous. <!--
+ On a Sun Sparc system running the
+ OpenWindows manager, the diamond key is used as the <tt>Alt</tt> key.
+-->
+   <a id="Using_the_Mouse_in_the_MOE_Window"></a>
+
+<a id="MOE"></a>
+</p>
+
+<h2>Using the Mouse in the MOE Window</h2>
+<a id="Selecting_Atoms"></a>
+<h3>
+<a id="SelectingAtoms">Selecting Atoms</a></h3>
+
+<p><b>Note:</b> Mouse selections are subject to the state of the <a href=
+  "mainwin.htm#RSL"><b>R</b>, <b>S</b>, and <b>L</b></a> buttons.</p>
+  <!-- WARNING: This table is repeated in mainwin.htm"-->
+  <center>
+    <table class="titlebar width-full">
+      <tr>
+        <th>Action</th>
+        <th>Using the Left Button</th>
+      </tr>
+      <tr>
+        <td width="50%">Select an atom</td>
+        <td>Click on the atom. This will deselect all other
+        atoms.</td>
+      </tr>
+      <tr>
+        <td width="50%">Select a bond (two atoms bonded
+        together)</td>
+        <td>Click on the bond joining the atoms. This will
+        deselect all other atoms.</td>
+      </tr>
+      <tr>
+        <td>Select all atoms of the same class (ligand, receptor,
+        solvent) in the same connected component as the atom</td>
+        <td>Double-click on the atom</td>
+      </tr>
+      <tr>
+        <td>Toggle selection state of an atom</td>
+        <td><tt>Shift</tt>-click on the atom</td>
+      </tr>
+      <tr>
+        <td>Select all atoms of parent residue of an atom</td>
+        <td><tt>Ctrl</tt>-click on the atom</td>
+      </tr>
+      <tr>
+        <td>Toggle selection state of parent residue atoms</td>
+        <td><tt>Shift+Ctrl</tt>-click on the atom</td>
+      </tr>
+      <tr>
+        <td>Select a group of atoms</td>
+        <td>Drag over atoms</td>
+      </tr>
+      <tr>
+        <td>Add more atoms to a group of selected atoms</td>
+        <td><tt>Shift</tt>-drag over atoms</td>
+      </tr>
+      <tr>
+        <td>Select a group of atoms AND atoms of parent
+        residues</td>
+        <td><tt>Ctrl</tt>-drag over atoms</td>
+      </tr>
+      <tr>
+        <td>Toggle selection state of parent residue atoms</td>
+        <td><tt>Shift+Ctrl</tt>-drag over atoms</td>
+      </tr>
+      <tr>
+        <td>Select atoms near an atom, deselecting all other atoms
+        </td>
+        <td>
+            <img src="mouse/sphere_selection.png" style=
+                "vertical-align:top; float:right" />
+            Click on the atom, then click again and drag the selection sphere
+            with the center of the first atom to select all atoms inside
+            the sphere.
+        </td>
+      </tr>
+      <tr>
+        <td>Toggle selection state of atoms near an atom</td>
+        <td>
+            Click on a selected atom and <tt>Shift</tt>-drag the
+            selection sphere. If all atoms inside the sphere are
+            selected then they will be deselected, otherwise the
+            unselected atoms in the sphere will be selected as well.
+        </td>
+      </tr>
+      <tr>
+        <td>Select atoms AND atoms of parent residues near an atom</td>
+        <td>
+            Click on the atom, then click again and <tt>Ctrl</tt>-drag
+            the selection sphere.
+        </td>
+      </tr>
+      <tr>
+        <td>Toggle selection state of parent residue atoms near an atom</td>
+        <td>
+           Click on a selected atom and <tt>Shift+Ctrl</tt>-drag
+           the selection sphere.
+        </td>
+      </tr>
+      <tr>
+        <td>Select atoms near multiple selected atoms
+        </td>
+        <td>
+           Click on one of the selected atom and <tt>Alt+Shift</tt>-drag
+           selection spheres over all selected atoms.
+        </td>
+      </tr>
+      <tr>
+        <td>Clear selection of atoms</td>
+        <td>Click away from any atoms</td>
+      </tr>
+    </table>
+  </center>
+
+<a id="Selecting_Ribbons"></a>
+<h3>
+<a id="SelectingRibbons">Selecting
+  Ribbons</a></h3>
+
+<p>When the ribbon segment of a residue is selected or unselected with the
+  mouse, all the atoms of that residue are selected/unselected as well.</p>
+
+<p><b>Note:</b> Mouse selections are subject to the state of the <a href=
+  "mainwin.htm#RSL"><b>R</b>, <b>S</b>, <b>L</b>, and <b>&#8680;</b></a>
+  buttons. With the <b>&#8680;</b> button one can enable/disable the
+  selectability of ribbons in general.</p>
+  <!-- WARNING: This table is repeated in mainwin.htm"-->
+  <center>
+    <table class="titlebar width-full">
+      <tr>
+        <th>Operation</th>
+        <th>Left Mouse Button</th>
+      </tr>
+      <tr>
+        <td style="vertical-align:top" width="50%">Select ribbon segment of a
+        residue, deselecting all other ribbons</td>
+        <td style="vertical-align:top">Click on the ribbon segment</td>
+      </tr>
+      <tr>
+        <td style="vertical-align:top">Select all ribbons in the same connected
+        component as the picked ribbon</td>
+        <td style="vertical-align:top">Double-click on the ribbon</td>
+      </tr>
+      <tr>
+        <td style="vertical-align:top">Toggle selection state of a ribbon</td>
+        <td style="vertical-align:top"><tt>Shift</tt>-click on the ribbon</td>
+      </tr>
+      <tr>
+        <td style="vertical-align:top">Select a group of ribbons, deselecting
+        all other ribbons/atoms</td>
+        <td style="vertical-align:top">Drag over ribbons</td>
+      </tr>
+      <tr>
+        <td style="vertical-align:top">Add more ribbons to a group of selected
+        ribbons</td>
+        <td style="vertical-align:top"><tt>Shift</tt>-drag over ribbons</td>
+      </tr>
+      <tr>
+        <td style="vertical-align:top">Clear selection of ribbons</td>
+        <td style="vertical-align:top">Click away from any ribbons</td>
+      </tr>
+    </table>
+  </center>
+
+<a id="Panning_Rotating_and_Zooming_Atoms"></a>
+<h3>
+<a id="RotatingAtoms">Panning, Rotating and Zooming
+  Atoms</a></h3>
+  <center>
+    <table class="titlebar width-full">
+      <tr>
+        <th width="33%">Action</th>
+        <th>Using the Middle Button</th>
+      </tr>
+      <tr>
+        <td>Pan view in x and y axes</td>
+        <td><tt>Shift</tt>-drag the middle button in rendering
+        area</td>
+      </tr>
+      <tr>
+        <td>Rotate view</td>
+        <td>Drag the middle button in rendering area</td>
+      </tr>
+      <tr>
+        <td>Rotate view about z axis only</td>
+        <td>Drag the middle button anywhere in perimeter of
+        rendering area</td>
+      </tr>
+      <tr>
+        <td>Zoom in/out</td>
+        <td><tt>Ctrl</tt>-drag the middle button in rendering
+        area</td>
+      </tr>
+      <tr>
+        <td>Change the center of rotation</td>
+        <td>
+          Click the middle button on the atom that will be the new center of
+          rotation. Rotate the system by dragging the middle mouse button.
+
+<p>Setting the center of rotation also sets the focal plane of the
+          stereo display and focal blur effect.</p>
+
+<p>To reset the center of rotation to the default, click the middle
+          button away from any atoms. (By default, the center of rotation is
+          the center of mass of the molecular system.)</p>
+        </td>
+      </tr>
+    </table>
+  </center>
+
+<a id="Using_the_Scroll_Wheel"></a>
+<a id="Wheel"></a>
+
+<h3>Using the Scroll Wheel</h3>
+
+<p>Some mice come with a <i>scroll wheel</i>. In the MOE Window, this wheel
+  can be used to zoom in and out.
+<a id="Editing_Atoms"></a>
+<a id="EditingAtoms"></a>
+</p>
+
+<h3>Editing Atoms</h3>
+
+<p>When the <tt>Alt</tt> key is pressed, mouse movement modifies the
+  positions of the selected atoms.</p>
+  <center>
+    <table class="titlebar width-full">
+      <tr>
+        <th valign="top" width="33%">Action</th>
+        <th valign="top"><span class="nobr">Middle Button in MOE
+        Window</span></th>
+      </tr>
+      <tr>
+        <td>Translate selected atoms</td>
+        <td><tt>Shift</tt>+<tt>Alt</tt>-drag the middle
+        button</td>
+      </tr>
+      <tr>
+        <td>Rotate selected atoms</td>
+        <td><tt>Alt</tt>-drag the middle button</td>
+      </tr>
+      <tr>
+        <td>Rotate selected atoms about view z axis only</td>
+        <td><tt>Alt</tt>-drag the middle button in perimeter of
+        rendering window</td>
+      </tr>
+    </table>
+  </center>
+  <center>
+    <table class="titlebar width-full">
+      <tr>
+        <th valign="top" width="33%">Action</th>
+        <th valign="top"><span class="nobr">Left Button in MOE
+        Window</span></th>
+      </tr>
+      <tr>
+        <td>Rotate about a bond (dihedral angle)</td>
+        <td>
+          <tt>Alt</tt>-drag the left button
+
+<p>Note: Requires that exactly two bonded atoms be selected. The side
+          that moves is the one with fewer atoms or the one with no fixed
+          atoms. Has no effect on ring bonds.</p>
+        </td>
+      </tr>
+    </table>
+  </center>
+<a id="WindowPreferences"></a>
+<div class="extra_info">
+
+<h3>If the <tt>Alt</tt> Key is Bound to Window Movement</h3>
+
+<p>On some systems, it is possible that <tt>Alt</tt> will not work as
+    described, e.g. instead it has been mapped to window movement. This can be
+    corrected by editing the Window Preferences manager:</p>
+    <ul>
+      <li>in Linux using GNOME desktop environment
+
+<p>The Window Preferences panel can be opened using the command line
+        (the terminal) by the user that launches MOE.</p>
+
+<pre>
+    $ gnome-window-properties
+</pre>With the Window Preferences panel open, re-map the mouse &quot;Movement
+Key.&quot;
+        <ol>
+          <li>Select Super (or &quot;Windows logo&quot;) or <tt>Ctrl</tt></li>
+          <li>Click Close</li>
+        </ol>
+
+<p>The <tt>Alt</tt> key should now react as described in the MOE manual
+        and the Super (or &quot;Windows logo&quot;) or <tt>Ctrl</tt> key can
+        now be used to resize, or move windows.</p>
+      </li>
+      <li>in Linux using Desktop Environment (KDE)
+
+<p>The preference panel is accessible from the KDE Control Center. Go
+        to the Desktop/Window Behavior panel and select the &quot;Windows
+        Actions&quot; tab. In the &quot;Inner Window, Titlebar & Frame&quot;
+        area, change the &quot;Modifier Key&quot; option from <tt>Alt</tt> to
+        <tt>Meta</tt> or <tt>Ctrl</tt>.</p>
+      </li>
+      <li>in the Common Desktop Environment (CDE)
+
+<p>MOE's rotate-bond uses <tt>Mod1-Drag1</tt>. <tt>Mod1</tt> is
+        usually bound by XWindows to <tt>Alt</tt> and/or <tt>Meta</tt> (both
+        <tt>Alt_L</tt> and <tt>Alt_R</tt>). Unfortunately, the CDE window
+        manager <tt>dtwm</tt> binds <tt>Alt-Drag1</tt> to window move. (They
+        call the event <tt>Alt&lt;Btn1Down&gt;</tt>). To undo it follow these
+        steps:</p>
+        <ul>
+          <li>Edit your <tt>&quot;dtwmrc&quot;</tt> configuration file,
+          typically located in one of
+
+<pre>    $HOME/.dt/$LANG/dtwmrc
+    $HOME/.dt/dtwmrc
+</pre>
+
+<p>If you do not have a <tt>dtwmrc</tt> file then you can copy
+            (into <tt>$HOME/.dt/dtwmrc</tt>) the default file typically located
+            in one of the following places:</p>
+
+<pre>    /etc/dt/config/$LANG/sys.dtwmrc
+    /etc/dt/config/sys.dtwmrc
+    /usr/dt/config/$LANG/sys.dtwmrc
+    /usr/dt/config/sys.dtwmrc
+</pre>
+          </li>
+          <li>Delete or comment-out any lines that define
+          <tt>Alt&lt;Btn1Down&gt;</tt> binding in the <tt>Buttons
+          DtButtonBinding</tt> class. Look for the paragraph
+
+<pre>    Buttons DtButtonBindings
+    {
+        ...
+        Alt&lt;Btn1Down&gt; icon|window             f.move ...
+        ...
+    }
+</pre>
+
+<p>and comment out the line:</p>
+
+<pre>    #   Alt&lt;Btn1Down&gt; icon|window             f.move
+</pre>
+          </li>
+          <li>Restart the window manager by choosing the entry named
+          &quot;Restart...&quot; or &quot;Restart Workspace Manager...&quot;
+          (or something similar) in the root or desktop popup menu (right-click
+          on the desktop).</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+<a id="MultilingualKeyboard"></a>
+<div class="extra_info">
+
+<h3>If <tt>Shift</tt>+<tt>Alt</tt> Switches between Input Languages</h3>
+
+<p>By default, multilingual Windows machines bind
+    <tt>Shift</tt>+<tt>Alt</tt> to the command of switching between input
+    languages, which changes the keyboard mapping. MOE users should disable the
+    <tt>Shift</tt>+<tt>Alt</tt> shortcut and either switch languages explicitly
+    in the language bar, or assign different shortcuts (e.g.
+    <tt>Shift</tt>+<tt>Alt</tt>+<tt>1</tt> and
+    <tt>Shift</tt>+<tt>Alt</tt>+<tt>2</tt>) to individual languages.</p>
+    <ul>
+      <li>On Windows 7, the key sequence for changing input languages can be
+      specified in:<br />
+      <b>Control&nbsp;Panel&nbsp;| Region&nbsp;and&nbsp;Language&nbsp;|
+      Keyboards&nbsp;and&nbsp;Languages&nbsp;| Language&nbsp;Bar&nbsp;|
+      Advanced&nbsp;Key&nbsp;Settings</b></li>
+      <li>On Windows 8, the key sequence for changing input languages can be
+      specified in:<br />
+      <b>Control&nbsp;Panel&nbsp;| Language&nbsp;|
+      Advanced&nbsp;Settings&nbsp;|
+      Change&nbsp;language&nbsp;bar&nbsp;hot&nbsp;keys</b></li>
+    </ul>
+  </div>
+<a id="Using_the_Mouse_in_the_Sequence_Editor"></a>
+<a id="SE"></a>
+<h2>Using the Mouse in the Sequence Editor</h2>
+<a id="Selecting_Chains"></a>
+<a id="SelectingChains"></a>
+<h3>Selecting Chains</h3>
+  <center>
+    <table class="titlebar">
+      <tr>
+        <th width="33%">Action</th>
+        <th>Using the Left Button</th>
+      </tr>
+      <tr>
+        <td>Select a chain</td>
+        <td>Click on the chain number. This will deselect all
+        other chains.</td>
+      </tr>
+      <tr>
+        <td>Select a tag</td>
+        <td>Click on the tag name. This will select all chains
+        grouped under the same tag, including all subunits, and deselect all
+        other chains.</td>
+      </tr>
+      <tr>
+        <td>Toggle selection state of a chain or tag</td>
+        <td><tt>Ctrl</tt>-click on the chain number or tag
+        name.</td>
+      </tr>
+      <tr>
+        <td>Select a range of chains or tags</td>
+        <td>Click on first chain or tag and <tt>Shift</tt>-click
+        on last chain or tag. This will fill in the range from the previous
+        selection of the same type.</td>
+      </tr>
+      <tr>
+        <td>Select all chains or tags</td>
+        <td>Click on <b>Tag</b> or <b>Chain</b> (tag/chain
+        button). Chain buttons will select all chains in the current subunit
+        whereas the Tag button will select all subunits.<br />
+        Note: If all chains were already selected, this will deselect all
+        chains.</td>
+      </tr>
+      <tr>
+        <td>Clear selection of chains or tags</td>
+        <td>Click in the empty space below the chains or
+        tags.</td>
+      </tr>
+    </table>
+  </center>
+<a id="Selecting_Residues"></a>
+<a id="SelectingResidues"></a>
+<h3>Selecting Residues</h3>
+  <center>
+    <table class="titlebar">
+      <tr>
+        <th width="33%">Action</th>
+        <th>Using the Left Button</th>
+      </tr>
+      <tr>
+        <td>Select a residue</td>
+        <td>Click on the residue. This will deselect all other
+        residues.</td>
+      </tr>
+      <tr>
+        <td>Toggle selection state of a residue</td>
+        <td><tt>Ctrl</tt>-click on the residue.</td>
+      </tr>
+      <tr>
+        <td>Select a range of residues within the same chain</td>
+        <td>Click on first residue and <tt>Shift</tt>-click on
+        last residue.</td>
+      </tr>
+      <tr>
+        <td>Select a column of residues, i.e. residues that occupy
+        the same alignment position across chains</td>
+        <td>Click on the position in the alignment ruler.</td>
+      </tr>
+      <tr>
+        <td>Toggle selection state of a column of residues</td>
+        <td>
+          <tt>Ctrl</tt>-click in alignment ruler.
+
+<p>Note: If any residue in the column was previously unselected, this
+          will select all residues. However, if all residues in the column were
+          already selected, this will deselect all residues.</p>
+        </td>
+      </tr>
+      <tr>
+        <td>Select a range of residue columns</td>
+        <td>Click in ruler over first column and
+        <tt>Shift</tt>-click in ruler over last column.</td>
+      </tr>
+      <tr>
+        <td>Select a group of residues</td>
+        <td>Drag over desired residues.<br />
+        Note: selection indicated in purple text in footer.</td>
+      </tr>
+      <tr>
+        <td>Add more residues to a group of selected residues</td>
+        <td><tt>Ctrl</tt>-drag over desired residues.<br />
+        Note: selection indicated with plus (+) sign in footer.</td>
+      </tr>
+      <tr>
+        <td>Mask selection of a group of residues</td>
+        <td><tt>Shift</tt>-drag over desired residues in mask.
+        This will select only those residues both in mask selection and which
+        were previously selected.<br />
+        Note: mask selection indicated with ampersand (&amp;) in footer
+        (logical AND).</td>
+      </tr>
+      <tr>
+        <td>Remove residues from a group of selected residues</td>
+        <td><tt>Alt</tt>-drag over desired residues.<br />
+        Note: selection indicated with minus (-) sign in footer.</td>
+      </tr>
+      <tr>
+        <td>Clear selection of residues</td>
+        <td>Click away from residues, chains or ruler.</td>
+      </tr>
+    </table>
+  </center>
+<a id="Moving_Residues"></a>
+<a id="MovingResidues"></a>
+<h3>Moving Residues</h3>
+  <center>
+    <table class="titlebar">
+      <tr>
+        <th width="33%">Action</th>
+        <th>Using the Middle Button</th>
+      </tr>
+      <tr>
+        <td>Move a residue (gaps not preserved)</td>
+        <td>
+          Drag the middle button over the residue. A red border highlights the
+          residue being moved.
+
+<p>Note: This moves the residue right or left, changing its alignment
+          position. Any residues encountered will be pushed along, like beads
+          on a string. Gaps between residues are not preserved.</p>
+        </td>
+      </tr>
+      <tr>
+        <td>Move several residues (gaps not preserved)</td>
+        <td>
+          Select the residues to move (residues can belong to more than one
+          chain and do not have to be consecutive), and press <tt>Alt</tt>
+          while dragging the middle button.
+
+<p>Note: This moves selected residues right or left, like beads on a
+          string. Selected residues maintain their relative alignment positions
+          while moving.</p>
+
+<p><span class="tip">Tip.</span> One can also move the selected
+          residues with the <tt>Left</tt> and <tt>Right</tt> arrow keys on the
+          keyboard.</p>
+        </td>
+      </tr>
+      <tr>
+        <td>Move a residue (preserve gaps)</td>
+        <td>
+          <tt>Shift</tt>-drag the middle button over the residue.
+
+<p>Note: Unlike the beads-on-a-string method, this pushes all
+          residues while maintaining gaps.</p>
+        </td>
+      </tr>
+      <tr>
+        <td>Slide an entire chain</td>
+        <td><tt>Ctrl</tt>-drag the middle button over the
+        residue.</td>
+      </tr>
+      <tr>
+        <td>Move residues in multiple chains (preserve gaps)</td>
+        <td>
+          Select the chains in the Chains or Tag column and then
+          <tt>Shift</tt>-drag the middle button over a residue
+          in the selected chains.If a residue of an unselected chain is
+          chosen, only that chain will be moved.
+
+<p>Note: Unlike the beads-on-a-string method, this pushes all
+          residues while maintaining gaps.</p>
+<p><span class="tip">Tip.</span> Alternatively select one residue
+          in the selected chains and use the <tt>Shift</tt>-<tt>Left</tt>
+          and <tt>Shift</tt>-<tt>Right</tt> arrow keys on the keyboard.</p>
+        </td>
+      </tr>
+      <tr>
+        <td>Slide multiple chains</td>
+        <td>
+        Select the chains in the Chains or Tag column and then
+        <tt>Ctrl</tt>-drag the middle button over a residue in the
+        selected chains. If a residue of an unselected chain is
+        chosen, only that chain will be moved.
+<p><span class="tip">Tip.</span> Alternatively select one residue
+          in the selected chains and use the <tt>Ctrl</tt>-<tt>Left</tt>
+          and <tt>Ctrl</tt>-<tt>Right</tt> arrow keys on the keyboard.</p>
+        </td>
+      </tr>
+    </table>
+  </center>
+
+<p><b>Note:</b> Residues cannot be moved beyond the start of the alignment
+  ruler.
+<a id="Using_the_Mouse_in_the_Database_Viewer"></a>
+</p>
+
+<h2>
+<a id="DB"></a>
+Using the Mouse in the Database Viewer</h2>
+<a id="Selecting_Entries_and_Fields"></a>
+<a id="SelectingDB"></a>
+<h3>Selecting Entries and fields</h3>
+  <center>
+    <table class="titlebar">
+      <tr>
+        <th width="33%">Action</th>
+        <th>Using the Left Button</th>
+      </tr>
+      <tr>
+        <td>Select an entry or field</td>
+        <td>Click on the entry number or field name. This will
+        deselect all other entries or fields.</td>
+      </tr>
+      <tr>
+        <td>Toggle selection state of an entry or field</td>
+        <td><tt>Ctrl</tt>-click on the entry number or field
+        name</td>
+      </tr>
+      <tr>
+        <td>Select range of entries or fields</td>
+        <td>Click on the first entry number/field name and
+        <tt>Shift</tt>-click on the last entry number/field name</td>
+      </tr>
+      <tr>
+        <td>Select/Unselect All entries & fields</td>
+        <td>Click on the top left corner button of the database
+        viewer to clear any field and entry selection. If nothing is selected,
+        the corner click will select all fields and entries.</td>
+      </tr>
+      <tr>
+        <td>Resize cell</td>
+        <td>Drag in cell, or on cell borders</td>
+      </tr>
+    </table>
+  </center>
+<a id="Rotating_and_Zooming_Molecules"></a>
+<a id="RotatingDB"></a>
+<h3>Rotating and Zooming 3D Molecules</h3>
+<table class="titlebar width-full">
+  <tr>
+	<th width="33%">Action</th>
+	<th>Using the Middle Button</th>
+  </tr>
+  <tr>
+	<td>Rotate molecule</td>
+	<td>Drag the middle button in a molecule cell</td>
+  </tr>
+  <tr>
+	<td>Zoom in/out molecule</td>
+	<td><tt>Ctrl</tt>-drag the middle button in a molecule
+	cell</td>
+  </tr>
+</table>
+<a id="Translating_and_Zooming_2D_Depictions"></a>
+<a id="TranslatingDB"></a>
+<h3>Translating and Zooming 2D Depictions</h3>
+<table class="titlebar width-full">
+  <tr>
+	<th width="33%">Action</th>
+	<th>Using the Middle Button</th>
+  </tr>
+  <tr>
+	<td>Translate 2D molecule depiction</td>
+	<td>Drag the middle button in a molecule cell</td>
+  </tr>
+  <tr>
+	<td>Zoom in/out 2D molecule depiction</td>
+	<td><tt>Ctrl</tt>-drag the middle button in a molecule
+	cell</td>
+  </tr>
+</table>
+<a id="Editing_and_Copying_Data"></a>
+<a id="EditingDB"></a>
+<h3>Editing and Copying Data</h3>
+  <center>
+    <table class="titlebar width-full">
+      <tr>
+        <th width="33%">Action</th>
+        <th>Using the Left Button</th>
+      </tr>
+      <tr>
+        <td>Edit non-molecular cell contents</td>
+        <td>Double-click in the cell</td>
+      </tr>
+      <tr>
+        <td>Load molecular cell contents into MOE</td>
+        <td>Double-click in the molecule cell</td>
+      </tr>
+    </table>
+  </center>
+<a id="Move_Entries_Fields"></a>
+<h3>Moving Single Entries and fields</h3>
+  <center>
+    <table class="titlebar width-full">
+      <tr>
+        <th width="33%">Action</th>
+        <th>Using the Middle Button</th>
+      </tr>
+      <tr>
+        <td>Move single entry</td>
+        <td>
+          Drag the entry number up or down to the requested new position.
+          During the drag operation, the selected entry number label is
+          outlined in red.
+
+<p>Note: Entries in databases which are opened in read-only mode
+          cannot be moved.</p>
+        </td>
+      </tr>
+      <tr>
+        <td>Move single field</td>
+        <td>
+          Drag the field header left or right to the requested new position.
+          During the drag operation, the selected field header is outlined in
+          red.
+
+<p>Note: fields in databases which are opened in read-only mode
+          cannot be moved.</p>
+        </td>
+      </tr>
+    </table>
+  </center>
+<a id="MouseConfiguration"></a>
+<h2>Mouse Configuration Panel</h2>
+
+<p>MOE allows the reconfiguration of the MOE window mouse behavior. This is
+  useful, if e.g. only a two button mouse is available or the user wants to
+  mimic a mouse mapping of another program. To change the mouse behavior, open
+  the <a href="../../appendix/settings.htm#MainMouse"><b>Mouse
+  Configuration</b></a> panel using <span class="menu">MOE | Settings |
+  Mouse</span>. This panel also allows to assign custom SVL code to mouse
+  button clicks.</p>
+  <img src="mouse/mouse.png" alt="Mouse Configuration Panel" class="center" />
+<a id="MouseReference"></a>
+<h2>Mouse Reference Panel</h2>
+
+<p>The Mouse Reference panel is opened using <span class="menu">MOE | Help |
+  Mouse</span>, and is intended as a quick reference for mouse operation in the
+  MOE Window, Sequence Editor, and Database Viewer windows.</p>
+  <img src="mouse/mouse_ref.png" alt="Mouse Reference Panel" class="center" />
+
+<p>The panel pages are organized by window, accessible using the buttons at
+  the top of the panel. The window-dependent categories of operation are viewed
+  using the buttons at the bottom of the panel. The mouse key to press is
+  indicated in blue, with mouse drag shown as blue arrows.<br />
+  The reference of the MOE Window page is dynamic and changes if the mouse
+  configuration is altered with the <b>Mouse Configuration</b> panel. But only
+  changes to MOE default mouse actions are shown, not additionally added
+  actions. Changed mouse actions are marked red.</p>
+<a id="Trackball"></a>
+<h2>MOE Footer and Trackball</h2>
+
+<p>Note that many MOE Window mouse operations can also be performed using
+  controls in the <a href="mainwin.htm#Footer">MOE Footer</a> area, notably the
+  <a href="mainwin.htm#Trackball">Trackball</a>.</p>
+<a id="SpaceNavigator"></a>
+<h2>SpaceNavigator&reg;</h2>
+  <div class="floatright"><img src="mouse/spacemouse2.png" alt=
+  "SpaceNavigator" class="floatright" /></div>
+
+<p>MOE supports 3D motion controllers and 6-degrees-of-freedom (6dof) devices
+  from 3Dconnexion such as the SpaceNavigator&reg;. Use of such devices
+  requires installing the 3Dconnexion driver software. On macOS, additionally,
+  the 3DxMagellanProxy application (available from 3Dconnexion) needs to be
+  installed and running before MOE is started.</p>
+
+<p>When connected, the 6dof cap controller of the SpaceNavigator&reg;
+  controls the translation and rotation of the molecules in the MOE Window in
+  all directions. If the <tt>Alt</tt> key is pressed, only the currently
+  selected atoms will be moved.</p>
+
+<p>The buttons of the 3Dconnexion devices can be programmed using the
+  driver software and can be set up to execute SVL commands. To do this, the
+  buttons must first be configured in the driver to send mouse button events to
+  MOE. The SVL command to be executed is associated with a particular button by
+  setting the appropriate RC variable. For example:</p>
+
+<pre>
+SetRC ['spacemouse.button1', 'ViewCenter[]']
+</pre>
+
+<p>will configure button 1 of the SpaceNavigator&reg; to execute the
+  <tt>ViewCenter</tt> command and recenter the molecules inside the MOE Window.
+  Keyboard modifiers can be used in conjunction with the button assignments,
+  and are indicated in the RC variable by the corresponding suffix:
+  <tt>s</tt>=<tt>Shift</tt>, <tt>c</tt>=<tt>Control</tt>,
+  <tt>a</tt>=<tt>Alt</tt>. For example, the RC variable
+  <tt>spacemouse.button3.s</tt> will configure the third SpaceNavigator&reg;
+  button press while the <tt>Shift</tt> key is pressed.
+<a id="See_Also"></a>
+</p>
+
+<h2>See Also</h2>
+
+<p><a href="../../appendix/settings.htm#MainMouse">Mouse
+  Configuration</a><br />
+  <a href="../../appendix/settings.htm#MainMouse">Controlling Mouse
+  Sensitivity</a><br />
+  <a href="../../appendix/settings.htm#MainMouse">Programming the Buttons (in
+  the MOE Window)</a>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

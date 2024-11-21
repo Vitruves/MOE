@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../images/ccgicon.png" />
+  <title>Flexible Alignment of Small Molecules</title>
+  <meta name="keywords" content="panel: Flexible Alignment" />
+  <meta name="keywords" content="main_keywords: RIPS" />
+  <meta name="keywords" content="keywords: scoring, smp, CoMFA" />
+  <meta name="keywords" content="keywords: conformation, activity" />
+  <meta name="keywords" content=
+  "keywords: Gaussian, density, properties, pharmacophore" />
+  <meta name="keywords" content=
+  "keywords: rigid template, partial charges, forcefield" />
+  <meta name="keywords" content=
+  "keywords: stochastic conformational search, unified scheme" />
+  <meta name="keywords" content="keywords: chiral, RMSD, minimize, Bayes" />
+  <meta name="keywords" content=
+  "keywords: forcefield, multiple, refine, iteration, failure, limit" />
+  <meta name="keywords" content=
+  "keywords: gradient test, invert unconstrained" />
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../index.htm"><img src="../images/ccglogo.png" /></a>
+    <a href="../index.htm"><div class="moeversion"></div></a>
+    Flexible Alignment of Small Molecules
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+  <!-- <div id="useMathJax"></div> -->
+  <ul>
+    <li>
+      <a href="#Introduction">Introduction</a>
+    </li>
+    <li>
+      <a href="#Methodology">Methodology</a>
+    </li>
+    <li>
+      <a href="#Running">Running the Calculation</a>
+      <ul>
+        <li>
+          <a href="#SettingsPanel">Scoring Function Settings</a>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <a href="#Ref">References</a>
+    </li>
+  </ul>
+
+<p>Flexible Alignment is an application for flexibly aligning small molecules
+  [Labute&nbsp;2001]. The method accepts as input a collection of small
+  molecules with 3D coordinates and computes a collection of alignments. Each
+  alignment is given a score that quantifies the quality of the alignment in
+  terms of both internal strain and overlap of molecular features
+  [Chan&nbsp;2010].</p>
+
+<p><b>Note:</b> The scoring scheme changed in the 2009 release. The pre-2009
+  scoring scheme can be restored by copying the file
+  <tt>$MOE/svl/calc.svl/flexalgn.svl</tt> and making a small modification to
+  it: change the value of the constant <tt>OLD</tt> from 0 to 1.</p>
+
+<pre class="code oneline">
+const OLD = 1;      // set to 1 for the pre-2009 scheme
+</pre>
+
+<p>This line is near the top of the file. Save the modified file and load
+  it:</p>
+
+<pre class="code oneline">
+svl&gt; load 'flexalgn.svl'
+</pre>
+
+<p>The old scheme is now in effect.</p>
+
+<p><span class="tip">Tip</span> The Flexible Alignment application supports
+  <a href="../install/smp_inst.htm">MOE/cluster (MOE/smp)</a> cluster
+  computing. If run under a MOE/smp session, Flexible Alignment will run in
+  parallel.</p>
+
+<h1><a id="Introduction">Introduction</a></h1>
+
+<p>Often, atomic-level details of the structures of pharmaceutically relevant
+  receptors are not available. In such cases, 3D alignment (or superposition)
+  of putative ligands can be used to deduce structural requirements for
+  biological activity. For example, CoMFA [Cramer&nbsp;1988] also uses a 3D
+  molecular alignment as input. Another strategy is pharmacophore elucidation
+  in which several ligands are aligned and a small collection of essential
+  molecular features required for biological activity is derived from the
+  alignment (e.g. [Martin&nbsp;1993]). Still another strategy is to use 3D
+  molecular alignment to search a database for ligands that have one or more
+  conformations that superpose well with a query molecule (e.g.
+  [Miller&nbsp;1999]). Methodologies based upon 3D alignment for finding
+  biologically active ligands generally make use of the qualitative assumption
+  that if two ligands have similar biological activity and bind in similar
+  modes, then the bound conformations of the two ligands align well and
+  inferences can be made about the nature of the receptor.</p>
+
+<p>Methods for producing molecular alignments are generally judged according
+  to a number of criteria:</p>
+  <ol>
+    <li>Scoring. Given an experimental alignment of two ligands of similar
+    activity that bind in the same mode, will the method score this alignment
+    best (or near best) over all other alignments? This determines whether top
+    scoring alignments can be used to make inferences about the nature of the
+    receptor.</li>
+    <li>Completeness. If a high-scoring molecular alignment exists will the
+    method find it? This determines if a molecule can be rejected (e.g. judged
+    inactive) if no alignment is produced.</li>
+    <li>Running Time. What is the average running time per pair of molecules?
+    This determines whether the method is suitable for database searching.</li>
+  </ol>
+
+<p>Flexible Alignment is a stochastic search procedure that simultaneously
+  searches the conformation space of a collection of molecules and the space of
+  alignments of those molecules (at a rate of a few tens of seconds per
+  iteration). As a result, the method is asymptotically complete. The scoring
+  of alignments is based upon a Gaussian density representation of features
+  tuned to reproduce certain X-ray crystallographic alignments, although it
+  must be remembered that experimental and modeling errors must be taken into
+  account when making any assessment of scoring function quality (and the
+  degree to which bound conformations can be calculated by 3D molecular
+  alignment).</p>
+
+<h1><a id="Methodology">Methodology</a></h1>
+  <!-- Comment from flexalgn.svl:
+// Each molecule is described by a sum of gaussian representations where
+// each atom is a gaussian of the form:
+//
+//      Pi * (Si / 2PI)**(3/2) exp {-0.5 * Si * (x - Xi)'(x - Xi)}
+//
+// where Si = (2/aRi)**2, Ri is the radius of atom i, Xi is the position
+// of atom i, a is a radius scale factor, and Pi is a property value.
+//
+// The overlap between two such gaussians is a gaussian of the form
+//
+//      Pi * Pj * (Sij/2PI)**(3/2) * exp {-0.5 * Sij * (Xi-Xj)'(Xi-Xj)
+//
+// where Sij = 4 / (Ri**2 + Rj**2).  The function Pi * Pj is regarded as
+// a similarity measure. Hence, the similarity measure is defined to be
+//
+//      Wij * exp {Sij * (Xi-Xj)'(Xi-Xj)}               (Sij < 0)
+//
+// Different properties can be added by turning Wij into a sum of different
+// similarity values.  In the calculations to follow, the dissimilarity
+// is actually used instead of the similarity
+-->
+
+<p>The probability density functions used in Flexible Alignment are
+  Gaussians. A <tt>Normal</tt>, or <tt>isotropic</tt> (spherically symmetric),
+  Gaussian probability density has the functional form:
+  <!-- <span class='LaTeX'>
+\begin{align}
+f\left( x \right) = s^{3} \left( 2 \pi \right)^{-\frac{3}{2}}
+    \exp \left( - \frac{1}{2} \left| x - x_{0} \right|^{2} s^{2} \right)
+\end{align}
+</span> --></p>
+
+<img src="flex/math_flex_eq0.png" class="center" />
+
+<p>where <i>s</i><sup>2</sup> is the inverse variance along each axis and
+  <i>x</i><sub>0</sub> is the center (and mean) of the density. An atom with a
+  nucleus located at <i>x</i><sub>0</sub> with van der Waals radius <i>r</i> is
+  represented by: <!-- <span class='LaTeX'>
+\begin{align}
+\left( a / r \right)^{3} \left( 2 \pi \right)^{-\frac{3}{2}}
+    \exp \left( - \frac{1}{2} \left| x - x_{0} \right|^{2} \left( a/r \right)^{2} \right)
+\end{align}
+</span> --></p>
+
+<img src="flex/math_flex_eq1.png" class="center" />
+
+<p>where <i>a</i> determines how broad the density will be. For example, if
+  <i>a</i> = 2 then approximately 90% of the density will be contained within
+  one van der Waals radius of <i>x</i><sub>0</sub>. In general, the value of
+  <i>a</i> can be used to approximate molecular volumes, i.e. to fill in the
+  gaps between atoms.</p>
+
+<p>Let {<i>x</i><sub>1</sub>,,x_{n}\) denote the 3D positions of <i>n</i>
+  atoms of a molecule in a given conformation. Let the non-negative
+  <i>w<sub>i</sub></i> denote the degree to which atom <i>i</i> has some
+  property <i>P</i> (e.g. &quot;is aromatic&quot; or &quot;is donor&quot;). We
+  assign to each point in space <i>x</i> the likelihood, expressed as a
+  sum-of-Gaussians density, that <i>x</i> has that property:
+  <!-- <span class='LaTeX'>
+\begin{align}
+f_{p} \left( x \right) =
+    \sum_{i=1}^{n} \frac{w_{i}}{W}
+    \left( \frac{1}{2 \pi} \frac{a^{2}}{r_{i}^{2}} \right)^{\frac{3}{2}}
+    \exp \left( - \frac{a^{2}}{2} \frac{\left| x - x_{i} \right|^{2}}{r_{i}^{2}} \right)
+\end{align}
+</span> --></p>
+
+<img src="flex/math_flex_eq2.png" class="center" />
+
+<p>This density is called the <i>P</i>-<i>density</i> of the conformation.
+  For example, if <i>P</i> is the property &quot;is aromatic&quot; so that
+  <i>w<sub>i</sub></i> is 1 when atom <i>i</i> is aromatic and 0 otherwise,
+  then the function <i>f</i> is the <i>aromatic density</i> of the conformation
+  and represents the likelihood that a given point in space is (in some sense)
+  aromatic.</p>
+
+<p>Given two <i>P</i>-densities for two given molecules or configurations,
+  the <i>overlap</i> of the two densities is, itself, a sum-of-Gaussians
+  density in the interatomic distances: <!-- <span class='LaTeX'>
+\begin{align}
+\sum_{i=1}^{n}
+\sum_{j=1}^{m}
+    \frac{w_{i}}{W}
+    \frac{v_{j}}{V}
+    \left( \frac{a^{2}}{ 2 \pi \left( r_{i}^{2} + s_{j}^{2} \right) } \right)^{\frac{3}{2}}
+    \exp \left( - \frac{a^{2}}{2} \frac{\left| x_{i} - y_{j} \right|^{2}}{r_{i}^{2} + s_{j}^{2}} \right)
+\end{align}
+</span> --></p>
+
+<img src="flex/math_flex_eq3.png" class="center" />
+
+<p>The <i>w<sub>i</sub></i> encode the features of the molecule. This overlap
+  formulation generalizes to more than one property, or feature, through a
+  weighted summation of the individual overlap equations. For example, given
+  three properties defined by atomic property weights, <i>u</i>, <i>v</i>,
+  <i>w</i>, we define the similarity of two molecular conformations to be
+  <!-- <span class='LaTeX'>
+\begin{align}
+F =
+\sum_{i=1}^{n}
+\sum_{j=1}^{n'}
+    \frac{ C_{u} u_{i} u_{j}' + C_{v} v_{i} v_{j}' + C_{w} w_{i} w_{j}'}{n n'}
+    \times
+    \left(
+        \frac{a^{2}}{ 2 \pi \left( r_{i}^{2} + r_{j}'^{2} \right) }
+    \right)^{\frac{3}{2}}
+    \exp \left(
+        - \frac{a^{2}}{2} \frac{\left| x_{i} - x_{j}' \right|^{2}}{r_{i}^{2} + r_{j}'^{2}}
+    \right)
+\end{align}
+</span> --></p>
+
+<img src="flex/math_flex_eq4.png" class="center" />
+
+<p>where <i>C<sub>u</sub></i>, <i>C<sub>v</sub></i> and <i>C<sub>w</sub></i>
+  are positive weights intended to emphasize or de-emphasize particular
+  <i>P</i>-densities. In this way, any number of features can be included into
+  similarity calculation without additional computational complexity: the
+  pair-wise weights need to be calculated only once.</p>
+
+<p>This similarity measure, <i>F</i> also generalizes to more than two
+  molecules through the averaging of all pair-wise similarities.</p>
+
+<p>Flexible Alignment is able to combine a number of atomic properties into
+  the similarity measure as <i>P</i>-densities:</p>
+<table class="titlebar">
+  <tr>
+    <th>Feature</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>Acid/Base</td>
+    <td><i>w<sub>i</sub></i> = 1 if atom <i>i</i> is a base, -1 if an acid,
+    and 0 otherwise.</td>
+  </tr>
+  <tr>
+    <td>Aromaticity</td>
+    <td><i>w<sub>i</sub></i> = 1 if atom <i>i</i> is aromatic, and 0
+    otherwise.</td>
+  </tr>
+  <tr>
+    <td>Exposure</td>
+    <td><i>w<sub>i</sub></i> is the fraction of atom <i>i</i>'s exposed
+    van der Waals surface area.</td>
+  </tr>
+  <tr>
+    <td>H-Bond Acceptor</td>
+    <td><i>w<sub>i</sub></i> if atom <i>i</i> is a hydrogen bond acceptor,
+    and 0 otherwise. The type assessment is based on a rule set similar to
+    [Sheridan&nbsp;1993].</td>
+  </tr>
+  <tr>
+    <td>H-Bond Donor</td>
+    <td><i>w<sub>i</sub></i> if atom <i>i</i> is a hydrogen bond donor, and
+    0 otherwise. The type assessment is based on a rule set similar to
+    [Sheridan&nbsp;1993].</td>
+  </tr>
+  <tr>
+    <td>Hydrophobe</td>
+    <td><i>w<sub>i</sub></i> if atom <i>i</i> is hydrophobic, and 0
+    otherwise. The type assessment is based on a rule set similar to
+    [Sheridan&nbsp;1993].</td>
+  </tr>
+  <tr>
+    <td>LogP(o/w)</td>
+    <td><i>w<sub>i</sub></i> is the atomic contribution of atom <i>i</i> to
+    <tt>logP</tt> (octanol/water) (normalized to the range [0,1] The
+    contribution is from [Crippen&nbsp;1999].</td>
+  </tr>
+  <tr>
+    <td>Molar Refractivity</td>
+    <td><i>w<sub>i</sub></i> is the atomic contribution of atom <i>i</i> to
+    Molar Refractivity (normalized to the range [0,1]). The contribution is
+    from [Crippen&nbsp;1999].</td>
+  </tr>
+  <tr>
+    <td>Partial Charge</td>
+    <td><i>w<sub>i</sub></i> is the current partial charge on atom
+    <i>i</i>. This feature allows for SEAL-type alignments
+    [Kearsley&nbsp;1990].</td>
+  </tr>
+  <tr>
+    <td>Volume</td>
+    <td><i>w<sub>i</sub></i> is 1 for each atom. This density models the
+    volume of molecules.</td>
+  </tr>
+</table>
+
+<p>The individual weights <i>w<sub>i</sub></i> in the above table are tunable
+  parameters.</p>
+
+<p>The projected pharmacophore terms work in the same way as the atom based
+  terms. The same formulae are used, with the atomic positions substituted by
+  the positions of the projected features. The features have the same
+  definition as those in the <a href="ph4_annot.htm">Unified pharmacophore
+  scheme</a>.</p>
+
+<p>The default weights for the terms were obtained by training on about 30
+  sets of aligned ligands in the PDB. Each of these sets must contain at least
+  4 diverse ligands. The ligands are diverse in the sense that for any pair of
+  ligands, the Tanimoto coefficient for the two MACSS keys is under 0.85. For
+  all ligand pairs associated with one protein, one ligand (the template) is
+  fixed and the other is flexibly aligned onto the template. Candidate aligned
+  configurations were generated using only the volume overlap term. For each
+  aligned configuration, a goodness measure is defined as 1 if the RMSD with
+  the correct answer is under 1 &Aring; and 0 if the RMSD is over 3 &Aring;,
+  and it drops off linearly for situations in between. Also the value of each
+  feature term is calculated. Then, the weights associated with each feature
+  term is determined one by one. At each stage, the weight of one term is under
+  consideration. The correlation between the term in concern, the already
+  decided terms, and the goodness function is used to determine the weight.</p>
+
+<p>We are now working on a systematic protocol to obtain the default weights
+  from the most recent PDB. These weights may hence change in the next
+  release.</p>
+
+<p>Alignments are &quot;sampled&quot; using a RIPS-style (Random Incremental
+  Pulse Search) procedure [Raber&nbsp;1989] that incorporates the quantitative
+  measure of goodness of an alignment defined above into the optimization
+  stage:</p>
+  <ol>
+    <li>[Perturb] Generate a conformation for each molecule by randomly
+    rotating bonds and inverting unconstrained chiral centers. Perform a
+    rigid-body optimization of the similarity function.</li>
+    <li>[Optimize] Minimize the grand alignment score <i>S</i> <!--
+-<I>kT</I>&nbsp;log&nbsp;<I>F</I>&nbsp;+&nbsp;<I>U</I>
+-->
+     with respect to the coordinates of all of the atoms. <i>S</i> is simply a
+    combination of the similarity measure (see above), and the average strain
+    energy of the molecules (<i>U</i>).</li>
+    <li>[Compare] If the new configuration has not been seen before (RMSD
+    greater than some threshold, up to topological symmetry), then set <i>k</i>
+    = 0 otherwise, set <i>k = k + 1</i>. If <i>k</i> is greater than some
+    predefined amount, terminate the search.</li>
+  </ol>
+
+<p>The termination criteria can be interpreted as follows. Upon termination
+  there have been <i>S</i> consecutive attempts to generate a new configuration
+  and each has failed. This is similar to tossing a coin <i>k</i> times and
+  observing &quot;heads&quot; on each toss. The Bayes estimator for the bias on
+  the coin is (<i>k</i>+1) / (<i>k</i>+2); thus the probability of observing a
+  &quot;tail&quot; (or a new configuration) is 1/(<i>k</i>=2). At <i>k</i>=20
+  this probability is less than 5%.</p>
+
+<p>Once the search is completed, the collection of configurations is pruned
+  by removing all configurations in which the average potential energy is
+  greater than the minimum observed average potential energy plus some
+  predefined threshold.</p>
+
+<h1><a id="Running">Running the Calculation</a></h1>
+
+<p>Flexible Alignment operates on all of the currently loaded molecules. To
+  set up a calculation, load a collection of molecules into MOE. Then, use
+  <span class="nobr"><b>MOE | Footer | <i>forcefield</i></b></span> to select
+  an appropriate forcefield (e.g. MMFF94 for small molecule alignment). Open
+  the Flexible Alignment panel by selecting <b><nobr>MOE | Compute | Flexible
+  Alignment</nobr></b>. Depending on the size and number of molecules, the
+  search may take some time.</p>
+
+<p><b>Note:</b> The speed of the calculation decreases <i>rapidly</i> with
+  the degree of freedom of the system. Hence for aligning multiple molecules,
+  if the situation allows, one may consider using a rigid template (by fixing
+  the template molecule) and aligning one molecule to the template at a time,
+  and repeat the process for several possibilities of the rigid template.</p>
+  <img src="flex/flexalgn.png" alt="Flexible Alignment Panel" class="center" />
+
+<p>The options in the panel are:</p>
+<table class="noborder">
+  <tr>
+    <td valign="top"><nobr><b>Alignment Mode</b></nobr></td>
+    <td valign="top">The <b>Flexible</b> mode enables all-atom flexibility
+    (and hence conformational search) during the generation of molecular
+    alignments. The <b>Rigid Body</b> mode disables all-atom flexibility (and
+    hence conformational search) so that only rotations and translations of
+    the input molecules are permitted. If <b>Refine Existing Alignment</b> is
+    enabled, then the currently loaded alignment will be refined (using the
+    similarity function) and no configurations will be written to the
+    database.</td>
+  </tr>
+  <tr>
+    <td valign="top"><nobr><b>Output Database</b></nobr></td>
+    <td valign="top">The name of the molecular database file that is to
+    contain the output configurations, energies, similarities and alignment
+    scores. If <b>Refine Existing Alignment</b> is enabled, no output
+    database is generated, and the Output Database field is ignored. If
+    <b>Open Database Viewer</b> is enabled, then the output database is
+    automatically opened when the search begins.</td>
+  </tr>
+  <tr>
+    <td valign="top"><nobr><b>Iteration Limit</b></nobr></td>
+    <td valign="top">Sets the maximum number of attempts to generate an
+    alignment. The search will stop when either the failure limit is exceeded
+    or the iteration limit is exceeded.</td>
+  </tr>
+  <tr>
+    <td valign="top"><nobr><b>Failure Limit</b></nobr></td>
+    <td valign="top">If the search fails to produce a new configuration
+    <i>k</i> times in a row (where <i>k</i> is the given value) the search
+    will terminate.</td>
+  </tr>
+  <tr>
+    <td valign="top"><nobr><b>Energy Cutoff</b></nobr></td>
+    <td valign="top">All configurations with a grand alignment score <i>S</i>
+    greater than the best such value so far plus this cutoff are
+    discarded.</td>
+  </tr>
+  <tr>
+    <td valign="top"><b>Options</b></td>
+    <td valign="top">
+      If <b>Calculate Forcefield Charges Prior to Search</b> is enabled,
+      atomic partial charges will be automatically assigned before the search
+      proceeds.
+
+<p>If <b>Stochastic Conformational Search</b> is enabled and Flexible
+      Alignment mode is selected, then a random conformation will be
+      generated for each molecule prior to alignment. If disabled then no
+      conformational search is conducted. This option has no effect in Rigid
+      Body mode (no conformational search done).</p>
+    </td>
+  </tr>
+</table>
+
+<a id="SettingsPanel"></a>
+<p>Prior to pressing <b>OK</b>, the <b>Flexible Alignment Settings</b> panel
+  can be used to modify some of the more technical parameters to Flexible
+  Alignment. When <b>Settings</b> is pressed, the following panel will be
+  opened:</p>
+<img src="flex/settings.png" alt="Flexible Alignment Settings Panel" class="center" />
+<table class="noborder">
+  <tr>
+    <td valign="top"><b>Configuration&nbsp;Limit</b></td>
+    <td valign="top">Sets the maximum number of alignment configurations that
+    will be saved per chiral class.</td>
+  </tr>
+  <tr>
+    <td valign="top"><b>Alpha</b></td>
+    <td valign="top">Controls the width of the Gaussian distributions
+    centered on each atom.</td>
+  </tr>
+  <tr>
+    <td valign="top"><nobr><b>RMSD Tolerance</b></nobr></td>
+    <td valign="top">Specifies the root mean square distance tolerance. Two
+    configurations are judged equal if their optimal heavy atom RMS
+    superposition distance is less than the specified value.</td>
+  </tr>
+  <tr>
+    <td valign="top"><nobr><b>Gradient Test</b></nobr></td>
+    <td valign="top">
+      Generated configurations are minimized until their RMS gradient is
+      below the specified value. See <a href="emin.htm">Energy
+      Minimization</a>.
+    </td>
+  </tr>
+  <tr>
+    <td valign="top"><nobr><b>Maximum Steps</b></nobr></td>
+    <td valign="top">
+      Determines the maximum number of energy minimization steps performed.
+      See <a href="emin.htm">Energy Minimization</a>.
+    </td>
+  </tr>
+  <tr>
+    <td valign="top"><nobr><b>Conformational Search</b></nobr></td>
+    <td valign="top">
+      This section controls details of the random conformation generation
+      procedure.
+
+      <p>If <b>Randomly Rotate Single Bonds</b> is enabled, random dihedral
+      angles will be assigned to all bonds (even ring bonds) except double,
+      triple and conjugated bonds unless <b>Randomly Rotate Double and
+      Conjugated Bonds</b> is enabled.</p>
+
+      <p>If <b>Randomly Invert Unconstrained Chiral Centers</b> is enabled,
+      then all unconstrained chiral centers will be assigned a random
+      enantiomer unless <b>Preserve Chirality of Unconstrained Chiral
+      Centers</b> is enabled.</p>
+
+      <p>If <b>Planar Systems are Rigid Bodies</b> is enabled, then
+      all pi systems (connected components consisting of atoms
+      connected with bonds of high pi bond order) will be treated
+      as rigid bodies.</p>
+    </td>
+  </tr>
+</table>
+
+<p>The <b>Atom Based Similarity Terms</b> and <b>Projected Pharmacophore
+  Similarity Terms</b> sections list out the available similarity field terms.
+  To apply a similarity term, turn on its checkbox. Selected terms are weighted
+  by the values in each of the corresponding text fields. Features in the
+  <b>Projected Pharmacophore Similarity Terms</b> are defined using the
+  <a href="ph4_annot.htm">Unified pharmacophore scheme</a>.</p>
+
+<p>If the <b>Refine Existing Alignment</b> checkbox is enabled, only an
+  optimization of the current alignment in MOE will be carried out. Otherwise a
+  stochastic search as described above will be carried out, and an output
+  database will be created to record the result. This output database can be
+  inspected even when the calculation is still running. It will contain the
+  following fields:</p>
+  <img src="flex/output.png" class="center" />
+
+<p>The fields have the following meanings:</p>
+<table class="titlebar">
+  <tr>
+    <th>Name</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><tt>mol</tt></td>
+    <td><tt>molecule</tt></td>
+    <td>A particular alignment configuration of the molecules submitted to
+    the calculation.</td>
+  </tr>
+  <tr>
+    <td><tt>U</tt></td>
+    <td><tt>float</tt></td>
+    <td>The average strain energy of the molecules in the alignment in
+    kcal/mol. This is calculated as the sum of the individual forcefield
+    potential energies (possibly with solvent model) divided by the number
+    of molecules.</td>
+  </tr>
+  <tr>
+    <td><tt>F</tt></td>
+    <td><tt>float</tt></td>
+    <td><!--
+<i>-kT</i>&nbsp;log&nbsp;<i>F</i>
+-->
+    The similarity measure of the configuration. <i>F</i> is the negative
+    value of the <i>P</i>-density overlap function as described in the
+    Methodology section (above). Lower values indicate greater
+    similarity.</td>
+  </tr>
+  <tr>
+    <td><tt>S</tt></td>
+    <td><tt>float</tt></td>
+    <td>The grand alignment score. This is simply the sum of the <i>U</i>
+    and the <i>F</i> columns. <!--
+This is calculated as
+<i>-&nbsp;kT&nbsp;</i>log&nbsp;<i>F&nbsp;+&nbsp;U</i>.  In this equation,
+<i>U</i> is the average potential energy of the molecules in the alignment
+(the quantity in the <tt>U</tt> field) and <i>F</i> is the value of the
+<i>P</i>-density overlap function (the quantity in the <tt>F</tt> field).
+-->
+      Lower values are intended to indicate better alignments.</td>
+  </tr>
+  <tr>
+    <td><tt>dU</tt></td>
+    <td><tt>float</tt></td>
+    <td>The average strain energy of the molecules in the alignment in
+    kcal/mol less the smallest such strain with the chiral class.</td>
+  </tr>
+  <tr>
+    <td><tt>dF</tt></td>
+    <td><tt>float</tt></td>
+    <td>The similarity measure of the configuration less the smallest such
+    similarity measure within the chiral class. Lower values indicate
+    greater similarity.</td>
+  </tr>
+  <tr>
+    <td><tt>dS</tt></td>
+    <td><tt>float</tt></td>
+    <td>The grand alignment score of the configuration less the smallest
+    such score within the chiral class. Lower values are intended to
+    indicate better alignments.</td>
+  </tr>
+  <tr>
+    <td><tt>chi</tt></td>
+    <td><tt>int</tt></td>
+    <td>The chiral class number. Unconstrained chiral centers will, in
+    general, be inverted during the search. The actual chirality of each
+    such chiral center contributes to the chiral class which is used to
+    separate alignments on output (and separate the related scores).</td>
+  </tr>
+</table>
+
+<p>Use the <nobr><b>Compute | Sort</b></nobr> command in the Database Viewer
+  to sort the database by increasing <tt>S</tt> or <tt>F</tt>; the alignments
+  judged best will then be first in the database. Typically, the top scoring
+  few alignments should be investigated. It can happen that a top scoring
+  alignment also has a relatively large strain energy in the <tt>U</tt> field.
+  Whether a high strain energy is evidence of a poor alignment depends on the
+  nature of the receptor to which the molecules are assumed to bind. For
+  example, higher strain energies are more acceptable when ligands for enzymes
+  and other catalytic receptors are submitted to the calculation.</p>
+
+<h1>
+<a id="Ref">References</a></h1>
+<table class="ref">
+  <tr>
+    <td valign="top">[Chan&nbsp;2010]</td>
+    <td valign="top">Chan, S.L., Labute, P.; Training a Scoring Function for
+    the Alignment of Small Molecules; <i>J.&nbsp;Chem. Inf. Model. 50</i>
+    (<b>2010</b>) 1724&ndash;1735.</td>
+  </tr>
+  <tr>
+    <td valign="top">[Cramer&nbsp;1988]</td>
+    <td valign="top">Cramer, R.D., Patterson, D.E., Bunce, J.D.; Comparative
+    Molecular field Analysis (CoMFA). 1. Effect of Shape on Binding of
+    Steroids to Carrier Proteins; <i>J. Am. Chem. Soc. 110</i> (<b>1988</b>)
+    5959.</td>
+  </tr>
+  <tr>
+    <td valign="top">[Crippen&nbsp;1999]</td>
+    <td valign="top">Wildman, S.A., Crippen, G.M.; Prediction of
+    Physiochemical Parameters by Atomic Contributions; <i>J. Chem. Inf.
+    Comput. Sci. 39</i> (<b>1999</b>) 868-873.</td>
+  </tr>
+  <tr>
+    <td valign="top">[Kearsley&nbsp;1990]</td>
+    <td valign="top">Kearsley, S.K., Smith, G.M.; An Alternative Method for
+    the Alignment of Molecular Structures: Maximizing Electrostatic and
+    Steric Overlap; <i>Tetrahedron Computer Methodology 3</i> (<b>1990</b>)
+    615-633.</td>
+  </tr>
+  <tr>
+    <td valign="top">[Labute&nbsp;2001]</td>
+    <td valign="top">Labute, P., Williams, C., Feher, M., Sourial, E.,
+    Schmidt, J.M.; Flexible Alignment of Small Molecules.; <i>J. Med. Chem.
+    44</i> (<b>2001</b>) 1483-1490.</td>
+  </tr>
+  <tr>
+    <td valign="top">[Martin&nbsp;1993]</td>
+    <td valign="top">Martin, Y.C., Bures, M.G., Danaher, E.A., Delazzer, J.,
+    Lico, I., Pavlik, P.A.; A Fast New Approach to Pharmacophore Mapping and
+    its Application to Dopaminergic and Benzodiazepine Agonists; <i>J.
+    Comput.-Aided. Mol. Des. 7</i> (<b>1993</b>) 83-102.</td>
+  </tr>
+  <tr>
+    <td valign="top">[Miller&nbsp;1999]</td>
+    <td valign="top">Miller, M.D., Sheridan, R.P., Kearsley, S.K.; SQ: A
+    Program for Rapidly Producing Pharmacophorically Relevant Molecular
+    Superpositions; <i>J. Med. Chem. 42</i> (<b>1999</b>) 1505-1514.</td>
+  </tr>
+  <tr>
+    <td valign="top">[Raber&nbsp;1989]</td>
+    <td valign="top">Ferguson, D.M., Raber, D.J.; A New Approach to Probing
+    Conformational Space with Molecular Mechanics: Random Incremental Pulse
+    Search; <i>J. Am. Chem. Soc. 111</i> (<b>1989</b>) 4371-4378.</td>
+  </tr>
+  <tr>
+    <td valign="top">[Sheridan&nbsp;1989]</td>
+    <td valign="top">Bush, B.L., Sheridan, R.P.; PATTY: A Programmable Atom
+    Typer and Language for Automatic Classification of Atoms in Molecular
+    Databases; <i>J. Chem. Info. Comp. Sci. 33</i> (<b>1993</b>)
+    756-762.</td>
+  </tr>
+</table>
+
+<h1>See Also</h1>
+
+<p><a href=
+  "https://www.chemcomp.com/moe/help/2018/CCG_Tutorials/(Tutorial)_MOE_Flexible_Alignment.svlx">
+  Flexible Alignment Tutorial</a> </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../images/ccgicon.png" /> <a href="../index.htm"></a>
+<a href=
+    "../legal.htm"></a> &copy;<span class="versionyear"></span> <a href="http://www.chemcomp.com"></a>. All
+    rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

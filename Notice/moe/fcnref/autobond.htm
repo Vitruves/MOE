@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content=
+  "functions: AutoConnect, AutoReconnect, AutoType" />
+  <meta name="keywords" content=
+  "functions: AutoConnectFromPosition, AutoTypeFromPosition" />
+  <title>Automatic Bond and Type Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Automatic Bond and Type Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    xbond = <a class="fcnlink" href=
+"#AutoConnectFromPosition">AutoConnectFromPosition</a> [el, pos, ybond]
+
+    [ion, geom, hintlp] = <a class="fcnlink" href=
+"#AutoTypeFromPosition">AutoTypeFromPosition</a> [el, pos, xbond, opt]
+    opt = [ acidbase: flag, implicitH: flag, totalcharge: num ]
+
+    <a class="fcnlink" href="#AutoConnect">AutoConnect</a>   atom_keys
+    <a class="fcnlink" href="#AutoReconnect">AutoReconnect</a> atom_keys
+    <a class="fcnlink" href="#AutoType">AutoType</a>      atom_keys
+</pre>
+<a id="AutoType"></a>
+<a id="AutoConnect"></a>
+<h1>Description</h1>
+
+<p>The automatic connection and automatic typing functions of MOE are used to
+  detect bonds and assign chemical types to atoms given only the elements and
+  their 3D coordinates. For example, suppose that a PDB file contains atoms
+  without connectivity information and that the current molecular system has
+  correct 3D coordinates and element information. The following code can be
+  used to automatically add bonds and assign atom type information:</p>
+
+<pre>
+    <span class="fcndef">AutoConnect</span> Atoms[];
+    <span class="fcndef">AutoType</span> Atoms[];
+</pre>
+<a id="AutoReconnect"></a>
+<a id="AutoConnectFromPosition"></a>
+<hr noshade="noshade" />
+
+<pre>xbond = <span class=
+  "fcndef">AutoConnectFromPosition</span> [el, pos, ybond]
+<span class="fcndef">AutoConnect</span>   atom_keys
+<span class="fcndef">AutoReconnect</span> atom_keys
+</pre>
+
+<p>The <tt>AutoConnectFromPosition</tt> function calculates atomic
+  connectivity. The <tt>el</tt> argument is the element token of the atoms,
+  <tt>pos</tt> are the 3D coordinates of each atom and <tt>ybond</tt> is a list
+  of pre-existing bonds for each atom (<tt>ybond(i)</tt> is the indices of the
+  connected neighbors for atom <tt>i</tt>). <tt>AutoConnectFromPosition</tt>
+  calculates and returns the additional connectivity as a list of neighbor
+  lists <tt>xbond</tt>. The connection algorithm is an enhanced version of the
+  Meng & Lewis method which uses covalent radii determined from X-ray
+  crystallography structures.</p>
+
+<p>The <tt>AutoConnect</tt> function uses <tt>AutoConnectFromPosition</tt> to
+  calculate additional connectivity between atoms given by <tt>atom_keys</tt>.
+  The additional bonds will be created between the atoms. to detect bonds and
+  connect the atoms. Bonds will not be created to atoms outside the given set
+  of atom keys. The <tt>AutoReconnect</tt> function is similar to
+  <tt>AutoConnect</tt> except that all bonds between atoms in the given set of
+  atom keys are deleted prior to detecting connections.</p>
+<a id="AutoTypeFromPosition"></a>
+<hr noshade="noshade" />
+
+<pre>[ion, geom, hintlp] = <span class=
+  "fcndef">AutoTypeFromPosition</span> [el, pos, xbond, opt]
+<span class="fcndef">AutoType</span> atom_keys
+</pre>
+
+<p>The <tt>AutoTypeFromPosition</tt> function assigns chemical type
+  information to atoms when given the element token (<tt>el</tt>), the 3D
+  coordinates (<tt>pos</tt>) and the connectivity in the form of lists of
+  indices of neighbors for each atom (<tt>xbond</tt>). The <tt>opt</tt>
+  argument is tagged vector with two flags: if <tt>opt.acidbase</tt> is true
+  then common acids, bases and ions will be protonated/deprotonated as
+  required; if <tt>opt.implicitH</tt> is true then the given atoms may or may
+  not have all hydrogens present. If <tt>opt.totalcharge</tt> is set then the
+  total charge of the system will be constrained to the given value. The
+  function returns the ionization, geometry state token and hintLP flag for
+  each atom.</p>
+
+<p>The <tt>AutoType</tt> uses <tt>AutoTypeFromPosition</tt> to assign type
+  information to the atoms given by <tt>atom_keys</tt>. The type information of
+  the atoms is replaced with the calculated values.</p>
+
+<p><b>Note!</b> In general, there is no unique solution but
+  <tt>AutoTypeFromPosition</tt> will return a reasonable solution.</p>
+
+<h1>References</h1>
+  <table class="ref">
+    <tbody>
+      <tr>
+        <td valign="top">[Labute&nbsp;2005]</td>
+        <td valign="top">Labute, P.; On the Perception of Molecules from 3D
+        Atomic Coordinates; <i>J. Chem. Inf. Model. 45</i> (<b>2005</b>)
+        215–221.</td>
+      </tr>
+      <tr>
+        <td valign="top">[Meng&nbsp;1991]</td>
+        <td valign="top">Meng, E.C., Lewis, R.A.; Determination of Molecular
+        Topology and Atomic Hybridization States from Heavy Atom Coordinates;
+        <i>J. Comp. Chem. 12</i> (<b>1991</b>) 891–898.</td>
+      </tr>
+    </tbody>
+  </table>
+
+<h1>See Also</h1>
+
+<p><a href="atom.htm">Atom&nbsp;Functions</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

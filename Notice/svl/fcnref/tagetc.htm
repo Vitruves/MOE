@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: tag, untag, tags, tagvals" />
+  <title>Tag Functions: tag, untag, tags</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Tag Functions: tag, untag, tags
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    v = <a class="fcnlink" href="#tag">tag</a> [ attributes, vals ]
+    [attributes, values] = <a class="fcnlink" href="#untag">untag</a> v
+    tag_vector = <a class="fcnlink" href="#tags">tags</a> v
+    val_vector = <a class="fcnlink" href="#tagvals">tagvals</a> v
+</pre>
+<a id="tag"></a>
+<h1>Description</h1>
+
+<pre>
+v = <span class="fcndef">tag</span> [ attributes, vals ]
+</pre>
+
+<p>Given a vector of tag tokens <tt>attributes</tt> and a vector of tag
+  values <tt>vals</tt>, combine them into attribute-value pairs to form a
+  tagged vector <tt>v</tt>.</p>
+<a id="untag"></a>
+<hr noshade="noshade" />
+
+<pre>
+[attributes, values] = <span class="fcndef">untag</span> v
+</pre>
+
+<p>Returns the tag tokens of tagged vector <tt>v</tt> and their corresponding
+  values, separated into 2 vectors. To strip out the tags from a tagged vector
+  <tt>v</tt>, use: <tt>first untag v</tt></p>
+<a id="tags"></a>
+<hr noshade="noshade" />
+
+<pre>
+tag_vector = <span class="fcndef">tags</span> v
+</pre>
+
+<p>Returns the tags of a tagged vector. <tt>tags v</tt> is equivalent to
+  <tt>first untag v</tt>.</p>
+
+<p>Examples:</p>
+
+<pre>
+    svl&gt; v = [ a:3, b:&#39;four&#39; ];
+    svl&gt; untag v
+    [ [&#39;a&#39;,&#39;b&#39;], [ 3, &#39;four&#39; ] ]
+    svl&gt; tag untag v
+    [ a:3, b:&#39;four&#39; ]
+    svl&gt; v = [ a:3, b:[ c:4, d:5 ] ];
+    svl&gt; v.b.d
+    5
+    svl&gt; tags v
+    [&#39;a&#39;,&#39;b&#39;]
+    svl&gt; tags v.b
+    [&#39;c&#39;,&#39;d&#39;]
+</pre>
+<a id="tagvals"></a>
+<hr noshade="noshade" />
+
+<pre>
+val_vector = <span class="fcndef">tagvals</span> v
+</pre>
+
+<p>Returns the values of a tagged vector. <tt>tagvals v</tt> is equivalent to
+  <tt>second untag v</tt>.</p>
+
+<p>Examples:</p>
+
+<pre>
+    svl&gt; v = [ a:3, b:&#39;four&#39; ];
+    svl&gt; tagvals v
+    [3, &#39;four&#39;]
+</pre>
+
+<h1>See Also</h1>
+
+<p>
+<a class="svl" href="tagpeek.htm">tagpeek</a><br />
+<a class="svl" href="tagpeek.htm">tagpoke</a>
+</p>
+
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

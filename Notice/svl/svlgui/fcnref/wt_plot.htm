@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href=
+  "../../../include/manstyle.css" />
+  <meta name="keywords" content="keywords: Plot" />
+  <meta name="keywords" content="functions: Widget:Plot" />
+  <meta name="keywords" content="functions: Plot (widget)" />
+  <meta name="keywords" content=
+  "functions: PLOT_COLORS, PLOT_LINE_STYLES, PLOT_MARKERS" />
+  <meta name="keywords" content="functions: PLOT_MARKER_STYLES" />
+  <title>Plot Widget</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../../index.htm"><img src="../../../images/ccglogo.png" /></a>
+    <a href="../../../index.htm"><div class="moeversion"></div></a>
+    Plot Widget
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Description</h1>
+
+<p>The <tt>Plot</tt> widget is a display area that is used to plot data and
+  set plot-related attributes. Four different plot types are supported:</p>
+<ol>
+<li><tt>function</tt> plot of one-dimensional data.</li>
+<li><tt>histogram</tt> bar chart plot of one-dimensional data.
+Multiple data series can be plotted at the same time.</li>
+<li><tt>scatter</tt> plot of two-dimensional data on X and Y axes.
+A third and fourth data dimension can be optionally visualized by
+coloring and sizing the data points according to the data values.</li>
+<li><tt>contour</tt> plot of matrix data on a regular two-dimensional
+grid.</tt>
+</ol>
+<p>The <tt>function</tt>, <tt>histogram</tt>, and <tt>scatter</tt> plot
+support visualization of multiple data series at the same time.</p>
+
+<h3>Attributes</h3>
+
+<p><tt>Plot</tt> inherits all <a class="svl" href="wt_core.htm">core</a>
+  attributes and defines the following attributes:</p>
+
+<p><b>General Plot Attributes</b></p>
+  <table class="titlebar">
+    <tr>
+      <th width="10%" valign="baseline">Attribute</th>
+      <th width="50%" valign="baseline">Description</th>
+      <th width="25%" valign="baseline">Values</th>
+      <th width="10%" valign="baseline">Default</th>
+    </tr>
+    <tr>
+      <td>plotTitle</td>
+      <td>Title to display at top of plot</td>
+      <td>token</td>
+      <td><tt>&#39;&#39;</tt></td>
+    </tr>
+    <tr>
+      <td>plotType</td>
+      <td>Type of plot</td>
+      <td><tt><a class="svl" href=
+      "#Constants">PLOT_TYPES:<br /></a> &#39;contour&#39;, &#39;function&#39;,
+      &#39;histogram&#39;, &#39;scatter&#39;</tt></td>
+      <td><tt>&#39;function&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>dimension</tt></td>
+      <td>Set the size of the plot widget. Width and height are specified
+      in UI zoom independent points.
+      <td>[width, height]</td>
+      <td><tt>[100,100]</tt></td>
+    </tr>
+    <tr>
+      <td>plotSensitive</td>
+      <td>Set the plot widget's sensitive look.
+      This attribute only changes how the plot widget is
+      displayed, not whether it reacts to mouse input
+      or not, use the attribute <tt>sensitive</tt> for that</td>
+      <td>0,1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>series</td>
+      <td>Data for each series:
+<p>
+<pre>
+function:  [[v1,v2,&hellip;],&hellip;]
+histogram: [[v1,v2,&hellip;],&hellip;]
+scatter:   [[[x1,x2,&hellip;],[y1,y2,&hellip;],&hellip;],&hellip;]
+contour:   [[v11,v12,&hellip;],[v21,v22,&hellip;],&hellip;]
+</pre>
+</p>
+      Specify missing data points with <tt>NaN</tt> values.
+      </td>
+      <td>Vector of series data</td>
+      <td><tt>[]</tt></td>
+    </tr>
+    <tr>
+      <td>seriesByIdx</td>
+      <td>Specify data of one series.</td>
+      <td>[series_idx, data]</td>
+      <td><tt>[]</tt></td>
+    </tr>
+    <tr>
+      <td>showAxes</td>
+      <td>Turn on/off display of axes.</td>
+      <td>0,1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>showGridlines</td>
+      <td>Turn on/off display of grid.</td>
+      <td>0,1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>showLegend</td>
+      <td>Turn on/off display of legend at top of plot.</td>
+      <td>0,1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>showTicks</td>
+      <td>Turn on/off display of axis ticks.</td>
+      <td>0,1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>tickStyle</td>
+      <td>Style and position of axis ticks</td>
+      <td><a class="svl" href=
+      "#Constants">PLOT_TICK_STYLES</a></td>
+      <td><tt>&#39;inside&#39;</tt></td>
+    </tr>
+    <tr>
+      <td>fontScale</td>
+      <td>Specify relative size factor of the text (titles, legends, labels)
+      in the plot.</td>
+      <td>real: 0.01-100</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>type</td>
+      <td>Plot return value data type</td>
+      <td><tt>'real'</tt>, <tt>'modint'</tt></td>
+      <td><tt>'real'</tt></td>
+    </tr>
+    <tr>
+      <td>graphics</td>
+      <td>Specify two optional graphics objects keys (see
+      <a href="../../fcnref/grfcn.htm" class="svl">gr_create</a>), as underlay
+      and/or overlay annotation graphics below/above the plotting area within
+      the axis bounds. The graphics objects are to be specified in the
+      coordinate system of the plot and are translated and zoomed together with
+      the plot axis ranges.</td>
+      <td>Vector of two graphics object keys</td>
+      <td>[0, 0]</td>
+    </tr>
+    <tr>
+      <td>contourColors</td>
+      <td>Set contour color ramp for <tt>contour</tt> plot and
+      coloring of <tt>scatter</tt> plot data points with
+      three-dimensional data. Specify a vector of colors.</td>
+      <td>Vector of <a class="svl" href=
+      "#Constants">PLOT_COLORS</a> or color integers</td>
+      <td>Vector of 16 default colors</td>
+    </tr>
+    <tr>
+      <td>contourColorCycle</td>
+      <td>Cycle through contour color range when
+      contouring Z values. If 0, map color range to upper/lower Z bounds.</td>
+      <td>0,1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>histogramBarWidth</td>
+      <td>Relative width of bars in histogram plot.</td>
+      <td>real: 0.0 - 1.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>seriesSelectionByIdx</td>
+      <td>Specify selection markers for <tt>function</tt> and
+      <tt>scatter</tt> plots. Selection markers are shown as borders/circles
+      around the data points. Two selection markers of increasing size
+      can be separately set for each data point in a bitwise manner.
+      The value <tt>1</tt> activates the first selection marker,
+      <tt>2</tt> the second, and <tt>3</tt> both.
+      </td>
+      <td>[series_idx, [m1,m2,&hellip;]]</td>
+      <td><tt>[]</tt></td>
+    </tr>
+    <tr>
+      <td>markerDimensions</td>
+      <td>Specify dimensions of the selection marker around the
+      data points. Set the overall scale and an offset for the first
+      and an additional offset for the second selection marker.</td>
+      <td>[scale, offset1, offset2]</td>
+      <td>[1, 0.5, 0.5]</td>
+    </tr>
+    <tr>
+      <td>plotPopup</td>
+      <td>Enable right click popup on plot.</td>
+      <td>0,1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>plotPopupCmd</td>
+      <td>Menu name or SVL command to pop up, when right
+      mouse button is pressed on top of plot widget.</td>
+      <td>token</td>
+      <td>&#39;PlotAttributesPompt[]&#39;</td>
+    </tr>
+    <tr>
+      <td>bubbleHelpCmd</td>
+      <td>Set to <tt>'wt_PlotBubbleHelp[]'</tt> to enable position-specific
+      bubblehelp. See code example below for details.</td>
+      <td>token</td>
+      <td><tt>&#39;&#39;</tt></td>
+    </tr>
+  </table>
+
+<p><b>Axis-Specific Attributes</b></p>
+  <table class="titlebar">
+    <tr>
+      <th width="10%" valign="baseline">Attribute</th>
+      <th width="50%" valign="baseline">Description</th>
+      <th width="25%" valign="baseline">Values</th>
+      <th width="10%" valign="baseline">Default</th>
+    </tr>
+    <tr>
+      <td>showXAxisLabels</td>
+      <td>Turn on/off display of labels on X axis.</td>
+      <td>0,1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>showYAxisLabels</td>
+      <td>Turn on/off display of labels on Y axis.</td>
+      <td>0,1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>showZAxisLabels</td>
+      <td>Turn on/off display of labels on Z axis.</td>
+      <td>0,1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>showWAxisLabels</td>
+      <td>Turn on/off display of labels on W axis.</td>
+      <td>0,1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>XAxisRange</td>
+      <td>Lower and upper bounds for X axis. If lower and
+      upper bounds are reversed, the direction of the axis is reversed as well.
+      Set both numbers to 0 to automatically calculate and set the bounds from
+      the series data values.</td>
+      <td>Vector of 2 real numbers</td>
+      <td>Calculated automatically</td>
+    </tr>
+    <tr>
+      <td>YAxisRange</td>
+      <td>Lower and upper bounds for Y axis. If lower and
+      upper bounds are reversed, the direction of the axis is reversed as well.
+      Set both numbers to 0 to automatically calculate and set the bounds from
+      the series data values.</td>
+      <td>Vector of 2 real numbers</td>
+      <td>Calculated automatically</td>
+    </tr>
+    <tr>
+      <td>ZAxisRange</td>
+      <td>Lower and upper bounds for Z axis (<tt>contour</tt> and
+      <tt>scatter</tt> plots only - data coloring).
+      If lower and upper bounds are reversed,
+      the direction of the axis legend is reversed as well.
+      Set both numbers to 0 to automatically calculate and set the
+      bounds from the series data values.</td>
+      <td>Vector of 2 real numbers</td>
+      <td>Calculated automatically</td>
+    </tr>
+    <tr>
+      <td>WAxisRange</td>
+      <td>Lower and upper bounds for W axis (<tt>scatter</tt> plot only -
+      size of data points).
+      Set both numbers to 0 to automatically calculate and set the bounds from
+      the series data values.</td>
+      <td>Vector of 2 real numbers</td>
+      <td>Calculated automatically</td>
+    </tr>
+    <tr>
+      <td>WAxisSizeRange</td>
+      <td>Set minimum and maximum relative size of data points in
+      a four-dimensional <tt>scatter</tt> plot. The fourth data
+      series values modify the data point sizes only if a
+      <tt>seriesMarkerStyle</tt> is set.</td>
+      <td>[min, max]</td>
+      <td>[0.5, 3]</td>
+    </tr>
+    <tr>
+      <td>XAxisMapping</td>
+      <td>Map X axis indices of <tt>contour</tt>, <tt>function</tt>, or
+      <tt>histogram</tt> plot to numerical values by specifying lower and upper
+      bounds for X axis.
+      If lower and upper bounds are reversed, the direction of the
+      axis is reversed as well. Set both numbers to 0 to automatically
+      calculate and set the mapping bounds from the series data values.</td>
+      <td>Vector of 2 real numbers</td>
+      <td>Calculated automatically</td>
+    </tr>
+    <tr>
+      <td>YAxisMapping</td>
+      <td>Map Y axis indices of <tt>contour</tt>, <tt>function</tt>, or
+      <tt>histogram</tt> plot to numerical values by specifying lower and upper
+      bounds for X axis. If lower and upper bounds are reversed, the direction
+      of the axis is reversed as well. Set both numbers to 0 to automatically
+      calculate and set the mapping bounds from the series data values.</td>
+      <td>Vector of 2 real numbers</td>
+      <td>Calculated automatically</td>
+    </tr>
+    <tr>
+      <td>XAxisTickSpacing</td>
+      <td>Spacing on X axis</td>
+      <td>real</td>
+      <td>Calculated automatically</td>
+    </tr>
+    <tr>
+      <td>YAxisTickSpacing</td>
+      <td>Spacing on Y axis</td>
+      <td>real</td>
+      <td>Calculated automatically</td>
+    </tr>
+    <tr>
+      <td>ZAxisTickSpacing</td>
+      <td>Spacing on Z axis legend</td>
+      <td>real</td>
+      <td>Calculated automatically</td>
+    </tr>
+    <tr>
+      <td>XAxisSubTicks</td>
+      <td>Number of sub-ticks per main tick interval on X
+      axis, including the main tick (i.e. 2 sub-ticks -&gt; 1 visible sub-tick
+      between each main tick).</td>
+      <td>0-100</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>YAxisSubTicks</td>
+      <td>Number of sub-ticks per main tick interval on Y
+      axis, including the main tick (i.e. 2 sub-ticks -&gt; 1 visible sub-tick
+      between each main tick).</td>
+      <td>0-100</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>XAxisTitle</td>
+      <td>Title to display on X axis</td>
+      <td>token</td>
+      <td><tt>&#39;&#39;</tt></td>
+    </tr>
+    <tr>
+      <td>YAxisTitle</td>
+      <td>Title to display on Y axis</td>
+      <td>token</td>
+      <td><tt>&#39;&#39;</tt></td>
+    </tr>
+    <tr>
+      <td>ZAxisTitle</td>
+      <td>Title to display on Z (color) axis of
+      <tt>contour</tt> plots and <tt>scatter</tt> plots with 3-dimensional
+      series</td>
+      <td>token</td>
+      <td><tt>&#39;&#39;</tt></td>
+    </tr>
+    <tr>
+      <td>WAxisTitle</td>
+      <td>Title to display on W (size) axis
+      of <tt>scatter</tt> plots with 4-dimensional series</td>
+      <td>token</td>
+      <td><tt>&#39;&#39;</tt></td>
+    </tr>
+    <tr>
+      <td>XAxisScaleType</td>
+      <td>Specify linear or logarithmic scaling of the X axis of the
+      <tt>scatter</tt> plot.</td>
+      <td><a class="svl" href="#Constants">PLOT_SCALE_TYPE</a></td>
+      <td><tt>&#39;linear&#39;</tt></td>
+    </tr>
+    <tr>
+      <td>YAxisScaleType</td>
+      <td>Specify linear or logarithmic scaling of the Y axis of the
+      <tt>scatter</tt>, <tt>function</tt>, and <tt>histogram</tt> plots.</td>
+      <td><a class="svl" href="#Constants">PLOT_SCALE_TYPE</a></td>
+      <td><tt>&#39;linear&#39;</tt></td>
+    </tr>
+    <tr>
+      <td>XAxisStyle</td>
+      <td>Show the X axis on both sides, only the main/bottom side,
+      or not at all.</td>
+      <td><a class="svl" href="#Constants">PLOT_AXIS_STYLE</a></td>
+      <td><tt>&#39;both&#39;</tt></td>
+    </tr>
+    <tr>
+      <td>YAxisStyle</td>
+      <td>Show the Y axis on both sides, only the main/left side,
+      or not at all.</td>
+      <td><a class="svl" href="#Constants">PLOT_AXIS_STYLE</a></td>
+      <td><tt>&#39;both&#39;</tt></td>
+    </tr>
+    <tr>
+      <td>XAxisZoom</td>
+      <td>Allow X axis to be zoomed with <tt>Ctrl</tt>-middle
+      mouse drag and translated with <tt>Shift</tt>-middle mouse drag.</td>
+      <td>0,1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>YAxisZoom</td>
+      <td>Allow Y axis to be zoomed with <tt>Ctrl</tt>-middle
+      mouse drag and translated with <tt>Shift</tt>-middle mouse drag.</td>
+      <td>0,1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>XAxisZoomRange</td>
+      <td>Lower and upper bounds of X axis zoom range. If
+      set, one cannot zoom out beyond that axis range. Also, translation is
+      capped at these bounds. Set to <tt>[-1,-1]</tt> to disable bounds or to
+      <tt>[0,0]</tt> to calculate bounds from the series data values.</td>
+      <td>Vector of 2 real numbers</td>
+      <td>Calculated automatically</td>
+    </tr>
+    <tr>
+      <td>YAxisZoomRange</td>
+      <td>Lower and upper bounds of Y axis zoom range. If
+      set, one cannot zoom out beyond that axis range. Also, translation is
+      capped at these bounds. Set to <tt>[-1,-1]</tt> to disable bounds or to
+      <tt>[0,0]</tt> to calculate bounds from the series data values.</td>
+      <td>Vector of 2 real numbers</td>
+      <td>Calculated automatically</td>
+    </tr>
+    <tr>
+      <td>XAxisZoomWindow</td>
+      <td>Lower and upper bounds of moving X axis zoom window.
+      If set, one cannot zoom in or out beyond that axis range cap. But
+      translation on the axis is still possible. E.g. if set to [10, 100],
+      the difference between the upper and lower <tt>XAxisRange</tt> must
+      be between 10 and 100, but one can still freely translate along the
+      axis as long as the bounds constraint is met. This is useful to
+      set e.g. on large function plots, where extreme zoom factors do not
+      make sense, but one wants to still explore all data via translation.
+      To disable the zoom window constraint, set to <tt>[0,0]</tt>.</td>
+      <td>Vector of 2 real numbers</td>
+      <td>[0,0]</td>
+    </tr>
+    <tr>
+      <td>YAxisZoomWindow</td>
+      <td>Lower and upper bounds of moving Y axis zoom window.
+      If set, one cannot zoom in or out beyond that axis range caps. But
+      translation on the axis is still possible. E.g. if set to [10, 100],
+      the difference between the upper and lower <tt>YAxisRange</tt> must
+      be between 10 and 100, but one can still freely translate along the
+      axis as long as the bounds constraint is met.
+      To disable the zoom window constraint set to <tt>[0,0]</tt>.</td>
+      <td>Vector of 2 real numbers</td>
+      <td>[0,0]</td>
+    </tr>
+  </table>
+
+<p><b>Series-Specific Attributes</b></p>
+  <table class="titlebar">
+    <tr>
+      <th width="10%" valign="baseline">Attribute</th>
+      <th width="50%" valign="baseline">Description</th>
+      <th width="25%" valign="baseline">Values</th>
+      <th width="10%" valign="baseline">Default</th>
+    </tr>
+    <tr>
+      <td>seriesColor</td>
+      <td>Colors of each series in plot</td>
+      <td>Vector of <a class="svl" href=
+      "#Constants">PLOT_COLORS</a> or color integers</td>
+      <td><tt>&#39;black&#39;</tt></td>
+    </tr>
+    <tr>
+      <td>showSeries</td>
+      <td>Enable/disable showing data series without having to
+      reset the data series with the attribute <tt>series</tt>
+      or <tt>seriesByIdx</tt>.</td>
+      <td>Vector of 0,1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>seriesLineStyle</td>
+      <td>Line styles for each series in plot</td>
+      <td>Vector of <a class="svl" href=
+      "#Constants">PLOT_LINE_STYLES</a></td>
+      <td><tt>&#39;solid&#39;</tt></td>
+    </tr>
+    <tr>
+      <td>seriesLineOrigin</td>
+      <td>Line connection options for each series in plot.
+      Set to e.g. &#39;xAxis&#39;, to connect series points to x Axis and
+      create bar line graphs.</td>
+      <td>Vector of <a class="svl" href=
+      "#Constants">PLOT_LINE_ORIGINS</a></td>
+      <td><tt>&#39;previousData&#39;</tt></td>
+    </tr>
+    <tr>
+      <td>seriesMarker</td>
+      <td>Marker shape - see note below</td>
+      <td>Vector of <a class="svl" href=
+      "#Constants">PLOT_MARKERS</a></td>
+      <td><tt>&#39;none&#39;</tt></td>
+    </tr>
+    <tr>
+      <td>seriesMarkerStyle</td>
+      <td>Marker style - see note below</td>
+      <td>Vector of <a class="svl" href=
+      "#Constants">PLOT_MARKER_STYLES</a></td>
+      <td><tt>&#39;none&#39;</tt></td>
+    </tr>
+    <tr>
+      <td>seriesTitle</td>
+      <td>Title for each series in the plot</td>
+      <td>Vector of tokens</td>
+      <td><tt>&#39;&#39;</tt></td>
+    </tr>
+    <tr>
+      <td>seriesSelectionColor</td>
+      <td>Set the color of the first series selection marker
+      (<tt>seriesSelectionByIdx</tt>). If the special value
+      <tt>-1</tt> is used, the selection markers have the
+      same color as the data points they are associated with.</td>
+      <td>Vector of <a class="svl" href=
+      "#Constants">PLOT_COLORS</a> or color integers</td>
+      <td>-1</td>
+    </tr>
+    <tr>
+      <td>seriesSelectionColor2</td>
+      <td>Set the color of the second series selection marker
+      (<tt>seriesSelectionByIdx</tt>). If the special value
+      <tt>-1</tt> is used, the selection markers have the
+      same color as the data points they are associated with.</td>
+      <td>Vector of <a class="svl" href=
+      "#Constants">PLOT_COLORS</a> or color integers</td>
+      <td>-1</td>
+    </tr>
+  </table>
+
+<p><b>Note:</b> The <tt>marker</tt> and <tt>markerStyle</tt> attributes both
+  set the shape of plot marks. The marks shaped by <tt>marker</tt> intersect
+  the actual plot point, whereas those determined by <tt>markerStyle</tt>
+  encircle the point.
+  Selection markers mimic the <tt>markerStyle</tt>, i.e. they can be
+  a triangle, square, circle or diamond depending on the style of the
+  data series point they are associated with.
+  </p>
+<p><a id="Constants"></a>
+<b>Constants used for the plot
+  attributes are as follows:</b>
+</p>
+  <table class="titlebar">
+    <tr>
+      <th>Constant</th>
+      <th>Values</th>
+    </tr>
+    <tr>
+      <td><tt>PLOT_TYPES</tt></td>
+      <td><tt>&#39;function&#39;</tt>, <tt>&#39;scatter&#39;</tt>, <tt>&#39;contour&#39;,
+      &#39;histogram&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>PLOT_COLORS</tt></td>
+      <td><tt>&#39;black&#39;</tt>, <tt>&#39;red&#39;</tt>, <tt>&#39;green&#39;</tt>, <tt>&#39;blue&#39;,
+      &#39;yellow&#39;</tt>, <tt>&#39;cyan&#39;</tt>, <tt>&#39;magenta&#39;</tt>, <tt>&#39;orange&#39;,
+      &#39;brown&#39;</tt>, <tt>&#39;pink&#39;</tt>, <tt>&#39;gray&#39;</tt>, <tt>&#39;darkRed&#39;,
+      &#39;darkGreen&#39;</tt>, <tt>&#39;darkBlue&#39;</tt>, <tt>&#39;darkYellow&#39;,
+      &#39;darkCyan&#39;</tt>, <tt>&#39;darkMagenta&#39;,
+      &#39;darkOrange&#39;,&#39;darkBrown&#39;</tt>, <tt>&#39;darkPink&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>PLOT_LINE_STYLES</tt></td>
+      <td>
+      <tt>&#39;solid&#39;</tt>, <tt>&#39;dashed&#39;</tt>,
+      <tt>&#39;dotted&#39;</tt>,
+      <tt>&#39;solid-light&#39;</tt>, <tt>&#39;dashed-light&#39;</tt>,
+      <tt>&#39;dotted-light&#39;</tt>,
+      &#39;none&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>PLOT_LINE_ORIGINS</tt></td>
+      <td><tt>&#39;previousData&#39;</tt>, <tt>&#39;xAxis&#39;,
+      &#39;yAxis&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>PLOT_MARKERS</tt></td>
+      <td><tt>&#39;cross&#39;</tt>, <tt>&#39;dot&#39;</tt>,
+      <tt>&#39;fine-dot&#39;,<tt>&#39;round-dot&#39;,<tt>&#39;fine-cross&#39;,
+      &#39;none&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>PLOT_MARKER_STYLES</tt></td>
+      <td><tt>&#39;filled-circle&#39;</tt>, <tt>&#39;filled-diamond&#39;,
+      &#39;filled-square&#39;</tt>, <tt>&#39;filled-triangle&#39;,
+      &#39;hollow-circle&#39;</tt>, <tt>&#39;hollow-diamond&#39;,
+      &#39;hollow-square&#39;</tt>, <tt>&#39;hollow-triangle&#39;,
+      &#39;none&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>PLOT_SCALE_TYPE</tt></td>
+      <td><tt>&#39;linear&#39;</tt>, <tt>&#39;log&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>PLOT_AXIS_STYLE</tt></td>
+      <td><tt>&#39;both&#39;</tt>, <tt>&#39;main&#39;</tt>,
+      <tt>&#39;none&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>PLOT_TICK_STYLES</tt></td>
+      <td><tt>&#39;inside&#39;</tt>, <tt>&#39;outside&#39;</tt>, <tt>&#39;both&#39;,
+      &#39;main-inside&#39;</tt>, <tt>&#39;main-outside&#39;</tt>, <tt>&#39;both&#39;</tt></td>
+    </tr>
+  </table>
+
+<h3>Trigger</h3>
+
+<p>A selection box is drawn by dragging and releasing the left mouse button
+  over the Plot area. Releasing the mouse button is the trigger.</p>
+
+<h3>Data Value</h3>
+
+<p>The selection box is returned as the data value. The plot widget returns
+  <tt>[x1,y1,x2,y2]</tt>, where <tt>[x1,y1]</tt> are the coordinates of the
+  top left corner of the selection box and <tt>[x2,y2]</tt> are the coordinates
+  of the bottom right corner of the selection box.</p>
+<p>If the <tt>type</tt> attribute is <tt>'modint'</tt> the key modifier
+  information is returned as fifth value: <tt>[x1,y1,x2,y2,mod]</tt>.
+  The key modifier bits include <tt>WMOD_CTRL</tt>, <tt>WMOD_SHIFT</tt>,
+  and <tt>WMOD_ALT</tt>. They indicate if one of the modifier keys was
+  pressed during the mouse selection. They can be checked with the
+  following code:</p>
+
+<pre>
+    alt_pressed = bitand [mod, WMOD_ALT];
+</pre>
+
+<h3>Position Dependent Bubble Help</h3>
+
+<p>
+By default one can specify only one common bubble help text over the whole
+plot widget. The attribute <tt>bubbleHelpCmd</tt> allows to create 
+position dependent bubble help over the plot. For this, one sets
+<tt>bubbleHelpCmd</tt> to the value <tt>wt_PlotBubbleHelp[]</tt> and adds
+handling of the plot trigger <tt>_plot_bubblehelp</tt>.
+This trigger is generated by <tt>wt_PlotBubbleHelp</tt> with the mouse
+position information just before the bubble help pops up.
+<p>
+The following example code, shows how to handle the <tt>_plot_bubblehelp</tt>
+trigger with the function <tt>wt_PlotSetBubbleHelp</tt> and a custom function
+<tt>get_bubblehelp</tt> which creates the text and/or graphics object
+for the help to be shown. The <b>bold</b> sections need to
+be adapted to the specific plot widget content:
+</p>
+<pre>  ...
+
+    // Set attribute to create position dependent bubble help.
+
+  WindowSetAttr [wkey, [plot: [bubbleHelpCmd: 'wt_PlotBubbleHelp[]']]];
+  ...
+
+    // Function 'get_bubblehelp' to generate bubble help.
+    //  wkey:   window key
+    //  widget: plot widget name
+    //  x:      plot x value of the mouse position
+    //  y:      plot y value of the mouse position
+    //  loc:    1: mouse over x-axis, 2: mouse over y-axis, 3: mouse over data
+    //  data:   additional custom data
+
+  local function get_bubblehelp [wkey, widget, x, y, loc, data]
+      <b>local [dx,dy,r,rmin,rmax,w,h] = PlotPickInfo [wkey, widget, [x, y]];
+      local text = twrite ['help text example - x: {} y: {}', x, y];
+      local grkey = gr_create [];</b>
+      ...
+      return [text, grkey];
+  endfunction
+  ...
+  local [trigger, values] = WindowWait wkey;
+  <b>local data = [...];</b>     // custom plot data, needed to create bubble help
+  ...
+
+    // Process _plot_bubblehelp trigger.
+
+  if trigger == '_plot_bubblehelp' then
+     wt_PlotSetBubbleHelp [wkey, trigger, values.(trigger), #get_bubblehelp, data];
+  endif
+  ...
+</pre>
+
+<h1>See Also</h1>
+
+<p><a href="wt_core.htm">Core Attributes</a><br />
+  <a href="../wt_intro.htm">SVL Window Toolkit</a><br />
+  <a href="introwt.htm">Window Toolkit Functions</a><br /></p>
+
+<p><a class="svl" href="wt_plotatt.htm">PlotAttributesPrompt</a><br />
+  <a class="svl" href="plotfcns.htm">Plot</a><br />
+  <a class="svl" href="plotfcns.htm">PlotC</a><br />
+  <a class="svl" href="plotfcns.htm">PlotH</a><br />
+  <a class="svl" href="plotfcns.htm">PlotS</a></p>
+
+<p><a href="../../fcnref/grfcn.htm">Graphics Object Functions</a><br />
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../../images/ccgicon.png" /> <a href="../../../index.htm"></a>
+    <a href="../../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

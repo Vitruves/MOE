@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <title>Linear Fragmentation</title>
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: SchuffenhauerScaffoldList" />
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Linear Fragmentation
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    ctablist = <a class="fcnlink" href=
+"#SchuffenhauerScaffoldList">SchuffenhauerScaffoldList</a> [ctab]
+    smiles = <a class="fcnlink" href=
+"#SchuffenhauerScaffoldList">SchuffenhauerScaffoldList</a> [smi]
+</pre>
+
+<h1>Description</h1>
+
+<p>The <tt>SchuffenhauerScaffoldList</tt> implements a linear fragmentation
+  sequence for an input molecule [Schuffenhauer 2007]. The input structure,
+  which is a molecular entity, is chopped up into ever smaller pieces, by
+  iteratively removing the least &quot;scaffold-like&quot; extremity, until the
+  remaining fragment cannot be made smaller. The function returns a list of
+  molecular fragment entities, in increasing order of size, i.e. the first
+  return value is the final irreducible fragment, and the last return value is
+  the least-pruned fragment. For example, submitting the following input
+  molecule:</p>
+  <div align="center"><img src="fragment/input.png" /></div>
+
+<p>would return a vector of 4 molecular fragments:</p>
+  <div align="center">
+    <table class="noborder">
+      <tr>
+        <td valign="center">[</td>
+        <td valign="center"><img src="fragment/seq_1.png" /></td>
+        <td valign="center">,</td>
+        <td valign="center"><img src="fragment/seq_2.png" /></td>
+        <td valign="center">,</td>
+        <td valign="center"><img src="fragment/seq_3.png" /></td>
+        <td valign="center">,</td>
+        <td valign="center"><img src="fragment/seq_4.png" /></td>
+        <td valign="center">]</td>
+      </tr>
+    </table>
+  </div>
+
+<p>The fragmentation process is described as <i>linear</i>, because for each
+  step, many pruning choices exist, but only one is selected. Because the
+  preferences are determined by rules which favor the selection of non
+  &quot;scaffold-like&quot; fragments, it is probable that the last remaining
+  fragment comprises all or part of the molecule's scaffold framework.
+  Hence, the resulting fragments can easily be used to sort and to classify
+  drug-like and lead-like molecules.</p>
+
+<p>For each pruning iteration:</p>
+  <ul>
+    <li>All terminal non-ring substituents are removed, except for exocyclic
+    double- and triple-bonds;</li>
+    <li>A ring, or portion of a ring, is identified, according to a priority
+    scheme, and removed.</li>
+  </ul>
+
+<p>The process repeats until further pruning would result in the deletion of
+  all atoms.</p>
+
+<p>The rules for selecting rings are briefly summarized below. Further detail
+  can be found in the original literature [Schuffenhauer 2007].</p>
+  <ol>
+    <li>Heterocycles of size 3 are removed first.</li>
+    <li>Avoid removing rings of size 12 or greater if smaller rings are
+    present.</li>
+    <li>Choose non-fused rings first, and those with longer linkers when a
+    choice is available.</li>
+    <li>Retain bridged systems, spiro-centers and rings-of-rings
+    preferentially.</li>
+    <li>Given no alternatives, remove a spiro-center rather than breaking a
+    bridge.</li>
+    <li>Remove rings of size 3, 5 or 6 in preference to those of less common
+    sizes.</li>
+    <li>Do not prune an aromatic ringsystem except in such a way that all
+    remaining members are still aromatic.</li>
+    <li>Remove rings with the fewest number of heteroatoms first.</li>
+    <li>In the event of equal numbers of heteroatoms, prune those with S before
+    O before N.</li>
+    <li>Smaller rings are removed first.</li>
+    <li>For mixed aromatic/non-aromatic ringsystems, prune aromatic rings
+    preferentially.</li>
+    <li>Remove rings first if the ring linker is attached to a ring heteroatom
+    at either end.</li>
+    <li>Break ties using a canonical walk-class method which does not rely on
+    atom order.</li>
+  </ol>
+<a id="SchuffenhauerScaffoldList"></a>
+<hr noshade="noshade" />
+
+<pre>
+ctablist = <span class="fcndef">SchuffenhauerScaffoldList</span> [ctab]
+</pre>
+
+<p>Calculates a series of fragments based on the original molecule
+  (<tt>ctab</tt>), and returns an array (<tt>ctablist</tt>), where the smallest
+  irreducible fragment is first, and the largest fragment is last.</p>
+
+<p>The <tt>ctab</tt> parameter should be a complete molecule. Aromatic bonds
+  should be represented in <i>resonance</i> form, rather than the more commonly
+  used <i>Kekul&eacute;</i> style. Aromatic rings should use bond type
+  <tt>CTAB_BT_ARO</tt> rather than <tt>CTAB_BT_1</tt> and <tt>CTAB_BT_2</tt>.
+  One way to obtain <tt>CTAB</tt> datastructures in this form is:</p>
+
+<pre>
+    svl&gt; ctab = ctab_Extract [atomkeys, [aro: 1]]
+</pre>
+
+<p>If it is necessary to record the position of atoms in each fragment within
+  the original molecule, the <tt>CTAB_A_NUM</tt> field should be used to store
+  an identifying index. For example:</p>
+
+<pre>
+    svl&gt; ctab(1)(CTAB_A_NUM) = x_id ctab(1)(CTAB_A_NUM);
+    svl&gt; frags = SchuffenhauerScaffoldList [ctab]
+</pre>
+
+<p>In this case, each of the <tt>CTAB</tt> structures contained within the
+  resulting array, <tt>frags</tt>, has its <tt>CTAB_A_NUM</tt> column set to
+  its original position within the input molecule.</p>
+<hr noshade="noshade" />
+
+<pre>
+smiles = <span class="fcndef">SchuffenhauerScaffoldList</span> [smi]
+</pre>
+
+<p>The <tt>SchuffenhauerScaffoldList</tt> function can also be invoked with a
+  <tt>SMILES</tt> string token as the input parameter. The operation is the
+  same as for when a <tt>CTAB</tt> datastructure is provided, except that the
+  interconversion is performed automatically, and the resulting fragments are
+  also provided in the form of <tt>SMILES</tt> strings.</p>
+
+<h1>References</h1>
+  <table class="ref">
+    <tr>
+      <td valign="top">[Schuffenhauer&nbsp;2007]</td>
+      <td valign="top">Schuffenhauer, A., Ertl, P., Roggo, S., Wetzel, S.
+      Marcus A., Koch, M.A., Waldman, H.; The Scaffold Tree - Visualization of
+      the Scaffold Universe by Hierarchical Scaffold Classification; <i>J.
+      Chem. Inf. Model.</i> <i>47</i> (<b>2007</b>) 47-58.</td>
+    </tr>
+  </table>
+
+<h1>See Also</h1>
+
+<p><a href="ctabfcn.htm">CTAB functions</a><br />
+  <a href="sm_build.htm">SMILES functions</a> </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

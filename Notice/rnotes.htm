@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE Online Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <link rel="stylesheet" type="text/css" href="include/manstyle.css" />
+  <link rel="icon" type="image/png" href="images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="images/ccgicon.png" />
+  <title>MOE 2024.06 Release Notes</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="index.htm"><img src="images/ccglogo.png" /></a>
+    <a href="index.htm"><div class="moeversion"></div>MOE 2024.06</a>
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<!-- ============================ 2024.06 ============================== -->
+
+<h1>2024.06</h1>
+
+<p>The 2024.06 release of Chemical Computing Group's Molecular Operating
+  Environment (MOE) software includes a variety of new features, enhancements
+  and changes that are summarized in this document.
+</p>
+
+<h2>Core System</h2>
+
+<div class="extra_info">
+
+<b>Default forcefield</b>.  The default forcefield has changed; it
+is now <b>AmberEHT</b> in MOE 2024.
+
+<p>AmberEHT is a new forcefield introduced in MOE 2024 that:
+  <ul>
+    <li>Uses MOE 2024's new bond angle and torsion EHT parameterization.
+    </li>
+    <li>Is updated to Amber19, with CMAP torsion cross-term corrections.
+    </li>
+    <li>Provides support for non-standard nucleic acids and sugars.
+    </li>
+  </ul>
+</p>
+
+</div>
+
+<p>
+<img src="rnotes/blueball.png" class="icon" /> <b>Updated EHT angle and
+torsion parameterization.</b> A novel bond angle and torsion
+parameterization methodology based on percentage <i>s</i> hybridization
+on directional bonds is now used for all forcefield EHT calculations in
+MOE.  The new parameters have been found to lead to good agreement with
+QM geometry predictions.  <b>Note:</b> As a consequence, Amber10:EHT
+energy terms may differ from those in MOE 2022.02 and earlier.
+</p>
+
+<p>
+<img src="rnotes/blueball.png" class="icon" /> <span class=
+"new"><b>NEW!</b></span> <b>AmberEHTo Forcefield.</b>
+The new AmberEHTo forcefield is similar to the new AmberEHT
+forcefield, the difference being that it uses:
+  <ul>
+    <li>EHT for bond lengths, angles, and out-of-plane parameters.</li>
+    <li>OpenFF 2.1 (Sage) SMIRKS torsion parameters.</li>
+  </ul>
+</p>
+
+<p>
+Note that the AMBER CMAP is now saved to PRMTOP files, to correct
+backbone torsion psi-phi angles in proteins during Amber MD
+simulations.
+</p>
+
+<img src="rnotes/ligtor.png" class="floatright" />
+<p>
+<img src="rnotes/blueball.png" class="icon" /> <b>Potential Setup.</b>
+A new <b>Selected Atoms Only</b> option on the Parameters tab of the
+Potential Setup panel allows for displaying the parameters of
+only the atoms currently selected in the system.
+</p>
+
+<p>
+<img src="rnotes/blueball.png" class="icon" /> <b>Updated pKa model.</b>
+The pKa model in MOE was retrained and improved.  <b>Note:</b> this may
+result in differences from MOE 2022; for example, in protomer
+enumeration.
+</p>
+
+<p>
+<img src="rnotes/blueball.png" class="icon" /> <span class=
+"new"><b>NEW!</b></span> <b>Ligand Torsion Analyzer.</b>
+<b>MOE | RHS | Ligand | Ligand Torsions</b>
+launches a monitor for dynamically assessing the quality of dihedral
+angles in the current system based on their consistency with
+CSD statistics.  Bond sleeves with traffic light coloring are
+displayed in the MOE 3D window as quality indicators, along with
+a text summary.
+Additionally, a Ligand Torsion Analyzer color bar can be displayed
+in the MOE footer Dihedral Plot for the currently selected
+torsion.
+</p>
+
+<p>
+<img src="rnotes/blueball.png" class="icon" /> <span class=
+"new"><b>NEW!</b></span> <b>OpenMOPAC integration.</b>
+OpenMOPAC 22.1.1 is now distributed with MOE.  MOPAC 7, which was
+previously distributed with MOE, is no longer part of the MOE
+distribution in 2024.
+</p>
+
+<p>OpenMOPAC has been integrated into all applications in MOE
+that supported the use of MOPAC 7, 2012, or 2016.  In particular,
+support for the MOZYME keyword has been explicitly added to
+the MOPAC settings page, provided
+as a <b>Linear Scaling (MOZYME)</b> checkbox.
+</p>
+
+<p>
+<img src="rnotes/blueball.png" class="icon" /> <span class=
+"new"><b>NEW!</b></span> <b>Database Viewer Filters.</b>
+<img src="rnotes/dbv_filter_database.png" class="floatright" />
+<b>Filter Database</b>, available through either
+<span class="menu">DBV | Edit | Filter</span> or the
+<img src="rnotes/ico_filter.png" class="icon" /> button in the
+menu bar of the Database Viewer, provides a quick interactive way to
+filter database entries by property.  The distributions of database
+field values are displayed as histograms or lists of
+categorical values, in which a range of values can be specified.
+The data display is updated dynamically when any changes
+are made to the database contents.
+</p>
+
+<p>Filter Database provides the following:
+<ul>
+  <li>Up to 10 filters.
+  </li>
+  <li>Interactive filter adjustment.
+  </li>
+  <li>Visual cues to indicate which part of the data are included /
+  excluded by the filtering process.
+  </li>
+  <li>Logical AND and OR combining operations.
+  </li>
+  <li>Filter inversion (logical NOT operator).
+  </li>
+  <li>Set entry selection or visibility based on filters.
+  </li>
+  <li>Enable / disable filters.
+  </li>
+  <li>Collapsed, summary view of filters.
+  </li>
+  <li>Choose whether to use first, minimum, maximum, or average of
+  multi-value database cells.
+  </li>
+  <li>Choose whether to always filter out empty cells or cells with
+  non-finite values.
+  </li>
+  <li>Attached and detached modes.
+  </li>
+</ul>
+</p>
+
+<p>
+<img src="rnotes/blueball.png" class="icon" /> <b>File formats.</b>
+Support for the following file formats has been added or enhanced:
+</p>
+<p>
+    <ul>
+      <li>The following file formats have been added to the <b>Save</b> panel
+	(<span class="menu">MOE | File | Save</span>):
+	<ul>
+	  <li>mmCIF</li>
+	  <li>XYZ</li>
+	  <li>MDB</li>
+	</ul>
+      </li>
+      <li>Multi-model PDB files can now be written from the Save
+	panel.
+      </li>
+      <li>Saving biopolymers (proteins, nucleic acids) as sequences
+        is now available when saving a database as a text or CSV file
+	(<span class="menu">DBV | File | Save As </span>).
+      </li>
+      <li>Reading of binary CIF files is now supported in the
+	<b>Open</b> panel.
+      </li>
+      <li>The AMBER CMAP is now written to PRMTOP files.
+      </li>
+    </ul>
+</p>
+
+<p>
+<img src="rnotes/blueball.png" class="icon" /> <b>Support for 5-letter
+residue names.</b> PDB reading and writing has been updated to support
+round-trip preservation of 5-letter residue names in MOE.  Long names
+are mapped to short names, with the mapping written into
+<tt>REMARK&nbsp;99</tt> for recovering the long names on reading.
+Reading and writing of <tt>REMARK&nbsp;600</tt> records containing long
+residue names is now supported as well.
+</p>
+
+<p>
+<img src="rnotes/blueball.png" class="icon" /> <b>Pi-pi contacts.</b>
+    The display of &pi;-&pi; interactions (between planar rings) can be
+    enabled from the <span class="menu">MOE Footer | Contacts</span> popup.
+</p>
+
+<p>
+<img src="rnotes/blueball.png" class="icon" /> <b>Ribbon display.</b>
+Ribbons have been updated with the following features:
+    <ul>
+      <li>Smooth colors.  Ribbon color can be interpolated between
+	differently colored segments.
+      </li>
+      <li>Beveled edges. Ribbons displayed using cartoon rendering can
+	be drawn with beveled edges to smooth out the corners.
+      </li>
+    </ul>
+</p>
+
+<p>
+<img src="rnotes/blueball.png" class="icon" /> <b>System Manager.</b>
+The System Manager context menu, opened by right clicking on any of
+the lines in the System Manager, now provides a <b>Show 2D</b>
+button that shows the corresponding molecule in the 2D
+overlay display in the MOE Window.
+</p>
+
+<p>
+<img src="rnotes/config_ui.png" class="floatright" />
+<img src="rnotes/blueball.png" class="icon" /> <b>UI Zoom</b>.
+The UI zoom factor of MOE windows can now be done on a per-monitor
+as well as a per-window basis:
+  <ul>
+    <li><b>Per-monitor zoom.</b> In a multi-monitor system, scaling
+      of individual monitors can be specified in the Configuration
+      Options panel.  A schematic in the panel shows the available
+      monitors and their arrangement in the operating system.
+      When scaling to very large sizes, a confirmation dialog will
+      open; if no confirmation is made, the zoom will be reverted
+      after 15 seconds.
+    </li>
+    <li><b>Per-window zoom.</b> Individual MOE windows can be
+      dynamically zoomed using the following key combinations:
+      <ul>
+        <li>Zoom out (reduce zoom): Ctrl&ndash;, i.e.
+	    hold the Control key and press <b>&ndash;</b>.
+	</li>
+        <li>Zoom in (increase zoom): Ctrl= (or Ctrl+), i.e.
+	    hold the Control key and press <b>=</b>.
+	</li>
+        <li>Reset zoom: Ctrl0, i.e.
+	    hold the Control key and press <b>0</b> (zero).
+	</li>
+      </ul>
+    </li>
+  </ul>
+</p>
+
+<p>
+<img src="rnotes/blueball.png" class="icon" /> <b>Bubble Help.</b>
+Bubble help in the Database Viewer and Sequence Editor have been
+enhanced as follows:
+  <ul>
+    <li><i>Sequence Editor</i>. The bubble help on non-natural amino
+	acids will now show a 2D depiction of the residue.
+    </li>
+    <li><i>Database Viewer</i>. A new set of <b>Bubble Help</b> buttons
+      in the Database Viewer page of the Configuration Options panel
+      are used to set the display mode of bubble help on minimized
+      molecule cells; the bubble help can be always shown or always
+      hidden, or shown only when a modifier is held down while hovering.
+    </li>
+  </ul>
+</p>
+
+<p>
+<img src="rnotes/context_video_help.png" class="floatright" />
+<img src="rnotes/blueball.png" class="icon" /> <span class=
+"new"><b>NEW!</b></span> <b>Video links.</b> 
+Context-sensitive video help is now available for many of the panels
+in MOE.  In addition to the manual page link,
+where available, one or more video links will be listed
+when the help button is pressed.
+If no video links are available, the manual page will open automatically.
+</p>
+
+<p>
+<img src="rnotes/blueball.png" class="icon" /> <b>Selection
+expression language.</b> The following updates have been made:
+  <ul>
+    <li>Adding a '<tt>?</tt>' character suffix when specifying
+	a set name will result in all objects being returned
+	when the set is undefined; without the suffix, no
+	objects are returned.
+    </li>
+    <li>The <tt>buried</tt> and <tt>exposed</tt> keywords
+	now take a selection expression as an additional
+	optional argument; when specified, the keywords
+	will apply only to the objects defined  by the
+	expression.
+    </li>
+  </ul>
+</p>
+
+<p>
+<img src="rnotes/blueball.png" class="icon" /> <b>Third party
+software support.</b> The following software versions are now
+supported:
+  <ul>
+    <li><b>Gaussian</b>: g16RevC.01
+    </li>
+    <li><b>AMBER</b>: AMBER 24
+    </li>
+    <li><b>CUDA SDK</b>: CUDA 12
+    </li>
+  </ul>
+</p>
+<p>
+Note that precompiled GPU ptx files are now patchable; i.e. they
+can be added to the MOE <tt>patch</tt> and <tt>custom</tt> directories.
+</p>
+
+<p>
+<img src="rnotes/blueball.png" class="icon" /> <b>MOE menus.</b>
+The following changes have been made to MOE menus.
+
+  <table class="titlebar" width="90%">
+  <tr>
+  <th>Menu Name</th>
+  <th>Menu Item</th>
+  <th>Description</th>
+  </tr>
+  <tr>
+  <td><span class="nobr">MOE | File</span><br />
+  <span class="nobr">MOE | RHS</span>
+  </td>
+  <td>Capture</td>
+  <td>Opens the Capture submenu, for accessing the Capture
+  application.</td>
+  </tr>
+  <tr>
+  <td><span class="nobr">MOE | Help</span></td>
+  <td>Videos</td>
+  <td>Opens <a href="http://video.chemcomp.com">video.chemcomp.com</a>,
+    which provides on-line access to MOE help videos.</td>
+  </tr>
+  <tr>
+  <td><span class="nobr">MOE | RHS | Ligand</span></td>
+  <td>Ligand Torsions</td>
+  <td>Launches the Ligand Torsion Analyzer, which displays
+    sleeves on torsion bonds colored to indicate quality.</td>
+  </tr>
+  <tr>
+  <td><span class="nobr">DBV | Edit</span></td>
+  <td>Filter</td>
+  <td>Opens Filter Database, for filtering entries in
+    the Database Viewer.</td>
+  </tr>
+  <tr>
+  <td><span class="nobr">DBV | Compute</span></td>
+  <td>Protein Patches</td>
+  <td>Opens the Save Protein Patches panel, for calculating
+    protein patches for structures in the database,
+    and writing them to the database.</td>
+  </tr>
+  <tr>
+  <td><span class="nobr">DBV | Compute | Analysis</span></td>
+  <td><span class="nobr">Protein Patch 2D Maps</span></td>
+  <td>Opens the Protein Patches 2D Maps panel, to display
+    the 2D maps of 3D protein patches that are saved
+    in the database.</td>
+  </tr>
+  <tr>
+  <td><span class="nobr">SE | Alignment | Constraints | Project</span></td>
+  <td>&lt;MOE&nbsp;Project&nbsp;name&gt;</td>
+  <td>Specifies the project from which to obtain alignment constraints.
+    The constraints will be taken from the project reference file.</td>
+  </tr>
+
+  </table>
+</p>
+
+<p><hr shadow="none"></p>
+
+<!-- =========================== APPLICATIONS ============================ -->
+
+<h2>Applications</h2>
+
+<p>
+<img src="rnotes/blueball.png" class="icon" /> <b>Conformation Import.</b>
+In 2024, Conformation Import was rewritten for better performance and
+reliability:
+  <ul>
+    <li>Improved fragmentation rules now create fewer fragments
+	with a better chemical context.
+    </li>
+    <li>Penalty functions are used to prevent the generation of
+	unwanted conformations such as, for example, cis-amides.
+    </li>
+    <li>Fragment databases are much smaller than in the previous
+        version; fragments were minimized using the new AmberEHT
+	forcefield.
+    </li>
+    <li>
+	The panel was streamlined and simplified.
+    </li>
+  </ul>
+
+<p>As a consequence of these updates, there almost no failure
+    cases (i.e. where conformations cannot be generated), and
+    calculations are generally much faster than with the previous
+    version.
+</p>
+
+<p>Note: the output database is now always written with
+    conformations in packed mode.
+</p>
+
+<p>
+<img src="rnotes/capture_add_panel.png" class="floatright" />
+<img src="rnotes/blueball.png" class="icon" /> <span class=
+"new"><b>NEW!</b></span> <b>Capture.</b>
+Capture provides the ability to easily save the current system
+along with a title and text annotations &ndash; together referred
+to as a <i>capture</i> &ndash; and subsequently browse and edit
+saved captures.  Captures are saved to a Capture file which 
+is specified when the application is launched, and which can be
+switched later in the MOE session if desired.
+</p>
+
+<p>
+Features include:
+</p>
+  <ul>
+  <li><span class="menu">MOE | RHS | Capture</span> provides quick
+    access to Add (add a new capture to the Capture file) and Open
+    (switch Capture files) options, as well as loading from a list of
+    captures.  <span class="menu">MOE | File | Captures</span>
+    provides the same menu access.
+  </li>
+  <li>Attached and detached panel modes.  In attached mode,
+    Capture opens in the MOE Footer, with buttons for quick
+    loading, Add, and Edit, and a list popup that
+    includes search, reordering, and delete capability.
+    In detached mode, Capture is launched as a separate panel.
+    The default launch mode is configurable.
+  </li>
+  <li>Smooth transitions when loading a capture.  The duration
+    of the transition can be configured.
+  </li>
+  <li>Save options to specify whether to save only tags with active
+    atoms or only the active ligand, surfaces, and the current
+    theme (view setup).  Note that if Ligand Properties are
+    currently displayed, they will be captured too.
+  </li>
+  <li>On hover over the Capture footer buttons or Capture list
+    items, bubble help will display a summary of the capture,
+    including a thumbnail of the saved system.
+  </li>
+  <li>Traversal between Title and Comment fields using keyboard
+    Tab key.  (Use Shift-Tab to enter a text tab.)
+  </li>
+  </ul>
+</p>
+
+<p>
+<img src="rnotes/blueball.png" class="icon" /> <b>MOEsaic.</b>
+MOEsaic, the web-based application for Structure Activity Relationship (SAR)
+and Matched Molecular Pair (MMP) analysis, has been enhanced as follows:</p>
+
+  <ul>
+    <li><b>Improved Filtering</b>. Filters were fully redesigned.  Data
+      distributions are shown as histograms for numerical fields,
+      percentages for categorical fields, and depictions for
+      structure fields.  OR and AND combining logic and logical inversion
+      are available.
+    </li>
+    <li><b>Heat Map</b>. The new Heatmap Pane is used to pinpoint where
+        there may be compounds of interest or not of interest in the
+	fully enumerated combinations of an R-Group Analysis fragmentation.
+	Features include:
+<p><img src="rnotes/moesaic_heatmap.png" class="floatright" /></p>
+	<ul>
+	  <li><i>Dynamic zoom</i>. Using the zoom button in the UI or
+	     Ctrl&nbsp;+&nbsp;wheel, the display will zoom in or out.
+	     The fully zoomed-in view shows individual fragment
+	     and compound depictions.  Zooming out loses
+	     detail, finally leading to an overview mode in which
+	     a sampled view of the data on a regular grid is shown.
+	  </li>
+	  <li><i>Summary information in bubble help</i>.  On mouse hover
+	    over the tiles of the heat map display, bubble help will
+	    appear with a summary of the data corresponding to that tile.
+	  </li>
+	  <li><i>Column and row sorting</i>. By default, columns and
+	    rows in the display are sorted by the main activity field.
+	    Sorting by any field is possible through <b>Sort</b> options
+	    in the pane's header.
+	  </li>
+	  <li><i>Calculate fragment activity using a model</i>.
+	    A MOE QSAR model can be used to calculate the activity
+	    value of the fragments.  If no model is specified, Free
+	    Wilson analysis is used to calculate the contribution
+	    of each fragment.  Fragments can be colored and sorted
+	    based on their contribution.
+	  </li>
+	</ul>
+    </li>
+    <li><b>QSAR models</b>. QSAR models are configured in MOEsaic in
+	the new Qsar Models page of the Project Configuration panel.
+	<ul>
+	  <li><i>Upload model files</i>.  MOE <tt>.fit</tt> files
+	    can be drag and dropped or selected via a file browser.
+	  </li>
+	  <li><i>Create model from descriptors</i>.  A model can
+	    be created or modified manually by selecting descriptors
+	    from all available MOE descriptors and then adding them
+	    to the model.
+	  </li>
+	</ul>
+    </li>
+    <li><b>View Templates</b>. The new View Templates pane in the Project
+	Configuration panel allows for specifying custom layouts for each
+	type of tab.
+    </li>
+    <li><b>New plot types</b>. The Plot pane now offers radar plots, box
+	bar plots, and bar charts.  These plots are useful for comparing
+	compounds to one another along different property dimensions.
+    </li>
+    <li><b>Custom hooks</b>. Hooks provide a mechanism for quickly and
+	easily sending requests from MOEsaic to third party servers.
+    </li>
+    <li><b>Interaction and pocket surfaces</b>.  The Dock pane now
+	generates and displays interaction surfaces and pocket
+	molecular surfaces colored by electrotstatics.
+    </li>
+  </ul>
+</p>
+
+<p>
+<img src="rnotes/blueball.png" class="icon" /> <b>Protein
+structural alignment.</b>  The protein structural alignment
+methodology in MOE has been redesigned for greater accuracy.
+  <ul>
+    <li><b>Pairwise protein alignment</b>.
+    The pairwise protein alignment algorithm
+    optimizes the STOVCA alignment quality
+    score, which is based on percentage of aligned alpha carbons.
+    </li>
+    <li><b>Multiple protein alignment</b>.
+    The new multiple alignment method searches for optimal pairwise
+    constraints then builds up a global alignment
+    from the pairwise alignments of each pair of structures
+    using a tree build-up strategy.
+    </li>
+    <li><b>Stuctural Overlap.</b> In <span class="menu">SE |
+        Align/Superpose</span>, the new Structural Overlap button
+	in the Superpose Options popup specifies that the
+	superposition to be performed  will correspond to the
+	calculations used to optimize the protein alignment,
+	i.e. which will maximize the number of equivalenced residues
+	according to STOVCA criteria.
+    </li>
+    <li><b>Pairwise Overlap Scan.</b> This new option in the
+	Align Options popup, when disabled, will perform a faster,
+	less thorough search; this may fail when sequence identity
+	between sequences is low.  Enable this option to perform
+	the full search.
+    </li>
+  </ul>
+</p>
+
+
+<p><img src="rnotes/ph4_AbAg.png" class="floatright" /></p>
+<p>
+<img src="rnotes/blueball.png" class="icon" /> <b>Pharmacophore
+Search with subsets.</b>
+Pharmacophore Search now support the use of selection expressions
+for restricting the pharmacophore search to a subset of atoms of
+the system.  This makes it possible, for example, to use
+pharmacophore search to quickly find protein-protein docking
+poses that satisfy particular interaction requirements.
+</p>
+
+<p>The new <b>Selection</b> option provides the ability to restrict
+the search by specifying the following sets of atoms:
+  <ul>
+    <li><b>Annotate</b>.  The atoms that will be annotated for
+	feature matching.
+    </li>
+    <li><b>Bcheck</b>. The atoms to use for a bump check on
+	projected annotations
+    </li>
+    <li><b>Volumes</b>.  The atoms to consider during volume checks.
+    </li>
+    <li><b>Molecule</b>. A set of atoms that will be used by default
+	when any of the above sets is left unspecified.
+    </li>
+  </ul>
+
+</p>
+
+<p>
+<img src="rnotes/blueball.png" class="icon" /> <b>Pharmacophore Query
+Volume Expressions.</b> The Pharmacophore Editor now supports the use of
+selection expressions and sets in Volume expressions.
+</p>
+
+<p>
+<img src="rnotes/blueball.png" class="icon" /> <b>Spectral Analysis.</b>
+The Spectral Analysis application has been enhanced with the following
+updates:
+<ul>
+  <li><b>ECD</b>.  Electronic Circular Dichroism (ECD) spectra are now
+    available in a new tab.  Analogously to the VCD tab where the
+    complementary IR spectra could be displayed, the UV spectrum
+    can be displayed next to the ECD spectrum.
+  </li>
+  <li><b>ORD</b>.  Optical rotation dispersion (ORD) is related to
+    ECD via the Kramers-Kronig transformation.  ORD spectra can be
+    displayed on the ECD page.
+  </li>
+  <li><b>Conformer Distribution Fitting Weights</b>.
+    When multiple experimental properties are used for fitting,
+    it is now possible to assign a greater or lesser weight to the
+    Chemical Shifts and Coupling Constants contributions.
+    This is useful when it is known that a particular property has
+    greater or lesser accuracy.
+  </li>
+  <li><b>Conformer Distribution 2D display of errors</b>.
+    Similarly to the NMR tab 2D structure display, the Conformer
+    Distribution 2D diagram now shows colored circles scaled
+    by the error of each conformer.
+  </li>
+  <li><b>Duplicate removal RMSD limit</b>.
+    Each tab in the Spectral Analysis panel now provides a configurable
+    RMSD threshold for duplicated removal.
+  </li>
+  <li><b>Averaged calculated shift for CH3</b>.  On the NMR tab,
+    calculated H shifts are averaged for methyl groups.
+  </li>
+  <li><b>Save coupling constants</b>.  On the NMR tab, the table of
+    coupling constants now offers a <b>Save</b> button.
+  </li>
+  <li><b>Conformer Distribution report</b>. A <b>Create Report</b>
+    button has been added to the Conformer Distribution tab.
+  </li>
+  <li><b>VCD Summary Report</b>. An option has been added to
+    create the VCD report in summary mode.
+  </li>
+  <li><b>Peak Half-Width</b>.  On both the VCD and ECD tabs, it is
+    possible now to specify the peak half-width of the selected line
+    shape.  This is useful when experimental values might have a lower
+    resolution than the calculated values.  By
+    broadening the peak, the theoretical calculation is effectively
+    performed at a coarser resolution, thus potentially
+    providing a better match to the experimental shape.
+  </li>
+  <li><b>Reset Zoom</b>. This button has been added to the NMR,
+    VCD, and ECD tabs.
+  </li>
+</ul>
+</p>
+
+<p>
+<b>Note:</b> In <b>Conformation Search</b>, QM duplicate removal is
+no longer done.
+</p>
+
+<p>
+<img src="rnotes/blueball.png" class="icon" /> <b>QuickPrep.</b>
+<b>Overwrite Temperature Factor by Displacement</b> is a new
+refinement option which, when enabled, overwrites the atom
+temperature factor with the distance the atom moved during
+minimization, multiplied by 30.0.
+</p>
+
+<p><img src="rnotes/map2d_diff.png" class="floatright" /></p>
+<p>
+<img src="rnotes/blueball.png" class="icon" /> <b>Protein Patches.</b>
+Protein Patches 2D Maps has been enhanced as follows:
+<ul>
+  <li><b>Map Average</b>. When patches belonging to multiple
+     structures are present in the system, the averaged 2D patches
+     can be displayed by selecting several structures from the
+     list of maps.
+  </li>
+  <li><b>Map Difference</b>. When <b>Map Difference</b> is
+    enabled, the difference between specified maps
+    or averaged maps is displayed.
+  </li>
+  <li><b>Show / Hide</b>.  When multiple maps as present, the
+    maps can be displayed in single or double pane mode by
+    showing or hiding one or the other of the map panes.
+  </li>
+  <li><b>Horizontal / Vertical alignment</b>.  When both map
+    panes are visible, they can be oriented side-by-side
+    or over-under using the new <b>Horizontal Align</b> setting.
+  </li>
+  <li><b>Legend</b>.  Each map pane now has an associated
+    legend popup.
+  </li>
+  <li><b>MDB input</b>. Input structures can now be read from
+    a MOE database file (.mdb).
+  </li>
+  <li><b>Save settings</b>. Panel configurations can be saved
+    and restored.
+  </li>
+</ul>
+
+<p>The Protein Patch Analyzer has a new <b>Area</b> field that
+reports the cumulative total patch area of all patches listed.
+</p>
+
+<p>Protein patches can now be calculated over a database.
+<span class="menu">DBV | Compute | Molecule | Protein Patches</span>
+opens the Save Protein Patches panel, in which the type of
+patch as well as patch parameters can be specified.
+</p>
+
+<p>
+<img src="rnotes/blueball.png" class="icon" /> <b>Ensemble Protein
+Properties.</b>  The following are new features in Protein
+Properties:
+<ul>
+  <li><b>Save patches in database</b>.  When enabled, an extra field
+    will be written to the ensemble database
+    containing the protein patches that are generated while
+    calculating patch properties.  Note that this may significantly
+    increase the size of the file.
+  </li>
+  <li><b>Save surface</b>.  When enabled, an extra field will be
+    written to the ensemble database containing the molecular
+    surfaces of the input structures, colored by a specified
+    ensemble average residue property.  The coloring scheme can be
+    configured.
+  </li>
+  <li><b>Subset support</b>.  When calculating properties on a
+    database of structures, it is now possible to specify a
+    subset of the system over which to perform calculations, including
+    named sets.
+  </li>
+  <li><b>Environment Charge</b>. The net charge of the fixed (not sampled)
+    part of the system can now be specified.  This value is added to the
+    sampled charge for determining the pI of the combined system.
+  </li>
+</ul>
+</p>
+
+<p>
+<img src="rnotes/blueball.png" class="icon" /> <b>Epitope Analyzer.</b>
+When browsing a database that contains computed epitopes, the
+epitope analysis panel is now embedded in the DBV Browser.
+</p>
+
+<p>
+<img src="rnotes/blueball.png" class="icon" /> <b>Protein Design.</b>
+Two new options have been added to Protein Design:
+<ul>
+  <li><b>Preserve Restraints.</b>
+    Tethers, forcefield restraints, and atom fixed state are used to
+    determine whether a residue will be included or excluded from
+    sidechain repacking.  This can be used to enforce specific
+    conformations.
+  </li>
+  <li><b>Lower Site Limit.</b> It is now possible to specify the
+    lower limit of Site Limit enumeration.
+  </li>
+  <li><b>Load Mutation Sequence.</b>
+    A sequence file in FastA or raw format can be specified
+    to define the list of mutations.
+  </li>
+</ul>
+</p>
+
+<p>
+<img src="rnotes/blueball.png" class="icon" /> <b>Protein Contacts.</b>
+Protein Contacts provides new <b>PosA</b> and <b>PosB</b> aggregation
+modes.  These allow summarizing all interactions for a unique residue
+in SetA or SetB, respectively.  Since multiple residue contacts and
+types may exist, the corresponding interacting pair in PosB or PosA,
+respectively, may be a list of residue names/positions.
+</p>
+
+<p>
+<img src="rnotes/blueball.png" class="icon" /> <b>Pro:Pro Dock.</b>
+When the system contains an annotated antibody-antigen complex,
+Protein-Protein Docking will now auto-select the antibody as
+the ligand, and the antigen as the receptor.  <tt>$CDR_H3</tt> is
+then auto-selected as the ligand site (the active site on the ligand),
+and <b>Use Hydrophobic Patch Potential</b> is enabled by default.
+&quot;Antibody mode&quot; is enabled through a single
+<b>Auto-detect CDR Site Restraints</b> option, which automatically
+detects antibody structures and, if found, automatically uses the
+CDR H3 loop as an additional site restraint.
+</p>
+<p>In batch mode, a Verbose Log File can now be specified.  Extra
+progress information is written to this file during the docking run.
+</p>
+
+<p>
+<img src="rnotes/blueball.png" class="icon" /> <b>Antibody Modeler.</b>
+The Antibody Modeler has the following enhancements:
+<ul>
+  <li><b>Refinement</b>.
+    A new refinement protocol is now used to generate the final model.
+    In a slow-quenching approach, heavy atoms are restrained
+    and minimized iteratively, which can help improve the stability
+    of the results.
+<p><img src="rnotes/projsrch_samriboswitch.png" class="floatright" /></p>
+  </li>
+  <li><b>Cleave terminal Lysines</b>. When building a full Ig model,
+    the <b>Full Ig Termini</b> option, when enabled, will result in
+    C-terminal Lysine residues being removed prior to adding terminal caps.
+    This option is available only when <b>Model Type</b> is set to Ig.
+  </li>
+</ul>
+</p>
+
+<p>
+<img src="rnotes/blueball.png" class="icon" /> <b>MOE project database
+RNA support.</b>  Support for RNA families has been added to the
+following applications in MOE:
+<ul>
+  <li><b>Project Search</b>. Sequence search, substructure search,
+    and general RNA residue handling is now supported in the
+    Project Search panel.
+    Note that remote PSILO families can now be included
+    in Project Search; this is configured from the MOE Configuration
+    Options panel and requires a valid PSILO server to be specified.
+  </li>
+  <li><b>Project building</b>. MOE RNA projects can now be built
+    using Protein Database Update.  RFAM codes are supported, with
+    RCSB as the source.
+  </li>
+</ul>
+</p>
+
+<p>
+<img src="rnotes/blueball.png" class="icon" /> <b>Database Wash.</b>
+The Database Wash application has been enhanced with a
+<b>Entropic Filtering</b> option which, when enabled, will result in
+protomers with insignificant contributions being removed.
+This option is only available when the Protonation mode is set to
+Enumerate.
+</p>
+
+<p>Database Wash now also provides a Batch button which can be
+used to submit Wash jobs to a queueing system, or to perform local
+calculations at a later time.  The application has also been
+reimplemented to support MPU parallelization.
+</p>
+
+<p>
+<img src="rnotes/blueball.png" class="icon" /> <b>Database Correlation.</b>
+A new <b>Clipboard</b> button in the Database Correlation panel
+copies the correlation matrix R values and field titles onto the text
+clipboard in tab-separated form.
+</p>
+
+<p>
+<img src="rnotes/blueball.png" class="icon" /> <b>Descriptors.</b>
+The following descriptors have been added:
+  <table class="titlebar" width="80%">
+  <tr>
+  <th>Name</th>
+  <th>Description</th>
+  </tr>
+  <tr>
+  <td><tt>druglike</tt>
+  </td>
+  <td>Drug-like compound:
+    150 &lt;= weight &lt;= 600, -1.0 &lt;= logD &lt; 6.0, RBC &lt;= 9<br />
+    (approximate weight and logD values).<br />
+    <b>Note:</b> in previous versions of MOE, <tt>druglike</tt> was an alias
+    for <tt>lip_druglike</tt>.
+  </td>
+  </tr>
+  <tr>
+  <td><tt>fraglike</tt>
+  </td>
+  <td>Fragment-like compound:
+    75 &lt;= weight &lt;= 300, -1.0 &lt;= logD &lt; 3.0, RBC &lt;= 3<br />
+    (approximate weight and logD values).
+  </td>
+  </tr>
+  <tr>
+  <td><tt>leadlike</tt>
+  </td>
+  <td>Lead-like compound:
+    150 &lt;= weight &lt;= 450, -1.0 &lt;= logD &lt; 5.0, RBC &lt;= 6<br />
+    (approximate weight and logD values).<br />
+    <b>Note:</b> in previous versions of MOE, <tt>leadlike</tt> was an alias
+    for <tt>opr_leadlike</tt>.
+  </td>
+  </tr>
+  <tr>
+  <td><tt>organic</tt>
+  </td>
+  <td>Contains only elements found normally in organic molecules, i.e. H, B,
+    C, N, O, F, S, Cl, Br, I, with normal coordination and ionization.
+  </td>
+  </tr>
+  <tr>
+  <td><tt>PM6_dipole</tt><br />
+    <tt>PM6_E</tt><br />
+    <tt>PM6_Eele</tt><br />
+    <tt>PM6_HF</tt><br />
+    <tt>PM6_HOMO</tt><br />
+    <tt>PM6_IP</tt><br />
+    <tt>PM6_LUMO</tt><br />
+  </td>
+  <td>
+    Equivalent to the <tt>PM3_*</tt> descriptors, but calculated with
+    the PM6 Hamiltonian.
+  </td>
+  </tr>
+  <tr>
+  <td><tt>PM7_dipole</tt><br />
+    <tt>PM7_E</tt><br />
+    <tt>PM7_Eele</tt><br />
+    <tt>PM7_HF</tt><br />
+    <tt>PM7_HOMO</tt><br />
+    <tt>PM7_IP</tt><br />
+    <tt>PM7_LUMO</tt><br />
+  </td>
+  <td>
+    Equivalent to the <tt>PM3_*</tt> descriptors, but calculated with
+    the PM7 Hamiltonian.
+  </td>
+  </tr>
+  </table>
+</p>
+
+<p>
+<img src="rnotes/blueball.png" class="icon" /> <b>Fragment tools.</b>
+Several new options have been added to the fragment tools:
+  <ul>
+    <li><b>Dominant Protomer</b>. In Scaffold Replacement, Link
+	Multiple Fragments, and Add Group to Ligand, when this option
+	is enabled, the dominant protomer of the generated structure
+	will be output.  The result can be output as a 2D
+	depiction, 3D ligand structure, or 3D structure
+	of both the ligand and pocket.
+    </li>
+    <li><b>Create Double Bonds</b>. In Scaffold Replacement, Link
+	Multiple Fragments, and Add Group to Ligand, when this option
+	is enabled, both single and double bonds will be created
+	when making connections, where permitted by geometry and
+	molecular topology.
+    </li>
+    <li><b>Maintain Score</b>. Available in all fragment tools,
+        this option when enabled filters results so that
+	only hits with improved ligand/receptor
+	scores will be retained.  <b>Original</b> will output
+	all structures with scores lower than that of the
+	original complex, whereas <b>Maximum</b> will output
+	only structures whose score is better than that
+	of all structures already output up to that point.
+    </li>
+    <li><b>Topologically Unique</b>. This option, already
+	available in several other fragment tools, has now
+	been added to Combinatorial Builder.  When enabled, only
+	hits that are topologically unique from all other results
+	up to that point are output.
+  </ul>
+</p>
+
+
+<p>
+<img src="rnotes/blueball.png" class="icon" /> <b>AMBER TI.</b>
+A <b>dt</b> option has been added to AMBER TI; reduction of dt
+can help mitigate AMBER calculation instability.  The range
+of values is limited to what is reasonable for the simulations.
+</p>
+
+<p><img src="rnotes/solvate_rhdod.png" class="floatright" /></p>
+<p>
+<img src="rnotes/blueball.png" class="icon" /> <b>Solvate.</b>
+The following updates have been made to Solvate.
+<ul>
+
+  <li><b>Shape</b>. Two new shapes have been added in Periodic mode:
+  <b>Trunc.  Oct.</b> generates images for space group I1 (two images
+  per box) in the shape of a truncated octahedron, and <b>Rh. Dodec.</b>
+  for F1 (four images per box), in the shape of a rhombic dodecahedron.
+  </li>
+
+  <li><b>Minimize</b>. When enabled, minimization of the atoms in the
+    primitive cell is performed, taking into account lattice symmetry.
+    This can help remove clashes due to non-orthogonal image boundaries
+    with non-primitive unit cells.
+  </li>
+
+  <li><b>Show Box</b>. For non-primitive periodic cells (e.g.
+    Trunc. Oct. or Rh. Dodec.), display the outline of the
+    of the asymmetric box centered in the periodic cell.
+    Note that this graphic can be toggled on or off using the new
+    <b>Hide Graphics</b> button in the Crystal Parameters panel (the
+    button is available only when a non-primitive periodic cell
+    is in effect).
+  </li>
+</ul>
+</p>
+
+<p>
+<img src="rnotes/blueball.png" class="icon" /> <b>Flexible Alignment.</b>
+A new <b>Planar Systems are Rigid Bodies</b> option, when enabled,
+will enforce that all &pi; systems (connected components consisting
+of atoms connected with bonds of high &pi; bond order), will be
+treated as rigid bodies.
+</p>
+
+<h1>Data Files</h1>
+
+<p><img src="rnotes/blueball.png" class="icon" /> <b><tt>$MOE/lib</tt>
+files</b>.
+The following changes have been made to <tt>$MOE/lib</tt>:</p>
+  <table class="titlebar" width="90%">
+  <tr>
+  <th>Name</th>
+  <th>Description</th>
+  </tr>
+  <tr>
+  <td><tt>abref/IgC.moe.gz</tt>
+  </td>
+  <td>New Ig constant domain profile for Ig constant domain
+    identification and IMGT constant domain numbering.
+  </td>
+  </tr>
+  <tr>
+  <td><tt>AmberEHT.ff</tt><br />
+    <tt>AmberEHTo.ff</tt><br />
+    <tt>ffi_eht.ff</tt><br />
+    <tt>ffi_amber.ff</tt>
+  </td>
+  <td>New forcefield files.</td>
+  </tr>
+  <tr>
+  <td><tt>cmap.frcmod.gz</tt>
+  </td>
+  <td>AMBER CMAP data file, used when saving the AMBER CMAP
+    to PRMTOP files.
+  </td>
+  </tr>
+  <tr>
+  <td><tt>frag_chain.mdb</tt><br />
+    <tt>frag_ring.mdb</tt>
+  </td>
+  <td>New fragment libraries for Conformation Import.
+  </td>
+  </tr>
+  <tr>
+  <td><tt>tor_lib_2020.xml</tt>
+  </td>
+  <td>TorsionLibrary 3.0 created by TorsionPatternMiner.<br />
+    MOE uses the Torsion Library jointly developed by
+    the University of Hamburg, Center for Bioinformatics, Hamburg,
+    Germany and F. Hoffmann-La-Roche Ltd., Basel, Switzerland.
+  </td>
+  </tr>
+  </table>
+</p>
+
+<p><img src="rnotes/blueball.png" class="icon" /> <b>Sample molecular data
+files</b>.  The following changes have been made to
+<tt>$MOE/sample/mol</tt>, the directory of sample molecular data files:</p>
+  <table class="titlebar">
+  <tr>
+  <th>Name</th>
+  <th>Description</th>
+  </tr>
+  <tr>
+  <td><tt>1m17_prepared.moe.gz</tt>
+  </td>
+  <td>New</td>
+  </tr>
+  <tr>
+  <td><tt>1yy9_fab.moe</tt></td>
+  <td>Renamed to <tt>1yy9_fv.moe</tt></td>
+  </tr>
+  <tr>
+  <td><tt>3f4h.cif.gz</tt>
+  </td>
+  <td>New</td>
+  </tr>
+  <tr>
+  <td><tt>6p4a.cif.gz</tt></td>
+  <td>New</td>
+  </tr>
+  <tr>
+  <td>
+    <tt>Dimethyl-L-tartrate_ECD.csv</tt><br />
+    <tt>Dimethyl-L-tartrate.moe</tt><br />
+    <tt>Dimethyl-L-tartrate_qm.mdb</tt>
+  </td>
+  <td>New</td>
+  </tr>
+  <tr>
+  <td><tt>FMN_riboswitch_example.moe.gz</tt>
+  </td>
+  <td>New</td>
+  </tr>
+  </table>
+
+
+<!-- =========================== PROGRAMMING ============================ -->
+
+<h1>SVL Programming</h1>
+
+<p>
+<img src="rnotes/blueball.png" class="icon" />
+The following are SVL functions that have been added to or modified in
+  MOE. Please consult the <a href="fcnindex.htm" class="toc">SVL Function
+  Index</a> for more information.</p>
+
+<table class="titlebar width-75p">
+  <tr>
+    <th width="25%">Function</th>
+    <th width="75%">Description</th>
+  </tr>
+  <tr>
+    <td><tt></tt></td>
+    <td>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <tt>db_DisplayAttributes</tt>
+    </td>
+    <td>Get and optionally set Database Viewer display field attributes,
+	such as <tt>'precision'</tt>, <tt>bubblehelp</tt>, etc.</td>
+  </tr>
+  <tr>
+    <td><tt>WindowCreate</tt></td>
+    <td>On Label and Button widgets, the <tt>grScale</tt> attribute
+        <tt>'isotropic_shrink'</tt> mode has been
+	renamed to <tt>'isotropic-shrink'</tt>.  Note
+	that in most cases, <tt>'isotropic'</tt> is
+	the desired mode.
+    </td>
+  </tr>
+  <tr>
+    <td><tt>mdl_ParseCTAB</tt></td>
+    <td>The calling syntax of <tt>mdl_ParseCTAB</tt> has changed to
+	allow more detailed accounting of hydrogens.  To preserve
+	original behavior,
+    </p>
+    <pre>
+    mdl_ParseCTAB [lines, qflag]</pre>
+    <p>should be modified to</p>
+    <pre>
+    mdl_ParseCTAB [lines, [query:qflag, hcount:0]]</pre>
+    </td>
+  </tr>
+  <tr>
+    <td><tt>sm_ExtractUnique</tt></td>
+    <td>The extracted strings are unique in MOE 2024, but may not
+      always match those generated in MOE 2022.
+      To be robust against changes to smiles strings between between
+      MOE versions,
+      code that does direct string comparisons of smiles strings
+      should regenerate them before comparing, using:
+      </p>
+  <pre>
+    smi = sm_ExtractUnique sm_BuildParse smi;</pre>
+    </td>
+  </tr>
+  <tr>
+    <td><tt>ViewSetup</tt></td>
+    <td>
+	A new option <tt>ribbon_bevel_coeff</tt> controls
+	the beveling of cartoon ribbons.  The option takes
+	an argument <i>n</i> between 0 and 1 (0 means no
+	beveling).
+    </td>
+  </tr>
+</table>
+
+<p>
+<img src="rnotes/blueball.png" class="icon" /> <b>Widgets.</b>
+The following attributes have been added to widgets that compose
+panels.
+<table class="titlebar width-75p">
+  <tr>
+    <th width="25%">Widget</th>
+    <th width="75%">New Attributes</th>
+  </tr>
+  <tr>
+    <td>
+      <tt>Button</tt><br />
+      <tt>Checkbox</tt><br />
+      <tt>Radio</tt>
+    </td>
+    <td>
+      <ul>
+	<li>checkmarkStyle
+	</li>
+	<li>checkmarkColor
+	</li>
+	<li>selectionStyle
+	</li>
+	<li>scrollbarWidth
+	</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td><tt>Button</tt></td>
+    <td>
+      <ul>
+	<li>font
+	</li>
+	<li>foreground
+	</li>
+	<li>background
+	</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <tt>FSB</tt><br />
+      <tt>FSBText</tt><br />
+      <tt>Text</tt>
+    </td>
+    <td>
+      <ul>
+	<li>extensionText
+	</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td><tt>Listbox</tt></td>
+    <td>
+      <ul>
+	<li>checkmarkStyle
+	</li>
+	<li>checkmarkColor
+	</li>
+	<li>selectionStyle
+	</li>
+	<li>scrollbarWidth
+	</li>
+      </ul>
+    </td>
+  </tr>
+  </table>
+</p>
+
+<p>
+<img src="rnotes/blueball.png" class="icon" />
+The following are SVL functions that have been deprecated or removed
+from MOE.  In brief, all MOPAC 7.0 functions have been removed.
+</p>
+
+<table class="titlebar width-75p">
+  <tr>
+    <th width="25%">Function</th>
+    <th width="75%">Description</th>
+  </tr>
+  <tr>
+    <td><tt>dbv_Minimize</tt></td>
+    <td>This function no longer exists in MOE.  The function
+	<tt>db_Minimize</tt> can be used instead.
+    </td>
+  </tr>
+  <tr>
+    <td><tt>el_DefaultGeometry</tt><br />
+    <tt>el_EQ</tt><br />
+    <tt>el_Energy</tt><br />
+    <tt>el_XQ</tt>
+    </td>
+    <td>These functions no longer exist in MOE.
+    </td>
+  </tr>
+  <tr>
+    <td><tt>mopac_Run</tt><br />
+    <tt>mopac_fread_Output</tt><br />
+    <tt>mopac_fwrite_Input</tt><br />
+    <tt>mopac_GeometryLines</tt><br />
+    <tt>mopac_MolecularOrbital</tt><br />
+    <tt>mopac_KeywordLines</tt><br />
+    <tt>mopac_Molecule</tt>
+    </td>
+    <td>These functions no longer exist in MOE.  MOPAC can be
+	accessed via the SCF functions.
+    </td>
+  </tr>
+</table>
+
+<h1>Platforms</h1>
+
+<h4>Windows</h4>
+
+<p>
+The following platforms have been deprecated.
+<p>
+<ul>
+<li>Windows 7, 8, and 8.1.</li>
+</ul>
+</p>
+<p>
+Supported Windows platforms are 10 and 11.
+</p>
+
+<h4>Linux</h4>
+
+<p>Please note that OpenMOPAC requires glibc 2.14 to run.
+It is also anticipated that in upcoming releases, the minimum requirement for
+MOE will also be glibc 2.14, which would imply a minimum requirement of
+the following platforms:
+</p>
+<ul>
+    <li>RHEL/CentOS 7</li>
+    <li>Ubuntu: 12.04 LTS precise</li>
+    <li>Debian: 8.0 jessie</li>
+    <li>Fedora: 16 verne</li>
+    <li>OpenSUS Linux EnterpriseE: 12.1</li>
+</ul>
+
+<p>and the deprecation of the following platforms in upcoming releases:
+</p>
+<ul>
+    <li>RHEL/CentOS 6 and earlier</li>
+    <li>Ubuntu: 8.04 LTS hardy and earlier</li>
+    <li>Debian: 5.0 lenny and earlier</li>
+    <li>Fedora: 8 werewolf and earlier</li>
+    <li>OpenSUS Linux EnterpriseE: 11.0 and earlier</li>
+</ul>
+
+<p>
+These are supported in the current release, but official
+support may be discontinued in the next release.
+</p>
+
+<h3>Java Version</h3>
+
+<p>Note that the minimum Java version required to run MOE is Java 8.</p>
+
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="images/ccgicon.png" /> <a href="index.htm"></a> <a href=
+    "legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

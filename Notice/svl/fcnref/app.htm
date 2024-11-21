@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: app,apt" />
+  <title>Function Extension: Apply-to-Each (app, apt)</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Function Extension: Apply-to-Each (app, apt)
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+<a class="fcnlink" href="#app">app</a> <i>function</i> <i>args</i>
+<a class="fcnlink" href="#apt">apt</a> <i>function</i> <i>args</i>
+</pre>
+
+<a id="app"></a>
+<h1>Description</h1>
+
+<pre>
+<span class="fcndef">app</span> <i>function</i> <i>args</i>
+</pre>
+
+<p><tt>app</tt> applies a function to each of the top-level elements in the
+  argument vector <i>args</i>. It can be construed as an implicit form of
+  looping.</p>
+
+<pre class="code">
+svl&gt; add [ [1,2,3], [10,20,30] ]
+[11,22,33]
+svl&gt; app add [ [1,2,3], [10,20,30] ]
+[6,60]
+</pre>
+<hr noshade="noshade" />
+
+<a id="apt"></a>
+<pre>
+<span class="fcndef">apt</span> <i>function</i> <i>args</i>
+</pre>
+
+<p>A special form of <tt>app</tt> is <tt>apt</tt>, short for <tt>app tr</tt>,
+  where <tt>tr</tt> is the transpose function. <tt>apt</tt> first
+  matrix-transposes the arguments of the function to be applied, and then
+  proceeds with the <tt>app</tt> function.</p>
+
+<pre class="code">
+svl&gt; apt reverse [ [1,2,3], [4,5,6] ]
+[ [4,1], [5,2], [6,3] ]
+</pre>
+
+<h1>See Also</h1>
+
+<p><a class="svl" href="tr.htm">tr</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

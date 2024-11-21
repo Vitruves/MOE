@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content=
+  "functions: db_PrincipalComponents, dbv_PrincipalComponents" />
+  <title>Principal Components Analysis</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Principal Components Analysis
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+<a class="fcnlink" href=
+"#db_PrincipalComponents">db_PrincipalComponents</a> [ 'dbfile', dbi, options, 'report_file' ]
+</pre>
+
+  <p class="blockquote">
+    where <tt>options</tt> is:
+  </p>
+
+<pre class="code">
+[
+    write_pca : flag,
+    prefix    : 'name',
+    autoscale : flag,
+    maxcond   : num,
+    minvar    : percent,
+    maxcomp   : num
+]
+
+<a class="fcnlink" href=
+"#dbv_PrincipalComponents">dbv_PrincipalComponents</a> 'mdb_filename'
+</pre>
+<a id="db_PrincipalComponents"></a>
+<h1>Description</h1>
+
+<p><tt><span class="fcndef">db_PrincipalComponents</span></tt> performs
+  principal components analysis on a given database. Arguments are:</p>
+<dl>
+  <dt><tt>dbfile</tt></dt>
+  <dd>Specifies the filename of the MOE molecular database to be operated
+  upon.</dd>
+  <dt><tt>dbi</tt></dt>
+  <dd>
+    Controls how the entries and fields from the database will be
+    interpreted. It is a tagged vector of the form:
+
+<pre class="code">
+[wfield:'field', xfields:['field1', 'field2', ...], esel:flag]
+</pre>
+
+    <p>where</p>
+
+    <ul>
+      <li><tt>'field'</tt> is the name of the weight field (a null or
+      empty token means no weight field)</li>
+      <li><tt>['field1', 'field2', ...]</tt> is a vector of
+      numeric field names specifying the fields to use in the calculation; if
+      null, all numeric fields are used</li>
+      <li><tt>flag</tt> indicates whether or not the calculation is
+      restricted to the selected entries in the Database Viewer (a non-zero
+      value means use selected entries only, default is 0); the flag is
+      ignored if the database is not open in a Database Viewer</li>
+    </ul>
+  </dd>
+
+  <dt><tt>options</tt></dt>
+  <dd>
+    Tagged vector of optional attribute-value colon-separated arguments:
+    <dl>
+      <dd></dd>
+      <dt><tt>write_pca:flag</tt></dt>
+      <dd>If <tt>flag</tt> is non-zero, the PCA components are written to the
+      database. The field names are constructed using the specified
+      <tt>prefix</tt>. Default is 1.</dd>
+      <dt><tt>prefix:'name'</tt></dt>
+      <dd>Prefix for the PCA component field names. Default is
+      <tt>'PCA'</tt>.</dd>
+      <dt><tt>autoscale:flag</tt></dt>
+      <dd>If <tt>flag</tt> is non-zero, the data in each field will be scaled
+      prior to the PCA calculation so that the field has unit variance.
+      Default is 1.</dd>
+      <dt><tt>maxcond:num</tt></dt>
+      <dd>Maximum acceptable condition number of the covariance matrix.
+      Smaller numbers result in fewer principal components. Default is
+      1e6.</dd>
+      <dt><tt>minvar:percent</tt></dt>
+      <dd>Minimum percentage of variance to retain in the final set of
+      principal components. Default is 100.</dd>
+      <dt><tt>maxcomp:num</tt></dt>
+      <dd>Maximum number of components to retain. A value of 0 means that no
+      limit is imposed. Default is 0.</dd>
+    </dl>
+  </dd>
+  <dt><tt>report_file</tt></dt>
+  <dd>Specifies the name of the report file. If <tt>report_file</tt> is null,
+  an SVL Text Editor will be opened containing the report.</dd>
+</dl>
+
+<p>See <a href="../../mdb/dbpca.htm">Principal Components Analysis</a> for
+  more details on the options vector and the theory behind the calculation.</p>
+<a id="dbv_PrincipalComponents"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">dbv_PrincipalComponents</span> 'mdb_filename'
+</pre>
+
+<p>Displays the Principal Components Analysis panel which is used to run the
+  <tt>db_PrincipalComponents</tt> function. If the given filename is null, the
+  user is prompted to select a database.</p>
+
+<h1>See Also</h1>
+
+<p><a href="../../mdb/dbpca.htm">Principal Components Analysis</a>
+  </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

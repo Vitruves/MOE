@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content=
+  "functions: rConstraints, rConstraintSet, rConstraintDisplay" />
+  <meta name="keywords" content="functions: AlignmentConstraintsManager" />
+  <title>Residue Functions: rConstraints ...</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Residue Functions: rConstraints ...
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+<pre class="code">
+[restraint_keys, residue_sets, vis_flag] = <a class="fcnlink" href="#rConstraints">rConstraints</a> []
+restraint_keys = <a class="fcnlink" href="#rConstraintSet">rConstraintSet</a> [ constraint_key, residue_keys ]
+<a class="fcnlink" href="#rConstraintDisplay">rConstraintDisplay</a> [ constraint_key, vis_flag ]
+<a class="fcnlink" href="#AlignmentConstraintsManager">AlignmentConstraintsManager</a> []
+</pre>
+<a id="rConstraints"></a>
+<h1>Description</h1>
+<pre>
+[restraint_keys, residue_sets, vis_flag] = <span class="fcndef">rConstraints</span> []
+</pre>
+
+<p>Returns information on all the alignment constraints in the system.
+  Alignment constraints are sets of residue object keys.</p>
+
+<p>The following information is returned:</p>
+  <dl>
+    <dt><tt>restraint_keys</tt></dt>
+    <dd>Vector containing the identifying keys of all the alignment
+    constraints.</dd>
+    <dt><tt>residue_sets</tt></dt>
+    <dd>Vector containing the corresponding residue sets.</dd>
+    <dt><tt>vis_flag</tt></dt>
+    <dd>Vector of ones and zeros, indicating whether or not the respective
+    constraints are to be drawn in the Sequence Editor.</dd>
+  </dl>
+<a id="rConstraintSet"></a>
+<hr noshade="noshade" />
+
+<pre>
+restraint_keys = <span class=
+"fcndef">rConstraintSet</span> [ constraint_key, residue_keys ]
+</pre>
+
+<p>Used to create or modify an alignment constraint. To create a new
+  constraint, pass <tt>rConstraintSet</tt> a key value of <tt>0</tt>. The
+  second argument is a vector of residue object keys. It is an error to pass
+  invalid residue keys to <tt>rConstraintSet</tt>. To <b>delete</b> a
+  constraint, pass the constraints key along with an empty residue set.</p>
+<p>For example:</p>
+<pre class="code">
+svl&gt; c1 = pro_SeqCreate [&quot;AGCE&quot;];
+svl&gt; c2 = pro_SeqCreate [&quot;YWPQ&quot;];
+svl&gt; res = cResidues [c1,c2]
+svl&gt; key = rConstraintSet [0, [first res(1), last res(2)]]
+svl&gt; [keys, sets, flags] = rConstraints[]
+svl&gt; rName sets(1)
+['GLN','ALA']
+</pre>
+
+<p>To delete this constraint:</p>
+<pre class="code oneline">
+    svl&gt; rConstraintSet [key, []]
+</pre>
+<a id="rConstraintDisplay"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">rConstraintDisplay</span> [ constraint_key, vis_flag ]
+</pre>
+
+<p>Used to control the visibility status of an alignment constraint. Invalid
+  constraint keys are ignored.</p>
+<a id="AlignmentConstraintsManager"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">AlignmentConstraintsManager</span> []
+</pre>
+
+<p>Opens a panel which allows the user to create, delete, show or hide
+  alignment constraints.</p>
+
+<h1>See Also</h1>
+
+<p><a class="svl" href="caligpos.htm">cAlignmentPositions</a><br />
+  <a class="svl" href="../../proteins/fcnref/pro_alig.htm">pro_Align</a><br />
+  <a class="svl" href="residue.htm">rPos</a><br />
+  <a class="svl" href="meters.htm">Meters</a><br />
+  <a class="svl" href="restrain.htm">Restraints</a></p>
+
+<p><a href="residue.htm">Residue Functions</a><br />
+  <a href="atom_p.htm">Atom Potential Functions</a><br />
+  <a href="measure.htm"><span class="nobr">Molecular System Measure
+  Functions</span></a><br />
+  <a href="potfcn.htm"><span class="nobr">Potential Energy
+  Functions</span></a><br />
+  <a href="../pot.htm"><span class="nobr">MOE Potential Energy
+  Model</span></a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

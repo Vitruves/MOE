@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <title>sdwash</title>
+  <meta name="keywords" content="functions: sdwash" />
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    sdwash
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+  <div class="indent">
+    <tt>unix&gt; $MOE/bin/sdwash</tt> <b>{</b> <i>option</i> |
+    <i>inputfilename</i> | @<i>filename</i> <b>}</b><br />
+    <tt>unix&gt; $MOE/bin/moebatch -run $MOE/bin/sdwash</tt> <b>{</b>
+    <i>option</i> | <i>inputfilename</i> | @<i>filename</i> <b>}</b><br />
+    <br />
+    <tt>windows&gt; %MOE%\bin\sdwash</tt> <b>{</b> <i>option</i> |
+    <i>inputfilename</i> | @<i>filename</i> <b>}</b><br />
+    <tt>windows&gt; %MOE%\bin\moebatch -run $MOE\bin\sdwash</tt> <b>{</b>
+    <i>option</i> | <i>inputfilename</i> | @<i>filename</i> <b>}</b>
+    <table class="noborder left">
+      <tr>
+        <td><i>option</i></td>
+        <td>&nbsp;:&nbsp;</td>
+        <td><tt>-help</tt></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;:&nbsp;</td>
+        <td><tt>-verbose</tt> | <tt>-quiet</tt></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;:&nbsp;</td>
+        <td><tt>-sdf</tt> | <tt>-smi</tt></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;:&nbsp;</td>
+        <td><tt>-o</tt> <i>outputfilename</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;:&nbsp;</td>
+        <td><tt>-f</tt> <i>filterfilename</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;:&nbsp;</td>
+        <td><tt>-stripdata</tt></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;:&nbsp;</td>
+        <td><tt>-keep</tt> <i>pattern</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;:&nbsp;</td>
+        <td><tt>-drop</tt> <i>pattern</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;:&nbsp;</td>
+        <td><tt>-strict</tt></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;:&nbsp;</td>
+        <td><tt>-abbrev</tt> <i>name<tt>=</tt>SMILES</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;:&nbsp;</td>
+        <td><tt>-setname</tt> <i>fieldname</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;:&nbsp;</td>
+        <td><tt>-seqno</tt> <i>fieldname</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;:&nbsp;</td>
+        <td><tt>-savesmi</tt> <i>fieldname</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;:&nbsp;</td>
+        <td><tt>-depict</tt></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;:&nbsp;</td>
+        <td><tt>-addH</tt></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;:&nbsp;</td>
+        <td><tt>-removeH</tt></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;:&nbsp;</td>
+        <td><tt>-ylide</tt></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;:&nbsp;</td>
+        <td><tt>-chiral</tt></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;:&nbsp;</td>
+        <td><tt>-wedge</tt></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;:&nbsp;</td>
+        <td><tt>-scale</tt></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;:&nbsp;</td>
+        <td><tt>-salts</tt></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;:&nbsp;</td>
+        <td><tt>-component</tt></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;:&nbsp;</td>
+        <td><tt>-compfield</tt> <i>fieldname</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;:&nbsp;</td>
+        <td><tt>-neutralize</tt></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;:&nbsp;</td>
+        <td><tt>-pH</tt> <i>value</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;:&nbsp;</td>
+        <td><tt>-dominant</tt></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;:&nbsp;</td>
+        <td><tt>-omitoriginal</tt></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;:&nbsp;</td>
+        <td><tt>-enumsize</tt> <i>numresults</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;:&nbsp;</td>
+        <td><tt>-enumdup</tt></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;:&nbsp;</td>
+        <td><tt>-rule acid:</tt><i>group</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;:&nbsp;</td>
+        <td><tt>-rule base:</tt><i>group</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;:&nbsp;</td>
+        <td><tt>-rule none:</tt><i>group</i></td>
+      </tr>
+    </table>
+  </div>
+<a id="sdwash"></a>
+<h1>Description</h1>
+
+<p>The <tt>sdwash</tt> program processes one or more input SD (or SMILES)
+  files, and applies certain operations to each record. Any number of input
+  files may be specified, and they will be read sequentially and combined into
+  the same output stream. Specifying an input file of hyphen <span class=
+  "nobr">('<tt>-</tt>')</span> causes the standard input to be read. In
+  the absence of an output filename, the standard output will be used.</p>
+
+<p>The fundamental structure of operation of <tt>sdwash</tt> is:</p>
+  <ol>
+    <li>Read and concatenate all specified input files.</li>
+    <li>Perform filtering and wash operations.</li>
+    <li>Write output records.</li>
+  </ol>
+
+<p>On most POSIX systems, the first syntax can be used: <tt>sdwash</tt> looks
+  like a Unix command. If using an unusual shell, it may be necessary to use
+  the second syntax. On Windows systems, use the third (batch file) or fourth
+  syntax lines (assuming <tt>cmd.exe</tt> is used to process commands).</p>
+
+<p>While much of the functionality of <tt>sdwash</tt> is shared with the
+  <a href="../../mdb/wash.htm">Database Wash</a> application, there are a
+  number of features that are specific to the interpretation and manipulation
+  of MDL SD files.</p>
+
+<p>The following optional parameters and flags may be specified to activate
+  certain functionality. Unless otherwise indicated, the order in which flags
+  are provided on the command line does not affect their meaning.</p>
+  <div class="indent">
+    <dl>
+      <dd></dd>
+      <dt><tt>-help</tt></dt>
+      <dd>Prints a syntax summary to <tt>stderr</tt> and then exits.</dd>
+      <dd></dd>
+      <dt>
+<a id="verbose"><tt>-verbose</tt><br />
+      <tt>-quiet</tt></a></dt>
+      <dd>In verbose mode, a running summary of progress will be written to the
+      standard error stream whenever a new input file is opened and at certain
+      intervals. Verbose mode and quiet mode are mutually exclusive. If both
+      <span class="nobr"><tt>-verbose</tt></span> and <span class=
+      "nobr"><tt>-quiet</tt></span> are encountered in the argument list, the
+      last to be specified (rightmost in the list) is used.</dd>
+      <dd></dd>
+      <dt><tt>-sdf</tt></dt>
+      <dd>Specifies that subsequent files in the <tt>sdwash</tt> argument list
+      are SD files. The format of the SD files can be further specified using
+      an option of the form <span class="nobr"><tt>-sdf:<i>fmt</i></tt></span>
+      where <i>fmt</i> is either <tt>V2000</tt> or <tt>V3000</tt>. If
+      <i>fmt</i> is omitted, output files will be written in V2000 format (the
+      default). It is not necessary to specify the format of input SD
+      files.</dd>
+      <dd></dd>
+      <dt><tt>-smi</tt></dt>
+      <dd>Specifies that subsequent files in the <tt>sdwash</tt> argument list
+      are whitespace separated ASCII files. Note that this includes
+      <span class="nobr"><tt>-o</tt></span> and <span class=
+      "nobr"><tt>-f</tt></span> specifications. The files have one SMILES
+      string per line, with each line beginning with the SMILES string;
+      subsequent fields on a given line are considered to be data. The format
+      of the ASCII file can be further specified using an option of the form
+      <span class="nobr"><tt>-smi:</tt><i>f</i></span> where <i>f</i> is a
+      single character: <tt>t</tt> for tab separated, <tt>c</tt> for comma
+      separated, <tt>m</tt> for semicolon separated, and <tt>w</tt> for
+      whitespace separated. Append a <tt>q</tt> to the option string to specify
+      that items are surrounded by double quotes. Append a <tt>p</tt> to the
+      option string to specify that the property names should be written as the
+      first line of the output file. For example, <span class=
+      "nobr"><tt>-smi:tq</tt></span> specifies files in which each line
+      contains tab-separated items with each item enclosed in double
+      quotes.</dd>
+      <dd></dd>
+      <dt><a id="outputfile"><tt>-o</tt>
+      <i>outputfilename</i></a></dt>
+      <dd>Send the output to the specified file; by default, <tt>sdwash</tt>
+      writes its output to <tt>stdout</tt>. If the given filename is
+      &quot;.&quot; then output will be suppressed.</dd>
+      <dt><a id="filterfile"><tt>-f</tt>
+      <i>filterfilename</i></a></dt>
+      <dd>This option has effect only when the <a class="svl" href=
+      "#strict">-strict</a> option is used. The specified output file is used
+      to store the rejected records. If a filter file is not specified,
+      rejected records will be discarded. The records written to the filter
+      file will be of the same format as those written to the main output, and,
+      as much as possible, the same wash rules will have been applied.</dd>
+      <dt><tt>-stripdata</tt><br />
+      <tt>-keep</tt> <i>pattern</i><br />
+      <tt>-drop</tt> <i>pattern</i></dt>
+      <dd>
+        Normally, the non-molecule fields in the SD input files are preserved.
+        fields can be kept or dropped according to the specified sequence of
+        pattern matches.
+
+<p>For the processing of each SD record, a mask is constructed, which
+        is set to true for all records. The sequence of <span class=
+        "nobr"><tt>-stripdata</tt></span>, <span class=
+        "nobr"><tt>-keep</tt></span> and <span class=
+        "nobr"><tt>-drop</tt></span> arguments are applied to the mask, in the
+        same order as encountered in the argument list. Any field for which the
+        mask is true at the end of the sequence is written to the output, and
+        the others are omitted.</p>
+
+<p>The <tt>-stripdata</tt> option sets the mask to zero for all fields.
+        It is functionally equivalent to <span class="nobr"><tt>-drop
+        *</tt></span>. The <span class="nobr"><tt>-keep</tt></span> and
+        <span class="nobr"><tt>-drop</tt></span> directives are accompanied by
+        a pattern, which can be a literal string or a matching rule, as is used
+        by the function <a class="svl" href=
+        "../../svl/fcnref/findetc.htm">m_findmatch</a>. The <span class=
+        "nobr"><tt>-keep</tt></span> directive sets the mask to true for any
+        fields which match the pattern, the <span class=
+        "nobr"><tt>-drop</tt></span> directive to false.</p>
+
+<p>Note that for Unix systems, care must be taken to escape out the
+        wildcard character <span class="nobr">(<tt>'*'</tt>)</span>,
+        which may otherwise be interpreted by the command shell. For example,
+        quotes may be used, as in the <a href="#asterisk">example</a>
+        below.</p>
+      </dd>
+      <dt><a id="strict"><tt>-strict</tt></a></dt>
+      <dd>When this option is used, only input molecules consisting entirely of
+      elements of the periodic table or the special lone pair identifier
+      (<tt>'LP'</tt>) will be washed. A molecule containing non-element
+      atoms will be rejected; it is then either discarded or written to the
+      <a href="#filterfile">filter file</a>. The strict check is done after
+      translation of any abbreviations specified using the <a class="svl" href=
+      "#abbrev"><span class="nobr">-abbrev</span></a> option. Any molecules
+      still found to contain abbreviations after the abbreviation translation
+      step, i.e. that contain unrecognized or invalid abbreviations, will be
+      rejected.</dd>
+      <dt><a id="abbrev"><tt>-abbrev</tt>
+      <i>name=SMILES</i></a></dt>
+      <dd>
+        By default, no translation will be performed when abbreviations
+        (non-elements) are discovered in the atom symbol field or in the group
+        description property block fields. For abbreviation translation to be
+        enabled, an abbreviation must be specified explicitly as a name paired
+        with its SMILES string.
+
+<p>For example, translation of methyl, ethyl and phenyl abbreviations
+        can be accomplished by adding the arguments:</p>
+
+<pre class="code oneline">-abbrev Me=C -abbrev Et=CC -abbrev Ph=c1ccccc1</pre>
+
+<p>For routine or large collections of abbreviations, it is recommended
+        that the abbreviation parameters be stored in a text file, and
+        retrieved with the <tt>@filename</tt> syntax. If a particular
+        abbreviation name is duplicated, the last specified takes priority.</p>
+
+<p>During abbreviation translation, the corresponding SMILES string is
+        instantiated into a molecular fragment. The root of this fragment
+        replaces the atom in whose atom symbol field or property block fields
+        the abbreviation was found. The remaining atoms of the fragment are
+        appended to the end of the molecule structure. The coordinates of the
+        fragment atoms are generated using a 2D depiction layout algorithm, and
+        will be &quot;glued on&quot; to the attachment point in a simple planar
+        arrangement. This is generally legible in cases where the input
+        molecule is a 2D sketch, but for best results, the <a class="svl" href=
+        "#depict"><span class="nobr">-depict</span></a> option should be used,
+        which will cause a redraw of the whole molecule.</p>
+
+<p>Hydrogen atoms are not explicitly created during abbreviation
+        translation, so if they are desired, the <a class="svl" href=
+        "#addH"><span class="nobr">-addH</span></a> option should be used.
+        Higher order bonds to the fragment root atom are permitted, and no
+        special checks are done for the valence of the fragment. For fragments
+        in which the root atom has a subvalent heavy-atom count, this imparts
+        some flexibility since the hydrogens are implied, but it is possible to
+        produce implausible structures if care is not taken.</p>
+
+<p>Atoms are eligible for abbreviation translation only if they meet
+        the following criteria:</p>
+        <ul>
+          <li>Terminal</li>
+          <li>The atom description matches an explicitly defined abbreviation
+          name.</li>
+        </ul>
+
+<p>The atom description within the source structure is obtained from
+        either</p>
+        <ul>
+          <li>The atom symbol, if not an element.</li>
+          <li>Certain fields in the property block, including the
+          <tt>M__G</tt>, <tt>M__A</tt> or <tt>M__V</tt> data entries. If the
+          description is held in a property block field, the atom symbol will
+          generally be <span class="nobr">(<tt>'*'</tt>)</span> or some
+          other non-element value. Property block entries take precedence over
+          the atom symbol field.</li>
+        </ul>
+
+<p>A special exception is made for property block entries which match
+        element symbol names; these are automatically translated, even if not
+        provided as abbreviation parameters.</p>
+
+<p>When an atom description matches one of the specified abbreviations,
+        the abbreviation is translated, and the atom symbol replaced by that
+        corresponding to the root of the fragment. Otherwise, if no match is
+        found, the atom symbol is not modified. If <a class="svl" href=
+        "#strict"><span class="nobr">-strict</span></a> has been specified,
+        failure to match an abbreviation causes the record to be rejected and
+        written to the filter file, if one was specified. In non-strict mode,
+        if non-element atoms remain in the structure after all abbreviations
+        have been parsed, all structure washing options will be disabled for
+        that entry, and the original input structure will be emitted to the
+        output stream. If <a class="svl" href="#verbose"><span class=
+        "nobr">-verbose</span></a> has been specified, a note will be made in
+        the output if a non-element or group description could not be matched
+        up with an abbreviation.</p>
+      </dd>
+      <dt><tt>-setname</tt> <i>fieldname</i></dt>
+      <dd>If specified, the indicated field will be used to replace the name of
+      the molecule, which is line 1 of each SD record. The name replacement is
+      done before fields are removed, i.e. before any of the <span class=
+      "nobr"><tt>-stripdata</tt></span>, <span class=
+      "nobr"><tt>-keep</tt></span> or <span class="nobr"><tt>-drop</tt></span>
+      features are invoked.</dd>
+      <dt><tt>-seqno</tt> <i>fieldname</i></dt>
+      <dd>A sequence identifier number can be generated for output records and
+      written to the specified field. The identifier numbers are the output
+      record ordinal numbers, i.e. the first record output from the wash
+      procedure is given the number 1, and successive records are consecutively
+      numbered. If multiple files are provided, each subsequent file begins
+      with a sequence identifier of one greater than the end of the previous
+      file. The sequence identifier is not affected by rejection of records due
+      to the <a class="svl" href="#strict"><span class=
+      "nobr">-strict</span></a> option, i.e. identifier numbers are
+      consecutive; rejected records do not cause the identifier number to
+      increment.</dd>
+      <dt><tt>-savesmi</tt> <i>fieldname</i></dt>
+      <dd>The structure of the input molecule prior to performing washing steps
+      can be stored as a SMILES string in the specified field. The SMILES
+      string is not necessarily canonical, and does not calculate aromaticity,
+      in order to be as faithful as possible to the original bond patterns. If
+      the <a class="svl" href="#abbrev"><span class="nobr">-abbrev</span></a>
+      option is used, translation of abbreviations will be conducted before the
+      SMILES string is generated. If the structure contains unrecognized
+      elements, such elements will be converted to carbon and labeled as
+      <tt>R0</tt>.</dd>
+      <dt><a id="depict"><tt>-depict</tt></a></dt>
+      <dd>If specified, the molecules will be output with atom coordinates
+      produced by the depiction layout algorithm, as implemented by the
+      <a class="svl" href="depictor.htm">DepictionCoordinates</a>
+      function.</dd>
+      <dt><a id="addH"><tt>-addH</tt></a></dt>
+      <dd>
+        When this option is used, implicit hydrogen counts are converted into
+        explicit hydrogen atoms. This is accomplished by temporarily converting
+        the MDL MOL structure into MOE atom keys and calculating the number of
+        missing hydrogen atoms with:
+
+<pre class="code oneline">implicitH = aHCount akeys - aExplicitHCount akeys</pre>
+
+<p>When the implicit hydrogen count calculated in this manner is zero
+        or negative, no further action is taken (i.e. hydrogen atoms are
+        <i>not</i> deleted). When the implicit hydrogen count is calculated to
+        be positive, a corresponding number of new hydrogen atoms are created
+        and appended to the end of the atom list. An MDL MOL structure is then
+        extracted from the resulting molecule.</p>
+
+<p>The coordinates of the newly created hydrogen atoms are generated in
+        several different ways, depending on the options used and on the
+        properties of the input molecule:</p>
+        <ul>
+          <li>If the <a class="svl" href="#depict">-depict</a> is specified,
+          hydrogen atom positioning is handled by the depiction algorithm.</li>
+          <li>If the molecule appears to be 3D, i.e. there are atom coordinates
+          outside the plane of the Z-axis, the hydrogen atom positions are
+          obtained with the <a class="svl" href="addh.htm">Add_H</a> function,
+          which generates reasonable 3D positions.</li>
+          <li>If neither of the above two cases holds, the hydrogen positions
+          are determined by assuming that the structure is a planar diagram.
+          Each hydrogen atom is assigned the same Z-coordinate as its parent
+          atom and is placed according to simple diagram layout
+          conventions.</li>
+        </ul>
+
+<p>If the wash operation is running in an enumerative mode, the
+        addition of hydrogen atoms is deferred to the end and carried out
+        separately for each result.</p>
+      </dd>
+      <dt><a id="removeH"><tt>-removeH</tt></a></dt>
+      <dd>
+        Removes all hydrogen atoms which can be <i>safely</i> re-created using
+        a simple and foolproof valence calculation. Because the SD format does
+        not have a field for recording the number of implicit hydrogen atoms in
+        a hydrogen-suppressed structure, it is prudent to retain explicit
+        hydrogen atoms which might be re-derived incorrectly by software.
+        Hydrogen atoms which are attached to hypervalent heavy atoms lying
+        outside of the main organic block or containing a partial complement of
+        explicit hydrogen atoms are potentially unsafe to delete.
+
+<p>Hydrogen atoms will be removed if they meet all of the following
+        criteria:</p>
+        <ul>
+          <li>Terminal</li>
+          <li>Neutral</li>
+          <li>Sigma-bonded</li>
+          <li>Not annotated with any kind of attachment label.</li>
+          <li>The parent atom is one of: B, C, N, P, As, O, S, Se, Te, F, Cl,
+          Br, I.</li>
+          <li>For the parent atom: valence + bond orders - charge = 8.</li>
+        </ul>
+
+<p>This option is intended for use with 2D depictions in which
+        hydrogens are commonly suppressed.</p>
+      </dd>
+      <dt><tt>-ylide</tt></dt>
+      <dd>Applies ylide-bond standardization rules to the structure, which is
+      functionally equivalent to importing the structure into MOE and exporting
+      it as an MDL MOL file. Some conversion between charge separated forms
+      [A(+)-B(-)] and double bond forms [A=B] is carried out, and certain
+      functional groups such as nitro and sulfoxides are represented in a
+      conventional manner.</dd>
+      <dt><tt>-chiral</tt></dt>
+      <dd>
+        Atom-centered chirality can be marked in MDL MOL files by <span class=
+        "nobr">(1)</span> using the chiral parity flag, or <span class=
+        "nobr">(2)</span> combining a planar 2D layout with wedge bond
+        annotations.
+
+<p>The chiral parity flag is considered to be definitive, even if the
+        atom appears to have symmetry, or if the parity is not consistent with
+        the geometry or wedge bonds. Chiral parity values of 1 (odd), 2 (even)
+        or 3 (chiral but unknown state) are never modified by
+        <tt>sdwash</tt>.</p>
+
+<p>Wedge bonds are usually used to correctly indicate chiral centers,
+        but they can also be used to provide visual cues other than
+        atom-centric chirality. The <span class="nobr"><tt>-chiral</tt></span>
+        option will cause atom centers with a chiral parity value of 0 to be
+        studied to see if they meet the following criteria:</p>
+        <ul>
+          <li>The atom center is sp<sup>3</sup> and has 4 substituents,
+          possibly including an implicit hydrogen.</li>
+          <li>None of the substituents are equivalent, as determined by the
+          function <a class="svl" href="atom_g.htm">aRSWaterChiral</a>.</li>
+          <li>All of the atom substituents lie on the plane of the Z-axis.</li>
+          <li>At least one of the substituents is assigned as a wedge
+          bond.</li>
+        </ul>
+
+<p>This being the case, the atom will be classified as being chiral,
+        and the chiral parity will be calculated based on the 2D positions of
+        the substituent atoms and the assignment of wedge bonds.</p>
+
+<p>Note that 3D geometry is never used to calculate chiral parity
+        values, because the presence of wedge bonds is necessary in order to
+        denote that a chiral center is constrained to be in one particular
+        state, and for 3D structures, wedge bonds are meaningless.</p>
+      </dd>
+      <dt><tt>-wedge</tt></dt>
+      <dd>
+        Specifying this option causes the redetermination of wedge bonds for
+        planar atoms which are marked as having chirality by means of the
+        chiral parity field. For such atoms, any existing wedge bond
+        information will be replaced by the recalculated wedge configuration,
+        which is intended to be a correct representation of the chirality, as
+        well as aesthetically most desirable.
+
+<p>Wedge bonds which are not involved in chiral centers are assumed to
+        be an aid to drawing aesthetics and overall geometry perception, and
+        are not modified by this feature.</p>
+      </dd>
+      <dt><tt>-scale</tt></dt>
+      <dd>Specifying this option causes molecule coordinates to be scaled so
+      that the average bond length is characteristic of a 2D diagram layout.
+      This is useful when the source molecules have abnormally short bond
+      lengths as produced by some drawing programs.</dd>
+      <dt><tt>-salts</tt></dt>
+      <dd>
+        Specifying this option causes certain salts to be converted from
+        covalent notation to ionic notation. The identification of such cases
+        is conservative, and atom pairs qualify if the following conditions are
+        met:
+        <ul>
+          <li>The electropositive element is one of Li, Na, K, Rb or Cs.</li>
+          <li>The electronegative element is one of C, N, O, F, P, S, Cl, Se,
+          Br, I.</li>
+          <li>Both elements are drawn in their neutral form.</li>
+          <li>The electropositive element is terminal.</li>
+          <li>The atoms are connected to each other by a single bond.</li>
+        </ul>
+
+<p>For any atom pair where these conditions are all satisfied, the bond
+        between the atoms is removed, the electropositive atom is set to +1,
+        and the electronegative atom to -1.</p>
+
+<p>When minor component removal is indicated by the <a class="svl"
+        href="#component">-component</a> option, salt disconnection is
+        performed prior to their removal.</p>
+      </dd>
+      <dt><a id="component"><tt>-component</tt></a></dt>
+      <dd>
+        Specifying this option causes minor components to be removed as
+        follows. The connection graph of the structure is divided into
+        connected components, and the one with the largest number of heavy
+        atoms is retained. In the event of a tie, the first component is kept.
+        The <a class="svl" href="#compfield"><span class=
+        "nobr">-compfield</span></a> option is used to generate a record of the
+        eliminated components.
+
+<p><b>Note:</b> Heavy atom counting is generally an effective way to
+        remove extraneous solvents, salts and miscellaneous adducts, but will
+        produce the wrong answer if the desired component is not the
+        largest.</p>
+      </dd>
+      <dt><a id="compfield"><tt>-compfield</tt>
+      <i>fieldname</i></a></dt>
+      <dd>When this option is specified, the <a class="svl" href=
+      "#component">-component</a> flag is enabled automatically, and a record
+      will be kept of any eliminated connected components. Whenever any atoms
+      are removed, <tt><i>fieldname</i></tt> is appended to the output set, and
+      its value set to the SMILES string generated from the removed atoms.</dd>
+
+      <dt><a id="pH"><tt>-pH</tt> <i>value</i></a>
+        <dd>This option enables protomer and tautomer generation using the
+        specified pH, <i>value</i>.  In this mode, one or more new tautomers
+        or protomers are produced, using the washed molecule as the starting
+        point.  This process is described in more detail in
+        <a href="../../mdb/wash.htm">Database Wash</a>.
+
+        <p>When this option is used, the washed structure submitted to the
+        enumeration procedure will generally be present in the output list. All
+        tautomers will have the same implicit molecular formula, and be related by a
+        tautomer shift.
+        The protomers do not necessarily have the same
+        total charge or implied molecular formula, based on the protonation or
+        deprotonation expected at the specified pH.
+        Explicit hydrogen atoms are removed prior to the enumeration
+        process (in the same manner as when using
+        <a class="nobr svl" href="#removeH">-removeH</a>). </p>
+
+        <p>If <a class="svl" href="#depict">-depict</a> is used, the depiction
+        layout will be done only once, for the input molecule. Heavy atoms and
+        non-deletable hydrogen atoms will be identical for all results, except
+        for the charge field. Bond orders will vary.</p>
+
+        <p>If <a class="svl" href="#addH">-addH</a> is used, the hydrogen atoms
+        will be added separately for each result, and so the connectivity graph
+        will in this case be different for each result.</p>
+
+	<p>If <tt>-dominant</tt> is used, the input structure will be
+	replaced with the dominant protomer/tautomer at the specified pH.
+      </dd>
+
+      <dt><tt>-tautomers</tt></dt>
+      <dd>
+        When this option is specified, tautomers/protomers will be enumerated
+	at the specified <a href="#pH">pH</a>.
+	The maximum number of enumerated structures can be specified
+	using <a class="nobr svl" href="#enumsize">-enumsize</a>.
+	By default, topologically degenerate structures are removed; this
+	can be controlled using <a class="nobr svl" href="#enumdup">-enumdup</a>.
+      </dd>
+
+      <dt><tt>-dominant</tt></dt>
+      <dd>
+        When this option is specified, the input structure will be
+	replaced with the dominant protomer/tautomer at the specified
+	<a href="#pH">pH</a>.
+      </dd>
+
+      <dt><tt>-neutralize</tt></dt>
+      <dd>
+        When this option is specified, charged species are replaced with:
+        <ul>
+          <li>A protonation state in which all the atoms are neutral, if
+          possible; otherwise</li>
+          <li>A protonation state in which the species is neutral overall, if
+          possible; otherwise</li>
+          <li>The least charge-bearing form of the structure.</li>
+        </ul>
+        <p>Note that neutralization takes place before any <a href=
+        "#pH">tautomer/protomer</a> enumeration.</p>
+      </dd>
+
+      <dt><tt>-omitoriginal</tt></dt>
+      <dd>If specified, the starting structure for the protomer/tautomer
+        generation process is not automatically included in the results.  Using
+        this option yields only the structures that reflect the specified pH.
+      </dd>
+
+      <dt><a id="enumsize"><tt>-enumsize</tt> <i>numresults</i></a></dt>
+      <dd>
+        Specifies the maximum number of results that may be obtained by
+        <a href="#pH">tautomer/protomer</a> enumeration.
+        By default this is set to 25.
+      </dd>
+      <dd>
+        <p>Note that if enumeration is used in conjunction with the <a class=
+        "svl" href="#strict">-strict</a> option, any molecule for which the
+        number of enumerated results exceeds this limit is considered to be a
+        failure, and is filtered out.</p>
+      </dd>
+
+      <dt><a id="enumdup"><tt>-enumdup</tt></a></dt>
+      <dd>By default, the <a class="svl" href="#pH">-tautomers</a> and
+      <a class="svl" href="#pH">-pH</a> options filter the
+      results to remove molecules that are topologically degenerate: if two
+      molecules differ only by atom order within the atom list, just one is
+      retained. The <span class="nobr"><tt>-enumdup</tt></span> option disables
+      this filter, so that a more complete enumeration is performed. This is
+      useful when atom indexes have specific meaning, such as for molecules
+      which already have well-defined geometry (e.g. a bound conformation of a
+      ligand in an active site).</dd>
+      <dt><tt>-rule acid:</tt><i>group</i><br />
+      <tt>-rule base:</tt><i>group</i><br />
+      <tt>-rule none:</tt><i>group</i></dt>
+      <dd>
+        Custom protonation and deprotonation rules can be provided using these
+        options. Each rule consists of a type and a SMARTS pattern. Any number
+        of rules may be specified, and they will be applied in the order given.
+        The order must be considered carefully, as each atom is assigned to the
+        first rule which matches at the root of the corresponding SMARTS
+        pattern, and is classified according to the corresponding type.
+
+        <p>Three types of rules are allowed, each of which has a specific
+        effect: <tt>acid</tt> type rules cause the atom at the root of the
+        SMARTS match to be deprotonated; <tt>base</tt> type rules cause the
+        atom to be protonated; <tt>none</tt> type rules cause no change to be
+        carried out, which can be used as a way of preventing subsequent rules
+        from being applied.</p>
+
+        <!-- <p>The custom rules will be applied <i>after</i> the rules activated by
+        <a class="svl" href="#acidbase"><span class=
+        "nobr">-acidbase</span></a>, <a class="svl" href=
+        "#depracids"><span class="nobr">-depracids</span></a> and <a class=
+        "svl" href="#protbases"><span class="nobr">-protbases</span></a>, which
+        allows the custom rules to be used as modifications to the existing
+        logic. In enumeration modes, the custom rules will be used to filter
+        the output, as well as preprocessing the input.</p> -->
+
+        <p>Note that for Unix systems, care must be taken to escape out the
+        colon character <span class="nobr">(<tt>':'</tt>)</span>, which
+        may otherwise be interpreted by the command shell. For example, double
+        quotes may be used, as in the <a href="#quote">example</a> below.</p>
+      </dd>
+    </dl>
+  </div>
+
+<p><b>Argument Processing</b>. The input arguments to <tt>sdwash</tt> are
+  processed in left-to-right order. An argument that starts with a dash
+  <span class="nobr">(&quot;-&quot;)</span> is taken as an option
+  specification. An argument of the form <span class=
+  "nobr">@<i>filename</i></span> specifies that the contents of <i>filename</i>
+  are read and inserted into the argument stream for further argument
+  processing (which is useful to avoid long command lines or to record commonly
+  used arguments and files). Any other argument form is taken to be an input
+  file.<br />
+  <br />
+  <b>Note:</b> the @<i>filename</i> can only appear where an option or filename
+  would normally be processed and cannot be used as the second argument to an
+  option (e.g. <span class="nobr"><tt>-o</tt>&nbsp;@<i>filename</i></span>
+  specifies <span class="nobr">@<i>filename</i></span> as the actual output
+  file).</p>
+
+<p>The input files are processed in left-to-right order. Input files
+  containing &quot;*&quot; or &quot;?&quot; are interpreted as filename
+  patterns and each will be substituted with all filenames that match the given
+  pattern; for example, <tt>*.sdf</tt> will be substituted with all filenames
+  in the current directory that have a <tt>.sdf</tt> suffix. The input file
+  <span class="nobr">&quot;-&quot;</span> is interpreted as <tt>stdin</tt> (for
+  use with pipes). If there are no explicit input files, <tt>stdin</tt> is used
+  as the single input file.</p>
+
+<h1>Examples</h1>
+
+<p>To iterate through all of the records in <tt>struct3D.sdf</tt> and rebuild
+  the coordinates in 2D, whilst also replacing the wedge bond assignments and
+  discarding non-molecule fields:</p>
+
+<pre class="code oneline">sdwash struct3D.sdf -o struct2D.sdf -depict -wedge -stripdata</pre>
+
+<p>Note that the command <tt>sdwash</tt> may need to be replaced with
+  <tt>$MOE/bin/sdwash</tt> or <span class="nobr"><tt>$MOE/bin/moebatch -run
+  $MOE/bin/sdwash</tt></span>, depending on the platform and how it is
+  configured.</p>
+
+<p>To use a Unix-style pipe to remove hydrogens and adjust protonation of all
+  records generated by another program:</p>
+
+<pre class="code oneline"><i>program1</i> | sdwash - -removeH -pH 7 | <i>program2</i></pre>
+
+<p>To process a number of large input datafiles, with some indication of
+  progress, keeping only the largest component but recording the discarded
+  fragments, and standardizing the bond order style:</p>
+
+<pre class="code oneline">sdwash structures*.sdf -o washed.sdf -verbose -compfield lost_frag -ylide</pre>
+
+<p>Note that because <tt>-compfield</tt> is specified, the <span class=
+  "nobr"><tt>-component</tt></span> flag is enabled automatically.</p>
+
+<p>To take a collection of structures and parse out a predefined set of
+  abbreviations which occur throughout the input file, replace the coordinates
+  with depiction layouts, and to insert the registration key field into the
+  name of the molecule:</p>
+
+<p><span class="nobr"><tt>&nbsp;&nbsp;&nbsp;&nbsp;sdwash input.sdf -o
+  output.sdf -drop regno -setname regno -depict
+  @$MOE/lib/sdabbrev.txt</tt></span></p>
+
+<p>The file <tt>$MOE/lib/sdabbrev.txt</tt> is a list of abbreviations that
+  are commonly used in SD files.</p>
+
+  <p>To enumerate the protomers and tautomers of a source datafile likely
+      to be present in an acidic solution,
+      starting by removing salts and non-major components and
+      keeping the source identification number from the original input:
+
+<p><span class="nobr"><tt>&nbsp;&nbsp;&nbsp;&nbsp;sdwash molecules.sdf -o
+  protomers.sdf -seqno mseq -pH 2 -salts -component</tt></span></p>
+
+<p>To create a field which contains a SMILES string representation of the
+  corresponding structure, remove all descriptor fields which begin with the
+  prefix <tt>desc_</tt>, but keep descriptor fields named <tt>desc_pi</tt> and
+  <tt>desc_mu</tt>, and append the results to an existing file: <a id="asterisk"></a>
+</p>
+
+<p><tt>&nbsp;&nbsp;&nbsp;&nbsp;sdwash fragments002.sdf \<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-savesmi SMILES
+  -drop 'desc_*' -keep desc_pi -keep desc_mu
+  &gt;&gt; cumulative_output.sdf</tt></p>
+
+<p>To cause primary amines to be protonated, unless they are of a benzylic
+  nature, the following two custom protonation rules could be used:
+<a id="quote"></a>
+</p>
+
+<pre class="code oneline">sdwash molecules.sdf -rule &quot;none:NCc&quot; -rule &quot;base:[NH2]C&quot;</pre>
+
+<p>Note in the above two examples the use of quotation marks, which are used
+  to prevent interpretation by a Unix command shell. As the <span class=
+  "nobr"><tt>-sdf</tt></span> option is omitted, all of the output files will
+  be written as MDL V2000 SD files.</p>
+
+<h1>See Also</h1>
+
+<p><a href="../../mdb/wash.htm">Database Wash</a></p>
+
+<p><a class="svl" href="sddesc.htm">sddesc</a><br />
+  <a class="svl" href="sdfilter.htm">sdfilter</a><br />
+  <a class="svl" href="sdfrag.htm">sdfrag</a><br />
+  <a class="svl" href="sdsort.htm">sdsort</a><br />
+  <a class="svl" href="sdstereo.htm">sdstereo</a></p>
+
+<p><a class="svl" href="protomer.htm">ctab_EnumerateProtomers</a><br />
+  <a class="svl" href="depictor.htm">DepictionCoordinates</a></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: tok_cat" />
+  <meta name="keywords" content="functions: tok_length" />
+  <meta name="keywords" content="functions: tok_keep" />
+  <meta name="keywords" content="functions: tok_drop" />
+  <meta name="keywords" content="functions: tok_hash" />
+  <meta name="keywords" content="functions: tok_pack" />
+  <meta name="keywords" content="functions: tok_unpack" />
+  <meta name="keywords" content="functions: tok_indexofP" />
+  <meta name="keywords" content="functions: tok_indexofS" />
+  <meta name="keywords" content="functions: tok_indexofW" />
+  <meta name="keywords" content="functions: tok_indexofWI" />
+  <meta name="keywords" content="functions: tok_sval" />
+  <meta name="keywords" content="functions: tok_svalLC" />
+  <meta name="keywords" content="functions: tok_svalUC" />
+  <title>Token Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Token Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+tok = <a class="fcnlink" href="#tok_cat"
+>tok_cat</a> [ 'a', 'b' ]
+tok = <a class="fcnlink" href="#tok_cat"
+>tok_cat</a> [ 'a1', 'a2', 'a3', ...]
+
+tok = <a class="fcnlink" href="#tok_drop"
+>tok_drop</a> ['token', n]
+tok = <a class="fcnlink" href="#tok_keep"
+>tok_keep</a> ['token', n]
+
+v = <a class="fcnlink" href="#tok_length"
+>tok_length</a> [ 'a', 'b' ]
+v = <a class="fcnlink" href="#tok_length"
+>tok_length</a> [ 'a1', 'a2', 'a3', ...]
+
+k = <a class="fcnlink" href="#tok_hash"
+>tok_hash</a> 'word'
+[k1, k2, ...] = <a class="fcnlink" href="#tok_hash"
+>tok_hash</a> ['word1', 'word2', ...]
+
+tok = <a class="fcnlink" href="#tok_pack"
+>tok_pack</a> [ 'tok1', 'tok2', ...]
+[tok1, tok2, ...] = <a class="fcnlink" href="#tok_pack"
+>tok_unpack</a> 'tok'
+
+[k1, k2, ...] = <a class="fcnlink" href="#tok_indexofP"
+>tok_indexofP</a> [['tok1', 'tok2', ...], ['pfx_1', 'pfx_2', ...]]
+[k1, k2, ...] = <a class="fcnlink" href="#tok_indexofS"
+>tok_indexofS</a> [['tok1', 'tok2', ...], ['pfx_1', 'pfx_2', ...]]
+[k1, k2, ...] = <a class="fcnlink" href="#tok_indexofW"
+>tok_indexofW</a> [['tok1', 'tok2', ...], ['pat_1', 'pat_2', ...]]
+[k1, k2, ...] = <a class="fcnlink" href="#tok_indexofW"
+>tok_indexofWI</a> [['tok1', 'tok2', ...], ['pat_1', 'pat_2', ...]]
+
+[t1, t2, ...]  = <a class="fcnlink" href="#tok_sval"
+>tok_sval</a> ['tok1', 'tok2', ...]
+[t1, t2, ...]  = <a class="fcnlink" href="#tok_sval"
+>tok_svalLC</a> ['tok1', 'tok2', ...]
+[t1, t2, ...]  = <a class="fcnlink" href="#tok_sval"
+>tok_svalUC</a> ['tok1', 'tok2', ...]
+</pre>
+<a id="tok_cat"></a>
+<h1>Description</h1>
+
+<pre>
+tok = <span class="fcndef">tok_cat</span> [ 'a', 'b' ]
+tok = <span class="fcndef">tok_cat</span> [ 'a1', 'a2', 'a3', ...]
+tok = <span class="fcndef">tok_cat</span> [ ['a1', 'a2'], ['b1', 'b2'], ...]
+</pre>
+
+<p>Concatenates tokens element-wise. Every vector argument must have the same
+length (unit extension applies). </p>
+
+<pre class="code">
+svl&gt; tok_cat ['some', 'rsa', 'ult']
+'somersault'
+
+svl&gt; tok_cat  ['over ', ['here', 'there'], [' also', ' too']]
+['over here also', 'over there too']
+
+svl&gt; tok_cat ['over ', 'there', []]
+[]
+</pre>
+<a id="tok_drop"></a>
+<hr noshade="noshade" />
+
+<pre>
+tok = <span class="fcndef">tok_drop</span> [ 'token', n]
+</pre>
+
+<p>If <tt>n</tt> is a positive number, <tt>tok_drop</tt> drops the first
+  <tt>n</tt> characters of <tt>token</tt>, and returns the remaining token.
+  Otherwise, if <tt>n</tt> is negative, <tt>tok_drop</tt> drops the last
+  <tt>n</tt> characters.</p>
+
+<pre class="code">
+svl&gt; a = 'abcde'
+svl&gt; tok_drop [a, 3]
+'de'
+svl&gt; tok_drop [a, -3]
+'ab'
+</pre>
+<a id="tok_keep"></a>
+<hr noshade="noshade" />
+
+<pre>
+tok = <span class="fcndef">tok_keep</span> [ 'token', n]
+</pre>
+
+<p>If <tt>n</tt> is a positive number, <tt>tok_keep</tt> returns the first
+  <tt>n</tt> characters of <tt>token</tt>. Otherwise, if <tt>n</tt> is
+  negative, <tt>tok_keep</tt> returns the last <tt>n</tt> characters of
+  <tt>token</tt>.</p>
+
+<pre class="code">
+svl&gt; a = 'abcde'
+svl&gt; tok_keep [a, 3]
+'abc'
+svl&gt; tok_keep [a, -3]
+'cde'
+</pre>
+<a id="tok_length"></a>
+<hr noshade="noshade" />
+
+<pre>
+v = <span class="fcndef">tok_length</span> [ 'a', 'b' ]
+v = <span class=
+"fcndef">tok_length</span> [ 'a1', 'a2', 'a3', ...]
+</pre>
+
+<p>Returns a vector with each token <tt>'a1'</tt>,
+  <tt>'a2'</tt>, ..., replaced with its length.</p>
+
+<pre class="code">
+svl&gt; tok_length [ 'some', 'rsa', 'ult' ]
+[4,3,3]
+
+svl&gt; tok_length [ 'over ', ['here','there'] ]
+[5, [4,5]]
+</pre>
+<a id="tok_hash"></a>
+<hr noshade="noshade" />
+
+<pre>
+k = <span class="fcndef">tok_hash</span> 'word'
+[k1, k2, ...] = <span class=
+"fcndef">tok_hash</span> ['word1', 'word2', ...]
+</pre>
+
+<p>Returns a vector with each token replaced by its <i>hash value</i>. The
+  hash value is an integer calculated from the contents of each token in such a
+  way that different tokens will likely correspond to different hash
+  values.</p>
+<a id="tok_pack"></a>
+<hr noshade="noshade" />
+
+<pre>
+tok = <span class=
+"fcndef">tok_pack</span> ['tok1', 'tok2', ...]
+[tok1, tok2, ...] = <span class="fcndef">tok_unpack</span> tok
+</pre>
+
+<p>Function <tt>tok_pack</tt> concatenates the given tokens into one token.
+  The tokens are first processed to escape unusual characters and separated
+  from each other with a special character (<tt>;</tt>). Function
+  <tt>tok_unpack</tt> reverses the effect of <tt>tok_pack</tt> and splits a
+  single token into the list of tokens that were used to create it.</p>
+
+<p>Note: <tt>tok_pack</tt> and <tt>tok_unpack</tt> can be used to prepare RC
+  file entries that store a list of names in a single RC variable.</p>
+
+<pre class="code">
+svl&gt; tok_pack [ 'aa', 'bb', 'cc' ]
+'aa;bb;cc'
+
+svl&gt; tok_unpack 'aa;bb;cc'
+['aa','bb','cc']
+</pre>
+
+
+<!-- ============================================================== -->
+
+<p><a id="tok_indexofP"></a></p>
+<p><hr noshade="noshade" />
+
+<pre>
+[k_1, k_2, ...] = <span class="fcndef">tok_indexofP</span
+> [['tok_1', 'tok_2', ...], ['pfx_1', 'pfx_2', ...]]
+</pre>
+
+<p>
+Function <tt>tok_indexofP</tt>
+returns, for each of the given items,
+<tt>tok_</tt><i>i</i>, the index,
+<tt>k_</tt><i>i</i>, of the longest of the given prefixes,
+<tt>pfx_</tt><i>j</i>, that matches the item.
+If no prefix matches the item, the function returns 0 for that item.
+
+The function is similar to indexof, except instead of searching for
+an exact match of each of the given values, it searches for a match of their
+prefix.
+</p>
+
+<pre class="code">
+svl&gt; tok_indexofP [ ['a','aa1','bb2','cc3','bbb4','aa5'], ['aa','bbb'] ]
+[0,1,0,0,2,1]
+</pre>
+
+If several prefixes match the same item, the position of the longest
+matching prefix is returned, e.g.
+
+<pre class="code">
+svl&gt; tok_indexofP [['a1','ab2','abcde3','abc4','ab5'],<s></s
+> ['abc','ab','abcd']]
+[0,2,3,1,2]
+</pre>
+
+If the prefix list contains duplicates, the position of the first duplicate
+match is returned, e.g.
+
+<pre class="code">
+svl&gt; tok_indexofP [['ac','ab2','ac'], ['a','ab','a', 'ab']]
+[1,2,1]
+</pre>
+
+<p><a id="tok_indexofS"></a></p>
+<p><hr noshade="noshade" />
+
+<pre>
+[k_1, k_2, ...] = <span class="fcndef">tok_indexofS</span
+> [['tok_1', 'tok_2', ...], ['pfx_1', 'pfx_2', ...]]
+</pre>
+
+<p>
+Function <tt>tok_indexofS</tt>
+is similar to tok_indexofP, except that instead of searching
+for a common prefix, it searches for a common suffix.  If several suffixes
+match, the position of the longest suffix will be returned.
+</p>
+
+<pre class="code">
+svl&gt; tok_indexofS [['1d','2cd','33abcd','4bcd','5cd'],<s></s
+> ['bcd','cd','abcd']]
+[0,2,3,1,2]
+</pre>
+
+<!-- ============================================================== -->
+
+<p><a id="tok_indexofW"></a></p>
+<p><hr noshade="noshade" />
+
+<pre>
+[k1, k2, ...] = <span class="fcndef">tok_indexofW</span
+> [['tok_1', 'tok_2', ...], ['pat_1', 'pat_2', ...]]
+[k1, k2, ...] = <span class="fcndef">tok_indexofWI</span
+> [['tok_1', 'tok_2', ...], ['pat_1', 'pat_2', ...]]
+</pre>
+
+<p>
+Function <tt>tok_indexofW</tt>
+is similar to <tt>tok_indexofP</tt>, except that instead of searching
+for a common prefix, it searches for a wildcard pattern that matches the
+given token. If several wild patterns match, the position of the first pattern
+(regardless of its length) will be returned.
+</p>
+
+<pre class="code">
+svl&gt; val = ['1d','2cd','33abcd','4bcd','5cd']
+svl&gt; pat = ['*bcd','*cd','*abcd']
+svl&gt; tok_indexofW [val, pat]
+[0,2,1,1,2]
+</pre>
+
+
+<p>
+Note: the found position of the <tt>'33abcd'</tt> is 1, which corresponds
+to <tt>'*bcd"</tt>, because that is the first match.
+The position is <i>NOT</i> 3, which would correspond to <tt>'*abcd'</tt>,
+because it is not the first match, even though it is the longest match.
+</p>
+
+<p>
+Function <tt>tok_indexofWI</tt>
+is identical to <tt>tok_indexofW</tt>, except that the wildcard match
+is case-insensitive.  For example
+</p>
+
+<pre class="code">
+svl&gt; tok_indexofW [['abc', 'aBd'], ['Ab*', 'ab*', 'aB*']]
+[2,3]
+
+svl&gt; tok_indexofWI [['abc', 'aBd'], ['Ab*', 'ab*', 'aB*']]
+[1,1]
+</pre>
+
+<!-- ============================================================== -->
+
+<p><a id="tok_sval"></a></p>
+<p><hr noshade="noshade" />
+
+<pre>
+[t1, t2, ...] = <span class="fcndef">tok_sval</span
+> ['tok1', 'tok2', ...]
+[t1, t2, ...] = <span class="fcndef">tok_svalLC</span
+> ['tok1', 'tok2', ...]
+[t1, t2, ...] = <span class="fcndef">tok_svalUC</span
+> ['tok1', 'tok2', ...]
+</pre>
+
+<p>
+Function <tt>tok_sval</tt>
+generates a sorting proxy of the vector passed in parameter so that the
+lexicographic order of the resulting vector is the "natural" order of the tokens
+in the original vector, i.e. such that embedded numbers are sorted according
+to their numerical values.
+For example, the lexicographic order of
+<tt>['a2','a1','a10']</tt> is
+<tt>['a1','a10','a2']</tt>, while their natural order is
+<tt>['a1','a2','a10']</tt>:
+</p>
+
+<pre class="code">
+svl&gt; v=['a1','a10','a2']
+
+svl&gt; v[x_sort v]
+['a1','a10','a2']
+
+svl&gt; v[x_sort tok_sval v]
+['a1','a2','a10']
+</pre>
+
+<p>
+Functions <tt>tok_svalLC</tt>, <tt>tok_svalUC</tt>
+are identical to <tt>tok_sval</tt>, except that letters are all converted to
+lowercase and uppercase respectively <em>before</em> calculating the sort
+order.
+</p>
+
+<pre class="code">
+svl&gt; v=['AB10', 'ab2', 'a_b1', 'A_b1']
+
+svl&gt; v[x_sort tok_sval v]
+['AB10','A_b1','a_b1','ab2']
+
+svl&gt; v[x_sort tok_svalLC v]
+['a_b1','A_b1','ab2','AB10']
+
+svl&gt; v[x_sort tok_svalUC v]
+['ab2','AB10','a_b1','A_b1']
+</pre>
+
+<h1>See Also</h1>
+
+<p><a class="svl" href="catetc.htm">cat</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+
+
+
+<!-- OTHER NOTES:
+WARNING: DON'T USE (or use with extreme caution)! This may all change.
+
+tok_escape
+tok_unescape
+
+default escapes:
+- hex-escape all ctrl except \t, \n, \r
+- hex_escape \x7f (DEL) and all 8-bit chars
+- backslash-escape \\, \t, \n, \r
+
+NOTES:
+
+** \0	0x00	Null
+** \a	0x07	Alarm (Bell)
+** \b	0x08	Backspace
+** \f	0x0c	Formfeed
+** \n	0x0a	Newline (Line Feed)
+** \r	0x0d	Carriage Return
+** \t	0x09	Horizontal Tab
+** \v	0x0b	Vertical Tab
+** \\	0x5c	Backslash
+** \;	0x27	Single Quote
+** \"	0x22	Double Quote
+** \?	0x3f	Question Mark
+** \e	0x1b	Escape
+** \d	0x7f	Delete (Rubout)
+** \&		Non-character Delimiter
+
+** The function escapes all control characters (\x00..\x19), bslash (\x5c)
+** and DEL (\x1f).  8-bit characters are NOT escaped.  Additionally, all
+** 7-bit characters from xlist are escaped using a 4-character hex sequence,
+** e.g. "0x3f".  Special codes in qlist specified other escapes:
+**   '\"' ... prefix all double quotes with bslash
+**   '\'' ... prefix all single quotes with bslash
+**   ",:;"... prefix commas, colons, semicolons with bslash
+**   '_'  ... replace all spaces with "\_"
+**   '8'  ... replace all 8-bit chars with a 4-char hex sequence.
+
+elist:
+**	#		... escape semicolon with '\#'
+**	x/#/		... escape semicolon with '\x23' (can use "/|!_.:;")
+**	.:;=#		... bslash escape '.', ':', ';', '=', '#'
+**	\'\"		... bslash escape single quote, double quote
+**	_		... escape space with '\_'
+**	s		... escape space with '\ '
+**	b		... escape BSLASH with '\\'	(default)
+**	d		... escape DEL with '\d'
+**	9		... escape everything to hex
+// !!! 'e/.../.../' is not yet implemented
+
+In the following example,
+- ascii characters 8 and 11 are escaped with "\x08" and "\x0b"
+- ascii characters 9 (TAB) and 10 (NL) are escaped with "\t" and "\n"
+- ascii character 127 (DEL) is escaped with"\x7f"
+- characters ";" and "#" are left as-is
+
+    svl> tok_escape [['$ab;c', '# \x08 \x09 \x0a \x0b \x7e \x7f']]
+    ['$ab;c','# \\x08 \\t \\n \\x0b ~ \\x7f']
+
+The format escape format string '#;dx/\t/' specifies that
+- "#" should be escaped (with "\\#")
+- ";" should be escaped (with "\\;")
+- DEL should be escaped (with "\\d")
+- TAB should NOT be escaped (i.e. use "\x09", not "\t")
+When given the optional escape format string, the function will escape
+the same input tokens in a slightly different way:
+
+    svl> tok_escape [['$ab;c', '# \x08 \x09 \x0a \x0b \x7e \x7f'], '#;x/\t/']
+    ['$ab\\;c','\\# \\x08 \\x09 \\n \\x0b ~ \\x7f']
+
+DBG: _tok_repack	(explicit tok_pack tok_unpack x)
+tok_repack
+
+tok_repack replaces a packed token with its "canonical" version.
+The function is equivalent to tok_pack tok_unpack x.
+The purpose of the function is to allow packed tokens to allow for
+efficient comparison, caching and storing of packed tokens.
+
+For example
+
+    svl> _tok_repack ' ;\\x24 \\x09 ;'
+    ' ;$ \\t ;'
+
+tok_svalN
+    generates a sorting proxy of string src such that the lexicographic order
+    of string proxies is the sort order of the numbers stored in the strings.
+
+    Leading spaces are ignored.  If the string contains a numerical prefix
+    followed by an arbitrary suffix, only the prefix is used.  If there is
+    no numerical prefix, the function returns 0.
+
+    Unlike tok_sval, this function recognizes "NaN", "Inf", "+Inf", "-Inf"
+    and treats different representation of the same numerical value as
+    same.
+
+    For example,
+
+	svl> v = ['10.0', '-Inf', '10']
+
+	svl> v[x_sort tok_sval v]
+	['10','10.0','-Inf']
+
+	svl> v[x_sort tok_svalN v]
+	['-Inf','10.0','10']
+
+	svl> v = ['10.0a', '10c', '10b']
+
+	svl> v[x_sort tok_sval v]
+	['10b','10c','10.0a']
+
+	svl> v[x_sort tok_svalN v]
+	['10.0a','10c','10b']
+
+    Unlike tok_sval, this function recognizes "NaN", "Inf", "+Inf"
+    and "-Inf" and returns the same proxy for different strings that
+    represent the same numerical value, e.g. "+0" vs. "-0"  or
+    "412" vs. "4.12e2".  "NaN" is considered greater than "Inf".
+!!-->
+
+</body>
+</html>
+

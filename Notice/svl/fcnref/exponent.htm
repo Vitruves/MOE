@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content=
+  "functions: cbrt, cube, pow, sqr, sqrt, exp, expm1" />
+  <meta name="keywords" content=
+  "functions: log, log2, log10, log1p, logb, logaddexp" />
+  <title>Exponentiation Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Exponentiation Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+y = <a class="fcnlink" href="#cbrt">cbrt</a>  x
+y = <a class="fcnlink" href="#cube">cube</a>  x
+y = <a class="fcnlink" href="#exp">exp</a>   x
+y = <a class="fcnlink" href="#expm1">expm1</a> x
+y = <a class="fcnlink" href="#log">log</a>   x
+y = <a class="fcnlink" href="#log10">log10</a> x
+y = <a class="fcnlink" href="#log1p">log1p</a> x
+y = <a class="fcnlink" href="#log2">log2</a>  x
+y = <a class="fcnlink" href="#logb">logb</a>  [x, b]
+y = <a class="fcnlink" href="#pow">pow</a>   [x, p]
+y = <a class="fcnlink" href="#sqr">sqr</a>   x
+y = <a class="fcnlink" href="#sqrt">sqrt</a>  x
+
+y = <a class="fcnlink" href="#logaddexp">logaddexp</a> [x1,...,xN]
+</pre>
+
+<h1>Description</h1>
+
+<p>SVL provides a number of <i>exponentiation functions</i> that are used to
+  raise values to specific powers. A collection of inverse functions are also
+  provided. <!-- DESC --></p>
+<table class="noborder">
+<tr>
+  <th>Function</th>
+  <th class="center">Value</th>
+  <th>Description</th>
+</tr>
+<tr>
+  <td>
+<a id="cbrt"></a>
+<tt>cbrt&nbsp;x</tt></td>
+  <td class="center"><img src="exponent/cbrt.gif" /></td>
+  <td>The cube root of <tt>x</tt>.</td>
+</tr>
+<tr>
+  <td>
+<a id="cube"></a>
+<tt>cube&nbsp;x</tt></td>
+  <td class="center"><img src="exponent/cube.gif" /></td>
+  <td>The cube of <tt>x</tt>.</td>
+</tr>
+<tr>
+  <td>
+<a id="exp"></a>
+<tt>exp&nbsp;x</tt></td>
+  <td class="center"><img src="exponent/exp.gif" /></td>
+  <td>The value <i>e</i> raised to <tt>x</tt>.</td>
+</tr>
+<tr>
+  <td>
+<a id="expm1"></a>
+<tt>expm1&nbsp;x</tt></td>
+  <td class="center"><img src="exponent/expm1.gif" /></td>
+  <td>The value <i>e</i> raised to <tt>x</tt> less one. Use this function
+  for improved precision when <tt>x</tt> is near zero (compared to
+  <tt>exp</tt>).</td>
+</tr>
+<tr>
+  <td>
+<a id="log"></a>
+<tt>log&nbsp;x</tt></td>
+  <td class="center"><img src="exponent/log.gif" /></td>
+  <td>The natural logarithm of <tt>x</tt>. <tt>NaN</tt> is returned for
+  <tt>x</tt>&lt;0.</td>
+</tr>
+<tr>
+  <td>
+<a id="log10"></a>
+<tt>log10&nbsp;x</tt></td>
+  <td class="center"><img src="exponent/log10.gif" /></td>
+  <td>The base 10 logarithm of <tt>x</tt>. <tt>NaN</tt> is returned for
+  <tt>x</tt>&lt;0.</td>
+</tr>
+<tr>
+  <td>
+<a id="log1p"></a>
+<tt>log1p&nbsp;x</tt></td>
+  <td class="center"><img src="exponent/log1p.gif" /></td>
+  <td>The natural logarithm of (<tt>x</tt>+1). <tt>NaN</tt> is returned for
+  <tt>x</tt>&lt;-1. This function provides improved precision for
+  <tt>x</tt> close to zero (compared to <tt>log</tt>).</td>
+</tr>
+<tr>
+  <td>
+<a id="logaddexp"></a>
+<tt>logaddexp&nbsp;[x1,...,xN]</tt></td>
+  <td class="center"><img src="exponent/logaddexp.gif" /></td>
+  <td>The natural logarithm of the sum of exponentiated values. This
+  function is appropriate for situations for summing numbers of
+  significantly disparate orders represented in log-space.</td>
+</tr>
+<tr>
+  <td>
+<a id="logb"></a>
+<tt>logb&nbsp;[x,b]</tt></td>
+  <td class="center"><img src="exponent/logb.gif" /></td>
+  <td>The base <tt>b</tt> logarithm of <tt>x</tt>. <tt>NaN</tt> is returned
+  for <tt>x</tt>&lt;0 or <tt>b</tt> non-positive.</td>
+</tr>
+<tr>
+  <td>
+<a id="log2"></a>
+<tt>log2&nbsp;x</tt></td>
+  <td class="center"><img src="exponent/log2.gif" /></td>
+  <td>The base 2 logarithm of <tt>x</tt>. <tt>NaN</tt> is returned for
+  <tt>x</tt>&lt;0.</td>
+</tr>
+<tr>
+  <td>
+<a id="pow"></a>
+<tt>pow&nbsp;[x,p]</tt></td>
+  <td class="center"><img src="exponent/pow.gif" /></td>
+  <td>The argument <tt>x</tt> raised to the power <tt>p</tt>. <tt>NaN</tt>
+  is returned if <tt>p</tt> is not an integer and <tt>x</tt>&lt;0.</td>
+</tr>
+<tr>
+  <td>
+<a id="sqr"></a>
+<tt>sqr&nbsp;x</tt></td>
+  <td class="center"><img src="exponent/sqr.gif" /></td>
+  <td>The square of <tt>x</tt>.</td>
+</tr>
+<tr>
+  <td>
+<a id="sqrt"></a>
+<tt>sqrt&nbsp;x</tt></td>
+  <td class="center"><img src="exponent/sqrt.gif" /></td>
+  <td>The square root of <tt>x</tt>. <tt>NaN</tt> is returned for
+  <i>x</i>&lt;0.</td>
+</tr>
+</table><!-- ENDDESC -->
+
+<p>The unary operators (like <tt>sqr</tt> and <tt>cube</tt>) apply to all
+  scalar values in the argument vector (no matter how deeply nested). The
+  binary operators (like <tt>pow</tt> and <tt>log1p</tt>) match elements of the
+  arguments in pair no matter how deeply nested. Unit extension applies.</p>
+
+<h1>See Also</h1>
+
+<p><a href="arithmet.htm">Arithmetic Functions</a><br />
+  <a href="specfcn.htm">Special Functions</a><br />
+  <a href="trigfcn.htm">Trigonometric Functions</a></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

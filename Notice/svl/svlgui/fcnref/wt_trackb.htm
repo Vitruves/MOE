@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href=
+  "../../../include/manstyle.css" />
+  <meta name="keywords" content="keywords: Trackball" />
+  <meta name="keywords" content="functions: Widget:Trackball" />
+  <meta name="keywords" content="functions: Trackball (widget)" />
+  <title>Trackball Widget</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../../index.htm"><img src="../../../images/ccglogo.png" /></a>
+    <a href="../../../index.htm"><div class="moeversion"></div></a>
+    Trackball Widget
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Description</h1>
+
+<p>The <tt>Trackball</tt> widget displays a virtual trackball and grid that
+  can be used to manipulate 3D objects using the mouse. Rotation and
+  translation transformations are achieved by dragging the mouse over the
+  widget using the left mouse button, and are visually cued by movement of the
+  trackball or the grid underneath it. The effect of a mouse drag over the
+  widget is determined by key modifiers or an optional button bar in the
+  widget.</p>
+
+<p>The following table summarizes the operation of the <tt>Trackball</tt>
+  widget. When the button bar is enabled (using the <tt>bbarPosition</tt>
+  attribute), a small box appears in one of the corners of the widget. When
+  pressed, this box puts the widget into &quot;translation mode&quot;,
+  equivalent to holding down the <tt>&lt;Shift&gt;</tt> key. Pressing the box
+  again releases the widget from this mode. The key modifiers are always
+  available.</p>
+  <table class="noborder">
+    <tr>
+      <th>Transformation</th>
+      <th>Button</th>
+      <th>Drag Modifier</th>
+    </tr>
+    <tr>
+      <td>Rotation</td>
+      <td><img class="icon" src="wt_trackb/trackball_rot.png" alt="Rotation" /></td>
+      <td><tt>&lt;None&gt;</tt></td>
+    </tr>
+    <tr>
+      <td>X/Y Translation</td>
+      <td><img class="icon" src="wt_trackb/trackball_trans.png" alt=
+      "XY Translation" /></td>
+      <td><tt>Shift</tt></td>
+    </tr>
+    <tr>
+      <td>Z Translation</td>
+      <td><img class="icon" src="wt_trackb/trackball_trans_z.png" alt=
+      "Z Translation" /></td>
+      <td><tt>Ctrl</tt></td>
+    </tr>
+  </table><!--
+
+<p>Pure Y-axis rotation can be accomplished by dragging the
+mouse in the periphery of the widget drawing area.
+
+If the widget button bar is displayed, the reset button
+<img src="wt_trackb/reset.gif" alt="Reset Button">
+can be used to restore all widget values to zero.
+-->
+
+<h2>Attributes</h2>
+
+<p><tt>Trackball</tt> inherits all <a class="svl" href="wt_core.htm">core</a>
+  attributes and defines the following attributes:</p>
+  <table class="titlebar">
+    <tr>
+      <th>Attribute</th>
+      <th>Description</th>
+      <th>Values</th>
+      <th>Default</th>
+    </tr>
+    <tr>
+      <td><tt>minWidth</tt></td>
+      <td>Minimum trackball width (in characters).</td>
+      <td>2-15</td>
+      <td>2 (if <tt>bbarPosition</tt> is &#39;none&#39;)<br />
+      5 (otherwise)<br /></td>
+    </tr>
+    <tr>
+      <td><tt>bbarPosition</tt></td>
+      <td>Position of the button bar with respect to the widget.</td>
+      <td>&#39;none&#39;, &#39;above&#39;, &#39;below&#39;, &#39;left&#39;,
+      &#39;right&#39;</td>
+      <td>&#39;none&#39; (button bar hidden)</td>
+    </tr>
+    <tr>
+      <td><tt>ballRelSize</tt></td>
+      <td>Diameter of the trackball as a percentage of the widget drawing area
+      dimensions.</td>
+      <td>0-100</td>
+      <td>60</td>
+    </tr>
+    <tr>
+      <td><tt>ballColor1</tt></td>
+      <td>Color of the trackball hexagons.</td>
+      <td>TRGB Color</td>
+      <td>0x00C0C0C0 (dark grey)</td>
+    </tr>
+    <tr>
+      <td><tt>ballColor2</tt></td>
+      <td>Color of the trackball pentagons.</td>
+      <td>TRGB Color</td>
+      <td>0x00494949 (light grey)</td>
+    </tr>
+    <tr>
+      <td><tt>gridColor</tt></td>
+      <td>Color of the XZ grid pattern.</td>
+      <td>TRGB Color</td>
+      <td>0x00999999 (grey)</td>
+    </tr>
+  </table>
+
+<h2>Trigger</h2>
+
+<p>Mouse drag over the widget drawing area or reset button pressed.</p>
+
+<h2>Data Value</h2>
+
+<p>The data value is returned as follows:</p>
+
+<pre>
+    [rotation_matrix, translation_vector]
+</pre>
+
+<p><tt>rotation_matrix</tt></p>
+  <div class="indent">
+
+<p>3x3 rotation matrix <b>R</b> such that for any point with
+    [<i>x</i>,<i>y</i>,<i>z</i>] position vector <b>V</b>, <tt>matmul
+    [<b>V</b>, <b>R</b>]</tt> returns the rotated coordinates.</p>
+  </div>
+
+<p><tt>translation_vector</tt></p>
+  <div class="indent">
+
+<p>Translation vector <span class="nobr"><b>T</b> = [T<sub>x</sub>,
+    T<sub>y</sub>, T<sub>z</sub>]</span> such that for any point with
+    [<i>x</i>,<i>y</i>,<i>z</i>] position vector <b>V</b>, <b>V</b> + <b>T</b>
+    returns the translated coordinates.</p>
+  </div>
+
+<h1>See Also</h1>
+
+<p><a href="../wt_intro.htm">SVL Window Toolkit</a><br />
+  <a href="wt_core.htm">Core Attributes</a><br />
+  <a href="introwt.htm">Window Toolkit Functions</a><br /></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../../images/ccgicon.png" /> <a href="../../../index.htm"></a>
+    <a href="../../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

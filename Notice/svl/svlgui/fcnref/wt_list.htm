@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href=
+  "../../../include/manstyle.css" />
+  <meta name="keywords" content="keywords: Listbox" />
+  <meta name="keywords" content="functions: Widget:Listbox" />
+  <meta name="keywords" content="functions: Listbox (widget)" />
+  <meta name="keywords" content="unsupported: wt_ListBubbleHelp" />
+  <meta name="keywords" content="unsupported: wt_ListSetBubbleHelp" />
+  <title>Listbox Widget</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../../index.htm"><img src="../../../images/ccglogo.png" /></a>
+    <a href="../../../index.htm"><div class="moeversion"></div></a>
+    Listbox Widget
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Description</h1>
+
+<p>The <tt>Listbox</tt> is a scrollable list of items. The number of items is
+  unlimited. In multi-column mode, the number of list columns displayed is
+  automatically calculated from the <tt>width</tt> attribute.</p>
+
+<h3>Selection Styles</h3>
+
+<p>The list widget has three selection policies to choose from:</p>
+  <div class="indent">
+
+<p><tt>Single select</tt> Exactly zero or one item may be selected.
+    Clicking on a new item automatically deselects the currently selected
+    item.</p>
+
+<p><tt>Multi-select style 1</tt> Click on an item to select or deselect
+    it.<br />
+    <tt>Shift</tt>-click extends the selection.<br />
+    <tt>Ctrl</tt>-click clears the selection.</p>
+
+<p><tt>Multi-select style 2</tt> Click on an item to select it and deselect
+    all other items.<br />
+    <tt>Shift</tt>-click extends the selection.<br />
+    <tt>Ctrl</tt>-click toggles the selection state of an item.</p>
+  </div>
+
+<h3>Fields</h3>
+
+<p>The list entries, stored in the <tt>text</tt> attribute, are interpreted
+  as fields, separated by the TAB character. Optionally, a header text, stored
+  in the <tt>header</tt> attribute, is displayed above each field. Dragging
+  boundary the header text button will narrow down or widen the corresponding
+  field, while pressing the button will sort the field in, alternatively,
+  ascending or descending order. The headers for all fields are stored in a
+  single token, separated by the TAB character. Optionally, each header can
+  contain a format string, bracketed by a pair of braces
+  (<tt>&quot;{}&quot;</tt>), which specifies the alignment style, sorting
+  method and default width of each field. For example,</p>
+
+<pre class="code">
+header: &#39;field 1{10n}\tfield 2{+}&#39;
+text:   [&#39;11\taa&#39;, &#39;22\tbb&#39;, &#39;33\tcc&#39;]
+</pre>
+
+<p>will show 3 lines, each with 2 fields. The first field will have header
+  <b>&quot;field 1&quot;</b> and use format <tt>{10n}</tt> (see below) to
+  display values <tt>&quot;11&quot;, &quot;22&quot;, &quot;33&quot;</tt>. The
+  second field will have header <b>&quot;field 2&quot;</b> and use format
+  <tt>{+}</tt> to display values <tt>&quot;aa&quot;, &quot;bb&quot;,
+  &quot;cc&quot;</tt>:</p>
+
+  <table class="titlebar">
+    <tr>
+      <th>field&nbsp;1</th>
+      <th>field&nbsp;2</th>
+    </tr>
+    <tr>
+      <td>
+
+<pre>
+11&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</pre>
+      </td>
+      <td class="right">aa</td>
+    </tr>
+    <tr>
+      <td>
+
+<pre>
+22&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</pre>
+      </td>
+      <td class="right">bb</td>
+    </tr>
+    <tr>
+      <td>
+
+<pre>
+33&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</pre>
+      </td>
+      <td class="right">cc</td>
+    </tr>
+  </table>
+
+<h3>Field Format</h3>
+
+<p>The format string specifies alignment, width and sort type (in that
+  order). The string must surrounded by a pair of braces
+  (<tt>&quot;{}&quot;</tt>). For example, <tt>&quot;{+10n}&quot;</tt> specifies
+  a right-aligned field of width 10 (nominal) characters, which is sorted using
+  the numerical value of the text. All parts of the field format are optional;
+  e.g. <tt>&quot;{+}&quot;</tt> specifies a right-aligned field with its width
+  determined by the contents that are sorted using the default mixed mode
+  sort.</p>
+  <table class="titlebar width-half">
+    <tr>
+      <th>Alignment</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td class="center"><tt>-</tt></td>
+      <td>Align on the left boundary (default).</td>
+    </tr>
+    <tr>
+      <td class="center"><tt>:</tt></td>
+      <td>Align on center.</td>
+    </tr>
+    <tr>
+      <td class="center"><tt>+</tt></td>
+      <td>Align on the right boundary.</td>
+    </tr>
+    <tr>
+      <td class="center"><tt>.</tt></td>
+      <td>Align on the (first) dot.</td>
+    </tr>
+    <tr>
+      <td class="center"><tt>~</tt></td>
+      <td>Align on the (invisible) <tt>TAB</tt> marker.</td>
+    </tr>
+  </table>
+
+<p class="caption">Table 1: Listbox alignment options</p>
+  <table class="titlebar width-half">
+    <tr>
+      <th>Sort&nbsp;Type</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td class="center"><tt>m</tt></td>
+      <td>Mixed mode (default), using case-insensitive lexicographic (ASCII)
+      comparison for alphabetical strings or substrings and numerical
+      comparison for strings or substrings representing a number.</td>
+    </tr>
+    <tr>
+      <td class="center"><tt>n</tt></td>
+      <td>Numerical mode, using numerical comparison.</td>
+    </tr>
+    <tr>
+      <td class="center"><tt>t</tt></td>
+      <td>Text mode, using case-sensitive lexicographic (ASCII)
+      comparison.</td>
+    </tr>
+    <tr>
+      <td class="center"><tt>r</tt></td>
+      <td>Numerical proxy mode, using numerical comparison of (invisible) field
+      proxy values, with each field proxy stored as a <tt>TAB</tt>-separated
+      prefix of the field text.</td>
+    </tr>
+    <tr>
+      <td class="center"><tt>s</tt></td>
+      <td>Text proxy mode, using case-sensitive lexicographic (ASCII)
+      comparison of (invisible) field proxy values.</td>
+    </tr>
+  </table>
+
+<p class="caption">Table 2: Listbox sorting options</p>
+
+<b>SYNTAX:</b>
+<pre class="code">
+left_brace space*
+  { {&quot;+&quot;|&quot;-&quot;|&quot;:&quot;|&quot;.&quot;|&quot;~&quot;} space* }?         // alignment (default &quot;-&quot;)
+  { digit digit* space* }?                  // width (#chars)
+  { {&quot;n&quot;|&quot;t&quot;|&quot;m&quot;|&quot;r&quot;|&quot;s&quot;|} space* }?        // sort type (default &quot;m&quot;)
+right_brace
+</pre>
+
+<h3>Row and Field Dependent Bubble Help</h3>
+
+<p>
+By default one can specify one common bubble help text over the whole
+list widget, and a field specific bubble help in the header line with the
+attribute <tt>headerBubbleHelp</tt>. This attribute
+allows to create field/row dependent bubble help over each cell of the
+list. For this, one sets the Listbox attribute <tt>bubbleHelpCmd</tt> to the
+value <tt>wt_ListBubbleHelp[]</tt> and adds handling of the
+list trigger <tt>_list_bubblehelp</tt>. This trigger is generated by
+<tt>wt_ListBubbleHelp</tt> with the mouse position information just
+before the bubble help pops up.
+<p>
+The following example code, shows how to handle the <tt>_list_bubblehelp</tt>
+trigger with the function <tt>wt_ListSetBubbleHelp</tt> and a custom function
+<tt>get_bubblehelp</tt> which creates the text and/or graphics object
+for the help to be shown. The <b>bold</b> sections need to
+be adapted to the specific list widget content:
+</p>
+<pre>  ...
+
+    // Set attribute to create field/row dependent bubble help.
+
+  WindowSetAttr [wkey, [list: [bubbleHelpCmd: 'wt_ListBubbleHelp[]']]];
+  ...
+
+    // Function 'get_bubblehelp' to generate bubble help.
+    //  wkey:   window key
+    //  widget: list widget name
+    //  line:   list line number over which the mouse is (sorting applied)
+    //  item:   list item number over which the mouse is (sort independent)
+    //  field:  list field number over which the mouse is
+    //  data:   additional custom data
+
+  local function get_bubblehelp [wkey, widget, line, item, field, data]
+      <b>local text = twrite ['help text example - item: {} field: {}', item, field];
+      local grkey = gr_create [];</b>
+      ...
+      return [text, grkey];
+  endfunction
+  ...
+  local [trigger, values] = WindowWait wkey;
+  <b>local data = [...];</b>     // custom list data, needed to create bubble help
+  ...
+
+    // Process _list_bubblehelp trigger.
+
+  if trigger == '_list_bubblehelp' then
+     wt_ListSetBubbleHelp [wkey, trigger, values.(trigger), #get_bubblehelp, data];
+  endif
+  ...
+</pre>
+
+<h3>Attributes</h3>
+
+<p><tt>Listbox</tt> inherits all <a class="svl" href="wt_core.htm">core</a>
+  attributes and defines the following attributes:</p>
+  <table class="titlebar">
+    <tr>
+      <th>Attribute</th>
+      <th>Description</th>
+      <th>Values</th>
+      <th>Default</th>
+    </tr>
+    <tr>
+      <td><tt>text</tt></td>
+      <td>Vector of tokens to display as list entries Each
+      entry can be further split into fields, separated by the TAB character.
+      field values aligned in a column of adjustable width.</td>
+      <td>tokens</td>
+      <td><tt>[]</tt></td>
+    </tr>
+    <tr>
+      <td><tt>len</tt></td>
+      <td>Number of rows to display</td>
+      <td>Positive integer</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <td><tt>width</tt></td>
+      <td>Number of characters to display per line</td>
+      <td>Positive integer</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <td><tt>type</tt></td>
+      <td>Listbox return value data type</td>
+      <td><tt>&#39;char&#39;</tt>,
+      <tt>&#39;int&#39;</tt>,<tt>&#39;modint&#39;</tt></td>
+      <td><tt>&#39;char&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>multiSelect</tt></td>
+      <td>List selection policy</td>
+      <td>
+      <nobr>0 (Single Select)</nobr><br />
+      <nobr>1 (Multi-select style 1)</nobr><br />
+      <nobr>2 (Multi-select style 2)</nobr></td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td><tt>multiColumn</tt></td>
+      <td>Allow multiple columns.</td>
+      <td>1 (True)<br />
+      0 (False)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td><tt>grid</tt></td>
+      <td>Display column separator lines.</td>
+      <td>1 (True)<br />
+      0 (False)</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td><tt>sortEnable</tt></td>
+      <td>Allow field to be sorted by the user.</td>
+      <td>1 (True)<br />
+      0 (False)</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td><tt>sort</tt></td>
+      <td>Set list sort order. The specified number is the index of the
+      field which is used to sort the list. If the number is negative,
+      the list is sorted in reverse by that field.</td>
+      <td>integer</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td><tt>keyNavigation</tt></td>
+      <td>Allow list navigation and selection with the keyboard.
+      <tt>Up</tt> and <tt>Down</tt> keys move the selection, the
+      <tt>Shift</tt> key modifier allows range selection in
+      multi-select lists.</td>
+      <td>1 (True)<br />
+      0 (False)</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td><tt>header</tt></td>
+      <td>Display field headers above the first list entry.
+      The attribute is a single token with individual headers separated by the
+      TAB character. Headers do not scroll vertically. The empty token implies
+      no headers.</td>
+      <td>token</td>
+      <td><tt>&#39;&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>headerMessage</tt></td>
+      <td>Display text over the field headers above the first
+      list entry, spanning the width of the widget. The text is <i>not</i>
+      split into individual field headers. The empty token implies no header
+      message.</td>
+      <td>token</td>
+      <td><tt>&#39;&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>headerBubbleHelp</tt></td>
+      <td>Text to display when cursor is motionless over the
+      list header only. If not specified, the text of the <tt>bubbleHelp</tt>
+      core attribute is also shown over the header line. If the field headers
+      are split into individual headers, the header bubblehelps can also be
+      specified for each field individually by separating them with TAB
+      characters.</td>
+      <td>token</td>
+      <td><tt>&#39;&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>bubbleHelpCmd</tt></td>
+      <td>Set to <tt>'wt_ListBubbleHelp[]'</tt> to enable row and field
+      specific bubblehelp. See code example above for details.</td>
+      <td>token</td>
+      <td><tt>&#39;&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>zebra</tt></td>
+      <td>Vary the background color of alternating lines for easier
+      visualization.</td>
+      <td>1 (True)<br />0 (False)</td>
+      <td><tt>0</tt></td>
+    </tr>
+    <tr>
+      <td><tt>enableWheel</tt></td>
+      <td>Enable scrolling with the mouse wheel</td>
+      <td>1 (True)</br>0 (False)</td>
+      <td><tt>1</tt></td>
+    </tr>
+  </table>
+
+<h3>Trigger</h3>
+
+<p>Change in the selection state of any list item. If the data type is
+  <tt>modint</tt>, widget will also trigger when the displayed items are
+  re-sorted.</p>
+
+<h3>Data Value</h3>
+
+<p>Depending on the value of the <tt>type</tt> attribute, the data value of
+  the listbox is returned as follows:</p>
+
+<pre class="code">
+[sel_text, num_mouse_clicks]        // type = &#39;char&#39;
+[sel_idx, num_mouse_clicks]         // type = &#39;int&#39;
+[sel_idx, modpos, lineno]           // type = &#39;modint&#39;
+</pre>
+
+<p>while the value passed to <tt>WindowSetData</tt> is as follows:</p>
+
+<pre class="code">
+sel_text                            // type = &#39;char&#39;
+sel_idx                             // type = &#39;int&#39;
+[sel_idx]                           // type = &#39;modint&#39;
+[sel_idx, modpos]                   // type = &#39;modint&#39;
+[sel_idx, modpos, lineno]           // type = &#39;modint&#39;
+</pre>
+
+<p><br /></p>
+<dl>
+  <dt><tt>sel_text</tt></dt>
+  <dd>Vector of tokens storing the the text of the selected entries. The
+  tokens are returned exactly as given in the <tt>text</tt> attribute,
+  including the invisible TAB separators and optional sort proxies.</dd>
+  <dt><tt>sel_idx</tt></dt>
+  <dd>Vector of integer indices representing the selected entries. The
+  indices refer to the positions of the selected entries in the <tt>text</tt>
+  attribute, <i>not</i> necessarily the current displayed positions of the
+  text, which change with sorting.</dd>
+  <dt><tt>num_mouse_clicks</tt></dt>
+  <dd>Specifies the number of mouse button clicks used to alter the
+  selection. (A double-click is usually used by applications to initiate the
+  default action on the given entry.)</dd>
+  <dt><tt>modpos</tt></dt>
+  <dd>
+    <p>Specifies the position of the clicked item combined with the bitmask of
+    modifiers used. The double click is indicated by presence the
+    <tt>WMOD_DBL</tt> modifier bit:</p>
+
+<pre class="code">
+pos = bitshr [modpos, WMOD_NBITS];
+is_dbl = bitand [modpos, WMOD_DBL];
+</pre>
+<p>
+Other modifier bits include <tt>WMOD_CTRL</tt>, <tt>WMOD_SHIFT</tt> and
+<tt>WMOD_ALT</tt>. Zero value of <tt>pos</tt> indicates a click on an empty
+area of the list. Negative values of <tt>pos</tt> indicate a click on the field
+header.</p>
+  </dd>
+  <dt><tt>lineno</tt></dt>
+  <dd>A list of displayed positions of the text entries.
+  <tt>lineno[</tt><i>i</i><tt>]</tt> stores the displayed position (the line
+  number) of entry <i>i</i>, given as the <i>i</i>-th item of the
+  <tt>text</tt> attribute. (These values are typically used by applications
+  that move the selection up and down, regardless the sort order.)</dd>
+</dl>
+
+<p><font color="#FF0000"><b>Note</b></font>: When setting the listbox value
+  of type <tt>char</tt> or <tt>int</tt> using <tt>WindowSetData</tt>, only the
+  first element of the data obtained from or <tt>WindowWait</tt> must be
+  passed. When value type is <tt>modint</tt>, both <tt>WindowGetData</tt> and
+  <tt>WindowSetData</tt> use the same shape of the argument, with
+  <tt>modpos</tt> and <tt>lineno</tt> portions of the value in
+  <tt>WindowSetData</tt> being only optional.</p>
+
+<h1>See Also</h1>
+
+<p><a href="../wt_intro.htm">SVL Window Toolkit</a><br />
+  <a href="wt_core.htm">Core Attributes</a><br />
+  <a href="introwt.htm">Window Toolkit Functions</a></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../../images/ccgicon.png" /> <a href="../../../index.htm"></a>
+    <a href="../../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

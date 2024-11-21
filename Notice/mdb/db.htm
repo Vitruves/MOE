@@ -1,0 +1,3328 @@
+<!DOCTYPE html>
+<html>
+
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../images/ccgicon.png" />
+  <meta name="keywords" content="panel: Database Viewer" />
+  <meta name="keywords" content="panel: Database Viewer Field Color" />
+  <meta name="keywords" content="panel: Database Viewer Selecting Entries" />
+  <meta name="keywords" content="panel: Sort Database" />
+  <meta name="keywords" content="panel: Save Database As" />
+  <meta name="keywords" content="panel: Save Protein Patches" />
+  <meta name="keywords" content="panel: Database Partial Charges" />
+  <title>MOE Database Viewer</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../index.htm"><img src="../images/ccglogo.png" /></a>
+    <a href="../index.htm"><div class="moeversion"></div></a>
+    MOE Database Viewer
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<p>This chapter covers the basic operations performed on databases containing
+  numeric, text and molecular data entries in MOE. For information on creating
+  databases, please consult the chapter on <a href="dbedit.htm">Creating and
+  Editing Databases</a>.</p>
+
+<p>If you are looking for information on a specific menu or command, click on
+  the links in the <a href="#QuickReference">Database Viewer Menu Bar</a>
+  section.</p>
+  <ul>
+    <li>
+      <a href="#Introduction">Introduction</a>
+    </li>
+    <li>
+      <a href="#Mouse">Using the Mouse</a>
+      <ul>
+        <li>
+          <a href="#Popups">Database Popup Menus</a>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <a href="#DisplayingAndEditingFields">Displaying and Editing Fields</a>
+      <ul>
+        <li>
+          <a href="#SelectingFields">Selecting Fields</a>
+        </li>
+        <li>
+          <a href="#InvertClearFields">Inverting and Clearing Field
+          Selection</a>
+        </li>
+        <li>
+          <a href="#HideShowFields">Hiding and Showing Fields</a>
+        </li>
+        <li>
+          <a href="#MovingFields">Moving Fields</a>
+        </li>
+        <li>
+          <a href="#ColoringFields">Coloring Fields</a>
+        </li>
+        <li>
+          <a href="#RenamingFields">Renaming Fields</a>
+        </li>
+        <li>
+          <a href="#Precision">Adjusting the Precision of Numeric Data</a>
+        </li>
+        <li>
+          <a href="#MultiLine">Displaying Multiple Lines per Entry</a>
+        </li>
+        <li>
+          <a href="#Converting_Fields">Converting Fields</a>
+        </li>
+        <li>
+          <a href="#DeletingFields">Deleting Fields</a>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <a href="#DisplayingAndEditingEntries">Displaying and Editing Entries</a>
+      <ul>
+        <li>
+          <a href="#SelectingEntries">Selecting Entries</a>
+          <ul>
+            <li>
+              <a href="#SelectingNumbers">Selecting Based on Numeric Data</a>
+            </li>
+            <li>
+              <a href="#SelectingText">Selecting Based on Character Data</a>
+            </li>
+            <li>
+              <a href="#SelectingMolecules">Selecting Based on Substructure
+              Search of Molecular Data</a>
+            </li>
+            <li>
+              <a href="#SelectingMoleculesByDescriptor">Selecting Based
+              on Descriptor Search of Molecular Data</a>
+            </li>
+            <li>
+              <a href="#SelectingMoleculesByAtomExpression">Selecting Based
+              on Atom Expression Search of Molecular Data</a>
+            </li>
+            <li>
+              <a href="#SelectingAllFields">Selecting Based on Multiple
+              Fields</a>
+            </li>
+            <li>
+              <a href="#SelectingMore">Using More Than One Selection
+              Criterion</a>
+            </li>
+            <li>
+              <a href="#Select_Entries">Selecting Using the Field Popup</a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="#InvertClearEntries">Inverting and Clearing Entry
+          Selection</a>
+        </li>
+        <li>
+          <a href="#HideShowEntries">Hiding and Showing Entries</a>
+        </li>
+        <li>
+          <a href="#FilteringEntries">Filtering Entries</a>
+        </li>
+        <li>
+          <a href="#MovingEntries">Moving Entries</a>
+        </li>
+        <li>
+          <a href="#SortingEntries">Sorting Entries</a>
+        </li>
+        <li>
+          <a href="#DeletingEntries">Deleting Entries</a>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <a href="#SpecifyingMolecularData">Specifying Molecular Data</a>
+      <ul>
+        <li>
+          <a href="#DisplayingMolecules">Displaying Molecules in the
+          Database</a>
+        </li>
+        <li>
+          <a href="#PartialCharges">Computing Partial Charges</a>
+        </li>
+        <li>
+          <a href="#SaveProteinPatches">Save Protein Patches</a>
+        </li>
+        <li>
+          <a href="#MinimizingMolecularStructures">Minimizing Molecular
+          Structures</a>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <a href="#DisplayingImages">Displaying Images in the Database</a>
+    </li>
+    <li>
+      <a href="#PlottingDatabaseValues">Database Plots</a>
+      <ul>
+        <li>
+          <a href="#SelectingPlot">Selecting Data Points and Entries</a>
+        </li>
+        <li>
+          <a href="#InvertClearPlot">Inverting and Clearing Selections</a>
+        </li>
+        <li>
+          <a href="#ClosePlot">Close the Plot Area</a>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <a href="#Saving">Saving Databases</a>
+    </li><!-- PACK
+  <ul>
+    <li><a href="#Packing">Packing/Unpacking Conformational Databases</a>
+  </ul>
+-->
+    <li>
+      <a href="#SVL">SVL Commands</a>
+    </li>
+    <li>
+      <a href="#QuickReference">Database Viewer Menu Bar</a>
+    </li>
+  </ul>
+
+<h1><a id="Introduction">Introduction</a></h1>
+
+<p>Databases are useful for storing the output of any process that generates
+  a large amount of data. Some examples in MOE are: Molecular Dynamics,
+  Conformational Search, Docking, Pharmacophore Search, Protein Homology
+  Modeling and PDB Search. MOE's QuaSAR and Diversity Analysis tools also
+  use databases. MOE applications commonly use databases to provide input and
+  return output. Should you need to write an SVL application, it is likely that
+  you will need to use a database.</p>
+
+<p>The Database Viewer displays database files. MOE database filenames
+  typically end with the extension <tt>.mdb</tt>. Files of various <a href=
+  "dbio.htm">database formats</a> can be imported and exported. The Database
+  Viewer is also used to create and modify databases within MOE.</p>
+
+<p>The MOE interface provides several ways of opening the Database Viewer.
+  Choose <nobr><b>File | Open</b></nobr> in the <a href=
+  "../moe/gui/mainwin.htm">MOE Window</a> or <a href=
+  "../moe/gui/se.htm">Sequence Editor</a> to open an existing database. Choose
+  <span class="nobr"><b>File | New | Database</b></span> or <span class=
+  "nobr"><b>DBV | File | New</b></span> in the Database Viewer to create a new
+  database. The Database Viewer <span class="nobr"><b>DBV | File |
+  Open</b></span> command can be used both to open an existing database and to
+  create a new one.</p>
+
+<p>A database file can be viewed in a single Database Viewer at any given
+  time. Trying to view a database already open in another viewer simply brings
+  this Database Viewer window to the foreground.</p>
+
+<p><b>Warning!</b> The Database Viewer is a direct view of the data on disk.
+  A change made to data in the Database Viewer <i>immediately</i> updates the
+  disk file. No backups are made, and there is no undo. Previous data can be
+  irrevocably lost.</p>
+
+<p><b>Warning!</b>
+When MOE opens a database for write access, it locks the database
+to prevent concurrent writing from another MOE session which
+could result in data corruption.
+A database which is locked for read/write access cannot be opened
+by any other MOE session.
+However, in rare cases, the system file locking can fail, therefore
+it is still strongly recommended not to attempt to open the same
+database in two different sessions of MOE.
+Note that a database opened and locked for read-only
+access can be viewed (but not written to) by other MOE sessions.
+</p>
+
+<p>The <a href="#QuickReference">menu bar</a> heading the Database Viewer
+  provides direct access to most commonly used commands, applications and
+  tools. The window includes a <a href="../moe/hellomoe.htm#CLI">command line
+  interface (CLI)</a>, which is used to enter SVL commands and also serves as a
+  prompt area for editing commands such as <span class="nobr">DBV | Edit | New
+  | Field</span>. The <a href="../moe/gui/mainwin.htm">Cancel menu</a> in the
+  top right corner of the window allows you to halt any tasks running in
+  MOE.</p>
+
+<p>Alternate rows in the Database Viewer can be colored to
+enhance visualization.  The coloring is controlled by
+the Row Color option menu in the
+<a href="../appendix/settings.htm">Configuration&nbsp;Options</a> panel.
+</p>
+<img src="db/db.png" alt="Data Area in Database Viewer" class="center">
+
+<p>A MOE molecular database is a binary file that stores a list of data
+records, called <em>entries</em>.  Rows represent the entries, where the
+leftmost column indicates entry numbers (i.e. row number).  Each
+entry is composed of a list of values, called <em>fields</em>, that have
+an associated name and data type.  Columns represent the fields. Each
+field has a name, or label, which is unique within the database.  The
+Database Viewer provides the option of displaying numerical fields in a
+plot area below the data area (<nobr><b>DBV | Footer | Plot icon</b></nobr>).
+</p>
+
+
+<p>Data cells store character or numeric data values as well as 3D
+conformations of molecules.  When a molecular field is a single
+character high,
+MOE displays the compound name instead of the line drawing.  Cells can be
+resized by dragging the left mouse button within a cell.  Modifying the
+width of a cell modifies the width of the whole field without affecting
+other fields.  Conversely, modifying the height of a cell modifies the
+height of every cell (i.e. every row) in the Viewer.
+</p>
+
+<p>
+The font size of the data area in the
+Database Viewer can be changed with the zoom
+wheel in the right corner of the footer. The <b>R</b>eset button will restore
+the default size.
+</p>
+
+<img src="db/dbzoom.png" alt="Database Viewer Footer with Zoom Wheel"
+class="center">
+
+<p>
+The Database Viewer Footer also includes a selection status line,
+displaying how many entries/fields are present/selected/visible in the
+database. The status text can be clicked with the mouse and corresponding
+menus will open with commands which operate on the corresponding items.
+E.g. to delete the currently selected entries use
+<span class="nobr"><b>DBV | Footer | Selected Entries | Delete</b></span>.
+</p>
+
+<img src="db/dbfooter.png"
+alt="Database Viewer Footer with Selected Entries Menu"
+class="center">
+
+<p>
+To move within a large database, use the attached scroll bars or
+the mouse wheel. Alternatively, one can press the <tt>PageUp</tt> and
+<tt>PageDown</tt> keys to move one page up or down each time; the
+<tt>Up</tt> and <tt>Down</tt> arrow keys can be used to move by
+one entry row at a time. To jump to the next or previous selected entry,
+press <tt>Ctrl+Down</tt> or <tt>Ctrl+Up</tt> respectively.
+</p>
+
+<a id="Mouse"></a><h1>Using the Mouse</h1>
+
+<p>In general, the left mouse button is used to select fields and entries,
+and to edit and resize cells.  The middle mouse button is used to modify
+the view of molecules inside the molecule cells. (Use the right button if
+you are using a <a href="../moe/gui/mouse.htm">two-button mouse</a>.)
+The functionality of the mouse depends
+on the location of the cursor in the database.
+</p>
+
+<p><center>
+<table class="titlebar noborder">
+
+  <tr>
+    <th>To:</th>
+    <th>Using the Mouse:</th>
+  </tr>
+
+  <tr>
+    <td>Resize cell</td>
+    <td>Drag left within the cell, or drag the row/column borders</td>
+  </tr>
+  <tr>
+    <td>Resize field label</td>
+    <td> Drag left the side and bottom of the top row.<br/>
+    Field labels can be extended vertically up to 5 lines.</td>
+  </tr>
+  <tr>
+    <td>Rotate molecule in cell</td>
+    <td>Drag middle. Only the 3D molecule view can be rotated.<br/>
+    In 2D mode one can translate within a zoomed view.</td>
+  </tr>
+
+  <tr>
+    <td>Zoom in/out molecule in cell</td>
+    <td><tt>Ctrl</tt> - drag middle</td>
+  </tr>
+
+ <tr>
+    <td>Edit non-molecular cell contents</td>
+    <td>Double-click</td>
+  </tr>
+
+  <tr>
+    <td>Copy molecule to the MOE Window</td>
+    <td>Double-click</td>
+  </tr>
+</table></center>
+
+
+<a id="Popups"></a><h2>Database Popup Menus</h2>
+<p>The Database Viewer includes several popup menus that provide shortcuts
+for performing certain operations.  Press the
+<a href="../moe/gui/mouse.htm#MousePopupButton">
+mouse popup button</a> over each of
+the following objects to display their relative popup options:
+</p>
+
+<div class="floatright">
+<img src="db/popup_marker.png" alt="Mouse Over Popup Marker" class="center">
+<p class="caption">Popup Marker in Cell Corner</p>
+</div>
+
+<p><table class="conventions center">
+<tr>
+
+<th><a href="#FieldPopup">Field</a></th>
+<td>Top row (field labels)
+</tr>
+
+<tr>
+<th><a href="#EntryPopup">Entry</a></th>
+<td>Leftmost column (entry numbers)
+</tr>
+
+<tr>
+<th><a href="dbedit.htm#EditingMoleculeCells">Molecule Cell</a></th>
+<td>Cell containing molecular data
+</tr>
+
+<tr>
+<th><a href="dbedit.htm#EditingNumericAndCharacterCells">Cell</a></th>
+<td>Cell containing numeric or character data
+</tr>
+
+<tr>
+<th><a href="dbplot.htm#PlotPopup">Plot</a></th>
+<td>Plot area (over graph or ruler)
+</tr>
+</table>
+
+<p>
+Alternatively, the popup menus can be opened with the popup marker in the
+top right/left corner of the cell or entry/field labels. The popup marker
+appears faint in the cell when the mouse enters the cell. Once the mouse
+is over the marker it becomes active bold and can be pressed with the left
+mouse button to open the popup menu. The popup markers can be disabled in the
+<a href="../appendix/settings.htm#DatabaseViewer">Configuration Options</a>.
+</p>
+
+<h1><a id="DisplayingAndEditingFields"></a>Displaying and Editing Fields</h1>
+
+<p>
+Fields hold character, numeric or molecular data. Note that a field may
+contain only a single kind of data. Operations on fields are performed
+using the Edit and Display menus and the Field Popup.
+To open the Field
+Popup, position the cursor over a field name and press the mouse popup
+button or click on the popup marker.
+</p>
+
+<p>
+<table class="conventions center">
+<tr>
+<th>DBV | Edit</th>
+<th>&nbsp;DBV | Display | Field&nbsp;</th>
+<th><a id="FieldPopup">Field Popup</a></th>
+</tr>
+<tr>
+<td><a href="dbedit.htm#CreatingFields">New | Field</a></td>
+<td><a href="#HideShowFields">Hide Selected</a></td>
+<td><a href="#InvertClearFields">Selection</a></td>
+</tr>
+<tr>
+<td><a href="dbedit.htm#CopyPaste">Copy</a></td>
+<td><a href="#HideShowFields">Hide Unselected</a></td>
+<td><a href="#HideShowFields">Display</a>
+    (<a href="#MultiLine">Multi-line</a>,
+    <a href="#Precision">Precision</a>)
+</tr>
+<tr>
+<td><a href="dbedit.htm#CopyPaste">Paste</a></td>
+<td><a href="#HideShowFields">Invert All</a></td>
+<td><a href="#DisplayingMolecules">Molecule</a></td>
+</tr>
+<tr>
+<td><a href="#DeletingFields">Delete | Selected Fields</a></td>
+<td><a href="#HideShowFields">Show All</a></td>
+<td><a href="#MovingFields">Move</a></td>
+</tr>
+<tr>
+<td><a href="#MovingFields">Move | Selected Fields</a></td>
+<td>&nbsp;</td>
+<td><a href="#ColoringFields">Color</a></td>
+</tr>
+<tr>
+<td><a href="#ColoringFields">Color</a></td>
+<td>&nbsp;</td>
+<td><a href="#RenamingFields">Rename</a></td>
+</tr>
+<tr>
+<td><a href="#RenamingFields">Rename</a></td>
+<td>&nbsp;</td>
+<td><a href="dbedit.htm#Duplicate">Duplicate</a></td>
+</tr>
+<tr>
+<td><a href="#InvertClearFields">Invert | Field Selection</a></td>
+<td>&nbsp;</td>
+<td><a href="dbedit.htm#CopyPaste">Copy</a></td>
+</tr>
+<tr>
+<td><a href="#InvertClearFields">Clear | Field Selection</a></td>
+<td>&nbsp;</td>
+<td><a href="#Converting_Fields">Convert To</a></td>
+</tr>
+<tr>
+<td><a href="#InvertClearFields">Select All | Fields</a>
+<td>&nbsp;
+<td><a href="#DeletingFields">Delete</a></td>
+</tr>
+<tr>
+<td><a href="#SelectingFields">Select Fields</a>
+<td>&nbsp;
+<td><a href="dbedit.htm#CreatingFields">New</a>
+</tr>
+<tr>
+<td>&nbsp;
+<td>&nbsp;
+<td><a href="#SortingEntries">Sort</a>
+</tr>
+<tr>
+<td>&nbsp;
+<td>&nbsp;
+<td><a href="#FilteringEntries">Filter</a>
+(Non-Molecule fields only)
+</tr>
+<tr>
+<td>&nbsp;
+<td>&nbsp;
+<td><a href="#SelectingEntries">Select</a>
+</tr>
+<tr>
+<td>&nbsp;
+<td>&nbsp;
+<td><a href="#SelectingFields">Select Fields</a>
+</tr>
+<tr>
+<td>&nbsp;
+<td>&nbsp;
+<td><a href="#Select_Entries">Select Entries</a>
+</tr>
+<tr>
+<td>&nbsp;
+<td>&nbsp;
+<td><a href="dbedit.htm#MoleculeNames">Name</a>
+(Molecule fields only)
+</tr>
+<tr>
+<td>&nbsp;
+<td>&nbsp;
+<td><a href="dbedit.htm#EditingNumericAndCharacterCells">Edit Selected</a>
+(Non-Molecule fields only)
+</tr>
+<tr>
+<td>&nbsp;
+<td>&nbsp;
+<td><a href="dbedit.htm#ClearNumericAndCharacterCells">Clear Selected</a>
+</tr>
+</table>
+
+<h2><a id="SelectingFields"></a>Selecting Fields</h2>
+
+Selecting fields can be done with the mouse:
+
+
+<p><center>
+<table class="titlebar noborder">
+<tr>
+<th>To:</th>
+<th>Using the Left Mouse Button:</th>
+</tr>
+<tr>
+<td>Select one field
+<td>Click on field name.  This will deselect all other fields.
+</tr>
+<tr>
+<td>Toggle selection state of field
+<td><tt>Ctrl</tt> - click on field name
+</tr>
+<tr>
+<td>Select range of fields
+<td>Click (or <tt>Ctrl</tt> - click) on first field name and
+<tt>Shift</tt> - click on second field name
+</tr>
+
+</table></center>
+
+<p>You can also use the <b>Select Fields</b> command in the
+<span class="nobr"><b>DBV | Field Popup</b></span> menu
+which displays a prompter in the CLI.
+Fields matching the selection criteria can be combined
+with the current field selection using either the
+<span class="menu">Add To</span>, <b>Intersect</b>,
+<span class="menu">Remove</span>, or
+<span class="menu">Replace</span> options.
+Selection is based on field names or types.
+If selecting
+by <b>Field Name</b>, names are matched to the specified
+<a href="../svl/fcnref/findetc.htm">pattern</a>.
+Multiple patterns or field names can be specified separated by
+spaces. If field names contain spaces use double quotes.
+If selecting by <b>Field Type</b> then all fields of the
+specified type will be considered for selection.
+Set the selection criteria and press <b>Apply</b> or <tt>Shift+Return</tt>
+to perform the operation without closing the prompter, press <b>OK</b> or
+<tt>Return</tt> to perforn the operation and close the prompter.
+<p>
+
+<p><center>
+<img src="db/selectfield.png" alt="Select Fields Prompt">
+</center>
+
+<p>
+<ul class="help">
+<li class="help">
+For more on combining selections, please see
+<a href="#SelectingMore">Using More Than One Selection Criterion</a>.
+Although this section is found under Selecting Entries,
+the information applies equally well to fields.
+</li>
+</ul>
+
+
+<h2><a id="InvertClearFields"></a>Inverting and Clearing Field Selection</h2>
+
+<p>
+The invert and clear field selection commands operate on all fields.
+To invert the selection means to deselect fields that are currently
+selected and select those that are not selected.
+To clear the selection means to deselect all fields in the database.
+There is also a command to select all fields.  The commands are
+duplicated in the
+<span class="nobr"><b>DBV | Edit</b></span> and
+<span class="nobr"><b>Field Popup | Selection</b></span> menus
+and are summarized in the following table:
+</p>
+
+<center>
+<table class="titlebar" border="1" cellpadding="3">
+<tr>
+<th>Operation</th>
+<th><span class="nobr"><b>DBV | Edit</b></span></th>
+<th><span class="nobr"><b>Field Popup | Selection</b></span></th>
+</tr>
+
+<tr>
+<td>
+Invert field selection
+</td>
+<td>
+<span class="nobr"><b>Invert | Field Selection</b></span>
+</td>
+<td>
+<span class="nobr"><b>Invert</b></span>
+</td>
+</tr>
+
+<tr>
+<td>
+Clear field selection
+</td>
+<td>
+<span class="nobr"><b>Clear | Field Selection</b></span>
+</td>
+<td>
+<span class="nobr"><b>Clear</b></span>
+</td>
+</tr>
+
+<tr>
+<td>
+Select all fields
+</td>
+<td>
+<span class="nobr"><b>Select All | Fields</b></span>
+</td>
+<td>
+<span class="nobr"><b>Select All</b></span>
+</td>
+</tr>
+
+</table>
+</center>
+
+<p>
+The top left corner button, which connects the field and entry labels,
+can be also used to clear the field selection or select all fields.
+If pressed, any field and entry selection will be cleared and if nothing
+is selected the press will select all fields and entries.
+</p>
+
+<h2><a id="HideShowFields"></a>Hiding and Showing Fields</h2>
+
+<p>The display of individual and multiple fields is controlled using
+the <span class="nobr"><b>DBV | Display | Field</b></span> and
+<span class="nobr"><b>DBV | Field Popup | Display</b></span> menus.
+Field selection can be used to determine which fields to
+hide or show.  An individual field can be hidden using that field's
+popup menu.  The
+<span class="nobr"><b>Show All</b></span> and
+<span class="nobr"><b>Invert All</b></span> commands
+operate on all fields.  The invert operation toggles the display
+state of all fields so that hidden fields become shown and vice-versa.
+The commands are summarized in the following table.
+</p>
+
+<p><b>Note:</b> Hidden fields cannot be selected.</p>
+
+<center>
+<table class="titlebar" border="1" cellpadding="3">
+<tr>
+<th>Operation</th>
+<th><span class="nobr"><b>DBV | Display | Field</b></span></th>
+<th><span class="nobr"><b>Field Popup | Display</b></span></th>
+</tr>
+
+<tr>
+<td>
+Hide individual field (without using field selection)
+</td>
+<td>
+&nbsp;
+</td>
+<td>
+<span class="nobr"><b>Hide Field</b></span>
+</td>
+</tr>
+
+<tr>
+<td>
+Hide selected fields
+</td>
+<td>
+<span class="nobr"><b>Hide Selected</b></span>
+</td>
+<td>
+<span class="nobr"><b>Hide Selected</b></span>
+</td>
+</tr>
+
+<tr>
+<td>
+Hide unselected fields
+</td>
+<td>
+<span class="nobr"><b>Hide Unselected</b></span>
+</td>
+<td>
+<span class="nobr"><b>Hide Unselected</b></span>
+</td>
+</tr>
+
+
+<tr>
+<td>
+Invert field display
+</td>
+<td>
+<span class="nobr"><b>Invert All</b></span>
+</td>
+<td>
+<span class="nobr"><b>Invert All</b></span>
+</td>
+</tr>
+
+<tr>
+<td>
+Show all fields
+</td>
+<td>
+<span class="nobr"><b>Show All</b></span>
+</td>
+<td>
+<span class="nobr"><b>Show All</b></span>
+</td>
+</tr>
+
+</table>
+</center>
+
+<h2><a id="MovingFields"></a>Moving Fields</h2>
+
+<p>Single fields can be repositioned in the Database Viewer, as follows:
+</p>
+
+<ol>
+<li>Position the cursor over the field to move.
+<li>Press and hold the middle mouse button and drag the field to
+the new position. During the move, the field label is marked by
+a red rectangle.
+</ol>
+
+<p>Or</p>
+
+<ol>
+<li>Position the cursor over the field to move (the field need not be selected).
+<li>Choose <span class="menu">Field Popup | Move</span>.
+<li>The cursor changes to a crosshair, and the CLI prompts you to select
+the new position of the field.
+
+<li>Click on the new position. The field is moved to the new location.
+Other fields are shifted to the right to make space for the new field.
+</ol>
+
+<p>Multiple fields are moved in a similar manner:
+</p>
+
+<ol>
+<li>Select the fields to reposition.</li>
+<li> Choose <span class="menu">Field | Popup | Selection | Move</span>.</li>
+<li>Click on the new position.  All selected fields are inserted at the
+new location and the displaced fields are moved right.</li>
+</ol>
+
+<p>
+<b>Note:</b> Fields in read-only databases cannot be moved.
+</p>
+
+<h2><a id="ColoringFields">Coloring Fields</a></h2>
+
+<p>The menu item <span class="menu"><b>DBV | Display | Color</b></span> or the
+<span class="nobr"><b>Field Popup | Color</b></span> command opens the
+field coloring popup.
+It can be detached in a separate window by pressing the <b>Detach</b> button.
+</p>
+
+<center>
+<img src="db/dbcolormenu.png" alt="Field Coloring Menu" />
+<img src="db/dbcolor.png" alt="Field Coloring Panel" />
+</center>
+
+<p>
+<table class="noborder">
+<tr>
+<th>Database</th>
+<td>Path and filename of the database to operate on (only visible in
+detached window).
+</tr>
+
+<tr>
+<th>Color</th>
+<td>Specify whether the color is to be applied to the
+background or foreground of the cells of the specified field;
+the default is <b>Background</b>.
+For molecule fields, only background coloring
+is available.  Foreground refers to text coloring.
+</td>
+</tr>
+<tr>
+<th>of Field</th>
+<td>Target field to which the coloring rule will be applied.
+<br /><br />
+</td>
+</tr>
+
+<tr>
+<th>Coloring&nbsp;scheme</th>
+<td>The color scheme can be specified in two ways, either by selecting
+and configuring one of the prepared <b>Cell</b> color options or specifying
+the <b>Color Rule</b> expression directly:
+
+  <table class="noborder">
+    <tr>
+    <th>Cell</th>
+    <td>The coloring of each cell depends on the value of the cell
+    contents.  Options for coloring all cells or just the empty ones are
+    available for both numeric and character fields.
+    If the field contains numeric data, options for coloring based on
+    comparison to a specified value are available.
+    <p>In addition, a <b>gradient</b> option provides the ability to
+    calculate a color gradient over multiple values.  The end- and midpoints
+    of the color gradient and their associated colors can be specified.
+    Values beyond the endpoints are assigned the endpoint colors.
+    For logarithmic data the <b>log gradient</b> option can be used, which
+    interpolates the color logarithmically instead of linearly between the
+    end- and midpoints.</p>
+    <p>Another scheme is the <b>ranges</b> option which allows specifying
+    adjacent color bins, such that values within the bin ranges show
+    the same color. Values beyond the range endpoints are not colored.</p>
+    <p>The number of gradient and range color bins can be specified between
+    1 and 7. Plausible end- and midpoint values are chosen on the value
+    range in the database field, but can be changed as needed. The colors
+    will be recalculated on the fly. To reset the values to the range in
+    the database use the <img src="db/reset.png" class="icon"/> button</p>
+    <p>With the <b>inherit</b> option the same coloring scheme as that
+    of another field is used. This is the only color option available
+    to molecule fields. The coloring scheme cannot be inherited
+    from molecule fields or from other fields which already inherited
+    a color scheme.</p>
+    
+    If the field contains character data, coloring can be based on
+    having a <a href="../svl/fcnref/findetc.htm">pattern</a>
+    <b>match</b> or <b>not match</b>.
+    </td>
+    </tr>
+    <tr>
+
+    <th>Color&nbsp;Rule</th>
+    <td>
+    The <a href="../moe/fcnref/dbcolor.htm">coloring expression</a>
+    which is currently in effect is displayed in the text field.
+    If this option is enabled, the coloring expression can
+    be edited or a new expression entered. If the expression is supported
+    by the <b>Cell</b> color option controls, their values
+    are updated, although not all color expressions can be represented
+    by the <b>Cell</b> color option. 
+    <p>Molecule fields only support the expression <tt>{field}</tt>
+    to inherit the colors from another field.</p>
+    <p>The bubblehelp on the text field offers a few representative
+    examples of coloring expression syntax.
+    When there is a syntax error, the text color turns red and its
+    bubblehelp will show the error message.</p>
+    </td>
+    </tr>
+  </table>
+</td>
+</tr>
+
+<tr>
+<th>Apply</th>
+<td>Puts the coloring rules or changes into effect.
+</td>
+</tr>
+
+<tr>
+<th>Clear</th>
+<td>Clears the coloring rule for the foreground or background,
+as specified in the <b>Color</b> options, of the specified field.  The
+foreground or background will revert to the default MOE foreground or
+background color.
+<p>If no foreground color is set, the DBV cell foreground color will
+be either black or white depending on the cell background color to maximize
+readability. This inversion of the text color on dark background can be
+disabled in the
+<a href="../appendix/settings.htm#DatabaseViewer">Configuration Options</a>.
+</p></td>
+</tr>
+
+<tr>
+<th>Undo</th>
+<td>Undo the last color change.
+</td>
+</tr>
+
+<tr>
+<th>Custom</th>
+<td>
+<img src="db/customcolorrules.png" alt="Custom Color Rules" class="floatright"/>
+The current color scheme/rule can be saved for future use as a favorite
+with the <b>Custom</b> button. It opens a popup to save the current coloring
+as a <b>New</b> custom rule under a descriptive name. Once saved, it can
+be selected from the <b>Rules</b> option menu and loaded or deleted with
+<b>Load</b> and <b>Delete</b> buttons.
+</td>
+</tr>
+
+<tr>
+<th>Detach</th>
+<td>Detach the color popup panel from the menu into a separate window.</td>
+</tr>
+
+</table>
+
+<h2><a id="RenamingFields">Renaming Fields</a></h2>
+
+<p>A field can be renamed in the Database Viewer using either
+<span class="nobr"><b>DBV | Edit | Rename</b></span> or
+<span class="nobr"><b>Field Popup | Rename</b></span>.
+When renaming using the Edit menu, you will be prompted to pick
+the field to rename.  Otherwise the field from which the
+popup was issued will be renamed.  The CLI area will display
+a prompter where the new name can be entered.  Press <b>Apply</b>
+or <tt>Enter</tt> to put the new name into effect.
+The new name must be unique.
+</p>
+
+<center>
+<img src="db/rename_prompt.png" alt="CLI Rename Prompter" />
+</center>
+
+<h2><a id="Precision"></a>Adjusting the Precision of Numeric Data</h2>
+
+<p>
+You can adjust the precision of numeric data displayed in a given numeric
+field by using that field's
+<span class="nobr"><b>Field Popup | Display</b></span>
+menu controls.  Note that the precision is for display purposes
+only and does not modify the values stored in the database.
+The precision display information is retained and saved with the database,
+unless it was opened in read-only mode.
+</p>
+
+<center>
+<img src="db/precision.png" alt="Field Popup Precision Menu Options" />
+</center>
+
+<h2><a id="MultiLine"></a>Displaying Multiple Lines per Entry</h2>
+
+<p>Numeric fields can contain one or more data items, provided data is of
+the same type.  Multiple numeric entries are entered into a single
+cell as space-separated values.  For example, to
+<a href="dbedit.htm#EditingNumericAndCharacterCells">add a value</a> to
+an existing cell, double-click in the cell then in the Edit prompter
+insert a space and enter the new value.  In a new entry (e.g. in the
+<a href="dbedit.htm#AddingEntries">Add Entry</a> panel), enter the values
+with spaces in between them.
+</p>
+
+<p>The data items can be displayed all on one line or one per line
+using the <span class="nobr"><b>Field Popup | Display | Multi-line</b></span>
+command.
+This option also allows long
+character strings to wrap instead of being truncated.
+</p>
+
+<p>Use the left mouse button to resize the data cell to see all the data lines.
+The multi-line attribute is retained and saved with the database,
+unless it was opened in read-only mode.
+</p>
+
+<h2><a id="Converting_Fields">Converting Fields</a></h2>
+
+<p>Molecule, numeric and character fields can be converted to other
+formats using the
+<span class="nobr"><b>Field Popup | Convert To</b></span> submenus.
+The conversions are summarized in the following table:
+</p>
+
+<center>
+<table class="titlebar" border="1" cellpadding="3">
+<tr>
+<th>Original Field Type</th>
+<th>Convert To</th>
+<th>Resulting Field Type</th>
+</tr>
+
+<tr>
+<td rowspan="4">Molecule
+</td>
+<td>SMILES</td>
+<td>Character
+</td>
+</tr>
+
+<tr>
+<td>2D Coordinates</td>
+<td>Molecule (create 2D depiction coordinates)
+</td>
+</tr>
+
+<tr>
+<td>Sequence</td>
+<td>Molecule (strip all atom information)
+</td>
+</tr>
+
+<tr>
+<td>MOE</td>
+<td>Extended Molecule
+</td>
+</tr>
+
+<tr>
+<td rowspan="4">MOE
+</td>
+<td>SMILES</td>
+<td>Character
+</td>
+</tr>
+
+<tr>
+<td>2D Coordinates</td>
+<td>Molecule (create 2D depiction coordinates)
+</td>
+</tr>
+
+<tr>
+<td>Molecule</td>
+<td>Molecule
+</td>
+</tr>
+
+<tr>
+<td>Sequence</td>
+<td>Extended Molecule (Strip All Atom Information)
+</td>
+</tr>
+
+<tr>
+<td rowspan="5">Character
+</td>
+<td>Integer</td>
+<td>Numeric
+</td>
+</tr>
+
+<tr>
+<td>Single Real</td>
+<td>Numeric (4-byte IEEE floating point)
+</td>
+</tr>
+
+<tr>
+<td>Double Real</td>
+<td>Numeric (8-byte IEEE floating point)
+</td>
+</tr>
+
+<tr>
+<td>Molecule 2D</td>
+<td>Molecule (provided field data are SMILES strings)
+</td>
+</tr>
+
+<tr>
+<td>MOE Molecule</td>
+<td>Extended Molecule (provided field data are SMILES strings)
+</td>
+</tr>
+
+<tr>
+<td rowspan="5">Numeric
+</td>
+<td>Single Real</td>
+<td>Numeric (4-byte IEEE floating point)
+
+<tr>
+<td>Double Real</td>
+<td>Numeric (8-byte IEEE floating point)
+</td>
+</tr>
+
+<tr>
+<td>Integer</td>
+<td>Numeric
+</td>
+</tr>
+
+<tr>
+<td>Character</td>
+<td>Character
+</td>
+</tr>
+
+<tr>
+<td>Byte</td>
+<td>Numeric (8-bit value in the range [<tt>-128</tt>..<tt>127</tt>] inclusive)
+</td>
+</tr>
+
+</table>
+</center>
+
+<h2><a id="DeletingFields">Deleting Fields</a></h2>
+
+<p>The deletion of multiple fields is controlled using the
+<span class="nobr"><b>DBV | Edit | Delete | Selected Fields</b></span>
+command or the
+<span class="nobr"><b>Field Popup | Selection | Delete Selected</b></span>
+command.
+These commands use field selection to determine which fields to delete.
+The <span class="nobr"><b>Field Popup | Delete</b></span> command
+can be used to delete individual fields.  In all cases, you will be
+asked to confirm the operation.
+</p>
+
+<center>
+<table class="titlebar" border="1" cellpadding="3">
+
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+
+<tr>
+<td>
+<span class="nobr"><b>DBV | Edit | Delete | Selected Fields</b></span>
+</td>
+<td>
+Delete selected fields.  This command is unavailable when no
+fields are selected.
+</td>
+</tr>
+
+<tr>
+<td>
+<span class="nobr"><b>Field Popup | Selection | Delete Selected</b></span>
+</td>
+<td>
+Delete selected fields.  This command is unavailable when no
+fields are selected.
+</td>
+</tr>
+
+<tr>
+<td>
+<span class="nobr"><b>Field Popup | Delete</b></span>
+</td>
+<td>
+Delete the current field (i.e. where the popup was issued).
+The field need not be selected.
+</td>
+</tr>
+
+</table>
+</center>
+
+<p><b>Caution!</b> These commands delete fields from the
+database file, and are not to be confused with the
+<a href="#HideShowFields">Hide Field</a> command.
+Deleted fields cannot be recovered as no temporary backups are made.
+</p>
+
+
+<h1>
+<a id="DisplayingAndEditingEntries"></a>Displaying and Editing Entries</h1>
+
+<p>A database entry is a set of data fields, which are displayed
+along one row of the Database Viewer.
+Each entry is identified by an entry (row) number to the
+left of its data fields.
+
+<p><b>Note:</b> The entry number is not the same as the <i>entry key</i>,
+an identifier unique within a given database that is used to reference
+an entry when using SVL calls.  To obtain the list
+of entry keys of a database, use
+<a class="svl" href="../moe/fcnref/db_entry.htm#db_Entries">db_Entries</a>.
+
+<p>Operations on entries are performed using the mouse, the Edit menu or
+the Entry Popup.  To display the Entry Popup, position the cursor over an
+entry number and press the mouse popup button or click on the popup marker
+in the top right corner of each entry label.
+
+<p>
+<table class="conventions center">
+<tr>
+<th>DBV | Edit</th>
+<th>&nbsp;DBV | Display | Entry&nbsp;</th>
+<th><a id="EntryPopup">
+	&nbsp;Entry Popup&nbsp;</a></th>
+</tr>
+<tr>
+<td><a href="dbedit.htm#AddingEntries">New | Entry</a></td>
+<td><a href="#HideShowEntries">Hide Selected</a></td>
+<td><a href="#InvertClearEntries">Selection</a></td>
+</tr>
+<tr>
+<td><a href="dbedit.htm#CopyPaste">Copy</a></td>
+<td><a href="#HideShowEntries">Hide Unselected</a></td>
+<td><a href="#HideShowEntries">Display</a></td>
+</tr>
+<tr>
+<td><a href="dbedit.htm#CopyPaste">Paste</a></td>
+<td><a href="#HideShowEntries">Invert All</a></td>
+<td><a href="#MovingEntries">Move</a></td>
+</tr>
+<tr>
+<td><a href="#DeletingEntries">Delete | Selected Entries</a></td>
+<td><a href="#HideShowEntries">Show All</a></td>
+<td><a href="dbedit.htm#Duplicate">Duplicate</a></td>
+</tr>
+<tr>
+<td><a href="#MovingEntries">Move | Selected Entries</a></td>
+<td><a href="#HideShowEntries">Go To Next Selected</a></td>
+<td><a href="dbedit.htm#CopyPaste">Copy</a></td>
+</tr>
+<tr>
+<td><a href="#FilteringEntries">Filter</a></td>
+<td>&nbsp;</td>
+<td><a href="#DeletingEntries">Delete</a></td>
+</tr>
+<tr>
+<td><a href="#SelectingEntries">Select</a></td>
+<td>&nbsp;</td>
+<td><a href="dbedit.htm#AddingEntries">New</a></td>
+</tr>
+<tr>
+<td><a href="#InvertClearEntries">Invert | Entry Selection</a></td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<td><a href="#InvertClearEntries">Clear | Entry Selection</a></td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td><a href="#InvertClearEntries">Select All | Entries</a></td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+</table>
+
+<h2><a id="SelectingEntries">Selecting Entries</a></h2>
+
+Selecting entries can be done with the mouse:
+
+<table class="titlebar">
+  <tr>
+    <th>To:</th>
+    <th>Using the Left Mouse Button:</th>
+  </tr>
+  <tr>
+    <td>Select one entry</td>
+    <td>Click on entry number. This will deselect all other entries.</td>
+  </tr>
+  <tr>
+    <td>Toggle selection state of entry</td>
+    <td><tt>Ctrl</tt> - click on entry number</td>
+  </tr>
+  <tr>
+    <td>Select range of entries</td>
+    <td>Click (or <tt>Ctrl</tt> - click) on first entry number and
+      <tt>Shift</tt> - click on second entry number</td>
+  </tr>
+</table>
+
+<p>Entry selection can also be performed using the
+<span class="menu">DBV | Edit | Select</span> and
+the <span class="menu">Field Popup | Select</span> commands, both of which
+open the selection panel. The panel can also be conveniently be opened with
+the <img src="db/spyglass.png" class="icon"/> button at the top. By default
+the selection panel is attached to the top of the Database Viewer, but it
+can also be detached into a separate window.
+
+<img src="db/selectpanel.png" alt="Select/find panel" class="center" />
+
+This panel allows the user to select one or more database entries or find
+cells (or entries) that satisfy the Selection Criteria.  When
+multiple fields of the appropriate type are present in a database entry,
+they are searched in turn.  In such cases, the search is considered
+successful if any field matches the Selection Criteria.
+
+<table class="noborder">
+<tr>
+<th>Search</th>
+<td>
+Specifies the field(s) to be used for the search.  Fields must be
+visible to be used.
+
+<table class="noborder">
+<tr>
+<th>All Fields</th>
+<td>
+Search all fields of the database, performing text, numeric and substructure
+searches as appropriate. The search can involve multiple data fields.
+Multiple search criteria can be specified.</td>
+</tr>
+<tr>
+<th>Molecule Fields</th>
+<td>
+Use a <a href="../quasar/fcnref/descrfcn.htm#DescriptorExprSyntax">
+Descriptor Filter</a> to search all molecule fields in a database entry.
+With multiple molecule fields, only one has to satisfy the filter for success.
+Or, use a <a href="../moe/fcnref/aselect.htm">Selection Expression</a>
+to select atoms and residues.</td>
+</tr>
+<tr>
+<th>Substructure</th>
+<td>
+Search all Molecule and MOE fields of the database by substructure.  This
+can be defined as a
+<a href="../moe/molsystems/smiles.htm#Substructure_Matching">SMARTS</a>
+string or via a <a href="../moe/sketcher.htm">Sketcher</a>
+program <img src="db/sketcher.png" class="icon"/>.
+</td>
+</tr>
+<tr>
+<th>Text Fields</th>
+<td>
+Search all character fields of the database by string or substring. Wildcard
+<a href="../svl/fcnref/findetc.htm">matching</a> is optional.
+The search can be case-sensitive if desired. To search for phrases
+with spaces enclose the phrase in single quotes. Multiple search
+phrases can be specified</td>
+</tr>
+<tr>
+<th>Number Fields</th>
+<td>
+Search all numeric fields (int, float or double) by value or range
+of values. Multiple criteria can be specified</td>
+</tr>
+<tr>
+<th><i>&lt;Fields&gt;</i></th>
+<td>
+Searches can also be performed on individual data fields only.  For individual
+Molecule or MOE fields, either a Descriptor Filter, Selection Expression,
+or sketched query search can be performed.</td>
+</tr>
+</table>
+
+<tr>
+<th>And/Or</th>
+<td>
+If multiple search criteria are specified, select whether all
+search criteria must be met (<b>And</b>), or if any of them
+satisfies the search (<b>Or</b>), e.g. if set to <b>Or</b> one
+can search for multiple numerical values at once and select all
+the entries with cells which match any one of the values.
+<p>
+The default settings is <b>And</b>, i.e. all search criteria
+must be met. <b>Molecule Fields</b> and <b>Substructure</b> searches
+must always satisfy all criteria and don't show this option.</p>
+</td>
+</tr>
+
+
+<tr>
+<th>Selection Criteria</th>
+<td>
+The selection criteria that must be satisfied.  If blank, valid
+possibilities are shown as
+hints.  The shortcuts contain the last successful searches for the type of
+field(s) being searched.
+Selecting <img src="db/clear.png" class="icon"/> clears
+the Selection Criteria.
+</td>
+</tr>
+
+<tr>
+<th><img src="db/sketcher.png" class="icon"/></th>
+<td>
+Open a 2D sketcher to enter a <b>Substructure</b> query.
+The button turns green when the sketch is loaded.
+</td>
+</tr>
+
+<tr>
+<th>Mode</th>
+<td>
+Specifies how the current field selection state should be
+modified based on the current selection:
+
+<table class="noborder">
+<tr>
+<th>Add To</th>
+<td>
+Any entry satisfying the Selection Criteria will
+be selected in the Database Viewer.</td>
+</tr>
+
+<tr>
+<th>Intersect</th>
+<td>
+Any entry satisfying the Selection Criteria will
+be selected in the Database Viewer only if it is already selected.</td>
+</tr>
+
+<tr>
+<th>Remove</th>
+<td>
+Any entry satisfying the Selection Criteria will
+be deselected in the Database Viewer.</td>
+</tr>
+
+<tr>
+<th>Replace</th>
+<td>
+Any entry satisfying the Selection Criteria will
+be selected in the Database Viewer. Any entry not satisfying the
+criteria will be deselected.</td>
+</tr>
+</table>
+
+<tr>
+<th>Search Selected Fields Only</th>
+<td>
+If on, the search will be restricted to the selected fields of the database.
+fields must be visible to be selected. This option does not apply to
+Descriptor Filter searches.
+
+
+<tr>
+<th>Match</th>
+<td>The text search can be configured with several options:
+
+<table class="noborder">
+<tr>
+<th>Partial</th>
+<td>
+By default, if <b>Partial</b> is on, text searches look for the specified
+substring within the cell text, otherwise the complete cell text string must
+match.</td>
+</tr>
+
+<tr>
+<th>Wildcards</th>
+<td>The <b>Wildcards</b> option allows to use wildcard
+<a href="../svl/fcnref/findetc.htm">pattern matching</a> in the
+text search phrase.</td>
+</tr>
+
+<tr>
+<th>Case</th>
+<td>
+By default, text searches are case-independent.
+If <b>Case</b> is on, the
+text must match the specific case of the Selection Criteria.</td>
+</tr>
+</table>
+
+</td>
+</tr>
+
+<tr>
+<th>Entries</th>
+<td>
+Press <b>Select</b> to find all database entries that satisfy the
+Selection Criteria.  The <b>Mode</b> menu determines how the selection
+state of the database will change.  This is described
+<a href="#SelectingMore">below</a>.
+Press <span class="nobr"><b>Find Next</b></span> to find the next
+occurrence of the Selection Criteria in the database.  If the search involves
+a single field, the cell will be highlighted.  Otherwise, the entry will be
+highlighted.
+Press <span class="nobr"><b>Find Previous</b></span> to find the
+previous occurrence of the Selection Criteria in the database.
+</td>
+</tr>
+
+</table>
+
+<p>
+If <span class="menu">Field Popup | Select</span> is used,
+<span class="nobr"><b>Search: All Fields</b></span> is set to the specific
+field name.  Fields with character data can be searched with text queries,
+numeric data fields with numberical comparisons. Molecular fields allow
+<a href="../moe/molsystems/smiles.htm#Substructure_Matching">Substructure</a>,
+<a href="../quasar/fcnref/descrfcn.htm#DescriptorExprSyntax">Descriptor</a>,
+and <a href="../moe/fcnref/aselect.htm">Selection Expression</a> searches.
+The following sections describe in detail how to specify the
+selection criteria.
+</p>
+
+<a id="SelectingNumbers"></a><h3>Selecting Based on Numeric Data</h3>
+
+Select in the Field Menu <b>All Fields</b>, <b>Number Fields</b> or a numeric
+data field. Use a Selection Criteria of the form <i>op&nbsp;number</i>,
+where <i>op</i> is one of 
+<tt>=</tt>, <tt>&lt;&gt;</tt>, <tt>&lt;</tt>, <tt>&gt;</tt>, <tt>&lt;=</tt>,
+<tt>&gt;=</tt> or <tt>!</tt> and
+<i>number</i> is a numeric value. If <i>op</i> is omitted, it is
+assumed to be <tt>=</tt>.  <tt>!</tt> is the not operator, equivalent
+to <tt>&lt;&gt;</tt>.  A range of values can be defined by using a
+Selection Criteria of the form
+<span class="nobr">[<i>low,high</i>]</span>, where <i>low</i>
+and <i>high</i> are numeric values with <i>low</i>&nbsp;&lt;&nbsp;<i>high</i>.
+
+<p>Multiple numerical comparison criteria can be specified, separated by
+spaces. If the default mode <b>And</b> is selected, all of the criteria
+must be satisified, otherwise in <b>Or</b> mode any one of them.</p>
+
+<p><b>Note:</b> If a numeric cell entry has multiple data items, any one of
+its values must satisfy the Selection Criteria for the comparison to be
+successful.
+</p>
+
+<a id="SelectingText"></a><h3>Selecting Based on Character Data</h3>
+
+Select in the Field Menu <b>All Fields</b>, <b>Text Fields</b> or a character
+data field. Use a Selection Criteria of the form <i>op&nbsp;text</i>,
+where <i>op</i> is one of <tt>=</tt>, <tt>&lt;&gt;</tt> or <tt>!</tt>.
+If <i>op</i> is omitted, it is assumed to be <tt>=</tt>.
+<tt>!</tt> is the not operator, equivalent to <tt>&lt;&gt;</tt>.
+If numbers or spaces are present, <i>text</i> must be enclosed
+in single-quotes.
+
+<p>Multiple text comparisons can be specified, separated by
+spaces. If the default mode <b>And</b> is selected, all of the criteria
+must be satisified, otherwise in <b>Or</b> mode any one of them.</p>
+
+<p>The values of <b>Partial</b>, <b>Wildcards</b> and
+<b>Case</b> are used to control how the character matching occurs.
+This is shown in the following example using a Search Criteria
+of <b>Ala</b>:</p>
+
+<table class="noborder">
+<tr>
+<th>Partial on and Case off (Default)</th>
+<td>
+Matches <b>Ala</b>, <b>ala</b> and <b>ProAla</b>.</td>
+
+<tr>
+<th>Partial on and Case on</th>
+<td>
+Matches <b>Ala</b> and <b>ProAla</b> but not <b>ala</b>.</td>
+
+<tr>
+<th>Partial off and Case off</th>
+<td>
+Matches <b>Ala</b> and <b>ala</b> but not <b>ProAla</b>.</td>
+
+<tr>
+<th>Partial off and Case on</th>
+<td>
+Matches <b>Ala</b> but not <b>ala</b> or <b>ProAla</b>.</td>
+</table>
+
+<p>
+The following wildcard expressions can be used in the pattern if
+the <b>Wildcards</b> option is enabled:</p>
+
+<table class="noborder">
+<tr>
+<th>*</th>
+<td>Wildcard used to match zero or more characters in the text.
+For example:
+<table class="noborder left width-60">
+  <tr>
+  <td width="40%"><tt>ZO<b>*</b></tt></td>
+  <td width="20%"><b>matches</b></td>
+  <td width="40%">
+    <tt>ZO<b>PICLONE</b></tt><br /><tt>ZO<b>RUBICIN</b></tt>
+  </td>
+  </tr>
+</table>
+</tr>
+
+<tr>
+
+  <th>?</th>
+  <td>Wildcard used to match any single character in the text.
+  For example:
+
+  <table class="noborder left width-60">
+    <tr>
+      <td width="40%"><pre>alpha<b>?</b>rhamnopyranose</pre></td>
+      <td width="20%"><b>matches</b><td>
+      <td width="40%">
+        <tt>alpha<b>D</b>rhamnopyranose</tt><br/>
+        <tt>alpha<b>L</b>rhamnopyranose</tt>
+      </td>
+    </tr>
+  </table>
+  </td>
+
+</tr>
+
+<tr>
+<th>@</th>
+<td>Wildcard used to match any character in {a...z,A...Z,_}.
+For example:
+
+<table class="noborder left width-60">
+  <tr>
+    <td width="40%"><tt><b>@</b>zulene</tt></td>
+    <td width="20%"><b>matches</b></td>
+    <td width="40%"><tt><b>A</b>zulene</tt></td>
+  </tr>
+</table>
+</tr>
+
+<tr>
+<th>#</th>
+<td>Wildcard used to match [0, ..., 9]. For example:
+
+<table class="noborder left width-60">
+  <tr>
+    <td width="40%"><nobr><tt>poly(<b>#*</b>)</tt></nobr></td>
+    <td width="20%"><b>matches</b></td>
+    <td width="40%">
+      <nobr><tt>poly(<b>1-butene</b>)</tt></nobr><br />
+      <nobr><tt>poly(<b>1-decene</b>)</tt></nobr>
+    </td>
+  </tr>
+</table>
+
+</tr>
+<tr>
+<th>[...]</th>
+<td>Wildcard used to match any character in a set. In the
+following example, the search matches any string that starts with an S or
+U:
+
+<table class="noborder left width-60">
+  <tr>
+    <td width="40%"><tt><b>[SU]</b>*</tt></td>
+    <td width="20%"><b>matches</b></td>
+    <td width="40%">
+      <tt><b>S</b>ulfur</tt><br /><tt><b>U</b>ltem</tt>
+    </td>
+  </tr>
+</table>
+</td>
+
+</tr>
+<tr>
+<th>[^...]</th>
+<td>Wildcard used to match any character that is not present at
+this position. <br />
+For example:<br />
+
+  <table class="noborder left width-full">
+    <tr>
+      <td width="24%">* [<b>^2</b>] </td>
+      <td width="12%"><b>matches</b></td>
+      <td width="24%">
+        <tt>Polycarbonate <b>1</b></tt><br />
+        <tt>Polycarbonate <b>3</b></tt><br /><tt>Resin <b>F</b></tt>
+      </td>
+      <td width="16 %"><b>but does not match</b></td>
+      <td width="24%">
+        <tt>Polycarbonate 2</tt><br /><tt>Polyetherimide 2</tt>
+    </td>
+    </tr>
+  </table>
+  </td>
+</tr>
+</table>
+
+<p>When <b>Wildcards</b> is off, all of the wildcard characters above
+are taken literally. An alternative way to search for partial strings is to
+use the <tt>*</tt> wildcard character at the start and/or end of the search
+pattern. E.g. the <b>Wildcards</b> search <b>*Ala*</b> is equivalent to the
+search <b>Ala</b> with the <b>Partial</b> option on.</p>
+
+<ul class="help">
+<li class="help">
+For more on wildcards, see
+<a class="svl" href="../svl/fcnref/findetc.htm">findmatch</a>.
+</li>
+</ul>
+
+<a id="SelectingMolecules"></a>
+<h3>Selecting Based on Substructure Search of Molecular Data</h3>
+
+<p>
+Select in the Search Field Menu <b>All Fields</b>, <b>Substructure</b>,
+a Molecular or a MOE data field.  Substructures queries can be defined via
+<a href="../moe/fcnref/smartsfcn.htm">SMARTS</a>, or a
+<a href="../moe/sketcher.htm">Sketcher</a> can
+be used.  SMARTS strings must be contained in double-quotes: <tt>c1ccccc1</tt>
+is invalid while <tt>"c1ccccc1"</tt> is valid.  The Selection Criteria can
+be of the form:</p>
+
+<table class="noborder">
+<tr>
+<th><i>op SMARTS</i></th>
+<td>
+<i>SMARTS</i> is a valid SMARTS string and <i>op</i> is one of
+<tt>=</tt>, <tt>&lt;&gt;</tt> or <tt>!</tt>.
+If omitted, <tt>=</tt> is assumed.</td>
+<tr>
+<th><i>SMARTS&nbsp;op&nbsp;number</i></th>
+<td>
+<i>SMARTS</i> is a valid SMARTS string, <i>op</i> is one of
+<tt>=</tt>, <tt>&lt;&gt;</tt>, <tt>&lt;</tt>, <tt>&gt;</tt>,
+<tt>&lt;=</tt>, <tt>&gt;=</tt> or
+<tt>!</tt> and <i>number</i> is a numeric value representing the number
+of matches.</td>
+<tr>
+<th><i>SMARTS</i>&nbsp;[<i>low,high</i>]</th>
+<td>
+<i>SMARTS</i> is a valid SMARTS string and <i>low</i> and <i>high</i>
+are numeric values with <i>low</i>&nbsp;&lt;&nbsp;<i>high</i>.</td>
+<tr>
+<th><i>op</i> {sketch}</th>
+<td>
+<i>op</i> is one of <tt>=</tt>, <tt>&lt;&gt;</tt> or <tt>!</tt>.
+If omitted, <tt>=</tt> is assumed.</td>
+<tr>
+<th>{sketch} <i>op number</i></th>
+<td>
+<i>op</i> is one of <tt>=</tt>, <tt>&lt;&gt;</tt>, <tt>&lt;</tt>,
+<tt>&gt;</tt>, <tt>&lt;=</tt>, <tt>&gt;=</tt> or
+<tt>!</tt> and <i>number</i> is a numeric value
+representing the number of matches.</td>
+<tr>
+<th>{sketch}[<i>low,high</i>]</th>
+<td>
+<i>low</i> and <i>high</i> are numeric values with
+<i>low</i>&nbsp;&lt;&nbsp;<i>high</i>.</td>
+<tr>
+<th><i>op number</i></th>
+<td>
+This assumes a query has been defined via a Sketcher.
+<i>op</i> is one of <tt>=</tt>, <tt>&lt;&gt;</tt>, <tt>&lt;</tt>,
+<tt>&gt;</tt>, <tt>&lt;=</tt>, <tt>&gt;=</tt> or
+<tt>!</tt> and <i>number</i> is a numeric value.  If omitted, <tt>=</tt>
+is assumed.</td>
+<tr>
+<th>[<i>low,high</i>]</th>
+<td>
+This assumes a query has been defined via a Sketcher.
+<i>low</i> and <i>high</i> are numeric values with
+<i>low</i>&nbsp;&lt;&nbsp;<i>high</i>.
+</table>
+
+<a id="SelectingMoleculesByDescriptor"></a>
+<h3>Selecting Based on Descriptor Search of Molecular Data</h3>
+
+<p>
+Select in the Search Field Menu <b>Molecule Fields</b>,
+a Molecular or a MOE data field.
+A <a href="../quasar/fcnref/descrfcn.htm#DescriptorExprSyntax">
+Descriptor Filter</a> query can be specified to search all molecule fields
+in a database entry. The descriptor values are calculated on the fly
+on the molecules. If there are multiple molecule fields in an entry only
+one of them has to match, but all descriptor values (if multiple descriptors
+are specified in the query) must fall into the specified ranges for
+that molecule.</p>
+
+<a id="SelectingMoleculesByAtomExpression"></a>
+<h3>Selecting Based on Atom Expression Search of Molecular Data</h3>
+
+<p>
+Select in the Search Field Menu <b>Molecule Fields</b>,
+a Molecular or a MOE data field.
+A <a href="../moe/fcnref/aselect.htm">Selection Expression</a>
+query can be specified to search all molecule fields
+in a database entry. If the Selection Expression would select
+any atom, residue or chain of the molecules in the database entry
+the selection criteria for that entry is satisfied.
+</p>
+
+<p>A Selection Expression query can not be mixed with other query types
+(e.g. a Descriptor Filter query) in the same search query.</p>
+
+<a id="SelectingAllFields"></a>
+<h3>Selecting Based on Multiple Fields</h3>
+
+Select <b>All Fields</b> in the Search Field Menu.
+The Selection Criteria can be more complex, possibly including multiple
+fields and/or numeric or text searches. If the default mode <b>And</b>
+is selected, all of the criteria must be satisified, otherwise in
+<b>Or</b> mode any one of them. Options include:
+
+<table class="noborder">
+<tr>
+<th><i>Field op number</i></th>
+<td>
+<i>Field</i> is a visible data field, <i>op</i> is one of
+<tt>=</tt>, <tt>&lt;&gt;</tt>, <tt>&lt;</tt>, <tt>&gt;</tt>,
+<tt>&lt;=</tt>, <tt>&gt;=</tt> or <tt>!</tt> and
+<i>number</i> is a numeric value.
+<tr>
+<th><i>Field</i>&nbsp;[<i>low,high</i>]</th>
+<td>
+<i>Field</i> is a visible numeric data field and
+<i>low</i> and <i>high</i> are numeric values with
+<i>low</i>&nbsp;&lt;&nbsp;<i>high</i>.
+<tr>
+<th><i>Field op text</i></th>
+<td>
+<i>Field</i> is a visible character data field, <i>op</i> is either
+<tt>=</tt> or <tt> &lt;&gt;</tt> and
+<i>text</i> is character string.  If numbers or spaces are present,
+<i>text</i> must be enclosed in single-quotes.
+<tr>
+<th><i>Field&nbsp;op&nbsp;SMARTS</i></th>
+<td>
+<i>Field</i> is a visible molecule data field, <i>op</i> is either
+<tt>=</tt> or <tt> &lt;&gt;</tt> and <i>SMARTS</i> is a valid SMARTS string.
+<tr>
+<th><i>Field op</i> {sketch}</th>
+<td>
+This assumes a query has been defined via a Sketcher.
+<i>Field</i> is a visible molecule data field and <i>op</i> is either
+<tt>=</tt> or <tt> &lt;&gt;</tt>.
+</table>
+
+<p>These can be combined to search multiple data fields.
+E.g. assuming <b>logP</b> and <b>Weight</b> are fields in the
+database,</p>
+<tt>logP[-2,2] Weight&gt;300 "c1ccccc1"&gt;2</tt>
+
+<p>will search for all entries whose logP value is between -2 and 2, Weight
+value is above 300 and with molecules that contain more than 2 phenyl rings.
+If there are Multiple molecule or MOE fields, only one needs to satisfy the
+substructure search for success.</p>
+
+
+<a id="SelectingMore"></a><h3>Using More Than One Selection Criterion</h3>
+
+<p>To select entries based on more than one criterion that cannot be
+performed using All Fields, successive selections must be done using the
+<span class="menu">Add To</span>,
+<span class="menu">Intersect</span>,
+<span class="menu">Remove</span>, and
+<span class="menu">Replace</span>
+Mode menu options.
+The first three perform a logical operation between the existing entry
+selection and the results of applying the current selection criteria.
+<b>Replace</b> is equivalent to first clearing the selection and then
+using <b>Add To</b> mode.
+
+<ul>
+
+<li>When
+<span class="nobr"><b>Add To</b></span> is used, unselected
+entries satisfying the selection criteria become selected,
+and entries already selected remain selected.
+In effect, a logical "OR" operation is being performed:
+an entry is selected if it was already selected <b>or</b>
+it satisfied the latest selection criteria.
+In this mode,
+the set of selected entries is either enlarged or remains the same.
+</li>
+
+<li>When <b>Intersect</b> is used,
+previously selected entries will become deselected if they
+fail to match the selection criteria, and unselected entries
+remain unselected.  In effect, a logical "AND"
+operation is being performed:
+an entry is selected only if it was already selected <b>and</b>
+it satisfied the latest selection criteria.
+In this mode, only previously selected entries are considered for selection;
+the set of selected entries is either diminished or remains the same.
+</li>
+
+<li>When <b>Remove</b> is used,
+previously selected entries will become deselected if they
+successfully match the selection criteria, and unselected entries
+remain unselected.  In effect, a logical "AND NOT"
+operation is being performed:
+an entry is selected only if it was already selected <b>and</b>
+it did <b>not</b> satisfy the latest selection criteria.
+In this mode, only previously selected entries are considered for deselection;
+the set of selected entries is either diminished or remains the same.
+</li>
+
+</ul>
+
+<div class="example">
+<i><b>Example.</b></i> Suppose you wish to
+select all entries with a molecule field containing <tt>"c1ccccc1"</tt>
+exactly once and whose pKa value is greater than 3. To do so, you can
+perform two separate selection operations: the first based on the
+substructure, the second based on the pKa value. Use the
+<span class="nobr"><b>Replace</b></span> mode for the
+substructure comparison and the <b>Intersect</b> mode for the
+pKa comparison.
+</div>
+
+<a id="Select_Entries"></a>
+<h3>Selecting Using the Field Popup</h3>
+
+<p>The <span class="nobr"><b>Field Popup | Select Entries</b></span>
+commands perform entry selection based on data in a given field
+using special pre-defined selection criteria.
+Entries whose data satisfy the selection
+criteria are added to the current entry selection.
+</p>
+
+<p>The selection criteria vary depending on the field data type.
+In all cases, <b>Empty</b>, <b>First Occurence</b>, and
+<span class="menu">Not Unique</span> are available:</p>
+<ul>
+<li><b>Empty</b> selects entries with no data in the given field.</li>
+<li><b>First Occurence</b> selects the entries corresponding to the
+first instance of each new unique field value encountered
+(the first entry encountered with a given data value is selected;
+subsequent entries with the same value are not selected). This applies
+only to the visible entries, hidden entries are ignored.</li>
+<li><b>Not Unique</b> selects entries
+that have duplicate values within a given field.  All entries
+with duplicated values are selected; entries whose field value
+is unique across the whole field are not selected. This applies
+only to the visible entries, hidden entries are ignored.</li>
+</ul>
+
+<p>Character data fields have two additional selection criteria:</p>
+<ul>
+<li><b>Numeric</b> selects entries with text which can be converted
+into numerical values.</li>
+<li><b>Not Numeric</b> select entries with text which are not
+numerical values.</li>
+</ul>
+
+<p>Numeric fields also allow for selecting entries whose field data
+are <span class="nobr"><b>Not Finite</b></span>, i.e. NaN or Inf.
+</p>
+
+<p>Molecular data can be subject to the following selection
+criteria:
+
+<table class="titlebar" border="1" cellpadding="3">
+
+  <tr>
+  <th>
+  <span class="nobr"><b>Field Popup | Select Entries</b></span>
+  </th>
+  <th>Select Entry if Molecular Data:</th>
+
+  <tr>
+  <td>Druglike
+  </td>
+  <td>
+  Passes Lipinski's Rule of Five [Lipinski&nbsp;1997].
+  </td>
+  </tr>
+
+  <tr>
+  <td>Leadlike
+  </td>
+  <td>
+  Passes Oprea's lead-like test [Oprea&nbsp;2000].
+  </td>
+  </tr>
+
+  <tr>
+  <td>Reactive
+  </td>
+  <td>
+  Contains reactive groups.
+  </td>
+  </tr>
+
+  <tr>
+  <td>Inorganic
+  </td>
+  <td>
+  Contains atom elements outside of the set
+  [LP,H,C,N,O,F,P,S,Cl,As,Se,Br,I].
+  </td>
+  </tr>
+
+  <tr>
+  <td>Bad A[k]
+  </td>
+  <td>
+  Is an invalid R-group label.
+  </td>
+  </tr>
+</table>
+
+<h2><a id="InvertClearEntries"></a>Inverting and Clearing Entry Selection</h2>
+
+<p>
+The invert and clear entry selection commands operate on all entries.
+To invert the selection means to deselect entries that are currently
+selected and select those that are not selected.
+To clear the selection means to deselect all entries in the database.
+There is also a command to select all entries.  The commands are
+duplicated in the
+<span class="nobr"><b>DBV | Edit</b></span> and
+<span class="nobr"><b>Entry Popup | Selection</b></span> menus
+and are summarized in the following table:
+</p>
+
+<center>
+<table class="titlebar" border="1" cellpadding="3">
+<tr>
+<th>Operation</th>
+<th><span class="nobr"><b>DBV | Edit</b></span></th>
+<th><span class="nobr"><b>Entry Popup | Selection</b></span></th>
+</tr>
+
+<tr>
+<td>
+Invert entry selection
+</td>
+<td>
+<span class="nobr"><b>Invert | Entry Selection</b></span>
+</td>
+<td>
+<span class="nobr"><b>Invert</b></span>
+</td>
+</tr>
+
+<tr>
+<td>
+Clear entry selection
+</td>
+<td>
+<span class="nobr"><b>Clear | Entry Selection</b></span>
+</td>
+<td>
+<span class="nobr"><b>Clear</b></span>
+</td>
+</tr>
+
+<tr>
+<td>
+Select all entries
+</td>
+<td>
+<span class="nobr"><b>Select All | Entries</b></span>
+</td>
+<td>
+<span class="nobr"><b>Select All</b></span>
+</td>
+</tr>
+
+</table>
+</center>
+
+<p>
+The top left corner button, which connects the field and entry labels,
+can be also used to clear the entry selection or select all entries.
+If pressed, any entry and field selection will be cleared and if nothing
+is selected the press will select all entries and fields.
+</p>
+
+<h2><a id="HideShowEntries"></a>Hiding and Showing Entries</h2>
+
+<p>The display of individual and multiple entries is controlled using
+the <span class="nobr"><b>DBV | Display | Entry</b></span> and
+<span class="nobr"><b>DBV | Entry Popup | Display</b></span> menus.
+Entry selection can be used to determine which entries to
+hide or show.  An individual entry can be hidden using that entry's
+popup menu.  The
+<span class="nobr"><b>Show All</b></span> and
+<span class="nobr"><b>Invert All</b></span> commands
+operate on all entries.  The invert operation toggles the display
+state of all entries so that hidden entries become shown and vice-versa.
+The commands are summarized in the following table.
+</p>
+
+<p><b>Note:</b> Hidden entries cannot be selected.</p>
+
+<center>
+<table class="titlebar" border="1" cellpadding="3">
+<tr>
+<th>Operation</th>
+<th><span class="nobr"><b>DBV | Display | Entry</b></span></th>
+<th><span class="nobr"><b>Entry Popup | Display</b></span></th>
+</tr>
+
+<tr>
+<td>
+Hide individual entry (without using entry selection)
+</td>
+<td>
+&nbsp;
+</td>
+<td>
+<span class="nobr"><b>Hide Entry</b></span>
+</td>
+</tr>
+
+<tr>
+<td>
+Hide selected entries
+</td>
+<td>
+<span class="nobr"><b>Hide Selected</b></span>
+</td>
+<td>
+<span class="nobr"><b>Hide Selected</b></span>
+</td>
+</tr>
+
+<tr>
+<td>
+Hide unselected entries
+</td>
+<td>
+<span class="nobr"><b>Hide Unselected</b></span>
+</td>
+<td>
+<span class="nobr"><b>Hide Unselected</b></span>
+</td>
+</tr>
+
+<tr>
+<td>
+Invert entry display
+</td>
+<td>
+<span class="nobr"><b>Invert All</b></span>
+</td>
+<td>
+<span class="nobr"><b>Invert All</b></span>
+</td>
+</tr>
+
+<tr>
+<td>
+Show all entries
+</td>
+<td>
+<span class="nobr"><b>Show All</b></span>
+</td>
+<td>
+<span class="nobr"><b>Show All</b></span>
+</td>
+</tr>
+
+<tr>
+<td>
+<a id="GoToNextSelected">
+Scroll</a> Database Viewer window, so that the<br />
+next selected entry becomes visible.
+</td>
+<td>
+<span class="nobr"><b>Go To Next Selected</b></span>
+</td>
+<td>
+<span class="nobr"><b>Go To Next Selected</b></span>
+</td>
+</tr>
+
+</table>
+</center>
+
+<p><b>Note:</b> When hiding entries, the remaining visible entries are not
+renumbered, causing gaps in the entry number sequence to appear.
+
+
+
+<h2><a id="FilteringEntries">Filtering Entries</a></h2>
+
+<p>Entry filtering based on numerical and textual properties can be
+performed using the <span class="menu">DBV | Edit | Filter</span> and
+the <span class="menu">Field Popup | Filter</span> commands,
+both of which open the <a href="dbfilter.htm"><b>Filter Database</b></a> panel.
+The panel can also be conveniently opened with the
+<img src="db/ico_filter.png" class="icon"/> button at the top.
+By default the filter panel is attached to the left of the Database Viewer,
+but it can also be detached into a separate window.
+
+<img src="db/attached_filters.png" alt="Filter panel" class="center" />
+
+The Filter Database panel allows the user to choose multiple filters to do a
+multi-variable analysis of molecular properties in a database.
+Each of the filters will define a search criterion on a specified molecular
+property stored in the database fields for the molecule entries.
+The filters act on numerical data and text data and then select or show
+only the entries in the Database Viewer which satisfy the filter criteria.
+More details about the filter features can be found in the
+<a href="dbfilter.htm"><b>Filter Database</b></a> section. 
+
+<h2><a id="MovingEntries"></a>Moving Entries</h2>
+
+<p>Single entries can be repositioned in the Database Viewer as follows:
+
+<ol>
+<li>Position the cursor over the entry to move.
+<li>Press and hold the middle mouse button and drag the entry to
+the new position. During the move, the entry label is marked by
+a red rectangle.
+</ol>
+
+<p>Or</p>
+
+<ol>
+<li>Position the cursor over the entry to move (the entry need not be selected).
+</li>
+<li>Choose <b><span class="nobr">Entry Popup | Move</span></b>.
+</li>
+<li>The cursor changes to a crosshair, and the CLI prompts you to select
+the new position of the entry.
+</li>
+
+<li>Click on the new position. The entry is moved to the new location.
+Other entries are shifted down to make space for the new entry.
+</li>
+</ol>
+
+<p>Multiple entries are moved in a similar manner:
+</p>
+
+<ol>
+<li>Select the entries to reposition.</li>
+<li> Choose <span class="menu">Entry | Popup | Selection | Move</span>.</li>
+<li>Click on the new position.  All selected entries are inserted at the
+new location and the displaced entries are moved down.</li>
+</ol>
+
+<p>
+<b>Note:</b> Entries in read-only databases cannot be moved.
+</p>
+
+<h2><a id="SortingEntries"></a>Sorting Entries</h2>
+
+The Database Viewer provides two ways of sorting entries in the database.
+
+<p>The <span class="nobr"><b>Field Popup | Sort</b></span>
+menu includes the following sort commands:
+
+<ul>
+<li><b>Ascending</b>.
+Sorts all entries in the database based on the ascending
+order (from lowest to highest value) of the field over
+which the popup is opened.
+Text is sorted alphabetically and molecules are sorted by SMILES string.</li>
+
+<li><b>Descending</b>. Sorts all entries in the database based on the
+descending order (from highest to lowest value) of the
+field over which the popup is opened.</li>
+
+<li><b>Advanced</b>. Opens the Sort Database panel, which allows to
+specify extended sorting options, such as multi-criteria sorting.</li>
+
+</ul>
+
+<p>MOE asks you for confirmation before sorting the database.
+
+<p>The <b><span class="nobr">DBV | Compute | Sort</span></b> command
+opens the Sort Database panel. Sorting can be done on
+all fields, i.e. numeric, character, and molecule.
+Molecule fields are sorted based on their unique SMILES strings.
+</p>
+
+<img src="db/dbsort.png" alt="Sort Database Panel" class="center">
+
+
+<table class="noborder">
+<tr>
+<th width="25%"><b>Filename</b></th>
+<td>Path and filename of database to sort on.
+</tr>
+
+<tr>
+<th>Sort Entries</th>
+<td>When the <b>OK</b> button is pressed, the database entries
+will be sorted.
+By default, this option is turned on.<br /> Turning off this option
+disables the sort operation while still allowing entry selection.
+</td>
+</tr>
+
+<tr>
+<th>Write Rank</th>
+<td>If on, write the sorting rank value for each entry into a new
+<b>Rank Field</b> of the database.
+</td>
+</tr>
+
+<tr>
+<th>Visible Only</th>
+<td>If on, sorting will be done only on visible
+entries.  Hidden entries will be placed after the sorted entries.
+If off (default), all entries will be sorted.
+</td>
+</tr>
+
+<tr>
+<th>Select Unique Entries</th>
+<td>Using
+all fields specified in the panel,
+selects one entry (the one with the smallest entry number)
+for each unique set of field values.
+</td>
+</tr>
+
+<tr>
+<th>Empty Cells at Bottom</th>
+<td>If on, then during a sort operation, all empty cells will be
+placed after the sorted entries, regardless of the sorting order.
+</td>
+</tr>
+
+<tr>
+<th>Select Non-unique Entries</th>
+<td>Using
+all fields specified in the panel,
+selects all entries whose set of field values is not unique.
+For example, if two entries have identical fields values,
+both will be selected.
+</td>
+</tr>
+
+<tr>
+<th>Rank Field</th>
+<td>Specify field name into which to write the sorting rank values.
+</td>
+</tr>
+
+<tr>
+<th>Segment by</th>
+<td>When using the <b>Write Rank</b> option, choose an optional field
+whose values will be used to segment the ranking values;
+i.e. for each group of entries with a unique value of that field,
+a separate ranking is done.
+</td>
+</tr>
+
+<tr>
+<th>Priority</th>
+<td>
+The numbering of the fields indicates <i>priority</i>.
+Priority determines the order in which sort operations are performed.  In
+the event of identical data values, fields of subsequent priorities
+(2, 3, etc.) will in turn act as tie breakers.
+</td>
+</tr>
+
+<tr>
+<th>Field (1&ndash;8)</th>
+<td>Specifies the fields to be sorted.
+
+<p><b>Note:</b> Prior to opening the Sort Database panel, if a field is
+selected in the Database Viewer, it
+will appear in the Priority 1 field menu. If more than one field is
+selected, fields are given priority based on their order in the database.
+</td>
+</tr>
+
+<tr>
+<th>Descending</th>
+<td>If on, then the corresponding
+field is sorted in descending numerical or reverse alphabetical order,
+depending on the type of data it contains.
+</td>
+</tr>
+
+</table>
+
+
+<h2><a id="DeletingEntries">Deleting Entries</a></h2>
+
+<p>The deletion of multiple entries is controlled using the
+<span class="nobr"><b>DBV | Edit | Delete | Selected Entries</b></span>
+command or the
+<span class="nobr"><b>Entry Popup | Selection | Delete Selected</b></span>
+command.
+These commands use entry selection to determine which entries to delete.
+The <span class="nobr"><b>Entry Popup | Delete</b></span> command
+can be used to delete individual entries.  In all cases, you will be
+asked to confirm the operation.
+</p>
+
+<center>
+<table class="titlebar" border="1" cellpadding="3">
+
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+
+<tr>
+<td>
+<span class="nobr"><b>DBV | Edit | Delete | Selected Entries</b></span>
+</td>
+<td>
+Delete selected entries.  This command is unavailable when no
+entries are selected.
+</td>
+</tr>
+
+<tr>
+<td>
+<span class="nobr"><b>Entry Popup | Selection | Delete Selected</b></span>
+</td>
+<td>
+Delete selected entries.  This command is unavailable when no
+entries are selected.
+</td>
+</tr>
+
+<tr>
+<td>
+<span class="nobr"><b>Entry Popup | Delete</b></span>
+</td>
+<td>
+Delete the current entry (i.e. where the popup was issued).
+The entry need not be selected.
+</td>
+</tr>
+
+</table>
+</center>
+
+<p><b>Caution!</b> These commands delete entries from the
+database file, and are not to be confused with the
+<a href="#HideShowEntries">Hide Entry</a> command.
+Deleted entries cannot be recovered as no temporary backups are made.
+</p>
+
+
+<a id="SpecifyingMolecularData"></a><h1>Specifying Molecular Data</h1>
+
+Molecular data is displayed in the Database Viewer by default as
+3D line drawings, but small molecules can also be viewed as 2D depictions.
+For proteins the sequence can be shown as a string of single letter codes,
+which is the default for proteins with sequence-only data.
+When the field is displayed with a height of a single character, MOE displays
+the compound name instead of the line drawing.
+To see the molecule in this situation press the <tt>Shift</tt> key and
+hover with the mouse over the molecule cell, a bubble help with the
+2D depiction will pop up.
+
+<p>The 3D line drawing of molecules can be rotated and zoomed in a
+similar fashion to that in the MOE Window:
+<ul>
+<li>Rotate by dragging the
+middle mouse button within the molecule cell.
+<li>Zoom by holding down
+the <tt>Ctrl</tt> button and dragging the middle mouse button within the
+molecule cell.
+</ul>
+<p>
+
+<p>The 2D depiction of molecules can be translated and zoomed:
+<ul>
+<li>Translate by dragging the
+middle mouse button within the molecule cell.
+<li>Zoom by holding down
+the <tt>Ctrl</tt> button and dragging the middle mouse button within the
+molecule cell.
+</ul>
+<p>
+
+<h2><a id="DisplayingMolecules"></a>Displaying Molecules in the Database</h2>
+
+<p>Several display options relative to molecular data are found in the
+<span class="nobr"><b>Display | Molecule</b></span> menu as well as the 
+<span class="nobr"><b>Field/Cell Popup | Molecule</b></span> menus:
+</p>
+
+<img src="db/mol_display.png" alt="Molecule Display menu" class="center">
+
+<table class="noborder">
+<tr>
+<th width="15%"><b>Field</b></th>
+<td>Molecule field onto which to apply display changes.</td>
+</tr>
+
+<tr>
+<th width="15%"><b>Display</b></th>
+<td>
+ Select the molecule display mode:
+
+ <table class="noborder">
+ <tr>
+ <th><b>3D</b></th>
+ <td>Molecules are displayed as 3D line drawings. Hetero elements are
+ shown as labels. Protein structures are shown as as
+ C<sub>&alpha;</sub>-trace. </td>
+ </tr>
+ <tr>
+ <th><b>2D</b></th>
+ <td>
+ <img src="db/mol_display2d.png" alt="Molecule 2D Display menu"
+ class="floatright">
+ Small molecules are displayed as 2D depictions. Chirality of
+ atoms (R/S) and bonds (E/Z) are shown and labeled optionally.
+ If the molecule structure consists of a ligand molecule and a
+ protein receptor, just the ligand is depicted and shown.
+ To signify that only the ligand is shown, a green
+ <span style="color:green"><b>(LO)</b></span> (Ligand-Only)
+ marker is displayed in the upper left corner of the cell.
+  
+ <p>If no small or ligand molecule is present,
+ the display falls back to the <b>3D</b> mode, including
+ a green <span style="color:green"><b>(3D)</b></span> marker.</p>
+ </td>
+ </tr>
+ <tr>
+ <th><img src="db/carbo.png" alt="" class="icon"/></th>
+ <td>Carbohydrate molecules are displayed using the 
+ Symbol Nomenclature for Glycans (SNFG).
+ If the molecule structure consist of a carbohydrate molecule and
+ a protein, just the carbohydrate molecules are shown.
+ To signify that only the carbohydrate is visible, a green
+ <span style="color:green"><b>(CO)</b></span> (Carbohydrate-Only)
+ marker is displayed in the upper left corner of the cell.
+  
+ <p>If no carbohydrate molecule is present,
+ the display falls back to the <b>2D</b> mode, including
+ a green <span style="color:green"><b>(2D)</b></span> marker.</p></td>
+ </tr>
+ <tr>
+ <th><b>Seq</b></th>
+ <td>
+ <img src="db/mol_displayseq.png" alt="Molecule Sequence Display menu"
+ class="floatright">
+ Display the FASTA formatted sequence string for
+ protein or dna structures. If no protein/dna structure is present,
+ the display falls back to the <b>3D</b> mode.
+ <p>The sequence display has no additional configuration options.</p></td>
+ </tr>
+ </table>
+</td>
+</tr>
+
+<tr>
+<th width="15%"><b>Hydrogens</b></th>
+<td>Displays hydrogen atoms:
+
+ <table class="noborder">
+ <tr>
+ <th><b>None</b></th>
+ <td>Do not display hydrogen atoms. This option is only available
+ in <b>3D</b> mode.</td>
+ </tr>
+ <tr>
+ <th><b>Polar</b></th>
+ <td>Show only polar hydrogen atoms. In <b>2D</b> depiction mode also
+ hydrogens on chiral atoms are shown.</td>
+ </tr>
+ <tr>
+ <th><b>All</b></th>
+ <td>Show only polar hydrogen atoms.</td>
+ </tr>
+ </table>
+ </td>
+</tr>
+
+<tr>
+<th width="15%"><b>Molecule Name</b></th>
+<td>If enabled, the molecule name is shown in the lower left corner
+of the molecule cell.</td>
+</tr>
+
+<tr>
+<th width="15%"><b>Element Colors</b></th>
+<td>Displays element symbols in color - nitrogens in blue, oxygens in
+red and so on.  When unchecked, all symbols are drawn black.
+This option is only available in the <b>3D</b> display mode.</td>
+</tr>
+
+<tr>
+<th width="15%"><b>Variable Font</b></th>
+<td>If enabled, the font of the element labels is scaled in relation to the
+molecule size, otherwise the label font size is the same for all molecules
+regardless of their size.
+This option is only available in the <b>3D</b> display mode.</td>
+</tr>
+
+<tr>
+<th width="15%"><b>Unified View</b></th>
+<td>Applies rotation or zoom to all molecules of the field at once.
+The molecules in the current molecule field rotate and zoom in
+unison when turned on.
+This feature is useful when comparing conformations of a single molecule.
+This option is only available in the <b>3D</b> display mode.</td>
+</tr>
+
+<tr>
+<th width="15%"><b>Display Chirality</b></th>
+<td>Display atom (R/S) and bond (E/Z) stereo chemistry/chirality using bond
+wedges and stereo labels. If chirality constraints are present the
+stereo labels are color coded:
+<span style="color:blue">Blue</span> means the constraint matches the
+current geometry; <span style="color:red">red</span> means the
+current geometry violates the constraint;
+<span style="color:green">green</span> means that no constraint is set.
+This option is only applies to the <b>2D</b> depiction display.</td>
+</tr>
+
+
+
+<tr>
+<th width="15%"><b>Apply to All Molecule Fields</b></th>
+<td>Apply the current settings to all molecule fields in the database.</td>
+</tr>
+
+</table>
+
+<p>
+The molecule display attributes are retained and saved in the database
+unless it is opened in read-only mode.
+</p>
+
+<a id="PartialCharges"></a>
+<h2>Computing Partial Charges</h2>
+
+<p>The
+<span class="menu">DBV | Compute | Molecule | Partial Charges</span>
+command displays
+the Database Partial Charges panel.
+The database must contain at least one molecular data
+field for this computation to succeed.
+If <a href="../install/smp_inst.htm">MOE/smp</a> is enabled,
+the partial charge computation is distributed over
+the nodes of the multi-processor cluster.
+
+<img src="db/charges.png" alt="Database Partial Charges Panel" class="center">
+
+<table class="noborder">
+<tr>
+<td width=25%><b>Database</b></td>
+<td>Path and filename of the current database which contains the molecules
+on which to calculate the partial charges.</td>
+</tr>
+
+<tr>
+<th>Selected Entries Only</th>
+<td>Perform the partial charge calculation only on entries that are
+selected in the Database Viewer.</td>
+</tr>
+
+<tr><th>Molecule Field</th>
+<td>List of molecular
+fields in the database (type Molecule and MOE).
+Select the field of molecular data for which
+the partial charges will be computed. This data will be overwritten with
+the new molecular data if the <b>Destination Field</b> (next item) is left
+blank.</td>
+</tr>
+
+<tr><th>Destination Field</th>
+<td>Destination molecular field in which to write the
+data.  If left blank then the source molecule field will be overwritten.</td>
+</tr>
+
+<tr><th>Method</th>
+<td>Method to use when calculating the partial charges.</td>
+</tr>
+
+<tr>
+<th>Options</th>
+<td><b>Adjust Hydrogens and Lone Pairs as Required</b>.
+If on, then hydrogens and/or lone pairs will be added or removed in order
+to complete valence.</td>
+</tr>
+
+</table>
+
+<p>Press <b>OK</b> to start the partial charge calculation.</p>
+
+<a id="SaveProteinPatches"></a>
+<h2>Save Protein Patches</h2>
+
+<p>The <span class="menu">DBV | Compute | Molecule | Protein Patches</span>
+command opens the Save Protein Patches panel.  This panel calculates
+protein patches for structures in the database; the patches are then saved
+to the database. The database must
+contain at least one field of type <tt>'moe'</tt> or type
+<tt>'molecule'</tt> and must be writeable.
+</p>
+
+<img src="db/save_protein_patches.png" alt="Save Protein Patches Panel"
+class="center">
+
+<table class="noborder">
+  <tr><th>Molecule Field</th>
+
+  <td>Field used to generate protein patches; it must be of type
+  <tt>'moe'</tt> or of type <tt>'molecule'</tt>.
+  </td>
+
+
+  <tr><th>Selected Entries Only</th>
+  <td>If on, protein patches will be calculated only for the entries
+  currently selected in the Database Viewer.</td>
+
+  <tr><th>Output Field</th>
+  <td>Field used to store the protein patches; the field will be
+  of type <tt>'moe'</tt>.</td>
+
+  <tr><th>Patch Type</th>
+  <td>Specifies which protein patch types &ndash; hydrophobic, positive,
+  or negative &ndash; to save.
+  </td>
+
+  <tr><th>Hydrophobic Cutoff</th>
+  <td>Lipophilicity cutoff value defining hydrophobic surface patches.</td>
+
+  <tr><th>Hydrophobic Min Area</th>
+  <td>Minimum size of hydrophobic surface patches.</td>
+
+  <tr><th>Charge Cutoff</th>
+  <td>Absolute charge cutoff value defining positive and negative
+  surface patches.</td>
+
+  <tr><th>Charge Min Area</th>
+  <td>Minimum size of positive and negative surface patches.</td>
+
+  <tr><th>Probe Radius</th>
+  <td>Probe sphere radius used to create
+  molecular surface for protein patches.</td>
+</table>
+
+<a id="MinimizingMolecularStructures"></a>
+<h2>Minimizing Molecular Structures</h2>
+
+<p>The <span class="menu">DBV | Compute | Molecule | Energy Minimize</span>
+command opens the
+<a href="../apps/emin.htm">Energy Minimize</a> panel with
+<span class="nobr"><b>Input Data</b></span> set to
+<span class="nobr"><b>MDB File</b></span> and the MDB filename set to the
+active database.  This command is used to minimize the energy of molecular
+structures using a classical forcefield or quantum chemical method.  It
+can also be used to calculate the energy of the current geometry
+(MOPAC/QM mode only) by unselecting
+<span class="nobr"><b>Geometry Optimization</b></span> before starting
+the calculation.  The database must contain at least one field of molecular
+data for this computation to available.</p>
+
+
+<h2><a id="DisplayingImages"></a>Displaying Images in the Database</h2>
+
+Image data can be stored and displayed in character fields.
+The following example shows ligand interaction diagram images stored and
+displayed in the character field <i>Ligand Interactions</i>.
+
+<img src="db/charimage.png" alt="Image Data in Char Field" class="center">
+
+<p>Database fields of the <tt>char</tt> type can store arbitrary text
+strings, including binary data. So it is possible to store the binary data
+of a .png file in a cell. The Database Viewer will automatically
+recognize if <tt>PNG</tt> image data is stored in a cell and then
+show it as an image. In addition to the <tt>PNG</tt> image bitmap format,
+the Database Viewer also supports the internal
+<a href="../svl/fcnref/grfcn.htm#gr_encode">image/grob</a> vector image
+format of MOE, which is available as an option in the
+<a href="../apps/print.htm#GraphicExportPanel">
+<b>Export Image</b></a> panel accessible in MOE applications which create
+images.</p>
+
+<p>Images in database cells can be zoomed with <tt>Ctrl</tt> - drag middle
+and panned when zoomed in with drag middle.</p>
+
+<p>Supported image data can be transferred into <tt>char</tt> type cells
+via <a href="../moe/gui/mainwin.htm#Copy"><b>Copy/Paste</b></a>.
+E.g. the PNG image of the structure in MOE can be put onto the clipboard via
+<span class="nobr"><b>MOE | Edit | Copy | Picture</b></span>,
+and then retrieved in the Database cell with
+<span class="nobr"><b>DBV Cell Popup | Paste</b></span>.
+This works also from other applications as long as the application puts the
+image in the format <tt>image/png</tt> onto the clipboard and no additional
+text string is on the clipboard (when pasting into DBV character cells and
+multiple different data types are on the clipboard, text strings
+get preference on paste).
+In the same way one can also copy image data from a database cell
+onto the clipboard to be retrieved by other applications.</p>
+<p><span class="tip"><b>Tip!</b></span> Images from .png files can also
+be imported into the database with the following SVL commands.
+The example fetches the PNG image data from the file <tt>image.png</tt>
+and writes it into the field <tt>image</tt> at the 10th entry
+of the database file <tt>database.mdb</tt>:</p>
+<pre>
+data = freadb [&#39;image.png&#39;, &#39;char&#39;, INT_MAX];
+ent  = db_Entries &#39;database.mdb&#39;;
+db_Write ['database.mdb', ent(10), tag [&#39;image&#39;, [data]]];
+</pre>
+
+<h1><a id="PlottingDatabaseValues">Database Plots</a></h1>
+
+<p>Numeric database data can be visualized using various plotting and
+specialized applications, available through the
+<span class="nobr"><a href="dbplot.htm">
+<b>DBV | Compute | Analysis</b></a></span> menu.
+The plotting applications are by default displayed in the plot area
+at the bottom of the Database Viewer. To open the plot area in the
+Database Viewer, press the plot icon in the footer of the Database
+Viewer and choose the plot type (<b>Data Plot</b>, <b>Correlation Plot</b>,
+<b>Field Histogram</b>, ...) for your data.</p>
+
+<img src="db/plotmenu.png" alt="Choice of Plots from Plot Icon" class="center">
+
+<p>
+<b>Note:</b>
+The plot area can be resized vertically by dragging
+its upper boundary up and down with the left mouse button.
+</p>
+<p>The plots can be detached into separate windows with the
+<b>Detach</b> button in the bottom button bar of the plot area;
+and consequently reattached with the <b>Attach</b> button.
+The default behavior determining whether new plots should be attached or
+created as separate windows can be configured in the
+<a href="../appendix/settings.htm#Miscellaneous">Configuration Options</a>.
+See details about the features of the various plot application in the
+<a href="dbplot.htm"><nobr><b>Database Plots</b></nobr></a> section.
+</p>
+
+<img src="db/plotarea.png" alt="Empty Plot Area in Database
+Viewer" class="center">
+
+<p>The data in the Database Viewer and the plot visualizations are linked.
+If data in the database is changed the plots will update as well.</p>
+
+<p>In the <b>Data Plot</b> and <b>Correlation Plot</b> the entry numbers of
+data points are obtained by positioning the cursor and holding it motionless
+on or near that point. The entry number, the plotted field values and the
+associated small molecule depiction will be displayed as bubble help
+next to the cursor.
+If the data point bubblehelp do not appear, check in the
+<a href="../appendix/settings.htm#Miscellaneous">Configuration Options</a>
+if bubble help has been turned off or requires the
+<tt>Ctrl</tt> key.</p>
+
+<img src="db/dbplot.png" alt="Database Viewer With
+Plot" class="center">
+
+<p>The functionality of the mouse inside the plot area depends on the
+location of the cursor.  In general, the left button is used to select
+entries, and the middle button is used to modify the view of the plotted
+data.  The data plot can be panned and zoomed.
+
+<p><center> <table class="titlebar">
+  <tr>
+    <th>To:</th>
+    <th>With the Mouse:</th>
+  </tr>
+  <tr>
+    <td>Pan in ruler or in graph area</td>
+    <td>drag middle in ruler or in graph area</td>
+  </tr>
+  <tr>
+    <td>Increase or decrease zoom
+    <td><tt>Ctrl</tt> - drag middle or use mouse wheel in graph</td>
+  </tr>
+  <tr>
+    <td>Zoom (vertically) in ruler
+    <td><tt>Ctrl</tt> - drag middle or use mouse wheel in ruler</td>
+  </tr>
+  <tr>
+    <td>Zoom (horizontal) in ruler
+    <td><tt>Ctrl</tt> - drag middle or use mouse wheel in ruler;<br />
+    in the Data Plot drag middle in the lower 5% of graph area</td>
+  </tr>
+</table></center>
+
+<a id="SelectingPlot"></a><h2>Selecting Data Points and Entries</h2>
+
+<p>Data points in the plots (<b>Data</b> and <b>Correlation Plot</b>)
+and entries in the database are synchronized. Selecting a data point in
+the plot results in the corresponding entry being selected in the
+database. The reverse is also true: selecting an entry in the database
+selects its corresponding data point in the plot.  Entries/data points
+may be hidden, with no effect on entry numbers.
+
+<p><center>
+<table class="titlebar noborder">
+<tr>
+<th>To:</th>
+<th>Using the Left Mouse Button:</th>
+</tr>
+
+  <tr>
+     <td>Select single data point/entry</td>
+     <td>Click on or near the data point</td>
+  </tr>
+  <tr>
+     <td>Select multiple data points/entries</td>
+     <td>Drag over data points</td>
+  </tr>
+  <tr>
+     <td>Unselect data points/entries</td>
+     <td><tt>Ctrl</tt> click/drag over data points</td>
+  </tr>
+  <tr>
+     <td>Scroll Database Viewer to entry</td>
+     <td>Double click on data point</td>
+  </tr>
+  <tr>
+    <td>Select data points</td>
+    <td>Click on or near data points in graph.</td>
+  </tr>
+  <tr>
+    <td>Select a set of data points using a selection box</td>
+    <td>Drag over entries in graph.</td>
+  </tr>
+  <tr>
+    <td>Unselect data points</td>
+    <td><tt>Ctrl</tt> click or drag over data points in graph.</td>
+  </tr>
+  <tr>
+    <td>Restrict current data point selection</td>
+    <td><tt>Shift</tt> drag over data points in graph</td>
+  </tr>  
+  <tr>
+    <td>Select a range of values in the ruler</td>
+    <td>Drag over numbers in ruler to create a rectangular
+    selection region that extends the entire breadth of the plot.</td>
+  </tr>
+  <tr>
+    <td>Select all data points</td>
+    <td>Use
+    <span class="menu">DBV Data Plot | Plot Popup | Select All</span> or
+    press the <b>Selection:</b> <b>Clear</b> then <b>Invert</b> buttons.
+  </tr>
+
+</table></center>
+
+<a id="InvertClearPlot"></a><h2>Inverting and Clearing Selections</h2>
+
+<p>The selection of data points in the plot area (and their
+corresponding entries in the database) can be inverted or cleared using
+the <b>Selection:</b> <b>Clear</b> and <b>Invert</b> buttons. These are
+equivalent to using <span class="menu">DBV | Entry Popup | Invert</span>
+and <span class="menu">Clear</span>.</p> <p>The <b>Data Plot</b>
+provides the invert and clear functions additionally in its plot popup
+menu.</p>
+
+<a id="ClosePlot"></a><h2>Closing the Plot Area</h2>
+
+<p>Database plots are closed with the <b>Close Plot</b> button in the
+plot bottom button bar, or
+pressing the red <span style="color:red"><b>X</b></span> in the plot icon
+<img src="db/plottoggle.png" alt="Plot Toggle" class="icon"/> popup menu.</p>
+
+<img src="db/closeplot.png" alt="Close Plot Area" class="center"/>
+
+<a id="Saving"></a><h1>Saving Databases</h1>
+
+Use the <b><nobr>DBV | File | Save As</nobr></b> command to save the
+database under a new name.   The following panel appears:
+
+<img src="db/saveas.png" alt="Database Save As Panel" class="center"/>
+
+<p>
+In the <b>Save Database As</b> panel, enter the path and name of the file to
+save.  By convention, databases should be saved with the <tt>.mdb</tt>
+extension.  The options allow you to choose the output format
+and to save only the fields and/or entries that
+are selected in the database.  You may also choose whether to open the
+newly saved database in a Database Viewer.
+</p>
+
+<table cellspacing="5" class="noborder">
+<tr>
+  <th width=25%><b>Filename</b></th>
+<td>Path and filename of the destination database.
+</td>
+</tr>
+
+<tr>
+<th>Selected Fields Only</th>
+<td>Save only those
+fields that are selected in the Database Viewer.
+</td>
+</tr>
+
+<tr>
+<th>Selected Entries Only</th>
+<td>Save only those
+entries that are selected in the Database Viewer.
+</td>
+</tr>
+
+<tr>
+<th>Output</th>
+<td>Choose the output format.  Format-specific options
+will appear in the panel as needed.
+</td>
+</tr>
+
+<tr>
+<th>Auto Extension</th>
+<td>When enabled, the file extension
+will change in accordance with the Output format.
+</td>
+</tr>
+
+<tr>
+<th>Viewer</th>
+<td>
+<table><tr>
+<th style="min-width: 8em;"><b>Same Viewer</b> </th>
+<td>Open the new database in the current Database Viewer, closing the current
+database.</td>
+</tr><tr>
+<th><b>New Viewer</b> </th>
+<td>Open the new database in a new Database Viewer window.</td>
+</tr><tr>
+<th><b>No Viewer</b> </th>
+<td>Save the database without opening it in a Database Viewer.</td>
+</tr></table>
+</td>
+</tr>
+
+<!-- PACK
+<tr><th>Pack/Unpack Conformations</th>
+<td>Pack/unpack conformational database.
+-->
+
+</table>
+
+<p>Databases can also be exported in other file formats. See
+<a href="dbio.htm#ExportingData">Importing and Exporting Databases</a>
+for more information on file formats.
+
+<p>Note: You cannot use the <b>Save As</b> command to save the
+currently opened database under the same name in the same location.
+
+<!-- PACK
+<a id="Packing"></a><h2>Packing/Unpacking Conformational Databases</h2>
+
+<p>
+The <b><nobr>Pack/Unpack Conformation</b></nobr> option
+of the <b><nobr>Save Database As</b></nobr> panel
+affects the storage of conformational databases.
+
+<p>Conformational databases are stored in
+either <i>packed</i> or <i>unpacked</i> forms.
+The packed form stores one molecule per entry.
+The unpacked form stores one conformation per entry.
+The packed or unpacked form of a conformational database
+is detected automatically and the user is presented
+with either the <b><nobr>Pack Conformations</nobr></b> checkbox or
+the <b><nobr>Unpack Conformations</nobr></b> checkbox.  In the rare case
+that the database contains multiple molecular fields
+and the packed or unpacked form cannot be detected
+automatically, the user is presented with both options:
+
+<p><center>
+<img src="db/saveas_poption.png">
+</center>
+
+<p>
+Select the <b><nobr>Pack Conformation</b></nobr> option
+of the <b><nobr>Save Database As</b></nobr> panel
+to pack a conformational database:
+
+<p><center>
+<img src="db/saveas_pack.png">
+</center>
+
+<p>
+Select the <b><nobr>Unpack Conformation</b></nobr> option
+to unpack a conformational database:
+
+<p><center>
+<img src="db/saveas_unpack.png">
+</center>
+
+<p><table cellspacing="5" class="noborder">
+<tr>
+<td width=25%><b>Molecule</th>
+<td>Molecular field to pack or unpack.
+</td>
+
+<tr>
+<th>Conf</th>
+<td>Packed conformation positions (and energies).
+
+<tr>
+<th>Sequence</th>
+<td>Optional molecule sequence number.  Conformations
+of the same molecule share the same sequence number.  If the
+name is empty, the molecule sequence will be detected from
+the molecule field.
+
+<tr>
+<th>Energy</th>
+<td>Optional energy field.  If the name is empty,
+the energy values are not used.
+
+<br /><b>Warning!</b> Energies are stored with a relative
+precision of only about 0.001.
+
+</table>
+
+<p>Conformational databases are packed by storing conformation
+positions, and optionally, conformation energies in a separate
+field of name derived from name of the molecule field by
+adding the suffix <tt>':conf'</tt>.  For example, <tt>'mol:conf'</tt>
+is the conformation field of molecule <tt>'mol'</tt>.
+
+Other fields are fields are stored according to their types.
+
+<ul>
+
+<li>Empty fields are packed and unpacked as empty fields.
+
+<p>
+<li>Non-numerical fields (molecules and strings) are packed by copying the
+value of the first conformation as-is.  They are unpacked
+by copying (duplicating) the packed value as-is to all conformations.
+
+<p>
+<li>Numerical fields that store one scalar value per conformation
+are packed by collecting the scalar values to a vector.  If all
+conformations share the same value, the value is packed as a scalar
+(and not as a vector of duplicates).
+
+Scalar fields are unpacked by copying the packed value to all conformations.
+
+Vector fields are unpacked by copying the individual (scalar) elements
+to the corresponding conformations.
+
+<p>
+<li>The length of a vector stored in a packed numerical field must
+be the same as the number of stored conformations.  If the packed field
+contains a vector of a different length (&gt;1), the field cannot be unpacked
+and is removed from the output.  Also, if an unpacked numerical field
+stores vector values (of length &gt;1), the field cannot be packed and
+is removed from the output.
+
+</ul>
+-->
+
+<h1><a id="SVL">SVL Commands</a></h1>
+
+<a href="../moe/fcnref/introdb.htm">Database Functions</a>
+
+
+<a id="QuickReference"></a><h1>Database Viewer Menu Bar</h1>
+
+<table cellspacing="0" class="noborder" width="100%">
+<tr>
+<td width="20%">
+<fieldset>
+    <legend> <b>File</b> </legend>
+    <a href="dbedit.htm">New</a><br />
+    <a href="dbedit.htm">Open</a><br />
+    <a href="#Saving">Save As</a><br />
+    <a href="../apps/print.htm#PrintDatabase">Print</a><br />
+    <a href="dbbrowse.htm">Browse</a><br />
+<!--
+    <a href="dbio.htm">Export</a><br />
+-->
+    <a href="dbio.htm">Import</a><br />
+    <a href="dbio.htm#Merge">Merge</a><br />
+<!--
+    <a href="../apps/ph4_search.htm">Pharmacophore Search</a><br />
+    <a href="ph4sim.htm">Similarity Search</a><br />
+    <a href="fpmodel.htm">Fingerprint Model</a><br />
+-->
+    Close
+</fieldset>
+
+<td width="20%" height="100%">
+<fieldset>
+    <legend> <b>Edit</b> </legend>
+    New<br />
+    &nbsp;&nbsp;&nbsp;<a href="dbedit.htm#AddingEntries">Entry</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="dbedit.htm#CreatingFields">Field</a><br />
+    <a href="dbedit.htm#Copying_and_Pasting_Using_the_Clipboard">Copy</a><br />
+    <a href="dbedit.htm#Copying_and_Pasting_Using_the_Clipboard">Paste</a><br />
+    Delete<br />
+    &nbsp;&nbsp;&nbsp;<a href="#DeletingEntries">Selected Entries</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="#DeletingFields">Selected Fields</a><br />
+    Move<br />
+    &nbsp;&nbsp;&nbsp;<a href="#MovingEntries">Selected Entries</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="#MovingFields">Selected Fields</a><br />
+    <a href="#ColoringFields">Color</a><br />
+    <a href="#RenamingFields">Rename</a><br />
+    <a href="#FilteringEntries">Filter</a><br />
+    <a href="#SelectingEntries">Select</a><br />
+    Invert<br />
+    &nbsp;&nbsp;&nbsp;<a href="#InvertClearEntries">Entry Selection</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="#InvertClearFields">Field Selection</a><br />
+    Clear<br />
+    &nbsp;&nbsp;&nbsp;All<br />
+    &nbsp;&nbsp;&nbsp;<a href="#InvertClearEntries">Entry Selection</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="#InvertClearFields">Field Selection</a><br />
+    Select All<br />
+    &nbsp;&nbsp;&nbsp;<a href="#InvertClearEntries">Entries</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="#InvertClearFields">Fields</a><br />
+    <a href="#SelectingFields">Select Fields</a><br />
+</fieldset>
+
+<td width="20%">
+<fieldset>
+    <legend> <b>Display</b> </legend>
+    Entry<br />
+    &nbsp;&nbsp;&nbsp;<a href="#HideShowEntries">Hide Selected</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="#HideShowEntries">Hide Unselected</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="#HideShowEntries">Invert All</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="#HideShowEntries">Show All</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="#GoToNextSelected">Go To Next Selected</a><br />
+    Field<br />
+    &nbsp;&nbsp;&nbsp;<a href="#SelectingFields">Hide Selected</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="#HideShowFields">Hide Unselected</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="#HideShowFields">Invert All</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="#HideShowFields">Show All</a><br />
+    <a href="#DisplayingMolecules">Molecule</a><br />
+    <a href="#ColoringFields">Color</a><br />
+</fieldset>
+
+<td width="20%">
+<fieldset>
+    <legend> <b>Compute</b> </legend>
+    <a href="dbplot.htm">Analysis</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="dbplot.htm#DataPlot">Data Plot</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="dbplot.htm#CorrelationPlot">Correlation Plot</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="dbplot.htm#CorrelationMatrix">Correlation Matrix</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="dbplot.htm#SelectedFieldsHistogram">Field&nbsp;Histogram</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="dbplot.htm#Creating3DPlot">3D Plot</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="../apps/torprofile.htm">Torsion
+	Profile</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="../apps/ti.htm">AMBER TI
+	Analysis</a><br />
+    &nbsp;&nbsp;&nbsp;<a
+	href="../proteins/propatch.htm#2DMaps">Protein&nbsp;Patch&nbsp;2D&nbsp;Maps</a><br />
+    <a href="dbcalc.htm">Calculator</a><br />
+    <a href="#SortingEntries">Sort</a><br />
+    Molecule<br />
+    &nbsp;&nbsp;&nbsp;<a href="wash.htm">Wash</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="../apps/ligx.htm">QuickPrep</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="#PartialCharges">Partial Charges</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="#MinimizingMolecularStructures">Energy Minimize</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="../apps/dbv_molsup.htm">Superpose</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="../apps/confsrch.htm">Conformational Search</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="../apps/spectralanalysis.htm">Spectral Analysis</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="../apps/confsrch.htm">Conformation Geometry</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="#SaveProteinPatches">Protein Patches</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="dbedit.htm">Molecule Name</a><br />
+    Descriptors<br />
+    &nbsp;&nbsp;&nbsp;<a href="../quasar/descr.htm">Calculate</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="../proteins/ensprop.htm">Protein Properties</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="dbpca.htm">Principal Components</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="../quasar/qcont.htm">Contingency</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="../quasar/cluster.htm">Clusters</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="valclust.htm">Value Clusters</a><br />
+    Fingerprint<br />
+    &nbsp;&nbsp;&nbsp;<a href="ph4calc.htm">Calculate</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="ph4sim.htm">Search</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="ph4clust.htm">Clusters</a><br />
+    Model<br />
+    &nbsp;&nbsp;&nbsp;<a href="../quasar/model.htm">QSAR</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="../quasar/qbct.htm">Classification</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="fpmodel.htm">Fingerprint</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="../quasar/modcomp.htm">Composer</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="../quasar/modcomp.htm">Evaluate</a><br />
+    Pharmacophore<br />
+    &nbsp;&nbsp;&nbsp;<a href="../apps/ph4_search.htm">Search</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="../apps/ph4_elu.htm">Elucidate</a><br />
+    <a href="../apps/combitools.htm">Combinatorial Library</a><br />
+    <a href="../proteins/buildrotlib.htm">Build Rotamer Library</a><br />
+    <a href="../apps/mutanal.htm">Mutation Analysis</a><br />
+    <a href="../proteins/projsrch.htm">Project Search</a><br />
+    <a href="diverse.htm">Diverse Subset</a><br />
+    <a href="../apps/sar.htm">SAReport</a><br />
+    RECAP<br />
+    &nbsp;&nbsp;&nbsp;<a href="../apps/recap.htm">Analysis</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="../apps/recap.htm">Synthesis</a><br />
+    PLIF<br />
+    &nbsp;&nbsp;&nbsp;<a href="../apps/plif.htm#Generate">Generate</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="../apps/plif.htm#Using">Analyze</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="../apps/epitope.htm">Epitope</a><br />
+    QM<br />
+    &nbsp;&nbsp;&nbsp;<a href="../apps/qmconfig.htm#QMimport">Import</a><br />
+    &nbsp;&nbsp;&nbsp;<a href="../apps/qmconfig.htm#QMexternal">Run</a><br />
+    <a href="../moesaic/overview.htm">MOEsaic</a><br />
+</fieldset>
+
+</table>
+
+<a id="References"></a><h1>References</h1>
+
+<table class="ref">
+
+<tr>
+<td>[Lipinski&nbsp;1997]
+<td>
+Lipinski, C.A., Lombardo, F., Dominy, B.W. and Feeney, P.J.;
+Experimental and Computational Approaches to Estimate Solubility
+and Permeability in Drug Discovery and Development Settings;
+<i>Adv. Drug Deliv. Rev. 23</i> (<b>1997</b>) 3&ndash;25.
+</tr>
+
+<tr>
+<td>[Oprea&nbsp;2000]
+<td>
+Oprea, Tudor I.; Property Distribution of Drug-Related Chemical
+Databases; <i>J. Comp. Aid. Mol. Des.</i> <i>14</i> (<b>2000</b>) 251&ndash;264.</tr>
+
+</table>
+
+<h1>See Also</h1>
+<p>
+<a href="dbedit.htm">Creating Databases, Creating Fields and Adding Entries</a><br />
+<a href="dbfilter.htm">Filter Database</a><br />
+<a href="dbplot.htm">Plotting Database Values</a><br />
+<a href="dbio.htm">Importing, Exporting, and Merging Databases</a><br />
+<a href="dbbrowse.htm">Database Browser</a><br />
+<a href="../tutorials/moetour.htm">MOE Tour</a>
+</p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../images/ccgicon.png" /> <a href="../index.htm"></a> <a href=
+    "../legal.htm"></a> &copy;<span class="versionyear"></span> <a href="http://www.chemcomp.com"></a>. All
+    rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

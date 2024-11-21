@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content=
+  "functions: macromodel_ExportMDB, macromodel_ImportMDB" />
+  <title>MacroModel Database Import/Export Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    MacroModel Database Import/Export Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+<a class="fcnlink" href=
+"#macromodel_ImportMDB">macromodel_ImportMDB</a> [ 'db_file', 'mm_file', 'mfield', options ]
+
+where options is:
+
+    [
+        overwrite:          flag,
+        file_field:         flag
+    ]
+
+<a class="fcnlink" href=
+"#macromodel_ExportMDB">macromodel_ExportMDB</a> [ 'db_file', 'mm_file', 'mfield', options ]
+
+where options is:
+
+    [
+        esel:       flag,
+        maestro:    flag
+    ]
+</pre>
+<a id="macromodel_ImportMDB"></a>
+<h1>Description</h1>
+
+<pre>
+<span class=
+"fcndef">macromodel_ImportMDB</span> [ 'db_file', 'mm_file', 'mfield', options ]
+</pre>
+
+<p>Imports data from a MacroModel Database file to a MOE molecular database
+  file.</p>
+<dl>
+  <dt><tt>'db_file'</tt></dt>
+  <dd>Name of the destination molecular database file, specified as a token.
+  This file must already exist for the function to work.</dd>
+  <dt><tt>'mm_file'</tt></dt>
+  <dd>Name of the source MacroModel file to import, specified as a
+  token.</dd>
+  <dt><tt>'mfield'</tt></dt>
+  <dd>Name of the molecule field in the destination database to use for the
+  imported molecules. A new field is created if necessary.</dd>
+  <dt>options</dt>
+  <dd>
+    <tt>options</tt> is an attribute-value tagged vector of options:
+    <dl>
+      <dt><tt>overwrite:flag</tt></dt>
+      <dd>If <tt>flag</tt> is non-zero, database entries are appended to the
+      database. Otherwise, data is merged into the database starting from the
+      first entry, i.e. the source data overwrites the destination, beginning
+      at the first entry of the destination database. The default is 1.</dd>
+      <dt><tt>file_field:flag</tt></dt>
+      <dd>If <tt>flag</tt> is non-zero, then the name of the source database
+      file for each entry is written to the destination database file. The
+      default is 1.</dd>
+    </dl>
+  </dd>
+</dl>
+
+<a id="macromodel_ExportMDB"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class=
+"fcndef">macromodel_ExportMDB</span> [ 'db_file', 'mm_file', 'mfield', options ]
+</pre>
+
+<p>Exports fields and entries from a molecular database to a MacroModel file
+  (which is overwritten if it exists). If no molecule field is present in the
+  molecular database, one is created. Only the first molecule field encountered
+  is exported.</p>
+<dl>
+  <dt><tt>'db_file'</tt></dt>
+  <dd>Name of the source MOE molecular database, specified as a token.</dd>
+  <dt><tt>'mm_file'</tt></dt>
+  <dd>Name of the destination MacroModel file, specified as a token.</dd>
+  <dt><tt>'mfield'</tt></dt>
+  <dd>Name of the molecule field to export. If null is given then the first
+  molecule field found in the database will be used.</dd>
+  <dt><tt>options</tt></dt>
+  <dd>
+    An attribute-value tagged vector of options:
+    <dl>
+      <dt><tt>esel:flag</tt></dt>
+      <dd>If <tt>flag</tt> is non-zero, only entries that are selected in the
+      Database Viewer will be exported. If no database viewer is currently
+      displaying <tt>db_file</tt> then this option will be ignored.</dd>
+      <dt><tt>maestro:flag</tt></dt>
+      <dd>If <tt>flag</tt> is non-zero, the Maestro file format is used.</dd>
+    </dl>
+  </dd>
+</dl>
+
+<h1>See Also</h1>
+
+<p><a href="introdb.htm">Database Functions</a></p>
+<table class="functionList">
+  <tr>
+    <td><a href="db_ascii.htm">db_ImportASCII</a></td>
+    <td><a href="db_ascii.htm">db_ExportASCII</a></td>
+  </tr>
+  <tr>
+    <td><a href="db_sd.htm">db_ImportSD</a></td>
+    <td><a href="db_sd.htm">db_ExportSD</a></td>
+  </tr>
+  <tr>
+    <td><a href="db_mol2.htm">db_ImportMOL2</a></td>
+    <td><a href="db_mol2.htm">db_ExportTriposMOL2</a></td>
+  </tr>
+  <tr>
+    <td><a href="db_port.htm">db_ImportDB</a></td>
+    <td><a href="db_port.htm">db_ExportDB</a></td>
+  </tr>
+</table><!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

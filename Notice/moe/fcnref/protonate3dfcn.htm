@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="functions: Protonate3D" />
+  <meta name="keywords" content="keywords: hydrogens" />
+  <title>Protonate 3D</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Protonate 3D
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+<a class="fcnlink" href=
+"#Protonate3D">
+Protonate3D</a> [calcatoms, titratoms, flipatoms, protatoms, watratoms, options]
+
+options = [
+    mdisconnect:        flag,
+    ele:                'mode',
+    ele_cutoff:         num,
+    d_in:               num,
+    d_out:              num,
+    T:                  num,
+    ionC:               num,
+    pH:                 num,
+    vdw:                'mode',
+    vdw_cutoff:         num,
+    render:             flag,
+    rulefile:           'filename',
+    verbose:            flag
+];
+</pre>
+<a id="Protonate3D"></a>
+<h1>Description</h1>
+
+<p>The purpose of the <tt><span class="fcndef">Protonate3D</span></tt>
+  function is to assign ionization states and position hydrogens in a
+  macromolecular structure given its 3D coordinates (typically from a crystal
+  structure). The main task is to determine</p>
+  <ol>
+    <li>the rotamers of -SH -OH -CH3 and -NH3 groups in CYS, SER, TYR, THR, MET
+    and LYS;</li>
+    <li>the ionization states of acids and bases in ARG, ASP, GLU, LYS,
+    HIS;</li>
+    <li>the tautomers of imidazoles (HIS) and carboxylic acids (ASP,GLU);</li>
+    <li>the protonation state of metal ligand atoms CYS, HIS, ASP, GLU,
+    etc.;</li>
+    <li>the ionization state of metals.</li>
+    <li>the element identities in HIS, terminal amides (ASN,GLN) and
+    sulfonamides;</li>
+    <li>the orientation of each water molecule</li>
+  </ol>
+
+<p>Rotamer and ionization states of ligands are also assigned by
+  <tt>Protonate3D</tt>. The collection of protonation states is determined by a
+  template file the syntax of which is described in <a href=
+  "../../apps/protonate3d.htm">Protonate3D - Macromolecular Protonation State
+  Assignment</a>. The arguments to <tt>Protonate3D</tt> are</p>
+  <div class="indent">
+    <dl>
+      <dt><tt>calcatoms</tt></dt>
+      <dd>A set of atom keys that the calculation will operate upon. Atoms in
+      the MOE system not included in this set will be ignored. The
+      <tt>calcatoms</tt> will be subjected to full protonation
+      optimization.</dd>
+      <dt><tt>titratoms</tt></dt>
+      <dd>A set of atom keys that will be subjected to ionization changes.
+      Atoms not included in this set will have their ionization states
+      preserved. Atoms in the <tt>titratoms</tt> but not in the
+      <tt>calcatoms</tt> will be removed from the ionization search.
+      <b>Note!</b> In order for a titration search to be conducted, an atom
+      must be in the <tt>titratoms</tt> set and have a template in the
+      <tt>rulefile</tt> (see <tt>options</tt> below). Atoms that do not match a
+      template or not in the <tt>titrset</tt> will have their ionization states
+      preserved.</dd>
+      <dt><tt>flipatoms</tt></dt>
+      <dd>A set of atom keys that will subjected to element exchange (flips);
+      typically such atoms are in terminal amide, terminal imidazole and
+      terminal sulfonamide groups. Atoms in the <tt>flipatoms</tt> but not in
+      the <tt>calcatoms</tt> will be removed from the element exchange search.
+      <b>Note!</b> In order for an element exchange search to be conducted, an
+      atom must be in the <tt>flipatoms</tt> set and have a template in the
+      <tt>rulefile</tt> (see <tt>options</tt> below). Atoms that do not match a
+      template or not in the <tt>flipset</tt> will have their element
+      identities preserved.</dd>
+      <dt><tt>protatoms</tt></dt>
+      <dd>A set of atom keys that are to be protected; that is, their element
+      identities and ionization states preserved. Membership in the
+      <tt>protatoms</tt> set takes precedence over membership in the
+      <tt>titratoms</tt> and <tt>flipatoms</tt> set.</dd>
+      <dt><tt>watratoms</tt></dt>
+      <dd>A set of atom keys containing water molecules that are to be
+      considered as <i>precise waters</i>. Normally water molecules are not
+      optimized along with the remaining atoms; they are placed one by one
+      after the optimization of the rest of the system. The <tt>watratoms</tt>
+      set contains a list of those waters that <i>are</i> to be optimized with
+      the rest of the system. <b>Note!</b> Water molecules included in this set
+      will be given ~500 orientations and each such water will increase the run
+      time of <tt>Protonate3D</tt> substantially. It is not practical to
+      include many water molecules in this set.</dd>
+      <dt><tt>options</tt></dt>
+      <dd>A tagged vector of options that control the calculation (see
+      below).</dd>
+    </dl>
+  </div>
+
+<p>A typical invocation of <tt>Protonate3D</tt> would resemble:</p>
+
+<pre class="code">
+local atoms = Atoms[];                    // get all atoms
+<span class=
+"fcndef">Protonate3D</span> [atoms,atoms,atoms,[],[],[]]; // optimize all, no precise waters
+</pre>
+
+<p>However if, for example, the variable <tt>nearlig</tt> contains the atom
+  keys of water molecules near a ligand, then</p>
+
+<pre class="code">
+Protonate3D [atoms,atoms,atoms,[],nearlig,[]];
+</pre>
+
+<p>would optimize the system and treat the water molecules in the
+  <tt>nearlig</tt> set in a precise manner (including them in the full
+  optimization). The <tt>options</tt> argument is a tagged vector with values
+  that control the calculation:</p>
+  <div class="indent">
+    <dl>
+      <dt><tt>ele</tt> : <i>token</i><br />
+      <tt>ele_cutoff</tt> : <i>number</i></dt>
+      <dd>
+        The electrostatics model to use in the calculation. The
+        <tt>ele_cutoff</tt> is the distance in Angstroms beyond which
+        electrostatic interactions will be ignored (defaulting to
+        15.0&nbsp;&Aring;). The <tt>ele</tt> token specifies the electrostatics
+        model and can be one of
+        <ul>
+          <li><tt>'1/r'</tt> - Coulomb's law.</li>
+          <li><tt>'SF/r'</tt> - Shifted force Coulomb's law.</li>
+          <li><tt>'1/r2'</tt> - Distance dependent dielectric
+          Coulomb's law.</li>
+          <li><tt>'GB'</tt> - Generalized Born electrostatics (the
+          default).</li>
+        </ul>
+
+<p><b>Note!</b> For titration (ionization search) the
+        <tt>'GB'</tt> <i>must</i> be specified - no titration will be
+        performed with the other models.</p>
+      </dd>
+      <dt><tt>d_in</tt> : <i>number</i><br />
+      <tt>d_out</tt> : <i>number</i></dt>
+      <dd>The dielectric constants used in the electrostatics models;
+      <tt>d_in</tt> is the dielectric of the solute (the <tt>calcatoms</tt>)
+      and defaults to 1.0; <tt>d_out</tt> is the dielectric of the (implicit)
+      solvent and defaults to 80.0. The <tt>d_out</tt> value is used only in
+      the <tt>'GB'</tt> electrostatics model.</dd>
+      <dt><tt>ionC</tt> : <i>number</i></dt>
+      <dd>The concentration of salt in the system (in mol/L) used only for the
+      <tt>'GB'</tt> electrostatics model. The default is
+      0.1&nbsp;mol/L.</dd>
+      <dt><tt>mdisconnect</tt> : <i>flag</i></dt>
+      <dd>If true then transition metals in a residue with no other heavy atoms
+      will be disconnected from their ligands prior to the calculation. This
+      procedure reduces the number of templates required but treats all
+      transition metals as point ions.</dd>
+      <dt><tt>pH</tt> : <i>number</i></dt>
+      <dd>The pH of the system used only in the <tt>'GB'</tt>
+      electrostatics model. The default is 7.0.</dd>
+      <dt><tt>render</tt> : <i>flag</i></dt>
+      <dd>If true then certain atoms of the system will have their appearance
+      and labels change; for example, metals will be labeled with their element
+      and given a small sphere rendering mode. The default is 1.</dd>
+      <dt><tt>rulefile</tt> : <i>token</i></dt>
+      <dd>The name of the protonation state template file. The default is
+      <tt>'$MOE/lib/protonate3d.dat'</tt>.</dd>
+      <dt><tt>T</tt> : <i>number</i></dt>
+      <dd>The temperature of the system in Kelvin. The default is 300.</dd>
+      <dt><tt>vdw</tt> : <i>token</i></dt>
+      <dt><tt>vdw_cutoff</tt> : <i>number</i></dt>
+      <dd>
+        The van der Waals model to use in the calculation. The
+        <tt>vdw_cutoff</tt> is the distance in Angstroms beyond which van der
+        Waals interactions will be ignored (defaulting to 10.0&nbsp;&Aring;).
+        The <tt>vdw</tt> token specifies the van der Waals model and can be one
+        of
+        <ul>
+          <li><tt>'SCWRL'</tt> - The SCWRL repulsion only term.</li>
+          <li><tt>'12-6'</tt> - The 12-6 Lennard Jones van der Waals
+          potential.</li>
+          <li><tt>'9-6'</tt> - The 9-6 Lennard Jones van der Waals
+          potential.</li>
+          <li><tt>'800R3'</tt> - An approximation to the Lennard Jones
+          repulsion only term (the default).</li>
+        </ul>
+      </dd>
+      <dt><tt>verbose</tt> : <i>flag</i></dt>
+      <dd>If true then information will be written to the SVL Commands window
+      during the course of the calculation; otherwise no information will be
+      written. The default is 1.</dd>
+    </dl>
+  </div>
+
+<p>More information about methodology and the energetic terms used in
+  <tt>Protonate3D</tt> can be found in the references in the See Also section
+  (below).</p>
+
+<h1>See Also</h1>
+
+<p><a href="../../apps/protonate3d.htm">Protonate3D - Macromolecular
+  Protonation State Assignment</a><br />
+  <a href="uqofcn.htm">Unary Quadratic Optimization Utilities</a></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

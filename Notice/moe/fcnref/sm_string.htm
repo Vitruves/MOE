@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: sm_StringRoot" />
+  <title>Molecule Input Language Functions: sm_StringRoot</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Molecule Input Language Functions:
+    sm_StringRoot
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    elements = <a class="fcnlink" href=
+"#sm_StringRoot">sm_StringRoot</a> [ SMILES_token ]
+    elements = <a class="fcnlink" href=
+"#sm_StringRoot">sm_StringRoot</a> [ SMILES_token, dkeys ]
+</pre>
+<a id="sm_StringRoot"></a>
+<h1>Description</h1>
+
+<p>For each molecular fragment represented by a molecular input language
+  string in the token vector <tt>SMILES_token</tt>, this function returns the
+  element of the first atom. If no element is specified, or if a wildcard is
+  encountered, '<tt>*</tt>' is returned. <tt>$()</tt> expressions (atom
+  environments) are permitted, as is the use of symbolic links. It is an error
+  to use a symbolic link (see <tt>sm_Match</tt>, <tt>sm_Define</tt>,
+  <tt>sm_Create</tt>) without passing the key of the dictionary in which the
+  referenced entry is to be found.</p>
+
+<pre>
+    svl&gt; <span class="fcndef">sm_StringRoot</span> 'O=C1CCC(=O)CC1'
+    'O'
+    svl&gt; <span class=
+"fcndef">sm_StringRoot</span> [ ['[#6]','n1aaaa1','A'] ]
+    ['C','N','*']
+</pre>
+
+<p>For details on syntax, see <a class="svl" href=
+  "sm_build.htm"><tt>sm_Build</tt></a> and <a class="svl" href=
+  "smartsfcn.htm"><tt>sm_Match</tt></a>.</p>
+
+<h1>See Also</h1>
+
+<p><a href="../molsystems/smiles.htm">SMILES Molecule Input Language</a></p>
+
+<p><tt><a class="svl" href="sm_build.htm">sm_BuildSyntax</a><br />
+  <a class="svl" href="sm_build.htm">sm_BuildSyntaxError</a><br />
+  <a class="svl" href="smartsfcn.htm">sm_MatchSyntax</a><br />
+  <a class="svl" href="smartsfcn.htm">sm_MatchSyntaxError</a><br /></tt></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

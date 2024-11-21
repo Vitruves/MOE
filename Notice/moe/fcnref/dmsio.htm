@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: fwrite_DMS" />
+  <meta name="keywords" content="functions: fread_DMS" />
+  <title>Desmond Structure (DMS) I/O Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Desmond Structure (DMS) I/O Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    mol = <a class="fcnlink" href="#fread_DMS">fread_DMS</a> 'filename'
+
+    <a class="fcnlink" href=
+"#fwrite_DMS">fwrite_DMS</a> ['filename', obj_keys, opt]
+    opt = [
+        dms_save_into: flag,
+        dms_provenance_user: userID_tok,
+        dms_provenance_source: filename
+    ]
+</pre>
+
+<h1>Description</h1>
+
+<p>These functions provide means for reading and writing Desmond Structure
+  (DMS) files.</p>
+<a id="fread_DMS"></a>
+<hr noshade="noshade" />
+
+<pre>
+mol = <span class="fcndef">fread_DMS</span> 'filename'
+</pre>
+
+<p>Reads a DMS format file and returns an MDB format <a href=
+  "extract.htm">MOL</a> data structure.</p>
+<a id="fwrite_DMS"></a>
+<hr noshade="noshade" />
+
+<pre>
+<a class="fcnlink" href=
+"#fwrite_DMS">fwrite_DMS</a> ['filename', obj_keys, opt]
+</pre>
+
+<p>Saves the specified molecular objects to a DMS format file.
+  <tt>obj_keys</tt> specifies the keys of the molecular objects loaded in the
+  MOE system that are to be saved.</p>
+
+<p><tt>opt</tt> provides the following options:</p>
+  <dl>
+    <dt><tt>dms_save_into: flag</tt></dt>
+    <dd>
+      This flag controls the behavior when writing to an already existing
+      file:
+      <ul>
+        <li>If <tt>flag</tt> is 0, then the file is overwritten; all tables in
+        the DMS file are recreated anew.</li>
+        <li>If <tt>flag</tt> is not zero, then there are two possibilities.
+        However, in both cases, the <tt>'provenance'</tt> table, which
+        records the modification history of the file, is retained and updated.
+          <ol style="margin: 10px 0 0 0;">
+            <li>If the molecular data being saved is the same as what was
+            originally in the file, only the position data is updated, and all
+            other data is preserved (with the exception of the
+            <tt>'provenance'</tt> table, which is updated).</li>
+            <li>Otherwise if the molecular data has changed, all data tables
+            are recreated anew with the exception of the
+            <tt>'provenance'</tt> table, which is updated.</li>
+          </ol>
+        </li>
+      </ul>
+
+<p>If a new file is being written, all tables are created anew.</p>
+    </dd>
+    <dt><tt>dms_provenance_source: filename</tt></dt>
+    <dd>This option allows for specifying another DMS file from which to copy
+    the <tt>'provenance'</tt> table. The current provenance data is
+    also appended to the table.</dd>
+    <dt><tt>dms_provenance_user: userID_tok</tt></dt>
+    <dd>This option allows for specifying a token that identifies the user
+    responsible for the file update. This token is stored in the
+    <tt>'provenance'</tt> table of the output DMS file.</dd>
+  </dl><!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

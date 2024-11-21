@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords: SOAP, moeweb" />
+  <meta name="keywords" content="keywords: homology" />
+  <meta name="keywords" content="functions: soapfcn_HomologyModeler" />
+  <meta name="keywords" content="functions: soap_spec_HomologyModeler" />
+  <meta name="keywords" content="functions: soap_HomologyModeler" />
+  <title>HomologyModeler SOAP Function</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    HomologyModeler SOAP Function
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<p>The automated SOAP homology modeler builds an all-atom homology model for
+  an input residue sequence.</p>
+
+<pre>
+    <a class="fcnlink" href="#HomologyModeler">HomologyModeler</a>
+</pre>
+  <hr noshade="noshade" />
+<a id="HomologyModeler"></a>
+<h1>HomologyModeler</h1>
+
+<h2>Parameters</h2>
+  <dl>
+    <dt><tt>seqFasta:</tt> <i>file</i></dt>
+    <dd>The input sequences, in FASTA <tt>(.fst)</tt> format, supplied as a
+    file. It is also possible to specify multiple chains by including all chain
+    sequences within the FASTA string. Note that multi-chain models are only
+    supported via <tt>seqFasta</tt> input. The content type for the file is
+    specified in the <tt>seqFastaContent</tt> parameter.</dd>
+    <dd><br /></dd>
+    <dt><tt>seq:</tt> <i>string</i></dt>
+    <dd>The input residue sequence, supplied as a string of single letter amino
+    acid codes. This argument is required.</dd>
+    <dd><br /></dd>
+    <dt><tt>template:</tt> <i>file</i></dt>
+    <dd>The antibody template model as a PDB-formatted file. The content type
+    for the file is specified in the <tt>templateContent</tt> parameter.</dd>
+    <dd><br /></dd>
+    <dt><tt>templatePDBCode:</tt> <i>string</i></dt>
+    <dd>An optional string argument specifying the PDB code of the template
+    structure. The dot-separated chain specifier can also be supplied; for
+    example, <tt>2XQY.L</tt>. If <tt>templatePDBCode</tt> is not provided, a
+    template will be automatically identified.</dd>
+    <dd><br /></dd>
+    <dt><tt>protocol:</tt> <i>string</i> (default: <tt>standard</tt>)</dt>
+    <dd>The level of effort to expend during model creation. This proceeds from
+    fast (<tt>coarse</tt>) to precise (<tt>fine</tt>), with <tt>standard</tt>
+    as the default. <tt>[coarse, standard, fine]</tt>.</dd>
+    <dd><br /></dd>
+    <dt><tt>seqFastaContent:</tt> <i>string</i> (default: <tt>text</tt>)</dt>
+    <dd>The content type of the file passed as the <tt>seqFasta</tt> parameter.
+    <tt>[text, base64, url]</tt>.</dd>
+    <dd><br /></dd>
+    <dt><tt>templateContent:</tt> <i>string</i> (default: <tt>text</tt>)</dt>
+    <dd>The content type of the file passed as the <tt>template</tt> parameter.
+    <tt>[text, base64, url]</tt>.</dd>
+    <dd><br /></dd>
+    <dt><tt>modelContent:</tt> <i>string</i> (default: <tt>text</tt>)</dt>
+    <dd>The content type of the file passed as the <tt>model</tt> return value.
+    <tt>[text, base64, url]</tt>.</dd>
+    <dd><br /></dd>
+  </dl>
+
+<h2>Return Values</h2>
+  <dl>
+    <dt><tt>model:</tt> <i>file</i></dt>
+    <dd>The homology model, in PDB format, returned as a file. The content type
+    for the file is specified in the <tt>modelContent</tt> parameter.</dd>
+    <dd><br /></dd>
+  </dl>
+
+<h2>Description</h2>
+
+<p>The automated SOAP homology modeler application creates an all-atom 3D
+  homology model of the input residue sequence. A template can optionally be
+  specified as a 4-letter PDB code using the <tt>templatePDBCode</tt> input
+  parameter, in which case it will be used to build the model. The template
+  structure will preferentially be taken from the provided <tt>template</tt>
+  PDB structure. Alternatively, it may be specified using
+  <tt>templatePDBCode</tt>. The latter is loaded from the Protein Database
+  distributed with MOE, if possible. If it is not found within this database,
+  the template will be downloaded from the PSILO server, if available,
+  otherwise it will be obtained from the RCSB website. If a chain specifier for
+  the template is given, and the specified chain exists, that specific
+  structure will be used as the template. If the chain specifier is not given,
+  or if the chain is not found, a pairwise alignment of the input query
+  sequence to each available chain in the template PDB family is conducted. The
+  template PDB family is the family of structures all sharing the same PDB
+  code. The chain offering the best scoring alignment will then be used as the
+  actual template.</p>
+
+<p>In the absence of a specified template (when <tt>template</tt> or
+  <tt>templatePDBCode</tt> are not given), a homology search is performed to
+  automatically identify a template. The chosen template is the top-scoring
+  member of the top-scoring family.</p>
+
+<p>As part of the homology modeling protocol, the input residue sequence is
+  first aligned to the family in which the template belongs. This
+  sequence-to-family alignment yields superior results compared to a
+  sequence-to-sequence alignment using just the template itself. The template
+  structure is then subjected to a structure preparation protocol in which
+  problems such as erroneous charges or missing atoms are corrected, and
+  refinement is performed.</p>
+
+<p>After the template has been refined, a series of intermediate homology
+  models is built using MOE's homology modeling procedure. This procedure
+  copies structure from the template wherever the input sequence is in good
+  alignment with the template, fills in gaps using loops modeled from a loop
+  library, packs sidechains, and finally performs additional refinement. The
+  returned homology model is chosen to be the best scoring of all these
+  intermediate models.</p>
+
+<p>When multiple query chains are specified, the above protocol is used with
+  the additional caveat that each chain is searched. The best scoring chain
+  will form the basis of selection for the template with all other chains being
+  matched to their best template pairing. Finally, a multi-chain homology model
+  is constructed with the best scoring model being returned.</p>
+
+<h1>See Also</h1>
+
+<p><a href="../../moeweb_apps/moeweb_intro.htm">MOE/web Applications</a><br />
+  <a href="../../moe/moesoap.htm">MOE/web SOAP Service and Functions</a><br />
+  <a class="svl" href="../../svl/fcnref/soapfcn.htm">SOAP Interface
+  Functions</a><br />
+  <br />
+  <a href=
+  "https://www.chemcomp.com/moe/help/2018/CCG_Tutorials/(Tutorial)_MOE_Homology_Modeling_of_Proteins.svlx">
+  Homology Model Tutorial</a><br />
+  <a href="../../proteins/prosearch.htm">Homology Searching</a><br />
+  <a href="../../proteins/promodel.htm">Building Homology Models</a><br />
+  <br />
+  <a href="../../proteins/fcnref/pro_mod.htm"><tt>pro_Model</tt> Protein
+  Function</a> </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

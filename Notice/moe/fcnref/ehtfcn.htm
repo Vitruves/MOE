@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="functions: ctab_EHT" />
+  <meta name="keywords" content="functions: ctab_ResonanceEHT" />
+  <title>Hueckel Theory Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Hueckel Theory Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+    eht = ctab_EHT ctab
+    ctab = ctab_ResonanceEHT [ctab, opt]
+</pre>
+
+<h1>Description</h1>
+
+<p>The <tt>ctab_EHT</tt> function performs a modified Hueckel Theory
+  calculation [Gerber&nbsp;1994] [Gerber&nbsp;1998] on a given <tt>ctab</tt>
+  and returns a tagged vector of results. For best speed, the input
+  <tt>ctab</tt> should be in charge separated form without aromatic bonds,
+  although if such bonds are present, the calculation will proceed after such
+  bonds are converted.</p>
+
+<p>The returned <tt>eht</tt> is a tagged vector:</p>
+  <div class="indent">
+    <dl>
+      <dt><tt>stable</tt></dt>
+      <dd>A flag indicating whether the calculation produced a result
+      consistent with the input <tt>ctab</tt> (e.g., the total charge is the
+      same). In general, the calculation will be stable for molecules with
+      complete valences; however, in some cases for Groups 5-8 with high
+      ionizations (+2 or more) may lead to instabilities.</dd>
+      <dd></dd>
+      <dt><tt>Z</tt></dt>
+      <dd>The atomic number of each atom.</dd>
+      <dd></dd>
+      <dt><tt>ion</tt></dt>
+      <dd>The input ionization of each atom (<tt>CTAB_A_CHARGE</tt>).</dd>
+      <dd></dd>
+      <dt><tt>iH</tt></dt>
+      <dd>The implicit hydrogen count of each atom
+      (<tt>CTAB_A_HCOUNT</tt>).</dd>
+      <dd></dd>
+      <dt><tt>xH</tt></dt>
+      <dd>The number of explicit hydrogens attached to each atom.</dd>
+      <dd></dd>
+      <dt><tt>nH</tt></dt>
+      <dd>The total number of hydrogens attached to each atom (explicit plus
+      implicit).</dd>
+      <dd></dd>
+      <dt><tt>iLP</tt></dt>
+      <dd>The number of implicit sigma LPs on each atom.</dd>
+      <dd></dd>
+      <dt><tt>xLP</tt></dt>
+      <dd>The number of explicit LPs attached to each atom.</dd>
+      <dd></dd>
+      <dt><tt>nLP</tt></dt>
+      <dd>The total number of LPs attached to each atom (explicit plus
+      implicit).</dd>
+      <dd></dd>
+      <dt><tt>col</tt></dt>
+      <dd>The group (column in the periodic table) of each atom; column 2 is
+      returned for transition metals and column 0 is returned for LP
+      atoms.</dd>
+      <dd></dd>
+      <dt><tt>row</tt></dt>
+      <dd>The row (in the periodic table) of each atom; 0 is returned for LP
+      atoms.</dd>
+      <dd></dd>
+      <dt><tt>deg</tt></dt>
+      <dd>The explicit degree of each atom in the graph.</dd>
+      <dd></dd>
+      <dt><tt>nc</tt></dt>
+      <dd>The coordination number of each atom (including implicit Hs but
+      excluding all LPs).</dd>
+      <dd></dd>
+      <dt><tt>hyb</tt></dt>
+      <dd>The hybridization state of each atom in {0,1,2,...} encoding
+      <i>sp<sup>n</sup></i> for <i>n&nbsp;&le;&nbsp;3</i> and
+      <i>sp<sup>3</sup>d<sup>n-3</sup></i> for <i>n&nbsp;&gt;&nbsp;3</i>.</dd>
+      <dd></dd>
+      <dt><tt>q_sigma</tt></dt>
+      <dd>The fractional Hueckel sigma charge (occupancy) of each atom.</dd>
+      <dd></dd>
+      <dt><tt>q_pi</tt></dt>
+      <dd>The fractional Hueckel pi charge (occupancy) of each atom.</dd>
+      <dd></dd>
+      <dt><tt>q_iH</tt></dt>
+      <dd>The total Hueckel charge (occupancy) of all implicit hydrogens
+      attached to each atom.</dd>
+      <dd></dd>
+      <dt><tt>emd</tt></dt>
+      <dd>The hydrogen bond donor strength of each atom [Gerber&nbsp;1998].
+      Note that non-hydrogen atoms will have a non-zero <tt>emd</tt> only if
+      they have implicit hydrogens.</dd>
+      <dd></dd>
+      <dt><tt>ema</tt></dt>
+      <dd>The hydrogen bond acceptor strength of each atom
+      [Gerber&nbsp;1998].</dd>
+      <dd></dd>
+      <dt><tt>xA</tt></dt>
+      <dd>The source atom of each bond (<tt>CTAB_B_FROM</tt>).</dd>
+      <dd></dd>
+      <dt><tt>xB</tt></dt>
+      <dd>The destination atom of each bond (<tt>CTAB_B_TO</tt>).</dd>
+      <dd></dd>
+      <dt><tt>b_pbo</tt></dt>
+      <dd>The fractional pi bond order of each bond.</dd>
+      <dd></dd>
+      <dt><tt>b_dbo</tt></dt>
+      <dd>The fractional d-hybrid bond order of each bond.</dd>
+    </dl>
+  </div>
+
+<p>Note that the atom order in the <tt>eht</tt> results is the same as the
+  original <tt>ctab</tt>; similarly for the bonds. For example, to perform a
+  Hueckel calculation on a molecule and set the partial charges to the Hueckel
+  occupancies, one can use:</p>
+
+<pre>
+    local atoms = Atoms[];
+    local eht = ctab_EHT ctab_Extract [atoms];
+    aSetCharge [atoms, eht.q_sigma + eht.q_pi + eht.q_iH];
+</pre>
+  <hr noshade="noshade" />
+
+<pre>
+    ctab = ctab_ResonanceEHT [ctab, opt]
+</pre>
+
+<p>The <tt>ctab_ResonanceEHT</tt> function recalculates the p- and d- bond
+  orders using Hueckel Theory. The fractional charges and bond orders are used
+  to optimally reassign the double and triple bonds in the given <tt>ctab</tt>.
+  The <tt>opt</tt> argument contains options to control the calculation:</p>
+  <div class="indent">
+    <dl>
+      <dt><tt>pbo</tt> : <i>flag</i></dt>
+      <dd>If true, the p- bond orders will be reassigned; otherwise they will
+      be left as-is. The default is true.</dd>
+      <dd></dd>
+      <dt><tt>dbo</tt> : <i>flag</i></dt>
+      <dd>If true, the d- bond orders will be reassigned; otherwise they will
+      be left as-is. The default is true.</dd>
+      <dd></dd>
+      <dt><tt>eht</tt> : <i>eht_data</i></dt>
+      <dd>If non-null, the EHT calculation will be skipped and the value of
+      <tt>eht</tt> will be used; otherwise, <tt>ctab_EHT</tt> will be called.
+      The default is null.</dd>
+    </dl>
+  </div>
+
+<p>For example, to reassign the p- and d- bond orders for a
+  <tt>ctab</tt>:</p>
+
+<pre class="code">
+local atoms = Atoms[];
+local ctab = ctab_Extract [atoms];
+ctab = ctab_ResonanceEHT [ctab];
+</pre>
+
+<h1>References</h1>
+<table class="ref">
+  <tr>
+    <td>[Gerber&nbsp;1998]</td>
+    <td>Gerber, P.R.; Charge distribution from a simple molecular orbital type
+    calculation and non-bonding interaction terms in the force field MAB; <i>J.
+    Comput.-Aid. Mol. Des. 12</i> (<b>1998</b>) 37&ndash;51.</td>
+  </tr>
+  <tr>
+    <td>[Gerber&nbsp;1994]</td>
+    <td>Gerber, P.R., Mueller, K.; MAB, a generally applicable molecular force
+        field for structure modelling in medicinal chemistry; <i>J. Comput.-Aid. Mol.
+        Des. 9</i> (<b>1994</b>) 251&ndash;268.</td>
+  </tr>
+</table>
+
+<h1>See Also</h1>
+<p><a href="ctabfcn.htm">CTAB Connection Table Functions</a></p>
+
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html>
+
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+
+<head>
+<meta http-equiv="x-ua-compatible" content="IE=9" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet" type="text/css"
+href="../include/manstyle.css" />
+<link rel="icon" type="image/png" href="../images/ccgicon.png" />
+<link rel="shortcut icon" type="image/png" href="../images/ccgicon.png" />
+<title>Torsion Profile</title>
+<meta name="keywords" content="panel: Torsion Profile" />
+<meta name="keywords" content="keywords: torsion " />
+<meta name="keywords" content="keywords: torsion profile" />
+<meta name="keywords" content="keywords: rotamer" />
+<meta name="keywords" content="keywords: constrained minimization" />
+<meta name="keywords" content="keywords: minimization" />
+<meta name="keywords" content="keywords: MM" />
+<meta name="keywords" content="keywords: QM" />
+<meta name="keywords" content="keywords: quantum" />
+<meta name="keywords" content="keywords: ONIOM" />
+<meta name="keywords" content="keywords: dihedral" />
+<meta name="keywords" content="keywords: forcefield" />
+<meta name="keywords" content="keywords: energy profile" />
+<meta name="keywords" content="keywords: torsion angle" />
+<meta name="keywords" content="keywords: Gaussian" />
+<meta name="keywords" content="keywords: Mogul" />
+<meta name="keywords" content="keywords: histogram" />
+</head>
+
+<body>
+<div class="center-page">
+
+<!-- START MOE_HEADER -->
+<div class="MOE_HEADER">
+  <a href="../index.htm"><img src="../images/ccglogo.png" /></a>
+  <a href="../index.htm"><div class="moeversion"></div></a>
+Torsion Profile
+</div>
+<!-- END MOE_HEADER -->
+
+<div class="content">
+
+<ul>
+  <li><a href="#Method">Methodology</a></li>
+  <li><a href="#RunTorsion">Running Torsion Profile</a></li>
+  <li><a class="#Examples" href="#Examples">Examples</a></li>
+  <ul>
+    <li>
+    <a class="example" href="#ForcefieldBased">
+      Forcefield-based Torsion Profile
+    </a>
+    </li>
+    <li>
+    <a class="example" href="#QMBased">QM-based Torsion Profile</a>
+    </li>
+    <li>
+    <a class="example" href="#ONIOMBased">ONIOM-based Torsion Profile</a>
+  </ul>
+  <li><a href="#Ref">References</a></li>
+  <li><a href="#seeAlso">See Also</a></li>
+</ul>
+
+<p>
+Reducing internal strain energy in small molecules is critical for designing
+potent drugs [Sellers&nbsp;2017].  A torsion energy analysis, or
+Torsion Profile, estimates the
+strain energy for a 360&deg; rotation around a single rotatable bond.  This
+identifies the minimum-energy orientations as well as the rotation barrier(s)
+to their interconversion.  This can be used by medicinal chemists to
+determine the optimal conformation of compounds under consideration.
+[Muegge&nbsp;2016].
+Torsion profiles can also be used to determine or improve
+forcefield parameters [Kahn&nbsp;2002] particularly when experimental
+structural information is lacking.
+</p>
+
+<p>
+An approximate profile can be rapidly determined
+by rotating a portion of the structure as a rigid body and calculating
+the energy at each
+angle.  A more detailed profile can be obtained by constraining the torsion
+angle
+of the rotating bond and allowing the rest of the structure to relax yielding
+minimized energies.  All calculations can be performed using forcefield or
+quantum chemical (QM) methods, with the latter requiring greater compute
+resources
+while providing a means of investigating structural details not amenable to
+classical modeling.
+</p>
+
+
+<!-- ============================= METHODOLOGY -=========================== -->
+
+<a id="Method"></a>
+<h1>Methodology</h1>
+
+<p>
+The Torsion Profile application performs a series of operations (described
+below) on behalf
+of the user in order to create a profile of a rotating bond.  Two
+types of profiles can be generated: a rigid-body rotation can be performed,
+calculating the energy at each rotation angle:
+
+<img src="torprofile/fixedpix.png" alt="Rigid-body Profile" class="center" />
+
+This is a rapid calculation as no minimizations are performed, although it
+can yield arbitrarily large energy values when the rotating bond is
+sterically hindered.
+</p>
+
+<p>
+A better approximation of the dynamic nature of the rotating bond can be
+obtained by performing a constrained minimization for each torsion angle
+value of the scan.  This allows all atoms to relax as long as the required
+torsion angle value is maintained, yielding more realistic energy profiles:
+
+<img src="torprofile/movedpix.png" alt="Constrained min Profile" class="center" />
+
+As shown, the non-rotating phenyl ring can change its orientation to
+reduce steric clash due to proximity of the rotating portion of the structure.
+The rotating bond in selected in both examples.
+</p>
+
+<h2>Rigid-rotor Torsion Profiles</h2>
+
+<p>
+This option mirrors the
+<a href="../moe/gui/mainwin.htm#DihedralProfile">Interactive Energy Profile</a>
+that can be calculated via the bottom bar in MOE.  The moving portion of
+the structure is rotated to each desired torsion angle value and the energy
+calculated via the
+<a href="../moe/fcnref/potfcn.htm">Potential</a> function (using the
+current forcefield and settings).  It is included in all calculations so
+that the user can easily visualize the effect of constrained minimization.
+</p>
+
+<h2>Constrained Minimization Torsion Profiles</h2>
+
+<p>
+This option performs single- or bi-directional scans using the current
+forcefield and settings.  This is a multi-step process:
+
+<ol>
+  <li>
+  <p>Determine the torsion angle values that must be examined.  All forcefield
+  calculations are performed with a one-degree stepsize, modified to include
+  all user-specified angles.  For example, if the (default) 7.5&deg; stepsize
+  is used, the non-whole-number angles must be included:
+  <tt>5, 6, 7, 7.5, 8, ...</tt>.</p>
+  </li>
+  <li>
+  <p>If requested, perform the clockwise scan.  Starting from the torsion angle
+  value from (1) that is closest to the input structure, a series of
+  constrained minimizations are performed to generate the structures and
+  energies for each desired angle.  A two-step process is used:</p>
+
+  <ul>
+    <li>
+    Apply a tether to each atom to restrain it to its starting position and
+    minimize.  This reduces steric clashes while preserving the initial
+    geometry.
+    </li>
+    <li>
+    Remove the tethers and minimize again.  This fully relaxes the geometry,
+    generating the forcefield-based structure and energy for each constrained
+    angle.
+    </li>
+  </ul>
+
+  <p>All calculations use the results of the previous angle as their initial
+  geometries.  As the maximum internal angle stepsize is one degree,
+  geometry changes
+  for each minimization step will be reduced.  However, sterically-hindered
+  bonds can (or will) be dependent on the rotation direction.</p>
+  </li>
+  <li>
+  <p>If requested, perform the counterclockwise scan.  The process described
+  in (2) is performed in the opposite direction.</p>
+  </li>
+  <li>
+  <p>If a bi-directional profile is requested, the results of the clockwise-
+  and counter-clockwise scans are compared and the lower-energy value
+  (and structure) for each user-specified angle are recorded.  If structures
+  and energies based on QM calculations are requested, the
+  lower-energy structure from each tethered minimization is recorded as well.
+  These will be used as the input structures for the QM calculations.</p>
+  </li>
+</ol>
+
+<h2>Conformer-based Torsion Profiles</h2>
+
+<p>
+A bi-directional scan provides an approximation of the Torsion Profile for
+a sterically-hindered bond.  A better approximation can be obtained by
+using a conformer database as input rather than a single structure, as
+the clash might not be present in higher-energy conformers due to internal
+rotation:</p>
+
+<ul>
+<li>
+For each input conformer, perform a bi-directional scan as described
+above.  If MOE is running in MPU mode (described in the
+<a href="../install/smp_inst.htm">MOE/smp manual</a>),
+each calculation scan will be performed simultaneously.
+</li>
+<br />
+<li>
+The results of the bi-directional scans for each conformer are compared,
+and the lowest-energy value (and structure) for each user-specified angle
+are recorded.  The structures from tethered minimization will be used
+as the input for any QM calculations while the fully-minimized
+structures (and associated energies) provide the forcefield-based
+Torsion Profile.
+</ul>
+
+<p>As all calculations are done using the current forcefield and settings,
+conformer-based Torsion Profiles will not require significantly more
+time to complete (particularly if MPU is available).  The output database
+indicates which conformer yielded the structure associated with each
+user-specified torsion angle in the field <b>ConformerFF</b>.
+</p>
+
+<h2>QM-based Torsion Profiles</h2>
+
+<p>
+Torsion Profiles can be obtained with any QM Engine that is capable of
+performing constrained minimization (currently, this is limited to
+Gaussian or GAMESS).  Rather than performing QM-based scanning, the results
+from the forcefield calculations described above (either from rigid-rotor
+or tethered minimization) are used as the initial geometries for a series
+of independent calculations.  If MOE is running in MPU mode, these will
+be performed simultaneously.  The calculations can also be run outside
+of MOE if desired.
+</p>
+
+<p>
+QM-based Torsion Profiles can accurately reflect features, such as 1-5
+interactions or halogen H-bonds [Jorgensen 2012], that are not well-modeled
+with forcefield methods.  The
+resulting energies can be more precise, as they are less sensitive to
+the quality and extent of the forcefield's parameter set and/or the
+presence of correction terms.  Using the
+results of the forcefield calculation also reduces the risk of structural
+rearrangement, as steric hindrance is resolved before the QM calculation
+starts.  However, novel or highly-strained structures might require
+a smaller torsion angle stepsize to provide better initial geometries.
+</p>
+
+<!-- =============================== RUNNING ============================== -->
+
+<a id="RunTorsion"></a>
+<h1>Running Torsion Profile</h1>
+
+<p>
+To start the Torsion Profile application, load a ligand into the main
+MOE window and select
+<span class="menu">MOE | Compute | Conformations | Torsion Profile...</span>
+to start the application:
+</p>
+
+<img src="torprofile/mainPanel.png" alt="Torsion Profile Panel" class="center"/>
+
+<table class="noborder">
+<tr>
+<th>Output Database</th>
+<td>
+  The Output Database contains the structures created by Torsion Profile,
+  along with various calculated energies (and histogram information if
+  Mogul is included).  If
+  <span class="nobr"><b>Open Database Viewer</b></span> is on then a
+  molecular Database Viewer will be opened with the output database.
+  Press the File Browser icon to select the output database.
+</td>
+</tr>
+
+<tr>
+<th>Profile</th>
+<td>
+The method used to generate the Torsion Profile: <b>Clockwise</b> or
+<b>Counterclockwise</b> performs a single scan in the specified direction.
+<b>Bidirectional</b> performs both a clockwise and counterclockwise scan,
+taking the lower-energy structure for each angle.
+<span class="nobr"><b>Rigid-Rotor</b></span> determines the energy of
+each angle in a rigid-body scan.  <b>Conformers</b> performs a bi-directional
+scan for each entry in a conformer database and selects the minimum-energy
+result for each desired angle.
+
+<p>
+Each method, aside from <span class="nobr"><b>Rigid-Rotor</b></span>,
+uses the results of the <i>N<sup>th</sup></i> calculation as
+the starting point for the <i>(N+1)<sup>st</sup></i> in order
+to minimize the change required for successive calculations.  Pressing
+the Configure icon brings up a sub-panel, allowing the user to change
+how the scanning is performed:
+</p>
+
+<img src="torprofile/profileConfig.png" alt="Profile Configure Popup"
+class="center" />
+
+<table class="noborder">
+<tr>
+<th>Angle Minimum</th>
+<td>
+Specify the starting angle (in degrees) for each scan.  The angle range must
+be &lt;= 360 degrees.
+</td>
+</tr>
+
+<tr>
+<th>Maximum</th>
+<td>
+Specify the starting angle (in degrees) for each scan.  The angle range must
+be &lt;= 360 degrees.
+</td>
+</tr>
+
+<tr>
+<th>Stepsize</th>
+<td>
+Specify the torsion angle stepsize (in degrees) for each scan.  This must
+be greater than zero.
+</td>
+</tr>
+
+<tr>
+<th>RMS Gradient</th>
+<td>
+Specify the Root Mean Squared (RMS) gradient limit.  Constrained
+minimization of each generated structure will be terminated when the
+RMS gradient falls below the specified value
+</td>
+</tr>
+
+<tr>
+<th>Modify Angles</th>
+<td>
+Specify the random perturbation (in degrees) to be applied to the
+forcefield-generated input structures for the QM calculation.
+This might assist in resolving anomalous answers caused by differences
+between the results of forcefield- and QM-based constrained minimization.
+</td>
+</tr>
+
+<tr>
+<th>Calculate forcefield partial charges</th>
+<td>
+If on, forcefield partial charges are calculated prior to the torsion profile; otherwise, the charges are left as specified in the input.
+</td>
+</tr>
+</table>
+</td>
+</tr>
+
+<tr>
+<th>QM Minimization</th>
+<td>
+If on, each rotamer generated by the forcefield calculation will be
+optimized using constrained minimization using the specified QM engine,
+method and basis set (along with other parameters).  Pressing the
+Configure icon brings up the
+<span class="nobr"><a href="qmconfig.htm#QMCalcOptions">
+QM Calculation Options</a></span>
+panel, where the various settings
+and keywords needed to perform the calculation can be defined.
+</td>
+</tr>
+<tr>
+<th>Mogul Histogram</th>
+<td>
+If on, a histogram for the rotating bond will be generated by
+<a href="mogul.htm">Mogul</a> (if available).  Pressing the Configure
+icon brings up the
+<span class="nobr"><a href="mogul.htm#Settings">Mogul Analysis Settings</a>
+</span> panel, where various Mogul options can be defined.
+</td>
+</tr>
+<tr>
+<th>Batch</th>
+<td>
+This button brings up the
+<a href="../moe/hpc.htm#BatchPanel">Batch</a> job submit
+panel, which allows the user to create
+a batch job that can be run locally outside of MOE,
+or on a compute cluster via a queueing system such as slurm:
+
+<img src="torprofile/batchpanel.png" alt="Batch Panel" class="center" />
+
+The default job directory name will reflect the output database.
+</tr>
+<tr>
+<td valign="top"><b>Load</b></td>
+<td valign="top">Pressing the <b>Load</b> button allows the user to
+open a batch job directory and load its information:
+
+<img src="torprofile/loadbatch.png" alt="Load Batch" class="center" />
+
+This loads the starting structure into the MOE system or opens
+the input database file (as appropriate), and restores the panel settings.
+</tr>
+</table>
+
+<p>
+After setting the appropriate options, press <b>OK</b> to start the
+calculation.
+If <span class="nobr"><b>QM Minimization</b></span> is selected,
+the <b>Batch</b> button can be used to set up the QM calculation to run
+<a href="qmconfig.htm#RunOutsideMOE">outside of MOE</a>
+according to the configuration of the corresponding
+<span class="nobr"><b>QM Engine</b></span>.
+Progress information is provided in the MOE window.
+Upon completion, the output database will contain the following fields
+(based on the particular profile and options):
+</p>
+
+<blockquote><table class="titlebar">
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><b>molRigid</b></td>
+<td>
+A molecule field containing the rotamer generated by rigid-body rotation
+for the specified torsion angle.
+</td>
+</tr>
+
+<tr>
+<td><b>ERigid</b></td>
+<td>
+The energy (in Kcal/mol) of the associated rigid-body rotamer.
+</td>
+</tr>
+
+<tr>
+<td><b>dERigid</b></td>
+<td>
+The relative energy (in Kcal/mol) of the associated rigid-body rotamer.
+</td>
+</tr>
+
+<tr>
+<td><b>angle</b></td>
+<td>
+The value (in degrees) of the rotating torsion angle.
+</td>
+</tr>
+
+<tr>
+<td><b>molFF_cw</b></td>
+<td>
+A molecule field containing the rotamer generated by a clockwise scan
+using constrained minimization for the specified torsion angle.
+</td>
+</tr>
+
+<tr>
+<td><b>EFF_cw</b></td>
+<td>
+The minimized energy (in Kcal/mol) of the associated clockwise-scan
+structure.
+</td>
+</tr>
+
+<tr>
+<td><b>dEFF_cw</b></td>
+<td>
+The relative energy (in Kcal/mol) of the associated clockwise-scan
+structure.
+</td>
+</tr>
+
+<tr>
+<td><b>molFF_ccw</b></td>
+<td>
+A molecule field containing the rotamer generated by a counterclockwise scan
+using constrained minimization for the specified torsion angle.
+</td>
+</tr>
+
+<tr>
+<td><b>EFF_ccw</b></td>
+<td>
+The minimized energy (in Kcal/mol) of the associated
+counterclockwise-scan structure.
+</td>
+</tr>
+
+<tr>
+<td><b>dEFF_ccw</b></td>
+<td>
+The relative energy (in Kcal/mol) of the associated counterclockwise-scan
+structure.
+</td>
+</tr>
+
+<tr>
+<td><b>molFF_min</b></td>
+<td>
+A molecule field containing the lowest-energy rotamer generated by a
+<b>Bidirectional</b> or <b>Conformers</b> scan
+using constrained minimization for the specified torsion angle.
+</td>
+</tr>
+
+<tr>
+<td><b>EFF_min</b></td>
+<td>
+The minimized energy (in Kcal/mol) of the associated
+lowest-energy structure.
+</td>
+</tr>
+
+<tr>
+<td><b>dEFF_min</b></td>
+<td>
+The relative energy (in Kcal/mol) of the associated lowest-energy
+structure.
+</td>
+</tr>
+
+<tr>
+<td><b>bHisto</b></td>
+<td>
+The gaussian-weighted histogram of the count data provided by Mogul for
+all of the 4-heavy-atom torsions spanning the rotating bond.
+</td>
+</tr>
+
+<tr>
+<td><b>QMTorsion_Input</b></td>
+<td>
+A MOE field containing the starting geometry for the QM calculation for
+the specified torsion angle.  Using a MOE field provides
+extra precision for the QM constrained minimization calculation.
+</td>
+</tr>
+
+<tr>
+<td><b>molQM</b></td>
+<td>
+A molecule field containing the rotamer generated by the QM calculation
+for the specified torsion angle.
+</td>
+</tr>
+
+<tr>
+<td><b>EQM</b></td>
+<td>
+The energy (in Kcal/mol) of the associated
+QM-minimized structure.
+</td>
+</tr>
+
+<tr>
+<td><b>dEQM</b></td>
+<td>
+The relative energy (in Kcal/mol) of the associated QM-minimized
+structure.
+</td>
+</tr>
+
+</table>
+
+<p>
+In addition, a Torsion Profile plot will be generated to show the various
+energy fields in the output database.
+
+<img src="torprofile/outputPlot.png" alt="Profile Output Plot" class="center"/>
+
+The contents and colors of the various Torsion Profile energy curves are
+shown in the legend at the top of the plot.  The checkboxes control the
+visibility of each curve: if on, the specific energy profile is shown.
+The selection state of the output database and the Torsion Profile plot
+are synchronized, and the plot can be zoomed/translated on both the X-
+and Y-axes via the mouse.  Other options are available:
+</p>
+
+<table class="noborder">
+<tr>
+<td><b>E&nbsp;Threshold</b></td>
+<td>
+Specify the maximum relative energy (in kcal/mol) for the Y-axis of the
+Torsion Profile plot.  The range for the X-axis is set by the minimum and
+maximum angles set in the <b>Profile</b> configuration panel.
+</td>
+</tr>
+
+<tr>
+<td><b>Clear Selection</b></td>
+<td>
+Clear the currently-selected points in the Torsion Profile and their
+associated database entries.
+</td>
+</tr>
+
+<tr>
+<td><b>Reset Zoom</b></td>
+<td>
+Redraw the Torsion Profile using the original scaling and position.
+</td>
+</tr>
+
+<tr>
+<td><b>Attach</b></td>
+<td>
+Attach the Torsion Profile to the Database Viewer bottom sidebar.
+</td>
+</tr>
+
+<tr>
+<td><b>Detach</b></td>
+<td>
+Detach the Torsion Profile from the Database Viewer bottom sidebar.
+</td>
+</tr>
+
+<tr>
+<td><b>Export Plot</b></td>
+<td>
+<a href="print.htm#GraphicExportPanel">Export</a>
+the Torsion Profile plot for use outside of MOE.
+</td>
+</tr>
+
+<tr>
+<td>
+  <img src="docking/gear_icon.png" class="icon">
+</td>
+<td>
+Pressing the Configure icon brings up a sub-panel that contains various
+options controlling how the Mogul histogram information is displayed:
+
+<table class="noborder">
+<tr>
+<th>Mogul Display</th>
+<td>
+Specify <b>Histogram</b> for a probability plot and <b>Energy</b> for a
+pseudo-energy plot, which assumes a Boltzmann distribution for energies:
+<span class="nobr"><tt>&Delta;E =  -ln(prob<sub>i</sub>)/<i>k</i>T</tt></span>,
+where <span class="nobr">
+<tt>prob<sub>i</sub> = bin<sub>i</sub>/&Sigma;<sub>i</sub>bin<sub>i</sub></tt>.
+</span>
+</td>
+</tr>
+
+<tr>
+<th>Temperature</th>
+<td>
+Specify the temperature, <tt>T</tt>, (in degrees-K) used when generating the
+pseudo-energy plot.
+</td>
+</tr>
+
+<tr>
+<th>Min Probability</th>
+<td>
+Specify the minimum probability, <tt>prob<sub>i</sub></tt>, used when
+generating the pseudo-energy
+plot.  This acts a limit for the energies associated with empty histogram
+bins.
+</td>
+</tr>
+</table>
+
+</td>
+</tr>
+</table>
+
+<!-- =============================== EXAMPLES ============================= -->
+
+<a id="Examples"></a>
+<h1>Examples</h1>
+
+<p>
+In this section we will present a number of example calculations using the
+Torsion Profile application, using both forcefield- and QM-based methods.
+Examples of Mogul histograms will also be included.
+<a href="../moe/extprog.htm#Gaussian">Gaussian Inc.'s  g16</a> must be
+used to run ONIOM calculations.
+</p>
+
+<div class="example">
+
+<a id="ForcefieldBased">
+<h2>Forcefield-based Torsion Profile</h2>
+</a>
+
+<ol>
+<li>
+  <p><i>Create N-Methylacetamide.</i></p>
+  <p>First, clear the system:</p>
+  <p class="indent_novspace">
+    <span class="menu">RHS | Close</span>
+  </p>
+
+  <p>then start the Builder:</p>
+
+  <p class="indent_novspace">
+    <span class="menu">RHS | Builder</span>
+  </p>
+
+  <p>Select <tt>C</tt>, <tt>N</tt>, <tt>C=O</tt>, <tt>C</tt> and
+  press <b>Close</b> to close the Builder.</p>
+  <p>Minimize the sketched structure:</p>
+
+  <p class="indent_novspace">
+    <span class="menu">RHS | Minimize</span>
+  </p>
+
+  <p>Specify the rotatable bond by selecting the central <tt>N-C</tt>
+  atoms (or select the <tt>C-N-C-C</tt> dihedral).  The display
+  should look like this:</p>
+
+  <img src="torprofile/initStruct.png" alt="Minimized structure"
+  class="center" />
+
+</li>
+<li>
+  <p><i>Run Torsion Profile.</i></p>
+
+  <p class="indent_novspace">
+    <span class="menu">MOE | Compute | Conformations | Torsion Profile</span>
+  </p>
+
+  <p>If Mogul is available, select
+  <span class="nobr"><b>Mogul Histogram</b></span> to add Mogul information
+  to the Torsion Profile.  Press <b>OK</b> to start the calculation.
+  It will take roughly 20 seconds and creates <tt>torsionprofile.mdb</tt>.</p>
+</li>
+
+<li>
+  <p><i>Analyze the Torsion Profile</i></p>
+
+  <p>Enter <tt>25</tt> in the <span class="nobr"><b>E Threshold</b></span>
+  text box and press return.  This expands the energy range (Y-axis) and
+  removes the "plateau" regions of the plot, yielding:</p>
+
+  <img src="torprofile/initPlot.png" alt="Initial torsion profile"
+  class="center" />
+
+  <p>Note that the rigid-rotor and bi-directional curves are similar,
+  with the former higher in energy.  The Mogul distribution (at zero degrees)
+  coincides with the energy minimum.</p>
+</li>
+
+<li>
+  <p><i>Examine Directionality.</i></p>
+
+  <p>Select <b>FF_cw</b> and <b>FF_ccw</b> to show the clockwise and
+  counter-clockwise energy curves.  Even with structures as simple as
+  N-Methylacetamide the torsion profiles can be dependent on the scanning
+  direction.  Note how the two directional
+  curves contribute to the overall minimum-energy curve (green) and
+  how each scan (light and
+  dark blue) have higher-energy structures past the "turning points"
+  at -90 and +90 degrees:</p>
+
+  <img src="torprofile/peaksPlot.png" alt="Torsion profile directionality"
+  class="center" />
+
+  <p>Examining the structures with the <b>Browse</b>
+  function of the Database Viewer reveals that the non-planarity of the
+  amide nitrogen reached a maximum due to steric hindrance at these points.
+  Selecting the energy values above the line in the Torsion Profile selects
+  the corresponding entries in <tt>torsionprofile.mdb</tt>.</p>
+</li>
+</ol>
+</div>
+
+<div class="example">
+<a id="QMBased">
+  <h2>QM-based Torsion Profile</h2>
+</a>
+
+<ol>
+<li>
+  <p><i>Create a substituted benzothiophene.</i></p>
+
+  <p>First, clear the system:</p>
+
+  <p class="indent_novspace"><span class="menu">RHS | Close</span></p>
+
+  <p>then open the Builder:
+  </p>
+
+  <p class="indent_novspace"><span class="menu">
+  RHS | Builder</span></p>
+  <p> Type "O=C([O-])Cc1sc2c(c1)cccc2" into the SMILES field, and press the
+  <img src="torprofile/smile.png" class="icon" /> button.</p>
+
+  <p>Minimize the sketched structure:</p>
+
+  <p class="indent_novspace"><span class="menu">RHS | Minimize</span></p>
+
+  <p>Specify the rotatable bond by selecting the ring bridgehead bond.  The
+  display should look like this:</p>
+
+  <img src="torprofile/initStruct2.png" alt="Minimized structure ex2"
+  class="center" />
+</li>
+
+<li>
+  <p><i>Run Torsion Profile.</i></p>
+
+  <p class="indent_novspace">
+    <span class="menu">MOE | Compute | Conformations | Torsion Profile</span>
+  </p>
+
+  <p>Select the Configure icon for the <b>Profile</b> entry and change
+  the stepsize from <tt>7.5</tt> to <tt>30</tt>.  Press <b>OK</b> to
+  accept the changes.  Select
+  <span class="nobr"><b>QM Minimization</b></span> and press its Configure
+  icon.  Change the <b>Method</b> to <tt>AM1</tt> and add the <b>Keywords</b>
+  <span class="nobr"><tt>%nproc=2 %mem=1gb</tt></span> to use two cores for
+  the QM calculation.  Press <b>OK</b> to accept the changes.
+  If Mogul is available, select
+  <span class="nobr"><b>Mogul Histogram</b></span> to add Mogul information
+  to the Torsion Profile.  Press <b>OK</b> to start the calculation.
+  It will take roughly 5 minutes and creates <tt>torsionprofile.mdb</tt>
+  and the following Torsion Profile:</p>
+
+  <img src="torprofile/torProfile1_2.png" alt="First torsion profile ex2"
+  class="center" />
+
+</li>
+<li>
+<p><i>Review the zero-degree torsion angle.</i><br /></p>
+<p>Notice that the energy curves are not in agreement, with a forcefield
+minimum near +/- 150&deg; and the AM1 minimum at +/- 30&deg;.  Interestingly,
+the Mogul histogram has its maximum at +/- 60&deg; which does not correspond
+to either the QM- or forcefield-based profiles.</p>
+
+<p>
+Given that <tt>COO<sup>-</sup></tt> is symmetric and the minimum energy
+structure from the forcefield calculation is perpendicular to the ring
+plane, it is possible that the 0&deg; AM1 energy is an artifact.
+A second Torsion Profile calculation can be made using the
+<span class="nobr"><b>Modify Angles</b></span> option to
+introduce a small, random perturbation to the non-rotating heavy-atom
+torsions:
+</p>
+
+<p class="indent_novspace"><span class="menu">
+MOE | Compute | Conformations | Torsion Profile</span></p>
+
+<p>
+  Change the <b>Output Database</b> to <tt>torsionprofile2.mdb</tt>.
+  Select the Configure icon for the <b>Profile</b> entry and change
+  the stepsize from <tt>7.5</tt> to <tt>30</tt>.  Change
+  <span class="nobr"><b>Modify Angles</b></span> from <tt>0</tt>
+  to <tt>7.5</tt>. Press <b>OK</b> to accept the changes.  Make
+  the same configuration changes for
+  <span class="nobr"><b>QM Minimization</b></span> and Mogul selection
+  as described above.
+  Press <b>OK</b> to start the calculation.
+  It will take roughly 5 minutes and creates <tt>torsionprofile2.mdb</tt>
+  and the following Torsion Profile:
+</p>
+
+<img src="torprofile/torProfile2_2.png" alt="Second torsion profile ex2"
+class="center" />
+
+<p>
+The second calculation reveals that the minimum-energy value of the AM1
+Torsion Profile occurs at 0&deg; and the overall shape of the AM1 profile
+changes due to the different minimum-energy value.
+The 0&deg; structure has a Heat of Formation of <tt>-80.62</tt>,
+which is noticeably lower than that of the artifact, <tt>-74.17</tt>.
+Looking at the various values in the <tt>EQM</tt> column reveals that
+the energies of the second calculation are the same or lower than those
+of the first, showing that the perturbation did not negatively affect
+the calculation.
+</p>
+
+<p>
+Browsing the <tt>molQM</tt> column reveals that the minimum-energy structure
+has the <tt>COO<sup>-</sup></tt> group planar to the rings with an
+<tt>S...O</tt> distance of 2.09&Aring;.  This reveals that the forcefield
+calculation is unable to account for the 1-5 interaction between sulfur and
+oxygen, and the <span class="nobr"><b>Modify Angles</b></span> perturbation
+was necessary to "break the symmetry" enabling the AM1 constrained minimization
+to rotate the <tt>COO<sup>-</sup></tt> group.  Similar energy curves are
+expected for higher-level QM calculations, such as that for a 7.5&deg;
+<tt>B3LYP/6-31G*</tt> calculation:
+
+<img src="torprofile/torProfile3_2.png" alt="Third torsion profile ex2"
+class="center" />
+
+A 5&deg; <b>Modify Angles</b> perturbation was used to reduce the artifacts
+at +/- 180&deg; and 0&deg;.  In this calculation, the minimum-energy
+torsion angles are roughly +/- 35&deg;.
+</p>
+</li>
+</ol>
+
+</div>
+
+<div class="example">
+<a id="ONIOMBased">
+  <h2>ONIOM-based Torsion Profile</h2>
+</a>
+
+<ol>
+<li>
+<p><i>Create a test structure.</i></p>
+
+<p>First, clear the system:</p>
+
+<p class="indent_novspace"><span class="menu">RHS | Close</span></p>
+
+<p>then open the Builder:</p>
+<p class="indent_novspace"><span class="menu">
+RHS | Builder</span></p>
+<p> Type "N(CCc1ccccc1)Cc1ccccc1" into the SMILES field, and press the
+  <img src="torprofile/smile.png" class="icon" />  button.</p>
+
+<p>Minimize the sketched structure:</p>
+
+<p class="indent_novspace"><span class="menu">RHS | Minimize</span></p>
+
+<p>Specify the rotatable bond by selecting the four atoms of the chain
+linking the aromatic rings.  This will be used to define the Inner layer
+for ONIOM.  The display should look like this:</p>
+
+<img src="torprofile/ONIOMStruct.png" alt="Minimized ONIOM structure ex3"
+class="center" />
+</li>
+<li>
+<p><i>Run Torsion Profile</i></p>
+
+<p class="indent_novspace">
+<span class="menu">MOE | Compute | Conformations | Torsion Profile</span>
+</p>
+
+<p>Select the Configure icon for the <b>Profile</b> entry, and change
+the stepsize from <tt>7.5</tt> to <tt>30</tt>.  Press <b>OK</b> to
+accept the changes.  Select
+<span class="nobr"><b>QM Minimization</b></span> and press its Configure
+icon.</p>
+
+<p>To set up the ONIOM calculation:</p>
+<ul>
+<li>Select <b>ONIOM</b> to signal an ONIOM (multi-layer) calculation.</li>
+<li>Enter <tt>asel</tt> in the <b>Inner</b> layer selection box.</li>
+<li>Enter <tt>0</tt> in the <b>Middle</b> layer extend-radius box.</li>
+<li>Press the Configure icon for the Inner layer and choose <b>HF</b> as
+the <b>Method</b> and <b>STO-3G</b> as the basis set.  Press <b>OK</b>
+to accept the selection.</li>
+<li>Press the Configure icon for the <b>Outer</b> layer and choose <b>MM</b>
+as the <b>Method</b>.  This will use the current forcefield parameters and
+partial charges from MOE for the forcefield portion of the ONIOM
+calculation.</li>
+<li>Make sure only <span class="nobr"><b>Geometry Optimization</b></span>
+and <span class="nobr"><b>Multi-step Convergence</b></span> options are
+selected.  If desired, the <b>Keywords</b> <tt>%nproc=2 %mem=2gb</tt> can
+be entered to specify two cores for the calculation.</li>
+</ul>
+<p>The configuration panel should look like this:
+
+<img src="torprofile/ONIOMPanel.png" alt="ONIOM panel ex3"
+class="center" />
+
+and the MOE system should highlight the Inner layer:
+
+<img src="torprofile/ONIOMStruct2.png" alt="ONIOM Inner layer ex3"
+class="center" />
+</ol>
+
+Press <b>OK</b> to start the calculation.  It will take roughly 5-15 minutes
+and creates <tt>torsionprofile.mdb</tt> and the following Torsion Profile:
+
+<img src="torprofile/ONIOM_STO3G.png" alt="ONIOM output plot ex3"
+class="center" />
+
+</p>
+
+<p> While this is a trivial example, ONIOM provides a means of
+investigating systems with complex side chains that are not proximate to
+the torsion being profiled but are too important to remove from the
+calculation.  In addition, it would allow for torsions 
+involving unusual bonding or elements to be analyzed without requiring
+a fully-QM treatment.</p>
+
+</div>
+
+<a id="Ref">
+<h1>References</h1>
+</a>
+
+<table class="ref">
+<tr>
+<td>[Kahn&nbsp;2002]</td>
+<td>Kahn, K., Bruice, T.C.; Parameterization of OPLS-AA Force
+Field for the Conformational Analysis of Macrocyclic Polyketides;
+<i>J. Comput. Chem.</i> (<b>2002</b>) 977&ndash;996</td>
+</tr>
+
+<tr>
+<td>[Muegge&nbsp;2016]</td>
+<td>Muegge, I., Bergner, A., Kriegl, J.M.; Computer-Aided
+Drug Design at Boehringer Ingelheim;
+<i>J. Comp. Aid. Mol. Des..</i> (<b>2016</b>) 275&ndash;285</td>
+</tr>
+
+<tr>
+<td>[Sellers&nbsp;2017]</td>
+<td>Sellers, B.D., James, N.C., Gobbi, A.; A Comparison of
+Quantum and Molecular Mechanical Methods to Estimate Strain Energy in
+Druglike Fragments;
+<i>J. Chem. Inf. Model.</i> (<b>2017</b>) 1265&ndash;1275</td>
+</tr>
+
+<tr>
+<td>[Jorgensen&nbsp;2012]</td>
+<td>Jorgensen, W.L., Schyman, P.; Treatment of Halogen Bonding
+in the OPLS-AA Force Field: Application to Potent Anti-HIV Agents;
+<i>J. Chem. Theory Comput.</i> (<b>2012</b>) 3895&ndash;3901</td>
+</tr>
+</table>
+
+<a id="seeAlso">
+<h1>See Also</h1>
+</a>
+
+<p>
+<a href="../moe/gui/mainwin.htm#DihedralProfile">Interactive Energy Profile</a>
+<br />
+<a href="../moe/fcnref/potfcn.htm">Potential Energy Functions</a><br />
+<a href="../install/smp_inst.htm">Installing and Running MOE/cluster
+(MOE/smp) </a><br />
+<a href="qmconfig.htm">Configuring a QM Engine</a><br />
+<a href="../moe/hpc.htm">High-Performance Computing Framework</a><br />
+<a href="mogul.htm">Mogul Analysis</a>
+</p>
+
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../images/ccgicon.png" /> <a href="../index.htm"></a> <a href=
+    "../legal.htm"></a> &copy;<span class="versionyear"></span> <a href="http://www.chemcomp.com"></a>. All
+    rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+
+</div>
+</div>
+</body>
+</html>
+

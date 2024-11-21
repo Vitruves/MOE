@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content=
+  "functions: task_call, task_eval, task_run, task_script" />
+  <title>Task Evaluation Functions: task_call...</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Task Evaluation Functions: task_call...
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    [result, return_code] = <a class="fcnlink" href=
+"#task_call">task_call</a> [&#39;function_token&#39;, arg, options]
+    [result, return_code] = <a class="fcnlink" href=
+"#task_call">task_call</a> [&#39;function&#39;, arg, options, &#39;file&#39;]
+
+    [result, return_code] = <a class="fcnlink" href=
+"#task_eval">task_eval</a> [&#39;expression_token&#39;, arg, options]
+
+    [result, return_code] = <a class="fcnlink" href=
+"#task_run">task_run</a> [&#39;filename_token&#39;, arg, options]
+    [result, return_code] = <a class="fcnlink" href=
+"#task_run">task_run</a> [&#39;file&#39;, arg, options, &#39;function&#39;]
+
+    [result, return_code] = <a class="fcnlink" href=
+"#task_script">task_script</a> [&#39;filename_token&#39;, arg, options]
+</pre>
+
+<h1>Description</h1>
+
+<p>Each of the above functions returns a vector containing the
+  <tt>result</tt> of the executed function and the <tt>return_code</tt> which
+  indicates the status of the task. In normal termination of the task,
+  <tt>return_code</tt> is <tt>&#39;&#39;</tt>, and <tt>result</tt> is the
+  return value of the function. If the task terminates with an error,
+  <tt>return_code</tt> is <tt>&#39;error&#39;</tt> and <tt>result</tt> is the
+  error message.</p>
+<a id="task_call"></a>
+<hr noshade="noshade" />
+
+<pre>
+[result, return_code] = <span class=
+"fcndef">task_call</span> [&#39;function_token&#39;, arg, options]
+[result, return_code] = <span class=
+"fcndef">task_call</span> [&#39;function&#39;, arg, options, &#39;file&#39;]
+</pre>
+
+<p>Creates a new task which will invoke the specified function using
+  <a class="svl" href="calletc.htm">call</a>. Parameters are as follows:</p>
+  <dl>
+    <dt><tt>&#39;function_token&#39;</tt></dt>
+    <dd>Name of the function to call, expressed as a token.</dd>
+    <dt><tt>arg</tt></dt>
+    <dd>Argument to be passed to the called function.</dd>
+    <dt><tt>options</tt></dt>
+    <dd>Tagged vector of options (see <a class="svl" href=
+    "tskfork.htm">task_fork</a>).</dd>
+    <dt><tt>&#39;file&#39;</tt></dt>
+    <dd>Optional name of the file that will be run if the given function is not
+    loaded. This argument is identical to the third argument of function
+    <a class="svl" href="calletc.htm">call</a>.</dd>
+  </dl>
+
+<p><tt>task_call</tt> is typically used for executing a function that causes
+  task termination when the function fails (encounters an error condition).
+  Executing the function in a secondary task by using <tt>task_call</tt>
+  permits the function to fail without disrupting the execution of the main
+  program.</p>
+
+<p>In the following example, an attempt is made to create a field named
+  <tt>&#39;x&#39;</tt> of type <tt>&#39;float&#39;</tt> in the database called
+  <tt>&#39;db_name&#39;</tt>.</p>
+
+<pre>
+    task_call [&#39;db_CreateField&#39;, [&#39;db_name&#39;,&#39;x&#39;,&#39;float&#39;], [errmsg:&#39;ignore&#39;]]
+</pre>
+
+<p>If an error is encountered, <tt>task_call</tt> returns the error message
+  as the <tt>result</tt> and the token specifying that an error has been
+  detected as the <tt>return_code</tt>. For example, if the field
+  <tt>&#39;x&#39;</tt> already exists in the database, the following is
+  returned:</p>
+
+<pre>
+    [&#39;Attempt to use field name more than once&#39;,&#39;error&#39;]
+</pre>
+
+<p>If no error is encountered, <tt>task_call</tt> returns null as the
+  <tt>result</tt> (<tt>db_CreateField</tt> has no return value) and a null
+  token signifying that no errors were reported as the
+  <tt>return_code</tt>.</p>
+<a id="task_eval"></a>
+<hr noshade="noshade" />
+
+<pre>
+[result, return_code] = <span class=
+"fcndef">task_eval</span> [&#39;expression_token&#39;, arg, options]
+</pre>
+
+<p>Creates a new task which will evaluate an SVL expression using
+  <tt>eval</tt>. Parameters are as follows:</p>
+  <dl>
+    <dt><tt>&#39;expression_token&#39;</tt></dt>
+    <dd>The SVL expression to be evaluated, given as a single token.</dd>
+    <dt><tt>arg</tt></dt>
+    <dd>Argument to be used with the SVL expression.</dd>
+    <dt><tt>options</tt></dt>
+    <dd>Tagged vector of options (see <a class="svl" href=
+    "tskfork.htm">task_fork</a>).</dd>
+  </dl>
+<a id="task_run"></a>
+<hr noshade="noshade" />
+
+<pre>
+[result, return_code] = <span class=
+"fcndef">task_run</span> [&#39;filename_token&#39;, arg, options]
+[result, return_code] = <span class=
+"fcndef">task_run</span> [&#39;filename_token&#39;, arg, options, &#39;function&#39;]
+</pre>
+
+<p>Creates a new task which runs the specified function. Parameters are as
+  follows:</p>
+  <dl>
+    <dt><tt>&#39;filename_token&#39;</tt></dt>
+    <dd>Name of the run file, expressed as a token.</dd>
+    <dt><tt>arg</tt></dt>
+    <dd>Argument to be passed to the run file.</dd>
+    <dt><tt>options</tt></dt>
+    <dd>Tagged vector of options (see <a class="svl" href=
+    "tskfork.htm">task_fork</a>).</dd>
+    <dt><tt>&#39;function&#39;</tt></dt>
+    <dd>Optional name of the module entry point function. This argument is
+    identical to the third argument of function <tt>run</tt>.</dd>
+  </dl>
+<a id="task_script"></a>
+<hr noshade="noshade" />
+
+<pre>
+[result, return_code] = <span class=
+"fcndef">task_script</span> [&#39;filename_token&#39;, arg, options]
+</pre>
+
+<p>Creates a new task which will execute the specified file as a script using
+  the <tt>script</tt> function. Parameters are as follows:</p>
+  <dl>
+    <dt><tt>&#39;filename_token&#39;</tt></dt>
+    <dd>Name of the script file, expressed as a token.</dd>
+    <dt><tt>arg</tt></dt>
+    <dd>Argument associated with the script file (see <a class="svl" href=
+    "argument.htm">argument</a> for how to access arguments in scripts).</dd>
+    <dt><tt>options</tt></dt>
+    <dd>Tagged vector of options (see <a class="svl" href=
+    "tskfork.htm">task_fork</a>).</dd>
+  </dl>
+
+<h1>See Also</h1>
+
+<p><a class="svl" href="argument.htm">argument</a><br />
+  <a class="svl" href="calletc.htm">call</a> <a class="svl" href=
+  "runetc.htm">eval</a> <a class="svl" href="runetc.htm">run</a> <a class="svl"
+  href="runetc.htm">script</a><br />
+  <a class="svl" href="tskfork.htm">task_fork</a> <a class="svl" href=
+  "taskfcn.htm">task_getenv</a></p>
+
+<p><a href="introcomm.htm">SVL Task Communication Functions</a></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

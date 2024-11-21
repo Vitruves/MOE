@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html>
+
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <title>Molecular Dynamics Trajectory File I/O</title>
+  <meta name="keywords" content=
+  "functions: MD_Open, MD_Key, MD_Info, MD_Close, MD_Read" />
+  <meta name="keywords" content=
+  "functions: netcdf_Open, netcdf_Close, netcdf_Validate, netcdf_Key" />
+  <meta name="keywords" content=
+  "functions: netcdf_Info, netcdf_Read, netcdf_Write" />
+  <meta name="keywords" content=
+  "keywords: molecular dynamics, protocol, trajectory" />
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Molecular Dynamics Trajectory File I/O
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    key   = <a class="fcnlink" href="#MD_Open">MD_Open</a>  'path'
+    key   = <a class="fcnlink" href="#MD_Open">MD_Open</a>  key
+            <a class="fcnlink" href="#MD_Close">MD_Close</a> keys
+    keys  = <a class="fcnlink" href="#MD_Key">MD_Key</a>   keys
+
+    info  = <a class="fcnlink" href="#MD_Info">MD_Info</a> path_or_key
+            <a class="fcnlink" href="#MD_Info">MD_Info</a> path_or_key
+
+    frame = <a class="fcnlink" href="#MD_Read">MD_Read</a> [ key, index ]
+
+    index = <a class="fcnlink" href=
+"#MD_TimeToIndex">MD_TimeToIndex</a> [ key, time  ]
+    time  = <a class="fcnlink" href=
+"#MD_IndexToTime">MD_IndexToTime</a> [ key, index ]
+
+    mol   = <a class="fcnlink" href="#MD_Mol">MD_Mol</a> key
+            <a class="fcnlink" href=
+"#MD_SetMol">MD_SetMol</a> [ key, mol ]
+
+    key  = <a class="fcnlink" href="#netcdf">netcdf_Open</a>     [ 'filename', mode, header ]
+    key  = <a class="fcnlink" href="#netcdf">netcdf_Open</a>     key
+    key  = <a class="fcnlink" href="#netcdf">netcdf_Key</a>      keys
+           <a class="fcnlink" href="#netcdf">netcdf_Close</a>    keys
+    flag = <a class="fcnlink" href="#netcdf">netcdf_Validate</a> 'filename'
+    info = <a class="fcnlink" href="#netcdf">netcdf_Info</a>     filename_or_key
+    data = <a class="fcnlink" href="#netcdf">netcdf_Read</a>     [key, irec, vnames]
+           <a class="fcnlink" href="#netcdf">netcdf_Write</a>    [key, irec, vnames, data]
+</pre>
+
+<h1>Description</h1>
+
+<p>The MD trajectory functions provide a format-agnostic interface for
+working with molecular dynamics trajectories.  A molecular dynamics
+simulation will generate one or more output files. Typically, a set of
+output files will be generated for each stage in a simulation, but others
+may be generated for restart purposes.  The trajectory files for a particular
+simulation are named according to the following scheme</p>
+
+  <p class="blockquote">
+    <i>path/root</i>.<i>x</i>.<i>ttt</i>.<i>ext</i>
+  </p>
+
+<p>where <i>root</i> is a base filename, or prefix, <i>ext</i> is an
+  extension (e.g. <tt>mdb</tt> or <tt>cord.dcd</tt>), <i>x</i> is a lowercase
+  letter indicating the number of digits in <i>ttt</i> (<tt>a</tt> is 1,
+  <tt>b</tt> is 2, etc.) and <i>ttt</i> is an integer time value in
+  picoseconds. This naming scheme is used so that the file names sort well
+  without resorting to encoding the time value with leading zeros. The letter
+  code <tt>z</tt> is special and does not have an associated time stamp value.
+  The <tt>z</tt> files are used to name files associated with the entire
+  trajectory like SVL or Bourne Shell scripts. A typical simulation with
+  root <tt>mysim</tt> will start at time <i>t</i>=0 with <tt>.moe</tt> and
+  <tt>.mdb</tt> files and batch script (for restarts) named as follows</p>
+
+<pre><p class="blockquote">mysim.a.0.moe
+mysim.a.0.mdb
+mysim.z.svl
+</p></pre>
+
+<p>If a simulation stage of length 100&nbsp;ps is conducted, the trajectory
+  will be stored with a time stamp of 100 indicating that this file contains
+  the simulation data up to time 100. Further stages will be similarly named.
+  For example:</p>
+
+<pre><p class="blockquote">mysim.a.0.moe
+mysim.a.0.mdb
+mysim.c.100.mdb
+mysim.c.200.mdb
+mysim.c.700.mdb
+mysim.c.800.mdb
+mysim.z.svl
+</p></pre>
+
+<p>with one or more files for each of the various stages of the protocol.
+Other files may be written depending on the
+  particular dynamics engine that is used; e.g. NAMD will generate PDB, output
+  coordinate, velocity, and DCD trajectory files instead of the <tt>.mdb</tt>
+  files.</p>
+
+
+<a id="MD_Key"></a>
+<a id="MD_Open"></a>
+<a id="MD_Close"></a>
+<hr noshade="noshade" />
+
+<pre>
+key  = <span class="fcndef">MD_Open</span>  path
+key  = <span class="fcndef">MD_Open</span>  key
+key  = <span class="fcndef">MD_Close</span> keys
+keys = <span class="fcndef">MD_Key</span>   keys
+</pre>
+
+<p>The <tt>MD_Open</tt> function is used to open an MD trajectory for reading.
+The <tt>path</tt> argument may be
+</p>
+<ul>
+<li>A directory &ndash; the directory is examined and an attempt is made to
+detect all trajectory segments in the given directory</li>
+<li>A filename <tt>path/root</tt> &ndash; all trajectory segments are
+detected (that follow the naming convention)</li>
+</ul>
+
+<p>
+The valid trajectory files are opened and a key is returned. A trajectory
+segment file is considered if a file <tt>path/root.[a-z].*.valid</tt> exists.
+In addition, the modification times of the <tt>.valid</tt> files of all opened
+segments must be non-decreasing.
+If a numeric <tt>key</tt> is given to <tt>MD_Open</tt>, then the trajectory
+is &quot;re-opened&quot;.
+</p>
+
+<p><tt>MD_Close</tt> closes previously opened trajectory files. The function
+closes all associated files and releases all allocated resources.
+<tt>MD_Close</tt> must be called for each call to <tt>MD_Open</tt>.
+For example,</p>
+
+<pre><p class="blockquote">local key = MD_Open 'directory';
+    ...
+    MD_Open key;
+    ...
+    MD_Close key;
+    ...
+MD_Close key;
+</p></pre>
+
+<p>The <tt>MD_Key</tt> function tests the validity of given keys, returning
+the key if it refers to a valid MD file key and zero otherwise.</p>
+
+
+<a id="MD_Info"></a>
+<hr noshade="noshade" />
+
+<pre>
+info = <span class="fcndef">MD_Info</span> path_or_key
+       <span class="fcndef">MD_Info</span> path_or_key
+</pre>
+
+<p>The <tt>MD_Info</tt> function returns information related to the contents
+of an MD trajectory. If a token is given, then the information is returned as
+though the trajectory were already opened.
+The returned information is a tagged vector:</p>
+
+<blockquote>
+<dl>
+  <dt><tt>format</tt> : <i>token</i></dt>
+  <dd>The format of the trajectory (i.e. dcd, mdcrd, etc.).</dd>
+
+  <dt><tt>moe</tt> : <i>token</i></dt>
+  <dd>The <tt>.moe</tt> file defining the system topology.</dd>
+
+  <dt><tt>filebase</tt> : <i>token</i></dt>
+  <dd>The <tt>path/root</tt> base filename of the trajectory segments
+  (named according to the trajectory naming convention defined above).</dd>
+
+  <dt><tt>startTime</tt> : <i>number</i></dt>
+  <dd>The time (in picoseconds) of the start of the trajectory.</dd>
+
+  <dt><tt>nframes</tt> : <i>number</i></dt>
+  <dd>The number of coordinate frames contained in the trajectory.</dd>
+
+  <dt><tt>seg_file</tt> : <i>tokens</i></dt>
+  <dd>A vector of filenames, one for each segment file in the trajectory.</dd>
+
+  <dt><tt>seg_nframes</tt> : <i>numbers</i></dt>
+  <dd>A vector of segment lengths (in picoseconds); <tt>seg_nframes(i)</tt> is
+  the length of of the i-th trajectory segment from <tt>seg_file(i)</tt>.</dd>
+
+  <dt><tt>seg_t_start</tt> : <i>numbers</i></dt>
+  <dd>A vector of start times (in picoseconds); <tt>seg_t_start(i)</tt> is
+  the time of of the first frame in segment file <tt>seg_file(i)</tt>.</dd>
+
+  <dt><tt>seg_t_end</tt> : <i>numbers</i></dt>
+  <dd>A vector of end times (in picoseconds); <tt>seg_t_end(i)</tt> is
+  the time of the last frame in segment file <tt>seg_file(i)</tt>.</dd>
+</dl>
+</blockquote>
+
+<p>
+If the return value of <tt>MD_Info</tt> is neither stored in a variable nor
+used in an expression then the information will be printed to the SVL Commands
+Window.</p>
+
+<a id="MD_Read"></a>
+<a id="MD_IndexToTime"></a>
+<a id="MD_TimeToIndex"></a>
+<hr noshade="noshade" />
+
+<pre>
+frame = <span class="fcndef">MD_Read</span>        [ key, index ]
+time  = <span class="fcndef">MD_IndexToTime</span> [ key, index ]
+index = <span class="fcndef">MD_TimeToIndex</span> [ key, time  ]
+</pre>
+
+<p>The <tt>MD_Read</tt> function reads a single frame from a previously
+opened MD trajectory.  The integer <tt>index</tt> argument determines which
+frame is returned:</p>
+
+<ul>
+<li><tt>0</tt> &ndash; read the next available frame from the trajectory
+(the frame following the previously read frame).</li>
+<li><tt>-1</tt> &ndash; read the previous frame from the trajectory
+(the frame preceding the previously read frame).</li>
+<li><i>num</i> &ndash; read frame <i>num</i> from the trajectory where
+<i>index</i> is in the range 1...<tt>info.nframes</tt> (see <tt>MD_Info</tt>).
+</li>
+</ul>
+
+<p>If the <tt>index</tt> is out of range, or there are no following or
+preceding frames then <tt>[]</tt> is returned. Otherwise the returned
+<tt>frame</tt> will be a vector <tt>[t,pos,cell,fdata,vel]</tt> where</p>
+
+<ol>
+<li><tt>t</tt> is the time of the frame (in picoseconds).</li>
+<li><tt>pos</tt> is the <tt>[x,y,z]</tt> coordinates of each atom in
+the system.</li>
+<li><tt>cell</tt> is the periodic cell specification
+<tt>['spc',[a,b,c],[</tt>&alpha;,&beta;,&gamma;<tt>]]</tt> of the frame;
+if there is no periodicity then <tt>['',[0,0,0],[0,0,0]]</tt> is returned.</li>
+<li><tt>fdata</tt> is a tagged vector of quantities calculated for the
+frame (instantaneous temperature, pressure, potential energy, etc).</li>
+<li><tt>vel</tt> is the <tt>[dx,dy,dz]</tt> velocities for the frame; if the
+frame does not contain velocity information then <tt>[[],[],[]]</tt> is
+returned.</li>
+</ol>
+
+<p>The following code can be used to read all coordinate frames in an MD
+trajectory:</p>
+
+<pre><p class="blockquote">local key = MD_Open 'path';
+local t, pos, cell, data, vel;
+
+while length ([t,pos,cell,data,vel] = MD_Read [key,0]) loop
+    ...
+endloop
+
+MD_Close key;
+</pre>
+
+<p>
+<span class="fcndef">MD_IndexToTime</span> returns the time value
+(in picoseconds) of a given frame; -1 is returned if the given <tt>index</tt>
+ is out of range.
+<span class="fcndef">MD_TimeToIndex</span> returns the frame index
+(1,2,...) corresponding to a given simulation time; 0 is returned if the
+given <tt>time</tt> value is out of range.
+</p>
+
+<a id="MD_Mol"></a>
+<a id="MD_SetMol"></a>
+<hr noshade="noshade" />
+
+<pre>
+mol = <span class="fcndef">MD_Mol</span>  [ key ]
+mol = <span class="fcndef">MD_SetMol</span> [ key, mol ]
+</pre>
+
+<p>The <tt>MD_Mol</tt> function returns the MOL associated with the
+  trajectory. The mol file is generally detected in <tt>MD_Open</tt> using
+  the <tt>.moe</tt> associated with the trajectory.
+  However, in some instances, auto-detection is not possible. In these
+  instances, <tt>MD_SetMol</tt> should be used to to set the current
+  molecule structure.</p>
+
+
+<a id="netcdf"></a>
+<hr noshade="noshade" />
+
+<pre>
+key  = <span class="fcndef">netcdf_Open</span>  [ 'filename', mode, header ]
+key  = <span class="fcndef">netcdf_Open</span>  key
+key  = <span class="fcndef">netcdf_Key</span>   keys
+       <span class="fcndef">netcdf_Close</span> keys
+flag = <span class="fcndef">netcdf_Validate</span> 'filename'
+info = <span class="fcndef">netcdf_Info</span> filename_or_key
+data = <span class="fcndef">netcdf_Read</span> [key, irec, vnames]
+       <span class="fcndef">netcdf_Write</span> [key, irec, vnames, data]
+</pre>
+
+<p>
+The <span class="fcndef">netcdf_Open</span> function opens a <a href=
+"https://www.unidata.ucar.edu/software/netcdf/docs/netcdf_introduction.html">Network
+Common Data Form</a> (netCDF) file in a specified I/O mode.
+<span class="fcndef">netcdf_Validate</span> returns non-zero if the given
+filename is a valid netCDF file and zero otherwise.
+<span class="fcndef">netcdf_Key</span> returns non-zero for each numeric value
+given if the value is a valid, currently open netCDF file opened with
+<span class="svl">MD_Open</span>.
+A netCDF file can be re-opened by giving <span class="svl">MD_Open</span> a
+key to a file previously opened.  Each call to <span class="svl">MD_Open</span>
+must have a matching call to <span class="fcndef">MD_Close</span> to release
+all resources associated with opening the netCDF file.
+</p>
+
+<p>
+<span class="fcndef">netcdf_Open</span> can open files in a number of
+modes specified by the <tt>mode</tt> token argument:
+</p>
+<ul>
+<li><tt>''</tt> &ndash; open an existing netCDF in read-write mode.</li>
+<li><tt>'read'</tt> &ndash; open an existing netCDF in read-only mode.</li>
+<li><tt>'create'</tt> &ndash; create a new netCDF and open in read-write mode.</li>
+</ul>
+<p>
+The <tt>header</tt> argument is only required in <tt>'create'</tt> mode and is
+ignored for other modes.  See below for a description of the <tt>header</tt>.
+</p>
+
+<p>
+A netCDF file consists of named data variables each of which is a
+multi-dimensional array of values (character or numeric).  For example,
+a scalar value is a one dimensional array of length 1; a matrix is a two
+dimensional array with <i>m</i> rows and <i>n</i> columns.  Each dimension
+length is named; an <i>m</i>&times;<i>n</i> matrix variable <tt>mat</tt>
+could be defined by dimensions <tt>NROWS</tt> having the value <i>m</i>
+and <tt>NCOLS</tt> having the value <i>n</i>.
+</p>
+
+<p>
+A special dimension, called the <i>record dimension</i> has unlimited length
+(determined by the file size) allowing for files consisting of a repeating
+collection of <i>records</i>; the record dimension (if used in a variable)
+is always the first dimension.  For example, a netCDF file containing a time
+series could use the time <tt>t</tt> as the record dimension and new time
+data could be appended to netCDF file one record at a time as the data
+becomes available.
+</p>
+
+<p>
+The <span class="fcndef">netcdf_Info</span> function returns information about
+the structure of a netCDF file as a tagged vector.
+</p>
+
+<blockquote>
+<dl>
+  <dt><tt>attr</tt> : <i>tagged vector</i></dt>
+  <dd>The name-value attributes stored in the file; <tt>info.attr.a</tt> is
+  the value of attribute <tt>a</tt> in the file.  Attributes are typically
+  values describing the contents and conventions of the file.</dd>
+
+  <dt><tt>dim</tt> : <i>tagged vector</i></dt>
+  <dd>A tagged vector containing the names of the dimensions (the tags) and
+  the values of the dimensions; <tt>info.dim.t</tt> is the length of the
+  dimension <tt>t</tt>.  The record dimension has a length of 0.</dd>
+
+  <dt><tt>filename</tt> : <i>token</i></dt>
+  <dd>The underlying filename of the netCDF file.</dd>
+
+  <dt><tt>format</tt> : <i>number</i></dt>
+  <dd>The value 2 for netCDF formation versions 1&dash;5.</dd>
+
+  <dt><tt>nrec</tt> : <i>number</i></dt>
+  <dd>The length of the record dimension &ndash; the number of records
+  in the file.</dd>
+
+  <dt><tt>v_name</tt> : <i>tokens</i></dt>
+  <dd>The name of each data variable in the netCDF file.</dd>
+
+  <dt><tt>v_type</tt> : <i>tokens</i></dt>
+  <dd>The data format of each of the variables; <tt>v_type(i)</tt> is the
+  format of variable <tt>info.v_name(i)</tt> and can be one of
+  <tt>int1</tt> (signed 8-bit integer),
+  <tt>int2m</tt> (signed 32-bit integer),
+  <tt>int4m</tt> (signed 64-bit integer),
+  <tt>IEEE4m</tt> (signed IEEE 32-bit real),
+  <tt>IEEE8m</tt> (signed IEEE 64-bit real).
+  </dd>
+
+  <dt><tt>v_dim</tt> : <i>vector</i></dt>
+  <dd>The row-major dimension names of each variable;
+  <tt>info.v_dim(i)</tt> contains a vector of tokens of dimension names
+  of variable <tt>info.v_name(i)</tt>.  For example, variable <tt>i</tt>
+  with name <tt>mat</tt> and dimensions <tt>NROWS</tt> and <tt>NCOLS</tt>
+  would result in <tt>info.v_name(i)</tt> equal to <tt>'mat'</tt> and
+  <tt>info.v_dim(i)</tt> equal to <tt>['NROWS','NCOLS']</tt> with
+  <tt>info.dim.NROWS</tt> and <tt>info.dim.NCOLS</tt> containing the
+  row and column count of the matrix.</dd>
+
+  <dt><tt>v_attr</tt> : <i>tagged vectors</i></dt>
+  <dd>A set of name-value attributes for each variable;
+  <tt>info.v_attr(i)</tt> is the tagged vector of attributes for
+  variable <tt>info.v_name(i)</tt>.  The variable attributes typically
+  contain information about particular variables (such as units).</dd>
+
+  <dt><tt>v_rec</tt> : <i>numbers</i></dt>
+  <dd>A flag (1 or 0) indicating whether variables are record variables
+  (i.e. have the record dimension as the first index);
+  <tt>info.v_rec(i)</tt> is true if variable <tt>info.v_name(i)</tt>
+  has one dimension of 0 length (the record dimension).</dd>
+</dl>
+</blockquote>
+
+<p>
+If the return value of <span class="svl">netcdf_Info</span> is not assigned
+to a variable or used in an expression then a summary of the header is
+printed to the SVL Commands window.
+</p>
+
+<p>When creating a netCDF file using <span class="svl">MD_Open</span> the
+<tt>header</tt> argument is required.  The <tt>header</tt> is a tagged
+vector consisting of the <tt>attr</tt>, <tt>dim</tt>, <tt>v_name</tt>,
+<tt>v_type</tt>, <tt>v_dim</tt> and <tt>v_attr</tt> tags in the same
+form as returned by <span class="svl">netcdf_Info</span>.
+</p>
+
+<p>
+The <span class="fcndef">netcdf_Read</span> function reads data from variables
+<tt>vnames</tt> from a netCDF file specified by <tt>key</tt> at record number
+<tt>irec</tt>.  The index <tt>irec</tt> is ignored for non-record-dimensioned
+variables.  The return value <tt>data(i)</tt> is the flat vector contents
+of variable <tt>vnames(i)</tt>.
+</p>
+
+<p>
+The <span class="fcndef">netcdf_Write</span> function writes data variables
+<tt>vnames</tt> to a netCDF file specified by <tt>key</tt> at record number
+<tt>irec</tt>.  If <tt>irec</tt> is 0 then data is appended to the netCDF
+file. The flat vector values <tt>data(i)</tt> are written to variable
+<tt>vnames(i)</tt>.
+</p>
+
+
+
+<h1>See Also</h1>
+
+<p><a href="../../apps/md.htm">Molecular Dynamics</a><br />
+  <br />
+  <a class="svl" href="cellfcn.htm">CellParameters</a><br />
+  </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

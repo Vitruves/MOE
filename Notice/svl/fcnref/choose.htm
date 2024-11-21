@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: choose" />
+  <meta name="keywords" content="functions: choose_intz" />
+  <meta name="keywords" content="functions: choose_s2m" />
+  <meta name="keywords" content="functions: choose_m2s" />
+  <meta name="keywords" content="functions: chooseR_s2m" />
+  <meta name="keywords" content="functions: chooseR_m2s" />
+  <title>SVL Subset Index Functions</title>
+  <style type="text/css">
+  /*<![CDATA[*/
+  dd { padding-bottom: 0.5em; }
+  table.display {
+    width: 90%;
+    border: solid thin grey;
+  }
+  table.display th {
+    border: solid thin grey;
+    background-color: #bbb;
+  }
+  table.display td {
+    border: solid thin grey;
+    padding: 0.25em 0.5em;
+  }
+  /*]]>*/
+  </style>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    SVL Subset Index Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+val = <a class="fcnlink" href="#choose">choose</a> [N, K]
+val = <a class="fcnlink" href="#choose_intz">choose_intz</a> [N, K]
+sidx = <a class="fcnlink" href=
+"#choose_m2s">choose_m2s</a> [midx1, midx2, ... midxK]
+sidx = <a class="fcnlink" href=
+"#chooseR_m2s">chooseR_m2s</a> [midx1, midx2, ... midxK]
+[midx1, midx2, ... midxK] = <a class="fcnlink" href=
+"#choose_s2m">choose_s2m</a> [sidx, K]
+[midx1, midx2, ... midxK] = <a class="fcnlink" href=
+"#chooseR_s2m">chooseR_s2m</a> [sidx, K]
+</pre>
+
+<h1>Description</h1>
+<a id="choose"></a>
+<hr noshade="noshade" />
+
+<pre>val = <span class="fcndef">choose</span> [N, K]
+</pre>
+
+<p>Function <tt>choose</tt> returns the value of the <i>binomial
+  coefficient</i>: the number of ways of picking&nbsp;<i>K</i> unordered
+  outcomes from&nbsp;<i>N</i> possibilities.</p>
+<pre class="code">
+choose[N,K] = <i>N</i> &times;(<i>N</i>&minus;1) &times; (<i>N</i>&minus;2) &times; ... &times;(<i>N</i>&minus;<i>K</i>+1) / <i>K</i>!
+</pre>
+<p>The arguments can be nested vectors of compatible shapes. The function
+  matches the corresponding elements of the nested arguments. Unit extension
+  applies.</p>
+
+<a id="choose_intz"></a>
+<hr noshade="noshade" />
+
+<pre>val = <span class="fcndef">choose_intz</span> [N, K]
+</pre>
+
+<p>Function <tt>choose_intz</tt> is identical to function <tt>choose</tt>
+  with one important exception: if the value of the result could not be stored
+  in an SVL variable without losing precision, the function returns&nbsp;0
+  instead. The function can be used to test whether a set of indices can be
+  safely converted to a single index using function <tt>choose_m2s</tt>. If
+  function <span class="nobr"><tt>choose_intz[N,K]</tt></span> returns
+  non-zero, then function <tt>choose_m2s midx</tt> will succeed for all values
+  of <tt>midx</tt> such that <span class="nobr">(<tt>max midx &le;
+  N</tt>)</span> and <span class="nobr">(<tt>length midx == K</tt>)</span>.
+  Function <tt>chooseR_m2s midx</tt> will succeed for all values of
+  <tt>midx</tt> such that <span class="nobr">(<tt>max midx &le;
+  N-K+1</tt>)</span> and <span class="nobr">(<tt>length midx ==
+  K</tt>)</span>.</p>
+<a id="choose_m2s"></a>
+<hr noshade="noshade" />
+
+<pre>sidx = <span class="fcndef">choose_m2s</span> [midx1, midx2, ... midxK]
+</pre>
+
+<p>Function <tt>choose_m2s</tt> converts a set of&nbsp;<i>K</i> unique
+  indices to a single index. The indices can be nested vectors of compatible
+  shapes. The function matches the corresponding elements of the nested
+  arguments. Unit extension applies. Note: Function <tt>choose_m2s</tt>
+  operates on a sets of indices <i>without repetitions</i>, i.e. its argument
+  must be free of duplicates.</p>
+<a id="chooseR_m2s"></a>
+<hr noshade="noshade" />
+
+<pre>sidx = <span class="fcndef">chooseR_m2s</span> [midx1, midx2, ... midxK]
+</pre>
+
+<p>Function <tt>chooseR_m2s</tt> converts a set of&nbsp;<i>K</i> indices with
+  possible repetitions to a single index. The indices can be nested vectors of
+  compatible shapes. The function matches the corresponding elements of the
+  nested arguments. Unit extension applies. Note: Function <tt>chooseR_m2s</tt>
+  operates on a sets of indices <i>with repetitions</i>, i.e. its argument can
+  contain duplicate indices.</p>
+<a id="choose_s2m"></a>
+<hr noshade="noshade" />
+
+<pre>[midx1, midx2, ... midxK] = <span class=
+  "fcndef">choose_s2m</span> [sidx, K]
+</pre>
+
+<p>Function <tt>choose_s2m</tt> converts a single index to a set
+  of&nbsp;<i>K</i> unique, sorted indices. The index can be a nested vector.
+  The resulting indices will match the shape of the single-index argument. The
+  second argument must be a scalar integer. Note: Function <tt>choose_s2m</tt>
+  operates on sets of indices <i>without repetitions</i>, i.e. it returns
+  sequences of strictly ascending values.</p>
+<a id="chooseR_s2m"></a>
+<hr noshade="noshade" />
+
+<pre>[midx1, midx2, ... midxK] = <span class=
+  "fcndef">chooseR_s2m</span> [sidx, K]
+</pre>
+
+<p>Function <tt>chooseR_s2m</tt> converts a single index to a set
+  of&nbsp;<i>K</i> sorted indices. The index can be a nested vector. The
+  resulting indices will match the shape of the single-index argument. The
+  second argument must be a scalar integer. Note: Function <tt>chooseR_s2m</tt>
+  operates on sets of indices <i>with repetitions</i>, i.e. it returns
+  sequences of ascending values with possible duplicates.</p>
+
+<hr noshade="noshade" />
+
+<p><b>Note 1</b>: Given a set of&nbsp;<i>N</i> unique elements,
+  let&nbsp;<i>M</i> denote the number of unique subsets of size&nbsp;<i>K</i>.
+  Then the following expressions are all true:</p>
+
+<pre class="code">
+M == <span class="fcndef">choose</span> [N, K]
+M == <span class="fcndef">choose_m2s</span> (N - dec igen K)
+<span class="fcndef">choose_s2m</span> [igen M, K] &lt;= N - dec igen K
+max <span class="fcndef">choose_s2m</span> [inc M, K] &gt; N
+</pre>
+
+<p><b>Note 2</b>: With functions <tt>choose</tt> and <tt>choose_s2m</tt>, it
+  is straightforward to generate all subsets of size&nbsp;<i>K</i> from a set
+  of&nbsp;<i>N</i> items:</p>
+
+<pre class="code">
+slist = tr choose_s2m [igen choose [N, K], K]
+</pre>
+
+<p>For example, if&nbsp;<i>k</i>=2, then vector <tt>slist</tt> will contain
+  the indices of the upper-triangular portion of
+  an&nbsp;<i>N</i>&times;<i>N</i> matrix in the column-major order.</p>
+
+<h1>See Also</h1>
+
+<p><a class="svl" href="grididx.htm">grid_m2s</a><br />
+  <a class="svl" href="grididx.htm">grid_s2m</a> </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

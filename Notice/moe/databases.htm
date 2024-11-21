@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../images/ccgicon.png" />
+  <title>Databases Distributed with MOE</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../index.htm"><img src="../images/ccglogo.png" /></a>
+    <a href="../index.htm"><div class="moeversion"></div></a>
+    Databases Distributed with MOE
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<p>A number of useful databases are distributed with MOE. Some are designed
+  for use with specific MOE applications while others are for more general
+  use.</p>
+
+<h1>Small Molecule Databases</h1>
+
+<p><b>Leadlike Conformer Database.</b> The MOE Conformation Database contains
+  3D conformations in MOE Molecular Database (.mdb) format for approximately
+  650,000 (Oprea) lead-like chemical structures. These are ready to be used for
+  pharmacophore searching, fingerprint analysis, and so on. The structures were
+  obtained from chemical suppliers' public catalogs, including the
+  following:</p>
+<table class="noborder">
+  <tr>
+    <td>A-Synthese-Biotech<br />
+    ASDI<br />
+    Akos<br />
+    Art-Chem<br />
+    Asinex<br />
+    Aurora<br />
+    Biofocus<br />
+    Bionet<br />
+    Biotech&nbsp;Corp.&nbsp;of&nbsp;America<br />
+    Cerep<br />
+    Chem T&amp;I</td>
+    <td>Chembridge<br />
+    Chemdiv<br />
+    Chemical&nbsp;Block<br />
+    Chemstar<br />
+    Comgenex<br />
+    EMC&nbsp;Microcollection<br />
+    Enamine<br />
+    Exclusive&nbsp;Chemistry<br />
+    FCHC<br />
+    InovaPharm<br />
+    InterBioScreen</td>
+    <td>Labotest<br />
+    Life&nbsp;Chemicals<br />
+    Lithuania<br />
+    MDD&nbsp;World&nbsp;Molecules<br />
+    MDPI<br />
+    Maybridge<br />
+    Menai<br />
+    Moscow&nbsp;MedChem&nbsp;Labs<br />
+    Nanosyn<br />
+    Otava<br />
+    Peakdale</td>
+    <td>Pharmeks<br />
+    Princeton&nbsp;Biomolecular<br />
+    Pyxis&nbsp;Discovery<br />
+    Scientific&nbsp;Exchange<br />
+    Sigma-Aldrich<br />
+    SPECS<br />
+    Spectrum&nbsp;Info<br />
+    TimTec<br />
+    Toslab<br />
+    Tripos<br />
+    Vitas-M&nbsp;Lab</td>
+  </tr>
+</table>
+
+<p>The conformations were generated using Conformational Search with the
+  default forcefield in MOE. A maximum of 500 conformers were generated for
+  each molecule, resulting in a limit of roughly 4 kcal/mol strain energy. The
+  results were filtered using a heavy-atom RMSD tolerance of 1.0&Aring; to
+  create the final set of conformers. These databases
+  (<tt>leadlike_conf_###.mdb</tt>) can be obtained from the
+  <a href="https://data.chemcomp.com" target="_blank">MOE
+  Auxiliary Databases</a> download page.
+  </p>
+
+<p><b>RECAP Fragments.</b> <tt>$MOE/opt/recaplib.mdb</tt> is the output of
+  RECAP analysis on a collection of ~750,000 diverse lead- and drug-like
+  chemical structures from vendor catalogs and medicinal chemistry journals. It
+  can be used with the <a href="../apps/recap.htm">RECAP Panel</a>.</p>
+
+<h1>Protein Databases</h1>
+
+<p><b>Non-redundant PDB.</b> <tt>$MOE/project/pdb.mdb</tt> is a database of
+  non-redundant domains derived from the PDB. Domains were clustered such that
+  all pairs of domains within a cluster had 90% pairwise sequence identity as
+  well as similar structure. One representative was chosen from each cluster
+  based on resolution, R free, and number of missing residues. Nearby ligands
+  and solvent atoms are included in each entry. This database may be searched
+  with the <a href="gui/fileopen.htm#MOEPDB">MOE-PDB page</a> of the <a href=
+  "gui/fileopen.htm">Open panel</a>.</p>
+
+<p><b>Protein Families.</b> The non-redundant set of PDB chains is further
+  clustered structurally to form families. These structure-based sequence
+  alignments are stored in the <tt>$MOE/project/pdb.fam.gz</tt> file in
+  (compressed) plain text. Small families are enhanced with additional
+  sequences from UniRef 50. This file can be used during <a href=
+  "../proteins/prosearch.htm">Homology Searching</a> to identify possible
+  templates to a query.</p>
+
+<p><b>Antibody Modeling Databases</b>. The central building block for
+  knowledge-based <a href="../proteins/antibody.htm">antibody homology
+  modeling</a> is the antibody MOE Project database, which constitutes the
+  information pool of the antibody homology modeling procedures. The current
+  antibody structure collection (MOE&nbsp;2018) is composed of over 4200
+  V<sub>L</sub>:V<sub>H</sub> complexes, as well as several hundred monomers,
+  stored in <tt>$MOE/project/Antibody.mdb</tt>.</p>
+
+<p>For more information, see the <a href="../proteins/pdb_mdb.htm#fabDB">MOE
+  Antibody Database</a> section.</p>
+
+<p><b>Kinase Modeling Databases</b>. The MOE kinase database is part of the
+  MOE Project databases, and is found at <tt>$MOE/project/Protein
+  Kinase.mdb</tt>. After their identification, kinase chains are further
+  classified based on their sequence identity within the kinase core. If this
+  is at least 45% within one of the classes in the reference file
+  <tt>$MOE/lib/kin_ref.fam.gz</tt>, that class is assigned; otherwise a check
+  is conducted to verify if the sequence is sufficiently close to one of the
+  known pseudo kinases in the pseudo reference file
+  (<tt>$MOE/lib/kin_refpseudo.fam.gz</tt>). If the sequence identity is higher
+  than 35%, the sequence group is labeled as <i>Pseudo-Kinase</i>. Sequences
+  that are positive with respect to kinase pattern detection (G-Loop, DFG and
+  HRD) but lack sufficient homology with the reference sequences are not given
+  any classification for a kinase group, family, or subfamily. This might apply
+  for distant species like bacteria, parasites, nematodes etc., since the
+  reference collection is biased towards the detection of human kinases. In
+  addition to classifications based on sequence, the conformational states of
+  distinct topologies such as the DFG segment or alpha-C helix are also stored
+  in the database.</p>
+
+<p>For more information, see the <a href="../proteins/pdb_mdb.htm#kinDB">MOE
+  Kinase Database</a> section.</p>
+
+<p><b>GPCR Structure Database</b>. The G protein-coupled receptors (GPCRs)
+  comprise the largest family of integral membrane proteins and one of the most
+  important classes of drug targets. In an effort to assist in 3D structure
+  modeling and function annotation, the GPCR Class A structure repository is
+  provided with the other MOE Project databases in <tt>$MOE/project/GPCR Class
+  A.mdb</tt>.</p>
+
+<p>For more information, see the <a href="../proteins/pdb_mdb.htm#gpcrDB">MOE
+  GPCR Database</a> section.</p>
+
+<p><b>MOE Project Databases</b>. A number of protein family databases &mdash;
+  including antibodies, kinases and GPCRs &mdash; are provided in the
+  <tt>$MOE/project</tt> directory. These databases have been created using the
+  <a href="../proteins/moeproject.htm">MOE Project</a> framework, and are all
+  very similar in construction and appearance. Each is superposed into a common
+  frame of reference based on the core region of the reference <tt>.moe.gz</tt>
+  files, which are also found in <tt>$MOE/project</tt>. The databases can all
+  be used with the <a href="../proteins/projsrch.htm">Project Search</a> panel
+  as the repository for all relevant information used in this application.</p>
+
+<p>For more information, see the <a href="../proteins/pdb_mdb.htm#projDB">MOE
+  Project Database</a> section.</p>
+
+<p><b>Rotamer Library.</b> The <a href="../proteins/buildrotlib.htm">Rotamer
+  Library</a> in MOE is a collection of all-atom sidechain conformations
+  created using LowModeMD. These conformations differ from traditional rotamer
+  libraries in that bond length and angle variations are permitted. The intent
+  is to provide adequate coverage of the conformational space available to a
+  sidechain and not just encode dihedral preferences. The rotamers are located
+  in <tt>$MOE/opt/rotamers.mdb</tt> in a packed conformation field associated
+  with each sidechain.</p><!--
+
+<p>
+<b>Protein-Ligand Complex Database.</b> <tt>$MOE/sample/mol/complex.mdb</tt>
+contains a set of structures from the PDB with experimental binding affinities.
+For each entry, <b>ligand</b> stores the ligand for which binding was measured,
+and <b>receptor</b>, the nearby chains.  <b>image</b> contains symmetry-related
+molecules which are near the ligand, if any, and <b>water</b> contains any
+water chains.  <b>dG</b> contains the experimental binding affinity of the
+ligand in kcal/mol, obtained from various sources in the literature.
+<b>degeneracy</b> indicates the number of copies of the ligand found in the PDB
+file; each copy will have its own row in the database.  The other fields
+contain summary information about the structure from the PDB file.  This
+database can be used for validation studies.
+</p>
+-->
+  <!-- ============================ REFERENCES ============================= -->
+
+<h1>See Also</h1>
+
+<p><a href="../proteins/pdb_mdb.htm">Protein Database</a><br />
+  <a href="../proteins/prosearch.htm">Homology Searching</a><br />
+  <a href="../proteins/promodel.htm">Homology Modeling</a><br />
+  <a href="../apps/recap.htm">RECAP Analysis</a><br />
+  <a href="../proteins/buildrotlib.htm">Rotamer Library</a><br />
+  <a href=
+  "https://www.chemcomp.com/moe/help/2018/CCG_Tutorials/(Tutorial)_MOE_Scaffold_Replacement.svlx">
+  Scaffold Replacement Tutorial</a><br /></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../images/ccgicon.png" /> <a href="../index.htm"></a> <a href=
+    "../legal.htm"></a> &copy;<span class="versionyear"></span> <a href="http://www.chemcomp.com"></a>. All
+    rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

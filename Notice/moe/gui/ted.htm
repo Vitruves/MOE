@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="panel: SVL Text Editor" />
+  <title>SVL Text Editor</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    SVL Text Editor
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+  <ul>
+    <li><a href="#Introduction">Introduction</a></li>
+    <li><a href="#File">Loading and Saving Files</a></li>
+    <li><a href="#Edit">Editing Files</a></li>
+    <li><a href="#Find">Finding and Replacing Strings</a></li>
+    <li><a href="#Display">Modifying the Display</a></li>
+    <li><a href="#SVLFiles">Loading and Running SVL Files</a></li>
+    <li><a href="#Shortcuts">Summary of Keyboard Shortcuts</a></li>
+    <li><a href="#SVL">SVL Commands</a></li>
+  </ul>
+
+<h1>
+<a id="Introduction">Introduction</a></h1>
+
+<p>The SVL Text Editor is used to create and edit ASCII files. It is
+  especially convenient for creating and modifying SVL code since the syntax in
+  files with the <tt>.svl</tt> extension is automatically colored in the
+  editor. Colors can be configured in the <a href=
+  "../../install/moeconfig.htm">user configuration file</a> (<tt>moe-rc</tt> or
+  <tt>.moe-rc</tt>). In MOE, the SVL Text Editor is often used from within an
+  SVL application to display a series of results. Such is the case for the
+  <a href="../../quasar/qbct.htm">binary classification tree</a> and <a href=
+  "../../quasar/model.htm">QuaSAR-Model</a>, for instance.</p>
+
+<p>The SVL Text Editor can be opened from the MOE Window or the Sequence
+  Editor by choosing <span class="menu">File | New | Text Editor</span>. Any
+  number of MOE SVL editors can be opened at the same time; however, it is not
+  possible to open a given file in different ones. Currently open editors are
+  listed under the <span class="menu">Window | Text Editors</span> menu, and
+  files that have not been saved appear as <tt>&lt;Untitled&gt;</tt>. Choosing
+  a file from the list raises that Text Editor.</p>
+
+<p>When first opened, the Text Editor is empty. You can invoke commands using
+  the menu bar at the top of the Text Editor or a popup menu. The popup is
+  displayed by pressing the <a href="mouse.htm">mouse popup button</a> over the
+  text display area. It includes the same commands as the menu bar.</p>
+
+<p>To open an existing file, choose Open from the File menu in the
+  editor's menu bar. To create a file in the SVL Text Editor, choose the
+  Save As command. The following snapshot depicts the SVL file
+  <tt>verlet.svl</tt>:</p>
+
+<img src="ted/tedsvl.png" alt=
+  "SVL Text Editor" class="center" />
+
+<p>You can use the scroll bars to move vertically or horizontally through the
+  text, or you can use the options in the popup menu by clicking the <a href=
+  "mouse.htm#MousePopupButton">mouse popup button</a> over the scroll bar area.
+  <a id="Loading_and_Saving_Files"></a>
+</p>
+
+<h1>
+<a id="File">Loading and Saving Files</a></h1>
+  <table class="titlebar">
+    <tr>
+      <th>File Menu</th>
+      <th>Keystrokes</th>
+      <th>Action</th>
+    </tr>
+    <tr>
+      <td valign="top">Open</td>
+      <td valign="top"><tt>Ctrl+O</tt></td>
+      <td valign="top">Displays the Open Text Editor File panel. This <a href=
+      "../hellomoe.htm#File_Selection_Box">file selection box</a> allows you to
+      open an existing file.</td>
+    </tr>
+    <tr>
+      <td valign="top">New</td>
+      <td valign="top">---</td>
+      <td valign="top">Opens a new Text Editor window. Equivalent to
+      <span class="menu">File | New | Text Editor</span> in the main
+      window.</td>
+    </tr>
+    <tr>
+      <td valign="top">Save</td>
+      <td valign="top"><tt>Ctrl+S</tt></td>
+      <td valign="top">Saves the contents of the Text Editor providing that a
+      save file is currently specified (e.g., the contents have already been
+      saved using the Save As command).</td>
+    </tr>
+    <tr>
+      <td valign="top">Save As</td>
+      <td valign="top">---</td>
+
+      <td valign="top">
+      <img src="ted/ted_saveas.png" class="floatright" alt="Save Text
+      Editor File As" />
+      Displays the Save Text Editor
+      File As panel. This file selection box allows you to save the
+      contents of the Text Editor under a new name.
+
+        <ul>
+	<li><b>Ascii Line Format.</b> Line termination characters differ
+	between platforms.  By default, the line termination for the
+	current operating system is used.  This behaviour can be overridden
+	here by selecting an explicit line termination to use.
+	</li>
+	<li><b>Compress with gzip.</b> If enabled, gzip data compression
+	will be applied when saving the file.
+	</li>
+	</ul>
+
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">Clear</td>
+      <td valign="top">---</td>
+      <td valign="top">
+        Clears the contents of the Text Editor, providing that the contents
+        have already been saved.
+
+<p>If the contents have not been saved, you will be asked whether you
+        wish to discard the unsaved changes. Choosing No cancels the Clear
+        operation, enabling you to save. Choosing Yes deletes the contents of
+        the editor.</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">Include</td>
+      <td valign="top">---</td>
+      <td valign="top">Displays the Include Text Editor File panel which allows
+      you to merge the contents of another file into the current Text Editor,
+      at the cursor position.</td>
+    </tr>
+    <tr>
+      <td valign="top">Print</td>
+      <td valign="top">---</td>
+      <td valign="top">Displays the <a href="../../apps/print.htm">SVL Text
+      Editor Print Preview</a> panel which allows you to send the content of
+      the Text Editor to a printer.</td>
+    </tr>
+    <tr>
+      <td valign="top">Quit</td>
+      <td valign="top">---</td>
+      <td valign="top">Closes the Text Editor. You will be asked whether you
+      wish to save any unsaved changes.</td>
+    </tr>
+  </table>
+
+<a id="Editing_Files"></a>
+<h1>
+<a id="Edit">Editing Files</a></h1>
+  <table class="titlebar">
+    <tr>
+      <th>Edit Menu</th>
+      <th>Keystrokes</th>
+      <th>Action</th>
+    </tr>
+    <tr>
+      <td valign="top">Undo</td>
+      <td valign="top"><tt>Ctrl+Z</tt></td>
+      <td valign="top">Cancels the last action that was performed in the Text
+      Editor such as the replacement or deletion of a string. It is possible to
+      undo several operations by repeatedly selecting Undo.</td>
+    </tr>
+    <tr>
+      <td valign="top">Redo</td>
+      <td valign="top"><tt>Ctrl+Y</tt></td>
+      <td valign="top">Redoes the last action that was &quot;undone&quot; (with
+      the Undo command). This command only becomes available after an Undo is
+      performed.</td>
+    </tr>
+    <tr>
+      <td valign="top">Cut</td>
+      <td valign="top"><tt>Ctrl+X</tt><br />
+      or<br />
+      <tt>Shift+Delete</tt></td>
+      <td valign="top">Cuts the highlighted text to the clipboard.</td>
+    </tr>
+    <tr>
+      <td valign="top">Copy</td>
+      <td valign="top"><tt>Ctrl+C</tt><br />
+      or<br />
+      <tt>Ctrl+Insert</tt></td>
+      <td valign="top">Copies the highlighted text to the clipboard.</td>
+    </tr>
+    <tr>
+      <td valign="top">Paste</td>
+      <td valign="top"><tt>Ctrl+V</tt><br />
+      or<br />
+      <tt>Shift+Insert</tt></td>
+      <td valign="top">Pastes the contents of the clipboard at the cursor
+      position.</td>
+    </tr>
+  </table>
+
+<a id="Finding_and_Replacing_Strings"></a>
+<h1>
+<a id="Find">Finding and Replacing Strings</a></h1>
+  <table class="titlebar">
+    <tr>
+      <th>Find Menu</th>
+      <th>Keystrokes</th>
+      <th>Action</th>
+    </tr>
+    <tr>
+      <td valign="top">Find and Replace</td>
+      <td valign="top"><tt>Ctrl+F</tt></td>
+      <td valign="top">
+        Displays the Find and Replace footer in the Text Editor. To find a
+        string, enter the search text in the text field next to the Find button
+        and press the Find button or <tt>Enter</tt>. The matched text will be
+        highlighted in the editor.
+
+<p>To close the Find and Replace footer, press <tt>Esc</tt>.</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">Find Next</td>
+      <td valign="top"><tt>Ctrl+N</tt></td>
+      <td valign="top">Finds the next match of the search text. Pressing the
+      Find button produces the same result.</td>
+    </tr>
+    <tr>
+      <td valign="top">Replace Then Find</td>
+      <td valign="top">--</td>
+      <td valign="top">Replaces the matched text with the replacement text
+      entered in the Replace field, which appears in the footer of the editor.
+      The next match is highlighted in the editor.</td>
+    </tr>
+    <tr>
+      <td valign="top">Replace All</td>
+      <td valign="top">---</td>
+      <td valign="top">Replaces all matched text with the replacement text
+      entered in the Replace field, which appears in the footer of the editor.
+      Pressing the Replace All button produces the same result.</td>
+    </tr>
+  </table>
+
+<p><b>Note:</b> In order for the Find Next, Replace Then Find and Replace All
+  commands to be available, you must first have specified the search text using
+  the Find and Replace command.</p>
+
+<a id="Modifying_the_Display"></a>
+<h1>
+<a id="Display">Modifying the Display</a></h1>
+  <table class="titlebar">
+    <tr>
+      <th>Display Menu</th>
+      <th>Keystrokes</th>
+      <th>Action</th>
+    </tr>
+    <tr>
+      <td valign="top">Goto Line</td>
+      <td valign="top"><tt>Ctrl+G</tt></td>
+      <td valign="top">Allows you to go to a specific line in the file. Enter
+      the line number in the Goto Line text field in the footer of the panel
+      and press <tt>Enter</tt>. The specified line is highlighted in the
+      editor.</td>
+    </tr>
+    <tr>
+      <td valign="top">Small Font</td>
+      <td valign="top">---</td>
+      <td valign="top">Displays the contents of the file in small size
+      font.</td>
+    </tr>
+    <tr>
+      <td valign="top">Normal Font</td>
+      <td valign="top">---</td>
+      <td valign="top">Displays the contents of the file in normal size
+      font.</td>
+    </tr>
+    <tr>
+      <td valign="top">Large Font</td>
+      <td valign="top">---</td>
+      <td valign="top">Displays the contents of the file in large size
+      font.</td>
+    </tr>
+  </table>
+
+<p><b>Note:</b> Font size, whether it be set to Small, Normal or Large, is
+  machine dependent.</p>
+
+<a id="Loading_and_Running_SVL_Files"></a>
+<h1>
+<a id="SVLFiles">Loading and Running SVL Files</a></h1>
+  <table class="titlebar">
+    <tr>
+      <th>SVL Menu</th>
+      <th>Keystrokes</th>
+      <th>Action</th>
+    </tr>
+    <tr>
+      <td valign="top">Save and Load</td>
+      <td valign="top"><tt>Ctrl+L</tt></td>
+      <td valign="top">Saves the editor contents to a file, then compiles and
+      <a href="../../svl/fcnref/loadetc.htm">loads</a> all functions found in
+      the file. If a syntax error is encountered, the file is not loaded. Note
+      that the executable code is kept in memory until the program is unloaded.
+      Loaded programs appear in the <a href="modtasks.htm">SVL Modules and
+      Tasks panel</a>.</td>
+    </tr>
+    <tr>
+      <td valign="top">Save and Run</td>
+      <td valign="top">---</td>
+      <td valign="top">
+        Saves the editor contents to a file and <a href=
+        "../../svl/fcnref/runetc.htm">runs</a> the program. If a syntax error
+        is encountered, the file is not run <!--loaded, and the cursor
+is positioned at the line containing the error.  If the file is new, a
+file selection box appears, prompting for the name of the file into which
+to save.--> The program is in memory only for the duration of execution and is
+subsequently freed.
+
+<p>If an error message appears stating <tt>Module Entry Point Not
+        Found</tt> the file requires either a <tt>main</tt> function or
+        <tt>#set main 'fcn name'</tt> directive.</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">Execute Command</td>
+      <td valign="top"><tt>Ctrl+E</tt></td>
+      <td valign="top">Opens a temporary SVL command line in the footer of the
+      Text Editor. As with all CLIs, the output of the executed command is
+      displayed in the <a href="svlcommands.htm">SVL Commands window</a>.</td>
+    </tr>
+    <tr>
+      <td valign="top">Edit Function</td>
+      <td valign="top">---</td>
+      <td valign="top">
+        Allows you to find the code of an SVL function. Highlight the name of
+        the SVL function in the SVL Text Editor and choose Edit Function. This
+        will open the file containing the code of the SVL function in a new
+        Text Editor window.
+
+<p>If this operation is unsuccessful, this means that the function is
+        not an SVL function or the file in which the function is defined is not
+        currently loaded in the system.</p>
+      </td>
+    </tr>
+  </table>
+
+<a id="Summary_of_Keyboard_Shortcuts"></a>
+<h1>
+<a id="Shortcuts">Summary of Keyboard Shortcuts</a></h1>
+
+<p>The following key combinations are available in the Text Editor:</p>
+  <center>
+    <table class="titlebar">
+      <tr>
+        <th>Keystrokes</th>
+        <th>Action</th>
+      </tr>
+      <tr>
+        <td valign="top"><tt>Ctrl+O</tt></td>
+        <td valign="top">Open file</td>
+      </tr>
+      <tr>
+        <td valign="top"><tt>Ctrl+S</tt></td>
+        <td valign="top">Save file</td>
+      </tr>
+      <tr>
+        <td valign="top"><tt>Ctrl+Z</tt></td>
+        <td valign="top">Undo last action</td>
+      </tr>
+      <tr>
+        <td valign="top"><tt>Ctrl+Y</tt></td>
+        <td valign="top">Redo last &quot;undo&quot;</td>
+      </tr>
+      <tr>
+        <td valign="top"><tt>Ctrl+F</tt></td>
+        <td valign="top">Find string</td>
+      </tr>
+      <tr>
+        <td valign="top"><tt>Ctrl+N</tt></td>
+        <td valign="top">Find next string</td>
+      </tr>
+      <tr>
+        <td valign="top"><tt>Ctrl+G</tt></td>
+        <td valign="top">Goto specified line</td>
+      </tr>
+      <tr>
+        <td valign="top"><tt>Ctrl+L</tt></td>
+        <td valign="top">Save and load SVL program</td>
+      </tr>
+      <tr>
+        <td valign="top"><tt>Ctrl+E</tt></td>
+        <td valign="top">Open CLI in Text Editor</td>
+      </tr>
+      <tr>
+        <td valign="top"><tt>PageUp, PageDown</tt></td>
+        <td valign="top">Move cursor up or down one page</td>
+      </tr>
+      <tr>
+        <td valign="top"><tt>Ctrl+Home</tt></td>
+        <td valign="top">Go to beginning of file</td>
+      </tr>
+      <tr>
+        <td valign="top"><tt>Ctrl+End</tt></td>
+        <td valign="top">Go to end of file</td>
+      </tr>
+      <tr>
+        <td valign="top"><tt>Home</tt></td>
+        <td valign="top">Go to beginning of line</td>
+      </tr>
+      <tr>
+        <td valign="top"><tt>End</tt></td>
+        <td valign="top">Go to end of line</td>
+      </tr>
+      <tr>
+        <td valign="top">Right mouse button (or <tt>Alt</tt>) over scroll
+        bars</td>
+        <td valign="top">Display popup menu with To Beginning, To End and
+        Previous options</td>
+      </tr>
+      <tr>
+        <td valign="top">Right mouse button (or <tt>Alt</tt>) over text
+        area</td>
+        <td valign="top">Display popup menu with Text Editor menus</td>
+      </tr>
+      <tr>
+        <td valign="top"><tt>Delete</tt></td>
+        <td valign="top">Delete character to the right of the cursor</td>
+      </tr>
+      <tr>
+        <td valign="top"><tt>Backspace</tt></td>
+        <td valign="top">Delete character to the left of the cursor</td>
+      </tr>
+      <tr>
+        <td valign="top"><tt>Ctrl+Insert</tt><br />
+        or<br />
+        <tt>Ctrl+C</tt></td>
+        <td valign="top">Copy highlighted text to clipboard</td>
+      </tr>
+      <tr>
+        <td valign="top"><tt>Shift+Insert</tt><br />
+        or<br />
+        <tt>Ctrl+V</tt></td>
+        <td valign="top">Paste from clipboard</td>
+      </tr>
+      <tr>
+        <td valign="top"><tt>Shift+Delete</tt><br />
+        or<br />
+        <tt>Ctrl+X</tt></td>
+        <td valign="top">Cut highlighted text to clipboard</td>
+      </tr>
+    </table>
+  </center>
+
+<a id="SVL_Commands"></a>
+<h1>
+<a id="SVL">SVL Commands</a></h1>
+
+<p><a href="../../svl/svlgui/fcnref/tedfcn.htm">Text Editor functions</a></p>
+
+<p><a class="svl" href="../../svl/fcnref/loadetc.htm">load</a><br />
+  <a class="svl" href="../../svl/fcnref/runetc.htm">run</a></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+<a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

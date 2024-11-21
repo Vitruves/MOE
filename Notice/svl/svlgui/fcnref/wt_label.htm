@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href=
+  "../../../include/manstyle.css" />
+  <meta name="keywords" content="keywords: Label" />
+  <meta name="keywords" content="functions: Widget:Label" />
+  <meta name="keywords" content="functions: Label (widget)" />
+  <title>Label Widget</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../../index.htm"><img src="../../../images/ccglogo.png" /></a>
+    <a href="../../../index.htm"><div class="moeversion"></div></a>
+    Label Widget
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Description</h1>
+
+<p>A set of one or more non-editable labels. A label may contain single or
+  multi-line text or a bitmap. The number of labels created is determined by
+  the length of the <tt>text</tt> attribute vector.</p>
+
+<h2>Attributes</h2>
+
+<p><tt>Label</tt> inherits all <a class="svl" href="wt_core.htm">core</a>
+  attributes and defines the following attributes:</p>
+  <table class="titlebar">
+    <tr>
+      <th>Attribute</th>
+      <th>Description</th>
+      <th>Values</th>
+      <th>Default</th>
+    </tr>
+    <tr>
+      <td width="15%"><tt>text</tt></td>
+      <td>Label</td>
+      <td>Vector of tokens</td>
+      <td><tt>[]</tt></td>
+    </tr>
+    <tr>
+      <td><tt>minWidth</tt></td>
+      <td>Minimum label width (in characters)</td>
+      <td>0 to 127</td>
+      <td><tt>0</tt></td>
+    </tr>
+    <tr>
+      <td><tt>alignment</tt></td>
+      <td>Horizontal alignment of text</td>
+      <td><tt>&#39;left&#39;, &#39;center&#39;, &#39;right&#39;</td>
+      <td><tt>&#39;left&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>foreground</tt></td>
+      <td>Text color</td>
+      <td><a class="svl" href=
+      "wt_const.htm">WINDOW_COLORS</a></td>
+      <td><tt>&#39;foreground&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>background</tt></td>
+      <td>Text background color</td>
+      <td><a class="svl" href=
+      "wt_const.htm">WINDOW_COLORS</a></td>
+      <td><tt>&#39;background&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>font</tt></td>
+      <td>Text font</td>
+      <td><a class="svl" href=
+      "wt_const.htm">WINDOW_FONTS</a></td>
+      <td><tt>&#39;medium&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>graphics</tt></td>
+      <td>A graphics object key (see <tt>gr_create</tt>) or
+      graphics content (see <tt>gr_data</tt>)</td>
+      <td>Scalar key, or vector content</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td><tt>grPosition</tt></td>
+      <td>Layout of graphic object with respect to text, when
+      both are present</td>
+      <td><tt>
+      &#39;left&#39;, &#39;right&#39;, &#39;above&#39;,</br>
+      &#39;below&#39;, &#39;overlay&#39;</br>
+      &#39;flushLeft&#39;, &#39;flushRight&#39;, </br>
+      &#39;flushAbove&#39;, &#39;flushBelow&#39;
+      </tt></td>
+      <td><tt>&#39;above&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>grScale</tt></td>
+      <td>Scaling policy for the graphic object</td>
+      <td><tt>&#39;none&#39;, &#39;anisotropic&#39;,
+      &#39;isotropic&#39;, &#39;isotropic-shrink&#39;</tt></td>
+      <td><tt>&#39;isotropic&#39;</tt></td>
+    </tr>
+  </table>
+
+<h2>Trigger</h2>
+
+<p>None.</p>
+
+<h2>Data Value</h2>
+
+<p><tt>Label</tt> defines no data value. If the data value for a
+  <tt>Label</tt> widget is requested through a <tt>WindowGetData</tt> function
+  call, the return value will be <tt>[]</tt>.</p>
+
+<h1>See Also</h1>
+
+<p><a href="wt_core.htm">Core Attributes</a><br />
+  <a href="../wt_intro.htm">SVL Window Toolkit</a><br />
+  <a href="introwt.htm">Window Toolkit Functions</a></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../../images/ccgicon.png" /> <a href="../../../index.htm"></a>
+    <a href="../../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

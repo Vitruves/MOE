@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: print, pr" />
+  <title>Printing Functions: print, pr</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Printing Functions: print, pr
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    <a class="fcnlink" href="#print">print</a> expression;
+    <a class="fcnlink" href="#pr">pr</a> val
+</pre>
+<a id="print"></a>
+<h1>Description</h1>
+
+<pre>
+<span class="fcndef">print</span> expression;
+</pre>
+
+<p><tt>print</tt> is an SVL keyword that causes the value of
+  <tt>expression</tt> to be echoed to the CLI. <tt>print</tt> is not an SVL
+  function, i.e.</p>
+  <ul>
+    <li>The expression does not have to be parenthesized</li>
+    <li>The keyword cannot be used inside an expression</li>
+  </ul>
+
+<pre>
+    svl&gt; print a = &quot;enterprise&quot;;
+    &quot;enterprise&quot;
+
+    svl&gt; print 5 + 6;
+    11
+</pre>
+<a id="pr"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">pr</span> val
+</pre>
+
+<p><tt>pr</tt> is an SVL function that returns the value of its argument with
+  the side-effect of printing the result at the SVL Commands window.
+  <tt>pr</tt> is useful for printing intermediate results when debugging
+  programs. Unlike the keyword <tt>print</tt>, function <tt>pr</tt> can be used
+  inside an expression.</p>
+
+<pre>
+    svl&gt; a = pr sort [7,3,5,2]
+    [2,3,5,7]
+
+    svl&gt; b = first pr a;
+    [2,3,5,7]
+
+    svl&gt; pr 5 + 6;
+    5
+</pre>
+
+<h1>See Also</h1>
+
+<p><a href="introio.htm">I/O Functions</a></p>
+
+<p><a class="svl" href="freadetc.htm">write</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

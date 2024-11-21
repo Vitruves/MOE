@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href=
+  "../../../include/manstyle.css" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content=
+  "functions: WindowCreate, WindowPrompt, WindowDestroy" />
+  <title>Window Functions: WindowCreate, WindowPrompt, WindowDestroy</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../../index.htm"><img src="../../../images/ccglogo.png" /></a>
+    <a href="../../../index.htm"><div class="moeversion"></div></a>
+    Window Functions: WindowCreate, WindowPrompt,
+    WindowDestroy
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    window_key = <a class="fcnlink" href=
+"#WindowCreate">WindowCreate</a> window_descriptor
+    obj_name_value_pairs = <a class="fcnlink" href=
+"#WindowPrompt">WindowPrompt</a> [ window_descriptor, default_values ]
+    <a class="fcnlink" href="#WindowDestroy">WindowDestroy</a> wkey
+</pre>
+<a id="WindowCreate"></a>
+<h1>Description</h1>
+
+<pre>
+window_key = <span class="fcndef">WindowCreate</span> window_descriptor
+</pre>
+
+<p>Creates a window defined by the window descriptor specified, and returns a
+  unique window key to be used in subsequent window calls. The descriptor is a
+  nested a list of attribute-value pairs describing the window.</p>
+
+<p>Note: when a window is created, it is invisible. <tt>WindowShow</tt> is
+  used to make it visible. To ensure only one instance of a window at any time,
+  set the <tt>windowName</tt> attribute, and then use <tt>WindowShow</tt> prior
+  to window creation to check for any currently existing windows of the same
+  name.</p>
+<a id="WindowPrompt"></a>
+<hr noshade="noshade" />
+
+<pre>
+obj_name_value_pairs = <span class=
+"fcndef">WindowPrompt</span> [ window_descriptor, default_values ]
+</pre>
+
+<p>Creates a window as specified by the supplied window descriptor.
+  <tt>WindowPrompt</tt> puts <tt>OK</tt> and <tt>Cancel</tt> command buttons at
+  the bottom of the window, with the <tt>OK</tt> <tt>onTrigger</tt> attribute
+  set to <tt>&#39;validate&#39;</tt> and the <tt>Cancel</tt> <tt>onTrigger</tt>
+  attribute set to <tt>&#39;exit&#39;</tt>. The supplied window descriptor must
+  not contain specifications for shell command buttons. The values of all named
+  widgets in the window are returned in a tagged vector of widget_name:value
+  pairs.</p>
+
+<p>Note: <tt>WindowPrompt</tt> cannot be used with <tt>WindowWait</tt>. Using
+  <tt>WindowPrompt</tt> is effectively equivalent to creating a window, making
+  it visible with <tt>WindowShow</tt>, and then using <tt>WindowWait</tt> to
+  wait for the window to be triggered. One notable difference is that with
+  <tt>WindowPrompt</tt>, the object which triggered is not known.</p>
+
+<p>Here is an example of how to use <tt>WindowPrompt</tt>:</p>
+
+<pre>
+    const panel = [
+        title : &#39;Test Panel&#39;,           // shell title
+        Checkbox : [
+            name : &#39;check&#39;,             // checkbox identifier
+            title: &#39;Click to toggle&#39;,
+            onTrigger : &#39;return&#39;        // make it a trigger object
+        ],
+        Text : [
+            name : &#39;data&#39;,              // text field identifier
+            title: &#39;Enter a number (press &lt;RETURN&gt;)&#39;,
+            type : &#39;real&#39;,              // expected entered data type
+            onTrigger : &#39;return&#39;        // make it a trigger object
+        ]
+    ];
+
+    global function makewin []
+        local values = WindowPrompt [ panel, [data:12] ];
+                                        // initial Text value 12
+        print values;
+    endfunction
+</pre>
+<a id="WindowDestroy"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">WindowDestroy</span> wkey
+</pre>
+
+<p>Destroys the specified window, which must already have been created. Once
+  a window is destroyed, its window key becomes invalid.</p>
+
+<p>Note: Although any open windows owned by a task will be closed by that
+  task when the task terminates, it is poor practice to leave windows open when
+  they are no longer needed. We recommend you do the housekeeping
+  explicitly.</p>
+
+<h1>See Also</h1>
+
+<p><a href="../wt_intro.htm">SVL Window Toolkit</a><br />
+  <a href="wt_core.htm">Core Attributes</a><br />
+  <a href="introwt.htm">Window Toolkit Functions</a></p>
+  <table class="functionList">
+    <tr>
+      <td valign="top"><a href="wt_wait.htm">WindowWait</a><br />
+      <a href="wt_data.htm">WindowValues</a><br />
+      <a href="wt_show.htm">WindowShow</a></td>
+      <td valign="top"><a href=
+      "wt_data.htm">WindowGetData</a><br />
+      <a href="wt_data.htm">WindowSetData</a><br />
+      <a href="wt_attr.htm">WindowSetAttr</a></td>
+    </tr>
+  </table><!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../../images/ccgicon.png" /> <a href="../../../index.htm"></a>
+    <a href="../../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

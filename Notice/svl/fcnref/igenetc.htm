@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: igen" />
+  <meta name="keywords" content="functions: id, m_id, x_id" />
+  <meta name="keywords" content="functions: null, m_null, isnull, notnull" />
+  <title>Identity and Index Generation Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Identity and Index Generation Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+w = <a class="fcnlink" href="#igen">igen</a> v
+
+identity = <a class="fcnlink" href="#id">id</a> v
+mask = <a class="fcnlink" href="#m_id">m_id</a> v
+index = <a class="fcnlink" href="#x_id">x_id</a> v
+
+flag = <a class="fcnlink" href="#isnull">isnull</a> v
+flag = <a class="fcnlink" href="#notnull">notnull</a> v
+nval = <a class="fcnlink" href="#null">null</a> v
+mask = <a class="fcnlink" href="#m_null">m_null</a> v
+</pre>
+
+<a id="igen"></a>
+<h1>Description</h1>
+
+<pre>
+w = <span class="fcndef">igen</span> v
+</pre>
+
+<p>Returns a flat numeric vector containing the sequence of integers from
+  <tt>1</tt> to <tt>v</tt>. <tt>v</tt> must be a scalar number, and should be
+  an integer.</p>
+
+<pre class="code">
+svl&gt; igen 5
+[1,2,3,4,5]
+</pre>
+
+<a id="x_id"></a>
+<a id="m_id"></a>
+<a id="id"></a>
+<hr noshade="noshade" />
+
+<pre>
+identity = <span class="fcndef">id</span> v
+mask = <span class="fcndef">m_id</span> v
+index = <span class="fcndef">x_id</span> v
+</pre>
+
+<p>Identity and index generation functions.</p>
+<table class="noborder left">
+  <tr>
+    <td><span class="nobr"><tt>id v</tt></span></td>
+    <td>
+      Identity operation which returns its argument.
+
+<pre class="code">
+svl&gt; id [1,2,3,4,5]
+[1,2,3,4,5]
+</pre>
+    </td>
+  </tr>
+  <tr>
+    <td><span class="nobr"><tt>m_id v</tt></span></td>
+    <td>
+      Returns a mask the length of <tt>v</tt>, filled with 1&#39;s. This is
+      equivalent to: <span class="nobr"><tt>one x_id v</tt></span>.
+
+<pre class="code">
+svl&gt; m_id [1,[2,7],3,4,5]
+[1,1,1,1,1]
+</pre>
+    </td>
+  </tr>
+  <tr>
+    <td><span class="nobr"><tt>x_id v</tt></span></td>
+    <td>
+      Returns the sequence of subscripts from <tt>1</tt> to <tt>length
+      v</tt>. This is equivalent to: <span class="nobr"><tt>igen length
+      v</tt></span>.
+
+<pre class="code">
+svl&gt; x_id [ [2,3], [4,5,6], [7,8] ]
+[1,2,3]
+</pre>
+    </td>
+  </tr>
+</table>
+<a id="m_null"></a>
+<a id="null"></a>
+<a id="isnull"></a>
+<a id="notnull"></a>
+<hr noshade="noshade" />
+
+<pre>
+flag = <span class="fcndef">isnull</span> v
+flag = <span class="fcndef">notnull</span> v
+nval = <span class="fcndef">null</span> v
+mask = <span class="fcndef">m_null</span> v
+</pre>
+
+<p>Empty vector functions.</p>
+  <table class="noborder">
+    <tr>
+      <td><span class="nobr"><tt>null v</tt></span></td>
+      <td>
+        Returns the null vector, <tt>[]</tt>, no matter what the argument.
+
+<pre class="code">
+svl&gt; null [1,2,3,4,5]
+[]
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td><span class="nobr"><tt>m_null v</tt></span></td>
+      <td>
+        Returns a mask the length of <tt>v</tt>, filled with 0&#39;s. This is
+        equivalent to: <span class="nobr"><tt>zero x_id v</tt></span>. The
+        principle behind <tt>m_null</tt> is that when the returned mask is
+        applied to <span class="svl">v</span> (using <a href="getpeek.htm#mget"
+        class="svl">mget</a>), a null results.
+
+<pre class="code">
+svl&gt; m_null [1,[2,7],3,4,5]
+[0,0,0,0,0]
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td><span class="nobr"><tt>isnull v</tt></span></td>
+      <td>
+        Returns 1 if <tt>v</tt> is the null vector and 0 otherwise. This
+        function is the same as <tt>not length v</tt>.
+
+<pre class="code">
+svl&gt; isnull []
+1
+svl&gt; isnull [1,2,3]
+0
+</pre>
+      </td>
+    </tr>
+    <tr>
+      <td><span class="nobr"><tt>notnull v</tt></span></td>
+      <td>
+        Returns 0 if <tt>v</tt> is the null vector and 1 otherwise. This
+        function is the same as <tt>not isnull</tt>.
+
+<pre class="code">
+svl&gt; notnull []
+0
+svl&gt; notnull [1,2,3]
+1
+</pre>
+      </td>
+    </tr>
+  </table>
+
+<h1>See Also</h1>
+
+<p><a class="svl" href="dropetc.htm">first</a> <a class="svl" href=
+  "dropetc.htm">second</a> <a class="svl" href="dropetc.htm">third</a>
+  <a class="svl" href="dropetc.htm">last</a><br />
+  <a class="svl" href="igenetc.htm">igen</a> <a class="svl" href=
+  "length.htm">length</a> <a class="svl" href="arithmet.htm">one</a> <a class=
+  "svl" href="arithmet.htm">zero</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <title>SVL Task Communication Functions</title>
+  <meta name="keywords" content="intro: SVL Task Communication Functions" />
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    SVL Task Communication Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<p>When computations require cooperation between tasks, inter-task
+  communication is essential. Such computations may progress asynchronously,
+  requiring that tasks be able to coordinate their activity. Often, resources
+  must be shared between tasks, and access to those resources must be
+  coordinated as well.</p>
+
+<p>SVL tasks can communicate with each other through a variety of SVL
+  functions. The <tt>task_send</tt> and <tt>task_receive</tt> functions allow
+  tasks to send and receive messages directly from each other. In a distributed
+  computing environment, <tt>mpu_send</tt>, <tt>mpu_receive</tt>, and
+  <tt>mpu_reply</tt> serve a similar purpose. Built-in constants such as
+  <tt>MPU_HOSTNAMES</tt> and <tt>MPU_THISHOST</tt> give information about the
+  distributed system that are useful for identifying sender/receiver tasks.</p>
+
+<p>When cooperating tasks share resources, the <tt>mutex_*</tt> functions can
+  be used to manage access to those resources. The <tt>sync_*</tt> functions
+  are used by tasks to notify the rest of the system about changes in their
+  state. The <tt>barrier_*</tt> functions are used to coordinate cooperating
+  tasks, requiring them to wait until all tasks needed for an operation are
+  active.</p>
+
+<p>Information can be shared between tasks using dynamic variables. The
+  <tt>dvar_*</tt> functions control access to these special data
+  containers.</p>
+
+<table class="functionList">
+  <tr>
+    <td><a href=
+    "tasksend.htm"><tt>task_receive</tt></a><br />
+    <a href="tasksend.htm"><tt>task_send</tt></a></td>
+    <td><a href=
+    "svlmpu.htm"><tt>mpu_receive</tt></a><br />
+    <a href="svlmpu.htm"><tt>mpu_send</tt></a><br />
+    <a href="svlmpu.htm"><tt>mpu_reply</tt></a></td>
+    <td><a href=
+    "svlmpu.htm"><tt>MPU_HOSTCOUNT</tt></a><br />
+    <a href="svlmpu.htm"><tt>MPU_HOSTNAMES</tt></a><br />
+    <a href="svlmpu.htm"><tt>MPU_THISHOST</tt></a></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>
+      <a href="mutex.htm"><tt>mutex_open</tt></a><br />
+    <a href="mutex.htm"><tt>mutex_close</tt></a><br />
+    <a href="mutex.htm"><tt>mutex_lock</tt></a><br />
+    <a href="mutex.htm"><tt>mutex_unlock</tt></a><br />
+    <a href="mutex.htm"><tt>mutex_rcapacity</tt></a><br />
+    <a href="mutex.htm"><tt>mutex_capacity</tt></a><br />
+    <a href="mutex.htm"><tt>mutex_setcapacity</tt></a><br />
+    <a href="mutex.htm"><tt>mutex_key</tt></a><br />
+    <a href="mutex.htm"><tt>mutex_name</tt></a><br />
+    <a href="mutex.htm"><tt>mutex_keylist</tt></a><br />
+    <a href="mutex.htm"><tt>mutex_ref</tt></a><br />
+    <a href="mutex.htm"><tt>mutex_taskref</tt></a></td>
+    <td>
+    <a href="sync.htm"><tt>sync_open</tt></a><br />
+    <a href="sync.htm"><tt>sync_close</tt></a><br />
+    <a href="sync.htm"><tt>sync_key</tt></a><br />
+    <a href="sync.htm"><tt>sync_name</tt></a><br />
+    <a href="sync.htm"><tt>sync_keylist</tt></a><br />
+    <a href="sync.htm"><tt>sync_ref</tt></a><br />
+    <a href="sync.htm"><tt>sync_taskref</tt></a><br />
+    <a href="sync.htm"><tt>sync_update</tt></a><br />
+    <a href="sync.htm"><tt>sync_wait</tt></a><br />
+    <a href="sync.htm"><tt>sync_poll</tt></a><br />
+    <a href="sync.htm"><tt>sync_diff</tt></a></td>
+    <td><a href=
+    "barrier.htm"><tt>barrier_open</tt></a><br />
+    <a href="barrier.htm"><tt>barrier_close</tt></a><br />
+    <a href="barrier.htm"><tt>barrier_wait</tt></a><br />
+    <a href="barrier.htm"><tt>barrier_rcapacity</tt></a><br />
+    <a href="barrier.htm"><tt>barrier_capacity</tt></a><br />
+    <a href="barrier.htm"><tt>barrier_setcapacity</tt></a><br />
+    <a href="barrier.htm"><tt>barrier_key</tt></a><br />
+    <a href="barrier.htm"><tt>barrier_name</tt></a><br />
+    <a href="barrier.htm"><tt>barrier_keylist</tt></a><br />
+    <a href="barrier.htm"><tt>barrier_ref</tt></a><br />
+    <a href="barrier.htm"><tt>barrier_taskref</tt></a></td>
+    <td><a href=
+    "dvaretc.htm"><tt>dvar_open</tt></a><br />
+    <a href="dvaretc.htm"><tt>dvar_close</tt></a><br />
+    <a href="dvaretc.htm"><tt>dvar_key</tt></a><br />
+    <a href="dvaretc.htm"><tt>dvar_keylist</tt></a><br />
+    <a href="dvaretc.htm"><tt>dvar_name</tt></a><br />
+    <a href="dvaretc.htm"><tt>dvar_ref</tt></a><br />
+    <a href="dvaretc.htm"><tt>dvar_taskref</tt></a><br />
+    <a href="dvaretc.htm"><tt>dvar_value</tt></a></td>
+  </tr>
+</table>
+
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

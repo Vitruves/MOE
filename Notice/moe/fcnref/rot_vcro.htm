@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content=
+  "functions: rot3d_vCross, rot3d_vDot, rot3d_vNorm, rot3d_vNormalize" />
+  <title>Rotation Functions: rot3d_vCross...</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Rotation Functions: rot3d_vCross...
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+w = <a class="fcnlink" href="#rot3d_vCross">rot3d_vCross</a> [u,v]
+a = <a class="fcnlink" href="#rot3d_vDot">rot3d_vDot</a> [u,v]
+norms = <a class="fcnlink" href="#rot3d_vNorm">rot3d_vNorm</a> v
+V = <a class="fcnlink" href="#rot3d_vNormalize">rot3d_vNormalize</a> v
+</pre>
+<a id="rot3d_vCross"></a>
+<h1>Description</h1>
+
+<pre>
+w = <span class="fcndef">rot3d_vCross</span> [u,v]
+</pre>
+
+<p>Returns the cross product of vectors <tt>u</tt> and <tt>v</tt>. <tt>u</tt>
+  and <tt>v</tt> cannot be lists of vectors.</p>
+
+<pre class="code">
+svl&gt; rot3d_vCross [ [1,0,0], [0,1,0] ]
+[0,0,1]
+</pre>
+<a id="rot3d_vDot"></a>
+<hr noshade="noshade" />
+
+<pre>
+a = <span class="fcndef">rot3d_vDot</span> [u,v]
+</pre>
+
+<p>Returns the dot product of vectors <tt>u</tt> and <tt>v</tt>. <tt>u</tt>
+  and <tt>v</tt> cannot be lists of vectors.</p>
+
+<pre class="code">
+svl&gt; rot3d_vDot [ [1,2,3], [1,10,100] ]
+321
+</pre>
+<a id="rot3d_vNorm"></a>
+<hr noshade="noshade" />
+
+<pre>
+norms = <span class="fcndef">rot3d_vNorm</span> v
+</pre>
+
+<p>Returns the <i>L</i><sub>2</sub> norm of vector <tt>v</tt>. The norms of
+  several vectors can be found by supplying them to <tt>rot3d_vNorm</tt> as
+  vectors of first, second, third, and so forth elements. For instance, the
+  vectors [<i>a</i><sub>1</sub>,<i>a</i><sub>2</sub>,<i>a</i><sub>3</sub>] and
+  [<i>b</i><sub>1</sub>,<i>b</i><sub>2</sub>,<i>b</i><sub>3</sub>] would be
+  given to the function as [ [<i>a</i><sub>1</sub>,<i>b</i><sub>1</sub>],
+  [<i>a</i><sub>2</sub>,<i>b</i><sub>2</sub>],
+  [<i>a</i><sub>3</sub>,<i>b</i><sub>3</sub>] ].</p>
+
+<pre class="code">
+svl&gt; rot3d_vNorm [ [1,3], [2,4], [2,0] ]
+[3,5]
+</pre>
+<a id="rot3d_vNormalize"></a>
+<hr noshade="noshade" />
+
+<pre>
+V = <span class="fcndef">rot3d_vNormalize</span> v
+</pre>
+
+<p>Returns vector v normalized. v cannot be a list of vectors.</p>
+
+<pre class="code">
+svl&gt; rot3d_vNormalize [2,1,2]
+[0.666667,0.333333,0.666667]
+</pre>
+
+<h1>See Also</h1>
+  <table class="functionList">
+    <tr>
+      <td><a href=
+      "rot_xyz.htm">rot3d_Rotation</a><br />
+      <a href="rot_xyz.htm">rot3d_PlaneRotation</a><br />
+      <a href="rot_iden.htm">rot3d_Identity</a><br />
+      <a href="rot_xyz.htm">rot3d_XRotation</a><br />
+      <a href="rot_xyz.htm">rot3d_YRotation</a><br />
+      <a href="rot_xyz.htm">rot3d_ZRotation</a><br />
+      <a href="rot_vang.htm">rot3d_vAngle</a></td>
+      <td><a href=
+      "rot_vang.htm">rot3d_vBisector</a><br />
+      <a href="rot_prt.htm">rot3d_Print</a><br />
+      <a href="rot_cov.htm">rot3d_Covariance</a><br />
+      <a href="rot_cov.htm">rot3d_CovarianceEigenSystem</a><br />
+      <a href="rot_mm.htm">rot3d_mmMul</a><br />
+      <a href="rot_mm.htm">rot3d_mvMul</a></td>
+    </tr>
+  </table><!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

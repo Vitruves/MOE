@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: lhs" />
+  <meta name="keywords" content="functions: uext" />
+  <meta name="keywords" content="functions: uext1" />
+  <meta name="keywords" content="functions: oext" />
+  <title>Vector reshaping functions: lhs</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Vector reshaping functions: lhs
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    v_uext = <a class="fcnlink" href="#lhs">lhs</a> [v, w]
+    v1_uext = <a class="fcnlink" href="#lhs">lhs</a> [v1, v2, v3, ...]
+    val_uext = <a class="fcnlink" href="#uext">uext</a> val
+    [v1, v2, v3, ...] = <a class="fcnlink" href=
+"#uext">uext</a> [v1, v2, v3, ...]
+    val_uext = <a class="fcnlink" href="#uext1">uext1</a> val
+    [v1, v2, v3, ...] = <a class="fcnlink" href=
+"#uext1">uext1</a> [v1, v2, v3, ...]
+    val_oext = <a class="fcnlink" href="#oext">oext</a> val
+    [r1, r2, r3, ...] = <a class="fcnlink" href=
+"#oext">oext</a> [v1, v2, v3, ...]
+</pre>
+<a id="lhs"></a>
+<h1>Description</h1>
+
+<pre>
+v_uext = <span class="fcndef">lhs</span> [v, w]
+v1_uext = <span class="fcndef">lhs</span> [v1, v2, v3, ...]
+</pre>
+
+<p>Function <tt>lhs</tt> returns the first element of its argument,
+  unit-extended to the shape of the remaining elements. All elements must be of
+  compatible shapes. The function generalizes the associative binary
+  <i>left-hand-side</i> operator that returns the first of its two
+  arguments.</p>
+
+<pre>
+    svl&gt; <span class="fcndef">lhs</span> [ 2, [3,4] ]
+    [ 2,2 ]
+
+    svl&gt; <span class=
+"fcndef">lhs</span> [ &quot;a&quot;, [ &quot;bc&quot;, &quot;def&quot; ] ]
+    [ &quot;aa&quot;, &quot;aaa&quot; ]
+
+    svl&gt; <span class="fcndef">lhs</span> [ [2,3], [ [4,5,6], [7,8] ] ]
+    [ [2,2,2], [3,3] ]
+
+    svl&gt; <span class="fcndef">lhs</span> [ [1,2], [[3,4],5], [6,[7,8,9]]]
+    [ [1,1], [2,2,2] ]
+</pre>
+<a id="uext"></a>
+<hr noshade="noshade" />
+
+<pre>
+val_uext = <span class="fcndef">uext</span> val
+[v1, v2, v3, ...] = <span class="fcndef">uext</span> [v1, v2, v3, ...]
+</pre>
+
+<p>Function <tt>uext</tt> returns its argument, with each of its elements
+  recursively unit-extended to the shape of the remaining elements. All
+  elements must be of compatible shapes.</p>
+
+<pre>
+    svl&gt; uext [ &quot;x&quot;, [ [1,2,3], [4,5,6,7] ] ]
+    [ [ &quot;xxx&quot;, &quot;xxxx&quot; ], [ [1,2,3], [4,5,6,7] ] ]
+</pre>
+
+<p>The function satisfies the following identity:</p>
+
+<pre>
+    uext x === lhs [x, [lhs x]]
+</pre>
+<a id="uext1"></a>
+<hr noshade="noshade" />
+
+<pre>
+val_uext = <span class="fcndef">uext1</span> val
+[v1, v2, v3, ...] = <span class="fcndef">uext1</span> [v1, v2, v3, ...]
+</pre>
+
+<p>Function <tt>uext1</tt> returns its argument, with each of its elements
+  unit-extended to the length of the remaining elements. All elements must be
+  of compatible lengths.</p>
+
+<pre>
+    svl&gt; uext1 [ &quot;x&quot;, [ [1,2,3], [4,5,6,7] ] ]
+    [ &quot;xx&quot;, [ [1,2,3], [4,5,6,7] ] ]
+</pre>
+
+<p>The function satisfies the following identity:</p>
+
+<pre>
+    uext1 x === apt resize [x, l_length x]
+</pre>
+<a id="oext"></a>
+<hr noshade="noshade" />
+
+<pre>
+val_oext = <span class="fcndef">oext</span> val
+[r1, r2, r3, ...] = <span class="fcndef">oext</span> [v1, v2, v3, ...]
+</pre>
+
+<p>Function <tt>oext</tt> returns the (right-fold) outer product expansion of
+  its argument <tt>val</tt>. The return value is a list of vectors, and is
+  composed from the elements of the input argument <tt>val</tt>. The length of
+  the return value is the product of the lengths of the top-level sub-vectors
+  of the input <tt>val</tt>. For example:</p>
+
+<pre>
+    [r1, r2, r3, ...] = oext [[a1,a2,a3], [b1,b2], [c1,c2]]
+    r1 = [a1, b1, c1]
+    r2 = [a1, b1, c2]
+    r3 = [a1, b2, c1]
+    r4 = [a1, b2, c2]
+    r5 = [a2, b1, c1]
+    r6 = [a2, b1, c2]
+    ...
+    r12 = [a3, b2, c2]
+</pre>
+
+<p>Thus</p>
+
+<pre>
+    svl&gt; oext [&quot;ab&quot;, &quot;123&quot;]
+    [&quot;a1&quot;, &quot;a2&quot;, &quot;a3&quot;, &quot;b1&quot;, &quot;b2&quot;, &quot;b3&quot;]
+
+    svl&gt; oext [&quot;ab&quot;, &quot;123&quot;, &quot;XY&quot;]
+    [&quot;a1X&quot;, &quot;a1Y&quot;, &quot;a2X&quot;, &quot;a2Y&quot;, &quot;a3X&quot;, &quot;a3Y&quot;,
+    &quot;b1X&quot;, &quot;b1Y&quot;, &quot;b2X&quot;, &quot;b2Y&quot;, &quot;b3X&quot;, &quot;b3Y&quot;]
+</pre>
+
+<p>Note: If the argument has one element, the result is the element itself.
+  If the outer product produces only one item, the item will be nested.</p>
+
+<pre>
+    svl&gt; oext [[&#39;a&#39;, &#39;b&#39;, &#39;c&#39;]]      // argument = 1 item
+    [&#39;a&#39;, &#39;b&#39;, &#39;c&#39; ]
+
+    oext [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;]
+    [[&#39;a&#39;, &#39;b&#39;, &#39;c&#39; ]]                  // result = 1 item
+</pre>
+
+<h1>See Also</h1>
+
+<p><a class="svl" href="catetc.htm">nest</a> <a class="svl" href=
+  "catetc.htm">cat</a> <a class="svl" href="repetc.htm">rep</a> <a class="svl"
+  href="repetc.htm">resize</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

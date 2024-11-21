@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../images/ccgicon.png" />
+  <meta name="keywords" content="panel: Dihedral Contour Plot" />
+  <title>Dihedral Contour Plot</title>
+  <meta name="keywords" content="keywords:" />
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../index.htm"><img src="../images/ccglogo.png" /></a>
+    <a href="../index.htm"><div class="moeversion"></div></a>
+    Dihedral Contour Plot
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+  <ul>
+    <!-- !!!
+  <li><a href="#SeeAlso">See Also</a></li>
+-->
+  </ul>
+
+<p>The <b>Dihedral Contour Plot</b> is an interactive means to explore
+  the energy landscape of two rotable bonds in a molecule. To open the
+  plot use <nobr><b>MOE | Compute | Conformations |
+  Dihedral Contour Plot</b></nobr>.</p>
+
+<p> The user has to define two dihedrals in the molecule to analyze. This
+  can be done by either selecting to rotatable bonds in the molecule before
+  opening the plot, or if no bonds are selected, a prompt will ask the
+  user to pick two sets of four atoms defining the dihedrals.
+  Once selected the currently explored dihedrals and their values
+  are shown in the MOE window with
+  <a href="../moe/gui/mainwin.htm#Measure">meters</a>.</p>
+
+<p>The application will then calculate the energies of the molecule for all
+  possible combinations of the two dihedral values. The molecule fragments
+  are rotated around the specified dihedrals but otherwise kept rigid.
+  The resulting energy matrix is shown as contour plot with the two axes
+  representing the dihedral angles from -180 to 180 degrees. 
+  Blue colors indicate low energies (i.e. favorable dihedral
+  angle combinations), and the high energy regions are red indicating
+  possible clashes. The current dihedral angles are marked in the plot
+  with a white cross.</p>
+
+<p>Left clicking in the plot will update the dihedral angles of the
+ molecule to the picked value combination, modifying the molecule
+ in the MOE window.</p>
+
+<center>
+<img src="dihedralcontour/dihedral_contour_plot.png"
+ alt="Dihedral Contour Plot" />
+<img src="dihedralcontour/dihedral_contour_plot_mol.png"
+ alt="Molecule Showing measured Dihedrals" />
+</center>
+
+<p>The panel controls are described as follows:</p>
+  <table class="noborder">
+    <tr>
+      <td valign="top"><b>Dihedrals</b></td>
+      <td>
+        Change the atoms defining the two dihedrals for which energies will
+        be calculated and displayed in the contour plot. This makes it
+        possible to look at two other dihedrals without needing to restart
+        the Dihedral Contour Plot application.
+       <p>
+        <img src="dihedralcontour/dihedral_contour_plot_prompt.png"
+         alt="Select New Dihedral Atoms" class="floatright" />
+        A prompt will be shown at the top of the MOE window to
+        select the two sets of 4 dihedral atoms. After the atoms
+        are picked the dihedral contour plot is recalculated.</p>
+       </td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Update</b></td>
+      <td>Recalculate the dihedral energies and
+       recreate the contour plot. This is useful, e.g. when one
+       changes the dihedrals by clicking in the plot and then minimizes
+       the molecule.
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Export</b></td>
+      <td>Export the contour plot in a variety of image file formats. </td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Attributes</b></td>
+      <td>
+      Open the Plot attributes panel, in which all plot settings can
+      be adjusted, e.g. changing axis parameters or inverting the
+      background color, etc.
+      </td>
+    </tr>
+  </table>
+
+<a id="SeeAlso" />
+<h1>See Also</h1>
+
+<p>
+  <a href="torprofile.htm">Torsion Profile</a><br />
+  <a href="mogul.htm">Mogul Analysis</a><br />
+  <a href="../moe/gui/mainwin.htm#FooterEditing">
+    Dihedral Profile in MOE Footer</a>
+
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../images/ccgicon.png" /> <a href="../index.htm"></a> <a href=
+    "../legal.htm"></a> &copy;<span class="versionyear"></span> <a href="http://www.chemcomp.com"></a>. All
+    rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

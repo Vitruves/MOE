@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content=
+  "functions: FastaOpen, FastaScore, FastaClose" />
+  <title>Local Alignment: FastaOpen, FastaScore, FastaClose</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Local Alignment: FastaOpen, FastaScore,
+    FastaClose
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    fasta_key = <a class="fcnlink" href=
+"#FastaOpen">FastaOpen</a> [query_idx, align_parameters, scan_parameters]
+    score = <a class="fcnlink" href=
+"#FastaScore">FastaScore</a> [fasta_key, subject_idx]
+    <a class="fcnlink" href="#FastaClose">FastaClose</a> fasta_key
+</pre>
+
+<p>where</p>
+
+<pre>
+    align_parameters = [
+        mda       : integer vectors
+        gapstart  : integer
+        gapextend : integer
+    ]
+
+    scan_parameters = [
+        ktup          : integer
+        optcut        : integer
+        join_penalty  : integer
+        optwid        : integer
+        hmap0         : integers
+        hmap1         : integers
+        hscore        : integers
+    ]
+</pre>
+
+<h1>Description</h1>
+
+<p>The <tt>Fasta</tt> functions implement a generalized version of the
+  heuristic local alignment scoring function of Pearson [Pearson 1997]. The
+  Fasta method for scoring a query sequence and a subject sequence consists of
+  three steps:</p>
+  <ol>
+    <li>Find all positive-scoring partial alignments (paired segments without
+    gaps) between the query and subject sequences. In this step, all alignments
+    must contain at least a specified number of exact matches. This
+    implementation of the Fasta method has been generalized to allow for the
+    determination of exact matches based on comparing query and sequence
+    elements after passing them through specified translation tables.</li>
+    <li>Attempt to join non-overlapping partial alignments from step one
+    together into a smaller set of high-scoring local similarity regions. The
+    score of a local similarity region is equal to the sum of the partial
+    alignment scores less a penalty for each two partial alignments which are
+    joined together. Regions scoring below a specified cutoff are then
+    discarded.</li>
+    <li>The highest scoring regions from step two are then submitted to a
+    gapped local alignment calculation [Smith 1981], restricted to a window of
+    a specified size around the region. The highest score recorded for any one
+    region is returned as the score for the subject sequence.</li>
+  </ol>
+<a id="FastaOpen"></a>
+<hr noshade="noshade" />
+
+<pre>
+fasta_key = <span class=
+"fcndef">FastaOpen</span> [query_idx, align_parameters, scan_parameters]
+</pre>
+
+<p>Initializes a query and returns the key to be used to score subject
+  sequences.</p>
+  <dl>
+    <dt><tt>query_idx</tt></dt>
+    <dd>a flat vector of non-negative integers representing the query sequence
+    for the search. The elements of <tt>query_idx</tt> are used as zero-based
+    indices to select rows of the scoring matrix when calculating sequence
+    alignments between the query sequence and subject sequences.</dd>
+    <dt><tt>align_parameters</tt></dt>
+    <dd>
+      parameters controlling sequence alignments, given as attribute-value
+      pairs:
+      <dl>
+        <dd></dd>
+        <dt><tt>mda:integer vectors</tt></dt>
+        <dd>Rectangular matrix of integers used to score alignments. The length
+        of this vector should be equal to or greater than the largest value in
+        <tt>query_idx</tt>. The laminated length should be equal to or greater
+        than than the largest value in any subject sequence.</dd>
+        <dt><tt>gapstart:integer</tt></dt>
+        <dd>The score for creating a gap in the local alignment.</dd>
+        <dt><tt>gapextend:integer</tt></dt>
+        <dd>The score for extending a gap in a local alignment.</dd>
+      </dl>
+    </dd>
+    <dt><tt>scan_parameters</tt></dt>
+    <dd>
+      parameters controlling the Fasta heuristic, given as attribute-value
+      pairs:
+      <dl>
+        <dd></dd>
+        <dt><tt>ktup:integer</tt></dt>
+        <dd>Specifies the number of exact matches between the query and subject
+        sequences required to report partial alignments. The maximum value is
+        three.</dd>
+        <dt><tt>join_penalty:integer</tt></dt>
+        <dd>The penalty for joining two partial alignments when calculating
+        local similarity regions.</dd>
+        <dt><tt>optcut:integer</tt></dt>
+        <dd>Specifies the threshold score which must be met by a local
+        similarity region in order to be submitted to gapped local alignment
+        calculation.</dd>
+        <dt><tt>optwid:integer</tt></dt>
+        <dd>Specifies the size of the window around a local similarity region
+        within which the gapped local alignment is restricted.</dd>
+        <dt><tt>hmap0:integers</tt></dt>
+        <dd>Table used to translate query elements before comparisons to the
+        subject sequence when seeking exact matches during the gapless partial
+        alignment step of the search. Values should be strictly positive. The
+        vector size should be equal to the highest value in
+        <tt>query_idx</tt>.</dd>
+        <dt><tt>hmap1:integers</tt></dt>
+        <dd>Table used to translate subject elements before comparisons to the
+        query sequence when seeking exact matches during the gapless partial
+        alignment step of the search. Values should be strictly positive. The
+        vector size should be equal to the highest value in
+        <tt>subject_idx</tt>.</dd>
+        <dt><tt>hscore:integers</tt></dt>
+        <dd>A flat vector of integers containing scores for matching translated
+        elements of the query and subject sequences. The vector size should be
+        equal to or larger than the largest values in <tt>hmap0</tt> and
+        <tt>hmap1</tt>.</dd>
+      </dl>
+    </dd>
+  </dl>
+<a id="FastaScore"></a>
+<hr noshade="noshade" />
+
+<pre>
+score = <span class="fcndef">FastaScore</span> [fasta_key, subject_idx]
+</pre>
+
+<p>Calculate the score for a subject sequence of a query specified by
+  <tt>fasta_key</tt>.</p>
+
+<p><tt>subject_idx</tt> is a flat vector of non-negative integers
+  representing the subject sequence for the search. The elements of
+  <tt>subject_idx</tt> are used as zero-based indices to select columns of the
+  scoring matrix when calculating gapped local alignments between the query
+  sequence and the subject sequence.</p>
+<a id="FastaClose"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">FastaClose</span> fasta_key
+</pre>
+
+<p>Free the memory associated with the query specified by <tt>fasta_key</tt>.
+  This memory is freed automatically at the end of a task, but it is good
+  practice to call <tt>FastaClose</tt> explicitly.</p>
+
+<h1>References</h1>
+  <table class="ref">
+    <tr>
+      <td valign="baseline">[Pearson&nbsp;1997]</td>
+      <td valign="baseline">Pearson, W. R. Effective protein sequence
+      comparison. <i>Meth. Enz.</i>., R. F. Doolittle, ed. (San Diego: Academic
+      Press) 266:227-258(1996).</td>
+    </tr>
+    <tr>
+      <td valign="baseline">[Smith&nbsp;1981]</td>
+      <td valign="baseline">Smith, T.F. and Waterman, M.S. Identification of
+      Common Molecular Subsequences. <i>Journal of Molecular Biology</i>.
+      147(1):195-197, (1981).</td>
+    </tr>
+  </table>
+
+<h1>See Also</h1>
+
+<p><a class="svl" href="../../proteins/fcnref/pro_srch.htm">pro_SearchPDB</a>
+  <a class="svl" href="../../moe/fcnref/sysalign.htm">AlignRange</a>
+  </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: symeigenvalues" />
+  <meta name="keywords" content="functions: symeigensystem" />
+  <meta name="keywords" content="functions: symtridiagonal" />
+  <title>Eigenvalues and Eigenvectors</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Eigenvalues and Eigenvectors
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+eigenvalues                = <a class="fcnlink" href=
+"#symeigenvalues">symeigenvalues</a> matrix
+[eigenvalues,eigenvectors] = <a class="fcnlink" href=
+"#symeigensystem">symeigensystem</a> matrix
+[diag1, diag2, Q]          = <a class="fcnlink" href=
+"#symtridiagonal">symtridiagonal</a> matrix
+</pre>
+
+<h1>Description</h1>
+
+<p>Let <i>A</i> denote a symmetric square matrix. In SVL, such a matrix is
+  represented by a vector of vectors, <tt>A</tt>, such that <tt>A(i)(j)</tt> =
+  <i>A<sub>ij</sub></i>. Because <i>A</i> is symmetric it can be factored
+  as:</p>
+  <center>
+    <i>A</i> = <i>Q</i><sup>T</sup> <i>D Q</i>
+  </center>
+
+<p>where <i>D</i> is diagonal and <i>Q</i><sup>T</sup><i>Q</i> = <i>I</i>.
+  The diagonal elements of <i>D</i> are the eigenvalues and the rows of
+  <i>Q</i> are the eigenvectors.</p>
+<a id="symeigenvalues"></a>
+<hr noshade="noshade" />
+
+<pre>
+eigenvalues = <span class="fcndef">symeigenvalues</span> matrix
+</pre>
+
+<p>Returns a vector containing the diagonal elements of <i>D</i> (the
+  eigenvalues of <i>A</i>).</p>
+<a id="symeigensystem"></a>
+<hr noshade="noshade" />
+
+<pre>
+[eigenvalues,eigenvectors] = <span class="fcndef">symeigensystem</span> matrix
+</pre>
+
+<p>Returns a two element vector, the first element of which is the vector
+  containing the diagonal elements of <i>D</i> (the eigenvalues of <i>A</i>)
+  and the second element contains the matrix <i>Q</i> (the rows are the
+  eigenvectors).</p>
+
+<p>Any real symmetric matrix can be factored as</p>
+  <center>
+    <i>A</i> = <i>Q</i><sup>T</sup> <i>R Q</i>
+  </center>
+
+<p>where <i>R</i> is symmetric tridiagonal and <i>Q</i><sup>T</sup><i>Q</i> =
+  <i>I</i>.</p>
+<a id="symtridiagonal"></a>
+<hr noshade="noshade" />
+
+<pre>
+[diag1, diag2, Q] = <span class="fcndef">symtridiagonal</span> matrix
+</pre>
+
+<p>Returns a three element vector <tt>[diag1,diag2,Q]</tt> where
+  <tt>diag1</tt> is a vector containing the diagonal elements of <i>R</i>,
+  <tt>diag2</tt> is a vector containing the immediate off-diagonal elements of
+  <i>R</i>, and <tt>Q</tt> is the orthogonal transform matrix.</p>
+
+<p>All three functions are invariant to permutations of the rows and columns
+  of the input matrix. The results are undefined for asymmetric matrices.</p>
+  <hr noshade="noshade" />
+
+<h1>Example</h1>
+
+<p><b>Example 1.</b> Find matrix inverse of a symmetric matrix:</p>
+
+<p>To find the eigenvalues, e, and the eigenvectors, Q, of the symmetric
+  matrix M:</p>
+
+<pre class="code">
+svl&gt; M = [[5,-2,-1,0], [-2,5,0,-1], [-1,0,5,-2], [0,-1,-2,5]]
+
+svl&gt; [e,Q] = <span class="fcndef">symeigensystem</span> M
+
+svl&gt; e
+[8,6,4,2]
+
+svl&gt; apt write ['{n:5.2f}\n', Q];
+  0.50 -0.50 -0.50  0.50
+ -0.50  0.50 -0.50  0.50
+  0.50  0.50 -0.50 -0.50
+  0.50  0.50  0.50  0.50
+
+svl&gt; apt write ['{n:5.2f}\n', rot3d_mmMul [tr Q, e * Q]];
+  5.00 -2.00 -1.00 -0.00
+ -2.00  5.00 -0.00 -1.00
+ -1.00 -0.00  5.00 -2.00
+ -0.00 -1.00 -2.00  5.00
+</pre>
+
+<p>To find the inverse, inv_M, by inverting the eigenvalues e:</p>
+
+<pre class="code">
+svl&gt; inv_M = rot3d_mmMul [tr Q, inv e * Q]
+
+svl&gt; apt write ['{n:5.2f}\n', rot3d_mmMul [M, inv_M]];
+  1.00  0.00  0.00  0.00
+  0.00  1.00  0.00  0.00
+  0.00  0.00  1.00  0.00
+  0.00  0.00  0.00  1.00
+</pre>
+
+<p><b>Example 2.</b> The following code will align the principal axes of
+  inertia of a loaded molecule along the X, Y, Z coordinate axes:</p>
+
+<pre class="code">
+svl&gt; a = Atoms []
+svl&gt; p = aPos a
+svl&gt; c = oCentroid a
+svl&gt; M = split [app add cat ([p-c] * app nest (p-c)), 3]
+svl&gt; [e,Q] = symeigensystem M
+svl&gt; Q(3) = rot3d_vCross keep [Q,2]
+svl&gt; aSetPos [a, rot3d_mmMul [Q,p-c]+c]
+</pre>
+
+<h1>See Also</h1>
+
+<p><a href="matlib.htm">Matrix Operations</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

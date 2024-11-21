@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: cAtoms, cResidues" />
+  <title>Chain Functions: cAtoms, cResidues</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Chain Functions: cAtoms, cResidues
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    atom_lists = <a class="fcnlink" href="#cAtoms">cAtoms</a> chain_keys
+    residue_lists = <a class="fcnlink" href=
+"#cResidues">cResidues</a> chain_keys
+</pre>
+<a id="cAtoms"></a>
+<h1>Description</h1>
+
+<pre>
+atom_lists = <span class="fcndef">cAtoms</span> chain_keys
+</pre>
+
+<p>Returns a list of all the atom keys that are the grandchildren of each
+  chain specified in <tt>chain_keys</tt>.</p>
+<a id="cResidues"></a>
+<hr noshade="noshade" />
+
+<pre>
+residue_lists = <span class="fcndef">cResidues</span> chain_keys
+</pre>
+
+<p>Returns a list of all the residue keys that are the children of each chain
+  specified in <tt>chain_keys</tt>.</p>
+
+<p><b>Note:</b> In both cases, the length of the return vector is always
+  equal to the length of the argument vector.</p>
+
+<h1>See Also</h1>
+
+<p><a class="svl" href="prompts.htm">ChainPrompt</a><br />
+  <a class="svl" href="achain.htm">aChain</a> <a class="svl" href=
+  "achain.htm">aResidue</a><br />
+  <a class="svl" href="ratrch.htm">rAtoms</a> <a class="svl" href=
+  "ratrch.htm">rChain</a><br />
+  <a class="svl" href="obj.htm">oAtoms</a> <a class="svl" href=
+  "obj.htm">oChildren</a> <a class="svl" href="obj.htm">oParent</a></p>
+
+<p><a href="atom.htm">Atom Functions</a><br />
+  <a href="residue.htm">Residue Functions</a><br />
+  <a href="chain.htm">Chain Functions</a><br />
+  <a href="obj.htm">Object&nbsp;Functions</a><br /></p>
+
+<p><a href="../molsystems/molrep.htm">Representation of Molecular Systems in
+  MOE</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

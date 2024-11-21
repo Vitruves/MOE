@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: Obsolete Functions" />
+  <meta name="keywords" content="intro: Obsolete Functions" />
+  <title>Obsolete Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Obsolete Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<p>The following functions are now obsolete. The functions which supersede
+  them are indicated below.</p>
+<table class="noborder">
+  <tr>
+    <th>Obsolete Function</th>
+    <th>Superseded By</th>
+  </tr>
+  <tr>
+    <td><tt>BoxEnable</tt><br />
+    <tt>BoxSize</tt></td>
+    <td><a href="cellfcn.htm">Crystal Cell Functions</a></td>
+  </tr>
+  <tr>
+    <td><tt>cattok</tt></td>
+    <td><a class="svl" href="../../svl/fcnref/tokcat.htm">tok_cat</a></td>
+  </tr>
+  <tr>
+    <td><tt>db_CreateMolecule<br />
+    db_ExtractMolecule<br />
+    &nbsp;<br />
+    db_MolCat<br />
+    &nbsp;<br />
+    db_MolMaskAtoms<br />
+    db_MolMaskResidues<br />
+    db_MolMaskChains<br />
+    &nbsp;<br />
+    db_MolAtomPos<br />
+    db_MolHeavyAtoms<br />
+    &nbsp;<br />
+    db_nAtoms<br />
+    db_nResidues<br />
+    db_nChains</tt></td>
+    <td><a class="svl" href="mol.htm">mol_Create</a><br />
+    <a class="svl" href="extract.htm">mol_Extract</a><br />
+    &nbsp;<br />
+    <a class="svl" href="mol.htm">mol_Cat</a><br />
+    &nbsp;<br />
+    <a class="svl" href="mol.htm">mol_aMask</a><br />
+    <a class="svl" href="mol.htm">mol_rMask</a><br />
+    <a class="svl" href="mol.htm">mol_cMask</a><br />
+    &nbsp;<br />
+    <a class="svl" href="mol.htm">mol_aPos</a><br />
+    <a class="svl" href="mol.htm">mol_Heavy</a><br />
+    &nbsp;<br />
+    <a class="svl" href="mol.htm">mol_aCount</a><br />
+    <a class="svl" href="mol.htm">mol_rCount</a><br />
+    <a class="svl" href="mol.htm">mol_cCount</a></td>
+  </tr>
+  <tr>
+    <td><tt>db_ComputeMinimize<br />
+    dbv_ComputeMinimize<br /></tt></td>
+    <td><a class="svl" href="dbmin.htm">db_Minimize</a><br />
+    <a class="svl" href="dbmin.htm">dbv_Minimize</a><br /></td>
+  </tr>
+  <tr>
+    <td><tt>dbv_EntryHide</tt></td>
+    <td><a class="svl" href="dbventry.htm">dbv_EntryVisible</a><br />
+    <a class="svl" href="dbventry.htm">dbv_EntrySetVisible</a></td>
+  </tr>
+  <tr>
+    <td><tt>dbv_EntrySelect</tt><br />
+    <tt>dbv_EntrySelection</tt></td>
+    <td><a class="svl" href="dbventry.htm">dbv_EntrySelected</a><br />
+    <a class="svl" href="dbventry.htm">dbv_EntrySetSelected</a></td>
+  </tr>
+  <tr>
+    <td><tt>dbv_ViewKeys</tt></td>
+    <td><a class="svl" href="dbvopen.htm">dbv_KeyList</a></td>
+  </tr>
+  <tr>
+    <td><tt>DNA_Create</tt></td>
+    <td><a class="svl" href="dna_seq.htm">dna_Create</a></td>
+  </tr>
+  <tr>
+    <td>
+      <tt>HMC<br />
+      HMC_Prompt</tt>
+
+<p><b>Note:</b> <tt>hmc.svl</tt> can be found in
+      <tt>$MOE/sample</tt>.</p>
+    </td>
+    <td><a class="svl" href="csrchfcn.htm">ConfSearch</a></td>
+  </tr>
+  <tr>
+    <td><tt>MD<br />
+    MD_Prompt</tt></td>
+    <td><a href="mdfcn.htm">Dynamics</a></td>
+  </tr>
+  <tr>
+    <td><tt>MM_Prompt</tt></td>
+    <td><a href="../../apps/emin.htm">Energy Minimize</a></td>
+  </tr>
+  <tr>
+    <td><tt>pb_*</tt></td>
+    <td><a class="svl" href="pbfcn.htm">pboltz_*</a></td>
+  </tr>
+  <tr>
+    <td><tt>PotReport</tt><br />
+    <tt>PotMissingReport</tt></td>
+    <td><a href="../pot.htm">Forcefield Parameter Report</a></td>
+  </tr>
+  <tr>
+    <td><tt>pro_Search</tt></td>
+    <td><a class="svl" href=
+    "../../proteins/fcnref/pro_srch.htm">pro_SearchPDB</a></td>
+  </tr>
+  <tr>
+    <td><tt>StochasticCSearch</tt></td>
+    <td><a class="svl" href="csrchfcn.htm">ConfSearch</a></td>
+  </tr>
+  <tr>
+    <td><tt>sm_ExtractIso</tt></td>
+    <td><a class="svl" href="sm_build.htm">sm_Extract</a></td>
+  </tr>
+  <tr>
+    <td><tt>sm_Create</tt><br />
+    <tt>sm_Destroy</tt><br />
+    <tt>sm_Define</tt><br />
+    <tt>sm_Undefine</tt></td>
+    <td>
+      <a class="svl" href="smartsfcn.htm">sm_Match</a><br />
+      <a class="svl" href="smartsfcn.htm">sm_MatchAtoms</a><br />
+      <a class="svl" href="smartsfcn.htm">sm_MatchAll</a>
+
+<p>It is no longer necessary to refer to dictionaries by their keys:
+      <tt>sm_Match</tt>, <tt>sm_MatchAtoms</tt>, and <tt>sm_MatchAll</tt> now
+      take tagged-vector dictionaries directly in their argument lists.</p>
+    </td>
+  </tr>
+  <tr>
+    <td><tt>ted_Keys</tt></td>
+    <td><a class="svl" href=
+    "../../svl/svlgui/fcnref/tedfcn.htm">ted_KeyList</a></td>
+  </tr>
+  <tr>
+    <td><tt>ted_GetFilename</tt></td>
+    <td><a class="svl" href=
+    "../../svl/svlgui/fcnref/tedfcn.htm">ted_Filename</a></td>
+  </tr>
+</table><!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

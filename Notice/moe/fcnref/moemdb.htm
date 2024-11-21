@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+
+
+<!--
+!!	moemdb.htm		MOE Data Structure
+-->
+
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+
+
+<head>
+
+<meta http-equiv="x-ua-compatible" content="IE=9" />
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<link rel="stylesheet" type="text/css"
+href="../../include/manstyle.css" />
+
+
+<meta name="keywords" content="keywords:" />
+<meta name="keywords" content="functions: _moe_Extract, _moe_Create" />
+<meta name="keywords" content="functions: _moe_CreateMultiple" />
+<meta name="keywords" content="functions: moe_CreateBasic, moe_IsMOE" />
+<meta name="keywords" content="functions: moe_CreateMOL, mol_CreateMOE" />
+
+<title>MOE Data Structure</title>
+</head>
+
+<body>
+<div class="center-page">
+
+<!-- START MOE_HEADER --><div class="MOE_HEADER">
+<a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+<div class="moeversion"></div>
+MOE Data Structure
+</div><!-- END MOE_HEADER -->
+<div class="content">
+
+<h2>Syntax</h2>
+
+<pre>
+    moe = <a class="fcnlink" href="#_moe_Extract">_moe_Extract</a> [object_keys, gobj, opt]
+
+    [chains, gobj, opt] = <a class="fcnlink" href="#_moe_Create">_moe_Create</a> [moe, opt]
+
+    [[chains, gobj, opt], [chains, gobj, opt], ...] =
+	<a class="fcnlink" href="#_moe_CreateMultiple">_moe_CreateMultiple</a> [[moe, moe, ...], [opt, opt, ...]]
+
+    [chains, mol_name]  = <a class="fcnlink" href="#moe_CreateBasic">moe_CreateBasic</a> moe
+
+    mol = <a class="fcnlink" href="#moe_CreateMOL">moe_CreateMOL</a> moe
+    moe = <a class="fcnlink" href="#mol_CreateMOE">mol_CreateMOE</a> mol
+
+    flag = <a class="fcnlink" href="#moe_IsMOE">moe_IsMOE</a> data
+</pre>
+
+<p><a id="_moe_Extract"></a>
+
+<h2>Description</h2>
+
+<pre>
+moe = <span class="fcndef">_moe_Extract</span> [object_keys, gobj, opt]
+
+ opt = [
+    selection	  : flag,
+    sets	  : flag,
+    view	  : flag,
+    box		  : flag,
+    wall	  : flag,
+    graphics	  : flag,
+    sequence_only : flag,
+    mol_name	  : 'token'
+]
+</pre>
+
+<p>
+<span class="fcndef">_moe_Extract</span> takes a vector of molecular object keys (atoms,
+residues, chains) and graphics object keys describing a molecule or sub-molecule in the
+current molecular system, and returns a compressed MOE data description of that molecule.
+This description is a vector suitable for passing to db_Write as the data value for a
+'moe' field type, or for passing to <span class="fcndef">_moe_Create</span> as the
+<tt>moe</tt> argument.
+</p>
+<p>
+When an atom key is passed to _moe_Extract, descriptors for the atom, its parent residue
+and its owning chain are generated and returned. When a residue key is passed, descriptors
+for the residue, its parent chain and all of its child atoms are returned. When a chain
+key is passed, descriptors for the chain and all of its child residues and their atoms
+are returned.
+</p>
+<p>
+If both the key of an atom and that of its parent residue or owning chain are passed to
+_moe_Extract, only one descriptor for that atom will be generated, i.e. all duplicate
+descriptors are eliminated from the return vector.
+</p>
+<p>
+The MOE data vector has similar use as the MOL vector returned by
+<a class="fcnlink" href="extract.htm">mol_Extract</a> but stores more information.
+The MOE vector stores the same information as the .moe file format including details
+such as the complete rendering information, force field restraints, atom/residue/chain sets,
+graphics objects such as molecular surfaces, etc.
+</p>
+<p>
+The input argument <tt>opt</tt> is a tagged vector of optional attribute-value pairs,
+controlling which parts of the information in the <tt>moe</tt> vector will be restored:
+</p>
+
+<dl>
+<dt><tt>selection</tt></dt>
+<dd>
+Set to <tt>1</tt> to save the atom/residue/chain selection state
+(default: <tt>1</tt>).
+</dd>
+<dt><tt>sets</tt></dt>
+<dd>
+Set to <tt>1</tt> to save atom/residue/chain sets/collections
+(default: <tt>1</tt>).
+</dd>
+<dt><tt>view</tt></dt>
+<dd>
+Set to <tt>1</tt> to save view state transformation and saved views
+(default: <tt>1</tt>).
+</dd>
+<dt><tt>box</tt></dt>
+<dd>
+Set to <tt>1</tt> to save periodic boundary conditions (default: <tt>1</tt>).
+</dd>
+<dt><tt>wall</tt></dt>
+<dd>
+Set to <tt>1</tt> to save wall restraints (default: <tt>1</tt>).
+</dd>
+<dt><tt>graphics</tt></dt>
+<dd>
+Set to <tt>1</tt> to save graphics objects (default: <tt>1</tt>).
+</dd>
+<dt><tt>sequence_only</tt></dt>
+<dd>
+Set to <tt>1</tt> to save the system without atoms, chains and residues only
+(default: <tt>0</tt>).
+</dd>
+<dt><tt>mol_name</tt></dt>
+<dd>
+Specify the mdb molecule name to be shown in DBV cells.
+</dd>
+</dl>
+
+<p>Example: Save the complete molecule system into a database entry:</p>
+<pre>
+    local moe = _moe_Extract [Atoms[], GKeyList[], [mol_name: first cTag Chains[]]];
+    local mdb = db_Open ['system.mdb', 'create'];
+    db_EnsureField [mdb, 'my_system', 'moe']
+    db_Write [mdb, 0, [my_system: moe]];
+    db_Close mdb;
+</pre>
+
+<p><a id="_moe_Create"></a></p><hr noshade="noshade" />
+<pre>
+[chains, gobj, opt] = <span class="fcndef">_moe_Create</span> [moe, opt]
+
+ opt = [
+    selection	  : flag,
+    sets	  : flag,
+    view	  : flag,
+    box		  : flag,
+    wall	  : flag,
+    graphics	  : flag,
+    sequence_only : flag,
+    hidden	  : flag,	(input only)
+    mol_name	  : 'token'	(output only)
+]
+</pre>
+
+<p>
+Create molecules and graphics objects from a MOE vector <tt>moe</tt>.
+</p>
+<p>
+The input argument <tt>opt</tt> is a tagged vector of optional attribute-value pairs,
+controlling which parts of the information in the <tt>moe</tt> vector will be restored:
+</p>
+
+<dl>
+<dt><tt>selection</tt></dt>
+<dd>
+Set to <tt>1</tt> to restore the atom/residue/chain selection state
+(default: <tt>1</tt>).
+</dd>
+<dt><tt>sets</tt></dt>
+<dd>
+Set to <tt>1</tt> to restore atom/residue/chain sets/collections
+(default: <tt>1</tt>).
+</dd>
+<dt><tt>view</tt></dt>
+<dd>
+Set to <tt>1</tt> to restore view state transformation and saved views
+(default: <tt>1</tt>).
+</dd>
+<dt><tt>box</tt></dt>
+<dd>
+Set to <tt>1</tt> to restore periodic boundary conditions (default: <tt>1</tt>).
+</dd>
+<dt><tt>wall</tt></dt>
+<dd>
+Set to <tt>1</tt> to restore wall restraints (default: <tt>1</tt>).
+</dd>
+<dt><tt>graphics</tt></dt>
+<dd>
+Set to <tt>1</tt> to restore graphics objects (default: <tt>1</tt>).
+</dd>
+<dt><tt>sequence_only</tt></dt>
+<dd>
+Set to <tt>1</tt> to create the system without atoms, chains and residues only
+(default: <tt>0</tt>).
+</dd>
+<dt><tt>hidden</tt></dt>
+<dd>
+Set to <tt>1</tt> to create the system with all atoms hidden (default: <tt>0</tt>).
+</dd>
+</dl>
+
+<p>
+On successful creation the keys of the created chains and graphics objects are returned in
+<tt>chains</tt> and <tt>gobj</tt>. Additionally a tagged vector <tt>opt</tt> is returned with
+information about the data that was restored and initially stored in the MOE vector.
+It is similar to the input <tt>opt</tt> vector, though without the flag <tt>hidden</tt>, but
+has the additional tag <tt>mol_name</tt> with the mdb molecule name of the system.
+</p>
+
+<p>Example: Restore the complete molecule system from a database entry:</p>
+<pre>
+    local mdb = db_Open ['system.mdb', 'read'];
+    local ent = db_NextEntry [mdb, 0];
+    local data = db_Read [mdb, ent];
+    local [chains, gobj, opt] = _moe_Create [data.my_system];
+    db_Close mdb;
+</pre>
+
+<p><a id="_moe_CreateMultiple"></a></p><hr noshade="noshade" />
+<pre>
+[chains, gobj, opt], [chains, gobj, opt], ...] =
+    <span class="fcndef">_moe_CreateMultiple</span> [[moe, moe, ...], [opt, opt, ...]]
+</pre>
+
+<p>
+Create molecules from multiple MOE vectors in one call. This function is optimized and
+more efficient than to call <span class="fcndef">_moe_Create</span> multiple times.
+It takes the same input and creates the same output as
+<span class="fcndef">_moe_Create</span>, just in vector form.
+</p>
+
+<p><a id="moe_CreateBasic"></a></p><hr noshade="noshade" />
+<pre>
+[chains, mol_name] = <span class="fcndef">moe_CreateBasic</span> moe
+</pre>
+
+<p>
+Create a "basic" molecule from the MOE vector, omitting all additional
+information/data, such as selection, sets, view, periodic box, wall
+restraints, graphics objects, etc.
+This can be used e.g. in functions which need only the MOL vector
+equivalent information. The function returns the keys of the
+created chains and the mdb molecule name.
+</p>
+
+<p><a id="moe_CreateMOL"></a></p><hr noshade="noshade" />
+<pre>
+mol = <span class="fcndef">moe_CreateMOL</span> moe
+</pre>
+
+<p>
+Convert a MOE vector into a MOL vector.
+</p>
+<p>
+<b>Note!</b> This function creates atoms in the current system during the conversion
+and therefore must be wrapped by SystemPush and SystemPop by the caller:
+</p>
+
+<pre>
+    local psys = SystemPush [];
+    for i = 1, n loop
+	Close [force: 1];
+	local moe = first db_ReadFields [mdb, entries(i), 'moe'];
+	local mol = moe_CreateMOL moe;
+	db_Write [mdb2, 0, [mol: mol]];
+    endloop
+    SystemPop psys;
+</pre>
+
+<p><a id="mol_CreateMOE"></a></p><hr noshade="noshade" />
+<pre>
+moe = <span class="fcndef">mol_CreateMOE</span> mol
+</pre>
+
+<p>
+Convert a MOL vector into a MOE vector.
+</p>
+<p>
+<b>Note!</b> This function creates atoms in the current system during the conversion
+and therefore must be wrapped by SystemPush and SystemPop by the caller:
+</p>
+
+<pre>
+    local psys = SystemPush [];
+    for i = 1, n loop
+	Close [force: 1];
+	local mol = first db_ReadFields [mdb, entries(i), 'mol'];
+	local moe = mol_CreateMOE mol;
+	db_Write [mdb2, 0, [moe: moe]];
+    endloop
+    SystemPop psys;
+</pre>
+
+<p><a id="moe_IsMOE"></a></p><hr noshade="noshade" />
+<pre>
+flag = <span class="fcndef">moe_IsMOE</span> data
+</pre>
+
+<p>
+Guess and return <tt>1</tt> if the given <tt>data</tt> is a MOE vector. Otherwise <tt>0</tt>
+is returned. This function will not give a definitive answer (i.e. <tt>data</tt> is a
+complete and valid MOE vector), but its result is enough to distinguish between a MOE
+vector and a MOL vector.
+</p>
+
+<h2>See Also</h2>
+
+<a class="svl" href="extract.htm">mol_Extract</a><br />
+<a class="svl" href="mol.htm">mol_Create</a><br />
+
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+
+</body>
+</html>
+

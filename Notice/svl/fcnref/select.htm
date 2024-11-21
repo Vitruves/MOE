@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: select" />
+  <title>Selection Function: select</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Selection Function: select
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    result = <a class="fcnlink" href="#select">select</a> [v,w,mask]
+</pre>
+<a id="select"></a>
+<h1>Description</h1>
+
+<p>Selection by mask. For each element of <tt>mask</tt>, one element is
+  returned, either from <tt>v</tt> or from <tt>w</tt>. A non-zero value in
+  <tt>mask</tt> results in the corresponding element in <tt>v</tt> being
+  returned. A zero value result in the corresponding element of <tt>w</tt>
+  being returned. <tt>mask</tt> must be a flat numerical vector. All 3
+  arguments must unit-extend to the same length.</p>
+
+<pre>
+    svl&gt; <span class=
+"fcndef">select</span> [[1,2,3,4], [10,20,30,40], [1,1,0,0]]
+    [1,2,30,40]
+</pre>
+
+<h1>See Also</h1>
+
+<p><a href="introstruct.htm">Structural Functions</a></p>
+
+<p><a class="svl" href="putpoke.htm">mput</a> <a class="svl" href=
+  "getpeek.htm">mget</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../images/ccgicon.png" />
+  <meta name="keywords" content="panel: Fingerprint Cluster" />
+  <meta name="keywords" content="panel: Fingerprint Chooser (Cluster)" />
+  <title>Fingerprint Database Clustering</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../index.htm"><img src="../images/ccglogo.png" /></a>
+    <a href="../index.htm"><div class="moeversion"></div></a>
+    Fingerprint Database Clustering
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+  <ul>
+    <li><a href="#Method">Methodology</a></li>
+    <li><a href="#Run">Clustering the Database Using Fingerprints</a></li>
+    <li><a href="#SVL">SVL Commands</a></li>
+  </ul>
+<a id="Method"></a>
+<h1>Methodology</h1>
+
+<p>The fingerprint clustering algorithm used is the Jarvis-Patrick clustering
+  method. The general flow of the clustering application is as follows:</p>
+  <ol>
+    <li><i>Calculate Fingerprints</i>. If there are no fingerprints in the
+    database, then calculate the fingerprints.</li>
+    <li><i>Calculate Similarity Matrix</i>. Create a matrix <i>A</i>, where
+    <i>A</i>[<i>i</i>,<i>j</i>] contains the similarity metric between
+    fingerprints <i>i</i> and <i>j</i>.</li>
+    <li><i>Similarity Thresholding</i>. From the similarity matrix <i>A</i>,
+    create a binary matrix <i>B</i> such that <i>B</i>[<i>i</i>,<i>j</i>] has
+    the value 1 if <i>A</i>[<i>i</i>,<i>j</i>] &gt;= <i>S</i>, or 0 otherwise.
+    <i>S</i> is the <i>similarity threshold</i> used to determine if two
+    fingerprints are similar.</li>
+    <li><i>Clustering</i>. We can now treat the rows of the matrix <i>B</i> as
+    fingerprints. Put two molecules in the same cluster if the Tanimoto
+    coefficient of their corresponding rows in <i>B</i> is greater than or
+    equal to <i>T</i>, the <i>overlap threshold</i>. Recall that the Tanimoto
+    coefficient is the number of features in common divided by the union of the
+    features, and always lies between 0 and 1.</li>
+  </ol>
+
+<p>Thus, two molecules are considered to be in the same cluster if the lists
+  of molecules to which they are similar overlap to a reasonable degree. In
+  other words, two molecules belong in the same cluster if they are similar to
+  the same set of molecules. The Jarvis-Patrick procedure is
+  O(<i>n</i><sup>2</sup>), where <i>n</i> is the number of items to cluster;
+  therefore, a substantial amount of time is required if <i>n</i> is large.</p>
+
+<p>Unless explicitly requested, the similarity matrix <i>A</i> is not stored;
+  however, a temporary file is used to store, for each molecule, the list of
+  molecules to which it is similar. This temporary file will be large only when
+  the set of molecules consists of very many mutually similar molecules.
+<a id="Run"></a>
+</p>
+
+<h1>Clustering the Database Using Fingerprints</h1>
+
+<p>Open a database in the Database Viewer and choose <b><span class=
+  "nobr">Compute | Fingerprint | Clusters</span></b>. The Fingerprint Cluster
+  panel appears:</p>
+
+<img src="ph4clust/panel.png" alt="Fingerprint Cluster Panel" class="center" />
+
+<p>The panel includes the following options:</p>
+  <table class="noborder">
+    <tr>
+      <td valign="top"><b>Database</b></td>
+      <td valign="top">Path and filename of the database to cluster.<br />
+      <br />
+      If <b>Selected Entries Only</b> is turned on, then only entries that are
+      selected in the Database Viewer will be used in the calculation (the rest
+      will be ignored).</td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Molecule</b></td>
+      <td valign="top">Option menu of all the Molecule fields in the database.
+      This field is only used if fingerprints must be calculated in the
+      database; if fingerprints have already been calculated, this field is
+      ignored.</td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Fingerprint</b></td>
+      <td valign="top">Indicates the fingerprint system and similarity metric
+      used for the search. Press <b>Set Fingerprint...</b> (at bottom of panel)
+      to change the fingerprint or the metric. <img src=
+      "ph4clust/choose_clus.png" alt=
+      "Fingerprint Chooser (Cluster) Panel" class="center"/></td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Matrix File</b></td>
+      <td valign="top">Filename of the binary file that will contain the
+      similarity score of each pair of fingerprints. A square matrix will be
+      written so that, if there are <i>n</i> molecules in the cluster set, then
+      <i>n</i><sup>2</sup> IEEE MSB-first floating point numbers will be
+      written to disk.<br />
+      <br />
+      If this field is empty, no matrix file will be written.</td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Similarity</b></td>
+      <td valign="top">Two fingerprints (molecules) are considered similar if
+      their metric score is greater than or equal to this value (see
+      Methodology).</td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Overlap</b></td>
+      <td valign="top">Two molecules are clustered together if the Tanimoto
+      coefficient of their neighbor lists is greater than or equal to this
+      value (see Methodology).</td>
+    </tr>
+    <tr>
+      <td valign="top"><b>Cluster&nbsp;field</b></td>
+      <td valign="top">Creates an integer field (using specified name) that
+      will contain the integer cluster numbers of each entry used in the
+      calculation. If no name is specified, no clustering is performed.</td>
+    </tr>
+  </table>
+
+<p>To start the calculation press <b>OK</b>. Since this is an
+  O(<i>n</i><sup>2</sup>) calculation, it might take quite a while for large
+  databases. Once the calculation is complete, you can sort the database on the
+  output cluster codes to group clustered entries together.</p>
+
+<p>If clustering is performed, MOE creates a temporary file
+  (<tt>ph4#######.tmp</tt>) in the current directory. This file will be deleted
+  upon termination of the calculation; however, if the calculation is canceled
+  before completion, this file will have to be deleted manually.</p>
+
+<h1>
+<a id="SVL">SVL Commands</a></h1>
+
+<p><a class="svl" href=
+  "../moe/fcnref/ph4clust.htm#ph4_ClusterMDB">ph4_ClusterMDB</a></p>
+
+<h1>See Also</h1>
+
+<p><a href="ph4intro.htm">Introduction to Molecular Fingerprints</a><br />
+  <a href="ph4calc.htm">Calculating Fingerprints</a><br />
+  <a href="../quasar/cluster.htm">QuaSAR-Cluster</a>
+  </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../images/ccgicon.png" /> <a href="../index.htm"></a>
+<a href=
+    "../legal.htm"></a> &copy;<span class="versionyear"></span> <a href="http://www.chemcomp.com"></a>. All
+    rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

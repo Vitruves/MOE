@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords: image, picture, save" />
+  <meta name="keywords" content=
+  "keywords: png, jpg, tif, bmp, wrl, vrml, stl, x3d" />
+  <meta name="keywords" content="functions: ViewGetImage" />
+  <meta name="keywords" content="functions: ViewPixelDimensions" />
+  <meta name="keywords" content="functions: ViewPixelAspectRatio" />
+  <meta name="keywords" content="functions: fwrite_PNG" />
+  <meta name="keywords" content="functions: fwrite_JPG" />
+  <meta name="keywords" content="functions: fwrite_TIF" />
+  <meta name="keywords" content="functions: fwrite_BMP" />
+  <meta name="keywords" content="functions: fwrite_VRML" />
+  <meta name="keywords" content="functions: fwrite_STL" />
+  <meta name="keywords" content="functions: fwrite_X3D" />
+  <title>Export Images and 3D Model Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Export Images and 3D Model Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    image = <a class="fcnlink" href="#ViewGetImage">ViewGetImage</a> options
+    [w, h] = <a class="fcnlink" href=
+"#ViewPixelDimensions">ViewPixelDimensions</a> []
+    ratio = <a class="fcnlink" href=
+"#ViewPixelAspectRatio">ViewPixelAspectRatio</a> []
+
+    <a class="fcnlink" href=
+"#fwrite_PNG">fwrite_PNG</a> ['filename', image, options]
+    <a class="fcnlink" href=
+"#fwrite_JPG">fwrite_JPG</a> ['filename', image, options]
+    <a class="fcnlink" href=
+"#fwrite_TIF">fwrite_TIF</a> ['filename', image, options]
+    <a class="fcnlink" href=
+"#fwrite_BMP">fwrite_BMP</a> ['filename', image, options]
+
+    <a class="fcnlink" href=
+"#fwrite_VRML">fwrite_VRML</a> ['filename', options]
+    <a class="fcnlink" href=
+"#fwrite_STL">fwrite_STL</a>  ['filename', options]
+    <a class="fcnlink" href=
+"#fwrite_X3D">fwrite_X3D</a>  ['filename', options]
+</pre>
+
+<h1>Description</h1>
+
+<h2>Export as Image and 3D Model Files</h2>
+
+<p>These functions provide a low-level interface to render/capture the
+  content of the MOE Window as an image and write that image into a file using
+  the PNG, JPEG, TIF, or BMP file format. In addition to generating image
+  files, the MOE scene can also be exported in common 3D model file formats
+  such as VRML, STL, and X3D.</p>
+<a id="ViewGetImage"></a>
+<hr noshade="noshade" />
+
+<pre>
+image = <span class="fcndef">ViewGetImage</span> options
+
+options = [
+    width                  : image_width_num
+,   height                 : image_height_num
+,   transparent_background : flag
+</pre>
+<pre>
+]
+</pre>
+
+
+<p>Render molecule scene from the MOE Window into a pixmap. The pixmap
+  <tt>image</tt> is a matrix of integer values, in the TRGB format: 8
+  significant bits each for transparency (0xFF000000), red (0xFF0000), green
+  (0xFF00) and blue (0xFF). The <tt>width</tt> and <tt>height</tt> of the
+  pixmap is specified in pixels and can be of arbitrary size. The background
+  can be specified to be fully transparent with the flag
+  <tt>transparent_background</tt>.</p>
+
+<a id="ViewPixelDimensions"></a>
+<hr noshade="noshade" />
+
+<pre>
+[w, h] = <span class="fcndef">ViewPixelDimensions</span> []
+</pre>
+
+<p>Returns the width and height of the current MOE 3D window, in pixels.</p>
+
+<a id="ViewPixelAspectRatio"></a>
+<hr noshade="noshade" />
+
+<pre>
+ratio = <span class="fcndef">ViewPixelAspectRatio</span> []
+</pre>
+
+<p>Returns the pixel aspect ratio of the monitor on which the MOE 3D window
+  is shown. It is calculated using the reported monitor information, for
+  example, x/y pixel resolution and physical dimensions.
+  Normally this value is near 1.0, corresponding to square pixels.
+  If the pixels on the screen do not appear square, one can adjust the
+  pixel aspect ratio with the RC-variable
+  <tt>vis.pixel_aspect_ratio</tt>.</p>
+
+  <pre>    SetRCNumber ['vis.pixel_aspect_ratio', value]</pre>
+
+<p>The default value is 0.0, in which case MOE uses the information
+  provided by the monitor. A value of 1.0 will force square pixels.
+  A pixel ratio slightly above 1.0 will result in "wide" pixels,
+  below 1.0, in "narrow" pixels.</p>
+
+<a id="fwrite_PNG"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">fwrite_PNG</span> ['filename', image, options]
+
+options = [
+    transparent_background : flag,
+    dpi                    : resolution_num,
+    colorspace             : 'token'
+]
+</pre>
+
+<p>Write pixmap <tt>image</tt> into file <tt>filename</tt> in PNG format. To
+  write the image with a transparent background, set the
+  <tt>transparent_background</tt> flag to <tt>1</tt>. The picture print
+  resolution of the PNG file can be specified with the <tt>dpi</tt> parameter
+  in dots per inch (default: 300). The PNG format allows to specify the output
+  <tt>colorspace</tt> as <tt>'RGB'</tt> (default) or
+  <tt>'sRGB'</tt>.</p>
+
+<p>Example; save 800x600 pixel PNG image of crambin:</p>
+
+<pre>
+    Open '$MOE/sample/mol/1crn.pdb';
+    img = ViewGetImage [width: 800, height: 600, transparent_background: 1];
+    fwrite_PNG ['output.png', img, [transparent_background:1, dpi: 300]];
+</pre>
+<a id="fwrite_JPG"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">fwrite_JPG</span> ['filename', image, options]
+
+options = [
+    dpi     : resolution_num,
+    quality : quality_num
+]
+</pre>
+
+<p>Write pixmap <tt>image</tt> into file <tt>filename</tt> in JPEG format.
+  The picture print resolution of the JPEG file can be specified with the
+  <tt>dpi</tt> parameter in dots per inch (default: 300). JPEG uses a lossy
+  compression algorithm which affects the image fidelity. The <tt>quality</tt>
+  parameter controls the image quality (0 to 100) stored the file. The higher
+  the value the better the quality. But with higher quality, the size of the
+  JPEG image file increases as well. The default quality is <tt>75</tt>.</p>
+<a id="fwrite_TIF"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">fwrite_TIF</span> ['filename', image, options]
+
+options = [
+    transparent_background : flag,
+    dpi                    : resolution_num,
+    compression            : 'token'
+]
+</pre>
+
+<p>Write pixmap <tt>image</tt> into file <tt>filename</tt> in TIFF format. To
+  write the image with a transparent background, set the
+  <tt>transparent_background</tt> flag to <tt>1</tt>. The picture print
+  resolution of the TIFF file can be specified with the <tt>dpi</tt> parameter
+  in dots per inch (default: 300). The TIFF file can use different
+  <tt>compression</tt> algorithms: <tt>'None'</tt> (default),
+  <tt>'RLE'</tt>, or <tt>'Zip'</tt>.</p>
+<a id="fwrite_BMP"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">fwrite_BMP</span> ['filename', image, options]
+
+options = [
+    transparent_background : flag,
+    dpi                    : resolution_num,
+]
+</pre>
+
+<p>Write pixmap <tt>image</tt> into file <tt>filename</tt> in Microsoft BMP
+  format. To write the image with a transparent background, set the
+  <tt>transparent_background</tt> flag to <tt>1</tt>. The BMP format supports
+  transparency only in the version 4. So, if the transparent background flag is
+  set, the image is written as version 4 BMP, otherwise version 3 is used.
+  <b>Note:</b> Only a few programs support reading version 4 BMP files. The
+  picture print resolution of the BMP file can be specified with the
+  <tt>dpi</tt> parameter in dots per inch (default: 300).</p>
+<a id="fwrite_VRML"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">fwrite_VRML</span> ['filename', options]
+
+options = [
+    apply_view    : flag,
+    scale         : scale_factor_num,
+    polygon_atoms : flag,
+    quality       : quality_num,
+    solid_lines   : flag
+]
+</pre>
+
+<p>Output the current molecular scene in the MOE Window as a 3D model using
+  the VRML 97 file format. VRML files can be imported and processed by many
+  programs dealing with 3D modeling. VRML models can also be embedded into
+  Microsoft PowerPoint slides with 3rd party plugins. Additionally, the VRML
+  format is a common input file format for 3D printers.</p>
+
+<p>To store the current MOE Window view orientation in the VRML file
+  <tt>filename</tt>, set the <tt>apply_view</tt> flag to <tt>1</tt>. This is
+  helpful if the VRML file is used to embed the MOE scene into PowerPoint.</p>
+
+<p>When using VRML files as input for a 3D printer, it is often necessary to
+  set the flags <tt>polygon_atoms</tt> and <tt>solid_lines</tt> to <tt>1</tt>.
+  This will output atoms and bonds as triangle meshes instead of sphere and
+  cylinder primitives. Lines and points will be exported as solid objects such
+  as cylinders and spheres. This increases the file size considerably, but some
+  3D printers do not process VRML sphere, cylinder, line and point primitives
+  correctly. The triangulation quality of the spheres and cylinders, which are
+  output as triangle meshes, is set with the <tt>quality</tt> parameter. The
+  value can range from <tt>1</tt> (lowest quality) to <tt>6</tt> (highest
+  quality). Higher quality values increase the size of the output file. The
+  default quality is <tt>2</tt>. If the 3D printer control software does not
+  allow to specify the size of the printed model, one can manipulate it with
+  the <tt>scale</tt> argument (by default <tt>1.0</tt>).</p>
+<a id="fwrite_STL"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">fwrite_STL</span> ['filename', options]
+
+options = [
+    apply_view    : flag,
+    scale         : scale_factor_num,
+    quality       : quality_num
+]
+</pre>
+
+<p>Export the current molecular scene in the MOE Window as a 3D model in the
+  STL file format. The STL format stores 3D geometry as a triangle mesh. It is
+  often used as input for 3D printers, but does not support colors and produces
+  very large files.</p>
+
+<p>To store the current view orientation in the STL file, set the
+  <tt>apply_view</tt> flag to <tt>1</tt>. The triangulation quality of the
+  spheres and cylinders which are output as triangle meshes is set with the
+  <tt>quality</tt> parameter. The value can range from <tt>1</tt> (lowest
+  quality) to <tt>6</tt> (highest quality). Higher quality values increase the
+  size of the output file. The default quality is <tt>2</tt>. If the 3D printer
+  control software does not allow to specify the size of the printed model, one
+  can manipulate it with the <tt>scale</tt> argument (by default
+  <tt>1.0</tt>).</p>
+<a id="fwrite_X3D"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">fwrite_X3D</span> ['filename', options]
+
+options = [
+    apply_view    : flag,
+    scale         : scale_factor_num,
+    polygon_atoms : flag,
+    quality       : quality_num,
+    solid_lines   : flag
+]
+</pre>
+
+<p>Export the molecular scene in the MOE Window as a 3D model in the X3D
+  file format. The X3D format is the successor of VRML. It is supported as an
+  input format by many 3D model programs and 3D printers.</p>
+
+<p>To store the current MOE Window view orientation in the X3D file
+  <tt>filename</tt>, set the <tt>apply_view</tt> flag to <tt>1</tt>. When
+  setting the flag <tt>polygon_atoms</tt> to <tt>1</tt>, atoms spheres and bond
+  cylinders will be output as triangle meshes instead of sphere and cylinder
+  primitives. The option <tt>solid_lines</tt> will output lines and points as
+  solid objects such as cylinders and spheres. Both options can increase the
+  file size considerably. The triangulation quality of the spheres and
+  cylinders, which are output as triangle meshes, is set with the
+  <tt>quality</tt> parameter (from <tt>1</tt> to <tt>6</tt>). The overall model
+  scale within the file can be set with the <tt>scale</tt> parameter (by default
+  <tt>1.0</tt>).</p>
+
+<p>The X3D format is designed to be integrated into HTML5 pages. <a href=
+  "#Reference">X3DOM</a> is the syntax model which achieves the browser
+  integration without a plugin, using only WebGL and Javascript. An X3D file
+  can be embedded in the HTML source code of a webpage as shown in the
+  following example, which embeds <tt>example.x3d</tt> with the X3D
+  <b>inline</b> node. On some browsers, the inline node might not work as
+  expected, in which case, the whole scene description in <tt>example.x3d</tt>
+  (the text between <b>&lt;scene&gt;</b> and <b>&lt;/scene&gt;</b>) needs to be
+  copied into the HTML source code.</p>
+
+<pre>
+&lt;html&gt;
+   &lt;head&gt;
+        &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge&quot;/&gt;
+        &lt;title&gt;Interactive MOE molecule&lt;/title&gt;
+        &lt;script type=&quot;text/javascript&quot; src=&quot;http://www.x3dom.org/download/x3dom.js&quot;&gt; &lt;/script&gt;
+        &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;http://www.x3dom.org/download/x3dom.css&quot;&gt;&lt;/link&gt;
+   &lt;/head&gt;
+   &lt;body&gt;
+   &lt;h3&gt;Example of embedded MOE scene&lt;/h3&gt;
+
+    &lt;x3d width=&quot;200px&quot; height=&quot;200px&quot;&gt;
+    &lt;scene&gt;
+        &lt;inline url=&quot;example.x3d&quot;&gt; &lt;/inline&gt;
+    &lt;/scene&gt;
+    &lt;/x3d&gt;
+    &lt;/body&gt;
+&lt;html&gt;
+</pre>
+
+<p>Click <a href="image/x3d_example.htm">here</a> to open an X3D example in
+  the current browser.</p>
+
+<h1>See Also</h1>
+
+<p><a href="../../apps/filesave.htm">Saving the System</a><br />
+  <a href="../../appendix/viewsetup.htm">3D Visualization Setup</a></p>
+<a id="Reference"></a>
+<h1>Reference</h1>
+
+<p><a href="http://www.x3dom.org/" target="_blank">x3dom - Integrate 3D
+  content into your webpage</a><br />
+  <a href="http://doc.x3dom.org/tutorials/index.html" target="_blank">x3dom -
+  Tutorials</a><br />
+  </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

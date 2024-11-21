@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: Grid89_ProbeNames" />
+  <meta name="keywords" content="functions: Grid89_GenGrid, Grid89_Dry_OH2" />
+  <title>Interaction Potentials</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Interaction Potentials
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+probes = <a class="fcnlink" href="#Grid89_ProbeNames">Grid89_ProbeNames</a> []
+
+data = <a class="fcnlink" href=
+"#Grid89_GenGrid">Grid89_GenGrid</a> [shape, atoms, probe, opt]
+[data_OH2, data_DRY] = <a class="fcnlink" href=
+"#Grid89_Dry_OH2">Grid89_Dry_OH2</a> [shape, atoms, opt]
+</pre>
+
+<h1>Description</h1>
+  <!-- ====================== INTERACTION POTENTIALS ======================== -->
+  <!--
+!! This is taken from Surfaces and Maps and so must be kept in sync
+!!-->
+
+<img src="../../apps/surfmap/math_IP_Exyz.png" class="center" />
+
+<p>where <!-- LATEX surfmap/math_IP_Elj \[
+E_{lj} = \frac{A}{r^{12}} + \frac{B}{r^{6}}
+\] ENDLATEX --></p>
+
+<!--
+<i>E<sub>lj</sub></i> = A / <i>r</i><sup>12</sup> - B / <i>r</i><sup>6</sup>
+-->
+   <img src="../../apps/surfmap/math_IP_Elj.png" class="center"/>
+  <!-- LATEX surfmap/math_IP_Eel \[
+E_{ele} = \frac{w_{ele}e^{2}}{4\pi \varepsilon_{0}d} =
+\sum_{i<j}q_{i}q_{j}\left[
+    \frac{1}{r_{ij}+b_{ele}} -
+    \frac{\alpha r_{ij}^{2}}{R_{c}^{3}} -
+    \frac{(1-\alpha)}{R_{c}}
+\right]
+\] ENDLATEX -->
+
+<img src="../../apps/surfmap/math_IP_Eel.png" class="center" />
+
+<img src="../../apps/surfmap/math_IP_alpha.png" class="center" />
+
+<p>were d is the dielectric constant in the interior of the solute and
+  d<sub>x</sub> is the dielectric constant of the solvent. Values of d = 4.0
+  and d<sub>x</sub> = 80.0 are used. E<sub><i>hb</i></sub> is the product of a
+  radial and an angular term: <!-- LATEX surfmap/math_IP_Ehb \[
+E_{hb} = E_{r} \times E_{\theta}
+\] ENDLATEX --></p>
+
+<!--
+E<sub><i>hb</i></sub> = E<sub><i>r</i></sub> x E<sub>&theta;</sub>
+-->
+   <img src="../../apps/surfmap/math_IP_Ehb.png" class="center"/>
+
+<p>with <!-- LATEX surfmap/math_IP_Er \[
+E_{r} = \frac{C}{r^{8}} - \frac{D}{r^{6}}
+\] ENDLATEX -->
+   <!-- LATEX surfmap/math_IP_Etheta \[
+E_{\theta} = \cos^{n}\theta
+\] ENDLATEX --></p>
+
+<!--
+E<sub>r</sub> = C / r<sup>8</sup> - D / r<sup>6</sup>
+-->
+   <img src="../../apps/surfmap/math_IP_Er.png" class="center"/>
+
+<!--
+E<sub>&theta;</sub> = cos<sup><i>n</i></sup> &theta;
+-->
+   <img src="../../apps/surfmap/math_IP_Etheta.png" class="center"/>
+
+<p>where the parameters A, B, C, D and <i>n</i> are based on the selected
+  probe and the individual atoms in the molecule being probed. Hydrogens must
+  be present on proteins to correctly model hydrogen bond orientation. The
+  following table lists the probes that are available. For each probe, the
+  probe type, charge, and number of hydrogen bond acceptors (#HBA) and donors
+  (#HBD) are given:</p>
+<table class="titlebar">
+  <tr>
+    <th>Type</th>
+    <th>Charge</th>
+    <th>#HBD</th>
+    <th>#HBA</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><tt>C1=</tt></td>
+    <td>0.00</td>
+    <td>0</td>
+    <td>0</td>
+    <td>Aromatic CH group</td>
+  </tr>
+  <tr>
+    <td><tt>C2</tt></td>
+    <td>0.00</td>
+    <td>0</td>
+    <td>0</td>
+    <td>Methylene CH group</td>
+  </tr>
+  <tr>
+    <td><tt>C3</tt></td>
+    <td>0.00</td>
+    <td>0</td>
+    <td>0</td>
+    <td>Methyl CH3 group</td>
+  </tr>
+  <tr>
+    <td><tt>N:</tt></td>
+    <td>0.00</td>
+    <td>0</td>
+    <td>1</td>
+    <td>Nitrogen atom with lone pair</td>
+  </tr>
+  <tr>
+    <td><tt>N1</tt></td>
+    <td>-0.08</td>
+    <td>1</td>
+    <td>0</td>
+    <td>Amide NH group</td>
+  </tr>
+  <tr>
+    <td><tt>N1=</tt></td>
+    <td>0.66</td>
+    <td>1</td>
+    <td>0</td>
+    <td><i>sp</i>2 cationic NH group</td>
+  </tr>
+  <tr>
+    <td><tt>N1:</tt></td>
+    <td>0.00</td>
+    <td>1</td>
+    <td>1</td>
+    <td><i>sp</i>3 NH group with lone pair</td>
+  </tr>
+  <tr>
+    <td><tt>N1+</tt></td>
+    <td>0.66</td>
+    <td>1</td>
+    <td>0</td>
+    <td><i>sp</i>3 NH cation</td>
+  </tr>
+  <tr>
+    <td><tt>N2</tt></td>
+    <td>0.00</td>
+    <td>2</td>
+    <td>0</td>
+    <td>Amide NH2 group</td>
+  </tr>
+  <tr>
+    <td><tt>N2=</tt></td>
+    <td>0.66</td>
+    <td>2</td>
+    <td>0</td>
+    <td><i>sp</i>2 cationic NH2 group</td>
+  </tr>
+  <tr>
+    <td><tt>N2+</tt></td>
+    <td>0.66</td>
+    <td>2</td>
+    <td>0</td>
+    <td><i>sp</i>3 cationic NH2 group</td>
+  </tr>
+  <tr>
+    <td><tt>N3+</tt></td>
+    <td>0.66</td>
+    <td>3</td>
+    <td>0</td>
+    <td><i>sp</i>3 cationic NH3 group</td>
+  </tr>
+  <tr>
+    <td><tt>OC2</tt></td>
+    <td>-0.20</td>
+    <td>0</td>
+    <td>2</td>
+    <td>Ether oxygen atom</td>
+  </tr>
+  <tr>
+    <td><tt>OES</tt></td>
+    <td>-0.20</td>
+    <td>0</td>
+    <td>0</td>
+    <td>Ester oxygen atom</td>
+  </tr>
+  <tr>
+    <td><tt>O</tt></td>
+    <td>-0.25</td>
+    <td>0</td>
+    <td>2</td>
+    <td>Carbonyl oxygen atom</td>
+  </tr>
+  <tr>
+    <td><tt>O::</tt></td>
+    <td>-0.45</td>
+    <td>0</td>
+    <td>2</td>
+    <td>Carboxy oxygen atom</td>
+  </tr>
+  <tr>
+    <td><tt>ON</tt></td>
+    <td>-0.10</td>
+    <td>0</td>
+    <td>2</td>
+    <td>Nitro oxygen atom</td>
+  </tr>
+  <tr>
+    <td><tt>O=</tt></td>
+    <td>-0.40</td>
+    <td>0</td>
+    <td>2</td>
+    <td>Phosphate oxygen atom</td>
+  </tr>
+  <tr>
+    <td><tt>O-</tt></td>
+    <td>-0.50</td>
+    <td>0</td>
+    <td>2</td>
+    <td>Anionic phenolate oxygen atom</td>
+  </tr>
+  <tr>
+    <td><tt>O1</tt></td>
+    <td>-0.10</td>
+    <td>1</td>
+    <td>2</td>
+    <td>Aliphatic hydroxyl group</td>
+  </tr>
+  <tr>
+    <td><tt>OH</tt></td>
+    <td>-0.15</td>
+    <td>1</td>
+    <td>1</td>
+    <td>Phenolic hydroxyl group</td>
+  </tr>
+  <tr>
+    <td><tt>F</tt></td>
+    <td>-0.30</td>
+    <td>0</td>
+    <td>0</td>
+    <td>Fluorine atom</td>
+  </tr>
+  <tr>
+    <td><tt>F-</tt></td>
+    <td>-1.00</td>
+    <td>0</td>
+    <td>0</td>
+    <td>Fluoride ion</td>
+  </tr>
+  <tr>
+    <td><tt>CL</tt></td>
+    <td>-0.25</td>
+    <td>0</td>
+    <td>0</td>
+    <td>Chlorine atom</td>
+  </tr>
+  <tr>
+    <td><tt>CL-</tt></td>
+    <td>-1.00</td>
+    <td>0</td>
+    <td>0</td>
+    <td>Chloride ion</td>
+  </tr>
+  <tr>
+    <td><tt>BR</tt></td>
+    <td>-0.20</td>
+    <td>0</td>
+    <td>0</td>
+    <td>Bromine atom</td>
+  </tr>
+  <tr>
+    <td><tt>BR-</tt></td>
+    <td>-1.00</td>
+    <td>0</td>
+    <td>0</td>
+    <td>Bromide ion</td>
+  </tr>
+  <tr>
+    <td><tt>I</tt></td>
+    <td>-0.10</td>
+    <td>0</td>
+    <td>0</td>
+    <td>Iodine atom</td>
+  </tr>
+  <tr>
+    <td><tt>K+</tt></td>
+    <td>1.00</td>
+    <td>0</td>
+    <td>0</td>
+    <td>Potassium cation</td>
+  </tr>
+  <tr>
+    <td><tt>NA+</tt></td>
+    <td>1.00</td>
+    <td>0</td>
+    <td>0</td>
+    <td>Sodium cation</td>
+  </tr>
+  <tr>
+    <td><tt>POH4</tt></td>
+    <td>-1.00</td>
+    <td>1</td>
+    <td>7</td>
+    <td>PO4H phosphate anion</td>
+  </tr>
+  <tr>
+    <td><tt>PO4</tt></td>
+    <td>-2.00</td>
+    <td>0</td>
+    <td>8</td>
+    <td>PO4 dianion</td>
+  </tr>
+  <tr>
+    <td><tt>OH2</tt></td>
+    <td>0.00</td>
+    <td>2</td>
+    <td>2</td>
+    <td>Water</td>
+  </tr>
+  <tr>
+    <td><tt>DRY</tt></td>
+    <td>0.00</td>
+    <td>*</td>
+    <td>*</td>
+    <td>Dry (hydrophobic) probe</td>
+  </tr>
+</table>
+
+<img src="../../apps/surfmap/math_DRY_Exyz.png" class="center" />
+
+<p>where <i>S</i>, the <i>entropy</i>, is a constant set to -0.848, and
+  represents the favorable interactions of hydrophobic particles in an aqueous
+  environment. E<sub><i>lj</i></sub> and E<sub><i>hb</i></sub> are calculated
+  using the same van der Waals and hydrogen bonding parameters as for the OH2
+  probe. E<sub><i>hb</i></sub> is subtracted to reflect the cost of breaking
+  the hydrogen bonding networks in the solvent and in the protein's
+  hydration shell.</p>
+<a id="Grid89_ProbeNames"></a>
+<hr noshade="noshade" />
+
+<pre>probes = <span class="fcndef">Grid89_ProbeNames</span> []
+</pre>
+
+<p>The Grid89_ProbeNames function returns a vector of tokens containing the
+  names of the available probes.</p>
+<a id="Grid89_GenGrid"></a>
+<hr noshade="noshade" />
+
+<pre>
+data = <span class= "fcndef">Grid89_GenGrid</span> [shape, atoms, probe, opt]
+</pre>
+
+<p>The <tt>Grid89_GenGrid</tt> function is used to calculate the interaction
+  potential for the specified probe in relation to the atoms provided. The
+  parameters are:</p>
+<table class="noborder">
+  <tr>
+    <td><tt>shape</tt></td>
+    <td>The shape of the potential grid to be
+    calculated.</td>
+  </tr>
+  <tr>
+    <td><tt>atoms</tt></td>
+    <td>The atoms used for the interaction potential
+    calculation.</td>
+  </tr>
+  <tr>
+    <td><tt>probe&nbsp;&nbsp;</tt></td>
+    <td>The specific probe to use. This must be one of the
+    probe names returned by <tt>Grid89_ProbeNames</tt>.</td>
+  </tr>
+</table>
+
+<p>The <tt>opt</tt> argument is a tagged vector containing:</p>
+  <div class="indent">
+    <dl>
+      <dt><tt>good_HB</tt> : <i>number</i></dt>
+      <dd>The smallest hydrogen bond energy that supersedes a vdW clash
+      penalty. The default is -1.5 kcal/mol.</dd>
+      <dt><tt>HBcutoff</tt> : <i>number</i></dt>
+      <dd>The cutoff distance for the hydrogen bond interaction energy. The
+      default is 6.5 &Aring;.</dd>
+      <dt><tt>LJcutoff</tt> : <i>number</i></dt>
+      <dd>The cutoff distance for the Lennard-Jones (vdW) probe/atom
+      interaction energy. The default is 7.0 &Aring;.</dd>
+      <dt><tt>RFcutoff</tt> : <i>number</i></dt>
+      <dd>The cutoff distance for the Reaction field (charge) probe/atom
+      interaction energy. The default is 4.0 &Aring;.</dd>
+      <dt><tt>DRYprobe:</tt> : <i>flag</i></dt>
+      <dd>This must be set to 1 to suppress the charge term in order to
+      properly calculate the 'DRY' probe interaction potential. The
+      default is 0.</dd>
+      <dt><tt>second_vdW</tt> : <i>flag</i></dt>
+      <dd>This option controls whether an additional check is made using the
+      hydrogen bond energy term to determine whether gridpoints are treated as
+      inside atoms (and so ignored). The default is 0 (no additional
+      checking).</dd>
+      <dt><tt>vdWEcutoff</tt> : <i>number</i></dt>
+      <dd>The energy threshold above which gridpoints are treated as inside
+      atoms (and so ignored). The default is 5.0 kcal/mol.</dd>
+      <dt><tt>HBEcutoff</tt> : <i>number</i></dt>
+      <dd>The energy threshold for the hydrogen bond interaction above which
+      gridpoints are treated as inside atoms (and so ignored). This is used
+      when second_vdW is set to 1. The default is 3.5 kcal/mol.</dd>
+      <dt><tt>Grid89_Eel</tt> : <i>flag</i></dt>
+      <dd>This option controls whether the charge contribution to the
+      interaction potential is calculated by the Reaction field formalism (0)
+      or by the original GRID potential (1) [Boobbyer&nbsp;1989]. The default
+      is 0.</dd>
+      <dt><tt>useLigQs</tt> : <i>flag</i></dt>
+      <dd>This option controls whether the ligand atom partial charges used to
+      calculate the interaction potential are determined by the Grid89 typing
+      rules (0) or the currently assigned partial charges (1). The default is
+      0.</dd>
+      <dt><tt>useProtQs</tt> : <i>flag</i></dt>
+      <dd>This options controls whether the protein atom partial charges used
+      to calculate the interaction potential are determined by the Grid89
+      typing rules (0) or the currently assigned partial charges (1). The
+      default is 0.</dd>
+      <dt><tt>vdWSurface</tt> : <i>number</i></dt>
+      <dd>The maximum distance from the molecular surface for which probes are
+      considered to disrupt solvent order. This is used to calculate the DRY
+      probe potential. The default is 0.7 &Aring;.</dd>
+    </dl>
+  </div>
+<a id="Grid89_Dry_OH2"></a>
+<hr noshade="noshade" />
+
+<pre>[data_OH2, data_DRY] = <span class=
+  "fcndef">Grid89_Dry_OH2</span> [shape, atoms, opt]
+</pre>
+
+<p>The Grid89_Dry_OH2 function is used to calculate the interaction
+  potentials for the OH2 (water) and DRY (hydrophobic) probes in relation to
+  the atoms provided. The parameters are:</p>
+<table class="noborder">
+  <tr>
+    <td><tt>shape</tt></td>
+    <td>The shape of the potential grid to be
+    calculated.</td>
+  </tr>
+  <tr>
+    <td><tt>atoms&nbsp;&nbsp;</tt></td>
+    <td>The atoms used for the Interaction Potential
+    calculation.</td>
+  </tr>
+</table>
+
+<p>The <tt>opt</tt> argument is a tagged vector as described for
+  <tt>Grid89_GenGrid</tt>.</p>
+
+<h1>References</h1>
+<table class="ref">
+  <tr>
+    <td>[Boobbyer&nbsp;1989]</td>
+    <td>Boobbyer, D.N.A., Goodford, P.J., McWhinnie, P.M.,
+    Wade, R.C.; New Hydrogen-Bond Potentials for Use in Determining
+    Energetically Favorable Binding Sites on Molecules of Known Structure;
+    <i>J. Med. Chem. 32</i> (<b>1989</b>) 1083&ndash;1094.</td>
+  </tr>
+  <tr>
+    <td>[Goodford&nbsp;1985]</td>
+    <td>Goodford, P.J.; A Computational Procedure for
+    Determining Energetically Favorable Binding Sites on Biologically
+    Important Macromolecules; <i>J. Med. Chem. 28</i> (<b>1985</b>)
+    849&ndash;857.</td>
+  </tr>
+</table>
+
+<h1>See Also</h1>
+
+<p><a href="../../apps/surfmap.htm">Surfaces and Maps</a></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

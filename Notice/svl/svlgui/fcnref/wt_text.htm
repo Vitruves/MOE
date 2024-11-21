@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href=
+  "../../../include/manstyle.css" />
+  <meta name="keywords" content="keywords: Text" />
+  <meta name="keywords" content="functions: Widget:Text" />
+  <meta name="keywords" content="functions: Text (widget)" />
+  <title>Text Widget</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../../index.htm"><img src="../../../images/ccglogo.png" /></a>
+    <a href="../../../index.htm"><div class="moeversion"></div></a>
+    Text Widget
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Description</h1>
+
+<p>Text entry field for entering numeric or token data. The allowable maximum
+  is 1024 characters. (Use the <a href="wt_edit.htm">Edit</a> widget if more
+  characters are required.) The field is scrollable to allow editing. Range
+  checking is performed on numeric data when <tt>min</tt> and <tt>max</tt>
+  values are specified and <tt>onTrigger</tt> (see <a class="svl" href=
+  "wt_core.htm">core</a> attributes) is set to <tt>&#39;validate&#39;</tt>.</p>
+
+<p>A shortcut list can be attached to the text widget. This is supplied as a
+  vector of tokens. If the shortcut attribute contains at least one token, then
+  a down arrow is displayed allowing the user to select an item from a pulldown
+  menu. Once an item is selected, the current text is replaced with the
+  selected text and the widget is triggered.</p>
+
+<p>The text widget has the ability to display text when the field is empty.
+  This text disappears when characters are entered in the text field, and
+  reappears when the field is cleared. By default, the text to display is the
+  null token so that the field appears blank.</p>
+
+<h2>Attributes</h2>
+
+<p><tt>Text</tt> inherits all <a class="svl" href="wt_core.htm">core</a>
+  attributes and defines the following attributes:</p>
+  <table class="titlebar">
+    <tr>
+      <th width="15%" valign="baseline">Attribute</th>
+      <th width="50%" valign="baseline">Description</th>
+      <th width="25%" valign="baseline">Values</th>
+      <th width="10%" valign="baseline">Default</th>
+    </tr>
+    <tr>
+      <td><tt>allowBlank</tt></td>
+      <td>If 0, then field must have some characters</td>
+      <td>1/0</td>
+      <td><tt>1</tt></td>
+    </tr>
+    <tr>
+      <td><tt>len</tt></td>
+      <td>Length of visible text field (in characters)</td>
+      <td>0 to 255</td>
+      <td><tt>10</tt></td>
+    </tr>
+    <tr>
+      <td><tt>min</tt></td>
+      <td>Minimum permitted numeric value (ignored if
+      character data)</td>
+      <td>real</td>
+      <td><tt>REAL_MIN</tt></td>
+    </tr>
+    <tr>
+      <td><tt>max</tt></td>
+      <td>Maximum permitted numeric value (ignored if
+      character data)</td>
+      <td>real</td>
+      <td><tt>REAL_MAX</tt></td>
+    </tr>
+    <tr>
+      <td><tt>type</tt></td>
+      <td>Expected input data type</td>
+      <td><tt>&#39;char&#39;, &#39;int&#39;,
+      &#39;real&#39;</tt></td>
+      <td><tt>&#39;char&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>shortcut</tt></td>
+      <td>List of tokens to appear as a pulldown list located
+      in the rightmost position of the text field</td>
+      <td><tt>vector of tokens</tt></td>
+      <td><tt>[]</tt></td>
+    </tr>
+    <tr>
+      <td><tt>shortcutTitle</tt></td>
+      <td>Title to appear on the pulldown list. Will not be
+      displayed if <tt>shortcut</tt> is empty.</td>
+      <td><tt>token</tt></td>
+      <td><tt>&#39;&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>triggerOnShortcut</tt></td>
+      <td>If enabled, send trigger when a shortcut is
+      selected.</td>
+      <td><tt>1/0</tt></td>
+      <td><tt>1</tt></td>
+    </tr>
+    <tr>
+      <td><tt>password</tt></td>
+      <td>If 1, then all characters entered in the field are
+      displayed as <tt>*</tt>. If 0, then the original characters are
+      displayed. The widget data value is unaffected by the attribute
+      setting.</td>
+      <td>1/0</td>
+      <td><tt>0</tt></td>
+    </tr>
+    <tr>
+      <td><tt>emptyText</tt></td>
+      <td>Token displayed when the text field is empty.</td>
+      <td><tt>token</tt></td>
+      <td><tt>&#39;&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>emptyForeground</tt></td>
+      <td>Color used for displaying the
+      <tt>emptyText</tt>.</td>
+      <td><a class="svl" href=
+      "wt_const.htm">WINDOW_COLORS</a></td>
+      <td><tt>&#39;none&#39;</tt><br />(grayed&nbsp;&#39;textForeground&#39;)</td>
+    </tr>
+    <tr>
+      <td><tt>extensionText</tt></td>
+      <td>File extension token which is displayed in gray
+      and added automatically to the text if no dot extension
+      is specified.</td>
+      <td><tt>token</tt></td>
+      <td><tt>&#39;&#39;</tt></td>
+    </tr>
+    <tr>
+      <td><tt>cursorPos</tt></td>
+      <td>Text cursor position and text selection as vector of two integer
+      numbers. The first number is the cursor position and the second the
+      length of the selection starting at the cursor position; negative
+      for a selection to the left, or positive to the right.
+      </td>
+      <td>[number, number]</td>
+      <td><tt>[0,0]</tt></td>
+    </tr>
+  </table>
+
+<h2>Trigger</h2>
+
+<p><tt>Return</tt> pressed within the text entry area.</p>
+
+<p>If a shortcut list is present and an item is selected from the list then
+  the text is replaced with the selected text and the widget triggers.</p>
+
+<h2>Data Value</h2>
+
+<p>The entered data (token or number) depending on <tt>type</tt>.</p>
+
+<h3>Notes</h3>
+
+<p>The <tt>text</tt> widget redefines the default font to be
+  <tt>&#39;fixedMedium&#39;</tt>. The font in a <tt>text</tt> widget must be a
+  fixed font. Thus, if a proportional font is used, it will be overwritten by a
+  similarly sized fixed font.</p>
+
+<h1>See Also</h1>
+
+<p><a href="../wt_intro.htm">SVL Window Toolkit</a><br />
+  <a href="wt_core.htm">Core Attributes</a><br />
+  <a href="introwt.htm">Window Toolkit Functions</a></p>
+
+<p><a href="wt_edit.htm">Edit Widget</a><br />
+  <a href="wt_fsb.htm">FSBText Widget</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../../images/ccgicon.png" /> <a href="../../../index.htm"></a>
+    <a href="../../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

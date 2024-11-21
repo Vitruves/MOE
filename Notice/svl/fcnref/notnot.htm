@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: not, notnot" />
+  <title>Logical Negation: not, notnot</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Logical Negation: not, notnot
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    flag = <a class="fcnlink" href="#not">not</a> v
+    flag = <a class="fcnlink" href="#notnot">notnot</a> v
+</pre>
+<a id="notnot"></a>
+<a id="not"></a>
+<h1>Description</h1>
+
+<p>Perform logical NOT operation on leaf elements of <tt>v</tt>.
+  <tt>notnot</tt> is an accelerated form of <tt>not</tt> <tt>not</tt>.</p>
+
+<pre>
+    svl&gt; <span class="fcndef">not</span> [2,0,-1]
+    [0,1,0]
+    svl&gt; <span class="fcndef">notnot</span> [2,0,-1]
+    [1,0,1]
+</pre>
+
+<h1>See Also</h1>
+
+<p><a class="svl" href="andetc.htm">andE</a> <a class="svl" href=
+  "andetc.htm">orE</a> <a class="svl" href="andetc.htm">xorE</a> <a class="svl"
+  href="bitwise.htm">bitnot</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

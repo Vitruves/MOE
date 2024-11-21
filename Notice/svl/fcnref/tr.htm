@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: tr" />
+  <title>Transpose Function: tr</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Transpose Function: tr
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    transposed_a = <a class="fcnlink" href="#tr">tr</a> a
+</pre>
+<a id="tr"></a>
+<h1>Description</h1>
+
+<p>Matrix transposition: rows become columns, columns become rows. Useful for
+  assembling the arguments for individual function calls from lists of
+  arguments, and also for assembling lists of data from data records.</p>
+
+<p>Unit extension applies to the top-level elements of unit length.</p>
+
+<pre>
+    svl&gt; <span class="fcndef">tr</span> [ [1,2,3], [4,5,6] ]
+    [ [1,4], [2,5], [3,6] ]
+
+    svl&gt; <span class=
+"fcndef">tr</span> [ [&#39;a&#39;,&#39;b&#39;,&#39;c&#39;], [1,2,3],[&quot;x&quot;,&quot;y&quot;,&quot;z&quot;] ]
+    [ [ &#39;a&#39;, 1, &quot;x&quot; ], [ &#39;b&#39;, 2, &quot;y&quot; ], [ &#39;c&#39;, 3, &quot;z&quot; ] ]
+
+    svl&gt; <span class=
+"fcndef">tr</span> [ &quot;abcd&quot;,&quot;E&quot;,&quot;fghi&quot;]
+    [&quot;aEf&quot;,&quot;bEg&quot;,&quot;cEh&quot;,&quot;dEi&quot;]
+
+    svl&gt; <span class="fcndef">tr</span> []
+    [ [] ]
+</pre>
+
+<h1>See Also</h1>
+
+<p><a class="svl" href="app.htm">apt</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

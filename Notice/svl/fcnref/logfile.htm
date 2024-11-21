@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: logfile" />
+  <meta name="keywords" content="functions: history" />
+  <title>Logging and History Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Logging and History Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    <a class="fcnlink" href="#logfile">logfile</a> &#39;filename&#39;
+    <a class="fcnlink" href="#logfile">logfile</a> []
+    <a class="fcnlink" href="#logfile">logfile</a> 0
+    <a class="fcnlink" href="#logfile">logfile</a> 1
+
+    cmd_list = <a class="fcnlink" href="#history">history</a> []
+</pre>
+<a id="logfile"></a>
+<h1>Description</h1>
+
+<pre>
+<span class="fcndef">logfile</span> &#39;filename&#39;
+<span class="fcndef">logfile</span> []
+<span class="fcndef">logfile</span> 0
+<span class="fcndef">logfile</span> 1
+</pre>
+
+<p>Records the SVL outputs of the current session. The first command to be
+  recorded is the one immediately following the call to <tt>logfile</tt>.
+  Everything echoed to the output area, both commands and SVL return values,
+  are written to the file <tt>filename</tt>. Recording is terminated and the
+  current file closed by calling <tt>logfile</tt> again. If this subsequent
+  call to <tt>logfile</tt> is passed a null argument, logging is terminated,
+  otherwise a new log file is opened, and recording continues in the newly
+  opened file. Logging may be temporarily suspended by calling <tt>logfile
+  0</tt>, and resumed with <tt>logfile 1</tt>.</p>
+
+<p>Note that if the file <tt>filename</tt> already exists, it will be
+  overwritten. You must close the current file with a call to <tt>logfile</tt>
+  before you can examine the file&#39;s contents.</p>
+<a id="history"></a>
+<hr noshade="noshade" />
+
+<pre>
+cmd_list = <span class="fcndef">history</span> []
+</pre>
+
+<p>Returns a list of the SVL commands issued at the CLI. If invoked as a
+  procedure (i.e. its return value is not stored or used in an expression), the
+  list of commands is pretty-printed.</p>
+
+<h1>See Also</h1>
+
+<p><a class="svl" href="runetc.htm">script</a></p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href=
+  "../../../include/manstyle.css" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: WindowWait" />
+  <meta name="keywords" content="functions: WindowTrigger" />
+  <title>Window Functions: WindowWait, WindowTrigger</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../../index.htm"><img src="../../../images/ccglogo.png" /></a>
+    <a href="../../../index.htm"><div class="moeversion"></div></a>
+    Window Functions: WindowWait, WindowTrigger
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+[widget_name_value_pairs, triggername] = <a class="fcnlink" href=
+"#WindowWait">WindowWait</a> wkey
+<a class="fcnlink" href=
+"#WindowTrigger">WindowTrigger</a> [wkey, widget_name_value_pair]
+</pre>
+<a id="WindowWait"></a>
+<h1>Description</h1>
+
+<pre>
+[widget_name_value_pairs, triggername] = <span class=
+"fcndef">WindowWait</span> wkey
+</pre>
+
+<p>Waits for a trigger event of the window specified by <tt>wkey</tt>.</p>
+
+<p>The task associated with the window is suspended until the value of any of
+  the window&#39;s widgets whose <tt>onTrigger</tt> attribute is set to either
+  <tt>&#39;return&#39;</tt> or <tt>&#39;validate&#39;</tt> is changed. If data
+  validation is requested (<tt>onTrigger</tt> set to
+  <tt>&#39;validate&#39;</tt>), illegal data will result in an error being
+  reported; in this case, <tt>WindowWait</tt> will not return normally.
+  Otherwise, (<tt>onTrigger</tt> set to <tt>&#39;return&#39;</tt>, or data
+  validation succeeds), <tt>WindowWait</tt> returns the values of all named
+  widgets in a tagged vector of widget_name-value pairs. The name of the
+  widgets that triggered the return is also returned.</p>
+
+<p>Here is an example of a window that is put up, then waited on for a
+  trigger. After a single trigger is processed, the task finishes.</p>
+
+<pre class="code">
+const panel = [
+    title : &#39;My Panel&#39;,             // shell title
+    Text : [
+        name : &#39;textfield&#39;,         // text field identifier
+        title : &#39;Enter a number:&#39;,
+        type : &#39;int&#39;,               // expected data type
+        onTrigger : &#39;return&#39;        // make Text a trigger object
+    ]
+];
+
+global function mypanel []
+    local wkey = WindowCreate panel;
+    WindowShow wkey;                // put up the window
+    local [values, trigger] = WindowWait wkey;    // wait for trigger
+
+        // when window triggers, window is taken down
+        // print the trigger and its value to the SVL Commands window
+
+    write [&#39;Trigger is {}.  Value is {}.\n&#39;, trigger, values.(trigger)];
+endfunction
+</pre>
+
+<p>This next example shows how to leave a window up and process its
+  triggers:</p>
+
+<pre class="code">
+const panel = [
+    title : &#39;My Panel&#39;,             // shell title
+    name : &#39;mypanel&#39;,               // shell identifier
+    text : [&#39;OK&#39;,&#39;Cancel&#39;],         // shell command buttons
+    onTrigger : [&#39;return&#39;,&#39;exit&#39;],  // Cancel kills the window
+
+    Text : [
+        name : &#39;textfield&#39;,         // text field identifier
+        title : &#39;Enter a number:&#39;,
+        type : &#39;int&#39;,               // expected data type
+        onTrigger : &#39;return&#39;        // make Text a trigger object
+    ]
+];
+
+global function mypanel []
+    local wkey = WindowCreate panel;
+    WindowShow wkey;                // put up the window
+
+    loop                            // infinite loop
+        local [values, trigger] = WindowWait wkey; // wait for trigger
+
+            // write the trigger and its value to SVL Commands window
+
+        write [&#39;Trigger is {}.  Value is {}.\n&#39;,
+            trigger,
+            values.(trigger)
+        ];
+
+        if trigger === &#39;mypanel&#39; then   // &#39;OK&#39; was pressed
+            WindowDestroy wkey;         // take down the window
+            return;                     // terminate the task
+        endif
+    endloop
+endfunction
+</pre>
+<a id="WindowTrigger"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">WindowTrigger</span> [wkey, widget_name_value_pair]
+</pre>
+
+<p>Sends a triggering event to the window specified by <tt>wkey</tt>.
+  <tt>widget_name_value_pair</tt> is a tagged vector specifying the name and
+  value of the widget triggering the event.</p>
+
+<p>This function can be used to simulate user interaction with the panel.
+  Functionally similar to <tt>WindowSetData</tt> with the addition of causing
+  <tt>WindowWait</tt> to return.</p>
+
+<p>The window must have already been created and the triggering widget must
+  be a valid named widget in the specified window.</p>
+
+<h1>See Also</h1>
+
+<p><a href="wt_core.htm">Core Attributes</a><br />
+  <a href="../wt_intro.htm">SVL Window Toolkit</a><br />
+  <a href="introwt.htm">Window Toolkit Functions</a><br /></p>
+  <table class="functionList">
+    <tr>
+      <td><a href=
+      "wt_create.htm">WindowCreate</a><br />
+      <a href="wt_create.htm">WindowDestroy</a><br />
+      <a href="wt_data.htm">WindowGetData</a><br />
+      <a href="wt_create.htm">WindowPrompt</a></td>
+      <td><a href=
+      "wt_attr.htm">WindowSetAttr</a><br />
+      <a href="wt_data.htm">WindowSetData</a><br />
+      <a href="wt_show.htm">WindowShow</a><br />
+      <a href="wt_data.htm">WindowValues</a></td>
+    </tr>
+  </table><!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../../images/ccgicon.png" /> <a href="../../../index.htm"></a>
+    <a href="../../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="functions: dbv_Fields, dbv_ShowField" />
+  <meta name="keywords" content="functions: dbv_FieldHeight" />
+  <meta name="keywords" content=
+  "functions: dbv_FieldSelection, dbv_FieldHide" />
+  <meta name="keywords" content=
+  "obsolete: ddbv_FieldWrap, dbv_FieldWidth, dbv_FieldPrecision" />
+  <meta name="keywords" content="unsupported: dbv_FieldPlot" />
+  <title>Database Viewer Field Attributes: dbv_Fields, ...</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Database Viewer Field Attributes: dbv_Fields,
+    ...
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+    fields = <a class="fcnlink" href="#dbv_Fields">dbv_Fields</a> mdb
+
+    old_field_order = <a class="fcnlink" href=
+"#dbv_ShowField">dbv_ShowField</a> [ mdb, new_field_order ]
+ 
+    old_height = <a class="fcnlink" href=
+"#dbv_FieldHeight">dbv_FieldHeight</a>    [ mdb, new_height ]
+
+    old_states = <a class="fcnlink" href=
+"#dbv_FieldSelection">dbv_FieldSelection</a> [ mdb, new_states ]
+    old_states = <a class="fcnlink" href=
+"#dbv_FieldHide">dbv_FieldHide</a>      [ mdb, new_states ]
+</pre>
+
+<h2 class="obsolete">Obsolete</h2>
+
+<pre class="code">
+    old_states = <a class="fcnlink" href=
+"#dbv_FieldWrap">dbv_FieldWrap</a>  [ mdb, new_states ]
+    old_widths = <a class="fcnlink" href=
+"#dbv_FieldWidth">dbv_FieldWidth</a> [ mdb, new_widths ]
+
+    old_precisions = <a class="fcnlink" href=
+"#dbv_FieldPrecision">dbv_FieldPrecision</a> [ mdb, new_precisions ]
+</pre>
+
+
+<h1>Description</h1>
+
+<p>The following functions return and optionally set attributes which control
+  the display of database fields in a Database Viewer.</p>
+<p>It is important to note that MOE saves only some of these
+  attributes to disk.
+  The functions <tt>dbv_ShowField</tt>, <tt>dbv_FieldSelection</tt>,
+  and <tt>dbv_FieldHide</tt> not modify the actual contents of the
+  database file in any manner, they only change the current view of
+  the database fields in the Database Viewer. If you close the Database
+  Viewer, the database will appear unchanged when you reopen it.
+  The other functions will change the attributes and save them
+  to the database so that the change is persistant.</p>
+
+<p><tt>mdb</tt> is a database identifier. All functions accept either a
+  database key or the name of the database. The database must be open in a
+  Database Viewer.</p>
+<a id="dbv_Fields"></a>
+<hr noshade="noshade" />
+
+<pre>
+fields = <span class="fcndef">dbv_Fields</span> mdb
+</pre>
+
+<p>Returns the field names of the fields in a database. Fields are in the
+  same order as in the Database Viewer, regardless of whether they are visible
+  or hidden.</p>
+<a id="dbv_ShowField"></a>
+<hr noshade="noshade" />
+
+<pre>
+old_field_order = <span class=
+"fcndef">dbv_ShowField</span> [ mdb, new_field_order ]
+</pre>
+
+<p>Returns the names of the database fields currently visible in the Database
+  Viewer, in the order in which they appear. The names of hidden fields are not
+  returned.</p>
+
+<p>If <tt>new_field_order</tt> is specified (i.e. not <tt>[]</tt>), a new
+  field display order is set. <tt>new_field_order</tt> specifies the names of
+  the fields which are to be displayed in the Database Viewer, in the desired
+  display order. Fields which are not specified are hidden. If the Show All
+  fields menu command is then performed in the Database Viewer, previously
+  hidden fields will appear <i>after</i> the fields specified in the most
+  recent call to <tt>dbv_ShowField</tt>.</p>
+
+<p><b>Note:</b> The field order set by <tt>dbv_ShowField</tt> is <i>not</i>
+  saved to disk. When the database is reopened, fields will appear in their
+  original order. To determine the actual order of fields in a database, use
+  <tt>db_Fields</tt>. To change the order of fields permanently, use the
+  function <tt>db_ReorderFields</tt>.</p>
+
+<a id="dbv_FieldHeight"></a>
+<hr noshade="noshade" />
+
+<pre>old_height = <span class=
+  "fcndef">dbv_FieldHeight</span> [ mdb, new_height ]</pre>
+
+<p>Returns and optionally sets the height (in lines) of the field
+  labels in the specified Database Viewer. The old height is always
+  returned. The height is set if <tt>new_height</tt> is specified
+  (i.e. not <tt>[]</tt>). Values between 1 and 5 lines are allowed.
+  The changed height is saved in the database.</p>
+
+<a id="dbv_FieldSelection"></a>
+<a id="dbv_FieldHide"></a>
+  <hr noshade="noshade" />
+
+<p>The following functions return the state of Database Viewer field display
+  attributes. If new attribute values are specified (i.e. not <tt>[]</tt>), the
+  display attributes will be set to these new values. The new values must
+  unit-extend to the length of the number of fields in the database.</p>
+  <dl>
+    <dd></dd>
+    <dt><tt><span class="fcndef">dbv_FieldSelection</span></tt></dt>
+    <dd>Controls the selection state of each field (<tt>1</tt> = selected,
+    <tt>0</tt> = unselected). The selection state value is ignored for hidden
+    fields as hidden fields cannot be selected. The selection state is not
+    saved in the database.
+    </dd>
+    <dt><tt><span class="fcndef">dbv_FieldHide</span></tt></dt>
+    <dd>Controls the hidden state of each field (<tt>1</tt> = hidden,
+    <tt>0</tt> = visible). Hiding a selected field deselects it.
+    The hidden state is not saved in the database.
+    
+    </dd>
+  </dl>
+
+<a id="dbv_FieldPlot"></a>
+<a id="dbv_FieldWrap"></a>
+<a id="dbv_FieldWidth"></a>
+<a id="dbv_FieldPrecision"></a>
+<hr noshade="noshade" />
+
+<h4 class="obsolete">Obsolete Syntax</h4>
+
+ The following functions are superseded by the function
+ <a class="svl" href="dbvmattr.htm">dbv_DisplayAttributes</a>:
+
+  <dl>
+    <dt><tt><span class="fcndef">dbv_FieldWrap</span></tt></dt>
+    <dd>Controls the line-wrapping state of each field. Both character and
+    numeric fields can be displayed wrapped. For numeric fields, wrapping only
+    applies if there are multiple values (a vector), in which case the values
+    are displayed one per line. When the state is set to <tt>0</tt>, all cells
+    display their contents on a single line. This attribute is saved
+    in the database.</dd>
+
+    <dt><tt><span class="fcndef">dbv_FieldWidth</span></tt></dt>
+    <dd>Controls the display width (measured in characters) of each field. The
+    width of each field can be set individually. This attribute is saved
+    in the database.</dd>
+
+    <dt><tt><span class="fcndef">dbv_FieldPrecision</span></tt></dt>
+    <dd>Controls the numeric display precision of floating-point (real-number)
+    fields. Precision is specified as a single integer: a positive value
+    denotes decimal notation with the value representing the number of digits
+    to display after the decimal; a negative value denotes scientific notation
+    with the absolute value indicating the number of significant figures to
+    display. This attribute is saved in the database</dd>
+  </dl>
+
+
+
+
+<h1>See Also</h1>
+
+<p><a href="introdb.htm">Database Functions</a></p>
+
+<p>
+<a href="introdb.htm">Database Functions</a><br />
+<a class="svl" href="dbvmattr.htm">dbv_DisplayAttributes</a><br />
+<a class="svl" href="dbvdef.htm">dbv_DefaultField</a><br />
+<a class="svl" href="db_prefx.htm">dbv_ReorderFields</a>
+  
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

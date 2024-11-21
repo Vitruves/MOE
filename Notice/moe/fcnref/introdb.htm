@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <title>MOE Database Functions</title>
+  <meta name="keywords" content="intro: Database Functions" />
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    MOE Database Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<p>A molecular database is a binary file that holds an ordered sequence of
+  entries. Each entry may have any number of data fields; all entries share the
+  same set of field names for their data. Each cell in the database can store
+  up to 2 gigabytes of information (integer, floating point, double, byte,
+  char, molecule). Data compression techniques are used to store 3D
+  conformations of molecules. Topological and conformational molecular data is
+  stored using an average of 7 bytes per atom for small molecules and 8 bytes
+  per atom for biopolymers.</p>
+
+<p>A database can be viewed using the Database Viewer, which is opened using
+  <a class="svl" href="dbvopen.htm">dbv_Open</a>. This viewing tool is used to
+  display and manipulate the data that is stored on disk. Database Viewer
+  functions are prefixed by <tt>dbv_</tt>.</p>
+
+<p>Every database is identified with a <tt>key</tt> which is obtained with
+  <a class="svl" href="db_opcl.htm">db_Open</a>, <a class="svl" href=
+  "dbvopen.htm">dbv_Open</a>, <a class="svl" href=
+  "dbvopen.htm">dbv_OpenFile</a> or <a class="svl" href=
+  "dbvopen.htm">dbv_KeyList</a>. The key identifying a database remains valid
+  until the database is closed. In general, database functions accept a
+  database key as a parameter, using it to identify the database to be
+  manipulated. Most database functions also accept the database name as the
+  database identifier.</p>
+
+<p>The entries themselves are referenced with entry keys. An entry key is an
+  integer that uniquely identifies the entry within a particular database. The
+  precise value of a key has no meaning and should not be interpreted in any
+  way. Entry keys are obtained with <a class="svl" href=
+  "db_entry.htm">db_Entries</a>.</p>
+
+<p>Data is read from and written to the database as either a flat vector of
+  values (for integer, real and character data) or a molecule structure, as
+  described in <a class="svl" href="extract.htm">mol_Extract</a>.</p>
+
+<p><a class="svl" href="moe_const.htm">DB_FIELD_TYPES</a> is the constant
+  used to enumerate the possible field types allowed in a database.</p>
+
+<p>Database functions in MOE are divided into Database File Functions and
+  Database Viewer functions:</p>
+
+<h1>Database File Functions</h1>
+  <table class="functionList">
+    <tr>
+      <td><b>File Manipulation</b><br />
+      <a href="db_opcl.htm">db_Close</a><br />
+      <a href="db_opcl.htm">db_Open</a><br />
+      <a href="db_opcl.htm">db_Filename</a><br />
+      <a href="db_opcl.htm">db_Flush</a><br />
+      <a href="db_opcl.htm">db_Key</a><br />
+      <a href="db_opcl.htm">db_KeyList</a><br />
+      <a href="db_crfie.htm">db_Write</a><br />
+      <a href="db_crfie.htm">db_Delete</a><br />
+      <a href="db_read.htm">db_Read</a><br />
+      <a href="db_read.htm">db_ReadColumn</a><br /></td>
+      <td><b>Import/Export</b><br />
+      <a href="db_ascii.htm">db_ExportASCII</a><br />
+      <a href="db_ascii.htm">db_ImportASCII</a><br />
+      <a href="db_port.htm">db_ExportDB</a><br />
+      <a href="db_port.htm">db_ImportDB</a><br />
+      <a href="db_sd.htm">db_ExportSD</a><br />
+      <a href="db_sd.htm">db_ImportSD</a><br />
+      <a href="db_mol2.htm">db_ImportMOL2</a><br />
+      <a href="macromodel.htm">macromodel_ImportMDB</a><br />
+      <a href="macromodel.htm">macromodel_ExportMDB</a><br /></td>
+      <td><b>Environment</b><br />
+      <a href="db_envir.htm">db_Environment</a><br />
+      <a href="db_envir.htm">db_Info</a><br />
+      <a href="db_envir.htm">db_GetEnv</a><br />
+      <a href="db_envir.htm">db_SetEnv</a><br />
+      <a href="db_envir.htm">db_DisplayAttributes</a><br /></td>
+    </tr>
+    <tr>
+      <td><b>Fields</b><br />
+      <a href="db_crfie.htm">db_CreateField</a><br />
+      <a href="db_crfie.htm">db_DeleteField</a><br />
+      <a href="db_ftype.htm">db_EnsureField</a><br />
+      <a href="db_prefx.htm">db_FieldPrefix</a><br />
+      <a href="db_ftype.htm">db_Fields</a><br />
+      <a href="db_ftype.htm">db_FieldType</a><br />
+      <a href="db_ftype.htm">db_FirstFieldType</a><br />
+      <a href="db_ftype.htm">db_NumericFields</a><br />
+      <a href="db_prefx.htm">db_Prefix</a><br />
+      <a href="db_prefx.htm">db_ReorderFields</a><br />
+      <a href="db_read.htm">db_ReadFields</a><br />
+      <a href="db_ftype.htm">db_RenameField</a><br />
+      <a href="db_ftype.htm">db_RequireField</a><br />
+      <a href="db_ftype.htm">db_RequireFieldType</a><br /></td>
+      <td><b>Entries</b><br />
+      <a href="db_entry.htm">db_Entries</a><br />
+      <a href="db_entry.htm">db_nEntries</a><br />
+      <a href="db_entry.htm">db_NextEntry</a><br />
+      <a href="db_entry.htm">db_PrevEntry</a><br />
+      <a href="db_sort.htm">db_Proxy</a><br />
+      <a href="db_sort.htm">db_Sort</a><br />
+      <br />
+      <b>Applications</b><br />
+      <a href="vclustfcn.htm">db_ValueCluster</a><br />
+      <a href="db_calc.htm">db_Calculator</a><br />
+      <a href="db_merge.htm">db_Merge</a><br />
+      <a href="dbmin.htm">db_Minimize</a><br />
+      <a href="dbpca.htm">db_PrincipalComponents</a><br /></td>
+      <td><b>States</b><br />
+      <a href="dbstate.htm">db_State</a><br />
+      <a href="dbstate.htm">db_FieldsState</a><br />
+      <a href="dbstate.htm">db_EntriesState</a><br />
+      <a href="dbstate.htm">db_DataState</a><br />
+      <a href="dbstate.htm">db_FieldsDataState</a><br />
+      <br />
+      <b>Constants</b><br />
+      <a href="moe_const.htm">DB_FIELD_TYPES</a><br /></td>
+    </tr>
+  </table>
+
+<h1>Database Viewer Functions</h1>
+  <table class="functionList">
+    <tr>
+      <td><b>File Manipulation</b><br />
+      <a href="dbvopen.htm">dbv_Open</a><br />
+      <a href="dbvopen.htm">dbv_OpenFile</a><br />
+      <a href="dbvopen.htm">dbv_Close</a><br />
+      <a href="dbvopen.htm">dbv_Key</a><br />
+      <a href="dbvopen.htm">dbv_KeyList</a><br />
+      <a href="dbvdef.htm">dbv_DefaultEntry</a><br />
+      <a href="dbvdef.htm">dbv_DefaultField</a><br />
+      <a href="dbvdef.htm">dbv_DefaultView</a><br />
+      <a href="dbvattr.htm">dbv_ReadOnly</a><br />
+      <a href="dbvattr.htm">dbv_SetDatabase</a><br /></td>
+      <td><b>States</b><br />
+      <a href="dbvstate.htm">dbv_State</a><br />
+      <a href="dbvstate.htm">dbv_SelectedEntriesState</a><br />
+      <a href="dbvstate.htm">dbv_VisibleEntriesState</a><br />
+      <a href="dbvstate.htm">dbv_SelectedFieldsState</a><br />
+      <a href="dbvstate.htm">dbv_VisibleFieldsState</a><br />
+      <br />
+      <b>Applications</b><br />
+      <a href="dbmin.htm">dbv_Minimize</a><br />
+      <a href="dbpca.htm">dbv_PrincipalComponents</a><br /></td>
+    </tr>
+    <tr>
+      <td><b>Entries</b><br />
+      <a href="dbventry.htm">dbv_Entries</a><br />
+      <a href="dbventry.htm">dbv_EntryHeight</a><br />
+      <a href="dbventry.htm">dbv_EntryHide</a><br />
+      <a href="dbventry.htm">dbv_EntrySelected</a><br />
+      <a href="dbventry.htm">dbv_EntrySetSelected</a><br />
+      <a href="dbventry.htm">dbv_EntryVisible</a><br />
+      <a href="dbventry.htm">dbv_EntrySetVisible</a><br />
+      <a href="dbventry.htm">dbv_nSelectedEntries</a><br />
+      <a href="dbventry.htm">dbv_nVisibleEntries</a><br />
+      <a href="dbventry.htm">dbv_VisibleEntries</a><br /></td>
+      <td><b>Fields</b><br />
+      <a href="dbvfield.htm">dbv_Fields</a><br />
+      <a href="dbvfield.htm">dbv_FieldHide</a><br />
+      <a href="dbvfield.htm">dbv_FieldSelection</a><br />
+      <a href="dbvfield.htm">dbv_FieldHeight</a><br />
+      <a href="dbvfield.htm">dbv_ShowField</a><br />
+      <br /><b>Display</b><br />
+      <a href="dbvmattr.htm">dbv_DisplayAttributes</a><br />
+      <br /></td>
+    </tr>
+  </table><!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

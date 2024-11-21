@@ -1,0 +1,2030 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../images/ccgicon.png" />
+  <title>Molecular Dynamics</title>
+  <meta name="keywords" content="panel: Dynamics" />
+  <meta name="keywords" content="panel: Molecular Dynamics" />
+  <meta name="keywords" content=
+  "main_keywords: MD, trajectory, NAMD, NPA, NVE, NVT, NPH, NPT, BER" />
+  <meta name="keywords" content=
+  "main_keywords: Amber, pmemd, sander, prmtop, mdcrd, mpirun" />
+  <meta name="keywords" content=
+  "main_keywords: CUDA, MPI, devices, charmrun, threads" />
+  <meta name="keywords" content=
+  "main_keywords: heating, cooling, equilibration" />
+  <meta name="keywords" content=
+  "keywords: periodic boundary conditions, crystal parameters" />
+  <meta name="keywords" content=
+  "keywords: solvation, solvent, reaction field electrostatics, forcefield" />
+  <meta name="keywords" content=
+  "keywords: potential setup, temperature, pressure" />
+  <meta name="keywords" content=
+  "keywords: protocol, constraint, ensemble, conformation space" />
+  <meta name="keywords" content=
+  "keywords: thermodynamic properties, hamiltonian, coordinates" />
+  <meta name="keywords" content=
+  "keywords: sample, numerical integration, uniform, momenta" />
+  <meta name="keywords" content=
+  "keywords: propagation, Berendsen, Lagrange, particle mesh ewald" />
+  <meta name="keywords" content=
+  "keywords: linear, angular momentum, initial velocity" />
+  <meta name="keywords" content=
+  "keywords: tether, standard deviation, checkpoint, discretization" />
+  <meta name="keywords" content="keywords: batch, script, bourne shell, bat" />
+  <meta name="keywords" content=
+  "keywords: analysis, instantaneous, kinetic energy, time step" />
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../index.htm"><img src="../images/ccglogo.png" /></a>
+    <a href="../index.htm"><div class="moeversion"></div></a>
+    Molecular Dynamics
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+  <div class="toc-wrap" id="toc-list">
+<ul class="tight">
+<li><a href="#Theory">Theory and Implementation</a></li>
+<li><a href="#Run">Running a Molecular Dynamics Simulation</a></li>
+<ul class="tight">
+<li><a href="#Simulation_Algorithms">Selecting the Simulation Algorithm</a></li>
+<li><a href="#System_Setup">System Setup</a></li>
+<li><a href="#Simulation_Protocol">Simulation Protocol</a></li>
+<li><a href="#Start_Simulation">Start Simulation</a></li>
+</ul>
+<li><a href="#MOEMD">Running a Simulation with MOE</a></li>
+<li><a href="#NAMD">Running a Simulation with NAMD</a></li>
+<li><a href="#AMBER">Running a Simulation with AMBER</a></li>
+<li><a href="#Simulation_Analysis">Simulation Analysis</a></li>
+<ul class="tight">
+<li><a href="#Simulation_Playback">Simulation Playback</a></li>
+<li><a href="#Simulation_Import">Trajectory Import</a></li>
+</ul>
+<li><a href="#Examples">Examples</a></li>
+<ul class="tight">
+<li><a class="example" href="#Example_Prepare">1FAX Data Preparation</a></li>
+<li><a class="example" href="#Example_MDSetup">1FAX MD Simulation</a></li>
+</ul>
+<li><a href="#References">References</a></li>
+<li><a href="#SVL">SVL Commands</a></li>
+<li><a href="#SeeAlso">See Also</a></li>
+</ul>
+</div>
+
+<p>Molecular dynamics simulation addresses the problem of numerically solving
+  the classical equations of motion for a system of <i>N</i> atoms in an effort
+  to sample a thermodynamic ensemble, or <i>trajectory</i>, under specified
+  thermodynamic conditions (e.g. constant temperature or constant pressure).
+  Such a trajectory is important for two reasons. Firstly, it provides
+  configurational and momentum information for each atom, from which
+  thermodynamic properties of the system can be calculated. Secondly, the
+  trajectory represents an exploration, or search, of the conformation space
+  available to a particular system. The principle underlying conformation
+  search using dynamics is that atoms in a dynamics simulation will eventually
+  search their entire conformation space. The obvious problem with this
+  approach is that the search space may be huge, and thus, it may take many
+  thousands, millions, or even billions of steps to adequately and accurately
+  sample the space. Consequently, much research effort is spent on devising
+  methods of accelerating the exploration without sacrificing accuracy.</p>
+
+<p><!-- THEORY -->
+</p>
+
+<a id="Theory">
+<h1>Theory and Implementation</h1>
+</a>
+
+<p>The simulation of molecular systems is well described in [Allen&nbsp;1987]
+  and it is beyond the scope of this document to detail all the research into
+  molecular dynamics. Instead, we will provide a rather terse description of
+  the methods used in MOE to solve the equations of motion. In the descriptions
+  of the methods we will make use of the following notation:</p>
+  <center>
+    <table class="titlebar">
+      <tr>
+        <th>Symbol</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td><i>g</i></td>
+        <td>The number of degrees of freedom in the atomic system</td>
+      </tr>
+      <tr>
+        <td><i>H</i></td>
+        <td>The Hamiltonian</td>
+      </tr>
+      <tr>
+        <td><i>k</i></td>
+        <td>Boltzmann's constant</td>
+      </tr>
+      <tr>
+        <td><i>K</i></td>
+        <td>The kinetic energy of the atoms;
+        2<i>K</i>&nbsp;=&nbsp;<b>p</b><sup>T</sup><b>M</b><sup>-1</sup><b>p</b></td>
+      </tr>
+      <tr>
+        <td><b>M</b></td>
+        <td>The diagonal atomic mass matrix</td>
+      </tr>
+      <tr>
+        <td><i>Q<sub>T</sub></i></td>
+        <td>The thermostat mass parameter</td>
+      </tr>
+      <tr>
+        <td><i>Q<sub>P</sub></i></td>
+        <td>The barostat mass parameter</td>
+      </tr>
+      <tr>
+        <td><i>P</i></td>
+        <td>The sum-over-states macroscopic pressure of the system</td>
+      </tr>
+      <tr>
+        <td><b>p</b></td>
+        <td>The real-space momenta of the atoms; their velocities are
+        <b>M</b><sup>-1</sup><b>p</b></td>
+      </tr>
+      <tr>
+        <td><b>q</b></td>
+        <td>The scaled-space coordinates of the atoms; <b>q</b> = <i>V</i>
+        <sup>-1/3</sup> <b>r</b></td>
+      </tr>
+      <tr>
+        <td><b>r</b></td>
+        <td>The real-space coordinates of the atoms; <b>r</b> = <i>V</i>
+        <sup>1/3</sup> <b>q</b></td>
+      </tr>
+      <tr>
+        <td><i>T</i></td>
+        <td>The sum-over-states macroscopic temperature of the system</td>
+      </tr>
+      <tr>
+        <td><b>u</b></td>
+        <td>The scaled-space momenta of the atoms (conjugate to <b>q</b>)</td>
+      </tr>
+      <tr>
+        <td><i>U</i></td>
+        <td>The atomic potential energy function, a function of <b>r</b></td>
+      </tr>
+      <tr>
+        <td><i>V</i></td>
+        <td>The instantaneous volume of the system</td>
+      </tr>
+      <tr>
+        <td><i>W</i></td>
+        <td>The virial; <i>W</i> = <b>r</b><sup>T</sup>
+        &nabla;<i>U</i>(<b>r</b>)</td>
+      </tr>
+    </table>
+  </center>
+
+<p><b>The NPA Equations</b>. The Nos&eacute;-Poincar&eacute;-Andersen (NPA)
+  equations of motion [Sturgeon&nbsp;2002] [Bond&nbsp;1999] are derived from an
+  NPT Hamiltonian. Thus, theoretically correct NVE, NVT, NPH and NPT ensembles,
+  where N is constant number of particles, V is constant volume, E is constant
+  enthalpy, T is constant temperature, P is constant pressure, and H is
+  constant enthalpy,
+  can be simulated. Moreover, symplectic integrators with Hamiltonian systems
+  tend to be more stable than non-Hamiltonian systems. The NPA Hamiltonian
+  is</p>
+
+<img src="md/npa_h.png" alt="Formula 1" class="center" />
+
+<p>where <i>g</i> is the number of degrees of freedom in the atomic system
+  plus one if <i>V</i> is not fixed. The s coordinate is a time scaling
+  coordinate used to enforce constant temperature. The quantity <i>H</i> is
+  conserved and the equations of motion can be derived by differentiating
+  <i>H</i> with respect to the conjugate coordinates and momenta to obtain the
+  equations of motion.</p>
+
+<img src="md/npa_eqn.png" alt="Formula 2" class="center" />
+
+<p>To solve these equations, the symplectic, time-reversible Generalized
+  Leapfrog Algorithm is appropriate [Sun&nbsp;1993]. A Hamiltonian,
+  <i>H</i>(<b>p</b>,<b>q</b>) in which <b>q</b> are the coordinates and
+  <b>p</b> the conjugate momenta at time <i>t</i> can be integrated through a
+  time step <i>h</i> with</p>
+
+<img src="md/gleap.png" alt="Formula 3" class="center" />
+
+<p>Applying the Generalized Leapfrog
+  Algorithm to the NPA equations gives the following.  In the exposition,
+  unsubscripted values refer to a quantity at time <i>t</i>, a subscript of
+  1/2 refers to a quantity at time <i>t</i>&nbsp;+&nbsp;<i>h</i>/2 and a subscript
+  of 1 refers to a quantity at time <i>t</i>&nbsp;+&nbsp;<i>h</i>; the primed
+  <i>h</i> denotes <i>h</i>/2.
+</p>
+
+<img src="md/npa_int.png" alt="Formula 4" class="center" />
+
+<p>Note that the implicit equations for <i>u</i><sub>1/2</sub> and
+  <i>s</i><sub>1</sub> are of low degree, involve only scalar quantities
+  and can be solved exactly.
+</p>
+
+<p><b>The NHA Equations.</b> The Nos&eacute;-Hoover-Andersen (NHA) equations
+  of motion are given in [Hoover&nbsp;1985] and are intended to probe the NPT
+  ensemble. However, by holding certain quantities fixed, these equations can
+  generate any of the NVE, NVT, NPH and NPT ensembles. The Hoover equations of
+  motion are</p>
+
+<img src="md/nha_eqn.png" alt="Formula 5" class="center" />
+
+<p>where <i>g</i> is the number of atomic degrees of freedom plus 1 if the
+  pressure is held fixed. The time coordinate is not uniform in the NHA
+  equations of motion; that is, quantities sampled at uniform intervals during
+  numerical integration do not correspond to true time samples but to some
+  time-scaled sampling. In most cases, this non-uniformity &quot;averages
+  out&quot; over sufficiently long simulations. While not Hamiltonian, the NHA
+  equations do conserve the following quantity:</p>
+
+<img src="md/nha_h.png" alt="Formula 6" class="center" />
+
+<p>The NHA equations can be solved by operator splitting techniques that
+  propagate &eta; and &chi; momenta at the outer propagation steps (holding the
+  other quantities fixed) and a Generalized Leapfrog integrator for the
+  Hamiltonian remainder.</p>
+
+<p><b>The BER Equations.</b> The Berendsen equations (BER) are NVE equations
+  of motion augmented with the Berendsen thermostat and barostat. The equations
+  of motion and associated Hamiltonian are</p>
+
+<img src="md/ber_eqn.png" alt="Formula 7" class="center" />
+
+<p>At every time step the momenta and coordinates are scaled according to the
+  Berendsen procedure [Berendsen&nbsp;1984] to enforce constant temperature
+  and/or pressure.</p>
+
+<img src="md/ber_s.png" alt="Formula 8" class="center" />
+
+<p>These equations are most useful for equilibration since they do not
+  formally generate correct NVT or NPT ensembles.</p>
+
+<p><b>Holonomic Constraints</b>. When bond lengths are constrained, the
+  potential function <i>U</i> is augmented with a Lagrange multiplied
+  constraint function <b>G</b>(<b>r</b>) that enforces the constraints. We use
+  the LINCS formulation [Hess&nbsp;1997]</p>
+
+<img src="md/con_1.png" alt="Formula 9" class="center" />
+
+<p>where <i>d<sub>i</sub></i> is the length to which the bond between atoms
+  <i>a<sub>i</sub></i> and <i>b<sub>i</sub></i> must be constrained. In other
+  words, <b>G</b>&nbsp;=&nbsp;0 at all times <i>t</i>. Define
+  <nobr><b>B</b><i><sub>ij</sub></i> =
+  <i>dg<sub>i</sub></i>/<i>d</i>r<sub><i>j</i></sub></nobr>. where
+  r<sub><i>j</i></sub> denotes the <i>j</i>'th coordinate in a 3<i>N</i>
+  vector. Because of the particular form of the constraint functions, we have
+  that <nobr><b>G</b>(<b>r</b>) = <b>B</b><b>r</b> - <b>d</b></nobr>. Under the
+  constrained equations of motion, the time derivatives of the constraint
+  functions are zero; i.e.</p>
+
+<img src="md/con_2.png" alt="Formula 10" class="center" />
+
+<p>At any given time, the Lagrange multipliers, <b>y</b>, modify the
+  potential to enforce the constraints</p>
+
+<img src="md/con_3.png" alt="Formula 11" class="center" />
+
+<p>and the constraint forces are given by <b>B</b><sup>T</sup><b>y</b>. Let
+  <b>Z</b>&nbsp;=&nbsp;(<b>BM</b><sup>-1</sup><b>B</b><sup>T</sup>)<sup>-1</sup>
+  which is a square matrix with 1/<i>m<sub>a</sub></i> + 1/<i>m<sub>b</sub></i>
+  on the diagonal; the off-diagonal elements are only non-zero when two
+  constraints are connected, in which case the element is cos <i>x</i> /
+  <i>m<sub>c</sub></i> where <i>m<sub>c</sub></i> is the mass of the atom
+  connecting the two constrained bonds and <i>x</i> is the angle between the
+  bonds. If we define the diagonal matrix <b>S</b> such that
+  <b>S</b><sub><i>i</i></sub> = diag (..., sqrt(1/<i>m<sub>a</sub></i> +
+  1/<i>m<sub>b</sub></i>), ...) we can write</p>
+
+<img src="md/con_4.png" alt="Formula 12" class="center" />
+
+<p>The matrix <b>A</b> is symmetric and sparse and has zeros on the diagonal.
+  Except for cases of highly triangulated constraints, all of its eigenvalues
+  are less than one; hence, a power series can be used to invert <b>A</b>. In
+  this way, only matrix-vector multiplies are required [Hess&nbsp;1997],
+  leading to a faster and more accurate constraint solver than SHAKE
+  [Ryckaert&nbsp;1977].</p>
+
+<p><b>Momenta Corrections</b>. When integrating the equations of motion,
+  numerical errors inevitably creep into the values, leading to
+  non-conservation of the Hamiltonian. When the forcefield is conservative
+  (e.g. no fixed atoms or external forces), total linear and angular momentum
+  should be conserved. However, if numerical errors lead to inexact
+  preservation of these quantities then these errors will be largely preserved
+  in the next iteration. For this reason, it is important to remove linear and
+  angular momentum at each step.
+</p>
+
+<a id="Run">
+<h1>Running a Molecular Dynamics Simulation</h1>
+</a>
+
+<p>Before running a Dynamics simulation:</p>
+  <ol>
+    <li>Select the appropriate <a href="../moe/pot.htm">forcefield</a> for the
+    molecular system.
+    </li>
+    <li>Configure the <a href="../moe/pot.htm#Forcefield">Potential Setup</a>
+    correctly. For NPA, NHA, and BER simulations using
+    <a href="solvate.htm">explicit solvent</a>, it is
+    recommended that Reaction field electrostatics be used.
+    </li>
+    <li>If periodic boundary conditions are desired, make sure that they are
+    configured properly with <a href="crystal.htm">Crystal Parameters</a>.
+    </li>
+    <li>Make sure that <a href="../moe/pot.htm#Charge">partial charges</a> have
+    been calculated and <a href="emin.htm">minimize the energy</a> of the
+    molecular system to an RMS gradient of 1.0 or less.
+    Note that NAMD and AMBER can perform their own minimizations, in which
+    case this step may be skipped.
+    </li>
+    <li>In NPA, NHA, and BER simulations, interaction energy averages can
+    be output by creating a named set called <tt>MD_INTERACTION</tt>
+    (see <a href="#Simulation_Analysis">Simulation Analysis</a> section below).
+    For example, to generate interaction energy averages
+    with a ligand, select the ligand atoms, then choose
+    <span class="menu">MOE | Select | Set Create</span>.
+    Alternatively, the SVL function
+    <a class="svl" href=
+    "../moe/fcnref/collect.htm">oSetCollection</a> can be used:
+
+<pre class="code oneline">
+svl&gt; oSetCollection ['MD_INTERACTION', SelectedAtoms []]
+</pre>
+    </li>
+    <li>Select the <nobr><b>MOE | Compute | Simulations | Dynamics</b></nobr>
+    menu item to start the Dynamics graphical interface.</li>
+  </ol>
+
+<p>Molecular dynamics simulations are often a sequence of simulation
+  <i>stages</i> each of which is run under different temperature or pressure
+  conditions; e.g. when heating or cooling a system. These sequences of stages
+  are called <i>protocols</i>, which can be setup using the graphical interface.
+</p>
+
+<p>The graphical interface of the Dynamics application:</p>
+<img src="md/md_panel.png" alt="Dynamics Panel" class="center" />
+
+<a id="Simulation_Algorithms">
+<h3>Selecting the Simulation Algorithm</h3>
+</a>
+
+<table class="noborder">
+  <tr>
+    <td><b>NPA</b></td>
+    <td>
+      The Nos&eacute;-Poincar&eacute;-Andersen equations of
+        motion. This method generates true ensemble trajectories. Of NPA,
+        NHA, and BER, it is the most accurate but the most sensitive.
+    </td>
+  </tr>
+  <tr>
+    <td><b>NHA</b></td>
+    <td>
+      The Nos&eacute;-Hoover-Andersen equations of motion.
+      This method does not generate uniform samples in time but is very
+      stable and is theoretically correct.
+    </td>
+  </tr>
+  <tr>
+    <td><b>BER</b></td>
+    <td>
+      Berendsen velocity/position scaling methodology. The
+      BER methodology is mostly used for system equilibration since it is
+      relatively insensitive to configuration conditions.
+    </td>
+  </tr>
+  <tr>
+    <td><b>NAMD</b></td>
+    <td>
+      The external NAMD2 molecular dynamics engine. When
+      this algorithm is selected, a settings button appears which will
+      open the &quot;NAMD Configuration&quot; panel. NAMD must be
+      correctly configured to run. If periodicity has been enabled,
+      <b>Particle Mesh Ewald</b> will be enabled. The option is used to
+      enable or disable the NAMD PME implementation for periodic
+      electrostatics. Additionally, <b>Wrap Water and Ions</b> will
+      change to allow the option to specify wrapping behavior apply to
+      <b>Water</b> only, or <b>All</b> atoms. For more information about
+      NAMD simulations, please see <a href="#NAMD">Running a Simulation
+      with NAMD</a> below.
+    </td>
+  </tr>
+  <tr>
+    <td><b>AMBER</b></td>
+    <td>
+      The external AMBER molecular dynamics engine. AMBER
+      must be correctly configured to run. AMBER <tt>pmemd.cuda</tt> is the
+      supported MD engine, hence periodic boundary conditions are required.
+      For more information about AMBER simulations, please see 
+      <a href="#AMBER">Running a Simulation with AMBER</a> below.
+    </td>
+  </tr>
+</table>
+
+<a id="System_Setup">
+<h3>System Setup</h3>
+</a>
+
+<table class="noborder">
+  <tr>
+    <td><b>Root&nbsp;Name</b></td>
+    <td>The root name of the simulation trajectory files.</td>
+  </tr>
+  <tr>
+    <td><b>Sample&nbsp;Time</b></td>
+    <td>Simulation data is written to the trajectory files with
+    the given period (in picoseconds). Additional (space consuming) output
+    consisting of the <b>Position</b> and/or <b>Velocity</b> may be written
+    if enabled. These two options are ignored in NAMD simulations. If <b>Wrap
+    Waters</b> is on then water molecules and counterions will be translated
+    in periodic simulations so that their center of mass is inside the
+    periodic cell.</td>
+  </tr>
+  <tr>
+    <td><b>Checkpoint&nbsp;Time</b></td>
+    <td>Simulation stages longer than the specified time (in
+    picoseconds) will be split into separate files. If a simulation is
+    prematurely terminated then it can be restarted from the most recent
+    checkpoint. A value of zero disables the splitting. Note that there is
+    always a split at the start of a new simulation stage.</td>
+  </tr>
+  <tr>
+    <td><b>Time&nbsp;Step</b></td>
+    <td>The time step (in picoseconds) used in discretizing the
+    equations of motion. If the bond length constraints are
+    disabled, then a value no larger than 0.001&nbsp;ps should be used;
+    otherwise, a time step of 0.002&nbsp;ps may be used.</td>
+  </tr>
+  <tr>
+    <td><b>Forcefield</b></td>
+    <td>
+      Press the <img src="../images/gear_icon.png" alt="Configure Gear"
+      class="icon" />
+      icon to raise the <a href="../moe/pot.htm#Forcefield">Potential Setup</a> 
+      window if the displayed settings are not appropriate for the simulation.
+      The forcefield name, solvation model, and non-bonded cutoff distance
+      ranges are shown. The solvation model is only used for the NPA, NHA and 
+      BER algorithm. Explicit solvent in NAMD and AMBER use TIP3P water or
+      simulate in gas phase.
+    </td>
+  </tr>
+  <tr>
+    <td><b>Solvent</b></td>
+    <td>
+      Press the <img src="../images/gear_icon.png" alt="Configure Gear"
+      class="icon" />
+      icon to raise the <a href="solvate.htm#Run">Solvate</a> window and add
+      explicit solvent (if desired).
+
+      <p class="nonebottom">Note that in AMBER, implicit solvent under
+      non-periodic boundary conditions cannot be used.
+      <tt>pmemd</tt> supports the use of implicit solvent only under
+      periodic boundary conditions.</p>
+    </td>
+  </tr>
+  <tr>
+    <td><b>Cell</b></td>
+    <td>
+      Press the <img src="../images/gear_icon.png" alt="Configure Gear"
+      class="icon" />
+      icon to raise the <a href="crystal.htm#CrystalParams">Crystal Parameters
+      </a> window if the displayed periodic settings are not appropriate for the
+      simulation.
+    </td>
+  </tr>
+  <tr>
+    <td><b>Constrain</b></td>
+    <td>
+      Controls bond length and water molecule constraints during the dynamics
+      simulation. The constraints on Bond Lengths can be one of the
+      following:
+      <table class="titlebar">
+        <tr>
+          <th>Menu Option</th>
+          <th>Description</th>
+        </tr>
+        <tr>
+          <td><b>None</b></td>
+          <td>No constraints will be applied.</td>
+        </tr>
+        <tr>
+          <td><b>Light Bonds</b></td>
+          <td>Bonds involving H or LP will be constrained.</td>
+        </tr>
+        <tr>
+          <td><b>All Bonds</b></td>
+          <td>All bonds will be constrained to be of fixed length.</td>
+        </tr>
+        <tr>
+          <td><b>HMR</b></td>
+          <td>Enable Hydrogen Mass Repartitioning (2 AMU shifted to H).</td>
+        </tr>
+      </table>
+      <p><b>Note:</b> If <b>Rigid Water</b> is on, water molecules will be
+      constrained to be rigid bodies.</p>
+
+      <p> The number of atoms which are <b>Fixed</b> or <b>Tethered</b> is also
+      shown. MOE will honor the constraints set in the system for any Simulation
+      Algorithm.  To see which atoms are fixed or tethered, press
+      <img src="md/icon_question.png" alt= "Question Icon" class="icon" />
+      to flash them briefly in the MOE Window.
+      To <b>release</b> these constraints, press the respective
+      <img src="md/icon_cross.png" alt= "Cross Icon" class="icon" /> button.
+      </p>
+    </td>
+  </tr>
+</table>
+
+<a id="Simulation_Protocol">
+<h3>Simulation Protocol</h3>
+</a>
+
+<p>The molecular dynamics protocol stages are entered using the button bar next
+to the protocol listbox. The protocol will be converted to MOE, NAMD, or 
+AMBER scripts depending on the setting of <b>Simulation Algorithm</b>.</p>
+
+<table class="titlebar">
+  <tr>
+    <th></th>
+    <th>Description</th>
+    <th>Popup</th>
+  </tr>
+  <tr>
+    <td style="vertical-align:top;">
+      <img src="md/icon_plus.png" alt= "Add stage" class="icon" />
+    </td>
+    <td style="vertical-align:top;">
+      <b>Add New Segment</b>.
+      <p><b>Name: </b>The name of the segment. This can be arbitrarily chosen
+        and is used to identify each segment during MD analysis.
+      </p>
+      <p><b>Length: </b>Length of the segment in ps. For minimization, the 
+        number of steps is calculated using the formula: length / time step
+        (e.g. 10 [ps] / 0.002 [ps / step] = 5000 steps).
+      </p>
+      <p><b>Temperature: </b>Temperature set at the beginning of the
+        segment, in K. If no temperature gradient is defined, this is the
+        temperature target for the thermostat.
+      </p>
+      <p><b>Pressure: </b>Pressure set at the beginning of the
+        segment, in kPa. If no pressure gradient is defined, this is the
+        pressure target for the barostat. Note: Pressure gradient is
+	not supported in the AMBER algorithm.
+      </p>
+
+      <p><b>Restraint: </b>Heavy atom tether restraint in &Aring; at the
+	beginning of the segment. These tethers are applied in addition
+	to the ones defined in the system. A value of 0 means that heavy
+	atoms are fixed, while e.g. 1 means that a restraint force
+	constant that produces a 1&nbsp;&Aring; radial standard
+	deviation from the reference position will be applied. If no
+	restraint gradient is defined, this is a constant restraint
+	applied during the entire MD segment.
+
+      </p>
+
+      <p><b>Minimization: </b>For NAMD/AMBER, a minimization segment can
+	be added. A selection box will appear at the top of the New
+	Segment popup.
+      </p>
+
+      <p><b>Note:</b> When NHA/NPA/BER is selected as the algorithm, all
+	minimization segments will be automatically converted to
+	0&nbsp;K segments.
+
+      </p>
+    </td>
+    <td style="vertical-align:top;">
+      <p>NPA/NHA/BER:</p>
+      <img src="md/popup_add.png" alt="Add stage popup" />
+      <p>NAMD/AMBER:</p>
+      <img src="md/popup_addalt.png" alt="Add stage popup for NAMD/AMBER" />
+    </td>
+  </tr>
+  <tr>
+    <td style="vertical-align:top;">
+      <img src="../images/edit_icon.png" alt= "Add stage" class="icon" />
+    </td>
+    <td style="vertical-align:top;">
+      <b>Edit Segment</b>.
+
+      <p>Change the value of an option, then press OK to accept the
+	change.  The options are the same as described in the Add New
+	Segment section above.
+
+      </p>
+
+      <p><b>Note:</b> When NHA/NPA/BER is selected as the algorithm, all
+	minimization segments will be automatically converted to
+	0&nbsp;K segments.
+
+      </p>
+    </td>
+    <td style="vertical-align:top;">
+      <p>NPA/NHA/BER:</p>
+      <img src="md/popup_edit.png" alt="Edit stage popup" />
+      <p>NAMD/AMBER:</p>
+      <img src="md/popup_editalt.png" alt="Edit stage popup for NAMD/AMBER" />
+    </td>
+  </tr>
+  <tr>
+    <td style="vertical-align:top;">
+      <img src="../images/cancel_icon.png" alt= "Delete segment"
+      class="icon" />
+    </td>
+    <td style="vertical-align:top;">
+      <b>Delete Segment</b>. Deletes the segment(s) currently selected in
+      the list.
+    </td>
+    <td style="vertical-align:top;"></td>
+  </tr>
+  <tr>
+    <td style="vertical-align:top;">
+      <img src="md/icon_arrowup.png" alt= "Move segment up" class="icon" />
+      <img src="md/icon_arrowdown.png" alt= "Move segment down" 
+      class="icon" />
+    </td>
+    <td style="vertical-align:top;">
+      <b>Move Segment</b>.
+      Move the selected segment up or down in the protocol.
+    </td>
+    <td style="vertical-align:top;"></td>
+  </tr>
+  <tr>
+    <td style="vertical-align:top;">
+      <img src="md/icon_save.png" alt= "Save protocol" class="icon" />
+    </td>
+    <td style="vertical-align:top;">
+      <b>Save Protocol</b>
+      Save the current protocol to a file, which can subsequently
+      be loaded back into the panel.
+
+      <p><b>Note:</b> When NHA/NPA/BER is selected as the algorithm, all
+	minimization segments will be automatically converted to
+	0&nbsp;K segments.
+
+      </p>
+    </td>
+    <td style="vertical-align:top;"></td>
+  </tr>
+  <tr>
+    <td style="vertical-align:top;">
+      <img src="../images/browse_icon.png" alt= "Load protocol" class="icon" />
+    </td>
+    <td style="vertical-align:top;">
+      <b>Load Protocol</b>.
+      Load a protocol into the panel from a file.
+    </td>
+    <td style="vertical-align:top;"></td>
+  </tr>
+</table>
+
+<a id="Start_Simulation">
+<h3>Start Simulation</h3>
+</a>
+
+<p>Press <b>OK</b> to begin the simulation or <b>Batch</b> to generate the
+  simulation files for running in a separate MOE/batch session or shell
+  execution. A molecular dynamics simulation requires a number of input files
+  and will generate one or more output files. Typically, a set of output files
+  will be generated for each stage in a simulation, but others may be generated
+  for restart purposes. The trajectory files for a particular simulation are
+  named according to the following scheme</p>
+  <p class="blockquote">
+    <i>root</i>.<i>x</i>.<i>ttt</i>.<i>ext</i>
+  </p>
+
+<p>where <i>root</i> is the base filename or prefix (entered in the
+  <b>Trajectory</b> field of the Dynamics panel), <i>ext</i> is an extension
+  (e.g. <tt>mdb</tt> or <tt>cord.dcd</tt>), <i>x</i> is a lower case letter
+  indicating the number of digits in <i>ttt</i> (<tt>a</tt> is 1, <tt>b</tt> is
+  2, etc.) and <i>ttt</i> is an integer time value in picoseconds. This naming
+  scheme is used so that the file names sort well without resorting to encoding
+  the time value with leading zeros. The letter code <tt>z</tt> is special and
+  does not have an associated time stamp value. The <tt>z</tt> files are used
+  to name files associated with the entire trajectory like SVL, BAT or Bourne
+  Shell scripts. If the root is <tt>mysim</tt> and the Start Time is 0 then the
+  Dynamics application will generate the following initial files for NPA, NHA
+  and BER (for NAMD and AMBER see below):</p>
+  <ol>
+    <li><tt>mysim.a.0.moe</tt> &ndash; the starting geometry of the current
+    molecular system.</li>
+    <li><tt>mysim.a.0.mdb</tt> &ndash; an initial MDB file containing molecular
+    dynamics configuration information. This file will not contain trajectory
+    data.</li>
+    <li>
+      <tt>mysim.z.svl</tt> &ndash; an SVL script used to run/restart the
+      simulation:
+
+<pre class="code">
+unix&gt; $MOE/bin/moebatch -run mysim.z.svl
+mswin&gt; %MOE%\bin\moebatch -run mysim.z.svl
+</pre>
+    </li>
+  </ol>
+
+<p>If a simulation stage of length 100&nbsp;ps is conducted, the trajectory
+  will be stored in an MDB file with a time stamp of 100 indicating that this
+  file contains the simulation data up to time 100. Further stages will be
+  similarly named. A simulation protocol with stage lengths 100, 100, 500 and
+  100 will produce the following set of files:</p>
+
+<pre class="code">
+mysim.a.0.moe
+mysim.a.0.mdb
+mysim.c.100.mdb
+mysim.c.200.mdb
+mysim.c.700.mdb
+mysim.c.800.mdb
+mysim.z.svl
+mysim.z.valid
+</pre>
+
+<p>The <tt>.z</tt> files indicate successful completion of the
+  simulation.</p>
+
+<a id="MOEMD">
+<h1>Running a Simulation with MOE</h1>
+<a/>
+
+<p>When running one of the MOE MD engines &ndash; NPA, NHA, or BER &ndash;
+  relevant data for monitoring the
+  simulation will be displayed along the top of the MOE 3D window. The
+  definitions of the labels are as given in the
+  <a href="#Theory">table</a> at the top of this page. </p>
+
+<p>While the values written to the output database comprise
+  instantaneous values, many of the values displayed in the MOE Window
+  are running averages over the last 1 ps of simulation, as
+  indicated by angle brackets. The averaged values also have their standard
+  deviations reported directly below them. The label of each averaged value is
+  followed by a symbol indicating the trend of its value:
+  <table class="titlebar">
+    <tr>
+      <th>Symbol</th>
+      <th>Trend</th>
+    </tr>
+    <tr>
+      <td>\</td>
+      <td>negative</td>
+    </tr>
+    <tr>
+      <td>:</td>
+      <td>weak</td>
+    </tr>
+    <tr>
+      <td>/</td>
+      <td>positive</td>
+    </tr>
+  </table>
+</p>
+
+<p>The value of the Hamiltonian, <i>H</i>, is reported as a ratio of itself to
+  the absolute value of its initial value plus one; i.e.
+  <span class="svl nobr"><i>H</i>/(1 + |<i>H</i>0|)</span>.</p>
+
+<p>The speed of the simulation is reported as the number of wall clock
+  days necessary to calculate 1 ns of simulation.</p>
+<img src="md/MOE_md_display.png" alt="MOE MD 3D" class="center" />
+
+<a id="NAMD">
+<h1>Running a Simulation with NAMD</h1>
+</a>
+
+<p>NAMD [Phillips&nbsp;2005] [NAMD&nbsp;2009] is a separate program available
+  from the University of Illinois <a href=
+  "http://www.ks.uiuc.edu/Research/namd">www.ks.uiuc.edu/Research/namd</a>.
+  Obtain the NAMD program from the University of Illinois for each appropriate
+  computer architecture. It is best to put the directory of the <tt>namd2</tt>
+  executable in the system <tt>PATH</tt> environment variable:
+  <!-- or to use a procedure
+similar to that used in <tt>$MOE/bin/arch.sh</tt>
+(<tt>%MOE%\bin\arch.sh</tt>) for automatically detecting
+computer architectures.
+--></p>
+<div class="indent">
+
+    <p>On Linux, concatenate the directory containing <tt>namd2</tt> to the
+    current <tt>PATH</tt> using</p>
+
+<pre class="code oneline">
+unix&gt; setenv PATH $PATH;<i>namd_directory</i>
+</pre>or, for some macOS and Linux systems,
+
+<pre class="code oneline">
+unix&gt; export PATH=$PATH;<i>namd_directory</i>
+</pre>
+
+    <p>On Windows, start a command prompt window using</p>
+    <p class="blockquote">
+      <span class="menu">Start | Run | <tt>cmd</tt></span>
+    </p>
+    At the command line, enter
+
+<pre class="code oneline">
+C:\&gt; set PATH=%PATH%;<i>namd_directory</i>
+</pre>
+</div>
+
+<p>To use NAMD with MOE, prepare the molecular system in the same way as for
+  MOE dynamics and run the Dynamics application graphical interface as
+  described above; however, specify <b>NAMD</b> as the Algorithm. NAMD may be
+  configured by accessing the <b>gear icon</b> which is made visible on
+  selecting <b>NAMD</b> for the algorithm.</p>
+  <img src="md/dynamics_namd_config.png" alt="Dynamics Panel" class="center" />
+  <table class="noborder">
+    <tr>
+      <td><b>NAMD Executable</b></td>
+      <td>The full path specification of the location of the namd2 program must
+      be entered here.</td>
+    </tr>
+    <tr>
+      <td><b>Synchronize Memory Between Threads</b></td>
+      <td>Enable this option if you are encountering problems with parallel
+      runs. This allows SMP runs to share address space and avoids a
+      segmentation violation error in these types of runs.
+      [+isomalloc_sync]</td>
+    </tr>
+    <tr>
+      <td><b>Threads</b></td>
+      <td>Specify the total number of parallel threads to use when running
+      NAMD. [+pN]</td>
+    </tr>
+    <tr>
+      <td><b>NAMD Executable is CUDA Enabled</b></td>
+      <td>This option must be turned on when using a CUDA enabled executable.
+      Doing so causes NAMD to actively poll for results instead of sleeping,
+      which is required in the case of a NAMD CUDA build. Use with non-CUDA
+      builds is discouraged. [+idlepoll]</td>
+    </tr>
+    <tr>
+      <td><b>Devices</b></td>
+      <td>This option requires a CUDA-enabled NAMD executable. By default, NAMD
+      CUDA builds use all available GPUs. To override auto-detection of the
+      devices on which to run, enable this option and provide a comma separated
+      list of device ids. Devices are assigned to threads in a round-robin
+      fashion. Device IDs can also appear more than once. [+devices
+      &lt;...&gt;]</td>
+    </tr>
+    <tr>
+      <td><b>Distribute NAMD via charmrun</b></td>
+      <td>Use charmrun to execute NAMD on one or more nodes.</td>
+    </tr>
+    <tr>
+      <td><b>Charumrun Executable</b></td>
+      <td>The full path specification of the location of the charmrun program
+      must be entered here.</td>
+    </tr>
+    <tr>
+      <td><b>Node List</b></td>
+      <td>When NAMD is distributed using charmrun, enabling this option permits
+      specification of the nodes on which to launch NAMD. The nodes are
+      specified in a Node List file whose name is entered in the textfield.
+      [++nodelist] Otherwise, if this option is off, NAMD will run on the local
+      node only. [++local]</td>
+    </tr>
+    <tr>
+      <td><b>Remote Shell</b></td>
+      <td>When NAMD is distributed using charmrun, and a node list file is
+      specified, this option specifies the shell type used to remotely spawn
+      processes on non-local nodes. The shell type is only relevant if
+      non-local nodes are being used. [++remote-shell]</td>
+    </tr>
+    <tr>
+      <td><b>Charmrun Flags</b></td>
+      <td>Any valid charmrun flag may be specified here. Note that no error
+      checking or parsing of these flags takes place, they are passed &quot;as
+      is&quot; to charmrun.</td>
+    </tr>
+  </table>
+
+<p>When either of <b>OK</b> or <b>Batch</b> is pressed, a number of NAMD
+  input files and operating system scripts for running <tt>namd2</tt> will be
+  generated. MOE is not required to execute the generated scripts and they may
+  be run on a different computer as long as <tt>namd2</tt> can be run. Once the
+  simulation is complete, the resulting trajectory file(s) can be visualized and
+  imported into MOE with the <a href="md.htm#Simulation_Analysis"> Dynamics
+  Player</a>.</p>
+
+<p>From the trajectory filename specified in the Dynamics panel (the name
+  <tt>root</tt> will be used to illustrate), a number of files will be
+  generated by MOE using the <a class="svl" href=
+  "../moe/fcnref/mdfcn.htm">NAMD_Initialize</a> function. These files will
+  follow the time stamp naming conventions used by MOE Dynamics. The prepared
+  files fall into three categories (assuming here a Start Time of 0 which
+  corresponds to a time stamp of <tt>a.0</tt>):</p>
+  <ol>
+    <li>
+      <i>Coordinates</i>. The <tt>root.a.0.{coor,vel,xsc}</tt> files contain
+      the atomic position, velocity and periodic cell configuration for the
+      molecular system. As the simulation proceeds, similar files are written
+      by NAMD as output but with different time stamps. A <tt>root.a.0.moe</tt>
+      file is generated and contains the initial molecular system in <a href=
+      "../moe/fcnref/moefmt.htm">MOE format</a>. The <tt>root.a.0.valid</tt>
+      file indicates that all the time stamp 0 files were successfully written.
+    </li>
+    <li><i>Parameters</i>. The <tt>root.a.0.{psf,par,fix,colvars}</tt> files
+    contain the forcefield and restraint parameters derived from the molecular
+    system in a form suitable for NAMD. These files are specific to the
+    molecular system and cannot be used for another molecular system. No other
+    parameter files are needed to run NAMD. The <tt>root.a.0.ff</tt> file is a
+    generated MOE forcefield file; this file may be used later for energy
+    analysis but is otherwise not needed by NAMD.</li>
+    <li>
+      <i>Scripts</i>. The <tt>root.z.{cfg,cfg.tcl}</tt> files contain TCL
+      scripts that are used to control NAMD and interpret the generated input
+      files. The <tt>root.z.{bat,sh}</tt> are Windows and Unix shell scripts
+      used to run/restart calculations on Window and Unix/Linux systems,
+      respectively. These scripts will exit when the full simulation protocol
+      is complete.
+
+<pre class="code">
+unix&gt; sh root.sh
+mswin&gt; root.bat
+</pre>
+
+<p><b>Warning!</b> The scripts assume that the current directory is where
+      the <tt>.cfg</tt> file is located. It is important to verify that the
+      current directory is the proper one prior to invoking the scripts.
+      <b>Note!</b> If the scripts are terminated prematurely, then the
+      simulation can be restarted by invoking the script again. The <b>OK</b>
+      button in the Dynamics panel will run the appropriate <tt>.bat</tt> or
+      <tt>.sh</tt> script independently of MOE.</p>
+    </li>
+  </ol>
+
+<p>Running the <tt>.sh</tt> or <tt>.bat</tt> will create a sequence of
+  trajectory files. These files will correspond to the simulation stages and to
+  any checkpoint or restart splits. A typical segment of the generated output
+  will be (assuming a stage end time of 100&nbsp;ps)</p>
+  <ol>
+    <li><i>Coordinates</i>. The <tt>root.c.100.{coor,vel,xsc}</tt> are the
+    position, velocity periodic cell formal output of NAMD at
+    <i>t</i>&nbsp;=&nbsp;100. These files are used as input for subsequent
+    simulation stages. The <tt>root.c.100.valid</tt> indicates that the output
+    files were successfully written.</li>
+    <li><i>Trajectory</i>. The <tt>root.c.100.{out,coor.dcd,vel.dcd,xst}</tt>
+    files contain the energy measurements, position trajectory, velocity
+    trajectory and periodic cell trajectory for the simulation up to
+    <i>t</i>&nbsp;=&nbsp;100. The position and velocity files are in binary DCD
+    format.</li>
+  </ol>
+
+<p>When the simulation protocol is complete, a number of <tt>z</tt> stamped
+  files will be written: <tt>root.{coor,vel,xsc,valid}</tt>. These files
+  contain no essential information not contained in the previous trajectory
+  files. They are written to indicate the successful completion of the
+  <tt>.bat</tt> or <tt>.sh</tt> scripts. Also, the <tt>stdout</tt> of NAMD is
+  redirected (appended) to <tt>root.z.stdout</tt>; this file may be useful for
+  diagnosing problems but is otherwise not needed.</p>
+
+<p>For example, a two step protocol</p>
+
+<ol>
+  <li>Equilibration for 20 ps at 300 K</li>
+  <li>Production for 80 ps at 300 K</li>
+</ol>
+
+<p>would generate files at times 0, 20 and 100 with the
+  <tt>root.z.{coor,vel,xsc,valid}</tt> files indicating a complete
+  simulation.</p>
+  <table class="titlebar">
+      <tr>
+        <th><b><i>t</i></b> = <b>0</b></th>
+        <th><b><i>t</i></b> = <b>20</b></th>
+        <th><b><i>t</i></b> = <b>100</b></th>
+      </tr>
+      <tr>
+        <td>
+
+<pre class="code">root.a.0.{coor,vel,xsc}
+root.a.0.{psf,par,
+          fix,colvars}
+root.a.0.{moe,ff}
+root.a.0.valid
+
+root.z.{sh,bat}
+root.z.{cfg,cfg.tcl}</pre>
+        </td>
+        <td>
+
+<pre class="code">root.b.20.{coor,vel,xsc}
+root.b.20.{out,xst}
+root.b.20.{coor.dcd,
+           vel.dcd}
+root.b.20.valid</pre>
+        </td>
+        <td>
+
+<pre class="code">root.c.100.{coor,vel,xsc}
+root.c.100.{out,xst}
+root.c.100.{coor.dcd,
+            vel.dcd}
+root.c.100.valid
+
+root.z.{coor,vel,xsc}
+root.z.valid</pre>
+        </td>
+      </tr>
+    </table>
+
+<p>The trajectory files generated by NAMD are can be visualized and imported
+into MOE with the <a href="md.htm#Simulation_Analysis"> Dynamics Player</a>.</p>
+
+<a id="AMBER">
+<h1>Running a Simulation with AMBER</h1>
+</a>
+
+<p><a href="http://ambermd.org">AMBER</a>
+[Salomon-Ferrer&nbsp;2013] [AMBER&nbsp;2016] is a separate program available
+  from the University of California.  Obtain the AMBER program from the
+  University of California for each appropriate computer architecture.
+  The AMBER program is distributed with multiple executables, each
+  dedicated to a particular computing platform. MOE will automatically configure
+  the CUDA executable <tt>pmemd.cuda</tt> as the default. No AMBER installation
+  is required if only input files should be generated via the Batch button.
+</p>
+
+<p>
+  MOE can launch the simulation on the same computer by clicking OK. 
+  The <tt>AMBERHOME</tt> environment variable must be set to the AMBER
+  installation directory.  MOE emphasizes AMBER GPU simulations (which
+  are the most efficient).  If CPU or MPI simulations are desired, then
+  the scripts generated by MOE will have to be modified manually: change
+  the <tt>amber=</tt> variable to the name of the AMBER executable to use.
+</p>
+<p>
+  For GPU simulations, the <tt>CUDA_VISIBLE_DEVICES</tt> must be set to a
+  comma-separated list of devices to use during the simulation.  Often
+  this environment variable is already set (e.g. in HPC queueing systems).
+  Note that CUDA-enabled AMBER runs only on Linux, and a separate CUDA
+  installation (version 8 or higher) is required.  The location of
+  the CUDA library must be included in the <tt>LD_LIBRARY_PATH</tt>
+  environment variable (if not already present):
+</p>
+
+<pre>
+      linux&gt; setenv CUDA_VISIBLE_DEVICES=0
+      linux&gt; setenv LD_LIBRARY_PATH $LD_LIBRARY_PATH;<i>cuda_directory</i>
+</pre>
+
+<p>To use AMBER with MOE, prepare the molecular system in the same way as for
+  MOE dynamics and run the Dynamics application graphical interface as
+  described above; however, specify <b>AMBER</b> as the Algorithm.</p>
+
+<p>When either of <b>OK</b> or <b>Batch</b> is pressed, a number of
+  input files and operating system scripts for running AMBER will be
+  generated. MOE is not required to execute the generated scripts and they may
+  be run on a different computer as long as AMBER can be run. Once the
+  simulation is complete, the resulting trajectory file(s) can be visualized and
+  imported into MOE with the <a href="md.htm#Simulation_Analysis"> Dynamics
+  Player</a>.</p>
+
+<p>From the trajectory filename specified in the Dynamics panel (the name
+  <tt>root</tt> will be used to illustrate), a number of files will be
+  generated by MOE using the <a class="svl" href=
+  "../moe/fcnref/mdfcn.htm">AMBER_Initialize</a> function. These files will
+  follow the time stamp naming conventions used by MOE Dynamics. The prepared
+  files fall into three categories (assuming here a Start Time of 0 which
+  corresponds to a time stamp of <tt>a.0</tt>):</p>
+  <ol>
+    <li>
+      <i>Coordinates</i>. The <tt>root.a.0.coor</tt> files contain
+      the atomic position configuration for the
+      molecular system, in AMBER format.
+      As the simulation proceeds, similar files are written
+      by AMBER as output but with different time stamps. A <tt>root.a.0.moe</tt>
+      file is generated and contains the initial molecular system in <a href=
+      "../moe/fcnref/moefmt.htm">MOE format</a>. The <tt>root.a.0.valid</tt>
+      file indicates that all the time stamp 0 files were successfully written.
+    </li>
+    <li>
+      <i>Parameters</i>.
+      The AMBER configuration files <tt>root.x.x.mdin</tt> are auto-generated at
+      the beginning of each simulation via <tt>root.z.prot_sh</tt> for each
+      segment defined in <tt>root.z.prot_seg</tt>.
+      The <tt>root.z.{cfg,protocol}</tt> files contain
+      the MD protocol information, including restart steps.
+      The <tt>root.z.prmtop</tt> file is an AMBER format forcefield file.
+      The <tt>root.z.{disang,group,refc}</tt> files contain constrain
+      information for each segment.
+    </li>
+    <li>
+      <i>Scripts</i>.
+      The <tt>root.z.sh</tt> is a Unix shell script
+      used to run/restart calculations.
+      The script will exit when the full simulation protocol is complete.
+
+<pre class="code">
+unix&gt; sh root.z.sh
+</pre>
+
+<p>
+      <b>Note!</b> If the scripts are terminated prematurely, then the
+      simulation can be restarted by invoking the script again. The <b>OK</b>
+      button in the Dynamics panel will run the <tt>.sh</tt> script
+	independently of MOE.</p>
+    </li>
+  </ol>
+
+<p>Running the <tt>.sh</tt> script will create a sequence of
+  trajectory files. These files will correspond
+  to the simulation stages and to
+  any checkpoint or restart splits. A typical segment of the generated output
+  will be (assuming a stage end time of 100&nbsp;ps)</p>
+  <ol>
+    <li><i>Coordinates</i>. The <tt>root.c.100.coor</tt> is the
+    positional information output from AMBER at
+    <i>t</i>&nbsp;=&nbsp;100. This file is used as input for subsequent
+    simulation stages. The <tt>root.c.100.valid</tt> file indicates that the
+    output files were successfully written.</li>
+    <li><i>Trajectory</i>. The <tt>root.c.100.mdcrd</tt> file
+    contains the <tt>netcdf</tt> format trajectory file for the simulation up
+    to <i>t</i>&nbsp;=&nbsp;100.<br \>The <tt>root.c.100.{mdinfo,out}</tt> files
+    give the energy measurements.
+    The stdout of AMBER is redirected to <tt>root.c.100.stdout</tt>;
+    this file may be useful for diagnosing problems but is otherwise
+    not needed.
+    </li>
+  </ol>
+
+<p>For example, a two step protocol</p>
+
+<ol>
+  <li>Equilibration for 20 ps at 300 K</li>
+  <li>Production for 80 ps at 300 K</li>
+</ol>
+
+<p>would generate files at times 0, 20 and 100:
+  <table class="titlebar">
+      <tr>
+        <th><b><i>t</i></b> = <b>0</b></th>
+        <th><b><i>t</i></b> = <b>20</b></th>
+        <th><b><i>t</i></b> = <b>100</b></th>
+      </tr>
+      <tr>
+        <td>
+
+<pre class="code">root.a.0.coor
+root.a.0.moe
+root.a.0.valid
+
+root.z.disang
+root.z.group
+root.z.sh
+root.z.cfg
+root.z.prmtop
+root.z.prot_sh
+root.z.protocol
+root.z.refc</pre>
+        </td>
+        <td>
+
+<pre class="code">root.b.20.coor
+root.b.20.mdcrd
+root.b.20.mdin
+root.b.20.mdinfo
+root.b.20.out
+root.b.20.stdout
+root.b.20.valid</pre>
+        </td>
+        <td>
+
+<pre class="code">root.c.100.coor
+root.c.100.mdcrd
+root.c.100.mdin
+root.c.100.mdinfo
+root.c.100.out
+root.c.100.stdout
+root.c.100.valid</pre>
+        </td>
+      </tr>
+    </table>
+
+<p>The trajectory files generated by AMBER are can be visualized and imported
+into MOE with the <a href="md.htm#Simulation_Analysis"> Dynamics Player</a>.</p>
+
+<a id="Simulation_Analysis">
+<h1>Simulation Analysis</h1>
+</a>
+
+<p>At completion of an MD simulation (for examples of how to set up and
+run a simulation, please refer to the <a
+href="md.htm#Examples">Examples</a>), the MD trajectory will have been
+saved as a series of files prefixed with the <b>Root Name</b> of the
+trajectory, collected in the directory given by the path of the <b>Root
+Name</b>. The <b>Dynamics Player</b>
+is used to play back the trajectory, and provides a good starting
+point for visual analysis of the quality of the data.  The player will
+automatically recognize the algorithm used to generate the trajectory
+and read it natively from the binary output files.</p>
+
+<p>The Dynamics Player also allows the import of the trajectory to a MOE
+Database (see <a href="md.htm#Simulation_Import">Trajectory Import</a>
+for details). From here, multiple downstream analyses can be
+performed.</p>
+
+<a id="Simulation_Playback">
+<h2>Simulation Playback</h2>
+</a>
+<p>The Dynamics player has two major entry points:</p>
+  <ol>
+
+    <li>Select <span class="menu">MOE | File | Open</span>, navigate to the
+    trajectory output folder, then select a file which shares the same
+    <b>Root Name</b> as the entire trajectory. Ensure that the <b>Action</b>
+    drop-down menu in the Open panel reads <b>MD Player</b>.</li>
+
+    <li>Select <span class="menu">MOE | Compute | Simulations | Dynamics
+    Player</span>, navigate to the trajectory output folder, then
+    select a file which shares the same <b>Root Name</b> as the entire
+    trajectory. The file list is already filtered by all supported file
+    types.</li>
+
+  </ol>
+
+<p>The Dynamics player will automatically read the trajectory reference
+file into the MOE system.  The reference specifies the starting
+coordinates and rendering parameters of the trajectory data.  If the
+current system is not empty and is not compatible with the trajectory, a
+confirmation dialog will open for clearing the current system.
+<b>Note:</b> You may wish to first save the current system before
+clearing it to play back the MD trajectory.</p>
+
+<p>The trajectory player is attached by default to the top of the MOE
+Window:</p>
+
+<p class="center"><img src="md/mdplayer_attached.png"
+alt="Dynamics Player attached to MOE Window" /></p>
+
+<table class="noborder">
+  <tr>
+    <td><img src="md/icon_jump-start.png" alt= "Jump to Start Icon"
+      class="icon" />
+    </td>
+    <td>
+      Jump to the first frame of the trajectory.
+    </td>
+  </tr>
+  <tr>
+    <td><img src="md/icon_move-backward.png" alt= "Move Backward Icon"
+      class="icon" />
+    </td>
+    <td>
+      Step to the previous frame. 
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="md/icon_play.png" alt= "Play Icon" class="icon" />
+      <img src="md/icon_pause.png" alt= "Pause Icon" class="icon" />
+    </td>
+    <td>
+      Start or stop automatic trajectory playback. In automatic playback
+      mode, the player will
+      automatically step to the next/previous frame.
+    </td>
+  </tr>
+  <tr>
+    <td><img src="md/icon_jump-end.png" alt= "Jump to End Icon"
+      class="icon" />
+    </td>
+    <td>
+      Jump to the last frame of the trajectory.
+    </td>
+  </tr>
+  <tr>
+    <td><img src="md/icon_move-forward.png" alt= "Move Forward Icon"
+      class="icon" />
+    </td>
+    <td>
+      Step to the next frame. 
+    </td>
+  </tr>
+  <tr>
+    <td><b>Time&nbsp;(ps)</b></td>
+    <td>
+      Indicates the current playhead position and the time (in ps)
+      elapsed until this point. The textfield can be used to jump to a specific
+      point in time. <b>Note:</b> Press Enter to confirm your choice.
+    </td>
+  </tr>
+  <tr>
+    <td><b>Step</b></td>
+    <td>
+      The default step size is the smallest step in the trajectory. It can be
+      changed to any multiple of this (in ps). Either use the arrow
+      buttons or type in the the exact step time in the textfield. <b>Note:</b>
+      Press Enter to confirm your choice.
+    </td>
+  </tr>
+  <tr>
+    <td><b>Speed</b></td>
+    <td>
+      Allows for the control of the playback speed. Use the slider to increase
+      or decrease the speed.
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="md/icon_save.png" alt= "Save Icon" class="icon" />
+    </td>
+    <td>
+      Allows the import of the trajectory to a MOE Database. For full details,
+      see <a href="md.htm#Simulation_Import">Trajectory Import</a>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="../images/gear_icon.png" alt= "Gear Icon" class="icon" />
+    </td>
+    <td>
+      Configuration for the current trajectory playback. 
+	<table class="noborder width-full">
+	  <tr>
+	    <td><b>Reference</b></td>
+	    <td>
+	      <img src="md/popup_config.png" alt="Configuration Popup"
+	      class="floatright" />
+
+	      The default reference is the MOE system before the
+	      simulation was started. The reference can be
+	      replaced with any MOE system written from a
+	      frame of the trajectory.  Once OK is pressed, the
+	      current atom coordinates and rendering will be
+	      replaced with the ones from the reference file. This
+	      is useful, for example, for superposing onto a
+	      different frame when importing to a MOE database.
+
+	    </td>
+	  </tr>
+	  <tr>
+	    <td><b>Superpose</b></td>
+	    <td>
+
+	      When enabled, each frame of the trajectory will be
+	      superposed onto the superposition set, as chosen from the
+	      menu.  The menu includes any named sets currently defined
+	      on the reference.  Note that a new set can be added using
+	      <span class="menu">MOE | Select | <a
+	      href="../moe/gui/mainwin.htm#SetCreate">Set
+	      Create</a></span>.   The name of the newly created set
+	      will automatically be added to the Superposition menu,
+	      where it can be selected.
+
+	    </td>
+	  </tr>
+	  <tr>
+	    <td><b>Playback</b></th>
+	    <td>
+
+	      The trajectory can be played back in a several
+	      auto-play modes: <ul>
+
+	      <li><b>Loop</b>.  Loop continuously forward or back
+	      unidirectionally through the stack of trajectory
+	      frames.</li>
+
+	      <li><b>Reversing</b>.  Step through the
+	      frames sequentially, reversing direction whenever the
+	      first or last frame is reached.
+	      </li>
+
+	      <li><b>Once</b>.  Step forward or backward through the
+	      frames sequentially, stopping when the first or last
+	      frame is reached.
+	      </li>
+	      </ul>
+
+	    </td>
+	  </tr>
+	  <tr>
+	    <td><b>Range</b></td>
+	    <td>
+
+	      Upper and lower bound of the trajectory playback.
+	      Also specifies the range (in ps) of frames to import
+	      to a MOE database on a <a
+	      href="#Simulation_Import">Trajectory Import</a>
+	      operation.
+
+	    </td>
+	  </tr>
+	  <tr>
+	    <td><b>Direction</b></td>
+	    <td>
+	      Choose direction of automatic playback.
+	    </td>
+	  </tr>
+	</table>
+    </td>
+  </tr>
+  <tr>
+    <td>
+     <img src="../images/detach_icon.png" alt= "Detach Application Icon"
+     class="icon" />
+    </td>
+    <td>
+      <table class="noborder" align="left">
+        <tr>
+          <td>
+            Detach the Dynamics Player into a standalone panel.
+            MOE will remember the attached state when the Dynamics
+            Player is next launched.
+          </td>
+          <td>
+            <img src="md/mdplayer_detached.png"
+            alt="Detached Application Windows" />
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td><img src="../images/cancel_icon.png" alt= "Close Icon"
+      class="icon" />
+    </td>
+    <td>
+      Close the Dynamics Player.
+    </td>
+  </tr>
+</table>
+
+
+<a id="Simulation_Import">
+<h2>Trajectory Import</h2>
+</a>
+
+<p>A dynamics trajectory can be imported to a MOE database by pressing
+the Trajectory Import button
+<img src="md/icon_save.png" alt= "Save Icon" class="icon" /> in the
+Dynamics Player.  Multiple imports can be started
+simultaneously.  Once the import has been started, the Dynamics Player can
+be closed without interrupting the import.</p>
+
+<table class="noborder">
+  <tr>
+    <td>
+      <table class="noborder width-full">
+        <tr>
+          <td><b>Database</b></td>
+          <td>
+
+	    Set the name of the database into which to import the
+	    trajectory. If <b>Open Database Viewer</b> is enabled, the
+	    output database will be opened automatically into a Database
+	    Viewer.
+
+          </td>
+        </tr>
+        <tr>
+          <td><b>Save</b></th>
+          <td>
+
+	    To import only a subset of atoms from each frame of the
+	    trajectory, select from the drop-down list the set of
+	    interest.  A new set can be created using <span
+	    class="menu">MOE | Select | <a
+	    href="../moe/gui/mainwin.htm#SetCreate">Set
+	    Create</a></span>; the name of the newly created set
+	    will be automatically added to the menu.
+
+          </td>
+        </tr>
+        <tr>
+          <td><b>Step</b></td>
+          <td>
+
+	    Set the step size (in ps), which allows skipping
+	    frames during the import to the MOE Database.
+	    Step should be a multiple of the smallest step in the
+	    trajectory.
+
+          </td>
+        </tr>
+        <tr>
+
+          <td><b>Range</b></td>
+          <td>
+
+	    Set the range (in ps) of the frames to import to the MOE
+	    database.
+
+          </td>
+
+        </tr>
+        <tr>
+          <td><b>Superpose</b></td>
+          <td>
+
+            Specify the atoms of the reference to which each frame will
+            be superposed before writing to the MOE database.
+	    The menu includes any named sets currently defined on the
+	    reference.  A new set can be created using <span
+	    class="menu">MOE | Select | <a
+	    href="../moe/gui/mainwin.htm#SetCreate">Set
+	    Create</a></span>; the name of the newly created set
+	    will be automatically added to the menu.
+
+          </td>
+        </tr>
+      </table>
+    </td>
+    <td><img src="md/popup_save.png" alt="Save Popup" /></td>
+  </tr>
+</table>
+
+<p>The imported trajectory data consist of the sampled molecular
+configurations and various instantaneous calculated values from the
+simulation.  The following are possible fields that can be written
+to the database, depending on the algorithm used:</p>
+
+  <table class="titlebar">
+    <tr>
+      <th width="10%">field</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td valign="top"><tt>mol</tt></td>
+      <td valign="top">The sampled molecular system topology and
+      configuration.</td>
+    </tr>
+    <tr>
+      <td valign="top"><tt>stage</tt></td>
+      <td valign="top">The name of the simulation phase specified in the
+      protocol.</td>
+    </tr>
+    <tr>
+      <td valign="top"><tt>t</tt></td>
+      <td valign="top">The time <i>t</i> of the sample (in picoseconds).</td>
+    </tr>
+    <tr>
+      <td valign="top"><tt>H</tt></td>
+      <td valign="top">The value of the full (extended system) Hamiltonian at
+      time <i>t</i>. In a properly functioning simulation, this quantity is
+      conserved at all times (although fluctuations will be present). Drift in
+      <i>H</i> is evidence of too large a time step.
+      This field is not generated by AMBER.</td>
+    </tr>
+    <tr>
+      <td valign="top"><tt>U</tt></td>
+      <td valign="top">The potential energy <i>U</i>(<b>r</b>) of the atomic
+      system at time <i>t</i> in kcal/mol.</td>
+    </tr>
+    <tr>
+      <td valign="top"><tt>K</tt></td>
+      <td valign="top">The kinetic energy <i>K</i>(<b>v</b>) of the atoms at
+      time <i>t</i> in kcal/mol.</td>
+    </tr>
+    <tr>
+      <td valign="top"><tt>T</tt></td>
+      <td valign="top">The instantaneous temperature, <i>T</i> in Kelvin, of
+      the atoms at time <i>t</i>. In NVT and NPT simulations, this value should
+      fluctuate about <b>T</b>, the sum-over-states temperature.</td>
+    </tr>
+    <tr>
+      <td valign="top"><tt>P</tt></td>
+      <td valign="top">The instantaneous pressure, <i>P</i> in kPa, of the
+      system at time <i>t</i>. In NPT and NPH simulations, this value should
+      fluctuate about <b>P</b>, the sum-over-states pressure.</td>
+    </tr>
+    <tr>
+      <td valign="top"><tt>V</tt></td>
+      <td valign="top">The instantaneous volume, <i>V</i> in cubic angstroms,
+      of the system at time <i>t</i>.</td>
+    </tr>
+    <tr>
+      <td valign="top"><tt>Ua</tt></td>
+      <td valign="top">The potential energy, in kcal/mol, of the atoms not in
+      the named set <tt>MD_INTERACTION</tt> at time <i>t</i>. This field is not
+      generated by either NAMD or AMBER.</td>
+    </tr>
+    <tr>
+      <td valign="top"><tt>Ub</tt></td>
+      <td valign="top">The potential energy, in kcal/mol, of the atoms in the
+      named set <tt>MD_INTERACTION</tt> at time <i>t</i>. This field is not
+      generated by either NAMD or AMBER.</td>
+    </tr>
+    <tr>
+      <td valign="top"><tt>Uab</tt></td>
+      <td valign="top">The interaction potential energy, in kcal/mol, between
+      the atoms in the named set <tt>MD_INTERACTION</tt> and those not in the
+      set, at time <i>t</i>. If the set contains all the atoms of a ligand,
+      then the <tt>Uab</tt> field may be used to calculate a sum-over-states
+      binding energy between the ligand and the other atoms in the system (a
+      receptor, for example). This field is not generated by either
+      NAMD or AMBER.</td>
+    </tr>
+    <tr>
+      <td valign="top"><tt>pos</tt></td>
+      <td valign="top">The position vector <b>r</b> at time <i>t</i>. This
+      field is empty unless explicitly enabled via the Save Position option or
+      imported from trajectory files. Occasionally, this field may contain data
+      used for restarting a simulation.
+      This field is not generated by AMBER.</td>
+    </tr>
+    <tr>
+      <td valign="top"><tt>vel</tt></td>
+      <td valign="top">The velocity vector <b>v</b> at time <i>t</i>. This
+      field is empty unless explicitly enabled via the Save Velocity option or
+      imported from trajectory files. Occasionally, this field may contain data
+      useful for restarting a simulation.
+      This field is not generated by AMBER.</td>
+    </tr>
+    <tr>
+      <td valign="top"><tt>xpt</tt></td>
+      <td valign="top">A vector of coordinates and momenta (for internal use)
+      of the extended Hamiltonian. This field is not generated by either
+      NAMD or AMBER.</td>
+    </tr>
+    <tr>
+      <td valign="top"><tt>box</tt></td>
+      <td valign="top">The dimensions of the periodic box (if enabled),
+      otherwise zeros.</td>
+    </tr>
+  </table>
+
+<p>MOE database applications can be used to further analyze the
+simulation.  For example, in the Database Viewer, the <a
+href="../mdb/db.htm#PlottingDatabaseValues"><img src="md/plot.png" alt=
+"Plot" class="icon" /></a> icon in the footer can be used to display a
+plot of instantaneous state quantities, as a function of time.
+Alternatively, <span class= "menu">Compute | Analysis | <a
+href="../mdb/dbplot.htm">Correlation Plot</a></span> can be used to
+display correlation plots between the quantities. The <a href=
+"../mdb/dbbrowse.htm#Animating_Molecular_Dynamics">Database Browser</a>
+can be used to visualize the trajectory, and the <a href=
+"../mdb/dbcalc.htm">Database Calculator</a> can be used to calculate
+averages.  <a href="../quasar/descr.htm">Molecular descriptors</a> can
+be used to to calculate properties of interest for each frame of the
+trajectory.  Similarly, when proteins are present in the simulation, <a
+href="../proteins/ensprop.htm#PropCalc">Protein properties</a> can be
+calculated.
+</p>
+
+
+<a id="Examples">
+<h1>Examples</h1>
+</a>
+
+<a id="Example_Prepare">
+<h2>Example: 1FAX Data Preparation</h2>
+</a>
+
+<div class="example">
+
+  <p>In this example, 1FAX, the coagulation Factor Xa inhibitor complex,
+  is prepared for an MD Simulation using NAMD as the algorithm.
+
+  <ol>
+    <li>
+      <i>Load the structure into MOE.</i>
+
+      <p class="blockquote"><span class="menu">MOE | File | Open |
+      <tt>$MOE/sample/mol/1fax.pdb.gz</tt></span></p>
+
+      In the Load PDB File panel that opens, press <b>OK</b>. The molecular
+      data comprises the crystallized protein-ligand complex. 
+    </li>
+
+    <li>
+      <i>Correct structural issues.</i><br />
+      <p class="blockquote"><span class="menu">RHS | QuickPrep</span></p>
+
+      The <a href="ligx.htm#QuickPrepBio">QuickPrep</a> application 
+      allows for an automatic preparation of the protein-ligand complex. In the
+      QuickPrep panel, press <b>OK</b> to start the workflow.
+      
+      <p>An all-atomistic model is vital to the success of an MD simulation. See
+      <a href="structprep.htm">Preparing Protein and Protein Complex
+      Data</a> for more details on preparing PDB files and correcting problems
+      (e.g. with ligand topology).</p>
+    </li>
+
+    <li>
+      <i>Verify remaining structural issues.</i>
+
+      <p class="blockquote">Open <span class="menu">MOE | Compute |
+      Prepare | Structure Preparation</span> to see the issues that
+      remain in the 1FAX structure after QuickPrep preparation.</p>
+
+      <p class="center"><img src="md/panel_structprep.png" alt=
+      "Structure Preparation Panel" /></p>
+
+      <p>The N and C termini have a long stretch of missing residues
+      which could not be repaired automatically with high confidence.
+      If the termini are known to be important, they can be manually
+      modeled using <a href="../proteins/promodel.htm">Homology
+      Model</a>. If a long loop needs to be modeled, you can use the <a
+      href="proloop.htm"> Loop/Linker Modeler</a>.</p>
+
+      <p>Press <b>Correct</b> to cap the termini, then press <b>Close</b> to
+      close the application.</p>
+
+    </li>
+
+    <li>
+      <i>Save the prepared data for future MD simulations.</i>
+
+      <p class="blockquote"><span class="menu">MOE | File | Save |
+      <tt>1FAX_md-simulation.moe</tt></span></p>
+      
+      The MOE file format saves graphics and viewing information in addition to
+      molecular data.
+    </li>
+
+  </ol>
+  </p>
+</div>
+
+<a id="Example_MDSetup">
+<h2>Example: 1FAX MD Simulation</h2>
+</a>
+
+<div class="example">
+  <p>This example assumes that the system prepared above
+  (<tt>1FAX_md-simulation.moe</tt>) is currently loaded in MOE.
+  The NAMD algorithm will be used in this example.</p>
+
+  <ol>
+    <li>
+      <i>Open the Dynamics Simulation panel.</i>
+      <p class="blockquote"><span class="menu">MOE | Compute | Simulations |
+      Dynamics</span></p>
+    </li>
+    <li>
+      <i>Select the Simulation Algorithm.</i>
+
+      <p>From left side buttons, press <b>NAMD</b>. To configure the
+      NAMD executable, press <img src="../images/gear_icon.png"
+      alt="Configure Gear" class="icon" />. (For detailed information on the
+      setup, see <a href="#NAMD">Running a Simulation with NAMD</a>.)</p>
+    </li>
+
+    <li>
+
+      <i>Choose Root Name and location for simulation data:</i> <p>Press
+      the browse button <img src="../images/browse_icon.png" alt="Browse
+      Icon" class="icon" /> to open the file browser. Right-click in the
+      file browser panel list area, and from the popup select <b>New
+      Folder</b>. Enter a new folder name in the <b>Create Folder</b>
+      popup, e.g. <tt>1fax_md</tt>, then press OK.  A new folder will be
+      created.  Double-click on the name of the new folder, then enter
+      in the file browser textfield root name prefix <tt>1fax</tt>. Press
+      <b>OK</b>.  The <b>Root Name</b> field is loaded with the full
+      path to the directory <tt>1fax_md</tt>, with the name prefix
+      <tt>1fax</tt> appended.</p>
+
+    </li>
+    <li>
+      <i>Forcefield setup.</i>
+
+      <p>Press the <b>Forcefield</b> configuration button <img
+      src="../images/gear_icon.png" alt="Gear Icon" class="icon" /> to
+      open the <a href="../moe/pot.htm#Forcefield">Potential Setup</a>
+      panel.  In addition to specifying which forcefield to use, the
+      panel provides controls for setting the electrostatic and van der
+      Waals cut-offs. See <a href="../moe/pot.htm">Potential Energy
+      Selection and Configuration</a> for more details.</p>
+      
+      <p>Press <b>OK</b> to dismiss the panel.</p>
+
+    </li>
+
+    <li>
+      <div class="floatright"><img src="md/solvate_system.png" alt= "Solvation
+      of 1FAX" /></div>
+      <i>Solvation setup.</i>
+
+      <p>For an explicit solvent simulation, press the Solvent
+      configuration button
+      <img src="../images/gear_icon.png" alt="Gear Icon" class="icon" />
+      to open the <a href="solvate.htm#Run">Solvate</a> panel.
+      </p>
+
+      <p>Ensure <b>Periodic</b> is selected as the <b>Mode</b>. Then set
+      the <b>Shape</b> to <b>Box</b> to generate a box-shaped periodic
+      boundary condition. Click on the small triangle in the <b>Salt</b>
+      textfield to open the shortcut, and select <b>NaCl</b>.</p>
+
+      <p>Enable the <b>Center</b> and <b>Axis Align</b> checkboxes,
+      then press <b>OK</b>.</p>
+
+      <p class="center"><img src="md/panel_solvate.png" alt=
+      "Solvate Application" /></p>
+
+      <p>See <a href="solvate.htm">Solvate</a> for more details on the
+      solvate application.</p>
+
+    </li>
+    <li>
+      <i>Constraint release.</i>
+
+      <p>The QuickPrep application applied tethers and fixed atoms in
+      the system. The Dynamics panel reports 3940 <b>Fixed</b> and 2273
+      <b>Tethered</b> atoms. Release these constraints by pressing <img
+      src="md/icon_cross.png" alt="Cross Icon" class="icon" /> next to
+      both Fixed Atoms and Tethered Atoms.</p>
+
+    </li>
+    <li>
+      <i>Simulation Protocol.</i>
+
+      <p>The Dynamics panel is pre-populated with either the default
+      protocol or the protocol of the last Dynamics simulation run. To
+      delete all steps, right-click on the listbox and choose <b>Select
+      All</b>. Then press the Delete button <img
+      src="../images/cancel_icon.png" alt="Delete Icon" class="icon" />.
+      </p>
+
+      <p>Specify a new protocol, comprising 5 stages, as follows:</p>
+
+      <div class="floatright"><img src="md/popup_addmin.png" alt= "Add
+      minimization" /></div>
+
+      <ol class="alphaNum">
+
+      <li>Press <img src="md/icon_plus.png" alt="Add Segment Icon"
+      class="icon" />. Select <b>Minimization</b>. Set <b>Name</b> to
+      <tt>min</tt> and <b>Length</b> to <tt>10</tt> ps.  Press
+      <b>OK</b>.  </li>
+
+      <li>Press <img src="md/icon_plus.png" alt="Add Segment Icon"
+      class="icon" />. Set the <b>Name</b> to <tt>heating</tt>,
+      <b>Length</b> to <tt>100</tt> ps, and <b>Temperature</b> to a
+      gradient of <tt>10</tt> to <tt>300</tt>&nbsp;K.  Press
+      <b>OK</b>.</li>
+
+      <li>Press <img src="md/icon_plus.png" alt="Add Segment Icon"
+      class="icon" />. Set <b>Name</b> to <tt>nvt</tt>,
+      <b>Length</b> to <tt>100</tt> ps, and <b>Temperature</b> to
+      <tt>300</tt>&nbsp;K.  Press <b>OK</b>.</li>
+
+      <li>Press <img src="md/icon_plus.png" alt="Add Segment Icon"
+      class="icon" />. Set <b>Name</b> to <tt>npt</tt>, <b>Length</b> to
+      <tt>200</tt> ps, <b>Temperature</b> to <tt>300</tt>&nbsp;K, and
+      <b>Pressure</b> to <tt>100</tt>&nbsp;kPa.  Press
+      <b>OK</b>.</li>
+
+      <li>Press <img src="md/icon_plus.png" alt="Add Segment Icon"
+      class="icon" />. Set <b>Name</b> to <tt>production</tt>,
+      <b>Length</b> to <tt>10000</tt> ps, <b>Temperature</b> to
+      <tt>300</tt>&nbsp;K, and <b>Pressure</b> to <tt>100</tt>&nbsp;kPa.
+      Press <b>OK</b>.</li>
+
+      </ol>
+
+      <p>The panel should look like this:</p>
+
+      <p class="center"><img src="md/md_panel_example.png" alt=
+      "Structure Preparation Panel" /></p>
+    </li>
+    <li>
+      <i>Start the simulation.</i>
+
+      <p>Press <b>OK</b> to start the simulation on the current
+      computer.  Alternatively, press <b>Batch</b> to generate the input
+      files that can subsequently be transferred to a remote computer,
+      cluster or cloud instance.</p>
+
+      <p>To start the simulation from a shell terminal, use one of the
+      following commands:</p>
+
+      <pre>
+      unix&gt; sh root.sh
+      mswin&gt; root.bat
+      </pre>
+    </li>
+  </ol>
+</div>
+
+
+<a id="References">
+<h1>References</h1>
+</a>
+
+  <table class="ref">
+    <tr>
+      <td>[Allen&nbsp;1987]</td>
+      <td>Allen, M.P., Tildesley, D.J.; <i>Computer Simulation of
+      Liquids</i> (<b>1987</b>) Oxford University Press.</td>
+    </tr>
+    <tr>
+      <td>[Berendsen&nbsp;1984]</td>
+      <td>Berendsen, H.J.C., Postma, J.P.M., Van Gunsteren, W.F., Di Nola, A.,
+      Haak, J.R.; Molecular Dynamics with Coupling to an External Bath; <i>J.
+      Chem. Phys. 81</i> (<b>1984</b>) 3684&ndash;3690.</td>
+    </tr>
+    <tr>
+      <td>[Bond&nbsp;1999]</td>
+      <td>Bond, S.D., Benedict, J.L., Laird, B.B.; The
+      Nos&eacute;-Poincar&eacute; Method for Constant Temperature Molecular
+      Dynamics; <i>J. Comp. Phys. 151</i> (<b>1999</b>) 114&ndash;134.</td>
+    </tr>
+    <tr>
+      <td>[Hess&nbsp;1997]</td>
+      <td>Hess, B., Bekker, H., Berendsen, H.J.C., Fraaije,
+      J.G.E.M.; LINCS: A Linear Constraint Solver for Molecular Simulations;
+      <i>J. Comp. Chem. 18</i> (<b>1997</b>) 1463&ndash;1472.</td>
+    </tr>
+    <tr>
+      <td>[Hoover&nbsp;1985]</td>
+      <td>Hoover, W.G.; Canonical Dynamics: Equilibrium
+      Phase-Space Distributions; <i>Physica 188A</i> (<b>1985</b>)
+      111&ndash;122.</td>
+    </tr>
+    <tr>
+      <td>[NAMD&nbsp;2009]</td>
+      <td>
+        <i>NAMD User's Guide Version 2.7b1</i> (<b>2009</b>) University of
+        Illinois; <a href=
+        "http://www.ks.uiuc.edu/Research/namd">www.ks.uiuc.edu/Research/namd</a>.
+      </td>
+    </tr>
+    <tr>
+      <td>[Phillips&nbsp;2005]</td>
+      <td>Phillips, J.C., Braun, R., Wang, W., Gumbart, J.,
+      Tajkhorshid, E.; Scalable molecular dynamics with NAMD; <i>J.&nbsp;Comp.
+      Chem. 26</i> (<b>2005</b>) 1781&ndash;1802.</td>
+    </tr>
+    <tr>
+      <td>[Ryckaert&nbsp;1977]</td>
+      <td>Ryckaert, J.P., Ciccotti, G., Berendsen, H.J.C.;
+      Numerical Integration of the Cartesian Equations of Motion of a System
+      with Constraints: Molecular Dynamics of n-Alkanes; <i>J. Comput. Phys.
+      23</i> (<b>1977</b>) 327&ndash;341.</td>
+    </tr>
+    <tr>
+      <td>[Salomon-Ferrer&nbsp;2013]</td>
+      <td>Salomon-Ferrer, R., Case, D.A., Walker, R.C.;
+      An overview of the Amber biomolecular simulation package;
+      <i>WIREs Comput. Mol. Sci. 3</i> (<b>2013</b>) 198&ndash;210.</td>
+    </tr>
+    <tr>
+      <td>[Sturgeon&nbsp;2002]</td>
+      <td>Sturgeon, J.B., Laird, B.B.; Symplectic Algorithm for
+      Constant Pressure Molecular Dynamics Using a Nos&eacute;-Poincar&eacute;
+      Thermostat; University of Kansas Technical Paper (<b>2002</b>).</td>
+    </tr>
+    <tr>
+      <td>[Sun&nbsp;1993]</td>
+      <td>Sun, G.; Symplectic Partitioned Runge-Kutta Methods;
+      <i>J. Comput. Math. 11</i> (<b>1993</b>) 365&ndash;372.</td>
+    </tr>
+    <tr>
+      <td>[Verlet&nbsp;1967]</td>
+      <td>Verlet, L.; Computer 'Experiments' on Classical Fluids. I.
+      Thermodynamical Properties of Lennard-Jones Molecules; <i>Phys. Rev.
+      159</i> (<b>1967</b>) 98&ndash;103.</td>
+    </tr>
+  </table>
+
+<a id="SVL">
+<h1>SVL Commands</h1>
+</a>
+
+<p><a href="../moe/fcnref/mdfcn.htm">Molecular Dynamics Functions</a><br />
+  <a class="svl" href=
+  "../moe/fcnref/collect.htm#oSetCollection">oSetCollection</a></p>
+
+<a id="SeeAlso">
+<h1>See Also</h1>
+</a>
+
+<p>
+  <a href="ti.htm">Free Energy Calculations with
+	Thermodynamic Integration</a><br />
+
+  <a href="../mdb/dbbrowse.htm#Animating_Molecular_Dynamics">Browsing
+  Molecules and Dynamics Output</a><br />
+
+  <a href="../mdb/db.htm">Molecular Databases</a><br />
+  <a href="solvate.htm">Solvate</a><br />
+  <a href="../moe/pot.htm">Potential Energy Selection and Configuration</a>
+</p>
+
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../images/ccgicon.png" /> <a href="../index.htm"></a> <a href=
+    "../legal.htm"></a> &copy;<span class="versionyear"></span> <a href="http://www.chemcomp.com"></a>. All
+    rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

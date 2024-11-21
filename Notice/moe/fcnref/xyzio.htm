@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: fwrite_XYZ" />
+  <meta name="keywords" content="functions: fread_XYZ" />
+  <title>XYZ File Format I/O Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    XYZ File Format I/O Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    keys = <a class="fcnlink" href="#fread_XYZ">fread_XYZ</a> ['filename', opt]
+    opt = [
+        def_molname: 'name_tok',
+        center: flag
+    ]
+
+    <a class="fcnlink" href=
+"#fwrite_XYZ">fwrite_XYZ</a> ['filename', obj_keys, opt]
+    opt = [
+        center: flag,
+        split: flag,
+        fileSplit: flag,
+        base: '/path/file_prefix',
+        multipleFnames: ['filename1', 'filename2', ...]
+    ]
+</pre>
+
+<h1>Description</h1>
+
+<p>These functions provide means for reading and writing XYZ files.</p>
+<a id="fread_XYZ"></a>
+<hr noshade="noshade" />
+
+<pre>
+keys = <span class="fcndef">fread_XYZ</span> ['filename', opt]
+</pre>
+
+<p>Reads a XYZ format file and returns chain keys.</p>
+<p><tt>opt</tt> provides the following options:</p>
+  <dl>
+    <dt><tt>def_molname: 'name_tok'</tt></dt>
+    <dd>
+        This option allows for specifying a default molecule name that will
+        use used if the XYZ comment line is empty.
+    </dd>
+    <dt><tt>center: flag</tt></dt>
+    <dd>
+        This flag controls the centering of molecules when reading an XYZ file:
+        <ul>
+            <li>If <tt>flag</tt> is 0, then the molecules are not centered.</li>
+            <li>If <tt>flag</tt> is 1, then the molecules are centered. This is
+                the default.
+            </li>
+          </ul>
+    </dd>
+  </dl>
+
+<a id="fwrite_XYZ"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">fwrite_XYZ</span> ['filename', obj_keys, opt]
+</pre>
+
+<p>Saves the specified molecular objects to a XYZ format file.
+  <tt>obj_keys</tt> specifies the keys of the molecular objects loaded in the
+  MOE system that are to be saved.</p>
+
+<p><tt>opt</tt> provides the following options:</p>
+  <dl>
+    <dt><tt>center: flag</tt></dt>
+    <dd>
+        This flag controls the centering of molecules when writing an XYZ file.
+        If true, then the molecules are recentered before writing to the file.
+        (default 1)
+    </dd>
+    <dt><tt>split: flag</tt></dt>
+    <dd>
+        This flag controls the separation of molecules when writing an XYZ file.
+        If true, then each molecule will be written in a separate entry.
+    </dd>
+    <dt><tt>fileSplit: flag</tt></dt>
+    <dd>
+        This flag controls the separation of entries into different XYZ files.
+        If true, then molecules will be written individually into separate
+        files, with their filenames either taken from <tt>multipleFnames</tt>
+        or generated from <tt>base</tt> and an incrementing index. Otherwise
+        all the molecule entries will be written to a single XYZ file.
+    </dd>
+    <dt><tt>base: '/path/file_prefix'</tt></dt>
+    <dd>
+        This option allows for specifying a filename prefix for writing to
+        multiple files when <tt>multipleFnames</tt> is not specified. If neither
+        is specified, <tt>filename</tt> is used. An incrementing index is used
+        as a suffix. Homonymous existing files will be overwritten.
+    </dd>
+    <dt><tt>multipleFnames: ['filename1', 'filename2', ...]</tt></dt>
+    <dd>
+        This option allows for specifying filenames for writing to
+        multiple files. If not specified, <tt>base</tt> is used. Homonymous
+        existing files will be overwritten.
+    </dd>
+  </dl>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

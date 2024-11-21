@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="functions: json_Read, json_Write" />
+  <title>JSON Conversion Functions</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    JSON Conversion Functions
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    val = <a class="fcnlink" href="#json_Read">json_Read</a> [json, opt]
+    val = <a class="fcnlink" href="#json_Write">json_Write</a> [data,opt]
+</pre>
+<a id="json_Read"></a>
+<h1>Description</h1>
+
+<p><tt>json_Read</tt> converts a char vector containing a valid JSON string
+  to an SVL data structure:</p>
+  <ul>
+    <li>number to number</li>
+    <li>string to token</li>
+    <li>array to vector</li>
+    <li>object to tagged vector</li>
+    <li><tt>true</tt> to 1</li>
+    <li><tt>false</tt> to 0</li>
+    <li><tt>null</tt> to <tt>[]</tt></li>
+  </ul>
+
+<p>The function accepts an ASCII/UTF-8 encoded JSON string and a tagged
+  vector with options. This last parameter is optional (reserved for future
+  functionalities).</p>
+
+<p>The function returns a vector of the form <tt>[data, error]</tt>. If
+  <tt>error</tt> is the empty token, <tt>data</tt> contains an SVL
+  representation of the JSON string passed to the function. If <tt>error</tt>
+  is <tt>'error'</tt>, <tt>data</tt> contains a token with the error
+  message.</p>
+
+<p>NOTE: This function follows the ECMA-404 standard, with the following
+  exceptions:</p>
+  <ul>
+    <li>the input string is treated as an ASCII (or UTF-8) string. Strings
+    encoded in UTF-16 or UTF-32 are not correctly converted;</li>
+    <li>unicode code points represented as <tt>\uXXXX</tt> escapes are written
+    to the output data as-is.</li>
+  </ul>
+
+<p>Example:</p>
+
+<pre>
+    svl&gt; json = string '{&quot;some&quot;:&quot;example&quot;, &quot;other&quot;:[4,5,6]}'
+    svl&gt; <span class="fcndef">json_Read</span> [json, []]
+    [[some:'example', other:[4,5,6]], '']
+</pre>
+<a id="json_Write"></a>
+<hr noshade="noshade" />
+
+<p><tt>json_Write</tt> converts an SVL data structure to an ASCII-encoded
+  JSON string. The function accepts an SVL variable and a tagged vector with
+  options. This last parameter is optional and reserved for future
+  functionalities.</p>
+
+<p>The function returns a vector of the form <tt>[json_str, error]</tt>. If
+  <tt>error</tt> is the empty token, then <tt>json_str</tt> contains the
+  conversion of the passed SVL variable to JSON. If <tt>error</tt> is
+  <tt>'error'</tt>, then <tt>json_str</tt> contains an error
+  message.</p>
+
+<p>NOTE: This function follows the ECMA-404 standard, with the following
+  limitations:</p>
+  <ul>
+    <li>it never generates <tt>true</tt> or <tt>false</tt> literals;</li>
+    <li>any empty (null) vector (including the <tt>&quot;&quot;</tt>
+    representation) is converted to the <tt>null</tt> literal;</li>
+    <li>numbers are converted to a literal decimal form using the
+    <tt>write</tt> function defaults.</li>
+  </ul>
+
+<p>Example:</p>
+
+<pre>
+    svl&gt; t = [some:'example', other:[4,5,6]]
+    svl&gt; json_Write [t, []]
+    [&quot;{\&quot;some\&quot;:\&quot;example\&quot;,\&quot;other\&quot;:[4,5,6]}&quot;, '']
+</pre><!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

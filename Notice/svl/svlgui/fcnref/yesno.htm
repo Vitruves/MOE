@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href=
+  "../../../include/manstyle.css" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content=
+  "functions: Warning, OKCancel, NoYes, YesNo, YesNoCancel, NoYesCancel" />
+  <title>Modal Dialog Functions: Warning...</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../../index.htm"><img src="../../../images/ccglogo.png" /></a>
+    <a href="../../../index.htm"><div class="moeversion"></div></a>
+    Modal Dialog Functions: Warning...
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    <a class="fcnlink" href="#Warning">Warning</a> &#39;message&#39;
+    <a class="fcnlink" href="#OKCancel">OKCancel</a> &#39;message&#39;
+    answer = <a class="fcnlink" href="#NoYes">NoYes</a> &#39;question&#39;
+    answer = <a class="fcnlink" href="#YesNo">YesNo</a> &#39;question&#39;
+    answer = <a class="fcnlink" href=
+"#NoYesCancel">NoYesCancel</a> &#39;question&#39;
+    answer = <a class="fcnlink" href=
+"#YesNoCancel">YesNoCancel</a> &#39;question&#39;
+
+    <a class="fcnlink" href="#Warning">Warning</a> key
+    <a class="fcnlink" href="#OKCancel">OKCancel</a> key
+    answer = <a class="fcnlink" href="#NoYes">NoYes</a> key
+    answer = <a class="fcnlink" href="#YesNo">YesNo</a> key
+    answer = <a class="fcnlink" href="#NoYesCancel">NoYesCancel</a> key
+    answer = <a class="fcnlink" href="#YesNoCancel">YesNoCancel</a> key
+</pre>
+
+<h1>Description</h1>
+
+<p>The following functions raise a prompt window displaying a
+  <tt>message</tt> or <tt>question</tt> token.
+  Alternatively, a graphics <tt>key</tt> can be specified to show a
+  graphical message (see <a href="../../fcnref/grfcn.htm">gr_create</a>
+  for how to create a 2D graphics object).</p> 
+<p>The prompt is <i>application
+  modal</i> which means that the entire application is suspended until the user
+  responds by clicking on one of the prompt command buttons or by pressing
+  <tt>Return</tt> or <tt>Esc</tt> while in one of the application windows.</p>
+
+<p><b>Note:</b> To display a message with a single OK button that terminates
+  the task, use the <a class="svl" href="../../fcnref/exit.htm">exit</a>
+  function.</p>
+<a id="Warning"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">Warning</span> &#39;message&#39;
+<span class="fcndef">Warning</span> key
+</pre>
+
+<p>Provides a single OK button. When OK is pressed, the function returns (the
+  function which invoked it resumes).</p>
+  <img src="yesno/warning.png" alt="Panel With an OK Button" class="center" />
+<a id="OKCancel"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">OKCancel</span> &#39;message&#39;
+<span class="fcndef">OKCancel</span> key
+</pre>
+
+<p>Provides OK and Cancel buttons. Pressing OK or <tt>Return</tt> returns
+  null. Pressing Cancel or <tt>Esc</tt> kills the task which initiated it.</p>
+  <img src="yesno/okcancel.png" alt="Panel With OK, Cancel Buttons" class="center" />
+<a id="NoYes"></a>
+<a id="YesNo"></a>
+<hr noshade="noshade" />
+
+<pre>
+answer = <span class="fcndef">NoYes</span> &#39;question&#39;
+answer = <span class="fcndef">NoYes</span> key
+
+answer = <span class="fcndef">YesNo</span> &#39;question&#39;
+answer = <span class="fcndef">YesNo</span> key
+</pre>
+
+<p><tt>YesNo</tt> provides Yes and No buttons, with Yes as the default.
+  Pressing Yes or <tt>Return</tt> returns 1; pressing No returns 0.</p>
+
+<p><tt>NoYes</tt> is the converse of <tt>YesNo</tt>, where No is now the
+  default button. In this case, pressing No or <tt>Return</tt> returns 0;
+  pressing Yes returns 1.</p>
+
+<p>In either case, pressing <tt>Esc</tt> returns 0 and task is also
+  killed.</p>
+  <img src="yesno/yesno.png" alt="Panel With Yes, No Buttons" class="center" />
+<a id="YesNoCancel"></a>
+<a id="NoYesCancel"></a>
+<hr noshade="noshade" />
+
+<pre>
+answer = <span class="fcndef">YesNoCancel</span> &#39;question&#39;
+answer = <span class="fcndef">YesNoCancel</span> key
+
+answer = <span class="fcndef">NoYesCancel</span> &#39;question&#39;
+answer = <span class="fcndef">NoYesCancel</span> key
+</pre>
+
+<p><tt>YesNoCancel</tt> provides Yes, No, and Cancel buttons, with Yes as the
+  default. Pressing Yes or <tt>Return</tt> returns 1; pressing No returns
+  0.</p>
+
+<p><tt>NoYesCancel</tt> is the complement of <tt>YesNoCancel</tt>, where No
+  is now the default button. In this case, pressing No or <tt>Return</tt>
+  returns 0; pressing Yes returns 1.</p>
+
+<p>In either case, pressing <tt>Esc</tt> or Cancel returns null
+  (<tt>[]</tt>), in which case the task from which the modal question was
+  initiated is also killed.</p>
+  <img src="yesno/yesnocancel.png" alt=
+    "Panel With Yes, No, Cancel Buttons" class="center" />
+
+<h1>See Also</h1>
+
+<p><a href="introwt.htm">Window Toolkit Functions</a><br />
+  <a href="../../../tutorials/wintour.htm">Window Toolkit Tutorial</a><br />
+  <a href="../../fcnref/grfcn.htm">Flat Graphics Object Functions</a></p>
+
+<p><a class="svl" href="beep.htm">Beep</a>
+  <a class="svl" href="../../../moe/fcnref/message.htm">Message</a>
+  <a class="svl" href= "../../../moe/fcnref/quit.htm">Quit</a>
+
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../../images/ccgicon.png" /> <a href="../../../index.htm"></a>
+    <a href="../../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

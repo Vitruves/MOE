@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: sam, sac" />
+  <title>Sorting Functions: sam, sac</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Sorting Functions: sam, sac
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre>
+    [i,m] = <a class="fcnlink" href="#sam">sam</a> v
+    [i,c] = <a class="fcnlink" href="#sac">sac</a> v
+</pre>
+
+<h1>Description</h1>
+<a id="sam"></a>
+<a id="sac"></a>
+
+<p>The function names are acronyms for <i>sort-argument and mask</i> and
+  <i>sort-argument and counts</i>, respectively. These functions return a list
+  of indices of elements in the sorted order (the sort &quot;argument&quot;),
+  <tt>i</tt>, and a mask of unique elements, <tt>m</tt>, or the counts of
+  segments of duplicate elements, <tt>c</tt>, respectively:</p>
+
+<pre>
+    i === x_sort v
+    m === m_uniq sort v
+    c === mtoc m
+</pre>
+
+<p>In other words,</p>
+
+<pre>
+    sort v == get [v,i]
+    uniq sort v == (sort v) | m
+</pre>
+
+<p>For example:</p>
+
+<pre>
+    svl&gt; v = &quot;Bookkeeper&quot;
+    svl&gt; [i,m] = sam v; print i; print m;
+    [1,6,7,9,4,5,2,3,8,10]
+    [1,1,0,0,1,0,1,0,1,1]
+
+    svl&gt; v[i] // sort v
+    &quot;Beeekkoopr&quot;
+
+    svl&gt; v[i|m] // uniq sort v
+    &quot;Bekopr&quot;
+
+    svl&gt; split [v[i], c] // sets of unique elements
+    [ &quot;B&quot;, &quot;eee&quot;, &quot;kk&quot;, &quot;oo&quot;, &quot;p&quot;, &quot;r&quot; ]
+
+    svl&gt; perm [pscan m, i]    // &quot;consecutive&quot; rank of v
+    [1,4,4,3,3,2,2,5,2,6]
+
+    svl&gt; frank v              // &quot;cumulative&quot; rank of v
+    [1,7,7,5,5,2,2,9,2,10]
+</pre>
+
+<h1>See Also</h1>
+
+<p><a href="introstruct.htm">Structural Functions</a></p>
+
+<p><a class="svl" href="sortetc.htm">rank</a> <a class="svl" href=
+  "sortetc.htm">frank</a><br />
+  <a class="svl" href="ctofetc.htm">mtoc</a> <a class="svl" href=
+  "ctofetc.htm">mtof</a><br />
+  <a class="svl" href="permetc.htm">perm</a> <a class="svl" href=
+  "sortetc.htm">sort</a><br />
+  <a class="svl" href="catetc.htm">split</a> <a class="svl" href=
+  "uniqetc.htm">uniq</a>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

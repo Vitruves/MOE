@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html>
+
+
+<!--
+!!    MOE On-Line Manuals
+!!    COPYRIGHT (C) CHEMICAL COMPUTING GROUP ULC.  ALL RIGHTS RESERVED.
+!!-->
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../images/ccgicon.png" />
+  <meta name="keywords" content="panel: Data Plot" />
+  <meta name="keywords" content="panel: Correlation Matrix" />
+  <meta name="keywords" content="panel: Correlation Plot" />
+  <meta name="keywords" content="panel: Database Plot" />
+  <meta name="keywords" content="panel: Database Correlation Plot" />
+  <meta name="keywords" content="panel: Database Correlation Matrix" />
+  <meta name="keywords" content="panel: Field Histogram" />
+  <meta name="keywords" content="panel: Database 3D Plot" />
+  <meta name="keywords" content="panel: Database 3D Plot Preferences" />
+  <title>Plotting Database Values</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../index.htm"><img src="../images/ccglogo.png" /></a>
+    <a href="../index.htm"><div class="moeversion"></div></a>
+    Plotting Database Values
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+  <ul>
+    <li>
+      <a href="#DataPlot">Data Plot</a>
+      <ul>
+        <li>
+          <a href="#SelectingPlot">Selecting Data Points and Entries</a>
+        </li>
+        <li>
+          <a href="#InvertClearPlot">Inverting and Clearing Selections</a>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <a href="#CorrelationPlot">Correlation Plot</a>
+    </li>
+      <ul>
+        <li>
+          <a href="#PlotAttributes">Setting Plot Attributes</a>
+        </li>
+      </ul>
+    <li>
+      <a href="#CorrelationMatrix">Correlation Matrix</a>
+    </li>
+    <li>
+      <a href="#SelectedFieldsHistogram">Field Histogram</a>
+    </li>
+    <li>
+      <a href="#3DPlot">3D Plot</a>
+      <ul>
+        <li>
+          <a href="#Creating3DPlot">Creating a 3D Plot</a>
+        </li>
+        <li>
+          <a href="#ModifyingAxisAttr">Modifying Axis Attributes</a>
+        </li>
+        <li>
+          <a href="#SettingColors">Setting Colors</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+<p>Numeric fields in databases can be viewed and analyzed using a variety of
+visualization utilities available through the
+<nobr><b>DBV | Compute | Analysis</b></nobr> menu, and the
+<a href="db.htm#PlottingDatabaseValues">plot area</a> of the Database Viewer,
+</p>
+
+
+
+<h1><a id="DataPlot">Data Plot</a></h1>
+
+<p>
+The Data Plot provides a graphical view of numerical data.
+Data values are plotted as ordinates (Y axis) against entry numbers
+(X axis). Multiple numerical fields can be plotted and share the plot area.
+To display the plot area in the Database Viewer, press the plot
+icon in the footer of the Database Viewer and select the <b>Data Plot</b>
+menu item or use <nobr><b>DBV | Compute | Analysis | Data Plot</b></nobr>.
+The Data Plot will open by default in the plot area in the lower half of
+the Database Viewer.
+</p>
+
+<p>
+<b>Note:</b>
+The plot area can be resized vertically by dragging
+its upper boundary up and down with the left mouse button.
+</p>
+
+<img src="dbplot/dataplot.png" alt="Empty Plot Area in Database
+Viewer" class="center">
+
+To plot one or more numeric data fields:
+
+<ol>
+<li>Open the <b><nobr>Plot Fields</nobr></b> pull-up menu.
+All the numeric fields in the database appear as toggle buttons in the menu.
+</li>
+<li>Select the numeric
+field to plot. The menu doubles as the plot legend:  when a field is
+chosen for plotting, the indicator is drawn. The data color in the plot
+can be chosen with the color widget.</li>
+</ol>
+
+Or
+
+<ol>
+<li>Select the fields to plot in the Database Viewer and
+choose <b>Plot Selected Fields</b> from the <b>Plot Popup</b> menu.</li>
+</ol>
+
+<p>Once data fields are plotted, the data display can be
+configured in the <a href="#PlotAttributes"><b>Plot Attributes</b></a> panel,
+which is opened with the <img src="dbplot/icon_config.png" class="icon"> button.
+The plot can be detached from the Database Viewer with the <b>Detach</b>
+button. A detached plot window can be reattached to the associated
+Database Viewer with the <b>Attach</b> button in the detached window.
+Alternatively one can press the
+<img src="dbplot/icon_showmdb.png" class="icon"> button in the detached
+plot window to open or raise the associated Database Viewer.</p>
+
+<p><b>Data to Clipboard</b> can be used to send the current
+plot data to the clipboard. The data can then be imported to an external
+application for further evaluation. <b>Export&nbsp;Plot</b> allows to
+<a href="../apps/print.htm#GraphicExportPanel">export the plot</a> in
+a variety of graphics file formats.</p>
+
+<p>The data in the Database Viewer and the plot visualizations are linked.
+If data in the database is changed the plots will update as well.
+If the database is very large and data is changing rapidly, the changes
+are not shown right away in the plot.
+Pressing <img src="dbplot/icon_redraw.png" class="icon"> redraws or
+updates the plot based on the current database values.
+This button turns red if the underlying database has been changed and
+the plot did not update because of the database size.
+</p>
+
+<p>In the plot the entry numbers of data points can be obtained by
+positioning the cursor and holding it motionless on or near that point.
+The entry number, the plotted field values and the associated small
+molecule depiction will be displayed as bubble help next to the cursor.
+If the data point bubblehelp do not appear, check in the
+<a href="../appendix/settings.htm#Miscellaneous">Configuration Options</a>
+if bubble help has been turned off or requires the
+<tt>Ctrl</tt> key.</p>
+
+<img src="dbplot/dbplot.png" alt="Data Plot With Entry BubbleHelp"
+class="center">
+
+<p>The functionality of the mouse inside the plot area depends on the
+location of the cursor.  In general, the left button is used to select
+entries, and the middle button is used to modify the view of the plotted
+data. The data plot can be panned and zoomed. If the number of
+entries is very large not all data points can be viewed at the same time
+and one has to pan the view with the scrollbar or the mouse. The scrollbar
+shows which portion of the data entries are currently visible in the plot.
+
+<p><center> <table class="titlebar">
+  <tr>
+    <th>To:</th>
+    <th>Using the Middle Mouse Button:</th>
+  </tr>
+  <tr>
+    <td>Pan in ruler or in graph area</td>
+    <td>Drag in ruler or in graph area</td>
+  </tr>
+  <tr>
+    <td>Increase or decrease zoom</td>
+    <td><tt>Ctrl</tt> - drag or use mouse wheel in graph</td>
+  </tr>
+  <tr>
+    <td>Zoom (vertically) in ruler</td>
+    <td><tt>Ctrl</tt> - drag or use mouse wheel in ruler</td>
+  </tr>
+  <tr>
+    <td>Zoom (horizontal) in ruler</td>
+    <td><tt>Ctrl</tt> - drag or use mouse wheel in ruler;<br />
+    or drag in the lower 5% of graph area</td>
+  </tr>
+  <tr>
+    <td>Reset zoom</td>
+    <td>Press the <img src="dbplot/icon_fit.png" alt="Fit" class="icon">
+    button to fit the plot to the data value ranges</td>
+  </tr>
+</table></center>
+
+<a id="SelectingPlot">
+</a><h3>Selecting Data Points and Entries</h3>
+
+<p>Data points in the <b>Data Plot</b> (as well as <b>Correlation Plot</b>)
+and entries in the database are synchronized.
+Selecting a data point in the plot results in the corresponding entry being
+selected in the database. The reverse is also true: selecting an entry in
+the database selects its corresponding data point in the plot.
+The plot data points of selected entries are marked by a border circle
+around the point.</p>
+
+<p><center>
+<table class="titlebar noborder">
+<tr>
+<th>To:</th>
+<th>Using the Left Mouse Button:</th>
+</tr>
+
+<tr>
+<td>Select single data point/entry</td>
+<td>Click on or near the data point</td>
+</tr>
+<tr>
+<td>Select multiple data points/entries</td>
+<td>Drag over data points</td>
+</tr>
+<tr>
+<td>Unselect data points/entries</td>
+<td><tt>Ctrl</tt> click/drag over data points</td>
+</tr>
+<tr>
+<td>Scroll Database Viewer to entry</td>
+<td>Double click on data point</td>
+</tr>
+
+<tr>
+<td>Select data points</td>
+<td>Click on or near data points in graph.</td>
+</tr>
+
+<tr>
+<td>Select a set of data points using a selection box</td>
+<td>Drag over entries in graph.</td>
+</tr>
+
+<tr>
+<td>Unselect data points</td>
+<td><tt>Ctrl</tt> click or drag over data points in graph.</td>
+</tr>
+
+<tr>
+<td>Restrict current data point selection</td>
+<td><tt>Shift</tt> drag over data points in graph</td>
+</tr>
+  
+<tr>
+<td>Select a range of values in the ruler</td>
+<td>Drag over numbers in ruler to create a rectangular selection<br />
+region that extends the entire breadth of the plot.</td>
+</tr>
+
+<tr>
+<td>Select all data points
+<td>Use
+<span class="menu">DBV Data Plot | Plot Popup | Select All</span><br />
+or press the <b>Selection:</b> <b>Clear</b> then <b>Invert</b> buttons.
+</tr>
+
+</table></center>
+
+<a id="InvertClearPlot"></a>
+<h3>Inverting and Clearing Selections</h3>
+
+<p>The selection of data points in the plot area (and their corresponding
+entries in the database) can be inverted or cleared using the
+<b>Selection:</b> <b>Clear</b> and <b>Invert</b> buttons. These
+are equivalent to using <span class="menu">DBV | Entry Popup | Invert</span> and 
+<span class="menu">Clear</span>.</p>
+<p>The <b>Data Plot</b> provides the invert and clear functions additionally in its
+plot popup menu.</p>
+
+
+<a id="PlotPopup"></a>
+<h3>Data Plot Popup Menu</h3>
+
+<p>The Data Plot popup is available by clicking the right mouse
+button in the plot area:
+
+<table class="conventions center">
+<tr>
+<th>Plot Popup</th>
+<th>Action</th>
+</tr>
+<tr>
+<td>Settings</td>
+<td>Open <a href="#PlotAttributes"><b>Plot Attributes</b></a>
+popup panel to configure plot, axes, and series display.</td>
+</tr>
+<tr>
+<td>Select All</td>
+<td>Selects all entries in plot and database</td>
+</tr>
+<tr>
+<td>Invert</td>
+<td>Invert entry selection in plot and database</td>
+</tr>
+<tr>
+<td>Clear</td>
+<td>Clear entry selection in plot and database</td>
+</tr>
+<tr>
+<td>Go To Next Selected</td>
+<td>Scroll the database viewer to show the next selected entry</td>
+</tr>
+<tr>
+<td>Toggle Lines</td>
+<td>Toggle the line display between data points on/off.<br />
+Detailed settings of the data series display can be done
+in the <a href="#PlotAttributes"><b>Plot Attributes</b></a> panel.</td>
+</tr>
+<tr>
+<td>Toggle Markers</td>
+<td>Toggle the data point marker display on/off.<br />
+Detailed settings of the data series display can be done
+in the <a href="#PlotAttributes"><b>Plot Attributes</b></a> panel.</td>
+</tr>
+<tr>
+<td>Plot Selected Fields</td>
+<td>Change the display to plot the currently selected fields in the
+Database Viewer</td>
+</tr>
+<tr>
+<td>Clear Fields</td>
+<td>Clear the plot area.<br />
+The selection state of entries in the database is not affected.</td>
+</tr>
+
+</table>
+
+<a id="ShowHideDataPoints"></a>
+<h3>Show/Hide Data Points and Entries</h3>
+
+<p>Entries/data points may be hidden, with no effect on entry numbers.
+Press the <b>Selection&nbsp;Hide</b> button to remove data points from the
+plot. The corresponding entries in the database will also
+be hidden in the Database Viewer. Conversely, any changes to the visibility
+state of entries in the Database Viewer automatically updates the Correlation
+Plot panel. To show all data points in both the plot and database, use the
+<nobr><b>Selection&nbsp;Show&nbsp;All</b></nobr> button.</p>
+
+
+<a id="CorrelationPlot"></a>
+<h1>Correlation Plot</h1>
+
+<p>The Correlation Plot is used to plot two to four selected numeric fields
+  against each other in a scatter plot. If no fields are selected, the
+  first two numerical fields in the database are plotted on the
+  the horizontal (<b>X</b>) and vertical (<b>Y</b>) axes.
+  Note that entries containing incorrect numbers
+  (e.g. Inf or NaN) or a vector of numbers instead of a single number
+  will not appear in the Correlation Plot.</p>
+
+<img src="dbplot/cmplot.png" alt=
+  "Selected Entries in Correlation Plot Panel" class="center" />
+
+<p>Two additional data fields can be selected and visualized in the plot
+by specifying color (<b>C</b>) and size (<b>S</b>) of the data points
+to represent the additional fields data values. The color legend and
+size range is shown on the right of the plot.</p>
+
+<img src="dbplot/corrplot4d.png" alt=
+  "4-dimensional Correlation Plot" class="center" />
+
+<p>In the plot panel, the selection of data points (shown as blue circles
+  around the data points) mirrors the database entry selection.
+  To select values in the plot, click on a data point or drag
+  a selection box around data   points using the left mouse button.
+  The corresponding entries in the database will also be selected in
+  the Database Viewer.
+  The inverse is also true. Selecting entries in the Database Viewer
+  automatically selects them in the  Correlation Plot panel.
+  To deselect entries, use the <b>Selection&nbsp;Clear</b> button in
+  the plot panel or turn off the selection state of a single entry
+  through the Database Viewer.
+  See the <a href="#SelectingPlot">Selection</a>
+  reference in the <b>Data Plot</b> section for additional
+  plot selection options.
+  
+  
+  An additional bigger circle around data points is shown for 
+  the currently-<a href="dbbrowse.htm">Browsed</a> entry of the database.
+</p>
+
+<p>Press the <b>Selection&nbsp;Hide</b> button to remove data points from the
+  plot and reset the view. The corresponding entries in the database will also
+  be hidden in the Database Viewer. Conversely, any changes to the visibility
+  state of entries in the Database Viewer automatically updates the Correlation
+  Plot panel. To show all data points in both the plot and database, use the
+  <nobr><b>Selection&nbsp;Show&nbsp;All</b></nobr> button.
+  By default, and if the plot is not scaled, the plot axis ranges are
+  reset when data points are hidden or shown to ensure an optimal view
+  of all data points. Sometimes it can be advantageous to lock the
+  axis ranges during showing and hiding of entries; this can be achieved with
+  the <img src="dbplot/icon_lockaxis.png" class="icon"> toggle button.
+  Press the <img src="dbplot/icon_redraw.png" class="icon"> button to
+  reset the axes. This button is colored blue when there are data points
+  that fall outside the axis ranges and thus are not being displayed.
+  </p>
+
+<p>The <b>X:</b>, <b>Y:</b>, <b>C:</b>, and <b>S:</b> menus show the
+  currently-visible fields in the database.
+  These are used to select the fields for the X- and Y-axes of the plot
+  as well as the optional coloring and sizing of the data points.</p>
+
+<p>The regression line button
+  <img src="dbplot/icon_linetoggle.png" class="icon">
+  opens a menu to choose the display and type of the regression line
+  and correlation information in the plot. One has the choice between
+  a <b>Linear</b>, <b>Quadratic</b>, <b>Logarithmic</b>,
+  <b>Exponential</b>, and <b>Power</b> regression line. The special
+  option <b>Automatic</b> will calculate all types and show the one
+  with the highest correlation value.</p>
+
+<p>Pressing <img src="dbplot/icon_redraw.png" class="icon">
+  redraws or updates the plot based on the current database values.
+  A Database Viewer displaying the database associated with the plot
+  data can be opened or raised with
+  the <img src="dbplot/icon_showmdb.png" class="icon"> button.
+  <b>Attach</b> can be used to attach the Correlation Plot to its associated
+  Database Viewer.  When the plot is attached, <b>Detach</b> can be used to
+  detach the plot. <b>Data to Clipboard</b> will send the correlation
+  plot data to the clipboard. The data can then be imported to an external
+  application for further evaluation. <b>Export&nbsp;Plot</b> will
+  <a href="../apps/print.htm#GraphicExportPanel">export the plot</a> in
+  various graphics file formats.</p>
+
+<a id="PlotAttributes"></a>
+<h3>Setting Plot Attributes</h3>
+
+<p> The Plot Attributes <img src="dbplot/icon_config.png" class="icon">
+  button or the right mouse button over the plot brings up the plot
+  attributes panel which contains several pages of attributes for changes
+  to titles, labels and general display.
+  
+<center>
+  <img src="dbplot/plotAttrib.png" alt="General Plot Attributes" />
+  &nbsp;
+  <img src="dbplot/plotAttribSeries.png" alt="Series Plot Attributes" />
+</center>
+
+<p>Additional pages allow to configure the axis ranges and titles
+  as well as tick spacing and labels. For X- and Y-axis a logarithmic scale
+  can be chosen. The Z-axis settings include the color range and
+  the W-axis options the data point size range.</p>
+  
+<center>
+  <img src="dbplot/plotAttribX.png" alt="X-Axis Plot Attributes" />
+  &nbsp;
+  <img src="dbplot/plotAttribZ.png" alt="Z-Axis Plot Attributes" />
+  &nbsp;
+  <img src="dbplot/plotAttribW.png" alt="W-Axis Plot Attributes" />
+</center>
+
+<p>The <b>Clipboard</b> button in the panel footer copies the data values of
+any plot onto the clipboard for other applications to retrieve, and
+<b>Export</b> sends the plot display to the
+<a href="../apps/print.htm#GraphicExportPanel"><b>Export Image</b></a> panel
+which can write the plot into various image formats or print it.</p>
+
+<a id="CorrelationMatrix"></a>
+<h1>Correlation Matrix</h1>
+
+<p>A fast way of determining the correlation of any two fields in a database
+  is provided by the Correlation Matrix utility. The displayed correlation
+  matrix is a color-coded matrix of all numeric fields in the database, with
+  the percent correlation indicated for each pair of fields.
+  If more than 20 fields are to be displayed, the panel adds scrollbars
+  on the bottom and the right to scroll through the matrix display.
+ </p>
+
+<p>The correlation matrix can also be displayed for selected numeric fields
+  only. In this case, you must select the numeric fields prior to invoking the
+  Correlation Matrix command. If no fields are selected, then all numeric
+  fields in the database will be used in the calculations. <img src=
+  "dbplot/cmatrix.png" class="center" alt="Correlation Matrix" /></p>
+
+<p>Numeric field names are numbered and displayed vertically to the left of
+  the matrix. Their order is the same as that in the database. The field
+  numbers are also displayed in a row across the top of the matrix, again in
+  database order. Hovering with the mouse over the field labels and field
+  numbers will show the full field name. Each box in the matrix
+  is labeled with the percent correlation between the two
+  corresponding numeric fields:</p>
+
+  <img src="dbplot/cmatrixset.png"
+   alt="Correlation Matrix Settings" class="floatright" />
+
+  <ul>
+    <li>100 signifies complete correlation (-100 signifies that the fields are
+    inversely correlated)</li>
+    <li>0 signifies no correlation</li>
+  </ul>
+
+<p> 
+  Boxes are color-coded by correlation. The higher the percentage, the
+  darker the box. For instance, 100 (complete correlation) is represented by a
+  dark green box, as is -100. Colors lighten with diminishing magnitude. 0 (no
+  correlation) is represented by a white box.
+</p>
+<p>  
+  The color scheme can be set in the configuration panel, which is accessed
+  using the <img src="dbplot/icon_config.png" class="icon"> button. Four color
+  schemes are available; two of them provide different colors for correlated
+  and inversely correlated data. Enabling the <nobr><b>Compact
+  Layout</b></nobr> option will reduce the size of the correlation matrix
+  display by using smaller fonts. To apply the configuration changes, press
+  <b>OK</b>.
+</p>
+<p> 
+  A Database Viewer displaying the database associated with the plot
+  data can be opened or raised by pressing the
+  <img src="dbplot/icon_showmdb.png" class="icon"> button.
+  The <b>Clipboard</b> button copies the matrix R values onto
+  the clipboard, so that the data can be pasted into other applications.
+  The <b>Export</b> button allows for exporting the matrix into an image
+  file.
+</p>
+
+<p>Click on a box in the matrix to display the <a href=
+  "#CorrelationPlot">Correlation Plot</a> of the corresponding numeric fields.
+  Hovering the mouse over the matrix box will show the names of the two
+  associated fields and the R and R<sup>2</sup> correlation values.</p>
+
+<a id="SelectedFieldsHistogram"></a>
+</p>
+
+<h1>Field Histogram</h1>
+
+<p>A histogram plot of one or more scalar numeric fields can be obtained
+  using the <b>Field Histogram</b> application. A histogram is a bar plot
+  giving the distribution of values in a particular field. The values are
+  binned, and the number of counts per bin are plotted. Several fields can
+  be plotted in the histogram together, allowing you to compare their
+  distributions.</p>
+
+<p>Select the fields to plot and then choose <b>DBV | Compute | Analysis |
+  Field Histogram</b>. The following panel appears:</p>
+
+<img src="dbplot/histo.png" class="center" />
+
+<p>
+    The histogram is created using the selected fields as specified by the
+    <b>Choose&nbsp;Field</b> menu.  If desired, the plot can be restricted to
+    the visible entries by selecting <b>Visible&nbsp;Entries&nbsp;Only</b>.
+    Pressing <img src="dbplot/icon_redraw.png" class="icon"> redraws or updates
+    the plot based on the current database values.  This button turns red if the
+    underlying database has been changed.
+    The histogram curves can be normalized in several ways, controlled
+    by the three options below the plot area:
+</p>
+  <table class="noborder width-full">
+<tr>
+<td><b>Cumulative</b></td>
+<td>If enabled then the Y values will be the cumulative value of all
+of the bins up to the current one.</td></tr>
+    <tr>
+      <td><b>Y in Percent</b></td>
+      <td>If enabled then the Y values will be normalized and the
+      results will be displayed in percent.</td>
+    </tr>
+    <tr>
+      <td><b>Mean Center</b></td>
+      <td>If enabled then the histograms will be translated
+      horizontally so that the mean is zero.</td>
+    </tr>
+    <tr>
+      <td><b>Normalize X</b></td>
+      <td>If enabled then the histograms will be scaled
+      horizontally so that the variance is one.</td>
+    </tr>
+  </table>
+
+<p>The number of bins can be changed by modifying the <b>Number of
+  Bins</b> field and pressing the redraw button to refresh the plot. By
+  default, 100 bins are used in the plot.</p>
+
+<p>Database entries corresponding to histogram bins can be selected by
+  dragging a box in the plot. The entries will be added to the current entry
+  selection.
+  A Database Viewer displaying the database associated with the plot
+  can be opened or raised by pressing the
+  <img src="dbplot/icon_showmdb.png" class="icon"> button.
+  
+  Pressing the configure icon
+  <img src="dbplot/icon_config.png" class="icon"> brings up the Database
+  Field Histogram Settings Panel:</p>
+
+
+
+<img src="dbplot/histoset.png" alt="histogram settings" class="center" />
+
+<p>The desired title of the plot can be entered into the <b>Title</b> text
+  box. The various <b>Show</b> checkboxes and the <b>Background</b> pulldown
+  menu also apply to the whole plot. Following this, each series in the
+  histogram is given a separate line of controls allowing the name, color, line
+  style and marker style to be adjusted. The marker style is composed
+  by two options: The type of the marker point itself (dot, cross, ...)
+  and an optional filled or hollow symbol on top (circle,
+  square, ...).</p>
+
+<p>
+  <b>Attach</b> can be used to attach the Field Histogram Plot to its associated
+  Database Viewer.  When the plot is attached, <b>Detach</b> can be used to
+  detach the plot.
+  <b>Data&nbsp;to&nbsp;Clipboard</b> can be used to send the correlation plot
+  data to the clipboard.  The data can then be imported to an external
+  application for further evaluation.
+  <b>Export&nbsp;Plot</b> can be used to
+  <a href="../apps/print.htm#GraphicExportPanel">export the plot</a> in
+  various graphics file formats so it can be used outside of MOE.
+</p>
+
+
+<a id="3DPlot"></a>
+</p>
+<p>
+
+</p>
+
+<h1>3D Plot</h1>
+
+<p>The 3D Plot application helps to visualize the relationships between
+  numeric data sets by plotting three database fields as a 3D dot plot in the
+  MOE Window. By default, the data are decorrelated and then normalized to a
+  mean of 0 and a standard deviation of 1. If desired, a fourth database field
+  can be used to color the data points.</p>
+
+<img src="dbplot/3dplot_view.png" alt="Database 3D Plot" class="center" />
+
+<p>The visibility and selection state of the data points and the database
+  entries are synchronized. Selecting a data point in the MOE Window will
+  result in the associated database entry being automatically selected in the
+  Database Viewer where the plot originated. Similarly, selecting an entry in
+  the Database Viewer will select the related data point in the plot. The same
+  holds true for hiding/showing data points or entries.
+</p>
+
+<a id="Creating3DPlot"></a>
+<h2>Creating a 3D Plot</h2>
+
+<p>To open the Database 3D Plot panel, use <nobr><b>DBV | Compute | Analysis
+  | 3D Plot</b></nobr> in a Database Viewer.</p>
+
+<img src="dbplot/3dplot.png" alt="Database 3D Plot Panel" class="center" />
+
+<p>You can also invoke the panel by entering</p>
+
+<pre class="code">
+    run 'db3dplot.svl'
+</pre>
+
+<p>which will prompt you for the name of a molecular database file to be
+  used.</p>
+  <table class="noborder">
+    <tr>
+      <td><b>Database</b></td>
+      <td>Filename of the database containing the data to be
+      plotted. It is possible to plot only a subset of the entries in the
+      database by turning on the <b><nobr>Selected Entries Only</nobr></b>
+      checkbox. In this case, you must have the database open in a Database
+      Viewer with the desired entries selected prior to making the plot.</td>
+    </tr>
+    <tr>
+      <td><b>Plot Fields</b></td>
+      <td>The fields to plot are selected using the <b><nobr>Plot
+      fields</nobr></b> option menus. Only numeric fields can be plotted. By
+      default, the X, Y, and Z plot fields are initially set to the first three
+      numeric fields in the database. Note, however, that if there are fields
+      selected in the source Database Viewer, these will be used for the
+      initial values instead.</td>
+    </tr>
+    <tr>
+      <td><b>Decorrelate&nbsp;Axes</b><br />
+      <b>Normalize&nbsp;Axes</b></td>
+      <td>Before being plotted, the data can be decorrelated
+      and/or normalized. The <b><nobr>Decorrelate Axes</nobr></b> and
+      <b><nobr>Normalize Axes</nobr></b> options are used to respectively turn
+      on or off the decorrelation and normalization preprocessing steps.</td>
+    </tr>
+    <tr>
+      <td><b>Activity</b></td>
+      <td>Data points can be colored according to the values of a
+      database field by using the <b>Activity</b> option menu.</td>
+    </tr>
+    <tr>
+      <td><b>Threshold</b></td>
+      <td>
+        The color map is determined by applying the coloring rules listed in
+        the <b>Threshold</b> textfield. Each threshold marks the beginning of a
+        new color band in the plot. Multiple thresholds are separated by either
+        spaces or commas. The ellipsis (the character sequence <tt>...</tt>) is
+        used in the threshold list to abbreviate a long regular sequence of
+        thresholds. When the ellipsis is encountered, the size of the previous
+        color band is repeated until the next threshold takes effect or the end
+        of the range is reached, whichever comes first. For example, entering
+        <tt>5%...</tt> will split the data into 20 color bands.
+
+<p>Thresholds can be specified using either absolute numbers or
+        percentiles. Any number followed by a <tt>%</tt> character is
+        considered a percentile. When using absolute numbers, it is recommended
+        to turn off the <b><nobr>Decorrelate Axes</nobr></b> and
+        <b><nobr>Normalize Axes</nobr></b> options.</p>
+      </td>
+    </tr>
+  </table>
+
+<p>Once all the options are defined, press the <b>Plot</b> button to draw the
+  plot in the MOE Window. To launch a <a href="dbbrowse.htm">Database
+  Browser</a> displaying the selected data points, press <b>Browse</b>. The
+  controls for numerous visual aspects of the plot, ranging from grid colors to
+  axis titles, are accessed by pressing <b>Preferences</b>.</p>
+
+<p>The database 3D plot uses atoms to mark the data points, and hence adds
+  atoms to the system. To delete data points, you can use the <a href=
+  "../moe/gui/se.htm">Sequence Editor</a> to delete the chain containing the
+  plot atoms. To remove the 3D plot box drawn in the rendering area, delete the
+  graphic object using the <a href="../moe/gui/gobjman.htm">Graphics Object
+  Manager</a>.
+</p>
+
+<a id="ModifyingAxisAttr"></a>
+<h2>Modifying Axis Attributes</h2>
+
+<p>Axis attributes are customizable from the Database 3D Plot Preferences
+  panel, which provides controls over titles, labels, range, tick spacing and
+  grid mode for each axis of the plot. To open the Database 3D Plot Preferences
+  panel, press <b>Preferences</b> in the Database 3D Plot panel.</p>
+
+<img src="dbplot/3dplot_axis.png" alt=
+  "Database 3D Plot Axis Attributes Page" class="center" />
+
+<p>Select one of the X-Axis Attributes, Y-Axis Attributes or Z-Axis
+  Attributes pages to display the current settings of the axis of interest. If
+  the data are decorrelated, the X, Y, and Z axis will show up initially as
+  PCA1, PCA2 and PCA3 respectively, where PCA stands for Principal Component
+  Axis.</p>
+
+<p>Press <b>Apply</b> to put any changes into effect.</p>
+  <table class="noborder">
+    <tr>
+      <td><b>Axis Title</b></td>
+      <td>
+        Each axis can have its title adjusted individually. There are two modes
+        for each axis:
+
+<p><b>Auto</b>. In auto mode, if the data are decorrelated, the X, Y,
+        and Z axis titles are PCA1, PCA2 and PCA3 (Principal Component Axis)
+        respectively. Otherwise, if the raw data are used, the title is the
+        name of the database field plotted along the axis.</p>
+
+<p><b>Custom</b>. In custom mode, a textfield is provided to enter the
+        desired title.</p>
+      </td>
+    </tr>
+    <tr>
+      <td><b>Show Title</b></td>
+      <td>If no titles are desired, they can be hidden by turning
+      off the <b><nobr>Show Title</nobr></b> checkbox.</td>
+    </tr>
+    <tr>
+      <td><b>Axis Range</b></td>
+      <td>
+        The range of the axes displayed in the MOE Window are adjusted with the
+        <b><nobr>Axis Range</nobr></b> buttons. There are three modes:
+
+<p><b>Span</b>. The axis covers the exact range of values of the
+        associated database field -- the lowest value on the axis is the lowest
+        value in the database field, and the highest, the highest value in the
+        field.</p>
+
+<p><b>NxSD</b>. A more focused plot, where the axis will extend a
+        number (<b>N</b>) of standard deviations in both directions from the
+        data mean. By default, the value of N is 3, but can be modified by
+        entering a new value in the provided textfield.</p>
+
+<p><b>Custom</b>. Explicit control over the axis range is available
+        with the <b>Custom</b> mode. In this mode, two textfields are provided
+        (<b>From</b>, <b>To</b>) to specify the start and end points of the
+        axis.</p>
+      </td>
+    </tr>
+    <tr>
+      <td><b>Tick Spacing</b></td>
+      <td>
+        Visual cues, or <i>ticks</i>, can be drawn along each axis to help
+        assess the position of data points. The <b><nobr>Tick
+        Spacing</nobr></b> buttons are used to select the frequency of the
+        ticks. There are three tick spacing modes:
+
+<p><b>Auto</b>. Tick interval is calculated at runtime in order to
+        provide maximum information with minimal clutter. If the axis range is
+        specified in standard deviations (NxSD Axis Range mode), then the tick
+        units are also in standard deviations.</p>
+
+<p><b>NxSD</b>. Insert a tick every <b>N</b> standard deviations. By
+        default, the value of N is 1.</p>
+
+<p><b>Custom</b>. Allows for ticks to be placed at any interval. By
+        default, the value is 1. Use the <b>Increment</b> textfield to set a
+        new value.</p>
+      </td>
+    </tr>
+    <tr>
+      <td><b><nobr>Show Ticks</nobr></b><br />
+      <b><nobr>Show Tick Labels</nobr></b></td>
+      <td>Ticks and tick labels can be hidden by turning off the
+      <b><nobr>Show Ticks</nobr></b> and <b><nobr>Show Tick Labels</nobr></b>
+      checkboxes respectively.</td>
+    </tr>
+    <tr>
+      <td><b>Grid Mode</b></td>
+      <td>
+        In addition to ticks, each axis can support perpendicular grids to
+        further help in localizing data points. For the X axis, YZ planes can
+        be drawn, for the Y axis, XZ planes, and for the Z axis, XY planes. The
+        <b><nobr>Grid Mode</nobr></b> buttons control the drawing of these
+        planes. There are three modes:
+
+<p><b>Backdrop</b>. A single plane is drawn at the first (lowest value)
+        tick of the axis. Backdrop is the default mode.</p>
+
+<p><b>Stack</b>. Planar grids are inserted in the plot at each of the
+        axis ticks.</p>
+
+<p><b>None</b>. Used to disable rendering of the grid planes.</p>
+      </td>
+    </tr>
+  </table>
+<a id="SettingColors"></a>
+<h2>Setting Colors</h2>
+
+<p>The colors of the axis titles, grids and tick labels can all be modified
+  from the Colors page of the Database 3D Plot Preferences Panel. To open the
+  Database 3D Plot Preferences panel press <b>Preferences</b> in the Database
+  3D Plot panel.</p>
+
+<img src="dbplot/3dplot_colors.png" alt=
+  "Database 3D Plot Colors Page" class="center" />
+
+<p>Colors are specified as RGB (red, green, blue) intensities on a scale from
+  0 to 255, with 255 being maximal intensity. Setting all to 0 yields black,
+  all to 255 yields white. The <b>Color</b> option menu allows you to choose
+  which plot element to edit. In order to facilitate color selection, updates
+  to the plot are immediate, <i>i.e.</i>, you do not have to press <b>Apply</b>
+  to put changes into effect.</p>
+
+
+
+<h1>See Also</h1>
+<p>
+  <a href="db.htm">Database Viewer</a><br />
+  <a href="db.htm#PlottingDatabaseValues">
+  Database Plots in the Database Viewer</a>
+  </p>
+<!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../images/ccgicon.png" /> <a href="../index.htm"></a> <a href=
+    "../legal.htm"></a> &copy;<span class="versionyear"></span> <a href="http://www.chemcomp.com"></a>. All
+    rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

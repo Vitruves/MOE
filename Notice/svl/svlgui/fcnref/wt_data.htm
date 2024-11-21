@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href=
+  "../../../include/manstyle.css" />
+  <meta name="keywords" content="keywords:" />
+  <meta name="keywords" content="functions: WindowGetData, WindowSetData" />
+  <meta name="keywords" content="functions: WindowValues" />
+  <title>Window Functions: WindowGetData, WindowSetData, WindowValues</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../../index.htm"><img src="../../../images/ccglogo.png" /></a>
+    <a href="../../../index.htm"><div class="moeversion"></div></a>
+    Window Functions: WindowGetData,
+    WindowSetData, WindowValues
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+  name_value_pairs = <a class="fcnlink" href=
+"#WindowGetData">WindowGetData</a> [ win, widget_names ]
+  <a class="fcnlink" href=
+"#WindowSetData">WindowSetData</a> [ win, widget_name_value_pairs ]
+
+  name_value_pairs = <a class="fcnlink" href=
+"#WindowValues">WindowValues</a> wkey
+</pre>
+<a id="WindowGetData"></a>
+<h1>Description</h1>
+
+<pre>
+name_value_pairs = <span class=
+"fcndef">WindowGetData</span> [ win, widget_names ]
+</pre>
+
+<p>Gets the values of the widgets (specified by name tokens in the vector
+  <tt>widget_names</tt>) that belong to the specified window. The window must
+  have already been created.</p>
+<a id="WindowSetData"></a>
+<hr noshade="noshade" />
+
+<pre>
+<span class="fcndef">WindowSetData</span> [ win, widget_name_value_pairs ]
+</pre>
+
+<p>Sets the values of the widgets that belong to the specified window.
+  <tt>widget_name_value_pairs</tt> is a tagged vector of name-value pairs. The
+  window must have already been created.</p>
+
+<p><tt>win</tt> can be either the window key (returned by
+  <tt>WindowCreate</tt>) or the name of the window (if it is not a prompter) as
+  set by the <tt>windowName</tt> attribute.</p>
+<a id="WindowValues"></a>
+<hr noshade="noshade" />
+
+<pre>
+name_value_pairs = <span class="fcndef">WindowValues</span> wkey
+</pre>
+
+<p>Returns a tagged vector of names and values of all named widgets in the
+  specified window.</p>
+
+<h1>See Also</h1>
+
+<p><a href="../wt_intro.htm">SVL Window Toolkit</a><br />
+  <a href="wt_core.htm">Core Attributes</a><br />
+  <a href="introwt.htm">Window Toolkit Functions</a></p>
+<table class="functionList">
+  <tr>
+    <td><a href="wt_wait.htm">WindowWait</a><br />
+    <a href="wt_create.htm">WindowCreate</a><br />
+    <a href="wt_create.htm">WindowPrompt</a></td>
+    <td><a href=
+    "wt_create.htm">WindowDestroy</a><br />
+    <a href="wt_show.htm">WindowShow</a><br />
+    <a href="wt_attr.htm">WindowSetAttr</a></td>
+  </tr>
+</table><!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../../images/ccgicon.png" /> <a href="../../../index.htm"></a>
+    <a href="../../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+

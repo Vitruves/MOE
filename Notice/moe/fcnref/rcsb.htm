@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=9" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="../../include/manstyle.css" />
+  <link rel="icon" type="image/png" href="../../images/ccgicon.png" />
+  <link rel="shortcut icon" type="image/png" href="../../images/ccgicon.png" />
+  <meta name="keywords" content="functions: rcsb_download" />
+  <meta name="keywords" content=
+  "keywords: PSILO,RCSB,PDB,FTP,download,protein,structure,transfer" />
+  <title>Download Protein Structure Data</title>
+</head>
+<body>
+<div class="center-page">
+  <!-- START MOE_HEADER -->
+  <div class="MOE_HEADER">
+    <a href="../../index.htm"><img src="../../images/ccglogo.png" /></a>
+    <a href="../../index.htm"><div class="moeversion"></div></a>
+    Download Protein Structure Data
+  </div>
+<!-- END MOE_HEADER -->
+<div class="content">
+
+<h1>Syntax</h1>
+
+<pre class="code">
+result = <a class="fcnlink" href=
+"#rcsb_download">rcsb_download</a> [pdb_codes, options]
+
+where options is:
+    [
+        directory   : 'download_directory',
+        servertype  : 'type',
+        server_base : 'url',
+        readPDB     : flag,
+        uncompress  : flag,
+        overwrite   : flag,
+        confirm     : flag,
+        showPanel   : flag,
+        loadmap     : flag,
+        loadccd     : flag,
+        mmcif       : flag,
+        pdbml       : flag
+    ]
+</pre>
+<a id="rcsb_download"></a>
+<h1>Description</h1>
+
+<p>Downloads protein structure data files from a <a href=
+  "https://www.chemcomp.com/Products.htm#PSILO-Structure_Database">PSILO</a>
+  server, or the Protein Data Bank (PDB) and saves them locally. The proteins
+  to download are specified by accession codes or by filename.</p>
+<dl>
+  <dt><tt>pdb_codes</tt></dt>
+  <dd>
+    Vector of PDB accession code tokens specifying the PDB files to download.
+    PDB accession codes are 4 character alphanumeric sequences.
+  </dd>
+  <dt><tt>options</tt> is a tagged vector of optional attribute-value
+  pairs:</dt>
+  <dd>
+    <dl>
+      <dt><tt>directory : token</tt></dt>
+      <dd>The directory in which to store the downloaded files. The
+      <tt>'download_directory'</tt> must be a token ending with
+      '/'. The default is the current working directory of MOE.</dd>
+      <dt><tt>servertype : token</tt></dt>
+      <dd>Specify <tt>'rcsb'</tt> (the default), if accessing a PDB
+      FTP site, or <tt>'psilo'</tt> if downloading from a PSILO
+      server. This setting will affect what is expected for some of the other
+      options, as described below.</dd>
+      <dt><tt>server_base : token</tt></dt>
+      <dd>For the PDB, URL specifying either an FTP site with a properly
+      structured '/pub/pdb/' directory, or a an HTTP address
+      configured to respond to requests for PDB files. If the server_base is
+      not specified, if will be read from the 'rcsb.mirror' attribute
+      in the <tt>moe-rc</tt> file. The default server_base for PDB files is
+      <tt>https://files.rcsb.org</tt></dd>
+      <dd>For PSILO servers, the connection information comes from the the
+      <tt>psilo.1.*</tt> settings in the <tt>moe-rc</tt> file, and the
+      <tt>server_base</tt> setting is ignored.</dd>
+      <dd>PSILO and PDB connection information can be viewed and edited in
+      the <a href="../../appendix/settings.htm#PSILO">Configuration
+      Options</a> panel.</dd>
+      <dt><tt>readPDB : flag</tt></dt>
+      <dd>If <tt>flag</tt> is non-zero then files specified by
+      <tt>pdb_codes</tt> are read into MOE. The default is 0.</dd>
+      <dt><tt>uncompress : flag</tt></dt>
+      <dd>If <tt>flag</tt> is non-zero then files are stored in uncompressed
+      form. Otherwise, files are stored in compressed form with filenames
+      ending in '.gz'. Uncompressed files are saved on disk with the
+      '.gz' extension removed. The default is 0.</dd>
+      <dt><tt>overwrite : flag</tt></dt>
+      <dd>Policy on behavior when a requested file matches the name of a file
+      (apart from 'gz' extension) already in the
+      <tt>download_directory</tt>. If <tt>flag</tt> is non-zero then the
+      requested PDB files are downloaded and the existing files are
+      overwritten. Otherwise, matching files are not transferred. The default
+      is 0.</dd>
+      <dt><tt>showPanel : flag</tt></dt>
+      <dd>If <tt>flag</tt> is 1 then the <a href=
+      "../../proteins/pdb_mdb.htm"><span class="nobr">Download</span></a>
+      panel will be shown before and while files are being downloaded. The
+      default is 1.</dd>
+      <dt><tt>confirm : flag</tt></dt>
+      <dd>If <tt>flag</tt> is non-zero then the Download panel will wait for
+      user confirmation before downloading and before closing the panel when
+      complete. This option is ignored if no panel is used (i.e. when running
+      batch mode or if showPanel is not enabled). The default is 0.</dd>
+
+      <p><dt><tt>loadmap : flag</tt>
+
+      <dd>If <tt>flag</tt> is non-zero then the Structure Factors will be
+      downloaded as well, if available, which can be used to calculate the
+      electron density maps.  The default is 0.
+
+      <p><dt><tt>loadccd : flag</tt>
+
+      <dd>If <tt>flag</tt> is non-zero then the RCSB Chemical Component
+      Dictionary CIF file for the ligands is downloaded.  This can be
+      used to correct the ligand bond orders and charges when reading the
+      PDB file.  The default is 1.
+
+      <p><dt><tt>mmcif : flag</tt>
+
+      <dd>If <tt>flag</tt> is non-zero, then mmCIF structure files will be
+      downloaded instead of PDB files.  The default is 0.
+
+      <p><dt><tt>pdbml : flag</tt>
+
+      <dd>If <tt>flag</tt> is non-zero, then PDBML (XML) structure files will
+      be downloaded instead of PDB files.  The default is 0.  Only one of
+      <tt>mmcif</tt> and <tt>pdbml</tt> may be non-zero.
+    </dl>
+  </dd>
+  <dt><tt>result</tt></dt>
+  <dd>
+    The return value is a list of the <tt>pdb_codes</tt> and download status
+    for each code. If structure factors and/or ligand CIF files were also
+    downloaded, these will be represented in the list as <i>1XYZ structure
+    factors</i> and <i>1XYZ ligands</i> respectively, where <i>1XYZ</i> is the
+    PDB code. If <tt>rcsb_download</tt> was called as a function,
+    <tt>result</tt> is a tagged vector of the form
+    <tt>pdb_codes</tt>:<tt>status</tt>. If <tt>rcsb_download</tt> is called
+    as a procedure, a summary of each file and its status is sent to the SVL
+    Commands window.
+
+<p>Possible status values are as follows:</p>
+    <table class="titlebar">
+      <tr>
+        <th>Status</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td><tt>'complete'</tt></td>
+        <td>The file was downloaded successfully.</td>
+      </tr>
+      <tr>
+        <td><tt>'overwritten'</tt></td>
+        <td>The file was downloaded successfully and a
+        matching file on disk was overwritten.</td>
+      </tr>
+      <tr>
+        <td><tt>'preserved'</tt></td>
+        <td>The file was not downloaded and a matching file
+        on disk was preserved.</td>
+      </tr>
+      <tr>
+        <td><tt>'failed'</tt></td>
+        <td>There was an error downloading the file; the
+        specified actions were not all completed.</td>
+      </tr>
+      <tr>
+        <td><tt>'canceled'</tt></td>
+        <td>The download was canceled before
+        completion.</td>
+      </tr>
+      <tr>
+        <td><tt>'unavailable'</tt></td>
+        <td>The file was not available for download - for example
+        when a PDB file has no corresponding structure factor file.</td>
+      </tr>
+    </table>
+  </dd>
+</dl>
+
+<h1>See Also</h1><a href="../../svl/fcnref/url.htm">URL
+  Functions</a><br />
+  <a href="rc.htm">Resource Configuration Functions</a>
+
+<p><a class="svl" href="molrw.htm">ReadPDB</a><br />
+  <a class="svl" href="../../svl/fcnref/calletc.htm">call</a></p>
+  <!-- START MOE_FOOTER -->
+  <div class="MOE_FOOTER">
+    <img src="../../images/ccgicon.png" /> <a href="../../index.htm"></a>
+    <a href="../../legal.htm"></a> &copy;<span class="versionyear"></span>
+    <a href="http://www.chemcomp.com"></a>. All rights reserved.<br />
+    <a href="mailto:info@chemcomp.com"></a>
+  </div><!-- END MOE_FOOTER -->
+</div>
+</div>
+</body>
+</html>
+
